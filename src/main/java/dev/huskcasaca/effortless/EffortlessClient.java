@@ -2,8 +2,8 @@ package dev.huskcasaca.effortless;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import dev.huskcasaca.effortless.buildmode.*;
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
+import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
+import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
 import dev.huskcasaca.effortless.event.ClientReloadShadersEvent;
 import dev.huskcasaca.effortless.event.ClientScreenEvent;
 import dev.huskcasaca.effortless.event.ClientScreenInputEvent;
@@ -12,16 +12,13 @@ import dev.huskcasaca.effortless.gui.buildmode.RadialMenuScreen;
 import dev.huskcasaca.effortless.gui.buildmodifier.ModifierSettingsScreen;
 import dev.huskcasaca.effortless.helper.ReachHelper;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
-import dev.huskcasaca.effortless.network.ModeActionMessage;
 import dev.huskcasaca.effortless.network.ModeSettingsMessage;
-import dev.huskcasaca.effortless.network.ModifierSettingsMessage;
 import dev.huskcasaca.effortless.network.PacketHandler;
 import dev.huskcasaca.effortless.render.BuildRenderTypes;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -87,21 +84,21 @@ public class EffortlessClient implements ClientModInitializer {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null)
             return;
-
-        //Remember to send packet to server if necessary
-        //Show Modifier Settings GUI
-        if (keyBindings[0].consumeClick()) {
-            openModifierSettings();
-        }
-
-        //QuickReplace toggle
-        if (keyBindings[1].consumeClick()) {
-            ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-            modifierSettings.setQuickReplace(!modifierSettings.doQuickReplace());
-            Effortless.log(player, ChatFormatting.GOLD + "Quick Replace " + ChatFormatting.RESET + (
-                    modifierSettings.doQuickReplace() ? "ON" : "OFF"));
-            PacketHandler.sendToServer(new ModifierSettingsMessage(modifierSettings));
-        }
+//
+//        //Remember to send packet to server if necessary
+//        //Show Modifier Settings GUI
+//        if (keyBindings[0].consumeClick()) {
+//            openModifierSettings();
+//        }
+//
+//        //QuickReplace toggle
+//        if (keyBindings[1].consumeClick()) {
+//            ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(player);
+//            modifierSettings.setQuickReplace(!modifierSettings.doQuickReplace());
+//            Effortless.log(player, ChatFormatting.GOLD + "Quick Replace " + ChatFormatting.RESET + (
+//                    modifierSettings.doQuickReplace() ? "ON" : "OFF"));
+//            PacketHandler.sendToServer(new ModifierSettingsMessage(modifierSettings));
+//        }
 
         //Radial menu
         if (keyBindings[2].isDown()) {
@@ -113,38 +110,38 @@ public class EffortlessClient implements ClientModInitializer {
 //                Effortless.log(player, "Build modes are disabled until your reach has increased. Increase your reach with craftable reach upgrades.");
 //            }
         }
-
-        //Undo (Ctrl+Z)
-        if (keyBindings[3].consumeClick()) {
-            BuildAction undoAction = BuildAction.UNDO;
-            BuildActionHandler.performAction(player, undoAction);
-            PacketHandler.sendToServer(new ModeActionMessage(undoAction));
-        }
-
-        //Redo (Ctrl+Y)
-        if (keyBindings[4].consumeClick()) {
-            BuildAction redoAction = BuildAction.REDO;
-            BuildActionHandler.performAction(player, redoAction);
-            PacketHandler.sendToServer(new ModeActionMessage(redoAction));
-        }
-
-        //Change placement mode
-        if (keyBindings[5].consumeClick()) {
-            //Toggle between first two actions of the first option of the current build mode
-            BuildMode currentBuildMode = ModeSettingsManager.getModeSettings(player).getBuildMode();
-            if (currentBuildMode.options.length > 0) {
-                BuildOption option = currentBuildMode.options[0];
-                if (option.actions.length >= 2) {
-                    if (BuildActionHandler.getOptionSetting(option) == option.actions[0]) {
-                        BuildActionHandler.performAction(player, option.actions[1]);
-                        PacketHandler.sendToServer(new ModeActionMessage(option.actions[1]));
-                    } else {
-                        BuildActionHandler.performAction(player, option.actions[0]);
-                        PacketHandler.sendToServer(new ModeActionMessage(option.actions[0]));
-                    }
-                }
-            }
-        }
+//
+//        //Undo (Ctrl+Z)
+//        if (keyBindings[3].consumeClick()) {
+//            BuildAction undoAction = BuildAction.UNDO;
+//            BuildActionHandler.performAction(player, undoAction);
+//            PacketHandler.sendToServer(new ModeActionMessage(undoAction));
+//        }
+//
+//        //Redo (Ctrl+Y)
+//        if (keyBindings[4].consumeClick()) {
+//            BuildAction redoAction = BuildAction.REDO;
+//            BuildActionHandler.performAction(player, redoAction);
+//            PacketHandler.sendToServer(new ModeActionMessage(redoAction));
+//        }
+//
+//        //Change placement mode
+//        if (keyBindings[5].consumeClick()) {
+//            //Toggle between first two actions of the first option of the current build mode
+//            BuildMode currentBuildMode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+//            if (currentBuildMode.options.length > 0) {
+//                BuildOption option = currentBuildMode.options[0];
+//                if (option.actions.length >= 2) {
+//                    if (BuildActionHandler.getOptionSetting(option) == option.actions[0]) {
+//                        BuildActionHandler.performAction(player, option.actions[1]);
+//                        PacketHandler.sendToServer(new ModeActionMessage(option.actions[1]));
+//                    } else {
+//                        BuildActionHandler.performAction(player, option.actions[0]);
+//                        PacketHandler.sendToServer(new ModeActionMessage(option.actions[0]));
+//                    }
+//                }
+//            }
+//        }
 
     }
 
@@ -249,7 +246,7 @@ public class EffortlessClient implements ClientModInitializer {
         keyBindings[2] = new KeyMapping("key.effortless.mode.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, "key.effortless.category");
         keyBindings[3] = new KeyMapping("key.effortless.undo.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, "key.effortless.category");
         keyBindings[4] = new KeyMapping("key.effortless.redo.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Y, "key.effortless.category");
-        keyBindings[5] = new KeyMapping("key.effortless.altplace.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_CONTROL, "key.effortless.category");
+//        keyBindings[5] = new KeyMapping("key.effortless.altplace.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_CONTROL, "key.effortless.category");
 
         ClientScreenEvent.SCREEN_OPENING_EVENT.register(EffortlessClient::onScreenEvent);
 
