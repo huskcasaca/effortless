@@ -1,0 +1,90 @@
+plugins {
+    id 'fabric-loom' version '1.3-SNAPSHOT' apply false
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+}
+
+subprojects {
+
+    apply plugin: 'java-library'
+    apply plugin: 'fabric-loom'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    version = "${mod_version}"
+    group = "${mod_group_id}.fabric"
+
+    base {
+        archivesName = "${mod_id}-fabric-${minecraft_version}"
+    }
+
+    java {
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    loom {
+        accessWidenerPath = project(":vanilla:$project.name").file("src/main/resources/effortless.accesswidener")
+        mixin {
+            add(sourceSets.main, 'effortless.fabric.refmap.json')
+        }
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${minecraft_version}"
+        mappings loom.officialMojangMappings()
+
+        modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+        implementation project(':common')
+        implementation project(':client')
+        implementation project(":vanilla:$project.name")
+
+        shadow project(':common')
+        shadow project(':client')
+        shadow project(":vanilla:$project.name")
+
+        implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    }
+
+    sourceSets.main.java {
+        srcDir "${buildDir}/generated/java"
+    }
+
+    processResources {
+
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        filesMatching('fabric.mod.json') {
+            expand project.properties
+        }
+
+        from project(':common').sourceSets.main.resources
+        from project(':client').sourceSets.main.resources
+        from project(":vanilla:${project.name}").file("src/main/resources")
+
+        from "${parent.projectDir}/src/main/resources"
+    }
+
+    shadowJar {
+        configurations = [project.configurations.shadow]
+        dependencies {
+            exclude dependency('com.google.code.findbugs:jsr305')
+        }
+        relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.fabric'
+    }
+
+    remapJar {
+        dependsOn shadowJar
+        inputFile = shadowJar.archiveFile
+        doLast {
+            inputFile.get().getAsFile().delete()
+        }
+    }
+
+    assemble {
+        dependsOn remapJar
+    }
+
+}

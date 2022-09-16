@@ -1,0 +1,36 @@
+# Gradle
+.gradle/
+build/
+out/
+classes/
+local.properties
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.settings/
+.vscode/
+.classpath
+.project
+
+# Eclipse
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
+
+# Mac OS
+.DS_Store
+
+# Java
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+
+# Minecraft
+run/

@@ -1,0 +1,12 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':common')
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+}
