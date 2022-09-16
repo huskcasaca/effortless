@@ -31,7 +31,6 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static dev.huskcasaca.effortless.buildmode.BuildActionHandler.*;
 
@@ -418,14 +417,14 @@ public class RadialMenuScreen extends Screen {
             result += I18n.get(((KeyMappingAccessor) keyMap).getKey().getName());
         }
 
-        if (currentBuildMode.options.length > 0) {
-            //Add (ctrl) to first two actions of first option
-            if (button.action == currentBuildMode.options[0].actions[0]
-                    || button.action == currentBuildMode.options[0].actions[1]) {
-                result = I18n.get(((KeyMappingAccessor) EffortlessClient.keyBindings[5]).getKey().getName());
-                if (result.equals("Left Control")) result = "Ctrl";
-            }
-        }
+//        if (currentBuildMode.options.length > 0) {
+//            //Add (ctrl) to first two actions of first option
+//            if (button.action == currentBuildMode.options[0].actions[0]
+//                    || button.action == currentBuildMode.options[0].actions[1]) {
+//                result = I18n.get(((KeyMappingAccessor) EffortlessClient.keyBindings[5]).getKey().getName());
+//                if (result.equals("Left Control")) result = "Ctrl";
+//            }
+//        }
         return result;
     }
 
