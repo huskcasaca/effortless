@@ -1,0 +1,30 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+            name = 'Fabric'
+            url = uri('https://maven.fabricmc.net/')
+        }
+        maven {
+            name = 'Forge'
+            url = uri('https://maven.minecraftforge.net/')
+        }
+        maven {
+            name = 'Sponge Snapshots'
+            url = uri('https://repo.spongepowered.org/repository/maven-public/')
+        }
+    }
+}
+
+rootProject.name = 'effortless'
+
+include 'common'
+include 'client'
+
+['fabric', 'forge', 'vanilla'].forEach { platform ->
+    include "$platform"
+    ['1-20-2'].forEach { port ->
+        include "${platform}:minecraft-${port}"
+    }
+}

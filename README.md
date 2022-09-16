@@ -1,6 +1,5 @@
-# Effortless Fabric
-[Effortless Fabric](https://www.curseforge.com/minecraft/mc-mods/effortless-fabric) is a fabric version of [Effortless Building](https://www.curseforge.com/minecraft/mc-mods/effortless-building).
-This mod implements most features from Effortless Building, but removed randomizer bag and reach upgrade items to make it a pure vanilla compat one.
+# Effortless
+[Effortless]() is a multiplatform mod for placing and breaking blocks in Minecraft. It offers a set of modes allowing players to create structures and designs with ease. Additionally, it includes an randomizer that randomly selects items from a pre-defined list for random placement.
 
 ## Screenshots
 ### Building Menu
@@ -15,51 +14,57 @@ This mod implements most features from Effortless Building, but removed randomiz
 ![Filled Cube Mode](screenshots/filled_cube_mode.png)
 
 ## Building
-
-Hold ALT key to switch build modes in the radial panel. There are buttons for undo/redo, modifier settings and replace modes on the left. The options for each build mode (like a filled vs hollow wall) are on the right.
+Hold ALT key to switch build modes in the radial panel. There are buttons for undo/redo, transformer settings and replace modes on the left. The options for each build mode (like a filled vs hollow wall) are on the right.
 
 ### Build Modes
 
-- **Disable**: Place in vanilla way
-- **Single**: Place single block
-- **Line**: Place lines of blocks in any 3 axis
-- **Wall**: Place walls with locked x or z axis
-- **Floor**: Place floor with locked y axis
-- **Diagonal Line**: Place freeform lines of blocks
-- **Diagonal Wall**: Place walls at any angle
-- **Slope Floor**: Place slopes at any angle
-- **Cube**: Place cubes with 3 clicks
-- **Circle**: Place blocks in a circle (ellipse)
-- **Cylinder**: Place a cylindrical shape like a tower
-- **Sphere**: Place a spheroid made of cubes
+- **Disable**: Place in the vanilla way.
+- **Single**: Place with increased reach distance.
+- **Line**: Place a line in any of the three axes.
+- **Wall**: Place a wall in X or Z axis.
+- **Floor**: Place a floor in Y axis.
+- **Diagonal Line**: Place a line at any angle.
+- **Diagonal Wall**: Place a wall at any angle.
+- **Slope Floor**: Place a sloped floor at any angle.
+- **Cube**: Place a cube.
+- **Circle**: Place a circle shape in any of the three axes.
+- **Cylinder**: Place a cylindrical shape in any of the three axes.
+- **Sphere**: Place a sphere made of blocks.
 
-### Build Modifiers
+### Build Transformers
 
-- **Mirror**: Place blocks and their states in mirror, works with even and uneven builds.
-- **Array**: Copies builds and block states in a certain direction a certain number of times.
-- **Radial Mirror**: Places blocks in a circle around a certain point. The circle can be divided into slices, and each slide will copy your block placements.
+- **Mirror**: Mirrors blocks and entities for even and uneven builds.
+- **Array**: Copies blocks and entities in a specific direction for a specified number of times.
+- **Radial Mirror**: Places blocks and entities in a circular pattern around a central point. The circle can be divided into sections, and each section will contain a copy of the block placements.
 
 ### Replace Modes
 
-- **Disable**: Placing blocks does not replace any existing blocks
-- **Normal**: Placing blocks replaces the existing blocks except the first one
-- **Quick**: Placing blocks replaces the existing blocks including the first one
+- **Disable**: Does not replace any existing blocks when placing new blocks.
+- **Normal**: Replaces existing blocks when placing new blocks, excluding the first block.
+- **Quick**: Replaces existing blocks, including the first block, when placing new blocks.
 
-## Todo
-* [x] Undo/Redo
-* [x] Configure screen
-* [x] Commands
-* [x] Magnet (pick up distant items)
-* [x] Rewrite attack/use logic
-* [x] Rewrite shader
-* [x] Rewrite S2C/C2S logic
-* [x] Wall blocks (torch) support
-* [ ] Performance optimize (for large amount of blocks)
-* [ ] Item randomizer
-* [ ] Makkit support
-* [ ] Tweakeroo support
+
+## Features
+- Pure Vanilla Compatibility: The mod is designed to be fully compatible with a pure vanilla game without adding new items or making incompatible modifications.
+- Building Commands: It provides a set of commands specifically designed for building, which are available to players on the server side only.
+- Randomizer: It includes an item randomizer that lets players place blocks and entities randomly from a pre-defined list.
+- Magnet: It has a magnet option that allows players to pick up items far away from them.
+
+## Platforms
+- Fabric
+- Forge
+
+## Downloads
+- [Curseforge](https://www.curseforge.com/minecraft/mc-mods/effortless)
+- [Modrinth](https://modrinth.com/mod/effortless)
 
 ## Changelog
+
+### 2.0.0
+* Add support for Forge.
+* Add item randomizer
+* Rewrite everything
+
 ### 1.6.3
 * Fix action bar text covering issue
 * Fix image resource path converting issue
@@ -76,14 +81,14 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 * Fix block breaking issue in survival mode
 ### 1.5.3
 * Fix compatibility with OptiFine
-* Fix modifier settings duplicate items
+* Fix transformer settings duplicate items
 ### 1.5.2
 * Fix insufficient block placing crash issue in survival mod
 ### 1.5.1
 * Fix undo/redo in creative mode with no matching item in inventory
 ### 1.5.0
 * Add build info in gui
-* Rearrange modifier settings entries
+* Rearrange transformer settings entries
 * Fix block preview issue in place with large coordinates
 ### 1.4.2
 * Fix network packet issue
@@ -91,7 +96,7 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 * Fix player dimension change issue
 ### 1.4.0
 * Add vanilla keybindings
-* Build modifier settings is no longer save to player data
+* Build transformer settings is no longer save to player data
 * Fix some mixin missing issue on server side
 * Fix contact info in mod description file
 ### 1.3.0
@@ -104,7 +109,7 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 * Fix new player settings issue
 ### 1.2.0
 * Fix magnet texture issue
-* Fix modifier settings
+* Fix transformer settings
 ### 1.1.1
 * Add cloth config and modmenu
 * Fix access widener issue
@@ -120,4 +125,4 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 
 ## License
 
-Effortless Fabric is licensed under LGPLv3.
+Effortless is licensed under LGPLv3.

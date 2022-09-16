@@ -1,0 +1,142 @@
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0.14,6.2)' apply false
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'net.minecraftforge.gradle'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    version = "${mod_version}"
+    group = "${mod_group_id}.forge"
+
+    base {
+        archivesName = "${mod_id}-forge-${minecraft_version}"
+    }
+
+    java {
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    repositories {}
+
+    minecraft {
+        mappings channel: mapping_channel, version: mapping_version
+        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+        copyIdeResources = true
+        runs {
+            configureEach {
+                workingDirectory project.file('run')
+                property 'forge.logging.markers', 'REGISTRIES'
+                property 'forge.logging.console.level', 'debug'
+
+                mods {
+                    "${mod_id}" {
+                        source sourceSets.main
+                    }
+                }
+            }
+
+            client {
+                property 'forge.enabledGameTestNamespaces', mod_id
+            }
+
+            server {
+                property 'forge.enabledGameTestNamespaces', mod_id
+                args '--nogui'
+            }
+
+            gameTestServer {
+                property 'forge.enabledGameTestNamespaces', mod_id
+            }
+
+            data {
+                workingDirectory project.file('run-data')
+
+                args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            }
+        }
+    }
+
+    sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+    repositories {
+    }
+
+    dependencies {
+        minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+        implementation project(':common')
+        implementation project(':client')
+        implementation project(":vanilla:$project.name")
+
+        shadow project(':common')
+        shadow project(':client')
+        shadow project(":vanilla:$project.name")
+
+    }
+
+    processResources {
+
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        var replaceProperties = [
+                minecraft_version   : minecraft_version, minecraft_version_range: minecraft_version_range,
+                forge_version       : forge_version, forge_version_range: forge_version_range,
+                loader_version_range: loader_version_range,
+                mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
+                mod_authors         : mod_authors, mod_description: mod_description,
+        ]
+        inputs.properties replaceProperties
+
+        filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+            expand replaceProperties + [project: project]
+        }
+
+        from project(':common').sourceSets.main.resources
+        from project(':client').sourceSets.main.resources
+        from project(":vanilla:$project.name").file("src/main/resources")
+    }
+
+    jar {
+        manifest {
+            attributes([
+                    'Specification-Title'     : mod_id,
+                    'Specification-Vendor'    : mod_authors,
+                    'Specification-Version'   : '1',
+                    'Implementation-Title'    : project.name,
+                    'Implementation-Version'  : project.jar.archiveVersion,
+                    'Implementation-Vendor'   : mod_authors,
+                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            ])
+        }
+        finalizedBy 'reobfJar'
+    }
+
+    compileJava {
+        options.encoding = 'UTF-8'
+
+        source project(':common').sourceSets.main.allSource
+        source project(':client').sourceSets.main.allSource
+        source project(":vanilla:$project.name").file("src/main/java")
+    }
+
+    shadowJar {
+        dependsOn 'reobfJar'
+        configurations = [project.configurations.shadow]
+        dependencies {
+            exclude dependency('com.google.code.findbugs:jsr305')
+        }
+        relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.forge'
+        minimize()
+        archiveClassifier = ""
+    }
+
+
+    reobf {
+        shadowJar {}
+    }
+}
