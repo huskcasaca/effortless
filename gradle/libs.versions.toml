@@ -1,0 +1,35 @@
+## Fabric https://modmuss50.me/fabric.html
+#
+#[versions]
+#jetbrains-annotations-version = "23.0.0"
+#gson-version = "2.9.1"
+#log4j2-version = "2.18.0"
+#
+## Minecraft / Loaders
+#minecraftVersion = "1.19.2"
+#fabric-loader-version = "0.14.9"
+#fabric-api-version = "0.59.0+1.19.2"
+#fabric-kotlin-version = "1.8.0+kotlin.1.7.0"
+#fabric-loom-version = "0.13.20"
+#
+## Mod dependencies
+#modmenu-version = "4.0.6"
+#cloth-config-version = "8.2.88"
+#
+#[libraries]
+#minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraftVersion" }
+#fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader-version" }
+#fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api-version" }
+#fabric-kotlin = { group = "net.fabricmc.fabric-language-kotlin", name = "fabric-language-kotlin", version.ref = "fabric-kotlin-version" }
+#
+#jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrains-annotations-version" }
+#gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson-version" }
+#log4j2 = { group = "org.apache.logging.log4j", name = "log4j-api", version.ref = "log4j2-version" }
+#modmenu = { group = "com.terraformersmc", name = "modmenu", version.ref = "modmenu-version" }
+#cloth-config = { group = "me.shedaniel.cloth", name = "cloth-config-fabric", version.ref = "cloth-config-version" }
+#
+#[bundles]
+#fabric = ["fabric-loader", "fabric-api"]
+#
+#[plugins]
+#loom = { id = "fabric-loom", version.ref = "fabric-loom-version" }

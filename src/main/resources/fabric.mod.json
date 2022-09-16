@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "effortless",
+  "version": "${version}",
+  "name": "Effortless Fabric",
+  "description": "Makes building easier by providing tools like mirrors, arrays and build modes. For survival and creative mode.",
+  "authors": [
+    "Requios",
+    "Huskcasaca"
+  ],
+  "contact": {
+    "homepage": "https://minecraft.curseforge.com/projects/effortless-fabric",
+    "issues": "https://bitbucket.org/Requios/effortless-building/issues?status=new&status=open",
+    "sources": "https://bitbucket.org/Requios/effortless-building"
+  },
+  "license": "GNU Lesser General Public License version 3 (LGPLv3)",
+  "icon": "assets/effortless/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.huskcasaca.effortless.Effortless"
+    ],
+    "client": [
+      "dev.huskcasaca.effortless.EffortlessClient"
+    ]
+  },
+  "mixins": [
+    "effortless.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric": "*",
+    "minecraft": "1.19.2",
+    "java": ">=17"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": ""
+      },
+      "badges": []
+    }
+  }
+}
