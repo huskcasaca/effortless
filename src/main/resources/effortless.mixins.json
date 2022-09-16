@@ -1,0 +1,23 @@
+{
+  "required": true,
+  "package": "dev.huskcasaca.effortless.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "KeyMappingAccessor",
+    "PlayerEventMixin",
+    "PlayerTagMixin",
+    "ScreenRenderablesAccessor",
+    "ScreenRenderHeaderAccessor",
+    "ServerPlayerEventMixin"
+  ],
+  "client": [
+    "KeyEventMixin",
+    "LevelRendererMixin",
+    "PlayerActionMixin",
+    "ScreenMixin",
+    "ShaderRendererMixin"
+  ]
+}
