@@ -71,10 +71,16 @@ public class BuildActionHandler {
                 UndoRedo.redo(player);
                 break;
             case REPLACE:
-                ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-                modifierSettings.setQuickReplace(!modifierSettings.doQuickReplace());
+                var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
+
+                modifierSettings = new ModifierSettingsManager.ModifierSettings(
+                        modifierSettings.arraySettings(), modifierSettings.mirrorSettings(), modifierSettings.radialMirrorSettings(),
+                        !modifierSettings.quickReplace(), modifierSettings.reachUpgrade()
+                );
+                ModifierSettingsManager.setModifierSettings(player, modifierSettings);
+
                 Effortless.log(player, ChatFormatting.GOLD + "Quick Replace " + ChatFormatting.RESET + (
-                        modifierSettings.doQuickReplace() ? "ON" : "OFF"), true);
+                        modifierSettings.quickReplace() ? "ON" : "OFF"), true);
                 break;
             case OPEN_MODIFIER_SETTINGS:
                 if (player.level.isClientSide)

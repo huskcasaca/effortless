@@ -90,7 +90,7 @@ public class MirrorSettingsPane extends ExpandableScrollEntry {
 
         y = top + 72;
         buttonCurrentPosition = new IconButton(left + 5, y, 0, 0, BUILDING_ICONS, button -> {
-            Vec3 pos = new Vec3(Math.floor(mc.player.getX()) + 0.5, Math.floor(mc.player.getY()) + 0.5, Math.floor(mc.player.getZ()) + 0.5);
+            var pos = new Vec3(Math.floor(mc.player.getX()) + 0.5, Math.floor(mc.player.getY()) + 0.5, Math.floor(mc.player.getZ()) + 0.5);
             textMirrorPosX.setNumber(pos.x);
             textMirrorPosY.setNumber(pos.y);
             textMirrorPosZ.setNumber(pos.z);
@@ -132,19 +132,19 @@ public class MirrorSettingsPane extends ExpandableScrollEntry {
         buttonDrawPlanes.setTooltip(Component.literal("Show area"));
         mirrorIconButtonList.add(buttonDrawPlanes);
 
-        ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(mc.player);
+        var modifierSettings = ModifierSettingsManager.getModifierSettings(mc.player);
         if (modifierSettings != null) {
-            Mirror.MirrorSettings m = modifierSettings.getMirrorSettings();
-            buttonMirrorEnabled.setIsChecked(m.enabled);
-            textMirrorPosX.setNumber(m.position.x);
-            textMirrorPosY.setNumber(m.position.y);
-            textMirrorPosZ.setNumber(m.position.z);
-            buttonMirrorX.setIsChecked(m.mirrorX);
-            buttonMirrorY.setIsChecked(m.mirrorY);
-            buttonMirrorZ.setIsChecked(m.mirrorZ);
-            textMirrorRadius.setNumber(m.radius);
-            drawLines = m.drawLines;
-            drawPlanes = m.drawPlanes;
+            var m = modifierSettings.mirrorSettings();
+            buttonMirrorEnabled.setIsChecked(m.enabled());
+            textMirrorPosX.setNumber(m.position().x);
+            textMirrorPosY.setNumber(m.position().y);
+            textMirrorPosZ.setNumber(m.position().z);
+            buttonMirrorX.setIsChecked(m.mirrorX());
+            buttonMirrorY.setIsChecked(m.mirrorY());
+            buttonMirrorZ.setIsChecked(m.mirrorZ());
+            textMirrorRadius.setNumber(m.radius());
+            drawLines = m.drawLines();
+            drawPlanes = m.drawPlanes();
             buttonDrawLines.setUseAlternateIcon(drawLines);
             buttonDrawPlanes.setUseAlternateIcon(drawPlanes);
             buttonDrawLines.setTooltip(Component.literal(drawLines ? "Hide lines" : "Show lines"));
@@ -250,7 +250,7 @@ public class MirrorSettingsPane extends ExpandableScrollEntry {
     public Mirror.MirrorSettings getMirrorSettings() {
         boolean mirrorEnabled = buttonMirrorEnabled.isChecked();
 
-        Vec3 mirrorPos = new Vec3(0, 64, 0);
+        var mirrorPos = new Vec3(0, 64, 0);
         try {
             mirrorPos = new Vec3(textMirrorPosX.getNumber(), textMirrorPosY.getNumber(), textMirrorPosZ.getNumber());
         } catch (NumberFormatException | NullPointerException ex) {

@@ -86,7 +86,7 @@ public class RadialMirrorSettingsPane extends ExpandableScrollEntry {
 
         y = top + 72;
         buttonCurrentPosition = new IconButton(left + 5, y, 0, 0, BUILDING_ICONS, button -> {
-            Vec3 pos = new Vec3(Math.floor(mc.player.getX()) + 0.5, Math.floor(mc.player.getY()) + 0.5, Math.floor(mc.player.getZ()) + 0.5);
+            var pos = new Vec3(Math.floor(mc.player.getX()) + 0.5, Math.floor(mc.player.getY()) + 0.5, Math.floor(mc.player.getZ()) + 0.5);
             textRadialMirrorPosX.setNumber(pos.x);
             textRadialMirrorPosY.setNumber(pos.y);
             textRadialMirrorPosZ.setNumber(pos.z);
@@ -132,18 +132,18 @@ public class RadialMirrorSettingsPane extends ExpandableScrollEntry {
         buttonRadialMirrorAlternate = new FixedCheckbox(left + 140, y, " Alternate", false);
         radialMirrorButtonList.add(buttonRadialMirrorAlternate);
 
-        ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(mc.player);
+        var modifierSettings = ModifierSettingsManager.getModifierSettings(mc.player);
         if (modifierSettings != null) {
-            RadialMirror.RadialMirrorSettings r = modifierSettings.getRadialMirrorSettings();
-            buttonRadialMirrorEnabled.setIsChecked(r.enabled);
-            textRadialMirrorPosX.setNumber(r.position.x);
-            textRadialMirrorPosY.setNumber(r.position.y);
-            textRadialMirrorPosZ.setNumber(r.position.z);
-            textRadialMirrorSlices.setNumber(r.slices);
-            buttonRadialMirrorAlternate.setIsChecked(r.alternate);
-            textRadialMirrorRadius.setNumber(r.radius);
-            drawLines = r.drawLines;
-            drawPlanes = r.drawPlanes;
+            var radialMirrorSettings = modifierSettings.radialMirrorSettings();
+            buttonRadialMirrorEnabled.setIsChecked(radialMirrorSettings.enabled());
+            textRadialMirrorPosX.setNumber(radialMirrorSettings.position().x);
+            textRadialMirrorPosY.setNumber(radialMirrorSettings.position().y);
+            textRadialMirrorPosZ.setNumber(radialMirrorSettings.position().z);
+            textRadialMirrorSlices.setNumber(radialMirrorSettings.slices());
+            buttonRadialMirrorAlternate.setIsChecked(radialMirrorSettings.alternate());
+            textRadialMirrorRadius.setNumber(radialMirrorSettings.radius());
+            drawLines = radialMirrorSettings.drawLines();
+            drawPlanes = radialMirrorSettings.drawPlanes();
             buttonDrawLines.setUseAlternateIcon(drawLines);
             buttonDrawPlanes.setUseAlternateIcon(drawPlanes);
             buttonDrawLines.setTooltip(Component.literal(drawLines ? "Hide lines" : "Show lines"));
@@ -250,7 +250,7 @@ public class RadialMirrorSettingsPane extends ExpandableScrollEntry {
     public RadialMirror.RadialMirrorSettings getRadialMirrorSettings() {
         boolean radialMirrorEnabled = buttonRadialMirrorEnabled.isChecked();
 
-        Vec3 radialMirrorPos = new Vec3(0, 64, 0);
+        var radialMirrorPos = new Vec3(0, 64, 0);
         try {
             radialMirrorPos = new Vec3(textRadialMirrorPosX.getNumber(), textRadialMirrorPosY.getNumber(), textRadialMirrorPosZ
                     .getNumber());

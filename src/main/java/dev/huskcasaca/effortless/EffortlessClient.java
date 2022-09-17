@@ -22,7 +22,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
@@ -81,7 +80,7 @@ public class EffortlessClient implements ClientModInitializer {
 
     //    @SubscribeEvent(receiveCanceled = true)
     public static void onKeyPress(int key, int scanCode, int action, int modifiers) {
-        LocalPlayer player = Minecraft.getInstance().player;
+        var player = Minecraft.getInstance().player;
         if (player == null)
             return;
 //
@@ -93,10 +92,10 @@ public class EffortlessClient implements ClientModInitializer {
 //
 //        //QuickReplace toggle
 //        if (keyBindings[1].consumeClick()) {
-//            ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-//            modifierSettings.setQuickReplace(!modifierSettings.doQuickReplace());
+//            var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
+//            modifierSettings.setQuickReplace(!modifierSettings.quickReplace());
 //            Effortless.log(player, ChatFormatting.GOLD + "Quick Replace " + ChatFormatting.RESET + (
-//                    modifierSettings.doQuickReplace() ? "ON" : "OFF"));
+//                    modifierSettings.quickReplace() ? "ON" : "OFF"));
 //            PacketHandler.sendToServer(new ModifierSettingsMessage(modifierSettings));
 //        }
 
@@ -146,8 +145,8 @@ public class EffortlessClient implements ClientModInitializer {
     }
 
     public static void openModifierSettings() {
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
+        var mc = Minecraft.getInstance();
+        var player = mc.player;
         if (player == null) return;
 
         //Disabled if max reach is 0, might be set in the config that way.
@@ -167,10 +166,10 @@ public class EffortlessClient implements ClientModInitializer {
     }
 
     public static void onScreenEvent(Screen screen) {
-        Player player = Minecraft.getInstance().player;
+        var player = Minecraft.getInstance().player;
         if (player != null) {
 
-            ModeSettingsManager.ModeSettings modeSettings = ModeSettingsManager.getModeSettings(player);
+            var modeSettings = ModeSettingsManager.getModeSettings(player);
             ModeSettingsManager.setModeSettings(player, modeSettings);
             BuildModeHandler.initializeMode(player);
             PacketHandler.sendToServer(new ModeSettingsMessage(modeSettings));
@@ -191,7 +190,7 @@ public class EffortlessClient implements ClientModInitializer {
     protected static BlockHitResult getPlayerPOVHitResult(Level level, Player player, ClipContext.Fluid fluid) {
         float f = player.getXRot();
         float g = player.getYRot();
-        Vec3 vec3 = player.getEyePosition();
+        var vec3 = player.getEyePosition();
         float h = Mth.cos(-g * ((float) Math.PI / 180) - (float) Math.PI);
         float i = Mth.sin(-g * ((float) Math.PI / 180) - (float) Math.PI);
         float j = -Mth.cos(-f * ((float) Math.PI / 180));
@@ -200,7 +199,7 @@ public class EffortlessClient implements ClientModInitializer {
         float m = k;
         float n = h * j;
         double d = 5.0;
-        Vec3 vec32 = vec3.add((double) l * 5.0, (double) m * 5.0, (double) n * 5.0);
+        var vec32 = vec3.add((double) l * 5.0, (double) m * 5.0, (double) n * 5.0);
         return level.clip(new ClipContext(vec3, vec32, ClipContext.Block.OUTLINE, fluid, player));
     }
 
@@ -210,9 +209,9 @@ public class EffortlessClient implements ClientModInitializer {
         //base distance off of player ability (config)
         float raytraceRange = ReachHelper.getPlacementReach(player);
 
-        Vec3 look = player.getLookAngle();
-        Vec3 start = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
-        Vec3 end = new Vec3(player.getX() + look.x * raytraceRange, player.getY() + player.getEyeHeight() + look.y * raytraceRange, player.getZ() + look.z * raytraceRange);
+        var look = player.getLookAngle();
+        var start = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
+        var end = new Vec3(player.getX() + look.x * raytraceRange, player.getY() + player.getEyeHeight() + look.y * raytraceRange, player.getZ() + look.z * raytraceRange);
 //        return player.rayTrace(raytraceRange, 1f, RayTraceFluidMode.NEVER);
         //TODO 1.14 check if correct
         return world.clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));

@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
-import dev.huskcasaca.effortless.gui.widget.FixedCheckbox;
 import dev.huskcasaca.effortless.gui.widget.ExpandableScrollEntry;
+import dev.huskcasaca.effortless.gui.widget.FixedCheckbox;
 import dev.huskcasaca.effortless.gui.widget.NumberField;
 import dev.huskcasaca.effortless.gui.widget.ScrollPane;
 import dev.huskcasaca.effortless.helper.ReachHelper;
@@ -68,14 +68,14 @@ public class ArraySettingsPane extends ExpandableScrollEntry {
         textArrayCount.setTooltip(Component.literal("How many copies should be made."));
         arrayNumberFieldList.add(textArrayCount);
 
-        ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(mc.player);
+        var modifierSettings = ModifierSettingsManager.getModifierSettings(mc.player);
         if (modifierSettings != null) {
-            Array.ArraySettings a = modifierSettings.getArraySettings();
-            buttonArrayEnabled.setIsChecked(a.enabled);
-            textArrayOffsetX.setNumber(a.offset.getX());
-            textArrayOffsetY.setNumber(a.offset.getY());
-            textArrayOffsetZ.setNumber(a.offset.getZ());
-            textArrayCount.setNumber(a.count);
+            var arraySettings = modifierSettings.arraySettings();
+            buttonArrayEnabled.setIsChecked(arraySettings.enabled());
+            textArrayOffsetX.setNumber(arraySettings.offset().getX());
+            textArrayOffsetY.setNumber(arraySettings.offset().getY());
+            textArrayOffsetZ.setNumber(arraySettings.offset().getZ());
+            textArrayCount.setNumber(arraySettings.count());
         }
 
         setCollapsed(!buttonArrayEnabled.isChecked());
@@ -155,7 +155,7 @@ public class ArraySettingsPane extends ExpandableScrollEntry {
 
     public Array.ArraySettings getArraySettings() {
         boolean arrayEnabled = buttonArrayEnabled.isChecked();
-        BlockPos arrayOffset = new BlockPos(0, 0, 0);
+        var arrayOffset = new BlockPos(0, 0, 0);
         try {
             arrayOffset = new BlockPos(textArrayOffsetX.getNumber(), textArrayOffsetY.getNumber(), textArrayOffsetZ.getNumber());
         } catch (NumberFormatException | NullPointerException ex) {

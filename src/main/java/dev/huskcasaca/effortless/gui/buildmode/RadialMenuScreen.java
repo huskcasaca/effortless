@@ -15,7 +15,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -25,7 +24,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -458,7 +456,7 @@ public class RadialMenuScreen extends Screen {
         if (!performedActionUsingMouse) {
             performAction(false);
         }
-        Player player = Minecraft.getInstance().player;
+        var player = Minecraft.getInstance().player;
         if (player != null) {
             Effortless.log(player, I18n.get(ModeSettingsManager.getModeSettings(player).buildMode().getNameKey()), true);
 
@@ -479,9 +477,9 @@ public class RadialMenuScreen extends Screen {
     }
 
     private void performAction(boolean fromMouseClick) {
-        LocalPlayer player = Minecraft.getInstance().player;
+        var player = Minecraft.getInstance().player;
 
-        ModeSettingsManager.ModeSettings modeSettings = ModeSettingsManager.getModeSettings(player);
+        var modeSettings = ModeSettingsManager.getModeSettings(player);
 
         if (switchTo != null) {
             playRadialMenuSound();

@@ -8,7 +8,6 @@ import dev.huskcasaca.effortless.network.BlockBrokenMessage;
 import dev.huskcasaca.effortless.network.BlockPlacedMessage;
 import dev.huskcasaca.effortless.network.PacketHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -41,7 +40,7 @@ public class PlayerActionMixin {
 //        Minecraft mc = Minecraft.getInstance();
 //        LocalPlayer player = mc.player;
 //        if (player == null) return;
-//        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
+//        var buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
 //
 //        if (Minecraft.getInstance().screen != null ||
 //                buildMode == BuildMode.VANILLA ||
@@ -55,8 +54,8 @@ public class PlayerActionMixin {
     private void onStartAttack(CallbackInfoReturnable<Boolean> cir) {
 
         if (this.hitResult.getType() != HitResult.Type.ENTITY) {
-            LocalPlayer player = Minecraft.getInstance().player;
-            BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
+            var player = Minecraft.getInstance().player;
+            var buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
             if (buildMode == BuildMode.VANILLA || player.isHandsBusy()) {
                 // let vanilla handle attack action
 
@@ -76,9 +75,9 @@ public class PlayerActionMixin {
                         //play sound if further than normal
                         if ((blockLookingAt.getLocation().subtract(player.getEyePosition(1f))).lengthSqr() > 25f) {
 
-                            BlockPos blockPos = blockLookingAt.getBlockPos();
-                            BlockState state = player.level.getBlockState(blockPos);
-                            SoundType soundtype = state.getBlock().getSoundType(state);
+                            var blockPos = blockLookingAt.getBlockPos();
+                            var state = player.level.getBlockState(blockPos);
+                            var soundtype = state.getBlock().getSoundType(state);
                             player.level.playSound(player, player.blockPosition(), soundtype.getBreakSound(), SoundSource.BLOCKS,
                                     0.4f, soundtype.getPitch());
                         }
@@ -103,8 +102,8 @@ public class PlayerActionMixin {
             this.missTime = 0;
         }
 
-        LocalPlayer player = Minecraft.getInstance().player;
-        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
+        var player = Minecraft.getInstance().player;
+        var buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
         if (buildMode == BuildMode.VANILLA || player.isHandsBusy()) {
 
         } else {
@@ -120,8 +119,8 @@ public class PlayerActionMixin {
     @Inject(method = "startUseItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/HitResult;getType()Lnet/minecraft/world/phys/HitResult$Type;"), cancellable = true)
     private void onStartOption(CallbackInfo ci) {
         if (hitResult != null && hitResult.getType() != HitResult.Type.ENTITY) {
-            LocalPlayer player = Minecraft.getInstance().player;
-            BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
+            var player = Minecraft.getInstance().player;
+            var buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
 
             if (buildMode == BuildMode.VANILLA) {
                 // let vanilla handle use action
@@ -144,9 +143,9 @@ public class PlayerActionMixin {
                         if ((blockLookingAt.getLocation().subtract(player.getEyePosition(1f))).lengthSqr() > 25f &&
                                 itemStack.getItem() instanceof BlockItem) {
 
-                            BlockState state = ((BlockItem) itemStack.getItem()).getBlock().defaultBlockState();
-                            BlockPos blockPos = blockLookingAt.getBlockPos();
-                            SoundType soundType = state.getBlock().getSoundType(state);
+                            var state = ((BlockItem) itemStack.getItem()).getBlock().defaultBlockState();
+                            var blockPos = blockLookingAt.getBlockPos();
+                            var soundType = state.getBlock().getSoundType(state);
                             player.level.playSound(player, player.blockPosition(), soundType.getPlaceSound(), SoundSource.BLOCKS,
                                     0.4f, soundType.getPitch());
                             player.swing(InteractionHand.MAIN_HAND);
