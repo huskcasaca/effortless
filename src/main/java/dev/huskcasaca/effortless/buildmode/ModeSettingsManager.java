@@ -19,7 +19,7 @@ public class ModeSettingsManager {
     }
 
     public static String getTranslatedModeOptionName(Player player) {
-        BuildMode mode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+        BuildMode mode = ModeSettingsManager.getModeSettings(player).buildMode();
         if (mode == BuildMode.VANILLA) {
             return I18n.get(mode.getNameKey());
         } else {
@@ -62,22 +62,35 @@ public class ModeSettingsManager {
         }
     }
 
-    public static class ModeSettings {
-        private BuildMode buildMode = BuildMode.VANILLA;
+    public record ModeSettings(
+            BuildMode buildMode,
+            boolean enableMagnet
+    ) {
 
         public ModeSettings() {
+            this(BuildMode.VANILLA, false);
         }
 
-        public ModeSettings(BuildMode buildMode) {
-            this.buildMode = buildMode;
-        }
 
-        public BuildMode getBuildMode() {
-            return this.buildMode;
-        }
+//        private BuildMode buildMode = BuildMode.VANILLA;
+//        private boolean enableMagnet = ;
 
-        public void setBuildMode(BuildMode buildMode) {
-            this.buildMode = buildMode;
-        }
+//        public BuildMode buildMode() {
+//            return this.buildMode;
+//        }
+//
+//        public void setBuildMode(BuildMode buildMode) {
+//            this.buildMode = buildMode;
+//        }
+//
+//        public boolean isEnableMagnet() {
+//            return enableMagnet;
+//        }
+//
+//        public void setEnableMagnet(boolean enableMagnet) {
+//            this.enableMagnet = enableMagnet;
+//        }
+
+
     }
 }

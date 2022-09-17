@@ -73,7 +73,7 @@ public class BlockPreviewRenderer {
 
         //Render block previews
         HitResult lookingAt = EffortlessClient.getLookingAt(player);
-        if (modeSettings.getBuildMode() == BuildMode.VANILLA)
+        if (modeSettings.buildMode() == BuildMode.VANILLA)
             lookingAt = Minecraft.getInstance().hitResult;
 
         ItemStack mainhand = player.getMainHandItem();
@@ -112,7 +112,7 @@ public class BlockPreviewRenderer {
             //Keep blockstate the same for every block in the buildmode
             //So dont rotate blocks when in the middle of placing wall etc.
             if (BuildModeHandler.isActive(player)) {
-                Buildable buildModeInstance = modeSettings.getBuildMode().instance;
+                Buildable buildModeInstance = modeSettings.buildMode().instance;
                 if (buildModeInstance.getSideHit(player) != null) sideHit = buildModeInstance.getSideHit(player);
                 if (buildModeInstance.getHitVec(player) != null) hitVec = buildModeInstance.getHitVec(player);
             }
@@ -265,7 +265,7 @@ public class BlockPreviewRenderer {
 
     //Whether to draw any block previews or outlines
     public static boolean doRenderBlockPreviews(ModifierSettings modifierSettings, ModeSettings modeSettings, BlockPos startPos) {
-        return modeSettings.getBuildMode() != BuildMode.VANILLA || BuildConfig.visuals.alwaysShowBlockPreview &&
+        return modeSettings.buildMode() != BuildMode.VANILLA || BuildConfig.visuals.alwaysShowBlockPreview &&
                 (startPos != null && BuildModifierHandler.isEnabled(modifierSettings, startPos));
     }
 

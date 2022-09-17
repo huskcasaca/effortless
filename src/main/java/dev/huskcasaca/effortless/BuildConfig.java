@@ -111,4 +111,7 @@ public class BuildConfig {
 //			builder.pop();
         }
     }
+
+    public static final boolean isMagnetEnabled = false;
+
 }

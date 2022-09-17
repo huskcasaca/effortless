@@ -41,7 +41,7 @@ public class BuildModeHandler {
 
         ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(player);
         ModeSettingsManager.ModeSettings modeSettings = ModeSettingsManager.getModeSettings(player);
-        BuildMode buildMode = modeSettings.getBuildMode();
+        BuildMode buildMode = modeSettings.buildMode();
 
         BlockPos startPos = null;
 
@@ -126,7 +126,7 @@ public class BuildModeHandler {
         ModeSettingsManager.ModeSettings modeSettings = ModeSettingsManager.getModeSettings(player);
 
         //Get coordinates
-        BuildMode buildMode = modeSettings.getBuildMode();
+        BuildMode buildMode = modeSettings.buildMode();
         List<BlockPos> coordinates = buildMode.instance.onRightClick(player, startPos, Direction.UP, Vec3.ZERO, true);
 
         if (coordinates.isEmpty()) {
@@ -146,7 +146,7 @@ public class BuildModeHandler {
         List<BlockPos> coordinates = new ArrayList<>();
 
         ModeSettingsManager.ModeSettings modeSettings = ModeSettingsManager.getModeSettings(player);
-        coordinates.addAll(modeSettings.getBuildMode().instance.findCoordinates(player, startPos, skipRaytrace));
+        coordinates.addAll(modeSettings.buildMode().instance.findCoordinates(player, startPos, skipRaytrace));
 
         return coordinates;
     }
@@ -156,7 +156,7 @@ public class BuildModeHandler {
         Dictionary<Player, Boolean> currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
         currentlyBreaking.remove(player);
 
-        ModeSettingsManager.getModeSettings(player).getBuildMode().instance.initialize(player);
+        ModeSettingsManager.getModeSettings(player).buildMode().instance.initialize(player);
     }
 
     public static boolean isCurrentlyPlacing(Player player) {

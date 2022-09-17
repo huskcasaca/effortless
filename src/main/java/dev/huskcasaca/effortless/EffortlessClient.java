@@ -128,7 +128,7 @@ public class EffortlessClient implements ClientModInitializer {
 //        //Change placement mode
 //        if (keyBindings[5].consumeClick()) {
 //            //Toggle between first two actions of the first option of the current build mode
-//            BuildMode currentBuildMode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+//            BuildMode currentBuildMode = ModeSettingsManager.getModeSettings(player).buildMode();
 //            if (currentBuildMode.options.length > 0) {
 //                BuildOption option = currentBuildMode.options[0];
 //                if (option.actions.length >= 2) {

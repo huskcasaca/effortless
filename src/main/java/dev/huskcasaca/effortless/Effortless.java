@@ -40,7 +40,7 @@ public class Effortless implements ModInitializer {
 
         //Cancel event if necessary
 //        ServerPlayer player = ((ServerPlayer) event.getEntity());
-        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
         ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(player);
 
         if (buildMode != BuildMode.VANILLA) {
@@ -74,7 +74,7 @@ public class Effortless implements ModInitializer {
 
         //Cancel event if necessary
         //If cant break far then dont cancel event ever
-        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
         if (buildMode != BuildMode.VANILLA && ReachHelper.canBreakFar(player)) {
             return false;
         } else {
@@ -112,7 +112,7 @@ public class Effortless implements ModInitializer {
 
         //Set build mode to normal
         ModeSettingsManager.ModeSettings modeSettings = ModeSettingsManager.getModeSettings(player);
-        modeSettings.setBuildMode(BuildMode.VANILLA);
+        modeSettings = new ModeSettingsManager.ModeSettings(BuildMode.VANILLA, modeSettings.enableMagnet());
         ModeSettingsManager.setModeSettings(player, modeSettings);
 
         //Disable modifiers

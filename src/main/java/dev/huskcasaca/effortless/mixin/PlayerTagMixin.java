@@ -44,13 +44,13 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
     private void readModeSettings(CompoundTag tag) {
-        modeSettings = new ModeSettingsManager.ModeSettings(BuildMode.VANILLA);
+        modeSettings = new ModeSettingsManager.ModeSettings();
     }
 
     @Unique
     private void writeModeSettings(CompoundTag tag) {
         if (modeSettings == null) modeSettings = new ModeSettingsManager.ModeSettings();
-        //tag.putInteger("buildMode", modeSettings.getBuildMode().ordinal());
+        //tag.putInteger("buildMode", modeSettings.buildMode().ordinal());
         //TODO add mode settings
     }
 
