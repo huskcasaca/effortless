@@ -1,4 +1,4 @@
-package dev.huskcasaca.effortless.gui.buildmode;
+package dev.huskcasaca.effortless.screen.buildmode;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;

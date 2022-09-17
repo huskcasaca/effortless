@@ -1,11 +1,11 @@
-package dev.huskcasaca.effortless.gui.buildmode;
+package dev.huskcasaca.effortless.screen.buildmode;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.gui.widget.ExtendedButton;
-import dev.huskcasaca.effortless.gui.widget.Slider;
+import dev.huskcasaca.effortless.screen.widget.ExtendedButton;
+import dev.huskcasaca.effortless.screen.widget.Slider;
 import dev.huskcasaca.effortless.mixin.ScreenRenderHeaderAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

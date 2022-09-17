@@ -1,7 +1,7 @@
-package dev.huskcasaca.effortless.gui.widget;
+package dev.huskcasaca.effortless.screen.widget;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.huskcasaca.effortless.gui.ScreenUtils;
+import dev.huskcasaca.effortless.screen.ScreenUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;

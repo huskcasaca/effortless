@@ -1,4 +1,4 @@
-package dev.huskcasaca.effortless.gui.widget;
+package dev.huskcasaca.effortless.screen.widget;
 
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.network.chat.Component;

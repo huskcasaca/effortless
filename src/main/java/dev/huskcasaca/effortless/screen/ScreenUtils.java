@@ -1,4 +1,4 @@
-package dev.huskcasaca.effortless.gui;
+package dev.huskcasaca.effortless.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
