@@ -101,7 +101,7 @@ public class RadialMenuScreen extends Screen {
         BuildMode currentBuildMode = ModeSettingsManager.getModeSettings(minecraft.player).buildMode();
 
         ms.pushPose();
-        ms.translate(0, 0, 200);
+//        ms.translate(0, 0, 200);
 
         visibility += fadeSpeed * partialTicks;
         if (visibility > 1f) visibility = 1f;
@@ -160,17 +160,15 @@ public class RadialMenuScreen extends Screen {
         //Add buildmode dependent options
         BuildOption[] options = currentBuildMode.options;
         BuildOption[] enabledOptions = options;
+        final ArrayList<MenuButton> optionButtons = new ArrayList<>();
         for (int row = 0; row < options.length; row++) {
-            boolean highlight = false;
             for (int col = 0; col < options[row].actions.length; col++) {
                 BuildAction action = options[row].actions[col];
                 MenuButton button = new MenuButton(action.getNameKey(), action, buttonDistance + col * 26, -13 + row * 39, Direction.DOWN);
-                if (isButtonHighlighted(button, mouseXCenter, mouseYCenter)) {
-                    highlight = true;
-                }
                 buttons.add(button);
+                optionButtons.add(button);
             }
-            if (highlight) {
+            if (isMouseInButtonGroup(optionButtons, mouseXCenter, mouseYCenter)) {
                 enabledOptions = new BuildOption[row + 1];
                 System.arraycopy(options, 0, enabledOptions, 0, row + 1);
                 break;
@@ -199,6 +197,12 @@ public class RadialMenuScreen extends Screen {
 
     private boolean isButtonHighlighted(MenuButton btn, double mouseXCenter, double mouseYCenter) {
         return btn.x1 <= mouseXCenter && btn.x2 >= mouseXCenter && btn.y1 <= mouseYCenter && btn.y2 >= mouseYCenter;
+    }
+
+    private boolean isMouseInButtonGroup(ArrayList<MenuButton> btns, double mouseXCenter, double mouseYCenter) {
+        if (btns.isEmpty()) return false;
+        return btns.stream().map(btn -> btn.x1).min(Double::compare).get() <= mouseXCenter && btns.stream().map(btn -> btn.x2).max(Double::compare).get() >= mouseXCenter
+                && btns.stream().map(btn -> btn.y1).min(Double::compare).get() <= mouseYCenter && btns.stream().map(btn -> btn.y2).max(Double::compare).get() >= mouseYCenter;
     }
 
     private void drawRadialButtonBackgrounds(BuildMode currentBuildMode, BufferBuilder buffer, double middleX, double middleY, double mouseXCenter, double mouseYCenter, double mouseRadians, double ringInnerEdge, double ringOuterEdge, double quarterCircle, ArrayList<MenuRegion> modes) {
