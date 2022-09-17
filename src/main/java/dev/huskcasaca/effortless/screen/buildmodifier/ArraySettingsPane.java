@@ -1,13 +1,13 @@
-package dev.huskcasaca.effortless.gui.buildmodifier;
+package dev.huskcasaca.effortless.screen.buildmodifier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
-import dev.huskcasaca.effortless.gui.widget.ExpandableScrollEntry;
-import dev.huskcasaca.effortless.gui.widget.FixedCheckbox;
-import dev.huskcasaca.effortless.gui.widget.NumberField;
-import dev.huskcasaca.effortless.gui.widget.ScrollPane;
+import dev.huskcasaca.effortless.screen.widget.ExpandableScrollEntry;
+import dev.huskcasaca.effortless.screen.widget.FixedCheckbox;
+import dev.huskcasaca.effortless.screen.widget.NumberField;
+import dev.huskcasaca.effortless.screen.widget.ScrollPane;
 import dev.huskcasaca.effortless.helper.ReachHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
