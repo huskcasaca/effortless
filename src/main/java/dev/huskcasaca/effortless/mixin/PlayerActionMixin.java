@@ -41,7 +41,7 @@ public class PlayerActionMixin {
 //        Minecraft mc = Minecraft.getInstance();
 //        LocalPlayer player = mc.player;
 //        if (player == null) return;
-//        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+//        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
 //
 //        if (Minecraft.getInstance().screen != null ||
 //                buildMode == BuildMode.VANILLA ||
@@ -56,7 +56,7 @@ public class PlayerActionMixin {
 
         if (this.hitResult.getType() != HitResult.Type.ENTITY) {
             LocalPlayer player = Minecraft.getInstance().player;
-            BuildMode buildMode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+            BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
             if (buildMode == BuildMode.VANILLA || player.isHandsBusy()) {
                 // let vanilla handle attack action
 
@@ -104,7 +104,7 @@ public class PlayerActionMixin {
         }
 
         LocalPlayer player = Minecraft.getInstance().player;
-        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+        BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
         if (buildMode == BuildMode.VANILLA || player.isHandsBusy()) {
 
         } else {
@@ -121,7 +121,7 @@ public class PlayerActionMixin {
     private void onStartOption(CallbackInfo ci) {
         if (hitResult != null && hitResult.getType() != HitResult.Type.ENTITY) {
             LocalPlayer player = Minecraft.getInstance().player;
-            BuildMode buildMode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+            BuildMode buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
 
             if (buildMode == BuildMode.VANILLA) {
                 // let vanilla handle use action

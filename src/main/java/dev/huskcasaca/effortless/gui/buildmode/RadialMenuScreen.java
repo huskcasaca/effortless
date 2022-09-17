@@ -100,7 +100,7 @@ public class RadialMenuScreen extends Screen {
 
     @Override
     public void render(PoseStack ms, final int mouseX, final int mouseY, final float partialTicks) {
-        BuildMode currentBuildMode = ModeSettingsManager.getModeSettings(minecraft.player).getBuildMode();
+        BuildMode currentBuildMode = ModeSettingsManager.getModeSettings(minecraft.player).buildMode();
 
         ms.pushPose();
         ms.translate(0, 0, 200);
@@ -460,9 +460,9 @@ public class RadialMenuScreen extends Screen {
         }
         Player player = Minecraft.getInstance().player;
         if (player != null) {
-            Effortless.log(player, I18n.get(ModeSettingsManager.getModeSettings(player).getBuildMode().getNameKey()), true);
+            Effortless.log(player, I18n.get(ModeSettingsManager.getModeSettings(player).buildMode().getNameKey()), true);
 
-            BuildMode mode = ModeSettingsManager.getModeSettings(player).getBuildMode();
+            BuildMode mode = ModeSettingsManager.getModeSettings(player).buildMode();
             if (mode == BuildMode.VANILLA) {
                 Effortless.log(player, ModeSettingsManager.getTranslatedModeOptionName(player), true);
             } else {
@@ -486,7 +486,7 @@ public class RadialMenuScreen extends Screen {
         if (switchTo != null) {
             playRadialMenuSound();
 
-            modeSettings.setBuildMode(switchTo);
+            modeSettings = new ModeSettingsManager.ModeSettings(switchTo, modeSettings.enableMagnet());
             if (player != null) {
                 BuildModeHandler.initializeMode(player);
             }
