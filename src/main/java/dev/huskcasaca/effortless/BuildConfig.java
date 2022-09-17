@@ -7,7 +7,8 @@ public class BuildConfig {
     public static final Reach reach = new Reach(/*builder*/);
     public static final SurvivalBalancers survivalBalancers = new SurvivalBalancers(/*builder*/);
     public static final Visuals visuals = new Visuals(/*builder*/);
-//	public static final ForgeConfigSpec spec = builder.build();
+    //	public static final ForgeConfigSpec spec = builder.build();
+    public static final boolean isMagnetEnabled = false;
 
     public static class Reach {
         public final Boolean enableReachUpgrades = false;
@@ -111,7 +112,5 @@ public class BuildConfig {
 //			builder.pop();
         }
     }
-
-    public static final boolean isMagnetEnabled = false;
 
 }

@@ -20,9 +20,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -92,12 +90,12 @@ public class BlockPreviewRenderer {
             //TODO 1.13 replaceable
             boolean replaceable = player.level.getBlockState(startPos).getMaterial().isReplaceable();
             boolean becomesDoubleSlab = SurvivalHelper.doesBecomeDoubleSlab(player, startPos, blockLookingAt.getDirection());
-            if (!modifierSettings.doQuickReplace() && !toolInHand && !replaceable && !becomesDoubleSlab) {
+            if (!modifierSettings.quickReplace() && !toolInHand && !replaceable && !becomesDoubleSlab) {
                 startPos = startPos.relative(blockLookingAt.getDirection());
             }
 
             //Get under tall grass and other replaceable blocks
-            if (modifierSettings.doQuickReplace() && !toolInHand && replaceable) {
+            if (modifierSettings.quickReplace() && !toolInHand && replaceable) {
                 startPos = startPos.below();
             }
 
@@ -123,10 +121,11 @@ public class BlockPreviewRenderer {
                 boolean breaking = BuildModeHandler.currentlyBreakingClient.get(player) != null && BuildModeHandler.currentlyBreakingClient.get(player);
 
                 //get coordinates
-                List<BlockPos> startCoordinates = BuildModeHandler.findCoordinates(player, startPos, breaking || modifierSettings.doQuickReplace());
+                List<BlockPos> startCoordinates = BuildModeHandler.findCoordinates(player, startPos, breaking || modifierSettings.quickReplace());
 
                 //Remember first and last point for the shader
-                BlockPos firstPos = BlockPos.ZERO, secondPos = BlockPos.ZERO;
+                var firstPos = BlockPos.ZERO;
+                var secondPos = BlockPos.ZERO;
                 if (!startCoordinates.isEmpty()) {
                     firstPos = startCoordinates.get(0);
                     secondPos = startCoordinates.get(startCoordinates.size() - 1);
@@ -150,7 +149,7 @@ public class BlockPreviewRenderer {
                 List<BlockState> blockStates = new ArrayList<>();
                 if (breaking) {
                     //Find blockstate of world
-                    for (BlockPos coordinate : newCoordinates) {
+                    for (var coordinate : newCoordinates) {
                         blockStates.add(player.level.getBlockState(coordinate));
                     }
                 } else {
@@ -192,7 +191,7 @@ public class BlockPreviewRenderer {
                     } else {
                         VertexConsumer buffer = RenderHandler.beginLines(renderTypeBuffer);
 
-                        Vec3 color = new Vec3(1f, 1f, 1f);
+                        var color = new Vec3(1f, 1f, 1f);
                         if (breaking) color = new Vec3(1f, 0f, 0f);
 
                         for (int i = newCoordinates.size() - 1; i >= 0; i--) {
@@ -212,7 +211,7 @@ public class BlockPreviewRenderer {
                         int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
                         int minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
                         int minZ = Integer.MAX_VALUE, maxZ = Integer.MIN_VALUE;
-                        for (BlockPos pos : startCoordinates) {
+                        for (var pos : startCoordinates) {
                             if (pos.getX() < minX) minX = pos.getX();
                             if (pos.getX() > maxX) maxX = pos.getX();
                             if (pos.getY() < minY) minY = pos.getY();
@@ -220,7 +219,7 @@ public class BlockPreviewRenderer {
                             if (pos.getZ() < minZ) minZ = pos.getZ();
                             if (pos.getZ() > maxZ) maxZ = pos.getZ();
                         }
-                        BlockPos dim = new BlockPos(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
+                        var dim = new BlockPos(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
 
                         String dimensions = "(";
                         if (dim.getX() > 1) dimensions += dim.getX() + "x";
@@ -248,9 +247,9 @@ public class BlockPreviewRenderer {
                 //Only render first outline if further than normal reach
                 boolean excludeFirst = objectMouseOver != null && objectMouseOver.getType() == HitResult.Type.BLOCK;
                 for (int i = excludeFirst ? 1 : 0; i < breakCoordinates.size(); i++) {
-                    BlockPos coordinate = breakCoordinates.get(i);
+                    var coordinate = breakCoordinates.get(i);
 
-                    BlockState blockState = player.level.getBlockState(coordinate);
+                    var blockState = player.level.getBlockState(coordinate);
                     if (!blockState.isAir()) {
                         if (SurvivalHelper.canBreak(player.level, player, coordinate) || i == 0) {
                             VoxelShape collisionShape = blockState.getCollisionShape(player.level, coordinate);
@@ -272,24 +271,24 @@ public class BlockPreviewRenderer {
     protected static int renderBlockPreviews(PoseStack matrixStack, MultiBufferSource.BufferSource renderTypeBuffer, List<BlockPos> coordinates, List<BlockState> blockStates,
                                              List<ItemStack> itemStacks, float dissolve, BlockPos firstPos,
                                              BlockPos secondPos, boolean checkCanPlace, boolean red) {
-        Player player = Minecraft.getInstance().player;
-        ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-        BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
+        var player = Minecraft.getInstance().player;
+        var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
+        var dispatcher = Minecraft.getInstance().getBlockRenderer();
         int blocksValid = 0;
 
         if (coordinates.isEmpty()) return blocksValid;
 
         for (int i = coordinates.size() - 1; i >= 0; i--) {
-            BlockPos blockPos = coordinates.get(i);
-            BlockState blockState = blockStates.get(i);
-            ItemStack itemstack = itemStacks.isEmpty() ? ItemStack.EMPTY : itemStacks.get(i);
+            var blockPos = coordinates.get(i);
+            var blockState = blockStates.get(i);
+            var itemstack = itemStacks.isEmpty() ? ItemStack.EMPTY : itemStacks.get(i);
             if (CompatHelper.isItemBlockProxy(itemstack))
                 itemstack = CompatHelper.getItemBlockByState(itemstack, blockState);
 
             //Check if can place
             //If check is turned off, check if blockstate is the same (for dissolve effect)
             if ((!checkCanPlace /*&& player.world.getNewBlockState(blockPos) == blockState*/) || //TODO enable (breaks the breaking shader)
-                    SurvivalHelper.canPlace(player.level, player, blockPos, blockState, itemstack, modifierSettings.doQuickReplace(), Direction.UP)) {
+                    SurvivalHelper.canPlace(player.level, player, blockPos, blockState, itemstack, modifierSettings.quickReplace(), Direction.UP)) {
 
                 RenderHandler.renderBlockPreview(matrixStack, renderTypeBuffer, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, red);
                 blocksValid++;
@@ -304,9 +303,9 @@ public class BlockPreviewRenderer {
 
     public static void onBlocksPlaced(List<BlockPos> coordinates, List<ItemStack> itemStacks, List<BlockState> blockStates,
                                       BlockPos firstPos, BlockPos secondPos) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-        ModeSettings modeSettings = ModeSettingsManager.getModeSettings(player);
+        var player = Minecraft.getInstance().player;
+        var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
+        var modeSettings = ModeSettingsManager.getModeSettings(player);
 
         //Check if block previews are enabled
         if (doRenderBlockPreviews(modifierSettings, modeSettings, firstPos)) {
@@ -328,9 +327,9 @@ public class BlockPreviewRenderer {
 
     public static void onBlocksBroken(List<BlockPos> coordinates, List<ItemStack> itemStacks, List<BlockState> blockStates,
                                       BlockPos firstPos, BlockPos secondPos) {
-        LocalPlayer player = Minecraft.getInstance().player;
-        ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-        ModeSettings modeSettings = ModeSettingsManager.getModeSettings(player);
+        var player = Minecraft.getInstance().player;
+        var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
+        var modeSettings = ModeSettingsManager.getModeSettings(player);
 
         //Check if block previews are enabled
         if (doRenderBlockPreviews(modifierSettings, modeSettings, firstPos)) {

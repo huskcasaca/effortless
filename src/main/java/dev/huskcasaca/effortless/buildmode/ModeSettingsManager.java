@@ -41,13 +41,17 @@ public class ModeSettingsManager {
         ((EffortlessDataProvider) player).setModeSettings(modeSettings);
     }
 
-    public static String sanitize(ModeSettings modeSettings, Player player) {
+    public static String getSanitizeMessage(ModeSettings modeSettings, Player player) {
         int maxReach = ReachHelper.getMaxReach(player);
         String error = "";
 
         //TODO sanitize
 
         return error;
+    }
+
+    public static ModeSettings sanitize(ModeSettings modeSettings, Player player) {
+        return modeSettings;
     }
 
     public static void handleNewPlayer(Player player) {
@@ -70,27 +74,6 @@ public class ModeSettingsManager {
         public ModeSettings() {
             this(BuildMode.VANILLA, false);
         }
-
-
-//        private BuildMode buildMode = BuildMode.VANILLA;
-//        private boolean enableMagnet = ;
-
-//        public BuildMode buildMode() {
-//            return this.buildMode;
-//        }
-//
-//        public void setBuildMode(BuildMode buildMode) {
-//            this.buildMode = buildMode;
-//        }
-//
-//        public boolean isEnableMagnet() {
-//            return enableMagnet;
-//        }
-//
-//        public void setEnableMagnet(boolean enableMagnet) {
-//            this.enableMagnet = enableMagnet;
-//        }
-
 
     }
 }

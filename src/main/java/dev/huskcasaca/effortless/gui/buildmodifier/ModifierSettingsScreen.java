@@ -4,9 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
-import dev.huskcasaca.effortless.buildmodifier.array.Array;
-import dev.huskcasaca.effortless.buildmodifier.mirror.Mirror;
-import dev.huskcasaca.effortless.buildmodifier.mirror.RadialMirror;
 import dev.huskcasaca.effortless.gui.widget.ScrollPane;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
 import dev.huskcasaca.effortless.mixin.ScreenRenderablesAccessor;
@@ -18,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
 
 @Environment(EnvType.CLIENT)
 public class ModifierSettingsScreen extends Screen {
@@ -54,7 +50,7 @@ public class ModifierSettingsScreen extends Screen {
         //Close button
         int y = height - 26;
         buttonClose = new Button(width / 2 - 100, y, 200, 20, Component.literal("Close"), (button) -> {
-            Player player = Minecraft.getInstance().player;
+            var player = Minecraft.getInstance().player;
             if (player != null) {
                 player.closeContainer();
             }
@@ -132,27 +128,26 @@ public class ModifierSettingsScreen extends Screen {
     public void removed() {
         scrollPane.onGuiClosed();
 
-        //save everything
-        Mirror.MirrorSettings m = mirrorSettingsPane.getMirrorSettings();
-        Array.ArraySettings a = arraySettingsPane.getArraySettings();
-        RadialMirror.RadialMirrorSettings r = radialMirrorSettingsPane.getRadialMirrorSettings();
+        var arraySettings = arraySettingsPane.getArraySettings();
+        var mirrorSettings = mirrorSettingsPane.getMirrorSettings();
+        var radialMirrorSettings = radialMirrorSettingsPane.getRadialMirrorSettings();
 
-        ModifierSettingsManager.ModifierSettings modifierSettings = ModifierSettingsManager.getModifierSettings(minecraft.player);
-        if (modifierSettings == null) modifierSettings = new ModifierSettingsManager.ModifierSettings();
-        modifierSettings.setMirrorSettings(m);
-        modifierSettings.setArraySettings(a);
-        modifierSettings.setRadialMirrorSettings(r);
+        var modifierSettings = ModifierSettingsManager.getModifierSettings(minecraft.player);
+        if (modifierSettings == null) {
+            modifierSettings = new ModifierSettingsManager.ModifierSettings(mirrorSettings, arraySettings, radialMirrorSettings);
+        }
 
         //Sanitize
-        String error = ModifierSettingsManager.sanitize(modifierSettings, minecraft.player);
+        String error = ModifierSettingsManager.getSanitizeMessage(modifierSettings, minecraft.player);
         if (!error.isEmpty()) Effortless.log(minecraft.player, error);
 
+        modifierSettings = ModifierSettingsManager.sanitize(modifierSettings, minecraft.player);
         ModifierSettingsManager.setModifierSettings(minecraft.player, modifierSettings);
 
         //Send to server
-        // FIXME: 7/9/22
         PacketHandler.sendToServer(new ModifierSettingsMessage(modifierSettings));
 
+        // TODO: 17/9/22 grabMouse
 //        Minecraft.getInstance().mouseHandler.grabMouse();
     }
 

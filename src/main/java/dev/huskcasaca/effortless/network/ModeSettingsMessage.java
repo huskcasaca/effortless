@@ -28,7 +28,7 @@ public record ModeSettingsMessage(
     }
 
     public static ModeSettingsMessage decode(FriendlyByteBuf buf) {
-        BuildMode buildMode = BuildMode.values()[buf.readInt()];
+        var buildMode = BuildMode.values()[buf.readInt()];
         boolean enableMagnet = buf.readBoolean();
 
         return new ModeSettingsMessage(new ModeSettings(buildMode, enableMagnet));
@@ -53,8 +53,7 @@ public record ModeSettingsMessage(
         @Override
         public void handleServerSide(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, ModeSettingsMessage message, PacketSender responseSender) {
             server.execute(() -> {
-                ModeSettingsManager.sanitize(message.modeSettings, player);
-                ModeSettingsManager.setModeSettings(player, message.modeSettings);
+                ModeSettingsManager.setModeSettings(player, ModeSettingsManager.sanitize(message.modeSettings, player));
                 BuildModeHandler.initializeMode(player);
             });
         }
@@ -67,8 +66,7 @@ public record ModeSettingsMessage(
         @Override
         public void handleClientSide(Minecraft client, LocalPlayer player, ClientPacketListener handler, ModeSettingsMessage message, PacketSender responseSender) {
             client.execute(() -> {
-                ModeSettingsManager.sanitize(message.modeSettings, player);
-                ModeSettingsManager.setModeSettings(player, message.modeSettings);
+                ModeSettingsManager.setModeSettings(player, ModeSettingsManager.sanitize(message.modeSettings, player));
                 BuildModeHandler.initializeMode(player);
             });
         }

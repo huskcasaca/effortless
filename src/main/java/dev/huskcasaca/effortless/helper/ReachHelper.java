@@ -11,7 +11,7 @@ public class ReachHelper {
 //		if (!BuildConfig.reach.enableReachUpgrades.get()) return BuildConfig.reach.maxReachLevel3.get();
 //
 //		//Check buildsettings for reachUpgrade
-//		int reachUpgrade = ModifierSettingsManager.getModifierSettings(player).getReachUpgrade();
+//		int reachUpgrade = ModifierSettingsManager.getModifierSettings(player).reachUpgrade();
 //		switch (reachUpgrade) {
 //			case 0:
 //				return BuildConfig.reach.maxReachLevel0.get();
