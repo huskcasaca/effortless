@@ -41,6 +41,18 @@ public class ModeSettingsManager {
         ((EffortlessDataProvider) player).setModeSettings(modeSettings);
     }
 
+    public static void syncMagnetSetting(Player player, boolean enable) {
+        if (player == null) {
+            return;
+        }
+        var modeSettings = getModeSettings(player);
+        modeSettings = new ModeSettingsManager.ModeSettings(modeSettings.buildMode(), enable);
+        ModeSettingsManager.setModeSettings(player, modeSettings);
+        PacketHandler.sendToServer(new ModeSettingsMessage(modeSettings));
+    }
+
+
+
     public static String getSanitizeMessage(ModeSettings modeSettings, Player player) {
         int maxReach = ReachHelper.getMaxReach(player);
         String error = "";
