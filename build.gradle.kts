@@ -52,17 +52,20 @@ val curseForgeKey: String by project
 val curseForgeId: String by project
 
 publishing {
-    repositories.curseForge {
-        apiKey.set(curseForgeKey)
+    repositories {
+        curseForge {
+            apiKey.set(curseForgeKey)
+        }
     }
     publications.create<CurseForgePublication>("curseForge") {
         projectID.set(curseForgeId.toInt()) // The CurseForge project ID (required)
         // Specify which game and version the mod/plugin targets (required)
-        includeGameVersions { type, version -> type == "minecraft-1-19" && version == "minecraft-1-19-1" }
+        includeGameVersions { type, version -> type == "modloader" || version == "fabric" }
+//        includeGameVersions { type, version -> type == "minecraft-1-19" && version == "minecraft-1-19-2" }
         artifact {
             changelog = Changelog("Changelog...", ChangelogType.TEXT) // The changelog (required)
             releaseType = ReleaseType.RELEASE // The release type (required)
-            displayName = "Effortless Fabric" // A user-friendly name for the project (optional)
+            displayName = "effortless-fabric-$version.jar" // A user-friendly name for the project (optional)
         }
     }
 }
