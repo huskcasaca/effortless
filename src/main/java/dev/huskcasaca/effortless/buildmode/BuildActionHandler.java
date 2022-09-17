@@ -4,6 +4,8 @@ import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.UndoRedo;
+import dev.huskcasaca.effortless.network.ModeSettingsMessage;
+import dev.huskcasaca.effortless.network.PacketHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.player.Player;
 
@@ -80,7 +82,14 @@ public class BuildActionHandler {
                 ModifierSettingsManager.setModifierSettings(player, modifierSettings);
 
                 Effortless.log(player, ChatFormatting.GOLD + "Quick Replace " + ChatFormatting.RESET + (
-                        modifierSettings.quickReplace() ? "ON" : "OFF"), true);
+                        modifierSettings.quickReplace() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
+                break;
+            case MAGNET:
+                var modeSettings = ModeSettingsManager.getModeSettings(player);
+                modeSettings = new ModeSettingsManager.ModeSettings(modeSettings.buildMode(), !modeSettings.enableMagnet());
+                ModeSettingsManager.setModeSettings(player, modeSettings);
+                PacketHandler.sendToServer(new ModeSettingsMessage(modeSettings));
+                Effortless.log(player, (ChatFormatting.GREEN + "ON") + (ChatFormatting.RED + "OFF") + ChatFormatting.RESET, true);
                 break;
             case OPEN_MODIFIER_SETTINGS:
                 if (player.level.isClientSide)
@@ -90,7 +99,6 @@ public class BuildActionHandler {
                 if (player.level.isClientSide)
                     EffortlessClient.openPlayerSettings();
                 break;
-
             case NORMAL_SPEED:
                 buildSpeed = BuildAction.NORMAL_SPEED;
                 break;

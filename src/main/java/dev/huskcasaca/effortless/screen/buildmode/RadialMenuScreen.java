@@ -145,11 +145,16 @@ public class RadialMenuScreen extends Screen {
             modes.add(new MenuRegion(mode));
         }
 
+//        -26 -13    0 -13
+//        -26  13    0  13
+//        -26  39    0  39
+
         //Add actions
         buttons.add(new MenuButton(BuildAction.UNDO.getNameKey(), BuildAction.UNDO, -buttonDistance - 26, -13, Direction.UP));
         buttons.add(new MenuButton(BuildAction.REDO.getNameKey(), BuildAction.REDO, -buttonDistance, -13, Direction.UP));
         buttons.add(new MenuButton(BuildAction.OPEN_MODIFIER_SETTINGS.getNameKey(), BuildAction.OPEN_MODIFIER_SETTINGS, -buttonDistance - 26, 13, Direction.DOWN));
         buttons.add(new MenuButton(BuildAction.REPLACE.getNameKey(), BuildAction.REPLACE, -buttonDistance, 13, Direction.DOWN));
+        buttons.add(new MenuButton(BuildAction.MAGNET.getNameKey(), BuildAction.MAGNET, -buttonDistance -26, 39, Direction.DOWN));
 //		buttons.add(new MenuButton(BuildAction.OPEN_PLAYER_SETTINGS.getNameKey(), BuildAction.OPEN_PLAYER_SETTINGS, -buttonDistance - 26 - 13, 13, Direction.DOWN));
 
         //Add buildmode dependent options
@@ -485,10 +490,10 @@ public class RadialMenuScreen extends Screen {
             playRadialMenuSound();
 
             modeSettings = new ModeSettingsManager.ModeSettings(switchTo, modeSettings.enableMagnet());
+            ModeSettingsManager.setModeSettings(player, modeSettings);
             if (player != null) {
                 BuildModeHandler.initializeMode(player);
             }
-            ModeSettingsManager.setModeSettings(player, modeSettings);
             PacketHandler.sendToServer(new ModeSettingsMessage(modeSettings));
 
             if (fromMouseClick) performedActionUsingMouse = true;
