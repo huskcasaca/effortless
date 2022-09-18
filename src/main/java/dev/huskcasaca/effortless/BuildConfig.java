@@ -12,7 +12,7 @@ public class BuildConfig {
 
     public static class Reach {
         public final Boolean enableReachUpgrades = false;
-        public final Integer maxReachCreative = 1024;
+        public final Integer maxReachCreative = 64;
         // TODO: 5/9/22  remove maxReachLevel0-3
         public final Integer maxReachLevel0 = maxReachCreative;
         public final Integer maxReachLevel1 = maxReachCreative;
