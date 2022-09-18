@@ -51,8 +51,8 @@ public class RadialMenuScreen extends Screen {
     private final int watermarkTextColor = 0x88888888;
     private final int descriptionTextColor = 0xdd888888;
     private final int optionTextColor = 0xeeeeeeff;
-    private final double ringInnerEdge = 40;
-    private final double ringOuterEdge = 80;
+    private final double ringInnerEdge = 38;
+    private final double ringOuterEdge = 75;
     private final double categoryLineOuterEdge = 42;
     private final double textDistance = 90;
     private final double buttonDistance = 120;
@@ -114,8 +114,8 @@ public class RadialMenuScreen extends Screen {
         RenderSystem.disableTexture();
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        final Tesselator tessellator = Tesselator.getInstance();
-        final BufferBuilder buffer = tessellator.getBuilder();
+        final var tessellator = Tesselator.getInstance();
+        final var buffer = tessellator.getBuilder();
 
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
