@@ -13,14 +13,7 @@ public class BuildConfig {
     public static class Reach {
         public final Boolean enableReachUpgrades = false;
         public final Integer maxReachCreative = 64;
-        // TODO: 5/9/22  remove maxReachLevel0-3
-        public final Integer maxReachLevel0 = maxReachCreative;
-        public final Integer maxReachLevel1 = maxReachCreative;
-        public final Integer maxReachLevel2 = maxReachCreative;
-        public final Integer maxReachLevel3 = maxReachCreative;
 
-//		public Reach(/*ForgeConfigSpec.Builder builder*/) {
-//			builder.push("Reach");
 //			enableReachUpgrades = builder
 //				.comment("Reach: how far away the player can place blocks using mirror/array etc.",
 //					"Enable the crafting of reach upgrades to increase reach.",
@@ -32,26 +25,6 @@ public class BuildConfig {
 //					"Keep in mind that chunks need to be loaded to be able to place blocks inside.")
 //				.define("maxReachCreative", 200);
 //
-//			maxReachLevel0 = builder
-//				.comment("Maximum reach in survival without upgrades",
-//					"Reach upgrades are craftable consumables that permanently increase reach.",
-//					"Set to 0 to disable Effortless Building until the player has consumed a reach upgrade.")
-//				.define("maxReachLevel0", 20);
-//
-//			maxReachLevel1 = builder
-//				.comment("Maximum reach in survival with one upgrade")
-//				.define("maxReachLevel1", 50);
-//
-//			maxReachLevel2 = builder
-//				.comment("Maximum reach in survival with two upgrades")
-//				.define("maxReachLevel2", 100);
-//
-//			maxReachLevel3 = builder
-//				.comment("Maximum reach in survival with three upgrades")
-//				.define("maxReachLevel3", 200);
-//
-//			builder.pop();
-//		}
     }
 
     public static class SurvivalBalancers {

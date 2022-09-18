@@ -88,7 +88,6 @@ public class BuildActionHandler {
                 var modeSettings = ModeSettingsManager.getModeSettings(player);
                 modeSettings = new ModeSettingsManager.ModeSettings(modeSettings.buildMode(), !modeSettings.enableMagnet());
                 ModeSettingsManager.setModeSettings(player, modeSettings);
-//                PacketHandler.sendToServer(new ModeSettingsMessage(modeSettings));
 
                 Effortless.log(player,  ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
                 break;
