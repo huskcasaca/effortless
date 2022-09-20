@@ -65,7 +65,7 @@ publishing {
         artifact {
             changelog = Changelog("Changelog...", ChangelogType.TEXT) // The changelog (required)
             releaseType = ReleaseType.RELEASE // The release type (required)
-            displayName = "effortless-fabric-$version-${libs.versions.minecraft.version}.jar" // A user-friendly name for the project (optional)
+            displayName = "effortless-fabric-$version-${libs.versions.minecraft.version}.jar"
         }
     }
 }
