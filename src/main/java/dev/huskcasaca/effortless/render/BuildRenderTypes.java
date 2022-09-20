@@ -104,19 +104,19 @@ public class BuildRenderTypes extends RenderType {
         RenderSystem.setShaderTexture(maskTextureIndex, shaderMaskTextureLocation);
 
         if (percentileUniform != null) percentileUniform.set(dissolve);
-        else Effortless.log("percentileUniform is null");
+        else Effortless.log("percentile uniform is null");
         if (highlightUniform != null) highlightUniform.set(highlight ? 1 : 0);
-        else Effortless.log("highlightUniform is null");
+        else Effortless.log("highlight uniform is null");
         if (redUniform != null) redUniform.set(red ? 1 : 0);
         else Effortless.log("redUniform is null");
 
         if (blockposUniform != null) blockposUniform.set((float) blockpos.x, (float) blockpos.y, (float) blockpos.z);
-        else Effortless.log("blockposUniform is null");
+        else Effortless.log("blockpos uniform is null");
         if (firstposUniform != null) firstposUniform.set((float) firstpos.x, (float) firstpos.y, (float) firstpos.z);
-        else Effortless.log("firstposUniform is null");
+        else Effortless.log("firstpos uniform is null");
         if (secondposUniform != null)
             secondposUniform.set((float) secondpos.x, (float) secondpos.y, (float) secondpos.z);
-        else Effortless.log("secondposUniform is null");
+        else Effortless.log("secondpos uniform is null");
     }
 
     private record ShaderInfo(

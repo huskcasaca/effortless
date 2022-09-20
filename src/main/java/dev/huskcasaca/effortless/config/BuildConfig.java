@@ -16,7 +16,6 @@ public class BuildConfig extends Config {
     public static int MIN_UNDO_STACK_SIZE = 0;
     public static int MAX_UNDO_STACK_SIZE = 100;
 
-
     @Expose
     private int maxReachDistance = 512;
     @Expose
@@ -38,10 +37,6 @@ public class BuildConfig extends Config {
     public void setMaxReachDistance(int maxReachDistance) {
         this.maxReachDistance = maxReachDistance;
     }
-
-    /**
-     * @return true if anything was changed
-     */
 
     public int getMaxBlockPlacePerAxis() {
         return maxBlockPlacePerAxis;
