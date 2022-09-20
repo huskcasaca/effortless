@@ -79,18 +79,13 @@ tasks {
             options.release.set(JavaVersion.VERSION_17.toString().toInt())
         }
     }
-//    withType<KotlinCompile> {
-//        kotlinOptions {
-//            jvmTarget = javaVersion.toString()
-//        }
-//    }
-
-    jar {
-        this.exclude("effortless.accesswidener")
-    }
 
     processResources {
-        inputs.property("version", project.version)
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        from("src/main/resources")
+        filesMatching("fabric.mod.json") {
+            expand(project.properties)
+        }
     }
 
 }
