@@ -30,6 +30,7 @@
   "mixins": [
     "effortless.mixins.json"
   ],
+  "accessWidener": "effortless.accesswidener",
   "depends": {
     "fabricloader": ">=0.14.9",
     "fabric": "*",
