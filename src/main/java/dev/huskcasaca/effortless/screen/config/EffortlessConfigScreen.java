@@ -100,22 +100,22 @@ public class EffortlessConfigScreen {
                         .build()
         );
         buildSubCat.add(isCanBreakFar.build(entryBuilder));
-//        buildSubCat.add(
-//                entryBuilder.startBooleanToggle(Component.translatable(enableUndo.getTitleKey()), enableUndo.currentValue)
-//                        .setTooltip(Component.translatable(enableUndo.getTooltipKey()))
-//                        .setDefaultValue(enableUndo.defaultValue)
-//                        .setSaveConsumer(enableUndo.saveConsumer)
-//                        .setYesNoTextSupplier(yesNoTextSupplier)
-//                        .build()
-//        );
-//        buildSubCat.add(
-//                entryBuilder.startIntSlider(Component.translatable(undoStackSize.getTitleKey()), undoStackSize.currentValue, undoStackSize.minValue, undoStackSize.maxValue)
-//                        .setTooltip(Component.translatable(undoStackSize.getTooltipKey()))
-//                        .setDefaultValue(undoStackSize.defaultValue)
-//                        .setSaveConsumer(undoStackSize.saveConsumer)
-//                        .setTextGetter((integer) -> Component.literal((integer <= 0 ? "Disabled" : (integer + " " + (integer <= 1 ? "step" : "steps")))))
-//                        .build()
-//        );
+        buildSubCat.add(
+                entryBuilder.startBooleanToggle(Component.translatable(enableUndo.getTitleKey()), enableUndo.currentValue)
+                        .setTooltip(Component.translatable(enableUndo.getTooltipKey()))
+                        .setDefaultValue(enableUndo.defaultValue)
+                        .setSaveConsumer(enableUndo.saveConsumer)
+                        .setYesNoTextSupplier(yesNoTextSupplier)
+                        .build()
+        );
+        buildSubCat.add(
+                entryBuilder.startIntSlider(Component.translatable(undoStackSize.getTitleKey()), undoStackSize.currentValue, undoStackSize.minValue, undoStackSize.maxValue)
+                        .setTooltip(Component.translatable(undoStackSize.getTooltipKey()))
+                        .setDefaultValue(undoStackSize.defaultValue)
+                        .setSaveConsumer(undoStackSize.saveConsumer)
+                        .setTextGetter((integer) -> Component.literal((integer <= 0 ? "Disabled" : (integer + " " + (integer <= 1 ? "step" : "steps")))))
+                        .build()
+        );
 
 
         final var alwaysShowBlockPreview = new BooleanEntryData("always_show_block_preview", defaults.getPreviewConfig().isAlwaysShowBlockPreview(), config.getPreviewConfig().isAlwaysShowBlockPreview(), config.getPreviewConfig()::setAlwaysShowBlockPreview);
