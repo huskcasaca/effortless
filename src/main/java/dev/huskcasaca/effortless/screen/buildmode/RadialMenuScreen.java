@@ -154,7 +154,7 @@ public class RadialMenuScreen extends Screen {
         buttons.add(new MenuButton(BuildAction.REDO.getNameKey(), BuildAction.REDO, -buttonDistance, -13, Direction.UP));
         buttons.add(new MenuButton(BuildAction.OPEN_MODIFIER_SETTINGS.getNameKey(), BuildAction.OPEN_MODIFIER_SETTINGS, -buttonDistance - 26, 13, Direction.DOWN));
         buttons.add(new MenuButton(BuildAction.REPLACE.getNameKey(), BuildAction.REPLACE, -buttonDistance, 13, Direction.DOWN));
-        buttons.add(new MenuButton(BuildAction.MAGNET.getNameKey(), BuildAction.MAGNET, -buttonDistance -26, 39, Direction.DOWN));
+        buttons.add(new MenuButton(BuildAction.MAGNET.getNameKey(), BuildAction.MAGNET, -buttonDistance - 26, 39, Direction.DOWN));
 //		buttons.add(new MenuButton(BuildAction.OPEN_PLAYER_SETTINGS.getNameKey(), BuildAction.OPEN_PLAYER_SETTINGS, -buttonDistance - 26 - 13, 13, Direction.DOWN));
 
         //Add buildmode dependent options

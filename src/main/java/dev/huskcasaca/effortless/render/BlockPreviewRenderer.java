@@ -2,7 +2,6 @@ package dev.huskcasaca.effortless.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.huskcasaca.effortless.BuildConfig;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
@@ -13,6 +12,8 @@ import dev.huskcasaca.effortless.buildmode.ModeSettingsManager.ModeSettings;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHandler;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager.ModifierSettings;
+import dev.huskcasaca.effortless.config.ConfigManager;
+import dev.huskcasaca.effortless.config.PreviewConfig;
 import dev.huskcasaca.effortless.helper.CompatHelper;
 import dev.huskcasaca.effortless.helper.ReachHelper;
 import dev.huskcasaca.effortless.helper.SurvivalHelper;
@@ -52,12 +53,12 @@ public class BlockPreviewRenderer {
 
         //Render placed blocks with dissolve effect
         //Use fancy shader if config allows, otherwise no dissolve
-        if (BuildConfig.visuals.useShaders) {
+        if (PreviewConfig.useShader()) {
             for (int i = 0; i < placedDataList.size(); i++) {
                 PlacedData placed = placedDataList.get(i);
                 if (placed.coordinates != null && !placed.coordinates.isEmpty()) {
 
-                    double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * BuildConfig.visuals.dissolveTimeMultiplier;
+                    double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();
                     float dissolve = (EffortlessClient.ticksInGame - placed.time) / (float) totalTime;
                     renderBlockPreviews(matrixStack, renderTypeBuffer, placed.coordinates, placed.blockStates, placed.itemStacks, dissolve, placed.firstPos, placed.secondPos, false, placed.breaking);
                 }
@@ -65,7 +66,7 @@ public class BlockPreviewRenderer {
         }
         //Expire
         placedDataList.removeIf(placed -> {
-            double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * BuildConfig.visuals.dissolveTimeMultiplier;
+            double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();
             return placed.time + totalTime < EffortlessClient.ticksInGame;
         });
 
@@ -95,6 +96,7 @@ public class BlockPreviewRenderer {
             }
 
             //Get under tall grass and other replaceable blocks
+            // TODO: 20/9/22 remove
             if (modifierSettings.quickReplace() && !toolInHand && replaceable) {
                 startPos = startPos.below();
             }
@@ -186,7 +188,7 @@ public class BlockPreviewRenderer {
                     int blockCount;
 
                     //Use fancy shader if config allows, otherwise outlines
-                    if (BuildConfig.visuals.useShaders && newCoordinates.size() < BuildConfig.visuals.shaderThreshold) {
+                    if (PreviewConfig.useShader() && newCoordinates.size() < PreviewConfig.shaderThresholdRounded()) {
                         blockCount = renderBlockPreviews(matrixStack, renderTypeBuffer, newCoordinates, blockStates, itemStacks, 0f, firstPos, secondPos, !breaking, breaking);
                     } else {
                         VertexConsumer buffer = RenderHandler.beginLines(renderTypeBuffer);
@@ -221,18 +223,21 @@ public class BlockPreviewRenderer {
                         }
                         var dim = new BlockPos(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
 
-                        String dimensions = "(";
+                        String dimensions = " (";
                         if (dim.getX() > 1) dimensions += dim.getX() + "x";
                         if (dim.getZ() > 1) dimensions += dim.getZ() + "x";
                         if (dim.getY() > 1) dimensions += dim.getY() + "x";
                         dimensions = dimensions.substring(0, dimensions.length() - 1);
                         if (dimensions.length() > 1) dimensions += ")";
 
-                        Effortless.log(player, ChatFormatting.GOLD + ModeSettingsManager.getTranslatedModeOptionName(player) + ChatFormatting.RESET + " of " + blockCount + " blocks " + dimensions, true);
+                        Effortless.log(player, ChatFormatting.GOLD + ModeSettingsManager.getTranslatedModeOptionName(player) + ChatFormatting.RESET + " of " + blockCount + " " + (blockCount == 1 ? "block" : "blocks") + dimensions, true);
                     }
+                } else {
+                    Effortless.log(player, ChatFormatting.GOLD + ModeSettingsManager.getTranslatedModeOptionName(player) + ChatFormatting.RESET + " cannot be built", true);
                 }
 
-
+            } else {
+                Effortless.log(player, ChatFormatting.GOLD + ModeSettingsManager.getTranslatedModeOptionName(player) + ChatFormatting.RESET + " is reset ", true);
             }
 
             VertexConsumer buffer = RenderHandler.beginLines(renderTypeBuffer);
@@ -264,8 +269,7 @@ public class BlockPreviewRenderer {
 
     //Whether to draw any block previews or outlines
     public static boolean doRenderBlockPreviews(ModifierSettings modifierSettings, ModeSettings modeSettings, BlockPos startPos) {
-        return modeSettings.buildMode() != BuildMode.VANILLA || BuildConfig.visuals.alwaysShowBlockPreview &&
-                (startPos != null && BuildModifierHandler.isEnabled(modifierSettings, startPos));
+        return ConfigManager.getGlobalPreviewConfig().isAlwaysShowBlockPreview() || (modeSettings.buildMode() != BuildMode.VANILLA);
     }
 
     protected static int renderBlockPreviews(PoseStack matrixStack, MultiBufferSource.BufferSource renderTypeBuffer, List<BlockPos> coordinates, List<BlockState> blockStates,
@@ -312,7 +316,7 @@ public class BlockPreviewRenderer {
 
             //Save current coordinates, blockstates and itemstacks
             if (!coordinates.isEmpty() && blockStates.size() == coordinates.size() &&
-                    coordinates.size() > 1 && coordinates.size() < BuildConfig.visuals.shaderThreshold) {
+                    coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
 
                 placedDataList.add(new PlacedData(EffortlessClient.ticksInGame, coordinates, blockStates,
                         itemStacks, firstPos, secondPos, false));
@@ -336,7 +340,7 @@ public class BlockPreviewRenderer {
 
             //Save current coordinates, blockstates and itemstacks
             if (!coordinates.isEmpty() && blockStates.size() == coordinates.size() &&
-                    coordinates.size() > 1 && coordinates.size() < BuildConfig.visuals.shaderThreshold) {
+                    coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
 
                 sortOnDistanceToPlayer(coordinates, player);
 

@@ -52,7 +52,6 @@ public class ModeSettingsManager {
     }
 
 
-
     public static String getSanitizeMessage(ModeSettings modeSettings, Player player) {
         int maxReach = ReachHelper.getMaxReach(player);
         String error = "";

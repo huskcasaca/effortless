@@ -156,7 +156,8 @@ public class Mirror implements Modifier {
     }
 
     public static boolean isEnabled(MirrorSettings mirrorSettings, BlockPos startPos) {
-        if (mirrorSettings == null || !mirrorSettings.enabled || (!mirrorSettings.mirrorX && !mirrorSettings.mirrorY && !mirrorSettings.mirrorZ)) return false;
+        if (mirrorSettings == null || !mirrorSettings.enabled || (!mirrorSettings.mirrorX && !mirrorSettings.mirrorY && !mirrorSettings.mirrorZ))
+            return false;
 
         //within mirror distance
         return !(startPos.getX() + 0.5 < mirrorSettings.position.x - mirrorSettings.radius) && !(startPos.getX() + 0.5 > mirrorSettings.position.x + mirrorSettings.radius) &&

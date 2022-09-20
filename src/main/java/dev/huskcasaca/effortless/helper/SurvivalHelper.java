@@ -1,7 +1,7 @@
 package dev.huskcasaca.effortless.helper;
 
-import dev.huskcasaca.effortless.BuildConfig;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
+import dev.huskcasaca.effortless.config.ConfigManager;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -212,7 +212,8 @@ public class SurvivalHelper {
 
         BlockState state = world.getBlockState(pos);
 
-        int miningLevel = BuildConfig.survivalBalancers.quickReplaceMiningLevel;
+        int miningLevel = ConfigManager.quickReplaceMiningLevel;
+        // TODO: 19/9/22 remove
         switch (miningLevel) {
             case -1:
                 return !state.requiresCorrectToolForDrops();

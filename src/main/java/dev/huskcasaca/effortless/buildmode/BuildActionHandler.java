@@ -4,8 +4,6 @@ import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.UndoRedo;
-import dev.huskcasaca.effortless.network.ModeSettingsMessage;
-import dev.huskcasaca.effortless.network.PacketHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.entity.player.Player;
 
@@ -89,7 +87,7 @@ public class BuildActionHandler {
                 modeSettings = new ModeSettingsManager.ModeSettings(modeSettings.buildMode(), !modeSettings.enableMagnet());
                 ModeSettingsManager.setModeSettings(player, modeSettings);
 
-                Effortless.log(player,  ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
+                Effortless.log(player, ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
                 break;
             case OPEN_MODIFIER_SETTINGS:
                 if (player.level.isClientSide)
