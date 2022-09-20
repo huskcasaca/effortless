@@ -22,6 +22,9 @@
     ],
     "client": [
       "dev.huskcasaca.effortless.EffortlessClient"
+    ],
+    "modmenu": [
+      "dev.huskcasaca.effortless.EffortlessModmenu"
     ]
   },
   "mixins": [

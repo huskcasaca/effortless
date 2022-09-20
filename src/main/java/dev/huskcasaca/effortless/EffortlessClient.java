@@ -7,14 +7,14 @@ import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
 import dev.huskcasaca.effortless.event.ClientReloadShadersEvent;
 import dev.huskcasaca.effortless.event.ClientScreenEvent;
 import dev.huskcasaca.effortless.event.ClientScreenInputEvent;
-import dev.huskcasaca.effortless.screen.buildmode.PlayerSettingsScreen;
-import dev.huskcasaca.effortless.screen.buildmode.RadialMenuScreen;
-import dev.huskcasaca.effortless.screen.buildmodifier.ModifierSettingsScreen;
 import dev.huskcasaca.effortless.helper.ReachHelper;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
 import dev.huskcasaca.effortless.network.ModeSettingsMessage;
 import dev.huskcasaca.effortless.network.PacketHandler;
 import dev.huskcasaca.effortless.render.BuildRenderTypes;
+import dev.huskcasaca.effortless.screen.buildmode.PlayerSettingsScreen;
+import dev.huskcasaca.effortless.screen.buildmode.RadialMenuScreen;
+import dev.huskcasaca.effortless.screen.buildmodifier.ModifierSettingsScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -207,7 +207,7 @@ public class EffortlessClient implements ClientModInitializer {
         Level world = player.level;
 
         //base distance off of player ability (config)
-        float raytraceRange = ReachHelper.getPlacementReach(player);
+        float raytraceRange = ReachHelper.getPlacementReach(player) * 4;
 
         var look = player.getLookAngle();
         var start = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
