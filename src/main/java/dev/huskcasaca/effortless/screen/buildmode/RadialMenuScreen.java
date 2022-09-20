@@ -6,6 +6,7 @@ import com.mojang.math.Vector4f;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmode.*;
+import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
 import dev.huskcasaca.effortless.network.ModeActionMessage;
 import dev.huskcasaca.effortless.network.ModeSettingsMessage;
@@ -63,6 +64,8 @@ public class RadialMenuScreen extends Screen {
     public boolean performedActionUsingMouse;
 
     private float visibility;
+
+    private BuildAction lastAction = null;
 
     public RadialMenuScreen() {
         super(Component.translatable("effortless.screen.radial_menu"));
@@ -467,13 +470,31 @@ public class RadialMenuScreen extends Screen {
         }
         var player = Minecraft.getInstance().player;
         if (player != null) {
-            Effortless.log(player, I18n.get(ModeSettingsManager.getModeSettings(player).buildMode().getNameKey()), true);
-
-            BuildMode mode = ModeSettingsManager.getModeSettings(player).buildMode();
-            if (mode == BuildMode.VANILLA) {
-                Effortless.log(player, ModeSettingsManager.getTranslatedModeOptionName(player), true);
+            if (lastAction == null) {
+                BuildMode mode = ModeSettingsManager.getModeSettings(player).buildMode();
+                if (mode == BuildMode.VANILLA) {
+                    Effortless.log(player, ModeSettingsManager.getTranslatedModeOptionName(player), true);
+                } else {
+                    Effortless.log(player, ChatFormatting.GOLD + ModeSettingsManager.getTranslatedModeOptionName(player) + ChatFormatting.RESET, true);
+                }
             } else {
-                Effortless.log(player, ChatFormatting.GOLD + ModeSettingsManager.getTranslatedModeOptionName(player) + ChatFormatting.RESET, true);
+                var modeSettings = ModeSettingsManager.getModeSettings(player);
+                var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
+                switch (lastAction) {
+                    case UNDO -> {
+                        Effortless.log(player, "Undo", true);
+                    }
+                    case REDO -> {
+                        Effortless.log(player, "Redo", true);
+                    }
+                    case REPLACE -> {
+                        Effortless.log(player, ChatFormatting.GOLD + "Quick Replace " + ChatFormatting.RESET + (
+                                modifierSettings.quickReplace() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
+                    }
+                    case MAGNET -> {
+                        Effortless.log(player, ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
+                    }
+                }
             }
         }
         super.onClose();
@@ -493,6 +514,7 @@ public class RadialMenuScreen extends Screen {
         if (switchTo != null) {
             playRadialMenuSound();
 
+            lastAction = null;
             modeSettings = new ModeSettingsManager.ModeSettings(switchTo, modeSettings.enableMagnet());
             ModeSettingsManager.setModeSettings(player, modeSettings);
             if (player != null) {
@@ -507,6 +529,7 @@ public class RadialMenuScreen extends Screen {
         BuildAction action = doAction;
         if (action != null) {
             playRadialMenuSound();
+            lastAction = action;
 
             BuildActionHandler.performAction(player, action);
             PacketHandler.sendToServer(new ModeActionMessage(action));
