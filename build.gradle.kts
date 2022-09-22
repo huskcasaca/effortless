@@ -6,7 +6,7 @@ plugins {
     id("fabric-loom") version "0.13.20"
     id("io.github.themrmilchmann.curseforge-publish") version "0.1.0"
 }
-version = "1.2.0"
+version = "1.2.1"
 group = "dev.huskcasaca"
 
 base {
