@@ -15,6 +15,7 @@ import dev.huskcasaca.effortless.render.BuildRenderTypes;
 import dev.huskcasaca.effortless.screen.buildmode.PlayerSettingsScreen;
 import dev.huskcasaca.effortless.screen.buildmode.RadialMenuScreen;
 import dev.huskcasaca.effortless.screen.buildmodifier.ModifierSettingsScreen;
+import dev.huskcasaca.effortless.screen.config.EffortlessConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -162,6 +163,12 @@ public class EffortlessClient implements ClientModInitializer {
     public static void openPlayerSettings() {
         Minecraft mc = Minecraft.getInstance();
         mc.setScreen(new PlayerSettingsScreen());
+
+    }
+
+    public static void openSettings() {
+        Minecraft mc = Minecraft.getInstance();
+        mc.setScreen(EffortlessConfigScreen.createConfigScreen(mc.screen));
 
     }
 
