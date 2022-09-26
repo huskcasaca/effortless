@@ -153,12 +153,17 @@ public class RadialMenuScreen extends Screen {
 //        -26  39    0  39
 
         //Add actions
-        buttons.add(new MenuButton(BuildAction.UNDO.getNameKey(), BuildAction.UNDO, -buttonDistance - 26, -13, Direction.UP));
-        buttons.add(new MenuButton(BuildAction.REDO.getNameKey(), BuildAction.REDO, -buttonDistance, -13, Direction.UP));
-        buttons.add(new MenuButton(BuildAction.OPEN_MODIFIER_SETTINGS.getNameKey(), BuildAction.OPEN_MODIFIER_SETTINGS, -buttonDistance - 26, 13, Direction.DOWN));
-        buttons.add(new MenuButton(BuildAction.REPLACE.getNameKey(), BuildAction.REPLACE, -buttonDistance, 13, Direction.DOWN));
-        buttons.add(new MenuButton(BuildAction.MAGNET.getNameKey(), BuildAction.MAGNET, -buttonDistance - 26, 39, Direction.DOWN));
-//		buttons.add(new MenuButton(BuildAction.OPEN_PLAYER_SETTINGS.getNameKey(), BuildAction.OPEN_PLAYER_SETTINGS, -buttonDistance - 26 - 13, 13, Direction.DOWN));
+
+        int baseY = -13;
+        int buttonOffset = 26;
+
+        buttons.add(new MenuButton(BuildAction.UNDO,     -buttonDistance - buttonOffset * 1, baseY + buttonOffset * 0, Direction.WEST));
+        buttons.add(new MenuButton(BuildAction.REDO,     -buttonDistance - buttonOffset * 0, baseY + buttonOffset * 0, Direction.EAST));
+        buttons.add(new MenuButton(BuildAction.MAGNET,   -buttonDistance - buttonOffset * 1, baseY + buttonOffset * 1, Direction.WEST));
+        buttons.add(new MenuButton(BuildAction.REPLACE,  -buttonDistance - buttonOffset * 0, baseY + buttonOffset * 1, Direction.EAST));
+        buttons.add(new MenuButton(BuildAction.MODIFIER, -buttonDistance - buttonOffset * 1, baseY + buttonOffset * 2, Direction.WEST));
+        buttons.add(new MenuButton(BuildAction.SETTINGS, -buttonDistance - buttonOffset * 0, baseY + buttonOffset * 2, Direction.EAST));
+//        OPEN_PLAYER_SETTINGS
 
         //Add buildmode dependent options
         BuildOption[] options = currentBuildMode.options;
@@ -167,7 +172,7 @@ public class RadialMenuScreen extends Screen {
         for (int row = 0; row < options.length; row++) {
             for (int col = 0; col < options[row].getActions().length; col++) {
                 BuildAction action = options[row].getActions()[col];
-                MenuButton button = new MenuButton(action.getNameKey(), action, buttonDistance + col * 26, -13 + row * 39, Direction.DOWN);
+                MenuButton button = new MenuButton(action, buttonDistance + col * 26, -13 + row * 39, Direction.DOWN);
                 buttons.add(button);
                 optionButtons.add(button);
             }
@@ -416,7 +421,7 @@ public class RadialMenuScreen extends Screen {
         if (button.action == BuildAction.UNDO) keybindingIndex = 3;
         if (button.action == BuildAction.REDO) keybindingIndex = 4;
         if (button.action == BuildAction.REPLACE) keybindingIndex = 1;
-        if (button.action == BuildAction.OPEN_MODIFIER_SETTINGS) keybindingIndex = 0;
+        if (button.action == BuildAction.MODIFIER) keybindingIndex = 0;
 
         if (keybindingIndex != -1) {
             KeyMapping keyMap = EffortlessClient.keyBindings[keybindingIndex];
@@ -547,9 +552,9 @@ public class RadialMenuScreen extends Screen {
         public String name;
         public Direction textSide;
 
-        public MenuButton(final String name, final BuildAction action, final double x, final double y,
+        public MenuButton(final BuildAction action, final double x, final double y,
                           final Direction textSide) {
-            this.name = I18n.get(name);
+            this.name = I18n.get(action.getNameKey());
             this.action = action;
             x1 = x - 10;
             x2 = x + 10;
