@@ -63,7 +63,7 @@ public class BuildModeHandler {
 
             //Check if player reach does not exceed startpos
             int maxReach = ReachHelper.getMaxReach(player);
-            if (buildMode != BuildMode.VANILLA && player.blockPosition().distSqr(startPos) > maxReach * maxReach) {
+            if (buildMode != BuildMode.DISABLE && player.blockPosition().distSqr(startPos) > maxReach * maxReach) {
                 Effortless.log(player, "Placement exceeds your reach.");
                 return;
             }

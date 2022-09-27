@@ -477,7 +477,7 @@ public class RadialMenuScreen extends Screen {
         if (player != null) {
             if (lastAction == null) {
                 BuildMode mode = ModeSettingsManager.getModeSettings(player).buildMode();
-                if (mode == BuildMode.VANILLA) {
+                if (mode == BuildMode.DISABLE) {
                     Effortless.log(player, ModeSettingsManager.getTranslatedModeOptionName(player), true);
                 } else {
                     Effortless.log(player, ChatFormatting.GOLD + ModeSettingsManager.getTranslatedModeOptionName(player) + ChatFormatting.RESET, true);
