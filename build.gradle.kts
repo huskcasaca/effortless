@@ -60,14 +60,14 @@ publishing {
     }
     publications.create<CurseForgePublication>("curseForge") {
         projectID.set(getLocalProperty("curseforge.id").toInt()) // The CurseForge project ID (required)
-        // Specify which game and version the mod/plugin targets (required)
-        includeGameVersions { type, version -> type == "modloader" || version == "fabric" }
-        includeGameVersions { type, version -> type == "minecraft-1-19" || version == "minecraft-1-19-2" || version == "minecraft-1-19-1" }
+        includeGameVersions { type, version -> type == "java" && version == "java-17" }
+        includeGameVersions { type, version -> type == "modloader" && version == "fabric" }
+        includeGameVersions { type, version -> type == "minecraft-1-19" && (version == "1-19-2" || version == "1-19-1") }
 
         artifact {
             changelog = Changelog("Changelog...", ChangelogType.TEXT) // The changelog (required)
             releaseType = ReleaseType.RELEASE // The release type (required)
-            displayName = "effortless-fabric-$version-${libs.versions.minecraft.version}.jar"
+            displayName = "effortless-fabric-${version}_${libs.versions.minecraft.version.get()}.jar"
         }
     }
 }
