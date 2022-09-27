@@ -493,7 +493,7 @@ public class RadialMenuScreen extends Screen {
                         Effortless.log(player, "Redo", true);
                     }
                     case REPLACE -> {
-                        Effortless.log(player, ChatFormatting.GOLD + "Quick Replace " + ChatFormatting.RESET + (
+                        Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (
                                 modifierSettings.quickReplace() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
                     }
                     case MAGNET -> {

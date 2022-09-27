@@ -95,7 +95,7 @@ public class EffortlessClient implements ClientModInitializer {
 //        if (keyBindings[1].consumeClick()) {
 //            var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
 //            modifierSettings.setQuickReplace(!modifierSettings.quickReplace());
-//            Effortless.log(player, ChatFormatting.GOLD + "Quick Replace " + ChatFormatting.RESET + (
+//            Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (
 //                    modifierSettings.quickReplace() ? "ON" : "OFF"));
 //            PacketHandler.sendToServer(new ModifierSettingsMessage(modifierSettings));
 //        }
