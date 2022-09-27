@@ -79,7 +79,7 @@ public class BuildActionHandler {
                 );
                 ModifierSettingsManager.setModifierSettings(player, modifierSettings);
 
-                Effortless.log(player, ChatFormatting.GOLD + "Quick Replace " + ChatFormatting.RESET + (
+                Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (
                         modifierSettings.quickReplace() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
                 break;
             case MAGNET:
