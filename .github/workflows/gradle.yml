@@ -4,6 +4,7 @@ name: Gradle CI
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
+  name: Gradle-Build
   build:
     
     # The type of runner that the job will run on
@@ -13,23 +14,23 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@v3
       
       # Setup JDK
       - name: Setup Java JDK
-        uses: actions/setup-java@a18c333f3f14249953dab3e186e5e21bf3390f1d
+        uses: actions/setup-java@v3.5.1
         with:
           java-version: 17
           distribution: 'zulu'
 
       # Build with Gradle
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@c295a4096e1d2c453eaf1f65c6f96686e26bd8be
+        uses: gradle/gradle-build-action@v2.3.1
         with:
           arguments: build
 
       # Test with Gradle
       - name: Test with Gradle
-        uses: gradle/gradle-build-action@c295a4096e1d2c453eaf1f65c6f96686e26bd8be
+        uses: gradle/gradle-build-action@v2.3.1
         with:
           arguments: test
