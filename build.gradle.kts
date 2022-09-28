@@ -55,11 +55,11 @@ val curseForgeId: String by project
 publishing {
     repositories {
         curseForge {
-            apiKey.set(getLocalProperty("curseforge.apikey"))
+            apiKey.set(getLocalPropertyOrNull("curseforge.apikey"))
         }
     }
     publications.create<CurseForgePublication>("curseForge") {
-        projectID.set(getLocalProperty("curseforge.id")?.toInt()) // The CurseForge project ID (required)
+        projectID.set(getLocalPropertyOrNull("curseforge.id")?.toInt()) // The CurseForge project ID (required)
         includeGameVersions { type, version -> type == "java" && version == "java-17" }
         includeGameVersions { type, version -> type == "modloader" && version == "fabric" }
         includeGameVersions { type, version -> type == "minecraft-1-19" && (version == "1-19-2" || version == "1-19-1") }
@@ -93,14 +93,16 @@ tasks {
 
 }
 
-fun getLocalProperty(key: String): String? {
+fun getLocalPropertyOrNull(key: String): String? {
     val properties = Properties()
     val localProperties = File("local.properties")
     if (localProperties.isFile) {
         InputStreamReader(FileInputStream(localProperties), Charsets.UTF_8).use { reader ->
             properties.load(reader)
         }
-    } else error("local.properties is not found")
+    } else {
+        println(localProperties.name + " is not found")
+    }
 
     return properties.getProperty(key)
 }
