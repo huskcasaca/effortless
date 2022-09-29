@@ -3,9 +3,10 @@ import java.util.Properties
 import java.io.*
 
 plugins {
-    id("fabric-loom") version "0.13.20"
-    id("io.github.themrmilchmann.curseforge-publish") version "0.1.0"
+    alias(libs.plugins.loom)
+    alias(libs.plugins.curseforge)
 }
+
 version = "1.3.0"
 group = "dev.huskcasaca"
 
@@ -20,21 +21,16 @@ repositories {
 
 dependencies {
     minecraft(libs.minecraft)
+
     mappings(loom.officialMojangMappings())
+
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
     modImplementation(libs.modmenu) { isTransitive = false }
     modImplementation(libs.cloth.config) { isTransitive = false }
-    implementation("com.google.code.findbugs:jsr305:3.0.2")
 
-//    minecraft("com.mojang:minecraft:$minecraftVersion")
-//    mappings(loom.officialMojangMappings())
-//
-//    modImplementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
-//    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
-//    modApi("com.terraformersmc:modmenu:$modmenuVersion") { isTransitive = false }
-//    modApi("me.shedaniel.cloth:cloth-config-fabric:$clothConfigVersion") { isTransitive = false }
-//
+    implementation(libs.findbugs)
+    implementation(libs.log4j2)
 }
 
 java {
@@ -67,7 +63,7 @@ publishing {
         artifact {
             changelog = Changelog("Changelog...", ChangelogType.TEXT) // The changelog (required)
             releaseType = ReleaseType.RELEASE // The release type (required)
-            displayName = "effortless-fabric-${version}_${libs.versions.minecraft.version.get()}.jar"
+            displayName = "effortless-fabric-${version}_${libs.versions.minecraft.get()}.jar"
         }
     }
 }
