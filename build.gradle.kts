@@ -1,4 +1,5 @@
 import io.github.themrmilchmann.gradle.publish.curseforge.*
+import org.gradle.jvm.tasks.Jar
 import java.util.Properties
 import java.io.*
 
@@ -30,11 +31,9 @@ dependencies {
     modImplementation(libs.cloth.config) { isTransitive = false }
 
     implementation(libs.findbugs)
-    implementation(libs.log4j2)
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(JavaVersion.VERSION_17.toString()))
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
     withSourcesJar()
@@ -46,39 +45,32 @@ loom {
     }
 }
 
-val curseForgeId: String by project
-
 publishing {
     repositories {
         curseForge {
             apiKey.set(getLocalPropertyOrNull("curseforge.apikey"))
         }
     }
+
     publications.create<CurseForgePublication>("curseForge") {
+        val minecraftVersion = libs.versions.minecraft.get()
+        val minecraftVersionTypeName = minecraftVersion.split(".").take(2).joinToString("-")
+        val minecraftVersionVersionName = minecraftVersion.split(".").take(3).joinToString("-")
+
         projectID.set(getLocalPropertyOrNull("curseforge.id")?.toInt()) // The CurseForge project ID (required)
         includeGameVersions { type, version -> type == "java" && version == "java-17" }
         includeGameVersions { type, version -> type == "modloader" && version == "fabric" }
-        includeGameVersions { type, version -> type == "minecraft-1-19" && (version == "1-19-2" || version == "1-19-1") }
+        includeGameVersions { type, version -> type == "minecraft-$minecraftVersionTypeName" && version == minecraftVersionVersionName }
 
         artifact {
             changelog = Changelog("Changelog...", ChangelogType.TEXT) // The changelog (required)
             releaseType = ReleaseType.RELEASE // The release type (required)
-            displayName = "effortless-fabric-${version}_${libs.versions.minecraft.get()}.jar"
+            displayName = "${base.archivesName}-${version}-${minecraftVersion}.jar"
         }
     }
 }
 
 tasks {
-
-    withType<JavaCompile> {
-        options.encoding = "UTF-8"
-        sourceCompatibility = JavaVersion.VERSION_17.toString()
-        targetCompatibility = JavaVersion.VERSION_17.toString()
-        if (JavaVersion.current().isJava9Compatible) {
-            options.release.set(JavaVersion.VERSION_17.toString().toInt())
-        }
-    }
-
     processResources {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
         from("src/main/resources")
@@ -86,7 +78,9 @@ tasks {
             expand(project.properties)
         }
     }
-
+    withType<Jar> {
+        archiveVersion.value("${project.version}-${libs.versions.minecraft.get()}")
+    }
 }
 
 fun getLocalPropertyOrNull(key: String): String? {
@@ -99,6 +93,5 @@ fun getLocalPropertyOrNull(key: String): String? {
     } else {
         println(localProperties.name + " is not found")
     }
-
     return properties.getProperty(key)
 }
