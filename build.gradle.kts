@@ -71,7 +71,10 @@ publishing {
 }
 
 tasks {
-    processResources {
+    withType<JavaCompile> {
+        options.release.set(JavaVersion.VERSION_17.toString().toInt())
+    }
+    withType<ProcessResources> {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
         from("src/main/resources")
         filesMatching("fabric.mod.json") {
