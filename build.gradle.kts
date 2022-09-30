@@ -53,36 +53,44 @@ publishing {
     }
 
     publications.create<CurseForgePublication>("curseForge") {
-        val minecraftVersion = libs.versions.minecraft.get()
-        val minecraftVersionTypeName = minecraftVersion.split(".").take(2).joinToString("-")
-        val minecraftVersionVersionName = minecraftVersion.split(".").take(3).joinToString("-")
 
         projectID.set(getLocalPropertyOrNull("curseforge.id")?.toInt()) // The CurseForge project ID (required)
-        includeGameVersions { type, version -> type == "java" && version == "java-17" }
+
         includeGameVersions { type, version -> type == "modloader" && version == "fabric" }
-        includeGameVersions { type, version -> type == "minecraft-$minecraftVersionTypeName" && version == minecraftVersionVersionName }
+
+        val java = project.extensions.getByType(JavaPluginExtension::class)
+        val targetVersion = java.targetCompatibility.majorVersion
+
+        includeGameVersions { type, version -> type == "java" && version == "java-$targetVersion" }
+
+        val mcVersion = libs.versions.minecraft.get()
+        val matchGroups = mcVersion.split(".")
+        val mcDependencySlug = "minecraft-${matchGroups.take(2).joinToString("-")}"
+        val mcVersionSlug = matchGroups.take(3).joinToString("-")
+
+        includeGameVersions { type, version -> type == mcDependencySlug && version == mcVersionSlug }
 
         artifact {
             changelog = Changelog("Changelog...", ChangelogType.TEXT) // The changelog (required)
             releaseType = ReleaseType.RELEASE // The release type (required)
-            displayName = "${base.archivesName}-${version}-${minecraftVersion}.jar"
+            displayName = "${base.archivesName.get()}-${version}-${libs.versions.minecraft.get()}.jar"
         }
     }
 }
 
 tasks {
-    withType<JavaCompile> {
+    withType(JavaCompile::class) {
         options.release.set(JavaVersion.VERSION_17.toString().toInt())
     }
-    withType<ProcessResources> {
+    withType(ProcessResources::class) {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
         from("src/main/resources")
         filesMatching("fabric.mod.json") {
             expand(project.properties)
         }
     }
-    withType<Jar> {
-        archiveVersion.value("${project.version}-${libs.versions.minecraft.get()}")
+    withType(Jar::class) {
+        archiveVersion.set("${project.version}-${libs.versions.minecraft.get()}")
     }
 }
 
