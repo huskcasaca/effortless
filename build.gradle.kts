@@ -3,6 +3,7 @@ import org.gradle.jvm.tasks.Jar
 import java.util.Properties
 import java.io.*
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.loom)
     alias(libs.plugins.curseforge)
