@@ -14,7 +14,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout
         uses: actions/checkout@v3
-      
+        with:
+          submodules: 'true'
+
       # Setup JDK
       - name: Setup Java JDK
         uses: actions/setup-java@v3.5.1
