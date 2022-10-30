@@ -1,6 +1,10 @@
+import io.github.huskcasaca.gradlecurseforgeplugin.*
+import java.util.*
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.loom)
+    id("io.github.huskcasaca.gradle-curseforge-plugin") version "1.0.0-alpha"
 }
 
 version = "1.3.0"
@@ -29,8 +33,9 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
     withSourcesJar()
 }
 
@@ -41,17 +46,49 @@ loom {
 }
 
 tasks {
-    withType(JavaCompile::class) {
-        options.release.set(JavaVersion.VERSION_17.toString().toInt())
-    }
-    withType(ProcessResources::class) {
+    processResources {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
         from("src/main/resources")
         filesMatching("fabric.mod.json") {
             expand(project.properties)
         }
     }
-    withType(Jar::class) {
-        archiveVersion.set("${project.version}-${libs.versions.minecraft.get()}")
+    remapJar {
+        archiveClassifier.set(libs.versions.minecraft.get())
+    }
+    remapSourcesJar {
+        archiveClassifier.set(libs.versions.minecraft.get() + "-source")
+    }
+}
+
+publishing {
+    val properties = Properties().apply {
+        file("local.properties").apply {
+            if (isFile) {
+                inputStream().use { reader -> load(reader) }
+            } else {
+                println("$name is not found")
+                return@publishing
+            }
+        }
+    }
+    repositories {
+        curseForge {
+            token.set(properties.getProperty("curseforge.apikey"))
+        }
+    }
+    publications {
+        create<CurseForgePublication>("Effortless") {
+
+            id.set(properties.getProperty("curseforge.id").toInt())
+
+            artifact(tasks.remapJar) {
+                releaseType = ReleaseType.ALPHA // The release type (required)
+                changelog = Changelog("Changelog...", ChangelogType.TEXT) // The changelog (required)
+                loader = LoaderType.FABRIC
+                gameVersion = MinecraftVersion.VERSION_1_19_2
+                javaVersion = JavaVersion.VERSION_17
+            }
+        }
     }
 }
