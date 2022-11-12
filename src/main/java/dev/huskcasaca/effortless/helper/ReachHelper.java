@@ -1,11 +1,11 @@
 package dev.huskcasaca.effortless.helper;
 
-import dev.huskcasaca.effortless.config.ConfigManager;
+import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
 import net.minecraft.world.entity.player.Player;
 
 public class ReachHelper {
     public static int getMaxReach(Player player) {
-        return ConfigManager.getGlobalBuildConfig().getMaxReachDistance();
+        return ReachSettingsManager.getReachSettings(player).maxReachDistance();
     }
 
     public static int getPlacementReach(Player player) {
@@ -13,14 +13,14 @@ public class ReachHelper {
     }
 
     public static int getMaxBlocksPlacedAtOnce(Player player) {
-        return ConfigManager.getGlobalBuildConfig().getMaxBlockPlaceAtOnce();
+        return ReachSettingsManager.getReachSettings(player).maxBlockPlaceAtOnce();
     }
 
     public static int getMaxBlocksPerAxis(Player player) {
-        return ConfigManager.getGlobalBuildConfig().getMaxBlockPlacePerAxis();
+        return ReachSettingsManager.getReachSettings(player).maxBlockPlacePerAxis();
     }
 
     public static boolean canBreakFar(Player player) {
-        return ConfigManager.getGlobalBuildConfig().isCanBreakFar();
+        return ReachSettingsManager.getReachSettings(player).canBreakFar();
     }
 }
