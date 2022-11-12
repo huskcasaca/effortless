@@ -23,6 +23,7 @@ public class PacketHandler {
 
         registerServerMessage(ModifierSettingsMessage.class, MessageChannel.MODIFIER_SETTINGS, new ModifierSettingsMessage.Serializer(), new ModifierSettingsMessage.ServerHandler());
         registerServerMessage(ModeSettingsMessage.class, MessageChannel.MODE_SETTINGS, new ModeSettingsMessage.Serializer(), new ModeSettingsMessage.ServerHandler());
+        registerServerMessage(ReachSettingsMessage.class, MessageChannel.REACH_SETTINGS, new ReachSettingsMessage.Serializer(), new ReachSettingsMessage.ServerHandler());
         registerServerMessage(ModeActionMessage.class, MessageChannel.MODE_ACTION, new ModeActionMessage.Serializer(), new ModeActionMessage.ServerHandler());
         registerServerMessage(BlockPlacedMessage.class, MessageChannel.BLOCK_PLACED, new BlockPlacedMessage.Serializer(), new BlockPlacedMessage.ServerHandler());
         registerServerMessage(BlockBrokenMessage.class, MessageChannel.BLOCK_BROKEN, new BlockBrokenMessage.Serializer(), new BlockBrokenMessage.ServerHandler());
@@ -37,6 +38,7 @@ public class PacketHandler {
 
         registerClientMessage(ModifierSettingsMessage.class, MessageChannel.MODIFIER_SETTINGS, new ModifierSettingsMessage.Serializer(), new ModifierSettingsMessage.ClientHandler());
         registerClientMessage(ModeSettingsMessage.class, MessageChannel.MODE_SETTINGS, new ModeSettingsMessage.Serializer(), new ModeSettingsMessage.ClientHandler());
+        registerServerMessage(ReachSettingsMessage.class, MessageChannel.REACH_SETTINGS, new ReachSettingsMessage.Serializer(), new ReachSettingsMessage.ServerHandler());
         registerClientMessage(ModeActionMessage.class, MessageChannel.MODE_ACTION, new ModeActionMessage.Serializer(), new ModeActionMessage.ClientHandler());
         registerClientMessage(BlockPlacedMessage.class, MessageChannel.BLOCK_PLACED, new BlockPlacedMessage.Serializer(), new BlockPlacedMessage.ClientHandler());
         registerClientMessage(BlockBrokenMessage.class, MessageChannel.BLOCK_BROKEN, new BlockBrokenMessage.Serializer(), new BlockBrokenMessage.ClientHandler());
