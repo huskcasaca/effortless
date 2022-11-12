@@ -26,19 +26,19 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void readTag(CompoundTag tag, CallbackInfo info) {
-        readModeSettings(tag.getCompound("EffortlessMode"));
-        readModifierSettings(tag.getCompound("EffortlessModifier"));
+//        readModeSettings(tag.getCompound("EffortlessMode"));
+//        readModifierSettings(tag.getCompound("EffortlessModifier"));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
     private void writeTag(CompoundTag tag, CallbackInfo info) {
-        CompoundTag modeTag = new CompoundTag();
-        writeModeSettings(modeTag);
-        tag.put("EffortlessMode", modeTag);
-
-        CompoundTag modifierTag = new CompoundTag();
-        writeModifierSettings(modifierTag);
-        tag.put("EffortlessModifier", modifierTag);
+//        CompoundTag modeTag = new CompoundTag();
+//        writeModeSettings(modeTag);
+//        tag.put("EffortlessMode", modeTag);
+//
+//        CompoundTag modifierTag = new CompoundTag();
+//        writeModifierSettings(modifierTag);
+//        tag.put("EffortlessModifier", modifierTag);
     }
 
     @Unique
