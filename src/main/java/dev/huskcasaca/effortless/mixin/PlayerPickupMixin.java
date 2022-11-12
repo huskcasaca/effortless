@@ -1,5 +1,6 @@
 package dev.huskcasaca.effortless.mixin;
 
+import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
 import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
 import dev.huskcasaca.effortless.config.ConfigManager;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +16,7 @@ public class PlayerPickupMixin {
     public AABB inflate(AABB instance, double d, double e, double f) {
         final var player = ((Player) (Object) this);
         var enable = ModeSettingsManager.getModeSettings(player).enableMagnet();
-        var maxReach = ConfigManager.getGlobalBuildConfig().getMaxReachDistance();
+        var maxReach = ReachSettingsManager.getReachSettings(player).maxReachDistance();;
 
         if (enable) {
             return instance.inflate(maxReach, maxReach, maxReach);

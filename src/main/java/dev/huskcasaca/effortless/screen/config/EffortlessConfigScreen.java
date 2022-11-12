@@ -1,7 +1,6 @@
 package dev.huskcasaca.effortless.screen.config;
 
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.config.BuildConfig;
 import dev.huskcasaca.effortless.config.ConfigManager;
 import dev.huskcasaca.effortless.config.EffortlessConfig;
 import dev.huskcasaca.effortless.config.PreviewConfig;
@@ -65,7 +64,7 @@ public class EffortlessConfigScreen {
 //        final var maxBlockPlacePerAxis = new SliderEntryData("max_block_axis", defaults.getBuildConfig().getMaxBlockPlacePerAxis(), config.getBuildConfig().getMaxBlockPlacePerAxis(), BuildConfig.MIN_MAX_BLOCK_PLACE_PER_AXIS, BuildConfig.MAX_MAX_BLOCK_PLACE_PER_AXIS, config.getBuildConfig()::setMaxBlockPlacePerAxis);
 //        final var maxBlockPlaceAtOnce = new IntegerEntryData("max_block_total", defaults.getBuildConfig().getMaxBlockPlaceAtOnce(), config.getBuildConfig().getMaxBlockPlaceAtOnce(), BuildConfig.MIN_MAX_BLOCK_PLACE_AT_ONCE, BuildConfig.MAX_MAX_BLOCK_PLACE_AT_ONCE, config.getBuildConfig()::setMaxBlockPlaceAtOnce);
 //        final var isCanBreakFar = new BooleanEntryData("far_reach", defaults.getBuildConfig().isCanBreakFar(), config.getBuildConfig().isCanBreakFar(), config.getBuildConfig()::setCanBreakFar);
-//        final var enableUndo = new BooleanEntryData("undo", defaults.getBuildConfig().isEnableUndo(), config.getBuildConfig().isEnableUndo(), config.getBuildConfig()::setEnableUndo);
+//        final var enableUndo = new BooleanEntryData("undo", defaults.getBuildConfig().isUndoEnabled(), config.getBuildConfig().isUndoEnabled(), config.getBuildConfig()::setEnableUndo);
 //        final var undoStackSize = new SliderEntryData("undo_stack_size", defaults.getBuildConfig().getUndoStackSize(), config.getBuildConfig().getUndoStackSize(), BuildConfig.MIN_UNDO_STACK_SIZE, BuildConfig.MAX_UNDO_STACK_SIZE, config.getBuildConfig()::setUndoStackSize);
 
 //        buildSubCat.add(
