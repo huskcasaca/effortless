@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 public interface MessageChannel {
     ResourceLocation MODIFIER_SETTINGS = new ResourceLocation(Effortless.MOD_ID, "channel.modifier_settings");
     ResourceLocation MODE_SETTINGS = new ResourceLocation(Effortless.MOD_ID, "channel.mode_settings");
+    ResourceLocation REACH_SETTINGS = new ResourceLocation(Effortless.MOD_ID, "channel.reach_settings");
     ResourceLocation MODE_ACTION = new ResourceLocation(Effortless.MOD_ID, "channel.mode_action");
     ResourceLocation BLOCK_PLACED = new ResourceLocation(Effortless.MOD_ID, "channel.block_placed");
     ResourceLocation BLOCK_BROKEN = new ResourceLocation(Effortless.MOD_ID, "channel.block_broken");

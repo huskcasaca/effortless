@@ -1,6 +1,7 @@
 package dev.huskcasaca.effortless.mixin;
 
 import dev.huskcasaca.effortless.EffortlessDataProvider;
+import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
 import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
@@ -23,11 +24,14 @@ public class PlayerTagMixin implements EffortlessDataProvider {
     private ModeSettingsManager.ModeSettings modeSettings = null;
     @Unique
     private ModifierSettingsManager.ModifierSettings modifierSettings = null;
+    @Unique
+    private ReachSettingsManager.ReachSettings reachSettings = null;
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void readTag(CompoundTag tag, CallbackInfo info) {
 //        readModeSettings(tag.getCompound("EffortlessMode"));
 //        readModifierSettings(tag.getCompound("EffortlessModifier"));
+        readSettings(tag.getCompound("Effortless"));
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
@@ -39,7 +43,39 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 //        CompoundTag modifierTag = new CompoundTag();
 //        writeModifierSettings(modifierTag);
 //        tag.put("EffortlessModifier", modifierTag);
+
+        CompoundTag tag1 = new CompoundTag();
+        writeSettings(tag1);
+        tag.put("Effortless", tag1);
     }
+
+    @Unique
+    private void readSettings(CompoundTag tag) {
+        reachSettings = new ReachSettingsManager.ReachSettings(
+                tag.getInt("maxReachDistance"),
+                tag.getInt("maxBlockPlacePerAxis"),
+                tag.getInt("maxBlockPlaceAtOnce"),
+                tag.getBoolean("canBreakFar"),
+                tag.getBoolean("enableUndo"),
+                tag.getInt("undoStackSize")
+        );
+    }
+
+    @Unique
+    private void writeSettings(CompoundTag tag) {
+        if (reachSettings == null) reachSettings = new ReachSettingsManager.ReachSettings();
+        var reachSettings = this.reachSettings;
+
+        tag.putInt("maxReachDistance", reachSettings.maxReachDistance());
+        tag.putInt("maxBlockPlacePerAxis", reachSettings.maxBlockPlacePerAxis());
+        tag.putInt("maxBlockPlaceAtOnce", reachSettings.maxBlockPlaceAtOnce());
+        tag.putBoolean("canBreakFar", reachSettings.canBreakFar());
+        tag.putBoolean("enableUndo", reachSettings.enableUndo());
+        tag.putInt("undoStackSize", reachSettings.undoStackSize());
+
+        //TODO add mode settings
+    }
+
 
     @Unique
     private void readModeSettings(CompoundTag tag) {
@@ -163,5 +199,17 @@ public class PlayerTagMixin implements EffortlessDataProvider {
     @Override
     public void setModifierSettings(ModifierSettingsManager.ModifierSettings modifierSettings) {
         this.modifierSettings = modifierSettings;
+    }
+
+    @Override
+    public ReachSettingsManager.ReachSettings getReachSettings() {
+        if (reachSettings == null) reachSettings = new ReachSettingsManager.ReachSettings();
+        return reachSettings;
+    }
+
+    @Override
+    public void setReachSettings(ReachSettingsManager.ReachSettings reachSettings) {
+        this.reachSettings = reachSettings;
+
     }
 }
