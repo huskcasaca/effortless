@@ -146,7 +146,7 @@ public class ModifierSettingsManager {
         //Only on server
         if (!player.level.isClientSide) {
             //Send to client
-            ModifierSettingsMessage msg = new ModifierSettingsMessage(new ModifierSettings());
+            ModifierSettingsMessage msg = new ModifierSettingsMessage(((EffortlessDataProvider) player).getModifierSettings());
             PacketHandler.sendToClient(msg, (ServerPlayer) player);
         }
     }

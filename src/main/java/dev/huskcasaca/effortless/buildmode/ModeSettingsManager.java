@@ -71,10 +71,8 @@ public class ModeSettingsManager {
         //Only on server
         if (!player.level.isClientSide) {
             //Send to client
-            ModeSettingsMessage msg = new ModeSettingsMessage(new ModeSettings());
+            ModeSettingsMessage msg = new ModeSettingsMessage(((EffortlessDataProvider) player).getModeSettings());
             PacketHandler.sendToClient(msg, (ServerPlayer) player);
-        } else {
-            setModeSettings(player, new ModeSettings());
         }
     }
 
