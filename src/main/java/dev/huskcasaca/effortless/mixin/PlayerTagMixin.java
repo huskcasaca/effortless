@@ -2,6 +2,7 @@ package dev.huskcasaca.effortless.mixin;
 
 import dev.huskcasaca.effortless.EffortlessDataProvider;
 import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
+import dev.huskcasaca.effortless.buildmode.BuildMode;
 import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
@@ -79,14 +80,16 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
     private void readModeSettings(CompoundTag tag) {
-        modeSettings = new ModeSettingsManager.ModeSettings();
+        modeSettings = new ModeSettingsManager.ModeSettings(
+                BuildMode.values()[tag.getInt("buildMode")],
+                false
+        );
     }
 
     @Unique
     private void writeModeSettings(CompoundTag tag) {
         if (modeSettings == null) modeSettings = new ModeSettingsManager.ModeSettings();
-        //tag.putInteger("buildMode", modeSettings.buildMode().ordinal());
-        //TODO add mode settings
+        tag.putInt("buildMode", modeSettings.buildMode().ordinal());
     }
 
     @Unique

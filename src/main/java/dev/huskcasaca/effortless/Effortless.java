@@ -1,15 +1,13 @@
 package dev.huskcasaca.effortless;
 
+import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
 import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.UndoRedo;
 import dev.huskcasaca.effortless.helper.ReachHelper;
-import dev.huskcasaca.effortless.network.AddUndoMessage;
-import dev.huskcasaca.effortless.network.ClearUndoMessage;
-import dev.huskcasaca.effortless.network.PacketHandler;
-import dev.huskcasaca.effortless.network.RequestLookAtMessage;
+import dev.huskcasaca.effortless.network.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.core.BlockPos;
@@ -95,10 +93,10 @@ public class Effortless implements ModInitializer {
     public static void onPlayerLogin(ServerPlayer player) {
         ModifierSettingsManager.handleNewPlayer(player);
         ModeSettingsManager.handleNewPlayer(player);
+        ReachSettingsManager.handleNewPlayer(player);
     }
 
     public static void onPlayerLogout(ServerPlayer player) {
-        if (player.getCommandSenderWorld().isClientSide) return;
         UndoRedo.clear(player);
         PacketHandler.sendToClient(new ClearUndoMessage(), player);
     }
@@ -106,12 +104,11 @@ public class Effortless implements ModInitializer {
     public static void onPlayerRespawn(ServerPlayer player) {
         ModifierSettingsManager.handleNewPlayer(player);
         ModeSettingsManager.handleNewPlayer(player);
+        ReachSettingsManager.handleNewPlayer(player);
     }
 
     public static void onPlayerChangedDimension(ServerPlayer player) {
-        if (player.getCommandSenderWorld().isClientSide) return;
-
-        //Set build mode to normal
+//        //Set build mode to normal
         var modeSettings = ModeSettingsManager.getModeSettings(player);
         modeSettings = new ModeSettingsManager.ModeSettings(
                 BuildMode.DISABLE,
@@ -119,19 +116,9 @@ public class Effortless implements ModInitializer {
         );
         ModeSettingsManager.setModeSettings(player, modeSettings);
 
-        //Disable modifiers
-        var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-        var arraySettings = modifierSettings.arraySettings();
-        arraySettings = arraySettings.clone(false);
-        var mirrorSettings = modifierSettings.mirrorSettings();
-        mirrorSettings = mirrorSettings.clone(false);
-        var radialMirrorSettings = modifierSettings.radialMirrorSettings();
-        radialMirrorSettings = radialMirrorSettings.clone(false);
-        modifierSettings = new ModifierSettingsManager.ModifierSettings(arraySettings, mirrorSettings, radialMirrorSettings, modifierSettings.quickReplace());
-        ModifierSettingsManager.setModifierSettings(player, modifierSettings);
-
         ModifierSettingsManager.handleNewPlayer(player);
         ModeSettingsManager.handleNewPlayer(player);
+        ReachSettingsManager.handleNewPlayer(player);
 
         UndoRedo.clear(player);
         PacketHandler.sendToClient(new ClearUndoMessage(), player);
@@ -141,6 +128,7 @@ public class Effortless implements ModInitializer {
     public static void onPlayerClone(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
         ModifierSettingsManager.setModifierSettings(newPlayer, ModifierSettingsManager.getModifierSettings(oldPlayer));
         ModeSettingsManager.setModeSettings(newPlayer, ModeSettingsManager.getModeSettings(oldPlayer));
+        ReachSettingsManager.setReachSettings(newPlayer, ReachSettingsManager.getReachSettings(oldPlayer));
     }
 
     public static void log(String msg) {
