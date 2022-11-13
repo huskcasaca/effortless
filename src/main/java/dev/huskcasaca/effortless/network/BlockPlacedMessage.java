@@ -7,7 +7,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -85,7 +84,7 @@ public record BlockPlacedMessage(
     public static class ClientHandler implements ClientMessageHandler<BlockPlacedMessage> {
 
         @Override
-        public void handleClientSide(Minecraft client, LocalPlayer player, ClientPacketListener handler, BlockPlacedMessage message, PacketSender responseSender) {
+        public void handleClientSide(Minecraft client, ClientPacketListener handler, BlockPlacedMessage message, PacketSender responseSender) {
             //Nod RenderHandler to do the dissolve shader effect
             client.execute(() -> BlockPreviewRenderer.onBlocksPlaced());
         }

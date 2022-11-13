@@ -10,7 +10,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -146,9 +145,9 @@ public record ModifierSettingsMessage(
     public static class ClientHandler implements ClientMessageHandler<ModifierSettingsMessage> {
 
         @Override
-        public void handleClientSide(Minecraft client, LocalPlayer player, ClientPacketListener handler, ModifierSettingsMessage message, PacketSender responseSender) {
+        public void handleClientSide(Minecraft client, ClientPacketListener handler, ModifierSettingsMessage message, PacketSender responseSender) {
             client.execute(() -> {
-                ModifierSettingsManager.setModifierSettings(player, ModifierSettingsManager.sanitize(message.modifierSettings, player));
+                ModifierSettingsManager.setModifierSettings(client.player, ModifierSettingsManager.sanitize(message.modifierSettings, client.player));
             });
         }
     }

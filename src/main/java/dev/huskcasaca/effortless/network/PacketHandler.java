@@ -63,7 +63,7 @@ public class PacketHandler {
         MSG_SERIALIZER.put(clazz, serializer);
         CLIENT_MSG_HANDLER.put(clazz, msgHandler);
         ClientPlayNetworking.registerGlobalReceiver(identifier, (client, handler, buf, responseSender) -> {
-            msgHandler.handleClientSide(client, client.player, handler, serializer.decode(buf), responseSender);
+            msgHandler.handleClientSide(client, handler, serializer.decode(buf), responseSender);
         });
     }
 

@@ -9,7 +9,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -64,10 +63,10 @@ public record ModeSettingsMessage(
     public static class ClientHandler implements ClientMessageHandler<ModeSettingsMessage> {
 
         @Override
-        public void handleClientSide(Minecraft client, LocalPlayer player, ClientPacketListener handler, ModeSettingsMessage message, PacketSender responseSender) {
+        public void handleClientSide(Minecraft client, ClientPacketListener handler, ModeSettingsMessage message, PacketSender responseSender) {
             client.execute(() -> {
-                ModeSettingsManager.setModeSettings(player, ModeSettingsManager.sanitize(message.modeSettings, player));
-                BuildModeHandler.initializeMode(player);
+                ModeSettingsManager.setModeSettings(client.player, ModeSettingsManager.sanitize(message.modeSettings, client.player));
+                BuildModeHandler.initializeMode(client.player);
             });
         }
 

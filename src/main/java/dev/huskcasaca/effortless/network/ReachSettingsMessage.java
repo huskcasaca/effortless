@@ -8,7 +8,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -68,10 +67,10 @@ public record ReachSettingsMessage(
     public static class ClientHandler implements ClientMessageHandler<ReachSettingsMessage> {
 
         @Override
-        public void handleClientSide(Minecraft client, LocalPlayer player, ClientPacketListener handler, ReachSettingsMessage message, PacketSender responseSender) {
+        public void handleClientSide(Minecraft client, ClientPacketListener handler, ReachSettingsMessage message, PacketSender responseSender) {
             client.execute(() -> {
-                ReachSettingsManager.setReachSettings(player, ReachSettingsManager.sanitize(message.reachSettings, player));
-                BuildModeHandler.initializeMode(player);
+                ReachSettingsManager.setReachSettings(client.player, ReachSettingsManager.sanitize(message.reachSettings, client.player));
+                BuildModeHandler.initializeMode(client.player);
             });
         }
 
