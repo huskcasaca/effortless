@@ -6,7 +6,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -54,9 +53,9 @@ public record ClearUndoMessage(
     public static class ClientHandler implements ClientMessageHandler<ClearUndoMessage> {
 
         @Override
-        public void handleClientSide(Minecraft client, LocalPlayer player, ClientPacketListener handler, ClearUndoMessage message, PacketSender responseSender) {
+        public void handleClientSide(Minecraft client, ClientPacketListener handler, ClearUndoMessage message, PacketSender responseSender) {
             client.execute(() -> {
-                UndoRedo.clear(player);
+                UndoRedo.clear(client.player);
             });
         }
 

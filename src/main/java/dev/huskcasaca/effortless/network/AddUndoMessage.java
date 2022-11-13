@@ -7,7 +7,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -18,7 +17,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /***
  * Sends a message to the client asking to add a block to the undo stack.
@@ -74,9 +72,9 @@ public record AddUndoMessage(
     public static class ClientHandler implements ClientMessageHandler<AddUndoMessage> {
 
         @Override
-        public void handleClientSide(Minecraft client, LocalPlayer player, ClientPacketListener handler, AddUndoMessage message, PacketSender responseSender) {
+        public void handleClientSide(Minecraft client, ClientPacketListener handler, AddUndoMessage message, PacketSender responseSender) {
             client.execute(() -> {
-                if (player != null) {
+                if (client.player != null) {
                     final var coordinates = new ArrayList<BlockPos>();
                     final var previousBlockState = new ArrayList<BlockState>();
                     final var newBlockState = new ArrayList<BlockState>();
@@ -84,7 +82,7 @@ public record AddUndoMessage(
                     previousBlockState.add(message.previousBlockState());
                     newBlockState.add(message.newBlockState());
 
-                    UndoRedo.addUndo(player, new BlockSet(
+                    UndoRedo.addUndo(client.player, new BlockSet(
                             coordinates,
                             previousBlockState,
                             newBlockState,

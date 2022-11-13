@@ -4,7 +4,6 @@ import dev.huskcasaca.effortless.Effortless;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -68,10 +67,10 @@ public record TranslatedLogMessage(
     public static class ClientHandler implements ClientMessageHandler<TranslatedLogMessage> {
 
         @Override
-        public void handleClientSide(Minecraft client, LocalPlayer player, ClientPacketListener handler, TranslatedLogMessage message, PacketSender responseSender) {
+        public void handleClientSide(Minecraft client, ClientPacketListener handler, TranslatedLogMessage message, PacketSender responseSender) {
 
             client.execute(() -> {
-                Effortless.logTranslate(player, message.prefix, message.translationKey, message.suffix, message.actionBar);
+                Effortless.logTranslate(client.player, message.prefix, message.translationKey, message.suffix, message.actionBar);
             });
         }
 

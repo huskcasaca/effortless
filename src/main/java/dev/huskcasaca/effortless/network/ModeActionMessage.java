@@ -7,7 +7,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -56,8 +55,8 @@ public record ModeActionMessage(
     public static class ClientHandler implements ClientMessageHandler<ModeActionMessage> {
 
         @Override
-        public void handleClientSide(Minecraft client, LocalPlayer player, ClientPacketListener handler, ModeActionMessage message, PacketSender responseSender) {
-            client.execute(() -> BuildActionHandler.performAction(player, message.action));
+        public void handleClientSide(Minecraft client, ClientPacketListener handler, ModeActionMessage message, PacketSender responseSender) {
+            client.execute(() -> BuildActionHandler.performAction(client.player, message.action));
         }
     }
 }
