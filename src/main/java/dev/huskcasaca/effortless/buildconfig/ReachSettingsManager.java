@@ -8,7 +8,6 @@ import dev.huskcasaca.effortless.network.ReachSettingsMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
-//@Mod.EventBusSubscriber
 public class ReachSettingsManager {
 
     public static int MIN_MAX_REACH_DISTANCE = 0;
@@ -55,15 +54,9 @@ public class ReachSettingsManager {
     }
 
     public static void handleNewPlayer(Player player) {
-        //Makes sure player has mode settings (if it doesnt it will create it)
-
-        //Only on server
         if (!player.level.isClientSide) {
-            //Send to client
-            ReachSettingsMessage msg = new ReachSettingsMessage(new ReachSettings());
+            ReachSettingsMessage msg = new ReachSettingsMessage(((EffortlessDataProvider) player).getReachSettings());
             PacketHandler.sendToClient(msg, (ServerPlayer) player);
-        } else {
-            setReachSettings(player, new ReachSettings());
         }
     }
 
@@ -82,7 +75,7 @@ public class ReachSettingsManager {
                     10_000,
                     true,
                     false,
-                    20
+                    10
             );
         }
 

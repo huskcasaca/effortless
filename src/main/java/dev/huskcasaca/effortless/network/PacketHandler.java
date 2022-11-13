@@ -38,7 +38,7 @@ public class PacketHandler {
 
         registerClientMessage(ModifierSettingsMessage.class, MessageChannel.MODIFIER_SETTINGS, new ModifierSettingsMessage.Serializer(), new ModifierSettingsMessage.ClientHandler());
         registerClientMessage(ModeSettingsMessage.class, MessageChannel.MODE_SETTINGS, new ModeSettingsMessage.Serializer(), new ModeSettingsMessage.ClientHandler());
-        registerServerMessage(ReachSettingsMessage.class, MessageChannel.REACH_SETTINGS, new ReachSettingsMessage.Serializer(), new ReachSettingsMessage.ServerHandler());
+        registerClientMessage(ReachSettingsMessage.class, MessageChannel.REACH_SETTINGS, new ReachSettingsMessage.Serializer(), new ReachSettingsMessage.ClientHandler());
         registerClientMessage(ModeActionMessage.class, MessageChannel.MODE_ACTION, new ModeActionMessage.Serializer(), new ModeActionMessage.ClientHandler());
         registerClientMessage(BlockPlacedMessage.class, MessageChannel.BLOCK_PLACED, new BlockPlacedMessage.Serializer(), new BlockPlacedMessage.ClientHandler());
         registerClientMessage(BlockBrokenMessage.class, MessageChannel.BLOCK_BROKEN, new BlockBrokenMessage.Serializer(), new BlockBrokenMessage.ClientHandler());
