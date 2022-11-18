@@ -8,7 +8,6 @@
   "mixins": [
     "BlockItemAccessor",
     "ClientGamePacketListenerMixin",
-    "ConnectionMixin",
     "KeyMappingAccessor",
     "PlayerEventMixin",
     "PlayerPickupMixin",

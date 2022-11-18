@@ -29,7 +29,7 @@ public class BuildModeHandler {
     //Uses a network message to get the previous raytraceresult from the player
     //The server could keep track of all raytraceresults but this might lag with many players
     //Raytraceresult is needed for sideHit and hitVec
-    public static void onBlockPlacedMessage(Player player, ServerboundPlayerPlaceBlockPacket message) {
+    public static void onBlockPlacedPacketReceived(Player player, ServerboundPlayerPlaceBlockPacket packet) {
 
         //Check if not in the middle of breaking
         var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
@@ -45,15 +45,15 @@ public class BuildModeHandler {
 
         BlockPos startPos = null;
 
-        if (message.blockHit() && message.blockPos() != null) {
-            startPos = message.blockPos();
+        if (packet.blockHit() && packet.blockPos() != null) {
+            startPos = packet.blockPos();
 
             //Offset in direction of sidehit if not quickreplace and not replaceable
             //TODO 1.13 replaceable
             boolean replaceable = player.level.getBlockState(startPos).getMaterial().isReplaceable();
-            boolean becomesDoubleSlab = SurvivalHelper.doesBecomeDoubleSlab(player, startPos, message.sideHit());
+            boolean becomesDoubleSlab = SurvivalHelper.doesBecomeDoubleSlab(player, startPos, packet.sideHit());
             if (!modifierSettings.quickReplace() && !replaceable && !becomesDoubleSlab) {
-                startPos = startPos.relative(message.sideHit());
+                startPos = startPos.relative(packet.sideHit());
             }
 
             //Get under tall grass and other replaceable blocks
@@ -71,7 +71,7 @@ public class BuildModeHandler {
 
         //Even when no starting block is found, call buildmode instance
         //We might want to place things in the air
-        List<BlockPos> coordinates = buildMode.instance.onRightClick(player, startPos, message.sideHit(), message.hitVec(), modifierSettings.quickReplace());
+        List<BlockPos> coordinates = buildMode.instance.onRightClick(player, startPos, packet.sideHit(), packet.hitVec(), modifierSettings.quickReplace());
 
         if (coordinates.isEmpty()) {
             currentlyBreaking.put(player, false);
@@ -85,12 +85,12 @@ public class BuildModeHandler {
         }
 
         var sideHit = buildMode.instance.getSideHit(player);
-        if (sideHit == null) sideHit = message.sideHit();
+        if (sideHit == null) sideHit = packet.sideHit();
 
         var hitVec = buildMode.instance.getHitVec(player);
-        if (hitVec == null) hitVec = message.hitVec();
+        if (hitVec == null) hitVec = packet.hitVec();
 
-        BuildModifierHandler.onBlockPlaced(player, coordinates, sideHit, hitVec, message.placeStartPos());
+        BuildModifierHandler.onBlockPlaced(player, coordinates, sideHit, hitVec, packet.placeStartPos());
 
         //Only works when finishing a buildmode is equal to placing some blocks
         //No intermediate blocks allowed
@@ -98,9 +98,9 @@ public class BuildModeHandler {
 
     }
 
-    //Use a network message to break blocks in the distance using clientside mouse input
-    public static void onBlockBrokenMessage(Player player, ServerboundPlayerBreakBlockPacket message) {
-        var startPos = message.blockHit() ? message.blockPos() : null;
+    //Use a network packet to break blocks in the distance using clientside mouse input
+    public static void onBlockBrokenPacketReceived(Player player, ServerboundPlayerBreakBlockPacket packet) {
+        var startPos = packet.blockHit() ? packet.blockPos() : null;
         onBlockBroken(player, startPos, true);
     }
 
