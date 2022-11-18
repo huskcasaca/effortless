@@ -6,8 +6,8 @@ import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
 import dev.huskcasaca.effortless.mixin.ScreenRenderablesAccessor;
-import dev.huskcasaca.effortless.network.ModifierSettingsMessage;
-import dev.huskcasaca.effortless.network.PacketHandler;
+import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModifierPacket;
 import dev.huskcasaca.effortless.screen.widget.ScrollPane;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -144,7 +144,7 @@ public class ModifierSettingsScreen extends Screen {
         ModifierSettingsManager.setModifierSettings(minecraft.player, modifierSettings);
 
         //Send to server
-        PacketHandler.sendToServer(new ModifierSettingsMessage(modifierSettings));
+        Packets.sendToServer(new ServerboundPlayerSetBuildModifierPacket(modifierSettings));
 
         // TODO: 17/9/22 grabMouse
 //        Minecraft.getInstance().mouseHandler.grabMouse();

@@ -1,10 +1,10 @@
-package dev.huskcasaca.effortless.buildconfig;
+package dev.huskcasaca.effortless.buildreach;
 
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessDataProvider;
 import dev.huskcasaca.effortless.helper.ReachHelper;
-import dev.huskcasaca.effortless.network.PacketHandler;
-import dev.huskcasaca.effortless.network.ReachSettingsMessage;
+import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerReachPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -22,11 +22,11 @@ public class ReachSettingsManager {
     public static int MIN_UNDO_STACK_SIZE = 0;
     public static int MAX_UNDO_STACK_SIZE = 100;
 
-    public static ReachSettings getReachSettings(Player player) {
+    public static BuildReachSettings getReachSettings(Player player) {
         return ((EffortlessDataProvider) player).getReachSettings();
     }
 
-    public static void setReachSettings(Player player, ReachSettings reachSettings) {
+    public static void setReachSettings(Player player, BuildReachSettings reachSettings) {
         if (player == null) {
             Effortless.log("Cannot set reach settings, player is null");
             return;
@@ -34,16 +34,16 @@ public class ReachSettingsManager {
         ((EffortlessDataProvider) player).setReachSettings(reachSettings);
     }
 
-    public static String getSanitizeMessage(ReachSettings modeSettings, Player player) {
+    public static String getSanitizeMessage(BuildReachSettings modeSettings, Player player) {
         int maxReach = ReachHelper.getMaxReach(player);
         String error = "";
         //TODO sanitize
         return error;
     }
 
-    public static ReachSettings sanitize(ReachSettings reachSettings, Player player) {
+    public static BuildReachSettings sanitize(BuildReachSettings reachSettings, Player player) {
 //        maxBlockPlaceAtOnce = Math.toIntExact(Math.round(maxBlockPlaceAtOnce / 1000.0)) * 1000;
-        return new ReachSettings(
+        return new BuildReachSettings(
                 Math.max(MIN_MAX_REACH_DISTANCE, Math.min(reachSettings.maxReachDistance, MAX_MAX_REACH_DISTANCE)),
                 Math.max(MIN_MAX_BLOCK_PLACE_PER_AXIS, Math.min(reachSettings.maxBlockPlacePerAxis, MAX_MAX_BLOCK_PLACE_PER_AXIS)),
                 Math.max(MIN_MAX_BLOCK_PLACE_AT_ONCE, Math.min(reachSettings.maxBlockPlaceAtOnce, MAX_MAX_BLOCK_PLACE_AT_ONCE)),
@@ -53,14 +53,13 @@ public class ReachSettingsManager {
         );
     }
 
-    public static void handleNewPlayer(Player player) {
+    public static void handleNewPlayer(ServerPlayer player) {
         if (!player.level.isClientSide) {
-            ReachSettingsMessage msg = new ReachSettingsMessage(((EffortlessDataProvider) player).getReachSettings());
-            PacketHandler.sendToClient(msg, (ServerPlayer) player);
+            Packets.sendToClient(new ClientboundPlayerReachPacket(((EffortlessDataProvider) player).getReachSettings()), (ServerPlayer) player);
         }
     }
 
-    public record ReachSettings(
+    public record BuildReachSettings(
             int maxReachDistance,
             int maxBlockPlacePerAxis,
             int maxBlockPlaceAtOnce,
@@ -68,7 +67,7 @@ public class ReachSettingsManager {
             boolean enableUndo,
             int undoStackSize
     ) {
-        public ReachSettings() {
+        public BuildReachSettings() {
             this(
                     512,
                     128,

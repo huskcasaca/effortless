@@ -3,8 +3,9 @@ package dev.huskcasaca.effortless.buildmode;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessDataProvider;
 import dev.huskcasaca.effortless.helper.ReachHelper;
-import dev.huskcasaca.effortless.network.ModeSettingsMessage;
-import dev.huskcasaca.effortless.network.PacketHandler;
+import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerBuildModePacket;
+import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModePacket;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -48,7 +49,7 @@ public class ModeSettingsManager {
         var modeSettings = getModeSettings(player);
         modeSettings = new ModeSettingsManager.ModeSettings(modeSettings.buildMode(), enable);
         ModeSettingsManager.setModeSettings(player, modeSettings);
-        PacketHandler.sendToServer(new ModeSettingsMessage(modeSettings));
+        Packets.sendToServer(new ServerboundPlayerSetBuildModePacket(modeSettings));
     }
 
 
@@ -65,15 +66,10 @@ public class ModeSettingsManager {
         return modeSettings;
     }
 
-    public static void handleNewPlayer(Player player) {
+    public static void handleNewPlayer(ServerPlayer player) {
         //Makes sure player has mode settings (if it doesnt it will create it)
 
-        //Only on server
-        if (!player.level.isClientSide) {
-            //Send to client
-            ModeSettingsMessage msg = new ModeSettingsMessage(((EffortlessDataProvider) player).getModeSettings());
-            PacketHandler.sendToClient(msg, (ServerPlayer) player);
-        }
+        Packets.sendToClient(new ClientboundPlayerBuildModePacket(((EffortlessDataProvider) player).getModeSettings()), (ServerPlayer) player);
     }
 
     public record ModeSettings(

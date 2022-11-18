@@ -1,6 +1,6 @@
 package dev.huskcasaca.effortless;
 
-import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
+import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
 import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
@@ -8,6 +8,7 @@ import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.UndoRedo;
 import dev.huskcasaca.effortless.helper.ReachHelper;
 import dev.huskcasaca.effortless.network.*;
+import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerRequestLookAtPacket;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.core.BlockPos;
@@ -15,7 +16,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
@@ -45,16 +45,16 @@ public class Effortless implements ModInitializer {
             return false;
         } else if (modifierSettings.quickReplace()) {
             //Cancel event and send message if QuickReplace
-            PacketHandler.sendToClient(new RequestLookAtMessage(true), (ServerPlayer) player);
-//            PacketHandler.sendToClient(new AddUndoMessage(pos, event.getBlockSnapshot().getReplacedBlock(), state), (ServerPlayer)  player);
+            Packets.sendToClient(new ClientboundPlayerRequestLookAtPacket(true), (ServerPlayer) player);
+//            Packets.sendToClient(new AddUndoMessage(pos, event.getBlockSnapshot().getReplacedBlock(), state), (ServerPlayer)  player);
             return false;
         } else {
             //NORMAL mode, let vanilla handle block placing
             //But modifiers should still work
 
             //Send message to client, which sends message back with raytrace info
-            PacketHandler.sendToClient(new RequestLookAtMessage(false), (ServerPlayer) player);
-//            PacketHandler.sendToClient(new AddUndoMessage(pos, event.getBlockSnapshot().getReplacedBlock(), state), (ServerPlayer) player);
+            Packets.sendToClient(new ClientboundPlayerRequestLookAtPacket(false), (ServerPlayer) player);
+//            Packets.sendToClient(new AddUndoMessage(pos, event.getBlockSnapshot().getReplacedBlock(), state), (ServerPlayer) player);
             return true;
         }
 
@@ -83,7 +83,8 @@ public class Effortless implements ModInitializer {
 
             //Add to undo stack in client
             if (player instanceof ServerPlayer && state != null && pos != null) {
-                PacketHandler.sendToClient(new AddUndoMessage(pos, state, Blocks.AIR.defaultBlockState()), ((ServerPlayer) player));
+                // FIXME: 18/11/22
+//                Packets.sendToClient(new AddUndoMessage(pos, state, Blocks.AIR.defaultBlockState()), ((ServerPlayer) player));
             }
             return true;
         }
@@ -98,7 +99,8 @@ public class Effortless implements ModInitializer {
 
     public static void onPlayerLogout(ServerPlayer player) {
         UndoRedo.clear(player);
-        PacketHandler.sendToClient(new ClearUndoMessage(), player);
+        // FIXME: 18/11/22
+//        Packets.sendToClient(new ClearUndoMessage(), player);
     }
 
     public static void onPlayerRespawn(ServerPlayer player) {
@@ -121,7 +123,8 @@ public class Effortless implements ModInitializer {
         ReachSettingsManager.handleNewPlayer(player);
 
         UndoRedo.clear(player);
-        PacketHandler.sendToClient(new ClearUndoMessage(), player);
+        // FIXME: 18/11/22
+//        Packets.sendToClient(new ClearUndoMessage(), player);
     }
 
     //
@@ -150,8 +153,6 @@ public class Effortless implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        PacketHandler.register();
-
         ServerPlayerEvents.COPY_FROM.register(Effortless::onPlayerClone);
     }
 }

@@ -1,6 +1,6 @@
 package dev.huskcasaca.effortless;
 
-import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
+import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
 import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 
@@ -15,8 +15,8 @@ public interface EffortlessDataProvider {
 
     void setModifierSettings(ModifierSettingsManager.ModifierSettings modifierSettings);
 
-    ReachSettingsManager.ReachSettings getReachSettings();
+    ReachSettingsManager.BuildReachSettings getReachSettings();
 
-    void setReachSettings(ReachSettingsManager.ReachSettings reachSettings);
+    void setReachSettings(ReachSettingsManager.BuildReachSettings reachSettings);
 
 }

@@ -9,8 +9,8 @@ import dev.huskcasaca.effortless.event.ClientScreenEvent;
 import dev.huskcasaca.effortless.event.ClientScreenInputEvent;
 import dev.huskcasaca.effortless.helper.ReachHelper;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
-import dev.huskcasaca.effortless.network.ModeSettingsMessage;
-import dev.huskcasaca.effortless.network.PacketHandler;
+import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModePacket;
 import dev.huskcasaca.effortless.render.BuildRenderTypes;
 import dev.huskcasaca.effortless.screen.buildmode.PlayerSettingsScreen;
 import dev.huskcasaca.effortless.screen.buildmode.RadialMenuScreen;
@@ -46,7 +46,6 @@ public class EffortlessClient implements ClientModInitializer {
 
     public static void onStartClientTick(Minecraft client) {
         //Update previousLookAt
-        PacketHandler.registerClient();
         HitResult objectMouseOver = Minecraft.getInstance().hitResult;
         //Checking for null is necessary! Even in vanilla when looking down ladders it is occasionally null (instead of Type MISS)
         if (objectMouseOver == null) return;
@@ -97,7 +96,7 @@ public class EffortlessClient implements ClientModInitializer {
 //            modifierSettings.setQuickReplace(!modifierSettings.quickReplace());
 //            Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (
 //                    modifierSettings.quickReplace() ? "ON" : "OFF"));
-//            PacketHandler.sendToServer(new ModifierSettingsMessage(modifierSettings));
+//            Packets.sendToServer(new ModifierSettingsMessage(modifierSettings));
 //        }
 
         //Radial menu
@@ -115,14 +114,14 @@ public class EffortlessClient implements ClientModInitializer {
 //        if (keyBindings[3].consumeClick()) {
 //            BuildAction undoAction = BuildAction.UNDO;
 //            BuildActionHandler.performAction(player, undoAction);
-//            PacketHandler.sendToServer(new ModeActionMessage(undoAction));
+//            Packets.sendToServer(new ModeActionMessage(undoAction));
 //        }
 //
 //        //Redo (Ctrl+Y)
 //        if (keyBindings[4].consumeClick()) {
 //            BuildAction redoAction = BuildAction.REDO;
 //            BuildActionHandler.performAction(player, redoAction);
-//            PacketHandler.sendToServer(new ModeActionMessage(redoAction));
+//            Packets.sendToServer(new ModeActionMessage(redoAction));
 //        }
 //
 //        //Change placement mode
@@ -134,10 +133,10 @@ public class EffortlessClient implements ClientModInitializer {
 //                if (option.actions.length >= 2) {
 //                    if (BuildActionHandler.getOptionSetting(option) == option.actions[0]) {
 //                        BuildActionHandler.performAction(player, option.actions[1]);
-//                        PacketHandler.sendToServer(new ModeActionMessage(option.actions[1]));
+//                        Packets.sendToServer(new ModeActionMessage(option.actions[1]));
 //                    } else {
 //                        BuildActionHandler.performAction(player, option.actions[0]);
-//                        PacketHandler.sendToServer(new ModeActionMessage(option.actions[0]));
+//                        Packets.sendToServer(new ModeActionMessage(option.actions[0]));
 //                    }
 //                }
 //            }
@@ -175,11 +174,10 @@ public class EffortlessClient implements ClientModInitializer {
     public static void onScreenEvent(Screen screen) {
         var player = Minecraft.getInstance().player;
         if (player != null) {
-
             var modeSettings = ModeSettingsManager.getModeSettings(player);
             ModeSettingsManager.setModeSettings(player, modeSettings);
             BuildModeHandler.initializeMode(player);
-            PacketHandler.sendToServer(new ModeSettingsMessage(modeSettings));
+            Packets.sendToServer(new ServerboundPlayerSetBuildModePacket(modeSettings));
         }
     }
 

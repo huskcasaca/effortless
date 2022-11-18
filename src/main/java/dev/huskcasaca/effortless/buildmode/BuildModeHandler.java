@@ -5,8 +5,8 @@ import dev.huskcasaca.effortless.buildmodifier.BuildModifierHandler;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.helper.ReachHelper;
 import dev.huskcasaca.effortless.helper.SurvivalHelper;
-import dev.huskcasaca.effortless.network.BlockBrokenMessage;
-import dev.huskcasaca.effortless.network.BlockPlacedMessage;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerBreakBlockPacket;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerPlaceBlockPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +29,7 @@ public class BuildModeHandler {
     //Uses a network message to get the previous raytraceresult from the player
     //The server could keep track of all raytraceresults but this might lag with many players
     //Raytraceresult is needed for sideHit and hitVec
-    public static void onBlockPlacedMessage(Player player, BlockPlacedMessage message) {
+    public static void onBlockPlacedMessage(Player player, ServerboundPlayerPlaceBlockPacket message) {
 
         //Check if not in the middle of breaking
         var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
@@ -99,7 +99,7 @@ public class BuildModeHandler {
     }
 
     //Use a network message to break blocks in the distance using clientside mouse input
-    public static void onBlockBrokenMessage(Player player, BlockBrokenMessage message) {
+    public static void onBlockBrokenMessage(Player player, ServerboundPlayerBreakBlockPacket message) {
         var startPos = message.blockHit() ? message.blockPos() : null;
         onBlockBroken(player, startPos, true);
     }
