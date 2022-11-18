@@ -62,7 +62,7 @@ public class PlayerActionMixin {
         if (lookingAt != null && lookingAt.getType() == HitResult.Type.BLOCK) {
             BlockHitResult blockLookingAt = (BlockHitResult) lookingAt;
 
-            BuildModeHandler.onBlockBrokenMessage(player, new ServerboundPlayerBreakBlockPacket(blockLookingAt));
+            BuildModeHandler.onBlockBrokenPacketReceived(player, new ServerboundPlayerBreakBlockPacket(blockLookingAt));
             Packets.sendToServer(new ServerboundPlayerBreakBlockPacket(blockLookingAt));
 
             //play sound if further than normal
@@ -76,7 +76,7 @@ public class PlayerActionMixin {
             }
             cir.setReturnValue(true);
         } else {
-            BuildModeHandler.onBlockBrokenMessage(player, new ServerboundPlayerBreakBlockPacket());
+            BuildModeHandler.onBlockBrokenPacketReceived(player, new ServerboundPlayerBreakBlockPacket());
             Packets.sendToServer(new ServerboundPlayerBreakBlockPacket());
             cir.setReturnValue(false);
         }
@@ -129,7 +129,7 @@ public class PlayerActionMixin {
             if (lookingAt.getType() == HitResult.Type.BLOCK) {
                 //find position in distance
                 BlockHitResult blockLookingAt = (BlockHitResult) lookingAt;
-                BuildModeHandler.onBlockPlacedMessage(player, new ServerboundPlayerPlaceBlockPacket(blockLookingAt, true));
+                BuildModeHandler.onBlockPlacedPacketReceived(player, new ServerboundPlayerPlaceBlockPacket(blockLookingAt, true));
                 Packets.sendToServer(new ServerboundPlayerPlaceBlockPacket(blockLookingAt, true));
                 //play sound if further than normal
                 if ((blockLookingAt.getLocation().subtract(player.getEyePosition(1f))).lengthSqr() > 25f) {
@@ -142,7 +142,7 @@ public class PlayerActionMixin {
                 }
             } else {
 
-                BuildModeHandler.onBlockPlacedMessage(player, new ServerboundPlayerPlaceBlockPacket());
+                BuildModeHandler.onBlockPlacedPacketReceived(player, new ServerboundPlayerPlaceBlockPacket());
                 Packets.sendToServer(new ServerboundPlayerPlaceBlockPacket());
             }
             ci.cancel();

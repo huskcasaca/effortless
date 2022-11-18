@@ -1,6 +1,5 @@
 package dev.huskcasaca.effortless.mixin;
 
-import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
 import dev.huskcasaca.effortless.buildmode.BuildActionHandler;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
@@ -64,7 +63,7 @@ public abstract class ServerGamePacketListenerMixin implements ServerEffortlessP
     @Override
     public void handle(ServerboundPlayerBreakBlockPacket packet) {
         server.execute(() -> {
-            BuildModeHandler.onBlockBrokenMessage(player, packet);
+            BuildModeHandler.onBlockBrokenPacketReceived(player, packet);
         });
     }
 
@@ -77,7 +76,7 @@ public abstract class ServerGamePacketListenerMixin implements ServerEffortlessP
 
     @Override
     public void handle(ServerboundPlayerPlaceBlockPacket packet) {
-        server.execute(() -> BuildModeHandler.onBlockPlacedMessage(player, packet));
+        server.execute(() -> BuildModeHandler.onBlockPlacedPacketReceived(player, packet));
         // TODO: 18/11/22  //Nod RenderHandler to do the dissolve shader effect
         //            client.execute(() -> BlockPreviewRenderer.onBlocksPlaced());
     }
