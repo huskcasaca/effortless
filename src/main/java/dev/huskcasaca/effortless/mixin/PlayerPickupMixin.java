@@ -1,8 +1,7 @@
 package dev.huskcasaca.effortless.mixin;
 
-import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
+import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
 import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
-import dev.huskcasaca.effortless.config.ConfigManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import org.spongepowered.asm.mixin.Mixin;

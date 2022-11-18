@@ -1,7 +1,7 @@
 package dev.huskcasaca.effortless.mixin;
 
 import dev.huskcasaca.effortless.EffortlessDataProvider;
-import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
+import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
 import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
@@ -26,7 +26,7 @@ public class PlayerTagMixin implements EffortlessDataProvider {
     @Unique
     private ModifierSettingsManager.ModifierSettings modifierSettings = null;
     @Unique
-    private ReachSettingsManager.ReachSettings reachSettings = null;
+    private ReachSettingsManager.BuildReachSettings reachSettings = null;
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void readTag(CompoundTag tag, CallbackInfo info) {
@@ -52,7 +52,7 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
     private void readSettings(CompoundTag tag) {
-        reachSettings = new ReachSettingsManager.ReachSettings(
+        reachSettings = new ReachSettingsManager.BuildReachSettings(
                 tag.getInt("maxReachDistance"),
                 tag.getInt("maxBlockPlacePerAxis"),
                 tag.getInt("maxBlockPlaceAtOnce"),
@@ -64,7 +64,7 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
     private void writeSettings(CompoundTag tag) {
-        if (reachSettings == null) reachSettings = new ReachSettingsManager.ReachSettings();
+        if (reachSettings == null) reachSettings = new ReachSettingsManager.BuildReachSettings();
         var reachSettings = this.reachSettings;
 
         tag.putInt("maxReachDistance", reachSettings.maxReachDistance());
@@ -205,13 +205,13 @@ public class PlayerTagMixin implements EffortlessDataProvider {
     }
 
     @Override
-    public ReachSettingsManager.ReachSettings getReachSettings() {
-        if (reachSettings == null) reachSettings = new ReachSettingsManager.ReachSettings();
+    public ReachSettingsManager.BuildReachSettings getReachSettings() {
+        if (reachSettings == null) reachSettings = new ReachSettingsManager.BuildReachSettings();
         return reachSettings;
     }
 
     @Override
-    public void setReachSettings(ReachSettingsManager.ReachSettings reachSettings) {
+    public void setReachSettings(ReachSettingsManager.BuildReachSettings reachSettings) {
         this.reachSettings = reachSettings;
 
     }

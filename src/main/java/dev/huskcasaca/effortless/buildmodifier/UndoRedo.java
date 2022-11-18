@@ -1,8 +1,7 @@
 package dev.huskcasaca.effortless.buildmodifier;
 
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.buildconfig.ReachSettingsManager;
-import dev.huskcasaca.effortless.config.ConfigManager;
+import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
 import dev.huskcasaca.effortless.helper.FixedStack;
 import dev.huskcasaca.effortless.helper.InventoryHelper;
 import dev.huskcasaca.effortless.helper.SurvivalHelper;

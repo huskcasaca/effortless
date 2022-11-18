@@ -8,9 +8,9 @@ import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmode.*;
 import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
-import dev.huskcasaca.effortless.network.ModeActionMessage;
-import dev.huskcasaca.effortless.network.ModeSettingsMessage;
-import dev.huskcasaca.effortless.network.PacketHandler;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerBuildActionPacket;
+import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModePacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.KeyMapping;
@@ -525,7 +525,7 @@ public class RadialMenuScreen extends Screen {
             if (player != null) {
                 BuildModeHandler.initializeMode(player);
             }
-            PacketHandler.sendToServer(new ModeSettingsMessage(modeSettings));
+            Packets.sendToServer(new ServerboundPlayerSetBuildModePacket(modeSettings));
 
             if (fromMouseClick) performedActionUsingMouse = true;
         }
@@ -537,7 +537,7 @@ public class RadialMenuScreen extends Screen {
             lastAction = action;
 
             BuildActionHandler.performAction(player, action);
-            PacketHandler.sendToServer(new ModeActionMessage(action));
+            Packets.sendToServer(new ServerboundPlayerBuildActionPacket(action));
 
             if (fromMouseClick) performedActionUsingMouse = true;
         }
