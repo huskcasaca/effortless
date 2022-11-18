@@ -1,5 +1,6 @@
 package dev.huskcasaca.effortless.mixin;
 
+import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessDataProvider;
 import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
@@ -32,7 +33,11 @@ public class PlayerTagMixin implements EffortlessDataProvider {
     private void readTag(CompoundTag tag, CallbackInfo info) {
 //        readModeSettings(tag.getCompound("EffortlessMode"));
 //        readModifierSettings(tag.getCompound("EffortlessModifier"));
-        readSettings(tag.getCompound("Effortless"));
+        if (tag.contains("Effortless")) {
+            readSettings(tag.getCompound("Effortless"));
+        } else {
+            reachSettings = new ReachSettingsManager.BuildReachSettings();
+        }
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
@@ -65,7 +70,6 @@ public class PlayerTagMixin implements EffortlessDataProvider {
     @Unique
     private void writeSettings(CompoundTag tag) {
         if (reachSettings == null) reachSettings = new ReachSettingsManager.BuildReachSettings();
-        var reachSettings = this.reachSettings;
 
         tag.putInt("maxReachDistance", reachSettings.maxReachDistance());
         tag.putInt("maxBlockPlacePerAxis", reachSettings.maxBlockPlacePerAxis());
