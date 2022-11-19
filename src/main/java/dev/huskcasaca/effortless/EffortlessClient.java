@@ -3,11 +3,11 @@ package dev.huskcasaca.effortless;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
-import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
+import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
 import dev.huskcasaca.effortless.event.ClientReloadShadersEvent;
 import dev.huskcasaca.effortless.event.ClientScreenEvent;
 import dev.huskcasaca.effortless.event.ClientScreenInputEvent;
-import dev.huskcasaca.effortless.helper.ReachHelper;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModePacket;
@@ -174,8 +174,8 @@ public class EffortlessClient implements ClientModInitializer {
     public static void onScreenEvent(Screen screen) {
         var player = Minecraft.getInstance().player;
         if (player != null) {
-            var modeSettings = ModeSettingsManager.getModeSettings(player);
-            ModeSettingsManager.setModeSettings(player, modeSettings);
+            var modeSettings = BuildModeHelper.getModeSettings(player);
+            BuildModeHelper.setModeSettings(player, modeSettings);
             BuildModeHandler.initializeMode(player);
             Packets.sendToServer(new ServerboundPlayerSetBuildModePacket(modeSettings));
         }

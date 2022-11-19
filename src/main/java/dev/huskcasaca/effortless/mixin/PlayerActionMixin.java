@@ -2,7 +2,7 @@ package dev.huskcasaca.effortless.mixin;
 
 import dev.huskcasaca.effortless.buildmode.BuildMode;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
-import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
+import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerBreakBlockPacket;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerPlaceBlockPacket;
 import dev.huskcasaca.effortless.network.Packets;
@@ -49,7 +49,7 @@ public class PlayerActionMixin {
     // startAttack
     @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/HitResult;getType()Lnet/minecraft/world/phys/HitResult$Type;"), cancellable = true)
     private void onStartAttack(CallbackInfoReturnable<Boolean> cir) {
-        var buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
+        var buildMode = BuildModeHelper.getModeSettings(player).buildMode();
         if (buildMode == BuildMode.DISABLE) return;
         // let vanilla handle entity attack
         if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) return;
@@ -88,7 +88,7 @@ public class PlayerActionMixin {
 
     @Inject(method = "continueAttack", at = @At("HEAD"), cancellable = true)
     private void onContinueAttack(boolean bl, CallbackInfo ci) {
-        var buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
+        var buildMode = BuildModeHelper.getModeSettings(player).buildMode();
         if (buildMode == BuildMode.DISABLE) return;
 
         if (!bl) {
@@ -107,7 +107,7 @@ public class PlayerActionMixin {
 
     @Inject(method = "startUseItem", at = @At(value = "HEAD"), cancellable = true)
     private void onStartUseItem(CallbackInfo ci) {
-        var buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
+        var buildMode = BuildModeHelper.getModeSettings(player).buildMode();
         if (buildMode == BuildMode.DISABLE) return;
         // let vanilla handle entity attack
         if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) return;

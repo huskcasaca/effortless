@@ -1,14 +1,18 @@
 package dev.huskcasaca.effortless.buildmode;
 
 import dev.huskcasaca.effortless.Effortless;
+import dev.huskcasaca.effortless.EffortlessDataProvider;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHandler;
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
-import dev.huskcasaca.effortless.helper.ReachHelper;
-import dev.huskcasaca.effortless.helper.SurvivalHelper;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
+import dev.huskcasaca.effortless.utils.SurvivalHelper;
+import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerBuildModePacket;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerBreakBlockPacket;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerPlaceBlockPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.HitResult;
@@ -39,8 +43,8 @@ public class BuildModeHandler {
             return;
         }
 
-        var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-        var modeSettings = ModeSettingsManager.getModeSettings(player);
+        var modifierSettings = BuildModifierHelper.getModifierSettings(player);
+        var modeSettings = BuildModeHelper.getModeSettings(player);
         var buildMode = modeSettings.buildMode();
 
         BlockPos startPos = null;
@@ -122,8 +126,8 @@ public class BuildModeHandler {
             if (startPos == null) return;
         }
 
-        var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-        var modeSettings = ModeSettingsManager.getModeSettings(player);
+        var modifierSettings = BuildModifierHelper.getModifierSettings(player);
+        var modeSettings = BuildModeHelper.getModeSettings(player);
 
         //Get coordinates
         var buildMode = modeSettings.buildMode();
@@ -145,7 +149,7 @@ public class BuildModeHandler {
     public static List<BlockPos> findCoordinates(Player player, BlockPos startPos, boolean skipRaytrace) {
         List<BlockPos> coordinates = new ArrayList<>();
 
-        var modeSettings = ModeSettingsManager.getModeSettings(player);
+        var modeSettings = BuildModeHelper.getModeSettings(player);
         coordinates.addAll(modeSettings.buildMode().instance.findCoordinates(player, startPos, skipRaytrace));
 
         return coordinates;
@@ -159,7 +163,7 @@ public class BuildModeHandler {
         var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
         currentlyBreaking.remove(player);
 
-        ModeSettingsManager.getModeSettings(player).buildMode().instance.initialize(player);
+        BuildModeHelper.getModeSettings(player).buildMode().instance.initialize(player);
     }
 
     public static boolean isCurrentlyPlacing(Player player) {
@@ -246,4 +250,8 @@ public class BuildModeHandler {
                 !intersects;
     }
 
+    public static void handleNewPlayer(ServerPlayer player) {
+        //Makes sure player has mode settings (if it doesnt it will create it)
+        Packets.sendToClient(new ClientboundPlayerBuildModePacket(((EffortlessDataProvider) player).getModeSettings()), (ServerPlayer) player);
+    }
 }

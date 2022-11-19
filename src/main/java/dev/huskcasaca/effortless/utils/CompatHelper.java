@@ -1,4 +1,4 @@
-package dev.huskcasaca.effortless.helper;
+package dev.huskcasaca.effortless.utils;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -6,10 +6,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class CompatHelper {
-
-    public static void setup() {
-
-    }
 
     // Check if the item given is a proxy for blocks. For now, we check for the randomizer bag,
     // /dank/null, or plain old blocks.

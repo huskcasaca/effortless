@@ -1,4 +1,4 @@
-package dev.huskcasaca.effortless.helper;
+package dev.huskcasaca.effortless.utils;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;

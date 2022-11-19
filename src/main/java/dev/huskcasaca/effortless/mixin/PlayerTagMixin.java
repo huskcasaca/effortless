@@ -1,11 +1,10 @@
 package dev.huskcasaca.effortless.mixin;
 
-import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessDataProvider;
-import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
+import dev.huskcasaca.effortless.entity.player.ModeSettings;
+import dev.huskcasaca.effortless.entity.player.ModifierSettings;
+import dev.huskcasaca.effortless.entity.player.ReachSettings;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
-import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
 import dev.huskcasaca.effortless.buildmodifier.mirror.Mirror;
 import dev.huskcasaca.effortless.buildmodifier.mirror.RadialMirror;
@@ -23,11 +22,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
-    private ModeSettingsManager.ModeSettings modeSettings = null;
+    private ModeSettings modeSettings = null;
     @Unique
-    private ModifierSettingsManager.ModifierSettings modifierSettings = null;
+    private ModifierSettings modifierSettings = null;
     @Unique
-    private ReachSettingsManager.BuildReachSettings reachSettings = null;
+    private ReachSettings reachSettings = null;
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
     private void readTag(CompoundTag tag, CallbackInfo info) {
@@ -36,7 +35,7 @@ public class PlayerTagMixin implements EffortlessDataProvider {
         if (tag.contains("Effortless")) {
             readSettings(tag.getCompound("Effortless"));
         } else {
-            reachSettings = new ReachSettingsManager.BuildReachSettings();
+            reachSettings = new ReachSettings();
         }
     }
 
@@ -57,7 +56,7 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
     private void readSettings(CompoundTag tag) {
-        reachSettings = new ReachSettingsManager.BuildReachSettings(
+        reachSettings = new ReachSettings(
                 tag.getInt("maxReachDistance"),
                 tag.getInt("maxBlockPlacePerAxis"),
                 tag.getInt("maxBlockPlaceAtOnce"),
@@ -69,7 +68,7 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
     private void writeSettings(CompoundTag tag) {
-        if (reachSettings == null) reachSettings = new ReachSettingsManager.BuildReachSettings();
+        if (reachSettings == null) reachSettings = new ReachSettings();
 
         tag.putInt("maxReachDistance", reachSettings.maxReachDistance());
         tag.putInt("maxBlockPlacePerAxis", reachSettings.maxBlockPlacePerAxis());
@@ -84,7 +83,7 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
     private void readModeSettings(CompoundTag tag) {
-        modeSettings = new ModeSettingsManager.ModeSettings(
+        modeSettings = new ModeSettings(
                 BuildMode.values()[tag.getInt("buildMode")],
                 false
         );
@@ -92,13 +91,13 @@ public class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
     private void writeModeSettings(CompoundTag tag) {
-        if (modeSettings == null) modeSettings = new ModeSettingsManager.ModeSettings();
+        if (modeSettings == null) modeSettings = new ModeSettings();
         tag.putInt("buildMode", modeSettings.buildMode().ordinal());
     }
 
     @Unique
     public void writeModifierSettings(CompoundTag tag) {
-        if (modifierSettings == null) modifierSettings = new ModifierSettingsManager.ModifierSettings();
+        if (modifierSettings == null) modifierSettings = new ModifierSettings();
 
         //ARRAY
         var arraySettings = modifierSettings.arraySettings();
@@ -182,40 +181,40 @@ public class PlayerTagMixin implements EffortlessDataProvider {
         var radialMirrorSettings = new RadialMirror.RadialMirrorSettings(radialMirrorEnabled, radialMirrorPosition,
                 radialMirrorSlices, radialMirrorAlternate, radialMirrorRadius, radialMirrorDrawLines, radialMirrorDrawPlanes);
 
-        modifierSettings = new ModifierSettingsManager.ModifierSettings(arraySettings, mirrorSettings, radialMirrorSettings, false);
+        modifierSettings = new ModifierSettings(arraySettings, mirrorSettings, radialMirrorSettings, false);
     }
 
 
     @Override
-    public ModeSettingsManager.ModeSettings getModeSettings() {
-        if (modeSettings == null) modeSettings = new ModeSettingsManager.ModeSettings();
+    public ModeSettings getModeSettings() {
+        if (modeSettings == null) modeSettings = new ModeSettings();
         return modeSettings;
     }
 
     @Override
-    public void setModeSettings(ModeSettingsManager.ModeSettings modeSettings) {
+    public void setModeSettings(ModeSettings modeSettings) {
         this.modeSettings = modeSettings;
     }
 
     @Override
-    public ModifierSettingsManager.ModifierSettings getModifierSettings() {
-        if (modifierSettings == null) modifierSettings = new ModifierSettingsManager.ModifierSettings();
+    public ModifierSettings getModifierSettings() {
+        if (modifierSettings == null) modifierSettings = new ModifierSettings();
         return modifierSettings;
     }
 
     @Override
-    public void setModifierSettings(ModifierSettingsManager.ModifierSettings modifierSettings) {
+    public void setModifierSettings(ModifierSettings modifierSettings) {
         this.modifierSettings = modifierSettings;
     }
 
     @Override
-    public ReachSettingsManager.BuildReachSettings getReachSettings() {
-        if (reachSettings == null) reachSettings = new ReachSettingsManager.BuildReachSettings();
+    public ReachSettings getReachSettings() {
+        if (reachSettings == null) reachSettings = new ReachSettings();
         return reachSettings;
     }
 
     @Override
-    public void setReachSettings(ReachSettingsManager.BuildReachSettings reachSettings) {
+    public void setReachSettings(ReachSettings reachSettings) {
         this.reachSettings = reachSettings;
 
     }

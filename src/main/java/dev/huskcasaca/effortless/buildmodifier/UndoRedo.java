@@ -1,10 +1,10 @@
 package dev.huskcasaca.effortless.buildmodifier;
 
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
-import dev.huskcasaca.effortless.helper.FixedStack;
-import dev.huskcasaca.effortless.helper.InventoryHelper;
-import dev.huskcasaca.effortless.helper.SurvivalHelper;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
+import dev.huskcasaca.effortless.utils.FixedStack;
+import dev.huskcasaca.effortless.utils.InventoryHelper;
+import dev.huskcasaca.effortless.utils.SurvivalHelper;
 import dev.huskcasaca.effortless.render.BlockPreviewRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +29,7 @@ public class UndoRedo {
     private static final Map<UUID, FixedStack<BlockSet>> redoStacksServer = new HashMap<>();
 
     public static boolean isUndoEnabled(Player player) {
-        return ReachSettingsManager.getReachSettings(player).enableUndo();
+        return ReachHelper.getReachSettings(player).enableUndo();
     }
     //add to undo stack
     public static void addUndo(Player player, BlockSet blockSet) {
@@ -65,7 +65,7 @@ public class UndoRedo {
         if (!isUndoEnabled(player)) {
             return 0;
         }
-        return ReachSettingsManager.getReachSettings(player).undoStackSize();
+        return ReachHelper.getReachSettings(player).undoStackSize();
     }
 
     private static void addRedo(Player player, BlockSet blockSet) {

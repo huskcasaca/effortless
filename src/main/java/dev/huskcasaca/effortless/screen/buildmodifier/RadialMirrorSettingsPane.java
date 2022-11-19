@@ -2,9 +2,9 @@ package dev.huskcasaca.effortless.screen.buildmodifier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.buildmodifier.mirror.RadialMirror;
-import dev.huskcasaca.effortless.helper.ReachHelper;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.screen.widget.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -135,7 +135,7 @@ public class RadialMirrorSettingsPane extends ExpandableScrollEntry {
         buttonRadialMirrorAlternate = new FixedCheckbox(left + 140, y, " Alternate", false);
         radialMirrorButtonList.add(buttonRadialMirrorAlternate);
 
-        var modifierSettings = ModifierSettingsManager.getModifierSettings(mc.player);
+        var modifierSettings = BuildModifierHelper.getModifierSettings(mc.player);
         if (modifierSettings != null) {
             var radialMirrorSettings = modifierSettings.radialMirrorSettings();
             buttonRadialMirrorEnabled.setIsChecked(radialMirrorSettings.enabled());

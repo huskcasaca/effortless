@@ -1,10 +1,10 @@
 package dev.huskcasaca.effortless.mixin;
 
-import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.buildmode.BuildActionHandler;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
-import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
+import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.*;
 import io.netty.buffer.Unpooled;
@@ -84,7 +84,7 @@ public abstract class ServerGamePacketListenerMixin implements ServerEffortlessP
     @Override
     public void handle(ServerboundPlayerSetBuildModePacket packet) {
         server.execute(() -> {
-            ModeSettingsManager.setModeSettings(player, ModeSettingsManager.sanitize(packet.modeSettings(), player));
+            BuildModeHelper.setModeSettings(player, BuildModeHelper.sanitize(packet.modeSettings(), player));
             BuildModeHandler.initializeMode(player);
         });
     }
@@ -92,14 +92,14 @@ public abstract class ServerGamePacketListenerMixin implements ServerEffortlessP
     @Override
     public void handle(ServerboundPlayerSetBuildModifierPacket packet) {
         server.execute(() -> {
-            ModifierSettingsManager.setModifierSettings(player, ModifierSettingsManager.sanitize(packet.modifierSettings(), player));
+            BuildModifierHelper.setModifierSettings(player, BuildModifierHelper.sanitize(packet.modifierSettings(), player));
         });
     }
 
     @Override
     public void handle(ServerboundPlayerSetBuildReachPacket packet) {
         server.execute(() -> {
-            ReachSettingsManager.setReachSettings(player, ReachSettingsManager.sanitize(packet.reachSettings(), player));
+            ReachHelper.setReachSettings(player, ReachHelper.sanitize(packet.reachSettings(), player));
             BuildModeHandler.initializeMode(player);
         });
     }

@@ -3,7 +3,8 @@ package dev.huskcasaca.effortless.screen.buildmodifier;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessClient;
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
+import dev.huskcasaca.effortless.entity.player.ModifierSettings;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
 import dev.huskcasaca.effortless.mixin.ScreenRenderablesAccessor;
 import dev.huskcasaca.effortless.network.Packets;
@@ -137,16 +138,16 @@ public class ModifierSettingsScreen extends Screen {
         var mirrorSettings = mirrorSettingsPane.getMirrorSettings();
         var radialMirrorSettings = radialMirrorSettingsPane.getRadialMirrorSettings();
 
-        var modifierSettings = ModifierSettingsManager.getModifierSettings(minecraft.player);
+        var modifierSettings = BuildModifierHelper.getModifierSettings(minecraft.player);
 
-        modifierSettings = new ModifierSettingsManager.ModifierSettings(arraySettings, mirrorSettings, radialMirrorSettings, modifierSettings.quickReplace());
+        modifierSettings = new ModifierSettings(arraySettings, mirrorSettings, radialMirrorSettings, modifierSettings.quickReplace());
 
         //Sanitize
-        String error = ModifierSettingsManager.getSanitizeMessage(modifierSettings, minecraft.player);
+        String error = BuildModifierHelper.getSanitizeMessage(modifierSettings, minecraft.player);
         if (!error.isEmpty()) Effortless.log(minecraft.player, error);
 
-        modifierSettings = ModifierSettingsManager.sanitize(modifierSettings, minecraft.player);
-        ModifierSettingsManager.setModifierSettings(minecraft.player, modifierSettings);
+        modifierSettings = BuildModifierHelper.sanitize(modifierSettings, minecraft.player);
+        BuildModifierHelper.setModifierSettings(minecraft.player, modifierSettings);
 
         //Send to server
         Packets.sendToServer(new ServerboundPlayerSetBuildModifierPacket(modifierSettings));
