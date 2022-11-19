@@ -9,6 +9,7 @@ import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
 import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.buildmodifier.UndoRedo;
+import dev.huskcasaca.effortless.entity.player.ModifierSettings;
 import dev.huskcasaca.effortless.network.*;
 import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerRequestLookAtPacket;
 import net.fabricmc.api.ModInitializer;
@@ -120,6 +121,11 @@ public class Effortless implements ModInitializer {
                 modeSettings.enableMagnet()
         );
         BuildModeHelper.setModeSettings(player, modeSettings);
+
+        var modifierSettings = BuildModifierHelper.getModifierSettings(player);
+        modifierSettings = new ModifierSettings();
+
+        BuildModifierHelper.setModifierSettings(player, modifierSettings);
 
         BuildModifierHandler.handleNewPlayer(player);
         BuildModeHandler.handleNewPlayer(player);
