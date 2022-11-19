@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
 import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
+import dev.huskcasaca.effortless.control.Keys;
 import dev.huskcasaca.effortless.event.ClientReloadShadersEvent;
 import dev.huskcasaca.effortless.event.ClientScreenEvent;
 import dev.huskcasaca.effortless.event.ClientScreenInputEvent;
@@ -86,9 +87,9 @@ public class EffortlessClient implements ClientModInitializer {
 //
 //        //Remember to send packet to server if necessary
 //        //Show Modifier Settings GUI
-//        if (keyBindings[0].consumeClick()) {
-//            openModifierSettings();
-//        }
+        if (Keys.MODIFIER_MENU.getKeyMapping().consumeClick()) {
+            openModifierSettings();
+        }
 //
 //        //QuickReplace toggle
 //        if (keyBindings[1].consumeClick()) {
@@ -100,7 +101,7 @@ public class EffortlessClient implements ClientModInitializer {
 //        }
 
         //Radial menu
-        if (keyBindings[2].isDown()) {
+        if (Keys.SHOW_RADIAL_MENU.isDown()) {
             if (!RadialMenuScreen.instance.isVisible()) {
                 Minecraft.getInstance().setScreen(RadialMenuScreen.instance);
             }
@@ -181,17 +182,6 @@ public class EffortlessClient implements ClientModInitializer {
         }
     }
 
-    public static boolean isKeybindDown(int index) {
-        return InputConstants.isKeyDown(
-                Minecraft.getInstance().getWindow().getWindow(),
-                ((KeyMappingAccessor) EffortlessClient.keyBindings[index]).getKey().getValue()
-        );
-    }
-
-    public static int getKey(int index) {
-        return ((KeyMappingAccessor) EffortlessClient.keyBindings[index]).getKey().getValue();
-    }
-
     protected static BlockHitResult getPlayerPOVHitResult(Level level, Player player, ClipContext.Fluid fluid) {
         float f = player.getXRot();
         float g = player.getYRot();
@@ -233,15 +223,7 @@ public class EffortlessClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         // register key bindings
-        keyBindings = new KeyMapping[6];
-
-        // instantiate the key bindings
-        keyBindings[0] = new KeyMapping("key.effortless.hud.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_KP_ADD, "key.effortless.category");
-        keyBindings[1] = new KeyMapping("key.effortless.replace.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_KP_SUBTRACT, "key.effortless.category");
-        keyBindings[2] = new KeyMapping("key.effortless.mode.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, "key.effortless.category");
-        keyBindings[3] = new KeyMapping("key.effortless.undo.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, "key.effortless.category");
-        keyBindings[4] = new KeyMapping("key.effortless.redo.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Y, "key.effortless.category");
-//        keyBindings[5] = new KeyMapping("key.effortless.altplace.desc", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_CONTROL, "key.effortless.category");
+        Keys.register();
 
         ClientScreenEvent.SCREEN_OPENING_EVENT.register(EffortlessClient::onScreenEvent);
 

@@ -4,19 +4,18 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Vector4f;
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmode.*;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
+import dev.huskcasaca.effortless.control.Keys;
 import dev.huskcasaca.effortless.entity.player.ModeSettings;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
-import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerBuildActionPacket;
 import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerBuildActionPacket;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModePacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -98,7 +97,7 @@ public class RadialMenuScreen extends Screen {
     public void tick() {
         super.tick();
 
-        if (!EffortlessClient.isKeybindDown(2)) {
+        if (!Keys.SHOW_RADIAL_MENU.isKeyDown()) {
             onClose();
         }
     }
@@ -420,21 +419,15 @@ public class RadialMenuScreen extends Screen {
     }
 
     private String findKeybind(MenuButton button, BuildMode currentBuildMode) {
-        String result = "";
-        int keybindingIndex = -1;
-        if (button.action == BuildAction.UNDO) keybindingIndex = 3;
-        if (button.action == BuildAction.REDO) keybindingIndex = 4;
-        if (button.action == BuildAction.REPLACE) keybindingIndex = 1;
-        if (button.action == BuildAction.MODIFIER) keybindingIndex = 0;
+        Keys keybindingIndex = null;
+        if (button.action == BuildAction.REPLACE) keybindingIndex = Keys.TOGGLE_QUICK_REPLACE;
+        if (button.action == BuildAction.MODIFIER) keybindingIndex = Keys.MODIFIER_MENU;
 
-        if (keybindingIndex != -1) {
-            KeyMapping keyMap = EffortlessClient.keyBindings[keybindingIndex];
-
-//			if (!keyMap.getKeyModifier().name().equals("none")) {
-//				result = keyMap.getKeyModifier().name() + " ";
-//			}
-            result += I18n.get(((KeyMappingAccessor) keyMap).getKey().getName());
+        if (keybindingIndex == null) {
+            return "";
         }
+
+        return ((KeyMappingAccessor) keybindingIndex.getKeyMapping()).getKey().getName();
 
 //        if (currentBuildMode.options.length > 0) {
 //            //Add (ctrl) to first two actions of first option
@@ -444,7 +437,6 @@ public class RadialMenuScreen extends Screen {
 //                if (result.equals("Left Control")) result = "Ctrl";
 //            }
 //        }
-        return result;
     }
 
     private boolean inTriangle(final double x1, final double y1, final double x2, final double y2,

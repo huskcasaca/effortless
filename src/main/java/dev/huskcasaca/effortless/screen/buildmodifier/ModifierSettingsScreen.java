@@ -2,7 +2,7 @@ package dev.huskcasaca.effortless.screen.buildmodifier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.EffortlessClient;
+import dev.huskcasaca.effortless.control.Keys;
 import dev.huskcasaca.effortless.entity.player.ModifierSettings;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
@@ -95,7 +95,7 @@ public class ModifierSettingsScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int p_96553_, int p_96554_) {
-        if (keyCode == ((KeyMappingAccessor) EffortlessClient.keyBindings[0]).getKey().getValue()) {
+        if (keyCode == ((KeyMappingAccessor) Keys.MODIFIER_MENU.getKeyMapping()).getKey().getValue()) {
             return true;
         }
         return super.keyPressed(keyCode, p_96553_, p_96554_);
