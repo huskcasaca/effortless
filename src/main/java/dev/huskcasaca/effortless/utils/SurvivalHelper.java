@@ -1,6 +1,6 @@
-package dev.huskcasaca.effortless.helper;
+package dev.huskcasaca.effortless.utils;
 
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.config.ConfigManager;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -276,7 +276,7 @@ public class SurvivalHelper {
         }
 
         //Check quickreplace
-        if (placer instanceof Player && ModifierSettingsManager.getModifierSettings(((Player) placer)).quickReplace()) {
+        if (placer instanceof Player && BuildModifierHelper.getModifierSettings(((Player) placer)).quickReplace()) {
             return true;
         }
 

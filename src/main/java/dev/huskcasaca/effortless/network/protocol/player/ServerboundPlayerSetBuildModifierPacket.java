@@ -1,6 +1,6 @@
 package dev.huskcasaca.effortless.network.protocol.player;
 
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager.ModifierSettings;
+import dev.huskcasaca.effortless.entity.player.ModifierSettings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 

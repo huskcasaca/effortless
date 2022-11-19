@@ -1,7 +1,7 @@
 package dev.huskcasaca.effortless.network.protocol.player;
 
 import dev.huskcasaca.effortless.buildmode.BuildMode;
-import dev.huskcasaca.effortless.buildmode.ModeSettingsManager.ModeSettings;
+import dev.huskcasaca.effortless.entity.player.ModeSettings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 

@@ -1,4 +1,4 @@
-package dev.huskcasaca.effortless.helper;
+package dev.huskcasaca.effortless.utils;
 
 //Stack with fixed size. Removes (overwrites) oldest element on push.
 public class FixedStack<T> {

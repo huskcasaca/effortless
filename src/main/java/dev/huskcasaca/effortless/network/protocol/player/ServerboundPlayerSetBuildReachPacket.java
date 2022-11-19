@@ -1,16 +1,16 @@
 package dev.huskcasaca.effortless.network.protocol.player;
 
-import dev.huskcasaca.effortless.buildreach.ReachSettingsManager.BuildReachSettings;
+import dev.huskcasaca.effortless.entity.player.ReachSettings;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 
 public record ServerboundPlayerSetBuildReachPacket(
-        BuildReachSettings reachSettings
+        ReachSettings reachSettings
 ) implements Packet<ServerEffortlessPacketListener> {
 
     public ServerboundPlayerSetBuildReachPacket(FriendlyByteBuf friendlyByteBuf) {
         this(
-                new BuildReachSettings(
+                new ReachSettings(
                         friendlyByteBuf.readInt(),
                         friendlyByteBuf.readInt(),
                         friendlyByteBuf.readInt(),

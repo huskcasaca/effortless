@@ -2,9 +2,9 @@ package dev.huskcasaca.effortless.screen.buildmodifier;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.buildmodifier.mirror.Mirror;
-import dev.huskcasaca.effortless.helper.ReachHelper;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.screen.widget.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -136,7 +136,7 @@ public class MirrorSettingsPane extends ExpandableScrollEntry {
         buttonDrawPlanes.setTooltip(Component.literal("Show area"));
         mirrorIconButtonList.add(buttonDrawPlanes);
 
-        var modifierSettings = ModifierSettingsManager.getModifierSettings(mc.player);
+        var modifierSettings = BuildModifierHelper.getModifierSettings(mc.player);
         if (modifierSettings != null) {
             var m = modifierSettings.mirrorSettings();
             buttonMirrorEnabled.setIsChecked(m.enabled());

@@ -1,14 +1,16 @@
 package dev.huskcasaca.effortless;
 
-import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHandler;
+import dev.huskcasaca.effortless.entity.player.ModeSettings;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
-import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
+import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.buildmodifier.UndoRedo;
-import dev.huskcasaca.effortless.helper.ReachHelper;
 import dev.huskcasaca.effortless.network.*;
 import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerRequestLookAtPacket;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.core.BlockPos;
@@ -38,8 +40,8 @@ public class Effortless implements ModInitializer {
 
         //Cancel event if necessary
 //        ServerPlayer player = ((ServerPlayer) event.getEntity());
-        var buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
-        var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
+        var buildMode = BuildModeHelper.getModeSettings(player).buildMode();
+        var modifierSettings = BuildModifierHelper.getModifierSettings(player);
 
         if (buildMode == BuildMode.DISABLE) {
             return false;
@@ -72,7 +74,7 @@ public class Effortless implements ModInitializer {
 
         //Cancel event if necessary
         //If cant break far then dont cancel event ever
-        var buildMode = ModeSettingsManager.getModeSettings(player).buildMode();
+        var buildMode = BuildModeHelper.getModeSettings(player).buildMode();
         if (buildMode != BuildMode.DISABLE && ReachHelper.canBreakFar(player)) {
             return false;
         } else {
@@ -92,9 +94,9 @@ public class Effortless implements ModInitializer {
 
     //
     public static void onPlayerLogin(ServerPlayer player) {
-        ModifierSettingsManager.handleNewPlayer(player);
-        ModeSettingsManager.handleNewPlayer(player);
-        ReachSettingsManager.handleNewPlayer(player);
+        BuildModifierHandler.handleNewPlayer(player);
+        BuildModeHandler.handleNewPlayer(player);
+        ReachHelper.handleNewPlayer(player);
     }
 
     public static void onPlayerLogout(ServerPlayer player) {
@@ -104,23 +106,23 @@ public class Effortless implements ModInitializer {
     }
 
     public static void onPlayerRespawn(ServerPlayer player) {
-        ModifierSettingsManager.handleNewPlayer(player);
-        ModeSettingsManager.handleNewPlayer(player);
-        ReachSettingsManager.handleNewPlayer(player);
+        BuildModifierHandler.handleNewPlayer(player);
+        BuildModeHandler.handleNewPlayer(player);
+        ReachHelper.handleNewPlayer(player);
     }
 
     public static void onPlayerChangedDimension(ServerPlayer player) {
 //        //Set build mode to normal
-        var modeSettings = ModeSettingsManager.getModeSettings(player);
-        modeSettings = new ModeSettingsManager.ModeSettings(
+        var modeSettings = BuildModeHelper.getModeSettings(player);
+        modeSettings = new ModeSettings(
                 BuildMode.DISABLE,
                 modeSettings.enableMagnet()
         );
-        ModeSettingsManager.setModeSettings(player, modeSettings);
+        BuildModeHelper.setModeSettings(player, modeSettings);
 
-        ModifierSettingsManager.handleNewPlayer(player);
-        ModeSettingsManager.handleNewPlayer(player);
-        ReachSettingsManager.handleNewPlayer(player);
+        BuildModifierHandler.handleNewPlayer(player);
+        BuildModeHandler.handleNewPlayer(player);
+        ReachHelper.handleNewPlayer(player);
 
         UndoRedo.clear(player);
         // FIXME: 18/11/22
@@ -129,9 +131,9 @@ public class Effortless implements ModInitializer {
 
     //
     public static void onPlayerClone(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
-        ModifierSettingsManager.setModifierSettings(newPlayer, ModifierSettingsManager.getModifierSettings(oldPlayer));
-        ModeSettingsManager.setModeSettings(newPlayer, ModeSettingsManager.getModeSettings(oldPlayer));
-        ReachSettingsManager.setReachSettings(newPlayer, ReachSettingsManager.getReachSettings(oldPlayer));
+        BuildModifierHelper.setModifierSettings(newPlayer, BuildModifierHelper.getModifierSettings(oldPlayer));
+        BuildModeHelper.setModeSettings(newPlayer, BuildModeHelper.getModeSettings(oldPlayer));
+        ReachHelper.setReachSettings(newPlayer, ReachHelper.getReachSettings(oldPlayer));
     }
 
     public static void log(String msg) {

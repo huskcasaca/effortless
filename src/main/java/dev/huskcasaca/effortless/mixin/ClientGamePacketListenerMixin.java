@@ -1,10 +1,10 @@
 package dev.huskcasaca.effortless.mixin;
 
 import dev.huskcasaca.effortless.EffortlessClient;
-import dev.huskcasaca.effortless.buildreach.ReachSettingsManager;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
-import dev.huskcasaca.effortless.buildmode.ModeSettingsManager;
-import dev.huskcasaca.effortless.buildmodifier.ModifierSettingsManager;
+import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.*;
 import io.netty.buffer.Unpooled;
@@ -12,12 +12,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.PacketUtils;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.thread.BlockableEventLoop;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Final;
@@ -68,7 +65,7 @@ public abstract class ClientGamePacketListenerMixin implements ClientPlayerPacke
     @Override
     public void handle(ClientboundPlayerBuildModePacket packet) {
         minecraft.execute(() -> {
-            ModeSettingsManager.setModeSettings(minecraft.player, ModeSettingsManager.sanitize(packet.modeSettings(), minecraft.player));
+            BuildModeHelper.setModeSettings(minecraft.player, BuildModeHelper.sanitize(packet.modeSettings(), minecraft.player));
             BuildModeHandler.initializeMode(minecraft.player);
         });
     }
@@ -77,7 +74,7 @@ public abstract class ClientGamePacketListenerMixin implements ClientPlayerPacke
     public void handle(ClientboundPlayerBuildModifierPacket packet) {
         minecraft.execute(() -> {
 
-            ModifierSettingsManager.setModifierSettings(minecraft.player, ModifierSettingsManager.sanitize(packet.modifierSettings(), minecraft.player));
+            BuildModifierHelper.setModifierSettings(minecraft.player, BuildModifierHelper.sanitize(packet.modifierSettings(), minecraft.player));
         });
     }
 
@@ -85,7 +82,7 @@ public abstract class ClientGamePacketListenerMixin implements ClientPlayerPacke
     public void handle(ClientboundPlayerReachPacket packet) {
 
         minecraft.execute(() -> {
-            ReachSettingsManager.setReachSettings(minecraft.player, ReachSettingsManager.sanitize(packet.reachSettings(), minecraft.player));
+            ReachHelper.setReachSettings(minecraft.player, ReachHelper.sanitize(packet.reachSettings(), minecraft.player));
             BuildModeHandler.initializeMode(minecraft.player);
         });
     }
