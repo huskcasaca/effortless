@@ -88,7 +88,7 @@ public class MirrorSettingsPane extends ExpandableScrollEntry {
         textMirrorRadius.setNumber(50);
         //TODO change to diameter (remove /2)
         textMirrorRadius.setTooltip(Arrays.asList(Component.literal("How far the mirror reaches in any direction."),
-                Component.literal("Max: ").withStyle(ChatFormatting.GRAY).append(Component.literal(String.valueOf(ReachHelper.getMaxReach(mc.player) / 2)).withStyle(ChatFormatting.GOLD)),
+                Component.literal("Max: ").withStyle(ChatFormatting.GRAY).append(Component.literal(String.valueOf(ReachHelper.getMaxReachDistance(mc.player) / 2)).withStyle(ChatFormatting.GOLD)),
                 Component.literal("Upgradeable in survival with reach upgrades.").withStyle(ChatFormatting.GRAY)));
         mirrorNumberFieldList.add(textMirrorRadius);
 
