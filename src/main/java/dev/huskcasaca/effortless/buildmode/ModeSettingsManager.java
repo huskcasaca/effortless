@@ -10,7 +10,6 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
-//@Mod.EventBusSubscriber
 public class ModeSettingsManager {
 
     //Retrieves the buildsettings of a player through the modeCapability capability
