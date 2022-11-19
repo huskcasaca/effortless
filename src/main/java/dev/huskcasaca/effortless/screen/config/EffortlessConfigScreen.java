@@ -64,7 +64,7 @@ public class EffortlessConfigScreen {
 
         final var entryBuilder = builder.entryBuilder();
 
-        final var buildSubCat = entryBuilder.startSubCategory(Component.translatable("effortless.settings.category.config.build.title"));
+//        final var buildSubCat = entryBuilder.startSubCategory(Component.translatable("effortless.settings.category.config.build.title"));
         final var previewSubCat = entryBuilder.startSubCategory(Component.translatable("effortless.settings.category.config.preview.title"));
 
 //        final var maxReachDistance = new SliderEntryData("max_reach", defaults.getBuildConfig().getMaxReachDistance(), config.getBuildConfig().getMaxReachDistance(), BuildConfig.MIN_MAX_REACH_DISTANCE, BuildConfig.MAX_MAX_REACH_DISTANCE, config.getBuildConfig()::setMaxReachDistance);
@@ -178,9 +178,9 @@ public class EffortlessConfigScreen {
                         .build()
         );
 
-        var buildSubEntry = buildSubCat.build();
-        buildSubEntry.setExpanded(true);
-        configCategory.addEntry(buildSubEntry);
+//        var buildSubEntry = buildSubCat.build();
+//        buildSubEntry.setExpanded(true);
+//        configCategory.addEntry(buildSubEntry);
 
         var previewSubEntry = previewSubCat.build();
         previewSubEntry.setExpanded(true);

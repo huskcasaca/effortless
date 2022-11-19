@@ -8,7 +8,6 @@
   "effortless.settings.toggle.on": "§aON§r",
   "effortless.settings.toggle.off": "§cOFF§r",
   "effortless.settings.category.config.title": "Config",
-  "effortless.settings.category.config.build.title": "Build Settings",
   "effortless.settings.category.config.preview.title": "Preview Settings",
   "effortless.settings.max_reach.title": "Max Reach Distance",
   "effortless.settings.max_reach.tooltip": "Keep in mind that chunks need to be loaded to be able to place/break blocks inside.",
