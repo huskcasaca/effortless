@@ -11,12 +11,17 @@ import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBui
 import dev.huskcasaca.effortless.screen.widget.ScrollPane;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @Environment(EnvType.CLIENT)
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ModifierSettingsScreen extends Screen {
 
     private ScrollPane scrollPane;
