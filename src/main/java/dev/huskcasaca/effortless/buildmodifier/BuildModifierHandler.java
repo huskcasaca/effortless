@@ -8,7 +8,6 @@ import dev.huskcasaca.effortless.entity.player.ModifierSettings;
 import dev.huskcasaca.effortless.utils.CompatHelper;
 import dev.huskcasaca.effortless.utils.InventoryHelper;
 import dev.huskcasaca.effortless.utils.SurvivalHelper;
-import dev.huskcasaca.effortless.mixin.BlockItemAccessor;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerBuildModifierPacket;
 import dev.huskcasaca.effortless.render.BlockPreviewRenderer;
@@ -259,7 +258,8 @@ public class BuildModifierHandler {
         var item = itemStack.getItem();
 
         if (item instanceof BlockItem) {
-            return ((BlockItemAccessor) Item.byBlock(((BlockItem) item).getBlock())).callGetPlacementState(new BlockPlaceContext(player, hand, itemStack, hitresult));
+            // FIXME: 23/11/22
+            return ((BlockItem) Item.byBlock(((BlockItem) item).getBlock())).getPlacementState(new BlockPlaceContext(player, hand, itemStack, hitresult));
         } else {
             return Block.byItem(item).getStateForPlacement(new BlockPlaceContext(new UseOnContext(player, hand, new BlockHitResult(hitVec, facing, blockPos, false))));
         }

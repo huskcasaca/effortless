@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public class PlayerTagMixin implements EffortlessDataProvider {
+public abstract class PlayerTagMixin implements EffortlessDataProvider {
 
     @Unique
     private ModeSettings modeSettings = null;
