@@ -276,7 +276,7 @@ public class SurvivalHelper {
         }
 
         //Check quickreplace
-        if (placer instanceof Player && BuildModifierHelper.getModifierSettings(((Player) placer)).quickReplace()) {
+        if (placer instanceof Player && BuildModifierHelper.getModifierSettings(((Player) placer)).enableQuickReplace()) {
             return true;
         }
 

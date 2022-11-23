@@ -39,15 +39,26 @@ public class BuildModeHelper {
         ((EffortlessDataProvider) player).setModeSettings(modeSettings);
     }
 
-    public static void syncMagnetSetting(Player player, boolean enable) {
-        if (player == null) {
-            return;
-        }
-        var modeSettings = getModeSettings(player);
-        modeSettings = new ModeSettings(modeSettings.buildMode(), enable);
-        BuildModeHelper.setModeSettings(player, modeSettings);
-        Packets.sendToServer(new ServerboundPlayerSetBuildModePacket(modeSettings));
+    public static BuildMode getBuildMode(Player player) {
+        return getModeSettings(player).buildMode();
     }
+
+    public static void setBuildMode(Player player, BuildMode mode) {
+        ModeSettings modeSettings = getModeSettings(player);
+        modeSettings = new ModeSettings(mode, modeSettings.enableMagnet());
+        setModeSettings(player, modeSettings);
+    }
+
+    public static boolean isEnableMagnet(Player player) {
+        return getModeSettings(player).enableMagnet();
+    }
+
+    public static void setEnableMagnet(Player player, boolean enableMagnet) {
+        ModeSettings modeSettings = getModeSettings(player);
+        modeSettings = new ModeSettings(modeSettings.buildMode(), enableMagnet);
+        setModeSettings(player, modeSettings);
+    }
+
 
     public static String getSanitizeMessage(ModeSettings modeSettings, Player player) {
         int maxReach = ReachHelper.getMaxReachDistance(player);

@@ -39,7 +39,7 @@
   "key.effortless.modifier_menu.desc": "Open Modifier Menu",
   "key.effortless.undo.desc": "Place/Break Undo",
   "key.effortless.redo.desc": "Place/Break Redo",
-  "key.effortless.toggle_quick_replace.desc": "Toggle Quick Replace",
+  "key.effortless.toggle_replace.desc": "Toggle Quick Replace",
   "key.effortless.toggle_alt_place.desc": "Toggle Alternative Placement",
   "effortless.mode.disable": "Disable",
   "effortless.mode.vanilla": "Vanilla",
