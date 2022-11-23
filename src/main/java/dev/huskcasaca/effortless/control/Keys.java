@@ -2,7 +2,6 @@ package dev.huskcasaca.effortless.control;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -54,7 +53,7 @@ public enum Keys {
 	public boolean isKeyDown() {
 		if (!modifiable)
 			return isKeyDown(key);
-		return isKeyDown(((KeyMappingAccessor) keyMapping).getKey().getValue());
+		return isKeyDown(keyMapping.key.getValue());
 	}
 
 	public String getBoundKey() {
@@ -64,7 +63,7 @@ public enum Keys {
 	}
 
 	public int getBoundCode() {
-		return ((KeyMappingAccessor) keyMapping).getKey()
+		return keyMapping.key
 			.getValue();
 	}
 

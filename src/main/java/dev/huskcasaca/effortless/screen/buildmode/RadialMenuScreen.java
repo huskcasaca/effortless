@@ -8,7 +8,6 @@ import dev.huskcasaca.effortless.buildmode.*;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.control.Keys;
 import dev.huskcasaca.effortless.entity.player.ModeSettings;
-import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerBuildActionPacket;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModePacket;
@@ -427,7 +426,7 @@ public class RadialMenuScreen extends Screen {
             return "";
         }
 
-        return ((KeyMappingAccessor) keybindingIndex.getKeyMapping()).getKey().getName();
+        return keybindingIndex.getKeyMapping().key.getName();
 
 //        if (currentBuildMode.options.length > 0) {
 //            //Add (ctrl) to first two actions of first option

@@ -1,7 +1,6 @@
 package dev.huskcasaca.effortless;
 
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHandler;
-import dev.huskcasaca.effortless.command.SettingsCommand;
 import dev.huskcasaca.effortless.entity.player.ModeSettings;
 import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
@@ -13,8 +12,6 @@ import dev.huskcasaca.effortless.entity.player.ModifierSettings;
 import dev.huskcasaca.effortless.network.*;
 import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerRequestLookAtPacket;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -162,7 +159,5 @@ public class Effortless implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ServerPlayerEvents.COPY_FROM.register(Effortless::onPlayerClone);
-        CommandRegistrationCallback.EVENT.register(SettingsCommand::register);
     }
 }

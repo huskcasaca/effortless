@@ -5,8 +5,6 @@ import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.control.Keys;
 import dev.huskcasaca.effortless.entity.player.ModifierSettings;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
-import dev.huskcasaca.effortless.mixin.KeyMappingAccessor;
-import dev.huskcasaca.effortless.mixin.ScreenRenderablesAccessor;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModifierPacket;
 import dev.huskcasaca.effortless.screen.widget.ScrollPane;
@@ -51,7 +49,7 @@ public class ModifierSettingsScreen extends Screen {
         radialMirrorSettingsPane = new RadialMirrorSettingsPane(scrollPane);
         scrollPane.AddListEntry(radialMirrorSettingsPane);
 
-        scrollPane.init(((ScreenRenderablesAccessor) this).getRenderables());
+        scrollPane.init(this.renderables);
 
         //Close button
         int y = height - 26;
@@ -95,7 +93,7 @@ public class ModifierSettingsScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int p_96553_, int p_96554_) {
-        if (keyCode == ((KeyMappingAccessor) Keys.MODIFIER_MENU.getKeyMapping()).getKey().getValue()) {
+        if (keyCode == Keys.MODIFIER_MENU.getKeyMapping().key.getValue()) {
             return true;
         }
         return super.keyPressed(keyCode, p_96553_, p_96554_);
@@ -104,7 +102,7 @@ public class ModifierSettingsScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        ((ScreenRenderablesAccessor) this).getRenderables().forEach(renderable -> {
+        renderables.forEach(renderable -> {
             if (renderable instanceof Button button) {
                 button.mouseClicked(mouseX, mouseY, mouseButton);
             }

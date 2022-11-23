@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static dev.huskcasaca.effortless.EffortlessClient.getLookingAt;
 
 @Mixin(Minecraft.class)
-public class PlayerActionMixin {
+public abstract class PlayerActionMixin {
 
     @Shadow
     @Nullable

@@ -6,22 +6,19 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "BlockItemAccessor",
+    "CommandMixin",
     "PlayerEventMixin",
     "PlayerPickupMixin",
     "PlayerTagMixin",
-    "ServerGamePacketListenerMixin",
+    "ServerPacketListenerMixin",
     "ServerPlayerEventMixin"
   ],
   "client": [
-    "ClientGamePacketListenerMixin",
+    "ClientPacketListenerMixin",
     "KeyEventMixin",
-    "KeyMappingAccessor",
     "LevelRendererMixin",
     "PlayerActionMixin",
     "ScreenMixin",
-    "ScreenRenderablesAccessor",
-    "ScreenRenderHeaderAccessor",
     "ShaderRendererMixin"
   ]
 }

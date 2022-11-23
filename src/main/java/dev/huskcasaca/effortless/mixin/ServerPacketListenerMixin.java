@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerGamePacketListenerImpl.class)
-public abstract class ServerGamePacketListenerMixin implements ServerEffortlessPacketListener {
+public abstract class ServerPacketListenerMixin implements ServerEffortlessPacketListener {
 
     @Shadow public ServerPlayer player;
 
