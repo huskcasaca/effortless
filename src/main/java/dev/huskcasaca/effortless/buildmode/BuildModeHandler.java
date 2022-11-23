@@ -56,12 +56,12 @@ public class BuildModeHandler {
             //TODO 1.13 replaceable
             boolean replaceable = player.level.getBlockState(startPos).getMaterial().isReplaceable();
             boolean becomesDoubleSlab = SurvivalHelper.doesBecomeDoubleSlab(player, startPos, packet.sideHit());
-            if (!modifierSettings.quickReplace() && !replaceable && !becomesDoubleSlab) {
+            if (!modifierSettings.enableQuickReplace() && !replaceable && !becomesDoubleSlab) {
                 startPos = startPos.relative(packet.sideHit());
             }
 
             //Get under tall grass and other replaceable blocks
-            if (modifierSettings.quickReplace() && replaceable) {
+            if (modifierSettings.enableQuickReplace() && replaceable) {
                 startPos = startPos.below();
             }
 
@@ -75,7 +75,7 @@ public class BuildModeHandler {
 
         //Even when no starting block is found, call buildmode instance
         //We might want to place things in the air
-        List<BlockPos> coordinates = buildMode.instance.onRightClick(player, startPos, packet.sideHit(), packet.hitVec(), modifierSettings.quickReplace());
+        List<BlockPos> coordinates = buildMode.instance.onRightClick(player, startPos, packet.sideHit(), packet.hitVec(), modifierSettings.enableQuickReplace());
 
         if (coordinates.isEmpty()) {
             currentlyBreaking.put(player, false);

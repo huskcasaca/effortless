@@ -249,7 +249,7 @@ public class BuildModifierHandler {
         return Array.isEnabled(modifierSettings.arraySettings()) ||
                 Mirror.isEnabled(modifierSettings.mirrorSettings(), startPos) ||
                 RadialMirror.isEnabled(modifierSettings.radialMirrorSettings(), startPos) ||
-                modifierSettings.quickReplace();
+                modifierSettings.enableQuickReplace();
     }
 
     public static BlockState getBlockStateFromItem(ItemStack itemStack, Player player, BlockPos blockPos, Direction facing, Vec3 hitVec, InteractionHand hand) {

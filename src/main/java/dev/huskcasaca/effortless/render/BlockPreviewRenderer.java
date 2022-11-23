@@ -91,13 +91,13 @@ public class BlockPreviewRenderer {
             //TODO 1.13 replaceable
             boolean replaceable = player.level.getBlockState(startPos).getMaterial().isReplaceable();
             boolean becomesDoubleSlab = SurvivalHelper.doesBecomeDoubleSlab(player, startPos, blockLookingAt.getDirection());
-            if (!modifierSettings.quickReplace() && !toolInHand && !replaceable && !becomesDoubleSlab) {
+            if (!modifierSettings.enableQuickReplace() && !toolInHand && !replaceable && !becomesDoubleSlab) {
                 startPos = startPos.relative(blockLookingAt.getDirection());
             }
 
             //Get under tall grass and other replaceable blocks
             // TODO: 20/9/22 remove
-            if (modifierSettings.quickReplace() && !toolInHand && replaceable) {
+            if (modifierSettings.enableQuickReplace() && !toolInHand && replaceable) {
                 startPos = startPos.below();
             }
 
@@ -123,7 +123,7 @@ public class BlockPreviewRenderer {
                 boolean breaking = BuildModeHandler.currentlyBreakingClient.get(player) != null && BuildModeHandler.currentlyBreakingClient.get(player);
 
                 //get coordinates
-                List<BlockPos> startCoordinates = BuildModeHandler.findCoordinates(player, startPos, breaking || modifierSettings.quickReplace());
+                List<BlockPos> startCoordinates = BuildModeHandler.findCoordinates(player, startPos, breaking || modifierSettings.enableQuickReplace());
 
                 //Remember first and last point for the shader
                 var firstPos = BlockPos.ZERO;
@@ -288,7 +288,7 @@ public class BlockPreviewRenderer {
             //Check if can place
             //If check is turned off, check if blockstate is the same (for dissolve effect)
             if ((!checkCanPlace /*&& player.world.getNewBlockState(blockPos) == blockState*/) || //TODO enable (breaks the breaking shader)
-                    SurvivalHelper.canPlace(player.level, player, blockPos, blockState, itemstack, modifierSettings.quickReplace(), Direction.UP)) {
+                    SurvivalHelper.canPlace(player.level, player, blockPos, blockState, itemstack, modifierSettings.enableQuickReplace(), Direction.UP)) {
 
                 RenderHandler.renderBlockPreview(matrixStack, renderTypeBuffer, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, red);
                 blocksValid++;

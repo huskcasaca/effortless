@@ -14,7 +14,7 @@ public enum Keys {
 	SHOW_RADIAL_MENU("radial_menu", InputConstants.KEY_LALT),
 //	UNDO("undo", InputConstants.UNKNOWN.getValue()),
 //	REDO("redo", InputConstants.UNKNOWN.getValue()),
-	TOGGLE_QUICK_REPLACE("toggle_quick_replace", InputConstants.UNKNOWN.getValue()),
+	TOGGLE_REPLACE("toggle_replace", InputConstants.UNKNOWN.getValue()),
 //	TOGGLE_ALT_PLACE("toggle_alt_place", InputConstants.UNKNOWN.getValue()),
 	;
 

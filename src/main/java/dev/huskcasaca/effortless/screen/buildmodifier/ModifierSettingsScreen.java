@@ -138,7 +138,7 @@ public class ModifierSettingsScreen extends Screen {
 
         var modifierSettings = BuildModifierHelper.getModifierSettings(minecraft.player);
 
-        modifierSettings = new ModifierSettings(arraySettings, mirrorSettings, radialMirrorSettings, modifierSettings.quickReplace());
+        modifierSettings = new ModifierSettings(arraySettings, mirrorSettings, radialMirrorSettings, modifierSettings.replaceMode());
 
         //Sanitize
         String error = BuildModifierHelper.getSanitizeMessage(modifierSettings, minecraft.player);

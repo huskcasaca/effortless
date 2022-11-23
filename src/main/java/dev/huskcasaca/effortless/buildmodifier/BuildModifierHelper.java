@@ -26,6 +26,28 @@ public class BuildModifierHelper {
 
     }
 
+    public static boolean getReplace(Player player) {
+        return getModifierSettings(player).enableReplace();
+    }
+
+    public static boolean getQuickReplace(Player player) {
+        return getModifierSettings(player).enableQuickReplace();
+    }
+
+
+    public static void setReplaceMode(Player player, ReplaceMode mode) {
+        ModifierSettings modifierSettings = getModifierSettings(player);
+        modifierSettings = new ModifierSettings(modifierSettings.arraySettings(), modifierSettings.mirrorSettings(), modifierSettings.radialMirrorSettings(), mode);
+        BuildModifierHelper.setModifierSettings(player, modifierSettings);
+        setModifierSettings(player, modifierSettings);
+    }
+
+    public static void cycleReplaceMode(Player player) {
+        ModifierSettings modifierSettings = getModifierSettings(player);
+        modifierSettings = new ModifierSettings(modifierSettings.arraySettings(), modifierSettings.mirrorSettings(), modifierSettings.radialMirrorSettings(), ReplaceMode.values()[(modifierSettings.replaceMode().ordinal() + 1) % ReplaceMode.values().length]);
+        BuildModifierHelper.setModifierSettings(player, modifierSettings);
+        setModifierSettings(player, modifierSettings);
+    }
     public static String getSanitizeMessage(ModifierSettings modifierSettings, Player player) {
         int maxReach = ReachHelper.getMaxReachDistance(player);
         String error = "";
@@ -129,13 +151,13 @@ public class BuildModifierHelper {
         );
 
         //Other
-        boolean quickReplace = modifierSettings.quickReplace();
+        var replaceMode = modifierSettings.replaceMode();
 
         return new ModifierSettings(
                 arraySettings,
                 mirrorSettings,
                 radialMirrorSettings,
-                quickReplace
+                replaceMode
         );
     }
 
