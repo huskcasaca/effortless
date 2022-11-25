@@ -1,5 +1,6 @@
 package dev.huskcasaca.effortless.mixin;
 
+import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
@@ -26,6 +27,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
+
 @Mixin(ClientPacketListener.class)
 public abstract class ClientPacketListenerMixin implements ClientPlayerPacketListener {
 
@@ -47,20 +50,17 @@ public abstract class ClientPacketListenerMixin implements ClientPlayerPacketLis
     private void handleCustomPayload(ClientboundCustomPayloadPacket clientboundCustomPayloadPacket, CallbackInfo ci) {
         PacketUtils.ensureRunningOnSameThread(clientboundCustomPayloadPacket, (ClientGamePacketListener) this, this.minecraft);
         ResourceLocation resourceLocation = clientboundCustomPayloadPacket.getIdentifier();
-        var deserializer = Packets.getDeserializer(resourceLocation);
-        if (deserializer == null) {
-            return;
-        } else {
-            ci.cancel();
-        }
-        FriendlyByteBuf friendlyByteBuf = null;
-        try {
-            friendlyByteBuf = clientboundCustomPayloadPacket.getData();
-            deserializer.apply(friendlyByteBuf).handle(this);
-        } finally {
-            if (friendlyByteBuf != null) {
-                friendlyByteBuf.release();
+        if (Objects.equals(resourceLocation.getNamespace(), Effortless.MOD_ID)) {
+            FriendlyByteBuf friendlyByteBuf = null;
+            try {
+                friendlyByteBuf = clientboundCustomPayloadPacket.getData();
+                Packets.getDeserializer(resourceLocation).apply(friendlyByteBuf).handle(this);
+            } finally {
+                if (friendlyByteBuf != null) {
+                    friendlyByteBuf.release();
+                }
             }
+            ci.cancel();
         }
     }
 

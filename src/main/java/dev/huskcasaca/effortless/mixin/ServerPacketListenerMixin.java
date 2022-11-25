@@ -1,5 +1,6 @@
 package dev.huskcasaca.effortless.mixin;
 
+import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.buildmode.BuildActionHandler;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
@@ -24,6 +25,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
+
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerPacketListenerMixin implements ServerEffortlessPacketListener {
 
@@ -47,19 +50,16 @@ public abstract class ServerPacketListenerMixin implements ServerEffortlessPacke
     void handleCustomPayload(ServerboundCustomPayloadPacket serverboundCustomPayloadPacket, CallbackInfo ci) {
         ResourceLocation resourceLocation = serverboundCustomPayloadPacket.getIdentifier();
         FriendlyByteBuf friendlyByteBuf = null;
-        var deserializer = Packets.getDeserializer(resourceLocation);
-        if (deserializer == null) {
-            return;
-        } else {
-            ci.cancel();
-        }
-        try {
-            friendlyByteBuf = serverboundCustomPayloadPacket.getData();
-            deserializer.apply(friendlyByteBuf).handle(this);
-        } finally {
-            if (friendlyByteBuf != null) {
+        if (Objects.equals(resourceLocation.getNamespace(), Effortless.MOD_ID)) {
+            try {
+                friendlyByteBuf = serverboundCustomPayloadPacket.getData();
+                Packets.getDeserializer(resourceLocation).apply(friendlyByteBuf).handle(this);
+            } finally {
+                if (friendlyByteBuf != null) {
 //                friendlyByteBuf.release();
+                }
             }
+            ci.cancel();
         }
     }
 
