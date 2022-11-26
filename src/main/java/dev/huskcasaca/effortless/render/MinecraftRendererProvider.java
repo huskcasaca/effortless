@@ -1,6 +1,5 @@
-package dev.huskcasaca.effortless;
+package dev.huskcasaca.effortless.render;
 
-import dev.huskcasaca.effortless.render.BlockPreviewRenderer;
 import net.minecraft.client.Minecraft;
 
 public interface MinecraftRendererProvider {

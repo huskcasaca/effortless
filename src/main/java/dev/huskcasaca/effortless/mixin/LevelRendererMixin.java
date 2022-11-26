@@ -3,7 +3,7 @@ package dev.huskcasaca.effortless.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
-import dev.huskcasaca.effortless.MinecraftRendererProvider;
+import dev.huskcasaca.effortless.render.MinecraftRendererProvider;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.render.ModifierRenderer;
 import net.minecraft.client.Camera;
