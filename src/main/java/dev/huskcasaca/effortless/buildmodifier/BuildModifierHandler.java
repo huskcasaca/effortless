@@ -1,7 +1,7 @@
 package dev.huskcasaca.effortless.buildmodifier;
 
-import dev.huskcasaca.effortless.EffortlessDataProvider;
-import dev.huskcasaca.effortless.MinecraftRendererProvider;
+import dev.huskcasaca.effortless.entity.player.EffortlessDataProvider;
+import dev.huskcasaca.effortless.render.MinecraftRendererProvider;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
 import dev.huskcasaca.effortless.buildmodifier.mirror.Mirror;
 import dev.huskcasaca.effortless.buildmodifier.mirror.RadialMirror;
@@ -11,7 +11,6 @@ import dev.huskcasaca.effortless.utils.InventoryHelper;
 import dev.huskcasaca.effortless.utils.SurvivalHelper;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerBuildModifierPacket;
-import dev.huskcasaca.effortless.render.BlockPreviewRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;

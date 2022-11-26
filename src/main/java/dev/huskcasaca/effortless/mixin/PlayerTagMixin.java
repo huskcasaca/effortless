@@ -1,6 +1,6 @@
 package dev.huskcasaca.effortless.mixin;
 
-import dev.huskcasaca.effortless.EffortlessDataProvider;
+import dev.huskcasaca.effortless.entity.player.EffortlessDataProvider;
 import dev.huskcasaca.effortless.buildmodifier.ReplaceMode;
 import dev.huskcasaca.effortless.entity.player.ModeSettings;
 import dev.huskcasaca.effortless.entity.player.ModifierSettings;

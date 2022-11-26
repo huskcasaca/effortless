@@ -1,12 +1,11 @@
 package dev.huskcasaca.effortless.buildmodifier;
 
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.MinecraftRendererProvider;
+import dev.huskcasaca.effortless.render.MinecraftRendererProvider;
 import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.utils.FixedStack;
 import dev.huskcasaca.effortless.utils.InventoryHelper;
 import dev.huskcasaca.effortless.utils.SurvivalHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

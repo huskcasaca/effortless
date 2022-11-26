@@ -1,7 +1,7 @@
 package dev.huskcasaca.effortless.buildreach;
 
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.EffortlessDataProvider;
+import dev.huskcasaca.effortless.entity.player.EffortlessDataProvider;
 import dev.huskcasaca.effortless.entity.player.ReachSettings;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerReachPacket;

@@ -1,6 +1,6 @@
 package dev.huskcasaca.effortless.mixin;
 
-import dev.huskcasaca.effortless.MinecraftRendererProvider;
+import dev.huskcasaca.effortless.render.MinecraftRendererProvider;
 import dev.huskcasaca.effortless.render.BlockPreviewRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.main.GameConfig;
