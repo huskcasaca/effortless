@@ -1,6 +1,7 @@
 package dev.huskcasaca.effortless.buildmodifier;
 
 import dev.huskcasaca.effortless.EffortlessDataProvider;
+import dev.huskcasaca.effortless.MinecraftRendererProvider;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
 import dev.huskcasaca.effortless.buildmodifier.mirror.Mirror;
 import dev.huskcasaca.effortless.buildmodifier.mirror.RadialMirror;
@@ -58,7 +59,7 @@ public class BuildModifierHandler {
 
         if (world.isClientSide) {
 
-            BlockPreviewRenderer.onBlocksPlaced();
+            MinecraftRendererProvider.getPreviewRenderer().onBlocksPlaced();
 
             newBlockStates = blockStates;
 
@@ -116,7 +117,7 @@ public class BuildModifierHandler {
         }
 
         if (world.isClientSide) {
-            BlockPreviewRenderer.onBlocksBroken();
+            MinecraftRendererProvider.getPreviewRenderer().onBlocksBroken();
 
             //list of air blockstates
             for (int i = 0; i < coordinates.size(); i++) {

@@ -1,60 +1,24 @@
 package dev.huskcasaca.effortless.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.huskcasaca.effortless.Effortless;
-import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
-import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/***
- * Main render class for Effortless Building
- */
 @Environment(EnvType.CLIENT)
-public class RenderHandler {
-
-    //    @SubscribeEvent
-    public static void onRenderLevel(PoseStack poseStack) {
-
-//        if (event.getPhase() != EventPriority.NORMAL || event.getStage() != AFTER_PARTICLES)
-//            return;
-
-        var matrixStack = poseStack;
-        var bufferBuilder = Tesselator.getInstance().getBuilder();
-        var renderTypeBuffer = MultiBufferSource.immediate(bufferBuilder);
-
-        var player = Minecraft.getInstance().player;
-        var modeSettings = BuildModeHelper.getModeSettings(player);
-        var modifierSettings = BuildModifierHelper.getModifierSettings(player);
-
-        var projectedView = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-
-        matrixStack.pushPose();
-        matrixStack.translate(-projectedView.x, -projectedView.y, -projectedView.z);
-
-        //Mirror and radial mirror lines and areas
-        ModifierRenderer.render(matrixStack, renderTypeBuffer, modifierSettings);
-
-        //Render block previews
-        BlockPreviewRenderer.render(matrixStack, renderTypeBuffer, player, modifierSettings, modeSettings);
-
-        matrixStack.popPose();
-    }
+public class RenderUtils {
 
     protected static VertexConsumer beginLines(MultiBufferSource.BufferSource renderTypeBuffer) {
         return renderTypeBuffer.getBuffer(BuildRenderTypes.EB_LINES);
@@ -77,10 +41,11 @@ public class RenderHandler {
         if (blockState == null) return;
 
         matrixStack.pushPose();
-        matrixStack.translate(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        var camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+        matrixStack.translate(blockPos.getX() - camera.x, blockPos.getY() - camera.y, blockPos.getZ() - camera.z);
 //        matrixStack.rotate(Vector3f.YP.rotationDegrees(-90f));
-        matrixStack.translate(-0.01f, -0.01f, -0.01f);
-        matrixStack.scale(1.02f, 1.02f, 1.02f);
+        matrixStack.translate(-1/256f, -1/256f, -1/256f);
+        matrixStack.scale(129 / 128f, 129 / 128f, 129 / 128f);
 
         //Begin block preview rendering
         RenderType blockPreviewRenderType = BuildRenderTypes.getBlockPreviewRenderType(dissolve, blockPos, firstPos, secondPos, red);
@@ -88,9 +53,10 @@ public class RenderHandler {
 
         try {
             BakedModel model = dispatcher.getBlockModel(blockState);
-            // TODO: 8/9/22  
-            dispatcher.getModelRenderer().renderModel(matrixStack.last(), buffer, blockState, model,
-                    1f, 1f, 1f, 0, OverlayTexture.NO_OVERLAY/*, ModelData.EMPTY, blockPreviewRenderType*/);
+            // TODO: 8/9/22
+//            dispatcher.getModelRenderer().renderModel(matrixStack.last(), buffer, blockState, model,
+//                    1f, 1f, 1f, 0, OverlayTexture.NO_OVERLAY/*, ModelData.EMPTY, blockPreviewRenderType*/);
+            dispatcher.getModelRenderer().tesselateBlock(Minecraft.getInstance().level, dispatcher.getBlockModel(blockState), blockState, blockPos, matrixStack, buffer, false, RandomSource.create(), blockState.getSeed(firstPos), OverlayTexture.NO_OVERLAY);
         } catch (NullPointerException e) {
             Effortless.logger.warn("RenderHandler::renderBlockPreview cannot render " + blockState.getBlock().toString());
 
