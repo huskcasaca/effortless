@@ -13,6 +13,14 @@ public enum ReplaceMode {
         this.name = name;
     }
 
+    public String getCommandName() {
+        return switch (this) {
+            case DISABLED -> "disabled";
+            case NORMAL -> "normal";
+            case QUICK -> "quick";
+        };
+    }
+
     public String getNameKey() {
         // TODO: 15/9/22 use ResourceLocation
         return Effortless.MOD_ID + ".action." + name;

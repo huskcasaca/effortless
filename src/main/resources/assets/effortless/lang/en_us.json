@@ -109,5 +109,6 @@
   "commands.effortless.enable_undo.success": "Set enableUndo of %s to %s",
   "commands.effortless.enable_undo.failure": "Failed to set enableUndo of %s",
   "commands.effortless.undo_stack_size.success": "Set undoStackSize of %s to %s",
-  "commands.effortless.undo_stack_size.failure": "Failed to set undoStackSize of %s"
+  "commands.effortless.undo_stack_size.failure": "Failed to set undoStackSize of %s",
+  "commands.reserved": "NIE"
 }
