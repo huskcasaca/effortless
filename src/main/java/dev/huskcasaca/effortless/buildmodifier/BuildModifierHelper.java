@@ -26,12 +26,16 @@ public class BuildModifierHelper {
 
     }
 
-    public static boolean getReplace(Player player) {
+    public static boolean isReplace(Player player) {
         return getModifierSettings(player).enableReplace();
     }
 
-    public static boolean getQuickReplace(Player player) {
+    public static boolean isQuickReplace(Player player) {
         return getModifierSettings(player).enableQuickReplace();
+    }
+
+    public static ReplaceMode getReplaceMode(Player player) {
+        return getModifierSettings(player).replaceMode();
     }
 
 

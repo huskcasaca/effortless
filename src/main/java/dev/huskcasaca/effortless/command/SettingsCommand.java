@@ -3,11 +3,20 @@ package dev.huskcasaca.effortless.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import dev.huskcasaca.effortless.buildmode.BuildAction;
+import dev.huskcasaca.effortless.buildmode.BuildActionHandler;
+import dev.huskcasaca.effortless.buildmode.BuildMode;
+import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
+import dev.huskcasaca.effortless.buildmodifier.ReplaceMode;
+import dev.huskcasaca.effortless.buildmodifier.UndoRedo;
 import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+
+import java.util.Arrays;
 
 public class SettingsCommand {
 
@@ -15,6 +24,80 @@ public class SettingsCommand {
 
         var effortlessCommand = Commands.literal("effortless");
 
+        var actionCommand = Commands.literal("performAction");
+
+        Arrays.stream(BuildAction.values()).forEach(buildAction -> {
+            actionCommand.then(Commands.literal(buildAction.getCommandName()).executes(context -> {
+                var player = context.getSource().getPlayer();
+                BuildActionHandler.performAction(player, buildAction);
+                context.getSource().sendSuccess(Component.nullToEmpty("Action set to " + buildAction.getCommandName()), true);
+                return 1;
+            }));
+        });
+
+        var replaceCommand = Commands.literal("replacemode").executes(context -> {
+            var player = context.getSource().getPlayer();
+            try {
+                var mode = BuildModifierHelper.getReplaceMode(player);
+                context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
+            } catch (Exception e) {
+                context.getSource().sendFailure(Component.translatable("commands.reserved"));
+                e.printStackTrace();
+            }
+            return 0;
+        });
+
+        Arrays.stream(ReplaceMode.values()).forEach(mode -> {
+            replaceCommand.then(Commands.literal(mode.getCommandName()).executes(context -> {
+                var player = context.getSource().getPlayer();
+                try {
+                    BuildModifierHelper.setReplaceMode(player, mode);
+                    context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
+                } catch (Exception e) {
+                    context.getSource().sendFailure(Component.translatable("commands.reserved"));
+                    e.printStackTrace();
+                }
+                return 0;
+            }));
+        });
+
+        var modeCommand = Commands.literal("buildmode").executes(context -> {
+            var player = context.getSource().getPlayer();
+            try {
+                var mode = BuildModeHelper.getBuildMode(player);
+                context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
+            } catch (Exception e) {
+                context.getSource().sendFailure(Component.translatable("commands.reserved"));
+                e.printStackTrace();
+            }
+            return 0;
+        });
+
+        Arrays.stream(BuildMode.values()).forEach(mode -> {
+            modeCommand.then(Commands.literal(mode.getCommandName()).executes(context -> {
+                var player = context.getSource().getPlayer();
+                try {
+                    BuildModeHelper.setBuildMode(player, mode);
+                    context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
+                } catch (Exception e) {
+                    context.getSource().sendFailure(Component.translatable("commands.reserved"));
+                    e.printStackTrace();
+                }
+                return 0;
+            }));
+        });
+
+        var modifierCommand = Commands.literal("performAction");
+
+        var arrayCommand = Commands.literal("array");
+        var radialArrayCommand = Commands.literal("radialArray");
+        var mirrorCommand = Commands.literal("mirror");
+
+        modifierCommand.then(arrayCommand);
+        modifierCommand.then(radialArrayCommand);
+        modifierCommand.then(mirrorCommand);
+
+        var ruleCommand = Commands.literal("buildingrule");
         var playerSettingsCommand = Commands.argument("player", EntityArgument.players());
 
         playerSettingsCommand.then(Commands.literal("maxReachDistance").then(Commands.argument("value", IntegerArgumentType.integer(ReachHelper.MIN_MAX_REACH_DISTANCE, ReachHelper.MAX_MAX_REACH_DISTANCE)).executes(context -> {
@@ -95,7 +178,15 @@ public class SettingsCommand {
             return 0;
         })));
 
-        commandDispatcher.register(effortlessCommand.then(playerSettingsCommand));
+        ruleCommand.then(playerSettingsCommand);
+
+        effortlessCommand.then(ruleCommand);
+        effortlessCommand.then(actionCommand);
+        effortlessCommand.then(replaceCommand);
+        effortlessCommand.then(modeCommand);
+        effortlessCommand.then(modifierCommand);
+
+        commandDispatcher.register(effortlessCommand);
     }
 
 

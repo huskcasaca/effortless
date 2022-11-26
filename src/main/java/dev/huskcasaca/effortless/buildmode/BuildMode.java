@@ -45,6 +45,23 @@ public enum BuildMode {
         return Effortless.MOD_ID + ".mode." + name;
     }
 
+    public String getCommandName() {
+        return switch (this) {
+            case DISABLE -> "disabled";
+            case SINGLE -> "single";
+            case LINE -> "line";
+            case WALL -> "wall";
+            case FLOOR -> "floor";
+            case CUBE -> "cube";
+            case DIAGONAL_LINE -> "diagonalLine";
+            case DIAGONAL_WALL -> "diagonalWall";
+            case SLOPE_FLOOR -> "slopeFloor";
+            case CIRCLE -> "circle";
+            case CYLINDER -> "cylinder";
+            case SPHERE -> "sphere";
+        };
+    }
+
     public String getDescriptionKey() {
         return Effortless.MOD_ID + ".description." + name;
     }
