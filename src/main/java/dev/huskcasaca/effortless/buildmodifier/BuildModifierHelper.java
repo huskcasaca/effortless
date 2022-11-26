@@ -7,6 +7,10 @@ import dev.huskcasaca.effortless.buildmodifier.mirror.Mirror;
 import dev.huskcasaca.effortless.buildmodifier.mirror.RadialMirror;
 import dev.huskcasaca.effortless.entity.player.ModifierSettings;
 import dev.huskcasaca.effortless.buildreach.ReachHelper;
+import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerBuildModifierPacket;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModifierPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 public class BuildModifierHelper {
@@ -51,6 +55,14 @@ public class BuildModifierHelper {
         modifierSettings = new ModifierSettings(modifierSettings.arraySettings(), modifierSettings.mirrorSettings(), modifierSettings.radialMirrorSettings(), ReplaceMode.values()[(modifierSettings.replaceMode().ordinal() + 1) % ReplaceMode.values().length]);
         BuildModifierHelper.setModifierSettings(player, modifierSettings);
         setModifierSettings(player, modifierSettings);
+    }
+
+    public static void sync(Player player) {
+        if (player instanceof ServerPlayer) {
+            Packets.sendToClient(new ClientboundPlayerBuildModifierPacket(getModifierSettings(player)), (ServerPlayer) player);
+        } else {
+            Packets.sendToServer(new ServerboundPlayerSetBuildModifierPacket(getModifierSettings(player)));
+        }
     }
     public static String getSanitizeMessage(ModifierSettings modifierSettings, Player player) {
         int maxReach = ReachHelper.getMaxReachDistance(player);

@@ -5,8 +5,10 @@ import dev.huskcasaca.effortless.EffortlessDataProvider;
 import dev.huskcasaca.effortless.entity.player.ModeSettings;
 import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerBuildModePacket;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModePacket;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 public class BuildModeHelper {
@@ -47,6 +49,14 @@ public class BuildModeHelper {
         ModeSettings modeSettings = getModeSettings(player);
         modeSettings = new ModeSettings(mode, modeSettings.enableMagnet());
         setModeSettings(player, modeSettings);
+    }
+
+    public static void sync(Player player) {
+        if (player instanceof ServerPlayer) {
+            Packets.sendToClient(new ClientboundPlayerBuildModePacket(getModeSettings(player)), (ServerPlayer) player);
+        } else {
+            Packets.sendToServer(new ServerboundPlayerSetBuildModePacket(getModeSettings(player)));
+        }
     }
 
     public static boolean isEnableMagnet(Player player) {

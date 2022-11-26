@@ -34,13 +34,6 @@ public abstract class CommandMixin {
 	@Final
 	private CommandDispatcher<CommandSourceStack> dispatcher;
 
-	/**
-	 * Wait an inject in a constructor?
-	 * This is a new addition to Fabric's fork of mixin.
-	 * If you are not using fabric's fork of mixin this will fail.
-	 *
-	 * @reason Add commands before ambiguities are calculated.
-	 */
 	@Inject(method = "<init>", at = @At(value = "TAIL", target = "Lnet/minecraft/server/commands/WorldBorderCommand;register(Lcom/mojang/brigadier/CommandDispatcher;)V"))
 	private void addCommands(Commands.CommandSelection commandSelection, CommandBuildContext commandBuildContext, CallbackInfo ci) {
 		SettingsCommand.register(this.dispatcher);
