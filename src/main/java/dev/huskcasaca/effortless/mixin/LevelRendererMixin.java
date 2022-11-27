@@ -38,7 +38,7 @@ public abstract class LevelRendererMixin {
         //Render block previews
         var modifierSettings = BuildModifierHelper.getModifierSettings(player);
         ModifierRenderer.render(poseStack, bufferSource, modifierSettings);
-        ((MinecraftRendererProvider) minecraft).getBlockPreviewRenderer().render(player, poseStack, bufferSource, camera);
+        MinecraftRendererProvider.getPreviewRenderer().render(player, poseStack, bufferSource, camera);
 
         poseStack.popPose();
     }
