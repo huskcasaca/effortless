@@ -1,7 +1,6 @@
 package dev.huskcasaca.effortless.render;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.*;
 import dev.huskcasaca.effortless.Effortless;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,15 +20,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class RenderUtils {
 
     protected static VertexConsumer beginLines(MultiBufferSource.BufferSource renderTypeBuffer) {
-        return renderTypeBuffer.getBuffer(BuildRenderTypes.EB_LINES);
+        return renderTypeBuffer.getBuffer(BuildRenderTypes.lines());
     }
 
     protected static void endLines(MultiBufferSource.BufferSource renderTypeBuffer) {
         renderTypeBuffer.endBatch();
     }
 
-    protected static VertexConsumer beginPlanes(MultiBufferSource.BufferSource renderTypeBuffer) {
-        return renderTypeBuffer.getBuffer(BuildRenderTypes.EB_PLANES);
+    protected static VertexConsumer beginPlanes(MultiBufferSource multiBufferSource) {
+        return multiBufferSource.getBuffer(BuildRenderTypes.planes());
     }
 
     protected static void endPlanes(MultiBufferSource.BufferSource renderTypeBuffer) {

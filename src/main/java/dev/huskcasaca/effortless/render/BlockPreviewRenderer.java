@@ -41,6 +41,11 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class BlockPreviewRenderer {
 
+    private static final BlockPreviewRenderer INSTANCE = new BlockPreviewRenderer();
+
+    public static BlockPreviewRenderer getInstance() {
+        return INSTANCE;
+    }
     private final Minecraft minecraft;
     private final List<PlacedData> placedDataList = new ArrayList<>();
     private List<BlockPos> previousCoordinates;
@@ -50,8 +55,8 @@ public class BlockPreviewRenderer {
     private BlockPos previousSecondPos;
     private int soundTime = 0;
 
-    public BlockPreviewRenderer(Minecraft minecraft) {
-        this.minecraft = minecraft;
+    public BlockPreviewRenderer() {
+        this.minecraft = Minecraft.getInstance();
     }
 
     public void render(Player player, PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, Camera camera) {

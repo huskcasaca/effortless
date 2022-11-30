@@ -3,7 +3,7 @@ package dev.huskcasaca.effortless.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
-import dev.huskcasaca.effortless.render.MinecraftRendererProvider;
+import dev.huskcasaca.effortless.render.BlockPreviewRenderer;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.render.ModifierRenderer;
 import net.minecraft.client.Camera;
@@ -37,8 +37,8 @@ public abstract class LevelRendererMixin {
         //Mirror and radial mirror lines and areas
         //Render block previews
         var modifierSettings = BuildModifierHelper.getModifierSettings(player);
-        ModifierRenderer.render(poseStack, bufferSource, modifierSettings);
-        MinecraftRendererProvider.getPreviewRenderer().render(player, poseStack, bufferSource, camera);
+        ModifierRenderer.getInstance().render(player, poseStack, bufferSource, camera);
+        BlockPreviewRenderer.getInstance().render(player, poseStack, bufferSource, camera);
 
         poseStack.popPose();
     }
