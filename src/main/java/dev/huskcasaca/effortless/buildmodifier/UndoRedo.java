@@ -31,10 +31,11 @@ public class UndoRedo {
     public static boolean isUndoEnabled(Player player) {
         return ReachHelper.getReachSettings(player).enableUndo();
     }
+
     //add to undo stack
     public static void addUndo(Player player, BlockSet blockSet) {
         if (!isUndoEnabled(player)) return;
-        
+
         Map<UUID, FixedStack<BlockSet>> undoStacks = player.level.isClientSide ? undoStacksClient : undoStacksServer;
 
         //Assert coordinates is as long as previous and new blockstate lists

@@ -252,6 +252,6 @@ public class BuildModeHandler {
 
     public static void handleNewPlayer(ServerPlayer player) {
         //Makes sure player has mode settings (if it doesnt it will create it)
-        Packets.sendToClient(new ClientboundPlayerBuildModePacket(((EffortlessDataProvider) player).getModeSettings()), (ServerPlayer) player);
+        Packets.sendToClient(new ClientboundPlayerBuildModePacket(((EffortlessDataProvider) player).getModeSettings()), player);
     }
 }

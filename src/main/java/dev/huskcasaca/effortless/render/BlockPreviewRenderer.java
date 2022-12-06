@@ -46,6 +46,7 @@ public class BlockPreviewRenderer {
     public static BlockPreviewRenderer getInstance() {
         return INSTANCE;
     }
+
     private final Minecraft minecraft;
     private final List<PlacedData> placedDataList = new ArrayList<>();
     private List<BlockPos> previousCoordinates;
@@ -309,7 +310,7 @@ public class BlockPreviewRenderer {
     }
 
     public void onBlocksPlaced(List<BlockPos> coordinates, List<ItemStack> itemStacks, List<BlockState> blockStates,
-                                      BlockPos firstPos, BlockPos secondPos) {
+                               BlockPos firstPos, BlockPos secondPos) {
         var player = Minecraft.getInstance().player;
 
         //Check if block previews are enabled
@@ -331,7 +332,7 @@ public class BlockPreviewRenderer {
     }
 
     public void onBlocksBroken(List<BlockPos> coordinates, List<ItemStack> itemStacks, List<BlockState> blockStates,
-                                      BlockPos firstPos, BlockPos secondPos) {
+                               BlockPos firstPos, BlockPos secondPos) {
         var player = Minecraft.getInstance().player;
 
         //Check if block previews are enabled

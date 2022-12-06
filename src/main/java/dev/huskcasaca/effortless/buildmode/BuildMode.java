@@ -12,7 +12,7 @@ import dev.huskcasaca.effortless.buildmode.twoclick.Wall;
 
 public enum BuildMode {
     DISABLE("disable", new Disable(), BuildCategory.BASIC),
-//    VANILLA("vanilla", new Vanilla(), BuildCategory.BASIC),
+    //    VANILLA("vanilla", new Vanilla(), BuildCategory.BASIC),
     SINGLE("single", new Single(), BuildCategory.BASIC /*, BuildOption.BUILD_SPEED*/),
 
     LINE("line", new Line(), BuildCategory.BASIC /*, OptionEnum.THICKNESS*/),

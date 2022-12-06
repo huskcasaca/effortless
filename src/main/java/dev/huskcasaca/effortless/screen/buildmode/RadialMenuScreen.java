@@ -159,10 +159,10 @@ public class RadialMenuScreen extends Screen {
         int baseY = -13;
         int buttonOffset = 26;
 
-        buttons.add(new MenuButton(BuildAction.UNDO,          -buttonDistance - buttonOffset * 1, baseY + buttonOffset * 0, Direction.WEST));
-        buttons.add(new MenuButton(BuildAction.REDO,          -buttonDistance - buttonOffset * 0, baseY + buttonOffset * 0, Direction.EAST));
-        buttons.add(new MenuButton(BuildAction.MODIFIER,      -buttonDistance - buttonOffset * 1, baseY + buttonOffset * 1, Direction.WEST));
-        buttons.add(new MenuButton(BuildAction.REPLACE,       -buttonDistance - buttonOffset * 0, baseY + buttonOffset * 1, Direction.EAST));
+        buttons.add(new MenuButton(BuildAction.UNDO, -buttonDistance - buttonOffset, baseY + 0, Direction.WEST));
+        buttons.add(new MenuButton(BuildAction.REDO, -buttonDistance - 0, baseY + 0, Direction.EAST));
+        buttons.add(new MenuButton(BuildAction.MODIFIER, -buttonDistance - buttonOffset, baseY + buttonOffset, Direction.WEST));
+        buttons.add(new MenuButton(BuildAction.REPLACE, -buttonDistance - 0, baseY + buttonOffset, Direction.EAST));
 //        buttons.add(new MenuButton(BuildAction.MODIFIER,      -buttonDistance - buttonOffset * 1, baseY + buttonOffset * 2, Direction.WEST));
 //        buttons.add(new MenuButton(BuildAction.SETTINGS,      -buttonDistance - buttonOffset * 0, baseY + buttonOffset * 2, Direction.EAST));
 //        OPEN_PLAYER_SETTINGS
@@ -488,7 +488,7 @@ public class RadialMenuScreen extends Screen {
                         Effortless.log(player, "Redo", true);
                     }
                     case REPLACE -> {
-                        Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ?  (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "NORMAL") ) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
+                        Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "NORMAL")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
                     }
                     case MAGNET -> {
                         Effortless.log(player, ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);

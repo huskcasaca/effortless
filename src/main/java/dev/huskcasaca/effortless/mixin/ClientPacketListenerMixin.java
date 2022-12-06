@@ -32,9 +32,12 @@ import java.util.Objects;
 @Mixin(ClientPacketListener.class)
 public abstract class ClientPacketListenerMixin implements ClientPlayerPacketListener {
 
-    @Shadow public abstract void send(Packet<?> packet);
+    @Shadow
+    public abstract void send(Packet<?> packet);
 
-    @Shadow @Final private Minecraft minecraft;
+    @Shadow
+    @Final
+    private Minecraft minecraft;
 
     @Inject(method = "send(Lnet/minecraft/network/protocol/Packet;)V", at = @At("HEAD"), cancellable = true)
     private void send(Packet<?> packet, CallbackInfo ci) {

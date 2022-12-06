@@ -43,7 +43,7 @@ public class RenderUtils {
         var camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         poseStack.translate(blockPos.getX() - camera.x, blockPos.getY() - camera.y, blockPos.getZ() - camera.z);
 //        poseStack.rotate(Vector3f.YP.rotationDegrees(-90f));
-        poseStack.translate(-1/256f, -1/256f, -1/256f);
+        poseStack.translate(-1 / 256f, -1 / 256f, -1 / 256f);
         poseStack.scale(129 / 128f, 129 / 128f, 129 / 128f);
 
         //Begin block preview rendering

@@ -232,7 +232,6 @@ public class Mirror implements Modifier {
         }
 
 
-
         public List<Direction.Axis> getMirrorAxis() {
             var directions = new ArrayList<Direction.Axis>();
 
