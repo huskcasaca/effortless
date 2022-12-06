@@ -30,11 +30,15 @@ import java.util.Objects;
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerPacketListenerMixin implements ServerEffortlessPacketListener {
 
-    @Shadow public ServerPlayer player;
+    @Shadow
+    public ServerPlayer player;
 
-    @Shadow public abstract void send(Packet<?> packet, @Nullable PacketSendListener packetSendListener);
+    @Shadow
+    public abstract void send(Packet<?> packet, @Nullable PacketSendListener packetSendListener);
 
-    @Shadow @Final private MinecraftServer server;
+    @Shadow
+    @Final
+    private MinecraftServer server;
 
     @Inject(method = "send(Lnet/minecraft/network/protocol/Packet;Lnet/minecraft/network/PacketSendListener;)V", at = @At("HEAD"), cancellable = true)
     private void send(Packet<?> packet, @Nullable PacketSendListener packetSendListener, CallbackInfo ci) {

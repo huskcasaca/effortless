@@ -30,12 +30,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Commands.class)
 public abstract class CommandMixin {
-	@Shadow
-	@Final
-	private CommandDispatcher<CommandSourceStack> dispatcher;
+    @Shadow
+    @Final
+    private CommandDispatcher<CommandSourceStack> dispatcher;
 
-	@Inject(method = "<init>", at = @At(value = "TAIL", target = "Lnet/minecraft/server/commands/WorldBorderCommand;register(Lcom/mojang/brigadier/CommandDispatcher;)V"))
-	private void addCommands(Commands.CommandSelection commandSelection, CommandBuildContext commandBuildContext, CallbackInfo ci) {
-		SettingsCommand.register(this.dispatcher);
-	}
+    @Inject(method = "<init>", at = @At(value = "TAIL", target = "Lnet/minecraft/server/commands/WorldBorderCommand;register(Lcom/mojang/brigadier/CommandDispatcher;)V"))
+    private void addCommands(Commands.CommandSelection commandSelection, CommandBuildContext commandBuildContext, CallbackInfo ci) {
+        SettingsCommand.register(this.dispatcher);
+    }
 }

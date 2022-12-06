@@ -36,14 +36,23 @@ public abstract class PlayerActionMixin {
 
     @Shadow
     protected int missTime;
-    @Shadow @Nullable public MultiPlayerGameMode gameMode;
+    @Shadow
+    @Nullable
+    public MultiPlayerGameMode gameMode;
 
-    @Shadow @Nullable public LocalPlayer player;
-    @Shadow @Final public GameRenderer gameRenderer;
+    @Shadow
+    @Nullable
+    public LocalPlayer player;
+    @Shadow
+    @Final
+    public GameRenderer gameRenderer;
 
-    @Shadow @Nullable public ClientLevel level;
+    @Shadow
+    @Nullable
+    public ClientLevel level;
 
-    @Shadow private int rightClickDelay;
+    @Shadow
+    private int rightClickDelay;
 
     // TODO: 15/9/22 extract to EffortlessClient class
     // startAttack

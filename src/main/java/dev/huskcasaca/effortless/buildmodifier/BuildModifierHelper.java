@@ -64,6 +64,7 @@ public class BuildModifierHelper {
             Packets.sendToServer(new ServerboundPlayerSetBuildModifierPacket(getModifierSettings(player)));
         }
     }
+
     public static String getSanitizeMessage(ModifierSettings modifierSettings, Player player) {
         int maxReach = ReachHelper.getMaxReachDistance(player);
         String error = "";

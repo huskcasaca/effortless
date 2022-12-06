@@ -73,7 +73,7 @@ public class BuildActionHandler {
             case REPLACE:
                 BuildModifierHelper.cycleReplaceMode(player);
                 var modifierSettings = BuildModifierHelper.getModifierSettings(player);
-                Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ?  (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "NORMAL") ) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
+                Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "NORMAL")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
                 break;
             case MAGNET:
                 BuildModeHelper.setEnableMagnet(player, !BuildModeHelper.isEnableMagnet(player));

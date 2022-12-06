@@ -15,7 +15,7 @@ public abstract class PlayerPickupMixin {
     public AABB inflate(AABB instance, double d, double e, double f) {
         final var player = ((Player) (Object) this);
         var enable = BuildModeHelper.getModeSettings(player).enableMagnet();
-        var maxReach = ReachHelper.getReachSettings(player).maxReachDistance();;
+        var maxReach = ReachHelper.getReachSettings(player).maxReachDistance();
 
         if (enable) {
             return instance.inflate(maxReach, maxReach, maxReach);

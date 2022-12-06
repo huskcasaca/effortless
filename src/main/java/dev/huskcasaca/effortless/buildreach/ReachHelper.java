@@ -56,9 +56,10 @@ public class ReachHelper {
 
     public static void handleNewPlayer(ServerPlayer player) {
         if (!player.level.isClientSide) {
-            Packets.sendToClient(new ClientboundPlayerReachPacket(((EffortlessDataProvider) player).getReachSettings()), (ServerPlayer) player);
+            Packets.sendToClient(new ClientboundPlayerReachPacket(((EffortlessDataProvider) player).getReachSettings()), player);
         }
     }
+
     public static int getMaxReachDistance(Player player) {
         return getReachSettings(player).maxReachDistance();
     }
