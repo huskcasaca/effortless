@@ -24,7 +24,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class ModifierSettingsScreen extends Screen {
 
     private ScrollPane scrollPane;
-    private Button buttonClose;
+    private Button buttonDone;
 
     private MirrorSettingsPane mirrorSettingsPane;
     private ArraySettingsPane arraySettingsPane;
@@ -40,26 +40,26 @@ public class ModifierSettingsScreen extends Screen {
 
         scrollPane = new ScrollPane(this, font, 8, height - 30);
 
-        mirrorSettingsPane = new MirrorSettingsPane(scrollPane);
-        scrollPane.AddListEntry(mirrorSettingsPane);
-
         arraySettingsPane = new ArraySettingsPane(scrollPane);
-        scrollPane.AddListEntry(arraySettingsPane);
+        scrollPane.addListEntry(arraySettingsPane);
+
+        mirrorSettingsPane = new MirrorSettingsPane(scrollPane);
+        scrollPane.addListEntry(mirrorSettingsPane);
 
         radialMirrorSettingsPane = new RadialMirrorSettingsPane(scrollPane);
-        scrollPane.AddListEntry(radialMirrorSettingsPane);
+        scrollPane.addListEntry(radialMirrorSettingsPane);
 
         scrollPane.init(this.renderables);
 
         //Close button
         int y = height - 26;
-        buttonClose = new Button(width / 2 - 100, y, 200, 20, Component.literal("Close"), (button) -> {
+        buttonDone = new Button(width / 2 - 100, y, 200, 20, Component.literal("Done"), (button) -> {
             var player = Minecraft.getInstance().player;
             if (player != null) {
                 player.closeContainer();
             }
         });
-        addRenderableOnly(buttonClose);
+        addRenderableOnly(buttonDone);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ModifierSettingsScreen extends Screen {
 
         scrollPane.render(ms, mouseX, mouseY, partialTicks);
 
-        buttonClose.render(ms, mouseX, mouseY, partialTicks);
+        buttonDone.render(ms, mouseX, mouseY, partialTicks);
 
         scrollPane.drawTooltip(ms, this, mouseX, mouseY);
     }
