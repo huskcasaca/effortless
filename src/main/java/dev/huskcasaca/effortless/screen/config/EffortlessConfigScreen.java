@@ -66,12 +66,21 @@ public class EffortlessConfigScreen {
 
         final var previewSubCat = entryBuilder.startSubCategory(Component.translatable("effortless.settings.category.config.preview.title"));
 
+        final var showBuildInfo = new BooleanEntryData("show_build_info", defaults.getPreviewConfig().isShowBuildInfo(), config.getPreviewConfig().isShowBuildInfo(), config.getPreviewConfig()::setShowBuildInfo);
         final var alwaysShowBlockPreview = new BooleanEntryData("always_show_block_preview", defaults.getPreviewConfig().isAlwaysShowBlockPreview(), config.getPreviewConfig().isAlwaysShowBlockPreview(), config.getPreviewConfig()::setAlwaysShowBlockPreview);
         final var useShaders = new BooleanEntryData("use_shaders", defaults.getPreviewConfig().isUseShaders(), config.getPreviewConfig().isUseShaders(), config.getPreviewConfig()::setUseShaders);
         final var shaderThreshold = new SliderEntryData("shader_threshold", defaults.getPreviewConfig().getShaderThreshold(), config.getPreviewConfig().getShaderThreshold(), PreviewConfig.MIN_SHADER_THRESHOLD, PreviewConfig.MAX_SHADER_THRESHOLD, config.getPreviewConfig()::setShaderThreshold);
         final var dissolveTimeMultiplier = new SliderEntryData("shader_dissolve_time_multiplier", defaults.getPreviewConfig().getShaderDissolveTimeMultiplier(), config.getPreviewConfig().getShaderDissolveTimeMultiplier(), PreviewConfig.MIN_SHADER_DISSOLVE_TIME_MULTIPLIER, PreviewConfig.MAX_SHADER_DISSOLVE_TIME_MULTIPLIER, config.getPreviewConfig()::setShaderDissolveTimeMultiplier);
 
 
+        previewSubCat.add(
+                entryBuilder.startBooleanToggle(Component.translatable(showBuildInfo.getTitleKey()), showBuildInfo.currentValue)
+                        .setTooltip(Component.translatable(showBuildInfo.getTooltipKey()))
+                        .setDefaultValue(showBuildInfo.defaultValue)
+                        .setSaveConsumer(showBuildInfo.saveConsumer)
+                        .setYesNoTextSupplier(yesNoTextSupplier)
+                        .build()
+        );
         previewSubCat.add(
                 entryBuilder.startBooleanToggle(Component.translatable(alwaysShowBlockPreview.getTitleKey()), alwaysShowBlockPreview.currentValue)
                         .setTooltip(Component.translatable(alwaysShowBlockPreview.getTooltipKey()))

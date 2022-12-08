@@ -99,8 +99,8 @@ public class EffortlessClient implements ClientModInitializer {
 
         //Radial menu
         if (Keys.SHOW_RADIAL_MENU.isDown()) {
-            if (!RadialMenuScreen.instance.isVisible()) {
-                Minecraft.getInstance().setScreen(RadialMenuScreen.instance);
+            if (!RadialMenuScreen.getInstance().isVisible()) {
+                Minecraft.getInstance().setScreen(RadialMenuScreen.getInstance());
             }
 //            if (ReachHelper.getMaxReachDistance(player) > 0) {
 //            } else {

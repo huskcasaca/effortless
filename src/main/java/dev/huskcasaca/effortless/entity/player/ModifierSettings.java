@@ -4,8 +4,11 @@ import dev.huskcasaca.effortless.buildmodifier.ReplaceMode;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
 import dev.huskcasaca.effortless.buildmodifier.mirror.Mirror;
 import dev.huskcasaca.effortless.buildmodifier.mirror.RadialMirror;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 public record ModifierSettings(
@@ -15,6 +18,15 @@ public record ModifierSettings(
 
         ReplaceMode replaceMode
 ) {
+
+    public ModifierSettings() {
+        this(new Array.ArraySettings(), new Mirror.MirrorSettings(), new RadialMirror.RadialMirrorSettings(), ReplaceMode.DISABLED);
+    }
+
+    public ModifierSettings(Mirror.MirrorSettings mirrorSettings, Array.ArraySettings arraySettings,
+                            RadialMirror.RadialMirrorSettings radialMirrorSettings) {
+        this(arraySettings, mirrorSettings, radialMirrorSettings, ReplaceMode.DISABLED);
+    }
 
     public boolean enableReplace() {
         return replaceMode != ReplaceMode.DISABLED;
@@ -26,15 +38,6 @@ public record ModifierSettings(
 
     public boolean enableQuickReplace() {
         return replaceMode == ReplaceMode.QUICK;
-    }
-
-    public ModifierSettings() {
-        this(new Array.ArraySettings(), new Mirror.MirrorSettings(), new RadialMirror.RadialMirrorSettings(), ReplaceMode.DISABLED);
-    }
-
-    public ModifierSettings(Mirror.MirrorSettings mirrorSettings, Array.ArraySettings arraySettings,
-                            RadialMirror.RadialMirrorSettings radialMirrorSettings) {
-        this(arraySettings, mirrorSettings, radialMirrorSettings, ReplaceMode.DISABLED);
     }
 
     public static ModifierSettings decodeBuf(FriendlyByteBuf friendlyByteBuf) {

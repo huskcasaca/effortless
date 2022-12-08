@@ -44,23 +44,23 @@ import static dev.huskcasaca.effortless.buildmode.BuildActionHandler.*;
 @MethodsReturnNonnullByDefault
 public class RadialMenuScreen extends Screen {
 
-    public static final RadialMenuScreen instance = new RadialMenuScreen();
-    private final Vector4f radialButtonColor = new Vector4f(0f, 0f, 0f, .5f);
-    private final Vector4f sideButtonColor = new Vector4f(.5f, .5f, .5f, .5f);
-    private final Vector4f highlightColor = new Vector4f(.6f, .8f, 1f, .6f);
-    private final Vector4f selectedColor = new Vector4f(0f, .5f, 1f, .5f);
-    private final Vector4f highlightSelectedColor = new Vector4f(0.2f, .7f, 1f, .7f);
-    private final int whiteTextColor = 0xffffffff;
-    private final int watermarkTextColor = 0x88888888;
-    private final int descriptionTextColor = 0xdd888888;
-    private final int optionTextColor = 0xeeeeeeff;
-    private final double ringInnerEdge = 38;
-    private final double ringOuterEdge = 75;
-    private final double categoryLineOuterEdge = 42;
-    private final double textDistance = 90;
-    private final double buttonDistance = 120;
-    private final float fadeSpeed = 0.3f;
-    private final int descriptionHeight = 100;
+    private static final RadialMenuScreen INSTANCE = new RadialMenuScreen();
+    private static final Vector4f radialButtonColor = new Vector4f(0f, 0f, 0f, .5f);
+    private static final Vector4f sideButtonColor = new Vector4f(.5f, .5f, .5f, .5f);
+    private static final Vector4f highlightColor = new Vector4f(.6f, .8f, 1f, .6f);
+    private static final Vector4f selectedColor = new Vector4f(0f, .5f, 1f, .5f);
+    private static final Vector4f highlightSelectedColor = new Vector4f(0.2f, .7f, 1f, .7f);
+    private static final int whiteTextColor = 0xffffffff;
+    private static final int watermarkTextColor = 0x88888888;
+    private static final int descriptionTextColor = 0xdd888888;
+    private static final int optionTextColor = 0xeeeeeeff;
+    private static final double ringInnerEdge = 38;
+    private static final double ringOuterEdge = 75;
+    private static final double categoryLineOuterEdge = 42;
+    private static final double textDistance = 90;
+    private static final double buttonDistance = 120;
+    private static final float fadeSpeed = 0.3f;
+    private static final int descriptionHeight = 100;
     public BuildMode switchTo = null;
     public BuildAction doAction = null;
     public boolean performedActionUsingMouse;
@@ -71,6 +71,10 @@ public class RadialMenuScreen extends Screen {
 
     public RadialMenuScreen() {
         super(Component.translatable("effortless.screen.radial_menu"));
+    }
+
+    public static RadialMenuScreen getInstance() {
+        return INSTANCE;
     }
 
     public static void playRadialMenuSound() {
@@ -347,7 +351,7 @@ public class RadialMenuScreen extends Screen {
         }
 
         String credits = I18n.get("effortless.credits");
-        font.drawShadow(ms, credits, width - font.width(credits) - 4, height - 10, watermarkTextColor);
+        font.drawShadow(ms, credits, width - font.width(credits) - 10, height - 15, watermarkTextColor);
 
         //Draw buildmode text
         for (final MenuRegion menuRegion : modes) {
@@ -488,7 +492,7 @@ public class RadialMenuScreen extends Screen {
                         Effortless.log(player, "Redo", true);
                     }
                     case REPLACE -> {
-                        Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "NORMAL")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
+                        Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "ON")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
                     }
                     case MAGNET -> {
                         Effortless.log(player, ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
