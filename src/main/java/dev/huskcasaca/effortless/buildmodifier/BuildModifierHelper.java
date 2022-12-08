@@ -10,6 +10,8 @@ import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerBuildModifierPacket;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModifierPacket;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -63,6 +65,11 @@ public class BuildModifierHelper {
         } else {
             Packets.sendToServer(new ServerboundPlayerSetBuildModifierPacket(getModifierSettings(player)));
         }
+    }
+
+    public static Component getReplaceModeName(Player player) {
+        var modifierSettings = getModifierSettings(player);
+        return Component.literal(ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "ON")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET);
     }
 
     public static String getSanitizeMessage(ModifierSettings modifierSettings, Player player) {

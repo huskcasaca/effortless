@@ -15,6 +15,7 @@
   ],
   "client": [
     "ClientPacketListenerMixin",
+    "GuiMixin",
     "KeyEventMixin",
     "LevelRendererMixin",
     "PlayerActionMixin",
