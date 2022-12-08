@@ -3,17 +3,17 @@
 [versions]
 
 # Minecraft / Loaders
-minecraft = "1.19.3"
-fabric-loader = "0.14.11"
-fabric-api = "0.68.1+1.19.3"
+minecraft = "1.19.2"
+fabric-loader = "0.14.9"
+fabric-api = "0.61.0+1.19.2"
 fabric-loom = "1.0-SNAPSHOT"
 
 # Dependencies
 jsr305 = "3.0.2"
 
 # Mod dependencies
-modmenu = "5.0.0-alpha.3"
-cloth-config = "9.0.92"
+modmenu = "4.0.6"
+cloth-config = "8.2.88"
 
 # Publish
 curseforge-publish = "0.1.0"

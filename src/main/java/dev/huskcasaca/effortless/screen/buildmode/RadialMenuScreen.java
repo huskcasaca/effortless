@@ -2,7 +2,7 @@ package dev.huskcasaca.effortless.screen.buildmode;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import org.joml.Vector4f;
+import com.mojang.math.Vector4f;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmode.*;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
@@ -80,7 +80,7 @@ public class RadialMenuScreen extends Screen {
     public static void playRadialMenuSound() {
         final float volume = 0.1f;
         if (volume >= 0.0001f) {
-            SimpleSoundInstance sound = new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, volume, 1.0f, RandomSource.create(), Minecraft.getInstance().player.blockPosition());
+            SimpleSoundInstance sound = new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK, SoundSource.MASTER, volume, 1.0f, RandomSource.create(), Minecraft.getInstance().player.blockPosition());
             Minecraft.getInstance().getSoundManager().play(sound);
         }
     }
@@ -506,7 +506,7 @@ public class RadialMenuScreen extends Screen {
     @Override
     public void removed() {
         super.removed();
-//        this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
+        this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
     }
 
     private void performAction(boolean fromMouseClick) {
