@@ -9,7 +9,6 @@ import dev.huskcasaca.effortless.buildmode.BuildMode;
 import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.buildmodifier.ReplaceMode;
-import dev.huskcasaca.effortless.buildmodifier.UndoRedo;
 import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -158,15 +157,15 @@ public class SettingsCommand {
             return 0;
         })));
 
-        playerSettingsCommand.then(Commands.literal("enableUndo").then(Commands.argument("value", BoolArgumentType.bool()).executes(context -> {
+        playerSettingsCommand.then(Commands.literal("enableUndoRedo").then(Commands.argument("value", BoolArgumentType.bool()).executes(context -> {
             EntityArgument.getPlayers(context, "player").forEach(player -> {
                 try {
                     var value = BoolArgumentType.getBool(context, "value");
-                    ReachHelper.setEnableUndo(player, value);
+                    ReachHelper.setEnableUndoRedo(player, value);
                     ReachHelper.sync(player);
-                    context.getSource().sendSuccess(Component.translatable("commands.effortless.enable_undo.success", player.getDisplayName(), value), true);
+                    context.getSource().sendSuccess(Component.translatable("commands.effortless.enable_undo_redo.success", player.getDisplayName(), value), true);
                 } catch (Exception e) {
-                    context.getSource().sendFailure(Component.translatable("commands.effortless.enable_undo.failure", player.getDisplayName()));
+                    context.getSource().sendFailure(Component.translatable("commands.effortless.enable_undo_redo.failure", player.getDisplayName()));
                 }
             });
             return 0;
