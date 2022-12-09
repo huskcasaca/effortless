@@ -34,6 +34,7 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 - **Quick**: Placing blocks replaces the existing blocks including the first one
 
 ## Todo
+* [x] Undo/Redo
 * [x] Configure screen
 * [x] Commands
 * [x] Magnet (pick up distant items)
@@ -41,7 +42,6 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 * [x] Rewrite shader
 * [x] Rewrite S2C/C2S logic
 * [x] Wall blocks (torch) support
-* [ ] Undo/Redo
 * [ ] Performance optimize (for large amount of blocks)
 * [ ] Item randomizer
 * [ ] Makkit support
