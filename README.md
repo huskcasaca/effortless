@@ -47,6 +47,10 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 * [ ] Makkit support
 * [ ] Tweakeroo support
 
+## Changelog
+### v1.5.1
+* Fix undo/redo in creative mode with no matching item in inventory
+
 ## Credits
 * **[Requioss](https://www.curseforge.com/members/requioss)**, the author of [Effortless Building](https://www.curseforge.com/minecraft/mc-mods/effortless-building) 
 
