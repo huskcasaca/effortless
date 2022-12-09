@@ -12,11 +12,8 @@ fabric-loom = "1.0-SNAPSHOT"
 jsr305 = "3.0.2"
 
 # Mod dependencies
-modmenu = "5.0.0-alpha.3"
-cloth-config = "9.0.92"
-
-# Publish
-curseforge-publish = "0.1.0"
+modmenu = "5.0.1"
+cloth-config = "9.0.94"
 
 [libraries]
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
