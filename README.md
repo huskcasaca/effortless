@@ -49,6 +49,8 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 
 ## Changelog
 ### 1.5.1
+* Fix insufficient block placing crash issue in survival mod
+### 1.5.1
 * Fix undo/redo in creative mode with no matching item in inventory
 ### 1.5.0
 * Add build info in gui
