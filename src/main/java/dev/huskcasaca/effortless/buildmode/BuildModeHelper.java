@@ -25,7 +25,7 @@ public class BuildModeHelper {
             return I18n.get(mode.getNameKey());
         } else {
             StringBuilder modeName = new StringBuilder();
-            for (BuildOption option : mode.options) {
+            for (BuildOption option : mode.getOptions()) {
                 modeName.append(I18n.get(BuildActionHandler.getOptionSetting(option).getNameKey()));
                 modeName.append(" ");
             }

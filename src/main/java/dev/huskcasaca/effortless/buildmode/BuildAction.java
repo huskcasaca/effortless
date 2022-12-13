@@ -32,7 +32,7 @@ public enum BuildAction {
     CIRCLE_START_CORNER("start_corner"),
     CIRCLE_START_CENTER("start_center");
 
-    public String name;
+    private final String name;
 
     BuildAction(String name) {
         this.name = name;

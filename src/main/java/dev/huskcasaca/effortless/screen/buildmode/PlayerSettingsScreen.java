@@ -101,7 +101,7 @@ public class PlayerSettingsScreen extends Screen {
         DISSOLVE_BLUE("Dissolve Blue"),
         DISSOLVE_ORANGE("Dissolve Orange");
 
-        public Component name;
+        private final Component name;
 
         ShaderType(Component name) {
             this.name = name;

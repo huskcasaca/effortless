@@ -172,7 +172,7 @@ public class RadialMenuScreen extends Screen {
 //        OPEN_PLAYER_SETTINGS
 
         //Add buildmode dependent options
-        BuildOption[] options = currentBuildMode.options;
+        BuildOption[] options = currentBuildMode.getOptions();
         BuildOption[] enabledOptions = options;
         final ArrayList<MenuButton> optionButtons = new ArrayList<>();
         for (int row = 0; row < options.length; row++) {
@@ -267,7 +267,7 @@ public class RadialMenuScreen extends Screen {
                 buffer.vertex(middleX + x1m2, middleY + y1m2, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
 
                 //Category line
-                color = menuRegion.mode.category.color;
+                color = menuRegion.mode.getCategory().getColor();
 
                 final double x1m3 = Math.cos(beginRadians + fragment) * categoryLineOuterEdge;
                 final double x2m3 = Math.cos(endRadians - fragment) * categoryLineOuterEdge;

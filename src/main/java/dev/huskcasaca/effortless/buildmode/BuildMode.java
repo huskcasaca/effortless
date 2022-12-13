@@ -3,7 +3,6 @@ package dev.huskcasaca.effortless.buildmode;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmode.oneclick.Single;
 import dev.huskcasaca.effortless.buildmode.oneclick.Disable;
-import dev.huskcasaca.effortless.buildmode.oneclick.Vanilla;
 import dev.huskcasaca.effortless.buildmode.threeclick.*;
 import dev.huskcasaca.effortless.buildmode.twoclick.Circle;
 import dev.huskcasaca.effortless.buildmode.twoclick.Floor;
@@ -29,9 +28,9 @@ public enum BuildMode {
 //    CONE("cone", new Cone(), BuildCategory.ROOF),
 //    DOME("dome", new Dome(), BuildCategory.ROOF);
 
-    public final Buildable instance;
-    public final BuildCategory category;
-    public final BuildOption[] options;
+    private final Buildable instance;
+    private final BuildCategory category;
+    private final BuildOption[] options;
     private final String name;
 
     BuildMode(String name, Buildable instance, BuildCategory category, BuildOption... options) {
@@ -42,7 +41,7 @@ public enum BuildMode {
     }
 
     public String getNameKey() {
-        return Effortless.MOD_ID + ".mode." + name;
+        return Effortless.MOD_ID + ".mode." + getName();
     }
 
     public String getCommandName() {
@@ -63,6 +62,22 @@ public enum BuildMode {
     }
 
     public String getDescriptionKey() {
-        return Effortless.MOD_ID + ".description." + name;
+        return Effortless.MOD_ID + ".description." + getName();
+    }
+
+    public Buildable getInstance() {
+        return instance;
+    }
+
+    public BuildCategory getCategory() {
+        return category;
+    }
+
+    public BuildOption[] getOptions() {
+        return options;
+    }
+
+    public String getName() {
+        return name;
     }
 }
