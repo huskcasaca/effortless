@@ -75,7 +75,7 @@ public class BuildModeHandler {
 
         //Even when no starting block is found, call buildmode instance
         //We might want to place things in the air
-        List<BlockPos> coordinates = buildMode.instance.onRightClick(player, startPos, packet.sideHit(), packet.hitVec(), modifierSettings.enableQuickReplace());
+        List<BlockPos> coordinates = buildMode.getInstance().onRightClick(player, startPos, packet.sideHit(), packet.hitVec(), modifierSettings.enableQuickReplace());
 
         if (coordinates.isEmpty()) {
             currentlyBreaking.put(player, false);
@@ -88,10 +88,10 @@ public class BuildModeHandler {
             coordinates = coordinates.subList(0, limit);
         }
 
-        var sideHit = buildMode.instance.getSideHit(player);
+        var sideHit = buildMode.getInstance().getSideHit(player);
         if (sideHit == null) sideHit = packet.sideHit();
 
-        var hitVec = buildMode.instance.getHitVec(player);
+        var hitVec = buildMode.getInstance().getHitVec(player);
         if (hitVec == null) hitVec = packet.hitVec();
 
         BuildModifierHandler.onBlockPlaced(player, coordinates, sideHit, hitVec, packet.placeStartPos());
@@ -131,7 +131,7 @@ public class BuildModeHandler {
 
         //Get coordinates
         var buildMode = modeSettings.buildMode();
-        var coordinates = buildMode.instance.onRightClick(player, startPos, Direction.UP, Vec3.ZERO, true);
+        var coordinates = buildMode.getInstance().onRightClick(player, startPos, Direction.UP, Vec3.ZERO, true);
 
         if (coordinates.isEmpty()) {
             currentlyBreaking.put(player, true);
@@ -150,7 +150,7 @@ public class BuildModeHandler {
         List<BlockPos> coordinates = new ArrayList<>();
 
         var modeSettings = BuildModeHelper.getModeSettings(player);
-        coordinates.addAll(modeSettings.buildMode().instance.findCoordinates(player, startPos, skipRaytrace));
+        coordinates.addAll(modeSettings.buildMode().getInstance().findCoordinates(player, startPos, skipRaytrace));
 
         return coordinates;
     }
@@ -163,7 +163,7 @@ public class BuildModeHandler {
         var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
         currentlyBreaking.remove(player);
 
-        BuildModeHelper.getModeSettings(player).buildMode().instance.initialize(player);
+        BuildModeHelper.getModeSettings(player).buildMode().getInstance().initialize(player);
     }
 
     public static boolean isCurrentlyPlacing(Player player) {

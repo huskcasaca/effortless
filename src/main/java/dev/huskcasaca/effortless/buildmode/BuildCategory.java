@@ -8,9 +8,13 @@ public enum BuildCategory {
     CIRCULAR(new Vector4f(0.29f, 0.76f, 0.3f, 1f)),
     ROOF(new Vector4f(0.83f, 0.87f, 0.23f, .8f));
 
-    public final Vector4f color;
+    private final Vector4f color;
 
     BuildCategory(Vector4f color) {
         this.color = color;
+    }
+
+    public Vector4f getColor() {
+        return color;
     }
 }

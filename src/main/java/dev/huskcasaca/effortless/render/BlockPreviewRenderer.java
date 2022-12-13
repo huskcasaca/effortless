@@ -119,7 +119,7 @@ public class BlockPreviewRenderer {
             //Keep blockstate the same for every block in the buildmode
             //So dont rotate blocks when in the middle of placing wall etc.
             if (BuildModeHandler.isActive(player)) {
-                Buildable buildModeInstance = BuildModeHelper.getBuildMode(player).instance;
+                Buildable buildModeInstance = BuildModeHelper.getBuildMode(player).getInstance();
                 if (buildModeInstance.getSideHit(player) != null) sideHit = buildModeInstance.getSideHit(player);
                 if (buildModeInstance.getHitVec(player) != null) hitVec = buildModeInstance.getHitVec(player);
             }
