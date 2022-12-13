@@ -27,61 +27,60 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class BuildModifierHandler {
 
     //Called from BuildModes
     public static void onBlockPlaced(Player player, List<BlockPos> startCoordinates, Direction sideHit, Vec3 hitVec, boolean placeStartPos) {
-        var world = player.level;
+        var level = player.level;
 //		AbstractRandomizerBagItem.renewRandomness();
 
         //Format hitvec to 0.x
         hitVec = new Vec3(Math.abs(hitVec.x - ((int) hitVec.x)), Math.abs(hitVec.y - ((int) hitVec.y)), Math.abs(hitVec.z - ((int) hitVec.z)));
 
         //find coordinates and blockstates
-        List<BlockPos> coordinates = findCoordinates(player, startCoordinates);
-        List<ItemStack> itemStacks = new ArrayList<>();
-        List<BlockState> blockStates = findBlockStates(player, startCoordinates, hitVec, sideHit, itemStacks);
+        var coordinates = findCoordinates(player, startCoordinates);
+        var itemStacks = new ArrayList<ItemStack>();
+        var blockStates = findBlockStates(player, startCoordinates, hitVec, sideHit, itemStacks);
 
         //check if valid blockstates
         if (blockStates.size() == 0 || coordinates.size() != blockStates.size()) return;
 
         //remember previous blockstates for undo
-        List<BlockState> previousBlockStates = new ArrayList<>(coordinates.size());
-        List<BlockState> newBlockStates = new ArrayList<>(coordinates.size());
+        var previousBlockStates = new ArrayList<BlockState>(coordinates.size());
+        var newBlockStates = new ArrayList<BlockState>(coordinates.size());
         for (var coordinate : coordinates) {
-            previousBlockStates.add(world.getBlockState(coordinate));
+            previousBlockStates.add(level.getBlockState(coordinate));
         }
 
-        if (world.isClientSide) {
+        if (level.isClientSide) {
 
             BlockPreviewRenderer.getInstance().onBlocksPlaced();
-            if (!itemStacks.isEmpty()) {
-                var blockLeft = new HashMap<Block, Integer>();
-                for (int i = placeStartPos ? 0 : 1; i < coordinates.size(); i++) {
-                    var blockPos = coordinates.get(i);
-                    var blockState = blockStates.get(i);
-                    var itemStack = itemStacks.get(i);
-                    if (!blockLeft.containsKey(blockState.getBlock())) {
-                        blockLeft.put(blockState.getBlock(), InventoryHelper.findTotalBlocksInInventory(player, blockState.getBlock()));
-                    }
-                    var count = blockLeft.get(blockState.getBlock());
-                    if (count <= 0) {
-                        return;
-                    }
-                    blockLeft.put(blockState.getBlock(), count - 1);
-                    if (world.isLoaded(blockPos)) {
-                        SurvivalHelper.placeBlock(world, player, blockPos, blockState, itemStack.copy(), sideHit, hitVec, false, false, false);
+//            if (!itemStacks.isEmpty()) {
+            var blockLeft = new HashMap<Block, Integer>();
+
+            for (int i = placeStartPos ? 0 : 1; i < coordinates.size(); i++) {
+                var blockPos = coordinates.get(i);
+                var blockState = blockStates.get(i);
+                var itemStack = itemStacks.get(i);
+                if (!blockLeft.containsKey(blockState.getBlock())) {
+                    blockLeft.put(blockState.getBlock(), InventoryHelper.findTotalBlocksInInventory(player, blockState.getBlock()));
+                }
+                var count = blockLeft.get(blockState.getBlock());
+                if (player.isCreative() || count > 0) {
+                    if (level.isLoaded(blockPos)) {
+                        SurvivalHelper.placeBlock(level, player, blockPos, blockState, itemStack.copy(), sideHit, hitVec, false, false, false);
+                        if (!player.isCreative()) {
+                            blockLeft.put(blockState.getBlock(), count - 1);
+                        }
                     }
                 }
             }
+//            }
             //find actual new blockstates for undo
             for (var coordinate : coordinates) {
-                newBlockStates.add(world.getBlockState(coordinate));
+                newBlockStates.add(level.getBlockState(coordinate));
             }
         } else {
 
@@ -91,19 +90,19 @@ public class BuildModifierHandler {
                 var blockState = blockStates.get(i);
                 var itemStack = itemStacks.get(i);
 
-                if (world.isLoaded(blockPos)) {
+                if (level.isLoaded(blockPos)) {
                     //check itemstack empty
                     if (itemStack.isEmpty()) {
                         //try to find new stack, otherwise continue
                         itemStack = InventoryHelper.findItemStackInInventory(player, blockState.getBlock());
                         if (itemStack.isEmpty()) continue;
                     }
-                    SurvivalHelper.placeBlock(world, player, blockPos, blockState, itemStack, sideHit, hitVec, false, false, false);
+                    SurvivalHelper.placeBlock(level, player, blockPos, blockState, itemStack, sideHit, hitVec, false, false, false);
                 }
             }
             //find actual new blockstates for undo
             for (var coordinate : coordinates) {
-                newBlockStates.add(world.getBlockState(coordinate));
+                newBlockStates.add(level.getBlockState(coordinate));
             }
         }
 

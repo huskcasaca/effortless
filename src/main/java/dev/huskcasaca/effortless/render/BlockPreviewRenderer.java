@@ -14,6 +14,7 @@ import dev.huskcasaca.effortless.config.ConfigManager;
 import dev.huskcasaca.effortless.config.PreviewConfig;
 import dev.huskcasaca.effortless.utils.CompatHelper;
 import dev.huskcasaca.effortless.buildreach.ReachHelper;
+import dev.huskcasaca.effortless.utils.InventoryHelper;
 import dev.huskcasaca.effortless.utils.SurvivalHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -27,6 +28,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -35,6 +37,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
@@ -67,7 +70,7 @@ public class BlockPreviewRenderer {
                 if (placed.coordinates != null && !placed.coordinates.isEmpty()) {
                     double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();
                     float dissolve = (EffortlessClient.ticksInGame - placed.time) / (float) totalTime;
-                    renderBlockPreviews(poseStack, multiBufferSource, placed.coordinates, placed.blockStates, placed.itemStacks, dissolve, placed.firstPos, placed.secondPos, false, placed.breaking);
+                    renderBlockPreviews(poseStack, multiBufferSource, placed.coordinates, placed.blockStates, placed.itemStacks, dissolve, placed.firstPos, placed.secondPos, false, placed.breaking, false);
                 }
             }
         }
@@ -130,7 +133,8 @@ public class BlockPreviewRenderer {
                 var breaking = BuildModeHandler.isCurrentlyBreaking(player);
 
                 //get coordinates
-                var startCoordinates = BuildModeHandler.findCoordinates(player, startPos, breaking || BuildModifierHelper.isQuickReplace(player));
+                var skipRaytrace = breaking || BuildModifierHelper.isQuickReplace(player);
+                var startCoordinates = BuildModeHandler.findCoordinates(player, startPos, skipRaytrace);
 
                 //Remember first and last point for the shader
                 var firstPos = BlockPos.ZERO;
@@ -148,10 +152,9 @@ public class BlockPreviewRenderer {
 
                 var newCoordinates = BuildModifierHandler.findCoordinates(player, startCoordinates);
 
-                sortOnDistanceToPlayer(newCoordinates, player);
+//                sortOnDistanceToPlayer(newCoordinates, player);
 
-                hitVec = new Vec3(Math.abs(hitVec.x - ((int) hitVec.x)), Math.abs(hitVec.y - ((int) hitVec.y)),
-                        Math.abs(hitVec.z - ((int) hitVec.z)));
+                hitVec = new Vec3(Math.abs(hitVec.x - ((int) hitVec.x)), Math.abs(hitVec.y - ((int) hitVec.y)), Math.abs(hitVec.z - ((int) hitVec.z)));
 
                 //Get blockstates
                 var itemStacks = new ArrayList<ItemStack>();
@@ -192,11 +195,11 @@ public class BlockPreviewRenderer {
 
                 //Render block previews
                 if (!blockStates.isEmpty() && newCoordinates.size() == blockStates.size()) {
-                    int blockCount;
+                    PlaceResult placeResult;
 
                     //Use fancy shader if config allows, otherwise outlines
                     if (PreviewConfig.useShader() && newCoordinates.size() < PreviewConfig.shaderThresholdRounded()) {
-                        blockCount = renderBlockPreviews(poseStack, multiBufferSource, newCoordinates, blockStates, itemStacks, 0f, firstPos, secondPos, !breaking, breaking);
+                        placeResult = renderBlockPreviews(poseStack, multiBufferSource, newCoordinates, blockStates, itemStacks, 0f, firstPos, secondPos, !breaking, breaking, true);
                     } else {
                         VertexConsumer buffer = RenderUtils.beginLines(multiBufferSource);
 
@@ -210,7 +213,7 @@ public class BlockPreviewRenderer {
 
                         RenderUtils.endLines(multiBufferSource);
 
-                        blockCount = newCoordinates.size();
+                        placeResult = renderBlockPreviews(poseStack, multiBufferSource, newCoordinates, blockStates, itemStacks, 0f, firstPos, secondPos, !breaking, breaking, true);
                     }
 
                     //Display block count and dimensions in actionbar
@@ -230,14 +233,19 @@ public class BlockPreviewRenderer {
                         }
                         var dim = new BlockPos(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
 
-                        String dimensions = " (";
+                        String dimensions = "(";
                         if (dim.getX() > 1) dimensions += dim.getX() + "x";
                         if (dim.getZ() > 1) dimensions += dim.getZ() + "x";
                         if (dim.getY() > 1) dimensions += dim.getY() + "x";
                         dimensions = dimensions.substring(0, dimensions.length() - 1);
                         if (dimensions.length() > 1) dimensions += ")";
 
-                        Effortless.log(player, ChatFormatting.GOLD + BuildModeHelper.getTranslatedModeOptionName(player) + ChatFormatting.RESET + " of " + blockCount + " " + (blockCount == 1 ? "block" : "blocks") + dimensions, true);
+
+                        var blockCounter = "" + ChatFormatting.WHITE + placeResult.validBlocks() + ChatFormatting.RESET + (placeResult.isFilled() ? " " : " + " + ChatFormatting.RED + placeResult.want() + ChatFormatting.RESET + " ") + (placeResult.totalBlocks() == 1 ? "block" : "blocks");
+
+                        Effortless.log(player, "%s%s of %s %s".formatted(ChatFormatting.GOLD, BuildModeHelper.getTranslatedModeOptionName(player), blockCounter, dimensions), true);
+                    } else {
+                        Effortless.log(player, "", true);
                     }
                 }
 
@@ -275,33 +283,50 @@ public class BlockPreviewRenderer {
         return ConfigManager.getGlobalPreviewConfig().isAlwaysShowBlockPreview() || (BuildModeHelper.getBuildMode(player) != BuildMode.DISABLE);
     }
 
-    protected static int renderBlockPreviews(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPos> coordinates, List<BlockState> blockStates,
+    protected static PlaceResult renderBlockPreviews(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPos> coordinates, List<BlockState> blockStates,
                                              List<ItemStack> itemStacks, float dissolve, BlockPos firstPos,
-                                             BlockPos secondPos, boolean checkCanPlace, boolean red) {
+                                             BlockPos secondPos, boolean checkCanPlace, boolean breaking, boolean render) {
         var player = Minecraft.getInstance().player;
         var modifierSettings = BuildModifierHelper.getModifierSettings(player);
         var dispatcher = Minecraft.getInstance().getBlockRenderer();
         int blocksValid = 0;
+        int blockTotal = 0;
 
-        if (coordinates.isEmpty()) return blocksValid;
+        if (coordinates.isEmpty()) {
+            return new PlaceResult(blocksValid, blockTotal);
+        }
 
-        for (int i = coordinates.size() - 1; i >= 0; i--) {
+        var blockLeft = new HashMap<Block, Integer>();
+
+        for (int i = 0; i < coordinates.size(); i++) {
             var blockPos = coordinates.get(i);
             var blockState = blockStates.get(i);
-            var itemstack = itemStacks.isEmpty() ? ItemStack.EMPTY : itemStacks.get(i);
-            if (CompatHelper.isItemBlockProxy(itemstack))
-                itemstack = CompatHelper.getItemBlockByState(itemstack, blockState);
-
+            // TODO: 13/12/22 remove
+            var itemStack = itemStacks.isEmpty() ? ItemStack.EMPTY : itemStacks.get(i);
+            if (!blockLeft.containsKey(blockState.getBlock())) {
+                blockLeft.put(blockState.getBlock(), InventoryHelper.findTotalBlocksInInventory(player, blockState.getBlock()));
+            }
             //Check if can place
             //If check is turned off, check if blockstate is the same (for dissolve effect)
             if ((!checkCanPlace /*&& player.world.getNewBlockState(blockPos) == blockState*/) || //TODO enable (breaks the breaking shader)
-                    SurvivalHelper.canPlace(player.level, player, blockPos, blockState, itemstack, modifierSettings.enableQuickReplace(), Direction.UP)) {
+                    SurvivalHelper.canPlace(player.level, player, blockPos, blockState, itemStack, modifierSettings.enableQuickReplace(), Direction.UP)) {
 
-                RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, red);
-                blocksValid++;
+                var count = blockLeft.get(blockState.getBlock());
+                if (!breaking && (player.isCreative() || count > 0)) {
+                    if (render) RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
+                    if (!player.isCreative()) {
+                        blockLeft.put(blockState.getBlock(), count - 1);
+                    }
+                    blocksValid++;
+                } else {
+                    RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
+                    if (breaking) blocksValid++;
+                }
+                blockTotal++;
             }
         }
-        return blocksValid;
+
+        return new PlaceResult(blocksValid, blockTotal);
     }
 
     public void onBlocksPlaced() {
@@ -370,5 +395,20 @@ public class BlockPreviewRenderer {
             BlockPos secondPos,
             boolean breaking
     ) {
+    }
+
+    record PlaceResult(
+            int validBlocks,
+            int totalBlocks
+    ) {
+
+        public boolean isFilled() {
+            return validBlocks == totalBlocks;
+        }
+        public int want() {
+            return totalBlocks - validBlocks;
+        }
+
+
     }
 }

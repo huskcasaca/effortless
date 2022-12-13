@@ -75,7 +75,8 @@ public class BuildModeHandler {
 
         //Even when no starting block is found, call buildmode instance
         //We might want to place things in the air
-        List<BlockPos> coordinates = buildMode.getInstance().onRightClick(player, startPos, packet.sideHit(), packet.hitVec(), modifierSettings.enableQuickReplace());
+        var skipRaytrace = modifierSettings.enableQuickReplace();
+        var coordinates = buildMode.getInstance().onRightClick(player, startPos, packet.sideHit(), packet.hitVec(), skipRaytrace);
 
         if (coordinates.isEmpty()) {
             currentlyBreaking.put(player, false);

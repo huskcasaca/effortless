@@ -190,10 +190,11 @@ public class SurvivalHelper {
      */
     public static boolean canPlace(Level world, Player player, BlockPos pos, BlockState newBlockState, ItemStack itemStack, boolean skipCollisionCheck, Direction sidePlacedOn) {
         if (BuildModifierHelper.isReplace(player)) {
-            if (true) return true;
+            return true;
         } else {
             return world.getBlockState(pos).canBeReplaced();
         }
+        /* TODO: 13/12/22 placement check
         //Check if itemstack is correct
         if (!(itemStack.getItem() instanceof BlockItem) || Block.byItem(itemStack.getItem()) != newBlockState.getBlock()) {
 //            Effortless.log(player, "Cannot (re)place block", true);
@@ -208,6 +209,7 @@ public class SurvivalHelper {
         return !itemStack.isEmpty() && canPlayerEdit(player, world, pos, itemStack) &&
 //                mayPlace(world, block, newBlockState, pos, skipCollisionCheck, sidePlacedOn, player) &&
                 canReplace(world, player, pos);
+         */
     }
 
     //Can be harvested with hand? (or in creative)
