@@ -96,7 +96,7 @@ public class BlockPreviewRenderer {
 
             //Check if tool (or none) in hand
             //TODO 1.13 replaceable
-            boolean replaceable = player.level.getBlockState(startPos).getMaterial().isReplaceable();
+            boolean replaceable = player.level.getBlockState(startPos).canBeReplaced();
             boolean becomesDoubleSlab = SurvivalHelper.doesBecomeDoubleSlab(player, startPos, blockLookingAt.getDirection());
             if (!BuildModifierHelper.isQuickReplace(player) && !toolInHand && !replaceable && !becomesDoubleSlab) {
                 startPos = startPos.relative(blockLookingAt.getDirection());
@@ -316,7 +316,7 @@ public class BlockPreviewRenderer {
         if (doRenderBlockPreviews(player, firstPos)) {
 
             //Save current coordinates, blockstates and itemstacks
-            if (!coordinates.isEmpty() && blockStates.size() == coordinates.size() &&
+            if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() &&
                     coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
 
                 placedDataList.add(new PlacedData(EffortlessClient.ticksInGame, coordinates, blockStates,
@@ -338,7 +338,7 @@ public class BlockPreviewRenderer {
         if (doRenderBlockPreviews(player, firstPos)) {
 
             //Save current coordinates, blockstates and itemstacks
-            if (!coordinates.isEmpty() && blockStates.size() == coordinates.size() &&
+            if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() &&
                     coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
 
                 sortOnDistanceToPlayer(coordinates, player);
