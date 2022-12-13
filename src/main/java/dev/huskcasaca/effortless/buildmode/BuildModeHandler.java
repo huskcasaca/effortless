@@ -27,8 +27,8 @@ public class BuildModeHandler {
 
     //Static variables are shared between client and server in singleplayer
     //We need them separate
-    public static Dictionary<Player, Boolean> currentlyBreakingClient = new Hashtable<>();
-    public static Dictionary<Player, Boolean> currentlyBreakingServer = new Hashtable<>();
+    private static final Dictionary<Player, Boolean> currentlyBreakingClient = new Hashtable<>();
+    private static final Dictionary<Player, Boolean> currentlyBreakingServer = new Hashtable<>();
 
     //Uses a network message to get the previous raytraceresult from the player
     //The server could keep track of all raytraceresults but this might lag with many players

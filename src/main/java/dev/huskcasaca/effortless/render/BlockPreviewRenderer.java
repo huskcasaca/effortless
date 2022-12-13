@@ -127,10 +127,10 @@ public class BlockPreviewRenderer {
             if (sideHit != null) {
 
                 //Should be red?
-                boolean breaking = BuildModeHandler.currentlyBreakingClient.get(player) != null && BuildModeHandler.currentlyBreakingClient.get(player);
+                var breaking = BuildModeHandler.isCurrentlyBreaking(player);
 
                 //get coordinates
-                List<BlockPos> startCoordinates = BuildModeHandler.findCoordinates(player, startPos, breaking || BuildModifierHelper.isQuickReplace(player));
+                var startCoordinates = BuildModeHandler.findCoordinates(player, startPos, breaking || BuildModifierHelper.isQuickReplace(player));
 
                 //Remember first and last point for the shader
                 var firstPos = BlockPos.ZERO;
@@ -146,7 +146,7 @@ public class BlockPreviewRenderer {
                     startCoordinates = startCoordinates.subList(0, limit);
                 }
 
-                List<BlockPos> newCoordinates = BuildModifierHandler.findCoordinates(player, startCoordinates);
+                var newCoordinates = BuildModifierHandler.findCoordinates(player, startCoordinates);
 
                 sortOnDistanceToPlayer(newCoordinates, player);
 
@@ -154,8 +154,8 @@ public class BlockPreviewRenderer {
                         Math.abs(hitVec.z - ((int) hitVec.z)));
 
                 //Get blockstates
-                List<ItemStack> itemStacks = new ArrayList<>();
-                List<BlockState> blockStates = new ArrayList<>();
+                var itemStacks = new ArrayList<ItemStack>();
+                var blockStates = (List<BlockState>) new ArrayList<BlockState>();
                 if (breaking) {
                     //Find blockstate of world
                     for (var coordinate : newCoordinates) {
