@@ -19,6 +19,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 @Environment(EnvType.CLIENT)
 public class RenderUtils {
 
+    private static RandomSource RAND = RandomSource.create();
+
     protected static VertexConsumer beginLines(MultiBufferSource.BufferSource renderTypeBuffer) {
         return renderTypeBuffer.getBuffer(BuildRenderType.lines());
     }
@@ -51,11 +53,13 @@ public class RenderUtils {
         VertexConsumer buffer = renderTypeBuffer.getBuffer(blockPreviewRenderType);
 
         try {
-            BakedModel model = dispatcher.getBlockModel(blockState);
+            var level = Minecraft.getInstance().level;
+            var model = dispatcher.getBlockModel(blockState);
+            var seed = blockState.getSeed(firstPos);
             // TODO: 8/9/22
 //            dispatcher.getModelRenderer().renderModel(poseStack.last(), buffer, blockState, model,
 //                    1f, 1f, 1f, 0, OverlayTexture.NO_OVERLAY/*, ModelData.EMPTY, blockPreviewRenderType*/);
-            dispatcher.getModelRenderer().tesselateBlock(Minecraft.getInstance().level, dispatcher.getBlockModel(blockState), blockState, blockPos, poseStack, buffer, false, RandomSource.create(), blockState.getSeed(firstPos), OverlayTexture.NO_OVERLAY);
+            dispatcher.getModelRenderer().tesselateBlock(level, model, blockState, blockPos, poseStack, buffer, false, RAND, seed, OverlayTexture.NO_OVERLAY);
         } catch (NullPointerException e) {
             Effortless.logger.warn("RenderUtils::renderBlockPreview cannot render " + blockState.getBlock().toString());
 
