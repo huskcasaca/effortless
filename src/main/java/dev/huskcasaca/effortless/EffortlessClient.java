@@ -220,7 +220,7 @@ public class EffortlessClient implements ClientModInitializer {
         sink.registerShader(
                 // TODO: 10/9/22 use custom namespace
                 new ShaderInstance(resourceProvider, "dissolve", DefaultVertexFormat.BLOCK),
-                (shaderInstance) -> BuildRenderType.dissolveShaderInstance = shaderInstance
+                (shaderInstance) -> BuildRenderType.setDissolveShaderInstance(shaderInstance)
         );
     }
 
