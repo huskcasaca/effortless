@@ -18,13 +18,13 @@ import java.util.OptionalDouble;
 
 @Environment(EnvType.CLIENT)
 public class BuildRenderType extends RenderType {
-    public static final RenderType EF_LINES;
-    public static final RenderType EF_PLANES;
+    private static final RenderType EF_LINES;
+    private static final RenderType EF_PLANES;
     //Between 0 and 7, but dont override vanilla textures
     //Also update dissolve.fsh SamplerX
     private static final int MASK_TEXTURE_INDEX = 2;
-    public static final ResourceLocation shaderMaskTextureLocation = new ResourceLocation("textures/shader_mask.png");
-    public static ShaderInstance dissolveShaderInstance;
+    private static final ResourceLocation SHADER_MASK_TEXTURE_LOCATION = new ResourceLocation(Effortless.MOD_ID, "textures/shader_mask.png");
+    private static ShaderInstance dissolveShaderInstance;
     private static final ShaderStateShard RENDER_TYPE_DISSOLVE_SHADER = new ShaderStateShard(() -> dissolveShaderInstance);
 
     static {
@@ -88,7 +88,7 @@ public class BuildRenderType extends RenderType {
 
         String stateName = "ef_texturing_" + dissolve + "_" + blockPos + "_" + firstPos + "_" + secondPos + "_" + red;
         TexturingStateShard MY_TEXTURING = new TexturingStateShard(stateName, () -> {
-            setShaderParameters(dissolveShaderInstance, dissolve, Vec3.atLowerCornerOf(blockPos), Vec3.atLowerCornerOf(firstPos), Vec3.atLowerCornerOf(secondPos), blockPos == secondPos, red);
+            setShaderParameters(getDissolveShaderInstance(), dissolve, Vec3.atLowerCornerOf(blockPos), Vec3.atLowerCornerOf(firstPos), Vec3.atLowerCornerOf(secondPos), blockPos == secondPos, red);
             RenderSystem.setShaderColor(1f, 1f, 1f, 0.8f);
         }, () -> {
         });
@@ -118,7 +118,7 @@ public class BuildRenderType extends RenderType {
         Uniform firstposUniform = shader.getUniform("firstpos");
         Uniform secondposUniform = shader.getUniform("secondpos");
 
-        RenderSystem.setShaderTexture(MASK_TEXTURE_INDEX, shaderMaskTextureLocation);
+        RenderSystem.setShaderTexture(MASK_TEXTURE_INDEX, SHADER_MASK_TEXTURE_LOCATION);
 
         if (percentileUniform != null) percentileUniform.set(dissolve);
         else Effortless.log("percentile uniform is null");
@@ -134,6 +134,14 @@ public class BuildRenderType extends RenderType {
         if (secondposUniform != null)
             secondposUniform.set((float) secondpos.x, (float) secondpos.y, (float) secondpos.z);
         else Effortless.log("secondpos uniform is null");
+    }
+
+    public static ShaderInstance getDissolveShaderInstance() {
+        return dissolveShaderInstance;
+    }
+
+    public static void setDissolveShaderInstance(ShaderInstance dissolveShaderInstance) {
+        BuildRenderType.dissolveShaderInstance = dissolveShaderInstance;
     }
 
     private record ShaderInfo(
