@@ -30,7 +30,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -48,7 +47,7 @@ public class EffortlessClient implements ClientModInitializer {
     public static KeyMapping[] keyBindings;
     public static HitResult previousLookAt;
     public static HitResult currentLookAt;
-    public static int ticksInGame = 0;
+    private static int ticksInGame = 0;
 
     public static void onStartClientTick(Minecraft client) {
         //Update previousLookAt
@@ -223,6 +222,10 @@ public class EffortlessClient implements ClientModInitializer {
                 new ShaderInstance(resourceProvider, "dissolve", DefaultVertexFormat.BLOCK),
                 (shaderInstance) -> BuildRenderType.dissolveShaderInstance = shaderInstance
         );
+    }
+
+    public static int getTicksInGame() {
+        return ticksInGame;
     }
 
     @Override

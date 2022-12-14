@@ -6,14 +6,14 @@ import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
-import dev.huskcasaca.effortless.buildmode.Buildable;
 import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
+import dev.huskcasaca.effortless.buildmode.Buildable;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHandler;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
+import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.config.ConfigManager;
 import dev.huskcasaca.effortless.config.PreviewConfig;
 import dev.huskcasaca.effortless.utils.CompatHelper;
-import dev.huskcasaca.effortless.buildreach.ReachHelper;
 import dev.huskcasaca.effortless.utils.InventoryHelper;
 import dev.huskcasaca.effortless.utils.SurvivalHelper;
 import net.fabricmc.api.EnvType;
@@ -36,48 +36,184 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Environment(EnvType.CLIENT)
 public class BlockPreviewRenderer {
 
     private static final BlockPreviewRenderer INSTANCE = new BlockPreviewRenderer();
-
-    public static BlockPreviewRenderer getInstance() {
-        return INSTANCE;
-    }
-
     private final Minecraft minecraft;
-    private final List<PlacedData> placedDataList = new ArrayList<>();
+    private final List<Preview> previews = new ArrayList<>();
     private List<BlockPos> previousCoordinates;
     private List<BlockState> previousBlockStates;
     private List<ItemStack> previousItemStacks;
     private BlockPos previousFirstPos;
     private BlockPos previousSecondPos;
     private int soundTime = 0;
-
     public BlockPreviewRenderer() {
         this.minecraft = Minecraft.getInstance();
+    }
+
+    public static BlockPreviewRenderer getInstance() {
+        return INSTANCE;
+    }
+
+    //Whether to draw any block previews or outlines
+    public static boolean doRenderBlockPreviews(Player player, BlockPos startPos) {
+        return ConfigManager.getGlobalPreviewConfig().isAlwaysShowBlockPreview() || (BuildModeHelper.getBuildMode(player) != BuildMode.DISABLE);
+    }
+
+    public static List<BlockPosState> getBlockPosStates(List<BlockPos> coordinates, List<BlockState> blockStates) {
+        if (coordinates.size() != blockStates.size()) {
+            throw new IllegalArgumentException("Coordinates and blockstates must be the same size");
+        }
+        if (coordinates.isEmpty()) {
+            return Collections.emptyList();
+        }
+        var result = new ArrayList<BlockPosState>();
+        for (int i = 0; i < coordinates.size(); i++) {
+            var coordinate = coordinates.get(i);
+            var blockState = blockStates.get(i);
+            if (coordinate == null || blockState == null) {
+                throw new IllegalArgumentException("Coordinate or blockstate is null");
+            }
+            result.add(new BlockPosState(coordinate, blockState, null, null));
+        }
+        return result;
+    }
+
+    public static List<BlockPosState> getBlockPosStates(Player player, List<BlockPos> coordinates, List<BlockState> blockStates) {
+        if (coordinates.size() != blockStates.size()) {
+            throw new IllegalArgumentException("Coordinates and blockstates must be the same size");
+        }
+        if (coordinates.isEmpty()) {
+            return Collections.emptyList();
+        }
+        var result = new ArrayList<BlockPosState>();
+        for (int i = 0; i < coordinates.size(); i++) {
+            var coordinate = coordinates.get(i);
+            var blockState = blockStates.get(i);
+            if (coordinate == null || blockState == null) {
+                throw new IllegalArgumentException("Coordinate or blockstate is null");
+            }
+            result.add(new BlockPosState(coordinate, blockState, SurvivalHelper.canPlace(player.level, player, coordinate, blockState), SurvivalHelper.canBreak(player.level, player, coordinate)));
+        }
+        return result;
+    }
+
+    public static Map<Block, Integer> getPlayerBlockCount(Player player, List<BlockState> blockStates) {
+        var result = new HashMap<Block, Integer>();
+        blockStates.forEach(blockState -> {
+            result.putIfAbsent(blockState.getBlock(), InventoryHelper.findTotalBlocksInInventory(player, blockState.getBlock()));
+        });
+        return result;
+    }
+
+    public static void renderBlockPreviews(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
+        var player = Minecraft.getInstance().player;
+        var dispatcher = Minecraft.getInstance().getBlockRenderer();
+
+        if (placeData.isEmpty()) return;
+
+        var blockLeft = new HashMap<>(blocksLeft);
+
+        for (BlockPosState placeDatum : placeData) {
+            var blockPos = placeDatum.coordinate;
+            var blockState = placeDatum.blockState;
+            var canBreak = placeDatum.canBreak;
+            var canPlace = placeDatum.canPlace;
+
+            if (breaking) {
+                if (canBreak != null && canBreak || SurvivalHelper.canBreak(player.level, player, blockPos)) {
+                    RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
+                }
+            } else {
+                if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level, player, placeDatum.coordinate, blockState)) {
+                    if ((player.isCreative())) {
+                        RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
+                        return;
+                    }
+                    var count = blockLeft.get(blockState.getBlock());
+                    if (count > 0) {
+                        RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
+                        blockLeft.put(blockState.getBlock(), count - 1);
+                    } else {
+                        RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
+                    }
+                }
+            }
+        }
+    }
+
+    public static UseResult getBlockUseResult(List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, boolean breaking) {
+        if (placeData.isEmpty()) {
+            return UseResult.EMPTY;
+        }
+        var player = Minecraft.getInstance().player;
+
+        var valid = new HashMap<Block, Integer>();
+        var total = new HashMap<Block, Integer>();
+
+        var left = new HashMap<>(blocksLeft);
+
+        for (BlockPosState placeDatum : placeData) {
+            var blockPos = placeDatum.coordinate;
+            var blockState = placeDatum.blockState;
+
+            if (breaking) {
+                var canBreak = SurvivalHelper.canBreak(player.level, player, blockPos);
+                if (canBreak) {
+                    valid.put(blockState.getBlock(), valid.getOrDefault(blockState.getBlock(), 0) + 1);
+                    total.put(blockState.getBlock(), total.getOrDefault(blockState.getBlock(), 0) + 1);
+                }
+
+            } else {
+                var canPlace = SurvivalHelper.canPlace(player.level, player, placeDatum.coordinate, blockState);
+                if (canPlace) {
+                    if (player.isCreative()) {
+                        valid.put(blockState.getBlock(), valid.getOrDefault(blockState.getBlock(), 0) + 1);
+                    } else {
+                        var count = left.get(blockState.getBlock());
+                        if (count > 0) {
+                            left.put(blockState.getBlock(), count - 1);
+                            valid.put(blockState.getBlock(), valid.getOrDefault(blockState.getBlock(), 0) + 1);
+                        }
+                    }
+                    total.put(blockState.getBlock(), total.getOrDefault(blockState.getBlock(), 0) + 1);
+                }
+            }
+        }
+
+        return new UseResult(valid, total);
+    }
+
+    private static void sortOnDistanceToPlayer(List<BlockPos> coordinates, Player player) {
+
+        coordinates.sort((lhs, rhs) -> {
+            // -1 - less than, 1 - greater than, 0 - equal
+            double lhsDistanceToPlayer = Vec3.atLowerCornerOf(lhs).subtract(player.getEyePosition(1f)).lengthSqr();
+            double rhsDistanceToPlayer = Vec3.atLowerCornerOf(rhs).subtract(player.getEyePosition(1f)).lengthSqr();
+            return (int) Math.signum(lhsDistanceToPlayer - rhsDistanceToPlayer);
+        });
+
     }
 
     public void render(Player player, PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, Camera camera) {
         //Render placed blocks with dissolve effect
         //Use fancy shader if config allows, otherwise no dissolve
         if (PreviewConfig.useShader()) {
-            for (PlacedData placed : placedDataList) {
-                if (placed.coordinates != null && !placed.coordinates.isEmpty()) {
+            for (Preview placed : previews) {
+                if (placed.blockPosStates() != null && !placed.blockPosStates().isEmpty()) {
                     double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();
-                    float dissolve = (EffortlessClient.ticksInGame - placed.time) / (float) totalTime;
-                    renderBlockPreviews(poseStack, multiBufferSource, placed.coordinates, placed.blockStates, placed.itemStacks, dissolve, placed.firstPos, placed.secondPos, false, placed.breaking, false);
+                    float dissolve = (EffortlessClient.getTicksInGame() - placed.time) / (float) totalTime;
+                    renderBlockPreviews(poseStack, multiBufferSource, placed.blockPosStates(), placed.blocksLeft(), placed.firstPos, placed.secondPos, dissolve, placed.breaking);
                 }
             }
         }
         //Expire
-        placedDataList.removeIf(placed -> {
+        previews.removeIf(placed -> {
             double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();
-            return placed.time + totalTime < EffortlessClient.ticksInGame;
+            return placed.time + totalTime < EffortlessClient.getTicksInGame();
         });
 
         //Render block previews
@@ -182,24 +318,23 @@ public class BlockPreviewRenderer {
                     //if so, renew randomness of randomizer bag
 //					AbstractRandomizerBagItem.renewRandomness();
                     //and play sound (max once every tick)
-                    if (newCoordinates.size() > 1 && blockStates.size() > 1 && soundTime < EffortlessClient.ticksInGame) {
-                        soundTime = EffortlessClient.ticksInGame;
+                    if (newCoordinates.size() > 1 && blockStates.size() > 1 && soundTime < EffortlessClient.getTicksInGame()) {
+                        soundTime = EffortlessClient.getTicksInGame();
 
                         if (blockStates.get(0) != null) {
                             SoundType soundType = blockStates.get(0).getBlock().getSoundType(blockStates.get(0));
-                            player.level.playSound(player, player.blockPosition(), breaking ? soundType.getBreakSound() : soundType.getPlaceSound(),
-                                    SoundSource.BLOCKS, 0.3f, 0.8f);
+                            player.level.playSound(player, player.blockPosition(), breaking ? soundType.getBreakSound() : soundType.getPlaceSound(), SoundSource.BLOCKS, 0.3f, 0.8f);
                         }
                     }
                 }
 
                 //Render block previews
                 if (!blockStates.isEmpty() && newCoordinates.size() == blockStates.size()) {
-                    PlaceResult placeResult;
 
                     //Use fancy shader if config allows, otherwise outlines
                     if (PreviewConfig.useShader() && newCoordinates.size() < PreviewConfig.shaderThresholdRounded()) {
-                        placeResult = renderBlockPreviews(poseStack, multiBufferSource, newCoordinates, blockStates, itemStacks, 0f, firstPos, secondPos, !breaking, breaking, true);
+
+                        renderBlockPreviews(poseStack, multiBufferSource, getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, 0f, breaking);
                     } else {
                         VertexConsumer buffer = RenderUtils.beginLines(multiBufferSource);
 
@@ -212,9 +347,8 @@ public class BlockPreviewRenderer {
                         }
 
                         RenderUtils.endLines(multiBufferSource);
-
-                        placeResult = renderBlockPreviews(poseStack, multiBufferSource, newCoordinates, blockStates, itemStacks, 0f, firstPos, secondPos, !breaking, breaking, true);
                     }
+                    var placeResult = getBlockUseResult(getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), breaking);
 
                     //Display block count and dimensions in actionbar
                     if (BuildModeHandler.isActive(player)) {
@@ -278,75 +412,18 @@ public class BlockPreviewRenderer {
         }
     }
 
-    //Whether to draw any block previews or outlines
-    public static boolean doRenderBlockPreviews(Player player, BlockPos startPos) {
-        return ConfigManager.getGlobalPreviewConfig().isAlwaysShowBlockPreview() || (BuildModeHelper.getBuildMode(player) != BuildMode.DISABLE);
-    }
-
-    protected static PlaceResult renderBlockPreviews(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPos> coordinates, List<BlockState> blockStates,
-                                             List<ItemStack> itemStacks, float dissolve, BlockPos firstPos,
-                                             BlockPos secondPos, boolean checkCanPlace, boolean breaking, boolean render) {
-        var player = Minecraft.getInstance().player;
-        var modifierSettings = BuildModifierHelper.getModifierSettings(player);
-        var dispatcher = Minecraft.getInstance().getBlockRenderer();
-        int blocksValid = 0;
-        int blockTotal = 0;
-
-        if (coordinates.isEmpty()) {
-            return new PlaceResult(blocksValid, blockTotal);
-        }
-
-        var blockLeft = new HashMap<Block, Integer>();
-
-        for (int i = 0; i < coordinates.size(); i++) {
-            var blockPos = coordinates.get(i);
-            var blockState = blockStates.get(i);
-            // TODO: 13/12/22 remove
-            var itemStack = itemStacks.isEmpty() ? ItemStack.EMPTY : itemStacks.get(i);
-            if (!blockLeft.containsKey(blockState.getBlock())) {
-                blockLeft.put(blockState.getBlock(), InventoryHelper.findTotalBlocksInInventory(player, blockState.getBlock()));
-            }
-            //Check if can place
-            //If check is turned off, check if blockstate is the same (for dissolve effect)
-            if ((!checkCanPlace /*&& player.world.getNewBlockState(blockPos) == blockState*/) || //TODO enable (breaks the breaking shader)
-                    SurvivalHelper.canPlace(player.level, player, blockPos, blockState, itemStack, modifierSettings.enableQuickReplace(), Direction.UP)) {
-
-                var count = blockLeft.get(blockState.getBlock());
-                if (!breaking && (player.isCreative() || count > 0)) {
-                    if (render) RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
-                    if (!player.isCreative()) {
-                        blockLeft.put(blockState.getBlock(), count - 1);
-                    }
-                    blocksValid++;
-                } else {
-                    RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
-                    if (breaking) blocksValid++;
-                }
-                blockTotal++;
-            }
-        }
-
-        return new PlaceResult(blocksValid, blockTotal);
-    }
-
     public void onBlocksPlaced() {
         onBlocksPlaced(previousCoordinates, previousItemStacks, previousBlockStates, previousFirstPos, previousSecondPos);
     }
 
-    public void onBlocksPlaced(List<BlockPos> coordinates, List<ItemStack> itemStacks, List<BlockState> blockStates,
-                               BlockPos firstPos, BlockPos secondPos) {
+    public void onBlocksPlaced(List<BlockPos> coordinates, List<ItemStack> itemStacks, List<BlockState> blockStates, BlockPos firstPos, BlockPos secondPos) {
         var player = Minecraft.getInstance().player;
 
-        //Check if block previews are enabled
-        if (doRenderBlockPreviews(player, firstPos)) {
-
-            //Save current coordinates, blockstates and itemstacks
-            if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() &&
-                    coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
-
-                placedDataList.add(new PlacedData(EffortlessClient.ticksInGame, coordinates, blockStates,
-                        itemStacks, firstPos, secondPos, false));
-            }
+        if (!doRenderBlockPreviews(player, firstPos)) {
+            return;
+        }
+        if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() && coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
+            previews.add(new Preview(getBlockPosStates(player, coordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, EffortlessClient.getTicksInGame(), false));
         }
 
     }
@@ -359,56 +436,54 @@ public class BlockPreviewRenderer {
                                BlockPos firstPos, BlockPos secondPos) {
         var player = Minecraft.getInstance().player;
 
-        //Check if block previews are enabled
         if (doRenderBlockPreviews(player, firstPos)) {
-
-            //Save current coordinates, blockstates and itemstacks
-            if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() &&
-                    coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
-
-                sortOnDistanceToPlayer(coordinates, player);
-
-                placedDataList.add(new PlacedData(EffortlessClient.ticksInGame, coordinates, blockStates,
-                        itemStacks, firstPos, secondPos, true));
-            }
+            return;
+        }
+        if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() && coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
+//                sortOnDistanceToPlayer(coordinates, player);
+            previews.add(new Preview(getBlockPosStates(coordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, EffortlessClient.getTicksInGame(), true));
         }
 
     }
 
-    private static void sortOnDistanceToPlayer(List<BlockPos> coordinates, Player player) {
+    record BlockPosState(
+            BlockPos coordinate,
+            BlockState blockState,
+            Boolean canPlace,
+            Boolean canBreak
+    ) { }
 
-        coordinates.sort((lhs, rhs) -> {
-            // -1 - less than, 1 - greater than, 0 - equal
-            double lhsDistanceToPlayer = Vec3.atLowerCornerOf(lhs).subtract(player.getEyePosition(1f)).lengthSqr();
-            double rhsDistanceToPlayer = Vec3.atLowerCornerOf(rhs).subtract(player.getEyePosition(1f)).lengthSqr();
-            return (int) Math.signum(lhsDistanceToPlayer - rhsDistanceToPlayer);
-        });
-
-    }
-
-    record PlacedData(
-            float time,
-            List<BlockPos> coordinates,
-            List<BlockState> blockStates,
-            List<ItemStack> itemStacks,
+    record Preview(
+            List<BlockPosState> blockPosStates,
+            Map<Block, Integer> blocksLeft,
             BlockPos firstPos,
             BlockPos secondPos,
+            float time,
             boolean breaking
-    ) {
-    }
+    ) { }
 
-    record PlaceResult(
-            int validBlocks,
-            int totalBlocks
+    record UseResult(
+            Map<Block, Integer> valid,
+            Map<Block, Integer> total
     ) {
+
+        public static UseResult EMPTY = new UseResult(Collections.emptyMap(), Collections.emptyMap());
+
+        public int validBlocks() {
+            return valid.values().stream().mapToInt(Integer::intValue).sum();
+        }
+
+        public int totalBlocks() {
+            return total.values().stream().mapToInt(Integer::intValue).sum();
+        }
 
         public boolean isFilled() {
-            return validBlocks == totalBlocks;
+            return validBlocks() == totalBlocks();
         }
+
         public int want() {
-            return totalBlocks - validBlocks;
+            return totalBlocks() - validBlocks();
         }
-
-
     }
+
 }
