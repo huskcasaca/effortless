@@ -212,6 +212,15 @@ public class SurvivalHelper {
          */
     }
 
+
+    public static boolean canPlace(Level world, Player player, BlockPos pos, BlockState newBlockState) {
+        if (BuildModifierHelper.isReplace(player)) {
+            return true;
+        } else {
+            return world.getBlockState(pos).canBeReplaced();
+        }
+    }
+
     //Can be harvested with hand? (or in creative)
     private static boolean canReplace(Level world, Player player, BlockPos pos) {
         // TODO: 3/9/22 fix state
