@@ -243,7 +243,7 @@ public class EffortlessClient implements ClientModInitializer {
         ClientReloadShadersEvent.REGISTER_SHADER.register(EffortlessClient::registerShaders);
 
         WorldRenderEvents.AFTER_ENTITIES.register((context) -> renderBlockPreview(context.matrixStack(), context.camera()));
-        WorldRenderEvents.BEFORE_DEBUG_RENDER.register((context) -> renderModifierSettings(context.matrixStack(), context.camera()));
+        WorldRenderEvents.LAST.register((context) -> renderModifierSettings(context.matrixStack(), context.camera()));
 
     }
 
