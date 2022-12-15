@@ -129,9 +129,9 @@ public class BlockPreviewRenderer {
                 }
             } else {
                 if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level, player, placeDatum.coordinate, blockState)) {
-                    if ((player.isCreative())) {
+                    if (player.isCreative()) {
                         RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
-                        return;
+                        continue;
                     }
                     var count = blockLeft.get(blockState.getBlock());
                     if (count > 0) {
