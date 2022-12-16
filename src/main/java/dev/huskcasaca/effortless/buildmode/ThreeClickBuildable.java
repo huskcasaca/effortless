@@ -62,10 +62,10 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
     }
 
     @Override
-    public List<BlockPos> onRightClick(Player player, BlockPos blockPos, Direction sideHit, Vec3 hitVec, boolean skipRaytrace) {
+    public List<BlockPos> onUse(Player player, BlockPos blockPos, Direction hitSide, Vec3 hitVec, boolean skipRaytrace) {
         List<BlockPos> list = new ArrayList<>();
 
-        var rightClickTable = player.level.isClientSide ? rightClickClientTable : rightClickServerTable;
+        var rightClickTable = player.level.isClientSide ? rightClickTableClient : rightClickTableServer;
         int rightClickNr = rightClickTable.get(player.getUUID());
         rightClickNr++;
         rightClickTable.put(player.getUUID(), rightClickNr);
@@ -79,7 +79,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
 
             //First click, remember starting position
             firstPosTable.put(player.getUUID(), blockPos);
-            sideHitTable.put(player.getUUID(), sideHit);
+            hitSideTable.put(player.getUUID(), hitSide);
             hitVecTable.put(player.getUUID(), hitVec);
             //Keep list empty, dont place any blocks yet
         } else if (rightClickNr == 2) {
@@ -106,7 +106,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
     @Override
     public List<BlockPos> findCoordinates(Player player, BlockPos blockPos, boolean skipRaytrace) {
         List<BlockPos> list = new ArrayList<>();
-        var rightClickTable = player.level.isClientSide ? rightClickClientTable : rightClickServerTable;
+        var rightClickTable = player.level.isClientSide ? rightClickTableClient : rightClickTableServer;
         int rightClickNr = rightClickTable.get(player.getUUID());
 
         if (rightClickNr == 0) {

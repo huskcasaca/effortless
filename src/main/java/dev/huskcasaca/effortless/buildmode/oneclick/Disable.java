@@ -16,7 +16,7 @@ public class Disable extends OneClickBuildable {
     }
 
     @Override
-    public List<BlockPos> onRightClick(Player player, BlockPos blockPos, Direction sideHit, Vec3 hitVec, boolean skipRaytrace) {
+    public List<BlockPos> onUse(Player player, BlockPos blockPos, Direction hitSide, Vec3 hitVec, boolean skipRaytrace) {
         List<BlockPos> list = new ArrayList<>();
         if (blockPos != null) list.add(blockPos);
         return list;
@@ -30,7 +30,7 @@ public class Disable extends OneClickBuildable {
     }
 
     @Override
-    public Direction getSideHit(Player player) {
+    public Direction getHitSide(Player player) {
         return null;
     }
 
