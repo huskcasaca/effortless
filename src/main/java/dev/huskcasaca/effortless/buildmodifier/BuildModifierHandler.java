@@ -121,7 +121,7 @@ public class BuildModifierHandler {
     }
 
     public static void onBlockBroken(Player player, List<BlockPos> startCoordinates, boolean breakStartPos) {
-        var world = player.level;
+        var level = player.level;
 
         var coordinates = findCoordinates(player, startCoordinates);
 
@@ -132,10 +132,10 @@ public class BuildModifierHandler {
         List<BlockState> newBlockStates = new ArrayList<>(coordinates.size());
 
         for (var coordinate : coordinates) {
-            previousBlockStates.add(world.getBlockState(coordinate));
+            previousBlockStates.add(level.getBlockState(coordinate));
         }
 
-        if (world.isClientSide) {
+        if (level.isClientSide) {
             BlockPreviewRenderer.getInstance().onBlocksBroken();
 
             //list of air blockstates
@@ -147,21 +147,21 @@ public class BuildModifierHandler {
 //        else {
         //If the player is going to inst-break grass or a plant, make sure to only break other inst-breakable things
         boolean onlyInstaBreaking = !player.isCreative() &&
-                world.getBlockState(startCoordinates.get(0)).getDestroySpeed(world, startCoordinates.get(0)) == 0f;
+                level.getBlockState(startCoordinates.get(0)).getDestroySpeed(level, startCoordinates.get(0)) == 0f;
 
         //break all those blocks
         for (int i = breakStartPos ? 0 : 1; i < coordinates.size(); i++) {
             var coordinate = coordinates.get(i);
-            if (world.isLoaded(coordinate) && !world.isEmptyBlock(coordinate)) {
-                if (!onlyInstaBreaking || world.getBlockState(coordinate).getDestroySpeed(world, coordinate) == 0f) {
-                    SurvivalHelper.breakBlock(world, player, coordinate, false);
+            if (level.isLoaded(coordinate) && !level.isEmptyBlock(coordinate)) {
+                if (!onlyInstaBreaking || level.getBlockState(coordinate).getDestroySpeed(level, coordinate) == 0f) {
+                    SurvivalHelper.breakBlock(level, player, coordinate, false);
                 }
             }
         }
 
         //find actual new blockstates for undo
         for (var coordinate : coordinates) {
-            newBlockStates.add(world.getBlockState(coordinate));
+            newBlockStates.add(level.getBlockState(coordinate));
         }
 //        }
 
