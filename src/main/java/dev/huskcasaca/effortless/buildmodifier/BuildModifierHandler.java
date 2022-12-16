@@ -32,7 +32,7 @@ import java.util.*;
 public class BuildModifierHandler {
 
     //Called from BuildModes
-    public static void onBlockPlaced(Player player, List<BlockPos> startCoordinates, Direction sideHit, Vec3 hitVec, boolean placeStartPos) {
+    public static void onBlockPlaced(Player player, List<BlockPos> startCoordinates, Direction hitSide, Vec3 hitVec, boolean placeStartPos) {
         var level = player.level;
 //		AbstractRandomizerBagItem.renewRandomness();
 
@@ -42,7 +42,7 @@ public class BuildModifierHandler {
         //find coordinates and blockstates
         var coordinates = findCoordinates(player, startCoordinates);
         var itemStacks = new ArrayList<ItemStack>();
-        var blockStates = findBlockStates(player, startCoordinates, hitVec, sideHit, itemStacks);
+        var blockStates = findBlockStates(player, startCoordinates, hitVec, hitSide, itemStacks);
 
         //check if valid blockstates
         if (blockStates.size() == 0 || coordinates.size() != blockStates.size()) return;
@@ -70,7 +70,7 @@ public class BuildModifierHandler {
                 var count = blockLeft.get(blockState.getBlock());
                 if (player.isCreative() || count > 0) {
                     if (level.isLoaded(blockPos)) {
-                        SurvivalHelper.placeBlock(level, player, blockPos, blockState, itemStack.copy(), sideHit, hitVec, false, false, false);
+                        SurvivalHelper.placeBlock(level, player, blockPos, blockState, itemStack.copy(), hitSide, hitVec, false, false, false);
                         if (!player.isCreative()) {
                             blockLeft.put(blockState.getBlock(), count - 1);
                         }
@@ -97,7 +97,7 @@ public class BuildModifierHandler {
                         itemStack = InventoryHelper.findItemStackInInventory(player, blockState.getBlock());
                         if (itemStack.isEmpty()) continue;
                     }
-                    SurvivalHelper.placeBlock(level, player, blockPos, blockState, itemStack, sideHit, hitVec, false, false, false);
+                    SurvivalHelper.placeBlock(level, player, blockPos, blockState, itemStack, hitSide, hitVec, false, false, false);
                 }
             }
             //find actual new blockstates for undo

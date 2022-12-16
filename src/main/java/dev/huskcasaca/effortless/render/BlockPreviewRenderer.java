@@ -225,7 +225,7 @@ public class BlockPreviewRenderer {
         boolean toolInHand = !(!mainhand.isEmpty() && CompatHelper.isItemBlockProxy(mainhand));
 
         BlockPos startPos = null;
-        Direction sideHit = null;
+        Direction hitSide = null;
         Vec3 hitVec = null;
 
         //Checking for null is necessary! Even in vanilla when looking down ladders it is occasionally null (instead of Type MISS)
@@ -247,7 +247,7 @@ public class BlockPreviewRenderer {
                 startPos = startPos.below();
             }
 
-            sideHit = blockLookingAt.getDirection();
+            hitSide = blockLookingAt.getDirection();
             hitVec = blockLookingAt.getLocation();
         }
 
@@ -259,11 +259,11 @@ public class BlockPreviewRenderer {
             //So dont rotate blocks when in the middle of placing wall etc.
             if (BuildModeHandler.isActive(player)) {
                 Buildable buildModeInstance = BuildModeHelper.getBuildMode(player).getInstance();
-                if (buildModeInstance.getSideHit(player) != null) sideHit = buildModeInstance.getSideHit(player);
+                if (buildModeInstance.getHitSide(player) != null) hitSide = buildModeInstance.getHitSide(player);
                 if (buildModeInstance.getHitVec(player) != null) hitVec = buildModeInstance.getHitVec(player);
             }
 
-            if (sideHit != null) {
+            if (hitSide != null) {
 
                 //Should be red?
                 var breaking = BuildModeHandler.isCurrentlyBreaking(player);
@@ -301,7 +301,7 @@ public class BlockPreviewRenderer {
                         blockStates.add(player.level.getBlockState(coordinate));
                     }
                 } else {
-                    blockStates = BuildModifierHandler.findBlockStates(player, startCoordinates, hitVec, sideHit, itemStacks);
+                    blockStates = BuildModifierHandler.findBlockStates(player, startCoordinates, hitVec, hitSide, itemStacks);
                 }
 
 
