@@ -29,6 +29,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -43,7 +44,8 @@ public class BlockPreviewRenderer {
 
     private static final BlockPreviewRenderer INSTANCE = new BlockPreviewRenderer();
     private final Minecraft minecraft;
-    private final List<Preview> previews = new ArrayList<>();
+    private final List<Preview> lastPlaced = new ArrayList<>();
+    private final List<Preview> currentPlacing = new ArrayList<>();
     private List<BlockPos> previousCoordinates;
     private List<BlockState> previousBlockStates;
     private List<ItemStack> previousItemStacks;
@@ -202,16 +204,17 @@ public class BlockPreviewRenderer {
         //Render placed blocks with dissolve effect
         //Use fancy shader if config allows, otherwise no dissolve
         if (PreviewConfig.useShader()) {
-            for (Preview placed : previews) {
+            for (Preview placed : lastPlaced) {
                 if (placed.blockPosStates() != null && !placed.blockPosStates().isEmpty()) {
                     double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();
                     float dissolve = (EffortlessClient.getTicksInGame() - placed.time) / (float) totalTime;
-                    renderBlockPreviews(poseStack, multiBufferSource, placed.blockPosStates(), placed.blocksLeft(), placed.firstPos, placed.secondPos, dissolve, placed.breaking);
+                    renderBlockPreviews(poseStack, multiBufferSource, placed.blockPosStates(), placed.useResult().valid(), placed.firstPos, placed.secondPos, dissolve, placed.breaking);
                 }
             }
         }
         //Expire
-        previews.removeIf(placed -> {
+        currentPlacing.clear();
+        lastPlaced.removeIf(placed -> {
             double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();
             return placed.time + totalTime < EffortlessClient.getTicksInGame();
         });
@@ -350,6 +353,8 @@ public class BlockPreviewRenderer {
                     }
                     var placeResult = getBlockUseResult(getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), breaking);
 
+                    currentPlacing.add(new Preview(getBlockPosStates(player, newCoordinates, blockStates), placeResult, firstPos, secondPos, EffortlessClient.getTicksInGame(), false));
+
                     //Display block count and dimensions in actionbar
                     if (BuildModeHandler.isActive(player)) {
 
@@ -375,9 +380,9 @@ public class BlockPreviewRenderer {
                         if (dimensions.length() > 1) dimensions += ")";
 
 
-                        var blockCounter = "" + ChatFormatting.WHITE + placeResult.validBlocks() + ChatFormatting.RESET + (placeResult.isFilled() ? " " : " + " + ChatFormatting.RED + placeResult.want() + ChatFormatting.RESET + " ") + (placeResult.totalBlocks() == 1 ? "block" : "blocks");
+                        var blockCounter = "" + ChatFormatting.WHITE + placeResult.validBlocks() + ChatFormatting.RESET + (placeResult.isFilled() ? " " : " + " + ChatFormatting.RED + placeResult.wantedBlocks() + ChatFormatting.RESET + " ") + (placeResult.totalBlocks() == 1 ? "block" : "blocks");
 
-                        Effortless.log(player, "%s%s of %s %s".formatted(ChatFormatting.GOLD, BuildModeHelper.getTranslatedModeOptionName(player), blockCounter, dimensions), true);
+                        Effortless.log(player, "%s%s%s of %s %s".formatted(ChatFormatting.GOLD, BuildModeHelper.getTranslatedModeOptionName(player), ChatFormatting.RESET, blockCounter, dimensions), true);
                     } else {
                         Effortless.log(player, "", true);
                     }
@@ -423,7 +428,7 @@ public class BlockPreviewRenderer {
             return;
         }
         if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() && coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
-            previews.add(new Preview(getBlockPosStates(player, coordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, EffortlessClient.getTicksInGame(), false));
+            lastPlaced.add(new Preview(getBlockPosStates(player, coordinates, blockStates), getBlockUseResult(getBlockPosStates(coordinates, blockStates), getPlayerBlockCount(player, blockStates), false), firstPos, secondPos, EffortlessClient.getTicksInGame(), false));
         }
 
     }
@@ -441,9 +446,17 @@ public class BlockPreviewRenderer {
         }
         if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() && coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
 //                sortOnDistanceToPlayer(coordinates, player);
-            previews.add(new Preview(getBlockPosStates(coordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, EffortlessClient.getTicksInGame(), true));
+            lastPlaced.add(new Preview(getBlockPosStates(coordinates, blockStates), getBlockUseResult(getBlockPosStates(coordinates, blockStates), getPlayerBlockCount(player, blockStates), true), firstPos, secondPos, EffortlessClient.getTicksInGame(), true));
         }
 
+    }
+
+    public List<Preview> getLastPlaced() {
+        return lastPlaced;
+    }
+
+    public List<Preview> getCurrentPlacing() {
+        return currentPlacing;
     }
 
     record BlockPosState(
@@ -453,14 +466,49 @@ public class BlockPreviewRenderer {
             Boolean canBreak
     ) { }
 
-    record Preview(
+    public record Preview(
             List<BlockPosState> blockPosStates,
-            Map<Block, Integer> blocksLeft,
+            UseResult useResult,
             BlockPos firstPos,
             BlockPos secondPos,
             float time,
             boolean breaking
-    ) { }
+    ) {
+
+        public List<ItemStack> getValidItemStacks() {
+            var result = new ArrayList<ItemStack>();
+            useResult.valid.forEach((block, count) -> {
+                if (block.equals(Blocks.AIR)) return;
+                while (count > 0) {
+                    var itemStack = new ItemStack(block.asItem());
+                    if (itemStack.getMaxStackSize() <= 0) continue;
+                    var used = count > itemStack.getMaxStackSize() ? itemStack.getMaxStackSize() : count;
+                    itemStack.setCount(used);
+                    count -= used;
+                    result.add(itemStack);
+                }
+            });
+            return result;
+        }
+
+        public List<ItemStack> getInvalidItemStacks() {
+            var result = new ArrayList<ItemStack>();
+            useResult.total.forEach((block, count) -> {
+                if (block.equals(Blocks.AIR)) return;
+                count = count - useResult.valid.getOrDefault(block, 0);
+                while (count > 0) {
+                    var itemStack = new ItemStack(block.asItem());
+                    if (itemStack.getMaxStackSize() <= 0) continue;
+                    var used = count > itemStack.getMaxStackSize() ? itemStack.getMaxStackSize() : count;
+                    itemStack.setCount(used);
+                    count -= used;
+                    result.add(itemStack);
+                }
+            });
+            return result;
+        }
+
+    }
 
     record UseResult(
             Map<Block, Integer> valid,
@@ -481,7 +529,7 @@ public class BlockPreviewRenderer {
             return validBlocks() == totalBlocks();
         }
 
-        public int want() {
+        public int wantedBlocks() {
             return totalBlocks() - validBlocks();
         }
     }
