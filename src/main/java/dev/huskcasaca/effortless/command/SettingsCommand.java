@@ -23,7 +23,7 @@ public class SettingsCommand {
 
         var effortlessCommand = Commands.literal("effortless");
 
-        var actionCommand = Commands.literal("performAction");
+        var actionCommand = Commands.literal("action");
 
         Arrays.stream(BuildAction.values()).forEach(buildAction -> {
             actionCommand.then(Commands.literal(buildAction.getCommandName()).executes(context -> {
@@ -88,7 +88,7 @@ public class SettingsCommand {
             }));
         });
 
-        var modifierCommand = Commands.literal("performAction");
+        var modifierCommand = Commands.literal("action");
 
         var arrayCommand = Commands.literal("array");
         var radialArrayCommand = Commands.literal("radialArray");
