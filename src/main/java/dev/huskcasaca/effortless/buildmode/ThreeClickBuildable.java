@@ -1,6 +1,6 @@
 package dev.huskcasaca.effortless.buildmode;
 
-import dev.huskcasaca.effortless.buildreach.ReachHelper;
+import dev.huskcasaca.effortless.building.ReachHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -54,6 +54,134 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
         }
         return new BlockPos(selected.lineBound);
     }
+
+
+    //Finds depth after wall has been chosen in buildmodes with 3 clicks
+    public static BlockPos findDepth(Player player, BlockPos secondPos, boolean skipRaytrace) {
+        var look = BuildModeHandler.getPlayerLookVec(player);
+        var start = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
+
+        List<HeightCriteria> criteriaList = new ArrayList<>(3);
+
+        //Y
+//        var yBound = BuildModeHandler.findYBound(secondPos.getY(), start, look);
+//        criteriaList.add(new HeightCriteria(yBound, secondPos, start));
+
+        //X
+        var xBound = BuildModeHandler.findXBound(secondPos.getX(), start, look);
+        criteriaList.add(new HeightCriteria(xBound, secondPos, start));
+
+        //Z
+        var zBound = BuildModeHandler.findZBound(secondPos.getZ(), start, look);
+        criteriaList.add(new HeightCriteria(zBound, secondPos, start));
+
+        //Remove invalid criteria
+        int reach = ReachHelper.getPlacementReach(player) * 4; //4 times as much as normal placement reach
+        criteriaList.removeIf(criteria -> !criteria.isValid(start, look, reach, player, skipRaytrace));
+
+        //If none are valid, return empty list of blocks
+        if (criteriaList.isEmpty()) return null;
+
+        //If only 1 is valid, choose that one
+        var selected = criteriaList.get(0);
+
+        //If multiple are valid, choose based on criteria
+        if (criteriaList.size() > 1) {
+            //Select the one that is closest (from wall position to its line counterpart)
+            for (int i = 1; i < criteriaList.size(); i++) {
+                HeightCriteria criteria = criteriaList.get(i);
+                if (criteria.distToLineSq < 2.0 && selected.distToLineSq < 2.0) {
+                    //Both very close to line, choose closest to player
+                    if (criteria.distToPlayerSq < selected.distToPlayerSq)
+                        selected = criteria;
+                } else {
+                    //Pick closest to line
+                    if (criteria.distToLineSq < selected.distToLineSq)
+                        selected = criteria;
+                }
+            }
+        }
+        return new BlockPos(selected.planeBound);
+    }
+
+    public static BlockPos findXDepth(Player player, BlockPos secondPos, boolean skipRaytrace) {
+        var look = BuildModeHandler.getPlayerLookVec(player);
+        var start = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
+
+        List<HeightCriteria> criteriaList = new ArrayList<>(3);
+
+        //X
+        var xBound = BuildModeHandler.findXBound(secondPos.getX(), start, look);
+        criteriaList.add(new HeightCriteria(xBound, secondPos, start));
+
+        //Remove invalid criteria
+        int reach = ReachHelper.getPlacementReach(player) * 4; //4 times as much as normal placement reach
+        criteriaList.removeIf(criteria -> !criteria.isValid(start, look, reach, player, skipRaytrace));
+
+        //If none are valid, return empty list of blocks
+        if (criteriaList.isEmpty()) return null;
+
+        //If only 1 is valid, choose that one
+        var selected = criteriaList.get(0);
+
+        //If multiple are valid, choose based on criteria
+        if (criteriaList.size() > 1) {
+            //Select the one that is closest (from wall position to its line counterpart)
+            for (int i = 1; i < criteriaList.size(); i++) {
+                HeightCriteria criteria = criteriaList.get(i);
+                if (criteria.distToLineSq < 2.0 && selected.distToLineSq < 2.0) {
+                    //Both very close to line, choose closest to player
+                    if (criteria.distToPlayerSq < selected.distToPlayerSq)
+                        selected = criteria;
+                } else {
+                    //Pick closest to line
+                    if (criteria.distToLineSq < selected.distToLineSq)
+                        selected = criteria;
+                }
+            }
+        }
+        return new BlockPos(selected.planeBound);
+    }
+
+    public static BlockPos findZDepth(Player player, BlockPos secondPos, boolean skipRaytrace) {
+        var look = BuildModeHandler.getPlayerLookVec(player);
+        var start = new Vec3(player.getX(), player.getY() + player.getEyeHeight(), player.getZ());
+
+        List<HeightCriteria> criteriaList = new ArrayList<>(3);
+
+        //Z
+        var zBound = BuildModeHandler.findZBound(secondPos.getZ(), start, look);
+        criteriaList.add(new HeightCriteria(zBound, secondPos, start));
+
+        //Remove invalid criteria
+        int reach = ReachHelper.getPlacementReach(player) * 4; //4 times as much as normal placement reach
+        criteriaList.removeIf(criteria -> !criteria.isValid(start, look, reach, player, skipRaytrace));
+
+        //If none are valid, return empty list of blocks
+        if (criteriaList.isEmpty()) return null;
+
+        //If only 1 is valid, choose that one
+        var selected = criteriaList.get(0);
+
+        //If multiple are valid, choose based on criteria
+        if (criteriaList.size() > 1) {
+            //Select the one that is closest (from wall position to its line counterpart)
+            for (int i = 1; i < criteriaList.size(); i++) {
+                HeightCriteria criteria = criteriaList.get(i);
+                if (criteria.distToLineSq < 2.0 && selected.distToLineSq < 2.0) {
+                    //Both very close to line, choose closest to player
+                    if (criteria.distToPlayerSq < selected.distToPlayerSq)
+                        selected = criteria;
+                } else {
+                    //Pick closest to line
+                    if (criteria.distToLineSq < selected.distToLineSq)
+                        selected = criteria;
+                }
+            }
+        }
+        return new BlockPos(selected.planeBound);
+    }
+
 
     @Override
     public void initialize(Player player) {
