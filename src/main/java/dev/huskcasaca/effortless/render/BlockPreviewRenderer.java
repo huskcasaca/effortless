@@ -10,7 +10,7 @@ import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
 import dev.huskcasaca.effortless.buildmode.Buildable;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHandler;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
-import dev.huskcasaca.effortless.buildreach.ReachHelper;
+import dev.huskcasaca.effortless.building.ReachHelper;
 import dev.huskcasaca.effortless.config.ConfigManager;
 import dev.huskcasaca.effortless.config.PreviewConfig;
 import dev.huskcasaca.effortless.utils.CompatHelper;
@@ -213,6 +213,9 @@ public class BlockPreviewRenderer {
             }
         }
         //Expire
+        if (currentPlacing.isEmpty()) {
+            Effortless.log(player, "", true);
+        }
         currentPlacing.clear();
         lastPlaced.removeIf(placed -> {
             double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();

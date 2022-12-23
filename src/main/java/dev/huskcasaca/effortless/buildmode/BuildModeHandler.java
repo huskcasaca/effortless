@@ -4,7 +4,7 @@ import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.entity.player.EffortlessDataProvider;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHandler;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
-import dev.huskcasaca.effortless.buildreach.ReachHelper;
+import dev.huskcasaca.effortless.building.ReachHelper;
 import dev.huskcasaca.effortless.utils.SurvivalHelper;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerBuildModePacket;

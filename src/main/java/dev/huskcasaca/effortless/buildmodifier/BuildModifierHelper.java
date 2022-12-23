@@ -6,7 +6,7 @@ import dev.huskcasaca.effortless.buildmodifier.array.Array;
 import dev.huskcasaca.effortless.buildmodifier.mirror.Mirror;
 import dev.huskcasaca.effortless.buildmodifier.mirror.RadialMirror;
 import dev.huskcasaca.effortless.entity.player.ModifierSettings;
-import dev.huskcasaca.effortless.buildreach.ReachHelper;
+import dev.huskcasaca.effortless.building.ReachHelper;
 import dev.huskcasaca.effortless.network.Packets;
 import dev.huskcasaca.effortless.network.protocol.player.ClientboundPlayerBuildModifierPacket;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModifierPacket;

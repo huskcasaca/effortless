@@ -2,6 +2,8 @@ package dev.huskcasaca.effortless.screen.buildmode;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import dev.huskcasaca.effortless.building.BuildAction;
+import dev.huskcasaca.effortless.building.BuildActionHandler;
 import org.joml.Vector4f;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmode.*;
@@ -31,8 +33,9 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import static dev.huskcasaca.effortless.buildmode.BuildActionHandler.*;
+import static dev.huskcasaca.effortless.building.BuildActionHandler.*;
 
 /**
  * Initially from Chisels and Bits by AlgorithmX2
@@ -61,6 +64,9 @@ public class RadialMenuScreen extends Screen {
     private static final double buttonDistance = 120;
     private static final float fadeSpeed = 0.3f;
     private static final int descriptionHeight = 100;
+
+    public static final int MODE_OPTION_ROW_HEIGHT = 39;
+
     public BuildMode switchTo = null;
     public BuildAction doAction = null;
     public boolean performedActionUsingMouse;
@@ -146,12 +152,12 @@ public class RadialMenuScreen extends Screen {
             mouseRadians = mouseRadians + Math.PI * 2;
         }
 
-        final ArrayList<MenuRegion> modes = new ArrayList<>();
+        final ArrayList<ModeRegion> modes = new ArrayList<>();
         final ArrayList<MenuButton> buttons = new ArrayList<>();
 
         //Add build modes
         for (final BuildMode mode : BuildMode.values()) {
-            modes.add(new MenuRegion(mode));
+            modes.add(new ModeRegion(mode));
         }
 
 //        -26 -13    0 -13
@@ -163,29 +169,28 @@ public class RadialMenuScreen extends Screen {
         int baseY = -13;
         int buttonOffset = 26;
 
-        buttons.add(new MenuButton(BuildAction.UNDO, -buttonDistance - buttonOffset, baseY + 0, Direction.WEST));
-        buttons.add(new MenuButton(BuildAction.REDO, -buttonDistance - 0, baseY + 0, Direction.EAST));
+        buttons.add(new MenuButton(BuildAction.UNDO,     -buttonDistance - buttonOffset, baseY + 0,            Direction.WEST));
+        buttons.add(new MenuButton(BuildAction.REDO,     -buttonDistance - 0,            baseY + 0,            Direction.EAST));
         buttons.add(new MenuButton(BuildAction.MODIFIER, -buttonDistance - buttonOffset, baseY + buttonOffset, Direction.WEST));
-        buttons.add(new MenuButton(BuildAction.REPLACE, -buttonDistance - 0, baseY + buttonOffset, Direction.EAST));
-//        buttons.add(new MenuButton(BuildAction.MODIFIER,      -buttonDistance - buttonOffset * 1, baseY + buttonOffset * 2, Direction.WEST));
-//        buttons.add(new MenuButton(BuildAction.SETTINGS,      -buttonDistance - buttonOffset * 0, baseY + buttonOffset * 2, Direction.EAST));
-//        OPEN_PLAYER_SETTINGS
+        buttons.add(new MenuButton(BuildAction.REPLACE,  -buttonDistance - 0,            baseY + buttonOffset, Direction.EAST));
 
         //Add buildmode dependent options
-        BuildOption[] options = currentBuildMode.getOptions();
-        BuildOption[] enabledOptions = options;
-        final ArrayList<MenuButton> optionButtons = new ArrayList<>();
+
+        var options = currentBuildMode.getOptions();
+        var optionsTexting = options.clone();
+        var optionButtons = new ArrayList<MenuButton>();
+
         for (int row = 0; row < options.length; row++) {
+            var buttonsInRow = new ArrayList<MenuButton>();
             for (int col = 0; col < options[row].getActions().length; col++) {
-                BuildAction action = options[row].getActions()[col];
-                MenuButton button = new MenuButton(action, buttonDistance + col * 26, -13 + row * 39, Direction.DOWN);
+                var action = options[row].getActions()[col];
+                var button = new MenuButton(action, buttonDistance + col * buttonOffset, options.length / -2f * MODE_OPTION_ROW_HEIGHT + 26 + row * MODE_OPTION_ROW_HEIGHT, Direction.DOWN);
                 buttons.add(button);
                 optionButtons.add(button);
+                buttonsInRow.add(button);
             }
-            if (isMouseInButtonGroup(optionButtons, mouseXCenter, mouseYCenter)) {
-                enabledOptions = new BuildOption[row + 1];
-                System.arraycopy(options, 0, enabledOptions, 0, row + 1);
-                break;
+            if (isButtonHighlighted(buttonsInRow, mouseXCenter, mouseYCenter) && row + 1 < options.length) {
+                optionsTexting[row + 1] = null;
             }
         }
 
@@ -204,7 +209,7 @@ public class RadialMenuScreen extends Screen {
 
         drawIcons(ms, tessellator, buffer, middleX, middleY, ringInnerEdge, ringOuterEdge, modes, buttons);
 
-        drawTexts(ms, currentBuildMode, middleX, middleY, textDistance, buttonDistance, modes, buttons, enabledOptions);
+        drawTexts(ms, currentBuildMode, middleX, middleY, textDistance, buttonDistance, modes, buttons, optionsTexting);
 
         ms.popPose();
     }
@@ -212,86 +217,90 @@ public class RadialMenuScreen extends Screen {
     private boolean isButtonHighlighted(MenuButton btn, double mouseXCenter, double mouseYCenter) {
         return btn.x1 <= mouseXCenter && btn.x2 >= mouseXCenter && btn.y1 <= mouseYCenter && btn.y2 >= mouseYCenter;
     }
+    private boolean isButtonHighlighted(ArrayList<MenuButton> btns, double mouseXCenter, double mouseYCenter) {
+        for (var btn : btns) {
+            if (isButtonHighlighted(btn, mouseXCenter, mouseYCenter)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
 
     private boolean isMouseInButtonGroup(ArrayList<MenuButton> btns, double mouseXCenter, double mouseYCenter) {
         if (btns.isEmpty()) return false;
-        return btns.stream().map(btn -> btn.x1).min(Double::compare).get() <= mouseXCenter && btns.stream().map(btn -> btn.x2).max(Double::compare).get() >= mouseXCenter
-                && btns.stream().map(btn -> btn.y1).min(Double::compare).get() <= mouseYCenter && btns.stream().map(btn -> btn.y2).max(Double::compare).get() >= mouseYCenter;
+
+
+        return btns.stream().map(btn -> btn.x1).min(Double::compare).get() <= mouseXCenter && btns.stream().map(btn -> btn.x2).max(Double::compare).get() >= mouseXCenter && btns.stream().map(btn -> btn.y1).min(Double::compare).get() <= mouseYCenter && btns.stream().map(btn -> btn.y2).max(Double::compare).get() >= mouseYCenter;
     }
 
-    private void drawRadialButtonBackgrounds(BuildMode currentBuildMode, BufferBuilder buffer, double middleX, double middleY, double mouseXCenter, double mouseYCenter, double mouseRadians, double ringInnerEdge, double ringOuterEdge, double quarterCircle, ArrayList<MenuRegion> modes) {
-        if (!modes.isEmpty()) {
-            final int totalModes = Math.max(3, modes.size());
-            final double fragment = Math.PI * 0.005; //gap between buttons in radians at inner edge
-            final double fragment2 = Math.PI * 0.0025; //gap between buttons in radians at outer edge
-            final double radiansPerObject = 2.0 * Math.PI / totalModes;
+    private void drawRadialButtonBackgrounds(BuildMode currentBuildMode, BufferBuilder buffer, double middleX, double middleY, double mouseXCenter, double mouseYCenter, double mouseRadians, double ringInnerEdge, double ringOuterEdge, double quarterCircle, ArrayList<ModeRegion> modes) {
+        if (modes.isEmpty()) {
+            return;
+        }
+        final int totalModes = Math.max(3, modes.size());
+        final double fragment = Math.PI * 0.005; //gap between buttons in radians at inner edge
+        final double fragment2 = Math.PI * 0.0025; //gap between buttons in radians at outer edge
+        final double radiansPerObject = 2.0 * Math.PI / totalModes;
 
-            for (int i = 0; i < modes.size(); i++) {
-                MenuRegion menuRegion = modes.get(i);
-                final double beginRadians = i * radiansPerObject - quarterCircle;
-                final double endRadians = (i + 1) * radiansPerObject - quarterCircle;
+        for (int i = 0; i < modes.size(); i++) {
+            ModeRegion modeRegion = modes.get(i);
+            final double beginRadians = i * radiansPerObject - quarterCircle;
+            final double endRadians = (i + 1) * radiansPerObject - quarterCircle;
 
-                menuRegion.x1 = Math.cos(beginRadians);
-                menuRegion.x2 = Math.cos(endRadians);
-                menuRegion.y1 = Math.sin(beginRadians);
-                menuRegion.y2 = Math.sin(endRadians);
+            modeRegion.x1 = Math.cos(beginRadians);
+            modeRegion.x2 = Math.cos(endRadians);
+            modeRegion.y1 = Math.sin(beginRadians);
+            modeRegion.y2 = Math.sin(endRadians);
 
-                final double x1m1 = Math.cos(beginRadians + fragment) * ringInnerEdge;
-                final double x2m1 = Math.cos(endRadians - fragment) * ringInnerEdge;
-                final double y1m1 = Math.sin(beginRadians + fragment) * ringInnerEdge;
-                final double y2m1 = Math.sin(endRadians - fragment) * ringInnerEdge;
+            final double x1m1 = Math.cos(beginRadians + fragment) * ringInnerEdge;
+            final double x2m1 = Math.cos(endRadians - fragment) * ringInnerEdge;
+            final double y1m1 = Math.sin(beginRadians + fragment) * ringInnerEdge;
+            final double y2m1 = Math.sin(endRadians - fragment) * ringInnerEdge;
 
-                final double x1m2 = Math.cos(beginRadians + fragment2) * ringOuterEdge;
-                final double x2m2 = Math.cos(endRadians - fragment2) * ringOuterEdge;
-                final double y1m2 = Math.sin(beginRadians + fragment2) * ringOuterEdge;
-                final double y2m2 = Math.sin(endRadians - fragment2) * ringOuterEdge;
+            final double x1m2 = Math.cos(beginRadians + fragment2) * ringOuterEdge;
+            final double x2m2 = Math.cos(endRadians - fragment2) * ringOuterEdge;
+            final double y1m2 = Math.sin(beginRadians + fragment2) * ringOuterEdge;
+            final double y2m2 = Math.sin(endRadians - fragment2) * ringOuterEdge;
 
-                final boolean isSelected = currentBuildMode.ordinal() == i;
-                final boolean isMouseInQuad = inTriangle(x1m1, y1m1, x2m2, y2m2, x2m1, y2m1, mouseXCenter, mouseYCenter)
-                        || inTriangle(x1m1, y1m1, x1m2, y1m2, x2m2, y2m2, mouseXCenter, mouseYCenter);
-                final boolean isHighlighted = beginRadians <= mouseRadians && mouseRadians <= endRadians && isMouseInQuad;
+            final boolean isSelected = currentBuildMode.ordinal() == i;
+            final boolean isMouseInQuad = inTriangle(x1m1, y1m1, x2m2, y2m2, x2m1, y2m1, mouseXCenter, mouseYCenter) || inTriangle(x1m1, y1m1, x1m2, y1m2, x2m2, y2m2, mouseXCenter, mouseYCenter);
+            final boolean isHighlighted = beginRadians <= mouseRadians && mouseRadians <= endRadians && isMouseInQuad;
 
-                Vector4f color = radialButtonColor;
-                if (isSelected) color = selectedColor;
-                if (isHighlighted) color = highlightColor;
-                if (isSelected && isHighlighted) color = highlightSelectedColor;
+            Vector4f color = radialButtonColor;
+            if (isSelected) color = selectedColor;
+            if (isHighlighted) color = highlightColor;
+            if (isSelected && isHighlighted) color = highlightSelectedColor;
 
-                if (isHighlighted) {
-                    menuRegion.highlighted = true;
-                    switchTo = menuRegion.mode;
-                }
-
-                buffer.vertex(middleX + x1m1, middleY + y1m1, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
-                buffer.vertex(middleX + x2m1, middleY + y2m1, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
-                buffer.vertex(middleX + x2m2, middleY + y2m2, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
-                buffer.vertex(middleX + x1m2, middleY + y1m2, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
-
-                //Category line
-                color = menuRegion.mode.getCategory().getColor();
-
-                final double x1m3 = Math.cos(beginRadians + fragment) * categoryLineOuterEdge;
-                final double x2m3 = Math.cos(endRadians - fragment) * categoryLineOuterEdge;
-                final double y1m3 = Math.sin(beginRadians + fragment) * categoryLineOuterEdge;
-                final double y2m3 = Math.sin(endRadians - fragment) * categoryLineOuterEdge;
-
-                buffer.vertex(middleX + x1m1, middleY + y1m1, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
-                buffer.vertex(middleX + x2m1, middleY + y2m1, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
-                buffer.vertex(middleX + x2m3, middleY + y2m3, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
-                buffer.vertex(middleX + x1m3, middleY + y1m3, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
+            if (isHighlighted) {
+                modeRegion.highlighted = true;
+                switchTo = modeRegion.mode;
             }
+
+            buffer.vertex(middleX + x1m1, middleY + y1m1, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
+            buffer.vertex(middleX + x2m1, middleY + y2m1, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
+            buffer.vertex(middleX + x2m2, middleY + y2m2, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
+            buffer.vertex(middleX + x1m2, middleY + y1m2, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
+
+            //Category line
+            color = modeRegion.mode.getCategory().getColor();
+
+            final double x1m3 = Math.cos(beginRadians + fragment) * categoryLineOuterEdge;
+            final double x2m3 = Math.cos(endRadians - fragment) * categoryLineOuterEdge;
+            final double y1m3 = Math.sin(beginRadians + fragment) * categoryLineOuterEdge;
+            final double y2m3 = Math.sin(endRadians - fragment) * categoryLineOuterEdge;
+
+            buffer.vertex(middleX + x1m1, middleY + y1m1, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
+            buffer.vertex(middleX + x2m1, middleY + y2m1, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
+            buffer.vertex(middleX + x2m3, middleY + y2m3, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
+            buffer.vertex(middleX + x1m3, middleY + y1m3, getBlitOffset()).color(color.x(), color.y(), color.z(), color.w()).endVertex();
         }
     }
 
     private void drawSideButtonBackgrounds(BufferBuilder buffer, double middleX, double middleY, double mouseXCenter, double mouseYCenter, ArrayList<MenuButton> buttons) {
         for (final MenuButton btn : buttons) {
 
-            final boolean isSelected =
-                    btn.action == getBuildSpeed() ||
-                            btn.action == getFill() ||
-                            btn.action == getCubeFill() ||
-                            btn.action == getRaisedEdge() ||
-                            btn.action == getLineThickness() ||
-                            btn.action == getCircleStart();
+            final boolean isSelected = Arrays.stream(getOptions()).toList().contains(btn.action);
 
             final boolean isHighlighted = btn.x1 <= mouseXCenter && btn.x2 >= mouseXCenter && btn.y1 <= mouseYCenter && btn.y2 >= mouseYCenter;
 
@@ -312,19 +321,19 @@ public class RadialMenuScreen extends Screen {
         }
     }
 
-    private void drawIcons(PoseStack ms, Tesselator tessellator, BufferBuilder buffer, double middleX, double middleY, double ringInnerEdge, double ringOuterEdge, ArrayList<MenuRegion> modes, ArrayList<MenuButton> buttons) {
+    private void drawIcons(PoseStack ms, Tesselator tessellator, BufferBuilder buffer, double middleX, double middleY, double ringInnerEdge, double ringOuterEdge, ArrayList<ModeRegion> modes, ArrayList<MenuButton> buttons) {
         ms.pushPose();
         RenderSystem.enableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
         //Draw buildmode icons
-        for (final MenuRegion menuRegion : modes) {
+        for (final ModeRegion modeRegion : modes) {
 
-            final double x = (menuRegion.x1 + menuRegion.x2) * 0.5 * (ringOuterEdge * 0.55 + 0.45 * ringInnerEdge);
-            final double y = (menuRegion.y1 + menuRegion.y2) * 0.5 * (ringOuterEdge * 0.55 + 0.45 * ringInnerEdge);
+            final double x = (modeRegion.x1 + modeRegion.x2) * 0.5 * (ringOuterEdge * 0.55 + 0.45 * ringInnerEdge);
+            final double y = (modeRegion.y1 + modeRegion.y2) * 0.5 * (ringOuterEdge * 0.55 + 0.45 * ringInnerEdge);
 
-            RenderSystem.setShaderTexture(0, new ResourceLocation(Effortless.MOD_ID, "textures/mode/" + menuRegion.mode.name().toLowerCase() + ".png"));
+            RenderSystem.setShaderTexture(0, new ResourceLocation(Effortless.MOD_ID, "textures/mode/" + modeRegion.mode.name().toLowerCase() + ".png"));
             blit(ms, (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
         }
 
@@ -341,28 +350,29 @@ public class RadialMenuScreen extends Screen {
         ms.popPose();
     }
 
-    private void drawTexts(PoseStack ms, BuildMode currentBuildMode, double middleX, double middleY, double textDistance, double buttonDistance, ArrayList<MenuRegion> modes, ArrayList<MenuButton> buttons, BuildOption[] options) {
+    private void drawTexts(PoseStack ms, BuildMode currentBuildMode, double middleX, double middleY, double textDistance, double buttonDistance, ArrayList<ModeRegion> modes, ArrayList<MenuButton> buttons, BuildMode.Option[] options) {
         //font.drawStringWithShadow("Actions", (int) (middleX - buttonDistance - 13) - font.getStringWidth("Actions") * 0.5f, (int) middleY - 38, 0xffffffff);
 
         //Draw option strings
-        for (int i = 0; i < options.length; i++) {
-            BuildOption option = options[i];
-            font.drawShadow(ms, I18n.get(option.getNameKey()), (int) (middleX + buttonDistance - 9), (int) middleY - 37 + i * 39, optionTextColor);
+        for (int row = 0; row < options.length; row++) {
+            BuildMode.Option option = options[row];
+            if (option == null) continue;
+            font.drawShadow(ms, I18n.get(option.getNameKey()), (int) (middleX + buttonDistance - 9), (int) middleY + options.length / -2f * MODE_OPTION_ROW_HEIGHT + 3 + row * MODE_OPTION_ROW_HEIGHT, optionTextColor);
         }
 
         String credits = I18n.get("effortless.credits");
         font.drawShadow(ms, credits, width - font.width(credits) - 10, height - 15, watermarkTextColor);
 
         //Draw buildmode text
-        for (final MenuRegion menuRegion : modes) {
+        for (final ModeRegion modeRegion : modes) {
 
-            if (menuRegion.highlighted) {
-                final double x = (menuRegion.x1 + menuRegion.x2) * 0.5;
-                final double y = (menuRegion.y1 + menuRegion.y2) * 0.5;
+            if (modeRegion.highlighted) {
+                final double x = (modeRegion.x1 + modeRegion.x2) * 0.5;
+                final double y = (modeRegion.y1 + modeRegion.y2) * 0.5;
 
                 int fixed_x = (int) (x * textDistance);
                 int fixed_y = (int) (y * textDistance) - font.lineHeight / 2;
-                String text = I18n.get(menuRegion.mode.getNameKey());
+                String text = I18n.get(modeRegion.mode.getNameKey());
 
                 if (x <= -0.2) {
                     fixed_x -= font.width(text);
@@ -373,7 +383,7 @@ public class RadialMenuScreen extends Screen {
                 font.drawShadow(ms, text, (int) middleX + fixed_x, (int) middleY + fixed_y, whiteTextColor);
 
                 //Draw description
-                text = I18n.get(menuRegion.mode.getDescriptionKey());
+                text = I18n.get(modeRegion.mode.getDescriptionKey());
                 font.drawShadow(ms, text, (int) middleX - font.width(text) / 2f, (int) middleY + descriptionHeight, descriptionTextColor);
             }
         }
@@ -389,32 +399,21 @@ public class RadialMenuScreen extends Screen {
                 if (!keybind.isEmpty())
                     keybindFormatted = ChatFormatting.GRAY + "(" + WordUtils.capitalizeFully(keybind) + ")";
 
-                if (button.textSide == Direction.WEST) {
-
-                    font.draw(ms, text, (int) (middleX + button.x1 - 8) - font.width(text),
-                            (int) (middleY + button.y1 + 6), whiteTextColor);
-
-                } else if (button.textSide == Direction.EAST) {
-
-                    font.draw(ms, text, (int) (middleX + button.x2 + 8),
-                            (int) (middleY + button.y1 + 6), whiteTextColor);
-
-                } else if (button.textSide == Direction.UP || button.textSide == Direction.NORTH) {
-
-                    font.draw(ms, keybindFormatted, (int) (middleX + (button.x1 + button.x2) * 0.5 - font.width(keybindFormatted) * 0.5),
-                            (int) (middleY + button.y1 - 26), whiteTextColor);
-
-                    font.draw(ms, text, (int) (middleX + (button.x1 + button.x2) * 0.5 - font.width(text) * 0.5),
-                            (int) (middleY + button.y1 - 14), whiteTextColor);
-
-                } else if (button.textSide == Direction.DOWN || button.textSide == Direction.SOUTH) {
-
-                    font.draw(ms, text, (int) (middleX + (button.x1 + button.x2) * 0.5 - font.width(text) * 0.5),
-                            (int) (middleY + button.y1 + 26), whiteTextColor);
-
-                    font.draw(ms, keybindFormatted, (int) (middleX + (button.x1 + button.x2) * 0.5 - font.width(keybindFormatted) * 0.5),
-                            (int) (middleY + button.y1 + 38), whiteTextColor);
-
+                switch (button.textSide) {
+                    case WEST -> {
+                        font.draw(ms, text, (int) (middleX + button.x1 - 8) - font.width(text), (int) (middleY + button.y1 + 6), whiteTextColor);
+                    }
+                    case EAST -> {
+                        font.draw(ms, text, (int) (middleX + button.x2 + 8), (int) (middleY + button.y1 + 6), whiteTextColor);
+                    }
+                    case UP, NORTH -> {
+                        font.draw(ms, keybindFormatted, (int) (middleX + (button.x1 + button.x2) * 0.5 - font.width(keybindFormatted) * 0.5), (int) (middleY + button.y1 - 26), whiteTextColor);
+                        font.draw(ms, text, (int) (middleX + (button.x1 + button.x2) * 0.5 - font.width(text) * 0.5), (int) (middleY + button.y1 - 14), whiteTextColor);
+                    }
+                    case DOWN, SOUTH -> {
+                        font.draw(ms, text, (int) (middleX + (button.x1 + button.x2) * 0.5 - font.width(text) * 0.5), (int) (middleY + button.y1 + 26), whiteTextColor);
+                        font.draw(ms, keybindFormatted, (int) (middleX + (button.x1 + button.x2) * 0.5 - font.width(keybindFormatted) * 0.5), (int) (middleY + button.y1 + 38), whiteTextColor);
+                    }
                 }
 
             }
@@ -541,36 +540,36 @@ public class RadialMenuScreen extends Screen {
         }
     }
 
-    private static class MenuButton {
+    static class MenuButton {
 
-        public final BuildAction action;
-        public double x1, x2;
-        public double y1, y2;
-        public boolean highlighted;
-        public String name;
-        public Direction textSide;
+        private final BuildAction action;
+        private final String name;
+        private final Direction textSide;
+        private double x1, x2;
+        private double y1, y2;
+        private boolean highlighted;
 
         public MenuButton(final BuildAction action, final double x, final double y,
                           final Direction textSide) {
             this.name = I18n.get(action.getNameKey());
             this.action = action;
-            x1 = x - 10;
-            x2 = x + 10;
-            y1 = y - 10;
-            y2 = y + 10;
+            this.x1 = x - 10;
+            this.x2 = x + 10;
+            this.y1 = y - 10;
+            this.y2 = y + 10;
             this.textSide = textSide;
         }
 
     }
 
-    static class MenuRegion {
+    static class ModeRegion {
 
-        public final BuildMode mode;
-        public double x1, x2;
-        public double y1, y2;
-        public boolean highlighted;
+        private final BuildMode mode;
+        private double x1, x2;
+        private double y1, y2;
+        private boolean highlighted;
 
-        public MenuRegion(final BuildMode mode) {
+        public ModeRegion(final BuildMode mode) {
             this.mode = mode;
         }
 

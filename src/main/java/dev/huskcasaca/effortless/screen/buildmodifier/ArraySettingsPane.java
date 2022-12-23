@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
-import dev.huskcasaca.effortless.buildreach.ReachHelper;
+import dev.huskcasaca.effortless.building.ReachHelper;
 import dev.huskcasaca.effortless.screen.widget.ExpandableScrollEntry;
 import dev.huskcasaca.effortless.screen.widget.Checkbox;
 import dev.huskcasaca.effortless.screen.widget.NumberField;
