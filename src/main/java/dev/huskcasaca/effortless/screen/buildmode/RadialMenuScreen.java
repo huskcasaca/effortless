@@ -76,7 +76,7 @@ public class RadialMenuScreen extends Screen {
     private BuildAction lastAction = null;
 
     public RadialMenuScreen() {
-        super(Component.translatable("effortless.screen.radial_menu"));
+        super(Component.translatable(String.join(".", Effortless.MOD_ID, "screen", "radial_menu")));
     }
 
     public static RadialMenuScreen getInstance() {
@@ -360,7 +360,7 @@ public class RadialMenuScreen extends Screen {
             font.drawShadow(poseStack, I18n.get(option.getNameKey()), (int) (middleX + buttonDistance - 9), (int) middleY + options.length / -2f * MODE_OPTION_ROW_HEIGHT + 3 + row * MODE_OPTION_ROW_HEIGHT, optionTextColor);
         }
 
-        String credits = I18n.get("effortless.credits");
+        String credits = I18n.get(Effortless.MOD_ID + "."+ "credits");
         font.drawShadow(poseStack, credits, width - font.width(credits) - 10, height - 15, watermarkTextColor);
 
         //Draw buildmode text

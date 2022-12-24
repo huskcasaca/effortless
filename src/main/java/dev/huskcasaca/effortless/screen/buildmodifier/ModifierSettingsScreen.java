@@ -31,7 +31,7 @@ public class ModifierSettingsScreen extends Screen {
     private RadialMirrorSettingsPane radialMirrorSettingsPane;
 
     public ModifierSettingsScreen() {
-        super(Component.translatable("effortless.screen.modifier_settings"));
+        super(Component.translatable(Effortless.MOD_ID + ".screen.modifier_settings"));
     }
 
     @Override
