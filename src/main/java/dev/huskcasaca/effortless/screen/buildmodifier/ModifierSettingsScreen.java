@@ -73,14 +73,14 @@ public class ModifierSettingsScreen extends Screen {
     @Override
     //Set colors using GL11, use the fontObj field to display text
     //Use drawTexturedModalRect() to transfers areas of a texture resource to the screen
-    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(ms);
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(poseStack);
 
-        scrollPane.render(ms, mouseX, mouseY, partialTicks);
+        scrollPane.render(poseStack, mouseX, mouseY, partialTicks);
 
-        buttonDone.render(ms, mouseX, mouseY, partialTicks);
+        buttonDone.render(poseStack, mouseX, mouseY, partialTicks);
 
-        scrollPane.drawTooltip(ms, this, mouseX, mouseY);
+        scrollPane.drawTooltip(poseStack, this, mouseX, mouseY);
     }
 
 

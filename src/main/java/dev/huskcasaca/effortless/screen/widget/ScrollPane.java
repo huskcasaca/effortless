@@ -69,7 +69,7 @@ public class ScrollPane extends Slot {
 
     //Removed background
     @Override
-    public void render(PoseStack ms, int mouseXIn, int mouseYIn, float partialTicks) {
+    public void render(PoseStack poseStack, int mouseXIn, int mouseYIn, float partialTicks) {
         if (this.visible) {
             this.mouseX = mouseXIn;
             this.mouseY = mouseYIn;
@@ -88,7 +88,7 @@ public class ScrollPane extends Slot {
             }
 
             //All entries
-            this.renderList(ms, insideLeft, insideTop, mouseXIn, mouseYIn, partialTicks);
+            this.renderList(poseStack, insideLeft, insideTop, mouseXIn, mouseYIn, partialTicks);
             RenderSystem.disableDepthTest();
 
             //Dirt overlays on top and bottom
@@ -169,8 +169,8 @@ public class ScrollPane extends Slot {
     }
 
     @Override
-    protected void renderItem(PoseStack ms, int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
-        this.getListEntry(slotIndex).drawEntry(ms, slotIndex, xPos, yPos, this.getRowWidth(), heightIn, mouseXIn, mouseYIn,
+    protected void renderItem(PoseStack poseStack, int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
+        this.getListEntry(slotIndex).drawEntry(poseStack, slotIndex, xPos, yPos, this.getRowWidth(), heightIn, mouseXIn, mouseYIn,
                 this.getSlotIndexFromScreenCoords(mouseXIn, mouseYIn) == slotIndex, partialTicks);
     }
 
@@ -323,7 +323,7 @@ public class ScrollPane extends Slot {
 
     //Draw in center if it fits
     @Override
-    protected void renderList(PoseStack ms, int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks) {
+    protected void renderList(PoseStack poseStack, int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks) {
         int itemCount = this.getItemCount();
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
@@ -369,7 +369,7 @@ public class ScrollPane extends Slot {
                 RenderSystem.enableTexture();
             }
 
-            this.renderItem(ms, i, insideLeft, y, entryHeight2, mouseXIn, mouseYIn, partialTicks);
+            this.renderItem(poseStack, i, insideLeft, y, entryHeight2, mouseXIn, mouseYIn, partialTicks);
             y += entryHeight;
         }
     }
@@ -406,9 +406,9 @@ public class ScrollPane extends Slot {
             entry.updateScreen();
     }
 
-    public void drawTooltip(PoseStack ms, Screen guiScreen, int mouseX, int mouseY) {
+    public void drawTooltip(PoseStack poseStack, Screen guiScreen, int mouseX, int mouseY) {
         for (IScrollEntry entry : this.listEntries)
-            entry.drawTooltip(ms, guiScreen, mouseX, mouseY);
+            entry.drawTooltip(poseStack, guiScreen, mouseX, mouseY);
     }
 
     @Override
@@ -437,7 +437,7 @@ public class ScrollPane extends Slot {
 
         void updateScreen();
 
-        void drawTooltip(PoseStack ms, Screen guiScreen, int mouseX, int mouseY);
+        void drawTooltip(PoseStack poseStack, Screen guiScreen, int mouseX, int mouseY);
 
         boolean charTyped(char eventChar, int eventKey);
 
@@ -447,7 +447,7 @@ public class ScrollPane extends Slot {
 
         void updatePosition(int slotIndex, int x, int y, float partialTicks);
 
-        void drawEntry(PoseStack ms, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks);
+        void drawEntry(PoseStack poseStack, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks);
 
         /**
          * Called when the mouse is clicked within this entry. Returning true means that something within this entry was

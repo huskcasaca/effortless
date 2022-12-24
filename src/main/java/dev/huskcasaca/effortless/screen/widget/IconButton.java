@@ -53,8 +53,8 @@ public class IconButton extends Button {
     }
 
     @Override
-    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-        super.render(ms, mouseX, mouseY, partialTicks);
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        super.render(poseStack, mouseX, mouseY, partialTicks);
         if (this.visible) {
             this.isHovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
             RenderSystem.setShaderTexture(0, this.resourceLocation);
@@ -67,15 +67,15 @@ public class IconButton extends Button {
             }
 
             //Draws a textured rectangle at the current z-value. Used to be drawTexturedModalRect in Gui.
-            this.blit(ms, this.getX(), this.getY(), currentIconX, currentIconY, this.iconWidth, this.iconHeight);
+            this.blit(poseStack, this.getX(), this.getY(), currentIconX, currentIconY, this.iconWidth, this.iconHeight);
         }
     }
 
-    public void drawTooltip(PoseStack ms, Screen screen, int mouseX, int mouseY) {
+    public void drawTooltip(PoseStack poseStack, Screen screen, int mouseX, int mouseY) {
         boolean flag = mouseX >= getX() && mouseX < getX() + width && mouseY >= getY() && mouseY < getY() + height;
 
         if (flag) {
-            screen.renderComponentTooltip(ms, tooltip, mouseX - 10, mouseY + 25);
+            screen.renderComponentTooltip(poseStack, tooltip, mouseX - 10, mouseY + 25);
         }
     }
 }

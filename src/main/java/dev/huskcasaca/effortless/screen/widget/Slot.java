@@ -71,7 +71,7 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
     protected void updateItemPosition(int p_updateItemPosition_1_, int p_updateItemPosition_2_, int p_updateItemPosition_3_, float p_updateItemPosition_4_) {
     }
 
-    protected abstract void renderItem(PoseStack ms, int p_renderItem_1_, int p_renderItem_2_, int p_renderItem_3_, int p_renderItem_4_, int p_renderItem_5_, int p_renderItem_6_, float p_renderItem_7_);
+    protected abstract void renderItem(PoseStack poseStack, int p_renderItem_1_, int p_renderItem_2_, int p_renderItem_3_, int p_renderItem_4_, int p_renderItem_5_, int p_renderItem_6_, float p_renderItem_7_);
 
     protected void renderHeader(int p_renderHeader_1_, int p_renderHeader_2_, Tesselator p_renderHeader_3_) {
     }
@@ -103,7 +103,7 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
         return p_isMouseInList_3_ >= (double) this.y0 && p_isMouseInList_3_ <= (double) this.y1 && p_isMouseInList_1_ >= (double) this.x0 && p_isMouseInList_1_ <= (double) this.x1;
     }
 
-    public abstract void render(PoseStack ms, int p_render_1_, int p_render_2_, float p_render_3_);
+    public abstract void render(PoseStack poseStack, int p_render_1_, int p_render_2_, float p_render_3_);
 
     protected void updateScrollingState(double p_updateScrollingState_1_, double p_updateScrollingState_3_, int p_updateScrollingState_5_) {
         this.scrolling = p_updateScrollingState_5_ == 0 && p_updateScrollingState_1_ >= (double) this.getScrollbarPosition() && p_updateScrollingState_1_ < (double) (this.getScrollbarPosition() + 6);
@@ -210,7 +210,7 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
         return 220;
     }
 
-    protected void renderList(PoseStack ms, int p_renderList_1_, int p_renderList_2_, int p_renderList_3_, int p_renderList_4_, float p_renderList_5_) {
+    protected void renderList(PoseStack poseStack, int p_renderList_1_, int p_renderList_2_, int p_renderList_3_, int p_renderList_4_, float p_renderList_5_) {
         int i = this.getItemCount();
         Tesselator tessellator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuilder();
@@ -244,7 +244,7 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
                 RenderSystem.enableTexture();
             }
 
-            this.renderItem(ms, j, p_renderList_1_, k, l, p_renderList_3_, p_renderList_4_, p_renderList_5_);
+            this.renderItem(poseStack, j, p_renderList_1_, k, l, p_renderList_3_, p_renderList_4_, p_renderList_5_);
         }
 
     }
