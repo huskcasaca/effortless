@@ -66,19 +66,19 @@ public class PlayerSettingsScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(ms);
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(poseStack);
 
         int yy = top;
-        font.draw(ms, "Shader type", left, yy + 5, 0xFFFFFF);
+        font.draw(poseStack, "Shader type", left, yy + 5, 0xFFFFFF);
 
         yy += 50;
-        font.draw(ms, "Shader speed", left, yy + 5, 0xFFFFFF);
+        font.draw(poseStack, "Shader speed", left, yy + 5, 0xFFFFFF);
 
-        super.render(ms, mouseX, mouseY, partialTicks);
+        super.render(poseStack, mouseX, mouseY, partialTicks);
 
         if (showShaderList)
-            this.shaderTypeList.render(ms, mouseX, mouseY, partialTicks);
+            this.shaderTypeList.render(poseStack, mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -190,8 +190,8 @@ public class PlayerSettingsScreen extends Screen {
 
         //From AbstractList, disabled parts
         @Override
-        public void render(PoseStack ms, int p_render_1_, int p_render_2_, float p_render_3_) {
-            this.renderBackground(ms);
+        public void render(PoseStack poseStack, int p_render_1_, int p_render_2_, float p_render_3_) {
+            this.renderBackground(poseStack);
             int i = this.getScrollbarPosition();
             int j = i + 6;
             Tesselator tessellator = Tesselator.getInstance();
@@ -211,10 +211,10 @@ public class PlayerSettingsScreen extends Screen {
             int l = this.y0 + 4 - (int) this.getScrollAmount();
             // TODO: 7/9/22 access private field renderHeader
             if (renderHeader) {
-                this.renderHeader(ms, k, l, tessellator);
+                this.renderHeader(poseStack, k, l, tessellator);
             }
 
-            this.renderList(ms, p_render_1_, p_render_2_, p_render_3_);
+            this.renderList(poseStack, p_render_1_, p_render_2_, p_render_3_);
             RenderSystem.disableDepthTest();
 //            this.renderHoleBackground(0, this.y0, 255, 255);
 //            this.renderHoleBackground(this.y1, this.height, 255, 255);
@@ -283,9 +283,9 @@ public class PlayerSettingsScreen extends Screen {
             }
 
             @Override
-            public void render(PoseStack ms, int itemIndex, int rowTop, int rowLeft, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+            public void render(PoseStack poseStack, int itemIndex, int rowTop, int rowLeft, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered, float partialTicks) {
                 if (rowTop + 10 > ShaderTypeList.this.y0 && rowTop + rowHeight - 5 < ShaderTypeList.this.y1)
-                    drawString(ms, font, shaderType.name, ShaderTypeList.this.x0 + 8, rowTop + 4, 0xFFFFFF);
+                    drawString(poseStack, font, shaderType.name, ShaderTypeList.this.x0 + 8, rowTop + 4, 0xFFFFFF);
             }
 
             @Override
