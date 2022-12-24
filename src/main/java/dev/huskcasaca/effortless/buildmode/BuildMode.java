@@ -139,11 +139,11 @@ public enum BuildMode {
     }
 
     public enum Category {
-        BASIC(new Vector4f(.5f, .5f, .5f, .6f)),
-        SQUARE(new Vector4f(0f, .5f, 1f, .8f)),
-        DIAGONAL(new Vector4f(0.56f, 0.28f, 0.87f, .8f)),
-        CIRCULAR(new Vector4f(0.29f, 0.76f, 0.3f, 1f)),
-        ROOF(new Vector4f(0.83f, 0.87f, 0.23f, .8f));
+        BASIC(new Vector4f(0f, .5f, 1f, .5f)),
+        SQUARE(new Vector4f(1f, .54f, .24f, .5f)),
+        DIAGONAL(new Vector4f(0.56f, 0.28f, 0.87f, .5f)),
+        CIRCULAR(new Vector4f(0.29f, 0.76f, 0.3f, .5f)),
+        ROOF(new Vector4f(0.83f, 0.87f, 0.23f, .5f));
 
         // TODO: 21/12/22 use Color
         private final Vector4f color;
