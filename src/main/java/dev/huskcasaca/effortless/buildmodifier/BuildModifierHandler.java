@@ -62,7 +62,7 @@ public class BuildModifierHandler {
 
             for (int i = placeStartPos ? 0 : 1; i < coordinates.size(); i++) {
                 var blockPos = coordinates.get(i);
-                var blockState = blockStates.get(i);
+                var blockState = blockStates.get(blockPos);
                 var itemStack = itemStacks.get(i);
                 if (!blockLeft.containsKey(blockState.getBlock())) {
                     blockLeft.put(blockState.getBlock(), InventoryHelper.findTotalBlocksInInventory(player, blockState.getBlock()));
@@ -87,7 +87,7 @@ public class BuildModifierHandler {
             //place blocks
             for (int i = placeStartPos ? 0 : 1; i < coordinates.size(); i++) {
                 var blockPos = coordinates.get(i);
-                var blockState = blockStates.get(i);
+                var blockState = blockStates.get(blockPos);
                 var itemStack = itemStacks.get(i);
 
                 if (level.isLoaded(blockPos)) {
@@ -178,13 +178,12 @@ public class BuildModifierHandler {
     }
 
     public static List<BlockPos> findCoordinates(Player player, List<BlockPos> posList) {
-        List<BlockPos> coordinates = new ArrayList<>();
         //Add current blocks being placed too
-        coordinates.addAll(posList);
+        var coordinates = new LinkedHashSet<>(posList);
 
         //Find mirror/array/radial mirror coordinates for each blockpos
         for (var blockPos : posList) {
-            List<BlockPos> arrayCoordinates = Array.findCoordinates(player, blockPos);
+            var arrayCoordinates = Array.findCoordinates(player, blockPos);
             coordinates.addAll(arrayCoordinates);
             coordinates.addAll(Mirror.findCoordinates(player, blockPos));
             coordinates.addAll(RadialMirror.findCoordinates(player, blockPos));
@@ -195,15 +194,15 @@ public class BuildModifierHandler {
             }
         }
 
-        return coordinates;
+        return coordinates.stream().toList();
     }
 
     public static List<BlockPos> findCoordinates(Player player, BlockPos blockPos) {
         return findCoordinates(player, new ArrayList<>(Collections.singletonList(blockPos)));
     }
 
-    public static List<BlockState> findBlockStates(Player player, List<BlockPos> posList, Vec3 hitVec, Direction facing, List<ItemStack> itemStacks) {
-        List<BlockState> blockStates = new ArrayList<>();
+    public static Map<BlockPos, BlockState> findBlockStates(Player player, List<BlockPos> posList, Vec3 hitVec, Direction facing, List<ItemStack> itemStacks) {
+        var blockStates = new LinkedHashMap<BlockPos, BlockState>();
         itemStacks.clear();
 
         //Get itemstack
@@ -212,7 +211,7 @@ public class BuildModifierHandler {
             itemStack = player.getItemInHand(InteractionHand.OFF_HAND);
         }
         if (itemStack.isEmpty() || !CompatHelper.isItemBlockProxy(itemStack)) {
-            return blockStates;
+            return Collections.emptyMap();
         }
 
         //Get ItemBlock stack
@@ -228,7 +227,7 @@ public class BuildModifierHandler {
 //            Effortless.log(player, "getBlockStateFromItem " + blockState);
             if (blockState == null) continue;
 
-            blockStates.add(blockState);
+            blockStates.put(blockPos, blockState);
             itemStacks.add(itemBlock);
         }
 
@@ -236,20 +235,19 @@ public class BuildModifierHandler {
             BlockState blockState = getBlockStateFromItem(itemBlock, player, blockPos, facing, hitVec, InteractionHand.MAIN_HAND);
             if (blockState == null) continue;
 
-            List<BlockState> arrayBlockStates = Array.findBlockStates(player, blockPos, blockState, itemStack, itemStacks);
-            blockStates.addAll(arrayBlockStates);
+            var arrayBlockStates = Array.findBlockStates(player, blockPos, blockState, itemStack, itemStacks);
+            blockStates.putAll(arrayBlockStates);
 
-            blockStates.addAll(Mirror.findBlockStates(player, blockPos, blockState, itemStack, itemStacks));
-            blockStates.addAll(RadialMirror.findBlockStates(player, blockPos, blockState, itemStack, itemStacks));
+            blockStates.putAll(Mirror.findBlockStates(player, blockPos, blockState, itemStack, itemStacks));
+            blockStates.putAll(RadialMirror.findBlockStates(player, blockPos, blockState, itemStack, itemStacks));
             //add mirror for each array coordinate
-            List<BlockPos> arrayCoordinates = Array.findCoordinates(player, blockPos);
-            for (int i = 0; i < arrayCoordinates.size(); i++) {
-                var coordinate = arrayCoordinates.get(i);
-                var blockState1 = arrayBlockStates.get(i);
+            for (BlockPos coordinate : Array.findCoordinates(player, blockPos)) {
+                var blockState1 = arrayBlockStates.get(coordinate);
                 if (blockState1 == null) continue;
 
-                blockStates.addAll(Mirror.findBlockStates(player, coordinate, blockState1, itemStack, itemStacks));
-                blockStates.addAll(RadialMirror.findBlockStates(player, coordinate, blockState1, itemStack, itemStacks));
+                blockStates.putAll(Mirror.findBlockStates(player, coordinate, blockState1, itemStack, itemStacks));
+                blockStates.putAll(RadialMirror.findBlockStates(player, coordinate, blockState1, itemStack, itemStacks));
+
             }
 
             //Adjust blockstates for torches and ladders etc to place on a valid side

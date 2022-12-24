@@ -344,14 +344,14 @@ public class BlockPreviewRenderer {
 
         //Get blockstates
         var itemStacks = new ArrayList<ItemStack>();
-        var blockStates = (List<BlockState>) new ArrayList<BlockState>();
+        var blockStates = new ArrayList<BlockState>();
         if (breaking) {
             //Find blockstate of world
             for (var coordinate : newCoordinates) {
                 blockStates.add(player.level.getBlockState(coordinate));
             }
         } else {
-            blockStates = BuildModifierHandler.findBlockStates(player, startCoordinates, hitVec, hitSide, itemStacks);
+            blockStates.addAll(BuildModifierHandler.findBlockStates(player, startCoordinates, hitVec, hitSide, itemStacks).values());
         }
 
 
