@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import dev.huskcasaca.effortless.building.BuildAction;
 import dev.huskcasaca.effortless.building.BuildActionHandler;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.core.Holder;
 import org.joml.Vector4f;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmode.*;
@@ -41,7 +43,6 @@ import static dev.huskcasaca.effortless.building.BuildActionHandler.*;
  * Initially from Chisels and Bits by AlgorithmX2
  * https://github.com/AlgorithmX2/Chisels-and-Bits/blob/1.12/src/main/java/mod/chiselsandbits/client/gui/ChiselsAndBitsMenu.java
  */
-
 @Environment(EnvType.CLIENT)
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -62,7 +63,7 @@ public class RadialMenuScreen extends Screen {
     private static final double categoryLineOuterEdge = 42;
     private static final double textDistance = 90;
     private static final double buttonDistance = 120;
-    private static final float fadeSpeed = 0.3f;
+    private static final float fadeSpeed = 0.5f;
     private static final int descriptionHeight = 100;
 
     public static final int MODE_OPTION_ROW_HEIGHT = 39;
@@ -84,11 +85,9 @@ public class RadialMenuScreen extends Screen {
     }
 
     public static void playRadialMenuSound() {
-        final float volume = 0.1f;
-        if (volume >= 0.0001f) {
-            SimpleSoundInstance sound = new SimpleSoundInstance(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, volume, 1.0f, RandomSource.create(), Minecraft.getInstance().player.blockPosition());
-            Minecraft.getInstance().getSoundManager().play(sound);
-        }
+        SoundManager soundManager = Minecraft.getInstance().getSoundManager();
+        soundManager.reload();
+        soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
 
     public boolean isVisible() {
@@ -113,18 +112,17 @@ public class RadialMenuScreen extends Screen {
 
     @Override
     public void render(PoseStack poseStack, final int mouseX, final int mouseY, final float partialTicks) {
+        visibility += fadeSpeed * partialTicks;
+        if (visibility > 1f) visibility = 1f;
+        if (minecraft.level != null) {
+            fillGradient(poseStack, 0, 0, this.width, this.height,  (int) (visibility * 0xC0) << 24 | 0x101010, (int) (visibility * 0xD0) << 24 | 0x101010);
+        } else {
+            this.renderDirtBackground(0);
+        }
+
         BuildMode currentBuildMode = BuildModeHelper.getModeSettings(minecraft.player).buildMode();
 
         poseStack.pushPose();
-//        poseStack.translate(0, 0, 200);
-
-        visibility += fadeSpeed * partialTicks;
-        if (visibility > 1f) visibility = 1f;
-
-//        final int startColor = ((int) (visibility * 98) << 24) + 0x282828
-//        final int endColor = ((int) (visibility * 128) << 24) + 0x282828;
-//        fillGradient(poseStack, 0, 0, width, height, startColor, endColor);
-        fill(poseStack, 0, 0, width, height, ((int) (visibility * 128) << 24) + 0x212121);
 
         RenderSystem.disableTexture();
         RenderSystem.enableBlend();
@@ -160,12 +158,7 @@ public class RadialMenuScreen extends Screen {
             modes.add(new ModeRegion(mode));
         }
 
-//        -26 -13    0 -13
-//        -26  13    0  13
-//        -26  39    0  39
-
         //Add actions
-
         int baseY = -13;
         int buttonOffset = 26;
 
@@ -175,7 +168,6 @@ public class RadialMenuScreen extends Screen {
         buttons.add(new MenuButton(BuildAction.REPLACE,  -buttonDistance - 0,            baseY + buttonOffset, Direction.EAST));
 
         //Add buildmode dependent options
-
         var options = currentBuildMode.getOptions();
         var optionsTexting = options.clone();
         var optionButtons = new ArrayList<MenuButton>();

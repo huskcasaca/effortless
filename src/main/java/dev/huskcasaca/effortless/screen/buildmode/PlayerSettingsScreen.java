@@ -14,6 +14,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -143,7 +144,9 @@ public class PlayerSettingsScreen extends Screen {
         @Override
         public void setSelected(PlayerSettingsScreen.ShaderTypeList.ShaderTypeEntry selected) {
             super.setSelected(selected);
-            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            SoundManager soundManager = Minecraft.getInstance().getSoundManager();
+            soundManager.reload();
+            soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             Effortless.log("Selected shader " + selected.shaderType.name);
             shaderTypeButton.setMessage(selected.shaderType.name);
 //            showShaderList = false;
