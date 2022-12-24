@@ -200,9 +200,10 @@ public class ArraySettingsPane extends ExpandableScrollEntry {
             double y = Math.abs(textArrayOffsetY.getNumber());
             double z = Math.abs(textArrayOffsetZ.getNumber());
             double largestOffset = Math.max(Math.max(x, y), z);
-            return (int) (largestOffset * textArrayCount.getNumber());
+            var count = textArrayCount.getNumber();
+            return (int) (count > 1 ? largestOffset * count : 0);
         } catch (NumberFormatException | NullPointerException ex) {
-            return -1;
+            return 0;
         }
     }
 

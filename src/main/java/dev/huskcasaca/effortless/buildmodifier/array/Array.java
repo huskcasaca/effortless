@@ -22,7 +22,7 @@ public class Array implements Modifier {
         var pos = startPos;
         var offset = new Vec3i(arraySettings.offset.getX(), arraySettings.offset.getY(), arraySettings.offset.getZ());
 
-        for (int i = 0; i < arraySettings.count; i++) {
+        for (int i = 0; i < arraySettings.count() - 1; i++) {
             pos = pos.offset(offset);
             coordinates.add(pos);
         }
@@ -48,7 +48,7 @@ public class Array implements Modifier {
 //			bagInventory = randomizerBagItem.getBagInventory(itemStack);
 //		}
 
-        for (int i = 0; i < arraySettings.count; i++) {
+        for (int i = 0; i < arraySettings.count() - 1; i++) {
             pos = pos.offset(offset);
 
             //Randomizer bag synergy
@@ -91,7 +91,7 @@ public class Array implements Modifier {
             int z = Math.abs(offset.getZ());
             int largestOffset = Math.max(Math.max(x, y), z);
 
-            return largestOffset * count;
+            return count > 1 ? largestOffset * (count - 1) : 0;
         }
 
         public ArraySettings clone(boolean enabled) {

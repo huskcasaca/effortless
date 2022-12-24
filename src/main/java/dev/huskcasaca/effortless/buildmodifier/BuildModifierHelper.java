@@ -78,8 +78,8 @@ public class BuildModifierHelper {
 
         //Array settings
         var arraySettings = modifierSettings.arraySettings();
-        if (arraySettings.count() < 0) {
-            error += "Array count may not be negative. It has been reset to 0. \n";
+        if (arraySettings.count() < 1) {
+            error += "Array count has to be at least 1. It has been reset to 1. \n";
         }
 
         if (arraySettings.reach() > maxReach) {
@@ -118,12 +118,12 @@ public class BuildModifierHelper {
         //Array settings
         var arraySettings = modifierSettings.arraySettings();
         int count = arraySettings.count();
-        if (count < 0) {
-            count = 0;
+        if (count < 1) {
+            count = 1;
         }
 
         if (arraySettings.reach() > maxReach) {
-            count = 0;
+            count = 1;
         }
         arraySettings = new Array.ArraySettings(
                 arraySettings.enabled(),
