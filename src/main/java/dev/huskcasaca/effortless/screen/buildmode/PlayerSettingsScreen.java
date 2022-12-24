@@ -32,7 +32,7 @@ public class PlayerSettingsScreen extends Screen {
     private Button closeButton;
 
     public PlayerSettingsScreen() {
-        super(Component.translatable("effortless.screen.player_settings"));
+        super(Component.translatable(String.join(".", Effortless.MOD_ID, "screen", "player_settings")));
     }
 
     @Override
