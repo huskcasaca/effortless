@@ -52,6 +52,7 @@ public class BlockPreviewRenderer {
     private BlockPos previousFirstPos;
     private BlockPos previousSecondPos;
     private int soundTime = 0;
+
     public BlockPreviewRenderer() {
         this.minecraft = Minecraft.getInstance();
     }
@@ -111,7 +112,7 @@ public class BlockPreviewRenderer {
         return result;
     }
 
-    public static void renderBlockPreviews(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
+    private static void renderBlockPreviews(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
         var player = Minecraft.getInstance().player;
         var dispatcher = Minecraft.getInstance().getBlockRenderer();
 
@@ -119,18 +120,18 @@ public class BlockPreviewRenderer {
 
         var blockLeft = new HashMap<>(blocksLeft);
 
-        for (BlockPosState placeDatum : placeData) {
-            var blockPos = placeDatum.coordinate;
-            var blockState = placeDatum.blockState;
-            var canBreak = placeDatum.canBreak;
-            var canPlace = placeDatum.canPlace;
+        for (BlockPosState blockPosState : placeData) {
+            var blockPos = blockPosState.coordinate;
+            var blockState = blockPosState.blockState;
+            var canBreak = blockPosState.canBreak;
+            var canPlace = blockPosState.canPlace;
 
             if (breaking) {
                 if (canBreak != null && canBreak || SurvivalHelper.canBreak(player.level, player, blockPos)) {
                     RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
                 }
             } else {
-                if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level, player, placeDatum.coordinate, blockState)) {
+                if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level, player, blockPosState.coordinate, blockState)) {
                     if (player.isCreative()) {
                         RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
                         continue;
@@ -147,7 +148,46 @@ public class BlockPreviewRenderer {
         }
     }
 
-    public static UseResult getBlockUseResult(List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, boolean breaking) {
+    private static void renderBlockOutlines(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
+        var player = Minecraft.getInstance().player;
+        if (placeData.isEmpty()) return;
+
+        var blockLeft = new HashMap<>(blocksLeft);
+
+        var buffer = RenderUtils.beginLines(multiBufferSource);
+        for (BlockPosState blockPosState : placeData) {
+            var blockPos = blockPosState.coordinate;
+            var blockState = blockPosState.blockState;
+            var canBreak = blockPosState.canBreak;
+            var canPlace = blockPosState.canPlace;
+            var collisionShape = blockState.getShape(player.level, blockPos);
+
+            if (breaking) {
+                if (canBreak != null && canBreak || SurvivalHelper.canBreak(player.level, player, blockPos)) {
+                    RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, collisionShape, true);
+
+                }
+            } else {
+                if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level, player, blockPosState.coordinate, blockState)) {
+                    if (player.isCreative()) {
+//                        RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, false);
+                        RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, collisionShape, false);
+                        continue;
+                    }
+                    var count = blockLeft.get(blockState.getBlock());
+                    if (count > 0) {
+                        RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, collisionShape, false);
+                        blockLeft.put(blockState.getBlock(), count - 1);
+                    } else {
+                        RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, collisionShape, true);
+                    }
+                }
+            }
+        }
+        RenderUtils.endLines(multiBufferSource);
+    }
+
+    private static UseResult getBlockUseResult(List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, boolean breaking) {
         if (placeData.isEmpty()) {
             return UseResult.EMPTY;
         }
@@ -259,165 +299,171 @@ public class BlockPreviewRenderer {
 
         //Dont render if in normal mode and modifiers are disabled
         //Unless alwaysShowBlockPreview is true in config
-        if (doRenderBlockPreviews(player, startPos)) {
+        if (!doRenderBlockPreviews(player, startPos)) {
+            return;
+        }
 
-            //Keep blockstate the same for every block in the buildmode
-            //So dont rotate blocks when in the middle of placing wall etc.
-            if (BuildModeHandler.isActive(player)) {
-                Buildable buildModeInstance = BuildModeHelper.getBuildMode(player).getInstance();
-                if (buildModeInstance.getHitSide(player) != null) hitSide = buildModeInstance.getHitSide(player);
-                if (buildModeInstance.getHitVec(player) != null) hitVec = buildModeInstance.getHitVec(player);
-            }
+        //Keep blockstate the same for every block in the buildmode
+        //So dont rotate blocks when in the middle of placing wall etc.
+        if (BuildModeHandler.isActive(player)) {
+            Buildable buildModeInstance = BuildModeHelper.getBuildMode(player).getInstance();
+            if (buildModeInstance.getHitSide(player) != null) hitSide = buildModeInstance.getHitSide(player);
+            if (buildModeInstance.getHitVec(player) != null) hitVec = buildModeInstance.getHitVec(player);
+        }
 
-            if (hitSide != null) {
+        if (hitSide == null) {
+            return;
+        }
 
-                //Should be red?
-                var breaking = BuildModeHandler.isCurrentlyBreaking(player);
+        //Should be red?
+        var breaking = BuildModeHandler.isCurrentlyBreaking(player);
 
-                //get coordinates
-                var skipRaytrace = breaking || BuildModifierHelper.isQuickReplace(player);
-                var startCoordinates = BuildModeHandler.findCoordinates(player, startPos, skipRaytrace);
+        //get coordinates
+        var skipRaytrace = breaking || BuildModifierHelper.isQuickReplace(player);
+        var startCoordinates = BuildModeHandler.findCoordinates(player, startPos, skipRaytrace);
 
-                //Remember first and last point for the shader
-                var firstPos = BlockPos.ZERO;
-                var secondPos = BlockPos.ZERO;
-                if (!startCoordinates.isEmpty()) {
-                    firstPos = startCoordinates.get(0);
-                    secondPos = startCoordinates.get(startCoordinates.size() - 1);
-                }
+        //Remember first and last point for the shader
+        var firstPos = BlockPos.ZERO;
+        var secondPos = BlockPos.ZERO;
+        if (!startCoordinates.isEmpty()) {
+            firstPos = startCoordinates.get(0);
+            secondPos = startCoordinates.get(startCoordinates.size() - 1);
+        }
 
-                //Limit number of blocks you can place
-                int limit = ReachHelper.getMaxBlockPlaceAtOnce(player);
-                if (startCoordinates.size() > limit) {
-                    startCoordinates = startCoordinates.subList(0, limit);
-                }
+        //Limit number of blocks you can place
+        int limit = ReachHelper.getMaxBlockPlaceAtOnce(player);
+        if (startCoordinates.size() > limit) {
+            startCoordinates = startCoordinates.subList(0, limit);
+        }
 
-                var newCoordinates = BuildModifierHandler.findCoordinates(player, startCoordinates);
+        var newCoordinates = BuildModifierHandler.findCoordinates(player, startCoordinates);
 
 //                sortOnDistanceToPlayer(newCoordinates, player);
 
-                hitVec = new Vec3(Math.abs(hitVec.x - ((int) hitVec.x)), Math.abs(hitVec.y - ((int) hitVec.y)), Math.abs(hitVec.z - ((int) hitVec.z)));
+        hitVec = new Vec3(Math.abs(hitVec.x - ((int) hitVec.x)), Math.abs(hitVec.y - ((int) hitVec.y)), Math.abs(hitVec.z - ((int) hitVec.z)));
 
-                //Get blockstates
-                var itemStacks = new ArrayList<ItemStack>();
-                var blockStates = (List<BlockState>) new ArrayList<BlockState>();
-                if (breaking) {
-                    //Find blockstate of world
-                    for (var coordinate : newCoordinates) {
-                        blockStates.add(player.level.getBlockState(coordinate));
-                    }
-                } else {
-                    blockStates = BuildModifierHandler.findBlockStates(player, startCoordinates, hitVec, hitSide, itemStacks);
-                }
-
-
-                //Check if they are different from previous
-                //TODO fix triggering when moving player
-                if (!BuildModifierHandler.compareCoordinates(previousCoordinates, newCoordinates)) {
-                    previousCoordinates = newCoordinates;
-                    //remember the rest for placed blocks
-                    previousBlockStates = blockStates;
-                    previousItemStacks = itemStacks;
-                    previousFirstPos = firstPos;
-                    previousSecondPos = secondPos;
-
-                    //if so, renew randomness of randomizer bag
-//					AbstractRandomizerBagItem.renewRandomness();
-                    //and play sound (max once every tick)
-                    if (newCoordinates.size() > 1 && blockStates.size() > 1 && soundTime < EffortlessClient.getTicksInGame()) {
-                        soundTime = EffortlessClient.getTicksInGame();
-
-                        if (blockStates.get(0) != null) {
-                            SoundType soundType = blockStates.get(0).getBlock().getSoundType(blockStates.get(0));
-                            player.level.playSound(player, player.blockPosition(), breaking ? soundType.getBreakSound() : soundType.getPlaceSound(), SoundSource.BLOCKS, 0.3f, 0.8f);
-                        }
-                    }
-                }
-
-                //Render block previews
-                if (!blockStates.isEmpty() && newCoordinates.size() == blockStates.size()) {
-
-                    //Use fancy shader if config allows, otherwise outlines
-                    if (PreviewConfig.useShader() && newCoordinates.size() < PreviewConfig.shaderThresholdRounded()) {
-
-                        renderBlockPreviews(poseStack, multiBufferSource, getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, 0f, breaking);
-                    } else {
-                        VertexConsumer buffer = RenderUtils.beginLines(multiBufferSource);
-
-                        var color = new Vec3(1f, 1f, 1f);
-                        if (breaking) color = new Vec3(1f, 0f, 0f);
-
-                        for (int i = newCoordinates.size() - 1; i >= 0; i--) {
-                            VoxelShape collisionShape = blockStates.get(i).getCollisionShape(player.level, newCoordinates.get(i));
-                            RenderUtils.renderBlockOutline(poseStack, buffer, newCoordinates.get(i), collisionShape, color);
-                        }
-
-                        RenderUtils.endLines(multiBufferSource);
-                    }
-                    var placeResult = getBlockUseResult(getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), breaking);
-
-                    currentPlacing.add(new Preview(getBlockPosStates(player, newCoordinates, blockStates), placeResult, firstPos, secondPos, EffortlessClient.getTicksInGame(), false));
-
-                    //Display block count and dimensions in actionbar
-                    if (BuildModeHandler.isActive(player)) {
-
-                        //Find min and max values (not simply firstPos and secondPos because that doesn't work with circles)
-                        int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
-                        int minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
-                        int minZ = Integer.MAX_VALUE, maxZ = Integer.MIN_VALUE;
-                        for (var pos : startCoordinates) {
-                            if (pos.getX() < minX) minX = pos.getX();
-                            if (pos.getX() > maxX) maxX = pos.getX();
-                            if (pos.getY() < minY) minY = pos.getY();
-                            if (pos.getY() > maxY) maxY = pos.getY();
-                            if (pos.getZ() < minZ) minZ = pos.getZ();
-                            if (pos.getZ() > maxZ) maxZ = pos.getZ();
-                        }
-                        var dim = new BlockPos(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
-
-                        String dimensions = "(";
-                        if (dim.getX() > 1) dimensions += dim.getX() + "x";
-                        if (dim.getZ() > 1) dimensions += dim.getZ() + "x";
-                        if (dim.getY() > 1) dimensions += dim.getY() + "x";
-                        dimensions = dimensions.substring(0, dimensions.length() - 1);
-                        if (dimensions.length() > 1) dimensions += ")";
-
-
-                        var blockCounter = "" + ChatFormatting.WHITE + placeResult.validBlocks() + ChatFormatting.RESET + (placeResult.isFilled() ? " " : " + " + ChatFormatting.RED + placeResult.wantedBlocks() + ChatFormatting.RESET + " ") + (placeResult.totalBlocks() == 1 ? "block" : "blocks");
-
-                        Effortless.log(player, "%s%s%s of %s %s".formatted(ChatFormatting.GOLD, BuildModeHelper.getTranslatedModeOptionName(player), ChatFormatting.RESET, blockCounter, dimensions), true);
-                    } else {
-                        Effortless.log(player, "", true);
-                    }
-                }
-
+        //Get blockstates
+        var itemStacks = new ArrayList<ItemStack>();
+        var blockStates = (List<BlockState>) new ArrayList<BlockState>();
+        if (breaking) {
+            //Find blockstate of world
+            for (var coordinate : newCoordinates) {
+                blockStates.add(player.level.getBlockState(coordinate));
             }
-
-            VertexConsumer buffer = RenderUtils.beginLines(multiBufferSource);
-            //Draw outlines if tool in hand
-            //Find proper raytrace: either normal range or increased range depending on canBreakFar
-            HitResult objectMouseOver = Minecraft.getInstance().hitResult;
-            HitResult breakingRaytrace = ReachHelper.isCanBreakFar(player) ? lookingAt : objectMouseOver;
-            if (toolInHand && breakingRaytrace != null && breakingRaytrace.getType() == HitResult.Type.BLOCK) {
-                BlockHitResult blockBreakingRaytrace = (BlockHitResult) breakingRaytrace;
-                List<BlockPos> breakCoordinates = BuildModifierHandler.findCoordinates(player, blockBreakingRaytrace.getBlockPos());
-
-                //Only render first outline if further than normal reach
-                boolean excludeFirst = objectMouseOver != null && objectMouseOver.getType() == HitResult.Type.BLOCK;
-                for (int i = excludeFirst ? 1 : 0; i < breakCoordinates.size(); i++) {
-                    var coordinate = breakCoordinates.get(i);
-
-                    var blockState = player.level.getBlockState(coordinate);
-                    if (!blockState.isAir()) {
-                        if (SurvivalHelper.canBreak(player.level, player, coordinate) || i == 0) {
-                            VoxelShape collisionShape = blockState.getCollisionShape(player.level, coordinate);
-                            RenderUtils.renderBlockOutline(poseStack, buffer, coordinate, collisionShape, new Vec3(0f, 0f, 0f));
-                        }
-                    }
-                }
-            }
-            RenderUtils.endLines(multiBufferSource);
+        } else {
+            blockStates = BuildModifierHandler.findBlockStates(player, startCoordinates, hitVec, hitSide, itemStacks);
         }
+
+
+        //Check if they are different from previous
+        //TODO fix triggering when moving player
+        if (!BuildModifierHandler.compareCoordinates(previousCoordinates, newCoordinates)) {
+            previousCoordinates = newCoordinates;
+            //remember the rest for placed blocks
+            previousBlockStates = blockStates;
+            previousItemStacks = itemStacks;
+            previousFirstPos = firstPos;
+            previousSecondPos = secondPos;
+
+            //if so, renew randomness of randomizer bag
+//					AbstractRandomizerBagItem.renewRandomness();
+            //and play sound (max once every tick)
+            if (newCoordinates.size() > 1 && blockStates.size() > 1 && soundTime < EffortlessClient.getTicksInGame()) {
+                soundTime = EffortlessClient.getTicksInGame();
+
+                if (blockStates.get(0) != null) {
+                    SoundType soundType = blockStates.get(0).getBlock().getSoundType(blockStates.get(0));
+                    player.level.playSound(player, player.blockPosition(), breaking ? soundType.getBreakSound() : soundType.getPlaceSound(), SoundSource.BLOCKS, 0.3f, 0.8f);
+                }
+            }
+        }
+
+        //Render block previews
+        if (blockStates.isEmpty() || newCoordinates.size() != blockStates.size()) {
+            return;
+        }
+
+        //Use fancy shader if config allows, otherwise outlines
+        if (PreviewConfig.useShader() && newCoordinates.size() < PreviewConfig.shaderThresholdRounded()) {
+            renderBlockPreviews(poseStack, multiBufferSource, getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, 0f, breaking);
+        } else {
+//            var camera1 = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+//            poseStack.translate(- camera1.x - 1, - camera1.y, - camera1.z);
+
+            renderBlockOutlines(poseStack, multiBufferSource, getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, 0f, breaking);
+//
+//            VertexConsumer buffer = RenderUtils.beginLines(multiBufferSource);
+//
+//            var color = new Vec3(1f, 1f, 1f);
+//            if (breaking) color = new Vec3(1f, 0f, 0f);
+//
+//            for (int i = newCoordinates.size() - 1; i >= 0; i--) {
+//                VoxelShape collisionShape = blockStates.get(i).getCollisionShape(player.level, newCoordinates.get(i));
+//                RenderUtils.renderBlockOutline(poseStack, buffer, newCoordinates.get(i), collisionShape, color);
+//            }
+//
+//            RenderUtils.endLines(multiBufferSource);
+        }
+        var placeResult = getBlockUseResult(getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), breaking);
+
+        currentPlacing.add(new Preview(getBlockPosStates(player, newCoordinates, blockStates), placeResult, firstPos, secondPos, EffortlessClient.getTicksInGame(), false));
+
+        //Display block count and dimensions in actionbar
+        if (BuildModeHandler.isActive(player)) {
+
+            //Find min and max values (not simply firstPos and secondPos because that doesn't work with circles)
+            int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
+            int minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
+            int minZ = Integer.MAX_VALUE, maxZ = Integer.MIN_VALUE;
+            for (var pos : startCoordinates) {
+                if (pos.getX() < minX) minX = pos.getX();
+                if (pos.getX() > maxX) maxX = pos.getX();
+                if (pos.getY() < minY) minY = pos.getY();
+                if (pos.getY() > maxY) maxY = pos.getY();
+                if (pos.getZ() < minZ) minZ = pos.getZ();
+                if (pos.getZ() > maxZ) maxZ = pos.getZ();
+            }
+            var dim = new BlockPos(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
+
+            String dimensions = "(";
+            if (dim.getX() > 1) dimensions += dim.getX() + "x";
+            if (dim.getZ() > 1) dimensions += dim.getZ() + "x";
+            if (dim.getY() > 1) dimensions += dim.getY() + "x";
+            dimensions = dimensions.substring(0, dimensions.length() - 1);
+            if (dimensions.length() > 1) dimensions += ")";
+
+
+            var blockCounter = "" + ChatFormatting.WHITE + placeResult.validBlocks() + ChatFormatting.RESET + (placeResult.isFilled() ? " " : " + " + ChatFormatting.RED + placeResult.wantedBlocks() + ChatFormatting.RESET + " ") + (placeResult.totalBlocks() == 1 ? "block" : "blocks");
+
+            Effortless.log(player, "%s%s%s of %s %s".formatted(ChatFormatting.GOLD, BuildModeHelper.getTranslatedModeOptionName(player), ChatFormatting.RESET, blockCounter, dimensions), true);
+        } else {
+            Effortless.log(player, "", true);
+        }
+
+        //            VertexConsumer buffer = RenderUtils.beginLines(multiBufferSource);
+//            //Draw outlines if tool in hand
+//            //Find proper raytrace: either normal range or increased range depending on canBreakFar
+//            HitResult objectMouseOver = Minecraft.getInstance().hitResult;
+//            HitResult breakingRaytrace = ReachHelper.isCanBreakFar(player) ? lookingAt : objectMouseOver;
+//            if (toolInHand && breakingRaytrace != null && breakingRaytrace.getType() == HitResult.Type.BLOCK) {
+//                BlockHitResult blockBreakingRaytrace = (BlockHitResult) breakingRaytrace;
+//                List<BlockPos> breakCoordinates = BuildModifierHandler.findCoordinates(player, blockBreakingRaytrace.getBlockPos());
+//
+//                //Only render first outline if further than normal reach
+//                boolean excludeFirst = objectMouseOver != null && objectMouseOver.getType() == HitResult.Type.BLOCK;
+//                for (int i = excludeFirst ? 1 : 0; i < breakCoordinates.size(); i++) {
+//                    var coordinate = breakCoordinates.get(i);
+//
+//                    var blockState = player.level.getBlockState(coordinate);
+//                    if (!blockState.isAir()) {
+//                        if (SurvivalHelper.canBreak(player.level, player, coordinate) || i == 0) {
+//                            VoxelShape collisionShape = blockState.getCollisionShape(player.level, coordinate);
+//                            RenderUtils.renderBlockOutline(poseStack, buffer, coordinate, collisionShape, new Vec3(0f, 0f, 0f));
+//                        }
+//                    }
+//                }
+//            }
+//            RenderUtils.endLines(multiBufferSource);
     }
 
     public void onBlocksPlaced() {

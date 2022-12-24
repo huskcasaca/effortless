@@ -86,16 +86,14 @@ public class BuildRenderType extends RenderType {
 
     public static RenderType getBlockPreviewRenderType(float dissolve, BlockPos blockPos, BlockPos firstPos, BlockPos secondPos, boolean red) {
 
-        String stateName = "ef_texturing_" + dissolve + "_" + blockPos + "_" + firstPos + "_" + secondPos + "_" + red;
-        TexturingStateShard MY_TEXTURING = new TexturingStateShard(stateName, () -> {
+        var stateName = "ef_texturing_" + dissolve + "_" + blockPos + "_" + firstPos + "_" + secondPos + "_" + red;
+        var texture = new TexturingStateShard(stateName, () -> {
             setShaderParameters(getDissolveShaderInstance(), dissolve, Vec3.atLowerCornerOf(blockPos), Vec3.atLowerCornerOf(firstPos), Vec3.atLowerCornerOf(secondPos), blockPos == secondPos, red);
             RenderSystem.setShaderColor(1f, 1f, 1f, 0.8f);
-        }, () -> {
-        });
-
-        RenderType.CompositeState renderState = RenderType.CompositeState.builder()
+        }, () -> { });
+        var renderState = RenderType.CompositeState.builder()
                 .setShaderState(RENDER_TYPE_DISSOLVE_SHADER)
-                .setTexturingState(MY_TEXTURING)
+                .setTexturingState(texture)
                 .setTextureState(RenderStateShard.BLOCK_SHEET_MIPPED)
                 .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                 .setLightmapState(RenderStateShard.NO_LIGHTMAP)
@@ -103,9 +101,8 @@ public class BuildRenderType extends RenderType {
                 .setOutputState(RenderStateShard.TRANSLUCENT_TARGET)
                 .createCompositeState(true);
         //Unique name for every combination, otherwise it will reuse the previous one
-        String name = "ef_block_previews_" + dissolve + "_" + blockPos + "_" + firstPos + "_" + secondPos + "_" + red;
-        return RenderType.create(name,
-                DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, true, renderState);
+        var name = "ef_block_previews_" + dissolve + "_" + blockPos + "_" + firstPos + "_" + secondPos + "_" + red;
+        return RenderType.create(name, DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, true, renderState);
     }
 
     private static void setShaderParameters(ShaderInstance shader, final float dissolve, final Vec3 blockpos,

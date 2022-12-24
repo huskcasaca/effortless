@@ -49,32 +49,33 @@ public class RenderUtils {
         poseStack.scale(129 / 128f, 129 / 128f, 129 / 128f);
 
         //Begin block preview rendering
-        RenderType blockPreviewRenderType = BuildRenderType.getBlockPreviewRenderType(dissolve, blockPos, firstPos, secondPos, red);
-        VertexConsumer buffer = renderTypeBuffer.getBuffer(blockPreviewRenderType);
+        var blockPreviewRenderType = BuildRenderType.getBlockPreviewRenderType(dissolve, blockPos, firstPos, secondPos, red);
+        var buffer = renderTypeBuffer.getBuffer(blockPreviewRenderType);
+//        ItemBlockRenderTypes.getChunkRenderType(blockState);
 
         try {
             var level = Minecraft.getInstance().level;
             var model = dispatcher.getBlockModel(blockState);
             var seed = blockState.getSeed(firstPos);
             // TODO: 8/9/22
-//            dispatcher.getModelRenderer().renderModel(poseStack.last(), buffer, blockState, model,
-//                    1f, 1f, 1f, 0, OverlayTexture.NO_OVERLAY/*, ModelData.EMPTY, blockPreviewRenderType*/);
             dispatcher.getModelRenderer().tesselateBlock(level, model, blockState, blockPos, poseStack, buffer, false, RAND, seed, OverlayTexture.NO_OVERLAY);
         } catch (NullPointerException e) {
+//            e.printStackTrace();
             Effortless.logger.warn("RenderUtils::renderBlockPreview cannot render " + blockState.getBlock().toString());
-
-            //Render outline as backup, escape out of the current renderstack
-            poseStack.popPose();
-            renderTypeBuffer.endBatch();
-            VertexConsumer lineBuffer = beginLines(renderTypeBuffer);
-            renderBlockOutline(poseStack, lineBuffer, blockPos, new Vec3(1f, 1f, 1f));
-            endLines(renderTypeBuffer);
-            buffer = renderTypeBuffer.getBuffer(Sheets.translucentCullBlockSheet()); //any type will do, as long as we have something on the stack
-            poseStack.pushPose();
+            var model = dispatcher.getBlockModel(blockState);
+            dispatcher.getModelRenderer().renderModel(poseStack.last(), buffer, blockState, model, 1f, 1f, 1f, 2, OverlayTexture.NO_OVERLAY/*, ModelData.EMPTY, blockPreviewRenderType*/);
         }
 
         renderTypeBuffer.endBatch();
         poseStack.popPose();
+    }
+
+    protected static void renderBlockOutline(PoseStack poseStack, VertexConsumer buffer, BlockPos pos, boolean red) {
+        if (red) {
+            renderBlockOutline(poseStack, buffer, pos, new Vec3(1f, 0f, 0f));
+        } else {
+            renderBlockOutline(poseStack, buffer, pos, new Vec3(1f, 1f, 1f));
+        }
     }
 
     protected static void renderBlockOutline(PoseStack poseStack, VertexConsumer buffer, BlockPos pos, Vec3 color) {
@@ -86,13 +87,21 @@ public class RenderUtils {
         AABB aabb = new AABB(pos1, pos2.offset(1, 1, 1)).inflate(0.0020000000949949026);
 
         LevelRenderer.renderLineBox(poseStack, buffer, aabb, (float) color.x, (float) color.y, (float) color.z, 0.4f);
-//        WorldRenderer.drawSelectionBoundingBox(aabb, (float) color.x, (float) color.y, (float) color.z, 0.4f);
+    }
+
+    protected static void renderBlockOutline(PoseStack poseStack, VertexConsumer buffer, BlockPos pos, VoxelShape voxelShape, boolean red) {
+        if (red) {
+            renderBlockOutline(poseStack, buffer, pos, voxelShape, new Vec3(1f, 0f, 0f));
+        } else {
+            renderBlockOutline(poseStack, buffer, pos, voxelShape, new Vec3(1f, 1f, 1f));
+        }
     }
 
     //Renders outline with given bounding box
-    protected static void renderBlockOutline(PoseStack poseStack, VertexConsumer buffer, BlockPos pos, VoxelShape collisionShape, Vec3 color) {
-//        WorldRenderer.drawShape(collisionShape, pos.getX(), pos.getY(), pos.getZ(), (float) color.x, (float) color.y, (float) color.z, 0.4f);
-        LevelRenderer.renderVoxelShape(poseStack, buffer, collisionShape, pos.getX(), pos.getY(), pos.getZ(), (float) color.x, (float) color.y, (float) color.z, 0.4f);
+    protected static void renderBlockOutline(PoseStack poseStack, VertexConsumer buffer, BlockPos pos, VoxelShape voxelShape, Vec3 color) {
+        var camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+
+        LevelRenderer.renderVoxelShape(poseStack, buffer, voxelShape, pos.getX() - camera.x(), pos.getY() - camera.y(), pos.getZ() - camera.z(), (float) color.x, (float) color.y, (float) color.z, 0.4f);
     }
 
     //TODO
