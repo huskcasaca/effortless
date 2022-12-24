@@ -12,12 +12,12 @@ import java.util.*;
 
 public class Array implements Modifier {
 
-    public static List<BlockPos> findCoordinates(Player player, BlockPos startPos) {
+    public static Set<BlockPos> findCoordinates(Player player, BlockPos startPos) {
         var coordinates = new LinkedHashSet<BlockPos>();
 
         //find arraysettings for the player
         var arraySettings = BuildModifierHelper.getModifierSettings(player).arraySettings();
-        if (!isEnabled(arraySettings)) return Collections.emptyList();
+        if (!isEnabled(arraySettings)) return Collections.emptySet();
 
         var pos = startPos;
         var offset = new Vec3i(arraySettings.offset.getX(), arraySettings.offset.getY(), arraySettings.offset.getZ());
@@ -27,15 +27,15 @@ public class Array implements Modifier {
             coordinates.add(pos);
         }
 
-        return coordinates.stream().toList();
+        return coordinates;
     }
 
-    public static List<BlockState> findBlockStates(Player player, BlockPos startPos, BlockState blockState, ItemStack itemStack, List<ItemStack> itemStacks) {
+    public static Map<BlockPos, BlockState> findBlockStates(Player player, BlockPos startPos, BlockState blockState, ItemStack itemStack, List<ItemStack> itemStacks) {
         var blockStates = new LinkedHashMap<BlockPos, BlockState>();
 
         //find arraysettings for the player that placed the block
         var arraySettings = BuildModifierHelper.getModifierSettings(player).arraySettings();
-        if (!isEnabled(arraySettings)) return Collections.emptyList();
+        if (!isEnabled(arraySettings)) return Collections.emptyMap();
 
         var pos = startPos;
         var offset = new Vec3i(arraySettings.offset.getX(), arraySettings.offset.getY(), arraySettings.offset.getZ());
@@ -65,7 +65,7 @@ public class Array implements Modifier {
             }
         }
 
-        return blockStates.values().stream().toList();
+        return blockStates;
     }
 
     public static boolean isEnabled(ArraySettings a) {
