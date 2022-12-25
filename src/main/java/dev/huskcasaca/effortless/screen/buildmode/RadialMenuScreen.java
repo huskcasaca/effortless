@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.*;
 import dev.huskcasaca.effortless.building.BuildAction;
 import dev.huskcasaca.effortless.building.BuildActionHandler;
 import net.minecraft.client.sounds.SoundManager;
-import net.minecraft.core.Holder;
 import org.joml.Vector4f;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmode.*;
@@ -28,8 +27,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import org.apache.commons.lang3.text.WordUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -127,8 +124,8 @@ public class RadialMenuScreen extends Screen {
         RenderSystem.disableTexture();
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-        final var tessellator = Tesselator.getInstance();
-        final var buffer = tessellator.getBuilder();
+        final var tesselator = Tesselator.getInstance();
+        final var buffer = tesselator.getBuilder();
 
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
@@ -195,11 +192,11 @@ public class RadialMenuScreen extends Screen {
         //Draw action backgrounds
         drawSideButtonBackgrounds(buffer, middleX, middleY, mouseXCenter, mouseYCenter, buttons);
 
-        tessellator.end();
+        tesselator.end();
         RenderSystem.disableBlend();
         RenderSystem.enableTexture();
 
-        drawIcons(poseStack, tessellator, buffer, middleX, middleY, ringInnerEdge, ringOuterEdge, modes, buttons);
+        drawIcons(poseStack, tesselator, buffer, middleX, middleY, ringInnerEdge, ringOuterEdge, modes, buttons);
 
         drawTexts(poseStack, currentBuildMode, middleX, middleY, textDistance, buttonDistance, modes, buttons, optionsTexting);
 
@@ -313,7 +310,7 @@ public class RadialMenuScreen extends Screen {
         }
     }
 
-    private void drawIcons(PoseStack poseStack, Tesselator tessellator, BufferBuilder buffer, double middleX, double middleY, double ringInnerEdge, double ringOuterEdge, ArrayList<ModeRegion> modes, ArrayList<MenuButton> buttons) {
+    private void drawIcons(PoseStack poseStack, Tesselator tesselator, BufferBuilder buffer, double middleX, double middleY, double ringInnerEdge, double ringOuterEdge, ArrayList<ModeRegion> modes, ArrayList<MenuButton> buttons) {
         poseStack.pushPose();
         RenderSystem.enableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
