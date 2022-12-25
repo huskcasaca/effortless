@@ -212,8 +212,8 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
 
     protected void renderList(PoseStack poseStack, int p_renderList_1_, int p_renderList_2_, int p_renderList_3_, int p_renderList_4_, float p_renderList_5_) {
         int i = this.getItemCount();
-        Tesselator tessellator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuilder();
+        Tesselator tesselator = Tesselator.getInstance();
+        BufferBuilder bufferbuilder = tesselator.getBuilder();
 
         for (int j = 0; j < i; ++j) {
             int k = p_renderList_2_ + j * this.itemHeight + this.headerHeight;
@@ -233,14 +233,14 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
                 bufferbuilder.vertex(j1, k + l + 2, 0.0D).endVertex();
                 bufferbuilder.vertex(j1, k - 2, 0.0D).endVertex();
                 bufferbuilder.vertex(i1, k - 2, 0.0D).endVertex();
-                tessellator.end();
+                tesselator.end();
                 RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
                 bufferbuilder.vertex(i1 + 1, k + l + 1, 0.0D).endVertex();
                 bufferbuilder.vertex(j1 - 1, k + l + 1, 0.0D).endVertex();
                 bufferbuilder.vertex(j1 - 1, k - 1, 0.0D).endVertex();
                 bufferbuilder.vertex(i1 + 1, k - 1, 0.0D).endVertex();
-                tessellator.end();
+                tesselator.end();
                 RenderSystem.enableTexture();
             }
 

@@ -197,8 +197,8 @@ public class PlayerSettingsScreen extends Screen {
             this.renderBackground(poseStack);
             int i = this.getScrollbarPosition();
             int j = i + 6;
-            Tesselator tessellator = Tesselator.getInstance();
-            BufferBuilder bufferbuilder = tessellator.getBuilder();
+            Tesselator tesselator = Tesselator.getInstance();
+            BufferBuilder bufferbuilder = tesselator.getBuilder();
 //            this.minecraft.getTextureManager().bindTexture(AbstractGui.BACKGROUND_LOCATION);
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
@@ -209,12 +209,12 @@ public class PlayerSettingsScreen extends Screen {
             bufferbuilder.vertex(this.x1, this.y1, 0.0D).color(20, 20, 20, 180).endVertex();
             bufferbuilder.vertex(this.x1, this.y0, 0.0D).color(20, 20, 20, 180).endVertex();
             bufferbuilder.vertex(this.x0, this.y0, 0.0D).color(20, 20, 20, 180).endVertex();
-            tessellator.end();
+            tesselator.end();
             int k = this.getRowLeft();
             int l = this.y0 + 4 - (int) this.getScrollAmount();
             // TODO: 7/9/22 access private field renderHeader
             if (renderHeader) {
-                this.renderHeader(poseStack, k, l, tessellator);
+                this.renderHeader(poseStack, k, l, tesselator);
             }
 
             this.renderList(poseStack, p_render_1_, p_render_2_, p_render_3_);
@@ -230,13 +230,13 @@ public class PlayerSettingsScreen extends Screen {
 //            bufferbuilder.pos((double)this.x1, (double)(this.y0 + 4), 0.0D).tex(1.0F, 1.0F).color(0, 0, 0, 0).endVertex();
 //            bufferbuilder.pos((double)this.x1, (double)this.y0, 0.0D).tex(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
 //            bufferbuilder.pos((double)this.x0, (double)this.y0, 0.0D).tex(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-//            tessellator.draw();
+//            tesselator.draw();
 //            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 //            bufferbuilder.pos((double)this.x0, (double)this.y1, 0.0D).tex(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
 //            bufferbuilder.pos((double)this.x1, (double)this.y1, 0.0D).tex(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
 //            bufferbuilder.pos((double)this.x1, (double)(this.y1 - 4), 0.0D).tex(1.0F, 0.0F).color(0, 0, 0, 0).endVertex();
 //            bufferbuilder.pos((double)this.x0, (double)(this.y1 - 4), 0.0D).tex(0.0F, 0.0F).color(0, 0, 0, 0).endVertex();
-//            tessellator.draw();
+//            tesselator.draw();
 
             //SCROLLBAR
             int j1 = this.getMaxScroll();
@@ -253,19 +253,19 @@ public class PlayerSettingsScreen extends Screen {
                 bufferbuilder.vertex(j, this.y1, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
                 bufferbuilder.vertex(j, this.y0, 0.0D).uv(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
                 bufferbuilder.vertex(i, this.y0, 0.0D).uv(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-                tessellator.end();
+                tesselator.end();
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
                 bufferbuilder.vertex(i, l1 + k1, 0.0D).uv(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
                 bufferbuilder.vertex(j, l1 + k1, 0.0D).uv(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
                 bufferbuilder.vertex(j, l1, 0.0D).uv(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
                 bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
-                tessellator.end();
+                tesselator.end();
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
                 bufferbuilder.vertex(i, l1 + k1 - 1, 0.0D).uv(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
                 bufferbuilder.vertex(j - 1, l1 + k1 - 1, 0.0D).uv(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
                 bufferbuilder.vertex(j - 1, l1, 0.0D).uv(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
                 bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(192, 192, 192, 255).endVertex();
-                tessellator.end();
+                tesselator.end();
             }
 
 //            this.renderDecorations(p_render_1_, p_render_2_);
