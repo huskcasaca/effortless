@@ -448,10 +448,10 @@ public class RadialMenuScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
         performAction(true);
 
-        return super.mouseClicked(mouseX, mouseY, mouseButton);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override

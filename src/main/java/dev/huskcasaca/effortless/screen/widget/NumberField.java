@@ -80,14 +80,14 @@ public class NumberField extends GuiComponent {
         this.tooltip = tooltip;
     }
 
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        boolean result = textField.mouseClicked(mouseX, mouseY, mouseButton);
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        boolean result = textField.mouseClicked(mouseX, mouseY, button);
 
         //Check if clicked inside textfield
         boolean flag = mouseX >= x + buttonWidth && mouseX < x + width - buttonWidth && mouseY >= y && mouseY < y + height;
 
         //Rightclicked inside textfield
-        if (flag && mouseButton == 1) {
+        if (flag && button == 1) {
             textField.setValue("");
             textField.setFocus(true);
             result = true;

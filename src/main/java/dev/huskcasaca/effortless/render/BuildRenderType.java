@@ -105,8 +105,8 @@ public class BuildRenderType extends RenderType {
         return RenderType.create(name, DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, true, renderState);
     }
 
-    private static void setShaderParameters(ShaderInstance shader, final float dissolve, final Vec3 blockpos,
-                                            final Vec3 firstpos, final Vec3 secondpos,
+    private static void setShaderParameters(ShaderInstance shader, final float dissolve, final Vec3 blockPos,
+                                            final Vec3 firstPos, final Vec3 secondPos,
                                             final boolean highlight, final boolean red) {
         Uniform percentileUniform = shader.getUniform("dissolve");
         Uniform highlightUniform = shader.getUniform("highlight");
@@ -124,12 +124,12 @@ public class BuildRenderType extends RenderType {
         if (redUniform != null) redUniform.set(red ? 1 : 0);
         else Effortless.log("redUniform is null");
 
-        if (blockposUniform != null) blockposUniform.set((float) blockpos.x, (float) blockpos.y, (float) blockpos.z);
+        if (blockposUniform != null) blockposUniform.set((float) blockPos.x, (float) blockPos.y, (float) blockPos.z);
         else Effortless.log("blockpos uniform is null");
-        if (firstposUniform != null) firstposUniform.set((float) firstpos.x, (float) firstpos.y, (float) firstpos.z);
+        if (firstposUniform != null) firstposUniform.set((float) firstPos.x, (float) firstPos.y, (float) firstPos.z);
         else Effortless.log("firstpos uniform is null");
         if (secondposUniform != null)
-            secondposUniform.set((float) secondpos.x, (float) secondpos.y, (float) secondpos.z);
+            secondposUniform.set((float) secondPos.x, (float) secondPos.y, (float) secondPos.z);
         else Effortless.log("secondpos uniform is null");
     }
 

@@ -15,8 +15,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ExtendedButton extends Button {
-    public ExtendedButton(int xPos, int yPos, int width, int height, Component displayString, OnPress handler) {
-        super(xPos, yPos, width, height, displayString, handler, Button.DEFAULT_NARRATION);
+    public ExtendedButton(int posX, int posY, int width, int height, Component displayString, OnPress handler) {
+        super(posX, posY, width, height, displayString, handler, Button.DEFAULT_NARRATION);
     }
 
     /**

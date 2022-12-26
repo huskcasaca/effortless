@@ -69,10 +69,10 @@ public class ScrollPane extends Slot {
 
     //Removed background
     @Override
-    public void render(PoseStack poseStack, int mouseXIn, int mouseYIn, float partialTicks) {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
-            this.mouseX = mouseXIn;
-            this.mouseY = mouseYIn;
+            this.mouseX = mouseX;
+            this.mouseY = mouseY;
             this.renderBackground();
             int scrollbarLeft = this.getScrollbarPosition();
             int scrollbarRight = scrollbarLeft + 6;
@@ -88,7 +88,7 @@ public class ScrollPane extends Slot {
             }
 
             //All entries
-            this.renderList(poseStack, insideLeft, insideTop, mouseXIn, mouseYIn, partialTicks);
+            this.renderList(poseStack, insideLeft, insideTop, mouseX, mouseY, partialTicks);
             RenderSystem.disableDepthTest();
 
             //Dirt overlays on top and bottom
@@ -145,7 +145,7 @@ public class ScrollPane extends Slot {
                 tesselator.end();
             }
 
-            //this.renderDecorations(mouseXIn, mouseYIn);
+            //this.renderDecorations(mouseX, mouseY);
             RenderSystem.enableTexture();
             RenderSystem.disableBlend();
         }
@@ -169,8 +169,8 @@ public class ScrollPane extends Slot {
     }
 
     @Override
-    protected void renderItem(PoseStack poseStack, int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
-        this.getListEntry(slotIndex).drawEntry(poseStack, slotIndex, xPos, yPos, this.getRowWidth(), heightIn, mouseXIn, mouseYIn,
+    protected void renderItem(PoseStack poseStack, int slotIndex, int posX, int posY, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
+        this.getListEntry(slotIndex).drawEntry(poseStack, slotIndex, posX, posY, this.getRowWidth(), heightIn, mouseXIn, mouseYIn,
                 this.getSlotIndexFromScreenCoords(mouseXIn, mouseYIn) == slotIndex, partialTicks);
     }
 
