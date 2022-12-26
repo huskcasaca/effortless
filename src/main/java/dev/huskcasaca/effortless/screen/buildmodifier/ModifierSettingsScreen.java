@@ -100,14 +100,14 @@ public class ModifierSettingsScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
         renderables.forEach(renderable -> {
-            if (renderable instanceof Button button) {
-                button.mouseClicked(mouseX, mouseY, mouseButton);
+            if (renderable instanceof Button btn) {
+                btn.mouseClicked(mouseX, mouseY, button);
             }
         });
-        return scrollPane.mouseClicked(mouseX, mouseY, mouseButton);
+        return scrollPane.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override

@@ -83,8 +83,8 @@ public class PlayerSettingsScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
         if (showShaderList) {
             if (!shaderTypeList.isMouseOver(mouseX, mouseY) && !shaderTypeButton.isMouseOver(mouseX, mouseY))
                 showShaderList = false;
@@ -142,44 +142,44 @@ public class PlayerSettingsScreen extends Screen {
         }
 
         @Override
-        public void setSelected(PlayerSettingsScreen.ShaderTypeList.ShaderTypeEntry selected) {
-            super.setSelected(selected);
+        public void setSelected(PlayerSettingsScreen.ShaderTypeList.ShaderTypeEntry entry) {
+            super.setSelected(entry);
             SoundManager soundManager = Minecraft.getInstance().getSoundManager();
             soundManager.reload();
             soundManager.play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-            Effortless.log("Selected shader " + selected.shaderType.name);
-            shaderTypeButton.setMessage(selected.shaderType.name);
+            Effortless.log("Selected shader " + entry.shaderType.name);
+            shaderTypeButton.setMessage(entry.shaderType.name);
 //            showShaderList = false;
         }
 
         @Override
-        public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
+        public boolean mouseClicked(double mouseX, double mouseY, int button) {
             if (!showShaderList) return false;
-            return super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+            return super.mouseClicked(mouseX, mouseY, button);
         }
 
         @Override
-        public boolean mouseReleased(double p_mouseReleased_1_, double p_mouseReleased_3_, int p_mouseReleased_5_) {
+        public boolean mouseReleased(double mouseX, double mouseY, int button) {
             if (!showShaderList) return false;
-            return super.mouseReleased(p_mouseReleased_1_, p_mouseReleased_3_, p_mouseReleased_5_);
+            return super.mouseReleased(mouseX, mouseY, button);
         }
 
         @Override
-        public boolean mouseDragged(double p_mouseDragged_1_, double p_mouseDragged_3_, int p_mouseDragged_5_, double p_mouseDragged_6_, double p_mouseDragged_8_) {
+        public boolean mouseDragged(double mouseX, double mouseY, int button, double f, double g) {
             if (!showShaderList) return false;
-            return super.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
+            return super.mouseDragged(mouseX, mouseY, button, f, g);
         }
 
         @Override
-        public boolean mouseScrolled(double p_mouseScrolled_1_, double p_mouseScrolled_3_, double p_mouseScrolled_5_) {
+        public boolean mouseScrolled(double mouseX, double mouseY, double scrolled) {
             if (!showShaderList) return false;
-            return super.mouseScrolled(p_mouseScrolled_1_, p_mouseScrolled_3_, p_mouseScrolled_5_);
+            return super.mouseScrolled(mouseX, mouseY, scrolled);
         }
 
         @Override
-        public boolean isMouseOver(double p_isMouseOver_1_, double p_isMouseOver_3_) {
+        public boolean isMouseOver(double mouseX, double mouseY) {
             if (!showShaderList) return false;
-            return super.isMouseOver(p_isMouseOver_1_, p_isMouseOver_3_);
+            return super.isMouseOver(mouseX, mouseY);
         }
 
         protected boolean isFocused() {
@@ -193,17 +193,17 @@ public class PlayerSettingsScreen extends Screen {
 
         //From AbstractList, disabled parts
         @Override
-        public void render(PoseStack poseStack, int p_render_1_, int p_render_2_, float p_render_3_) {
+        public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
             this.renderBackground(poseStack);
-            int i = this.getScrollbarPosition();
-            int j = i + 6;
+            int scrollbarPosition = this.getScrollbarPosition();
+            int scrollbarPositionWithOffset = scrollbarPosition + 6;
             Tesselator tesselator = Tesselator.getInstance();
             BufferBuilder bufferbuilder = tesselator.getBuilder();
 //            this.minecraft.getTextureManager().bindTexture(AbstractGui.BACKGROUND_LOCATION);
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            float f = 32.0F;
+//            float partialTicks = 32.0F;
             bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
             bufferbuilder.vertex(this.x0, this.y1, 0.0D).color(20, 20, 20, 180).endVertex();
             bufferbuilder.vertex(this.x1, this.y1, 0.0D).color(20, 20, 20, 180).endVertex();
@@ -217,7 +217,7 @@ public class PlayerSettingsScreen extends Screen {
                 this.renderHeader(poseStack, k, l, tesselator);
             }
 
-            this.renderList(poseStack, p_render_1_, p_render_2_, p_render_3_);
+            this.renderList(poseStack, mouseX, mouseY, partialTicks);
             RenderSystem.disableDepthTest();
 //            this.renderHoleBackground(0, this.y0, 255, 255);
 //            this.renderHoleBackground(this.y1, this.height, 255, 255);
@@ -249,26 +249,26 @@ public class PlayerSettingsScreen extends Screen {
                 }
 
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-                bufferbuilder.vertex(i, this.y1, 0.0D).uv(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-                bufferbuilder.vertex(j, this.y1, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
-                bufferbuilder.vertex(j, this.y0, 0.0D).uv(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
-                bufferbuilder.vertex(i, this.y0, 0.0D).uv(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPosition, this.y1, 0.0D).uv(0.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPositionWithOffset, this.y1, 0.0D).uv(1.0F, 1.0F).color(0, 0, 0, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPositionWithOffset, this.y0, 0.0D).uv(1.0F, 0.0F).color(0, 0, 0, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPosition, this.y0, 0.0D).uv(0.0F, 0.0F).color(0, 0, 0, 255).endVertex();
                 tesselator.end();
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-                bufferbuilder.vertex(i, l1 + k1, 0.0D).uv(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
-                bufferbuilder.vertex(j, l1 + k1, 0.0D).uv(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
-                bufferbuilder.vertex(j, l1, 0.0D).uv(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
-                bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPosition, l1 + k1, 0.0D).uv(0.0F, 1.0F).color(128, 128, 128, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPositionWithOffset, l1 + k1, 0.0D).uv(1.0F, 1.0F).color(128, 128, 128, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPositionWithOffset, l1, 0.0D).uv(1.0F, 0.0F).color(128, 128, 128, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPosition, l1, 0.0D).uv(0.0F, 0.0F).color(128, 128, 128, 255).endVertex();
                 tesselator.end();
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-                bufferbuilder.vertex(i, l1 + k1 - 1, 0.0D).uv(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
-                bufferbuilder.vertex(j - 1, l1 + k1 - 1, 0.0D).uv(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
-                bufferbuilder.vertex(j - 1, l1, 0.0D).uv(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
-                bufferbuilder.vertex(i, l1, 0.0D).uv(0.0F, 0.0F).color(192, 192, 192, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPosition, l1 + k1 - 1, 0.0D).uv(0.0F, 1.0F).color(192, 192, 192, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPositionWithOffset - 1, l1 + k1 - 1, 0.0D).uv(1.0F, 1.0F).color(192, 192, 192, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPositionWithOffset - 1, l1, 0.0D).uv(1.0F, 0.0F).color(192, 192, 192, 255).endVertex();
+                bufferbuilder.vertex(scrollbarPosition, l1, 0.0D).uv(0.0F, 0.0F).color(192, 192, 192, 255).endVertex();
                 tesselator.end();
             }
 
-//            this.renderDecorations(p_render_1_, p_render_2_);
+//            this.renderDecorations(mouseX, mouseY);
             RenderSystem.enableTexture();
             RenderSystem.disableBlend();
         }
@@ -292,8 +292,8 @@ public class PlayerSettingsScreen extends Screen {
             }
 
             @Override
-            public boolean mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_, int p_mouseClicked_5_) {
-                if (p_mouseClicked_5_ == 0) {
+            public boolean mouseClicked(double mouseX, double mouseY, int button) {
+                if (button == 0) {
                     setSelected(this);
                     return true;
                 } else {

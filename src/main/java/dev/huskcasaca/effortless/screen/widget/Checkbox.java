@@ -21,8 +21,8 @@ public class Checkbox extends Button {
     private final int boxWidth;
     private boolean isChecked;
 
-    public Checkbox(int xPos, int yPos, String displayString, boolean isChecked) {
-            super(xPos, yPos, Minecraft.getInstance().font.width(displayString) + 2 + 11, 11, Component.literal(displayString), b -> {
+    public Checkbox(int posX, int posY, String displayString, boolean isChecked) {
+            super(posX, posY, Minecraft.getInstance().font.width(displayString) + 2 + 11, 11, Component.literal(displayString), b -> {
         }, Button.DEFAULT_NARRATION);
         this.isChecked = isChecked;
         this.boxWidth = 11;

@@ -37,8 +37,7 @@ public class RenderUtils {
         renderTypeBuffer.endBatch();
     }
 
-    protected static void renderBlockPreview(PoseStack poseStack, MultiBufferSource.BufferSource renderTypeBuffer, BlockRenderDispatcher dispatcher,
-                                             BlockPos blockPos, BlockState blockState, float dissolve, BlockPos firstPos, BlockPos secondPos, boolean red) {
+    protected static void renderBlockPreview(PoseStack poseStack, MultiBufferSource.BufferSource renderTypeBuffer, BlockRenderDispatcher dispatcher, BlockPos blockPos, BlockState blockState, float dissolve, BlockPos firstPos, BlockPos secondPos, boolean red) {
         if (blockState == null) return;
 
         poseStack.pushPose();
