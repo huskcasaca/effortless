@@ -13,6 +13,8 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlag;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -55,7 +57,7 @@ public class SurvivalHelper {
 
 
         //More manual with ItemBlock#placeBlockAt
-        if (canPlace(level, player, pos, blockState, itemstack, skipCollisionCheck, facing.getOpposite())) {
+        if (canPlace(level, player, pos, blockState /*, itemstack, skipCollisionCheck, facing.getOpposite()*/)) {
             //Drop existing block
             dropBlock(level, player, pos);
 
@@ -189,6 +191,7 @@ public class SurvivalHelper {
      * @return Whether the player may place the block at pos with itemstack
      */
     public static boolean canPlace(Level level, Player player, BlockPos pos, BlockState newBlockState, ItemStack itemStack, boolean skipCollisionCheck, Direction sidePlacedOn) {
+
         if (BuildModifierHelper.isReplace(player)) {
             return true;
         } else {
@@ -212,12 +215,34 @@ public class SurvivalHelper {
          */
     }
 
-
     public static boolean canPlace(Level level, Player player, BlockPos pos, BlockState newBlockState) {
-        if (BuildModifierHelper.isReplace(player)) {
-            return true;
+        if (!level.mayInteract(player, pos)) return false;
+        if (player.getAbilities().mayBuild) {
+            if (BuildModifierHelper.isReplace(player)) {
+                if (player.isCreative()) {
+                    return true;
+                } else {
+                    return !level.getBlockState(pos).is(BlockTags.FEATURES_CANNOT_REPLACE);
+                }
+            } else {
+                return level.getBlockState(pos).canBeReplaced(); // fluid
+            }
         } else {
-            return level.getBlockState(pos).canBeReplaced();
+            return false;
+        }
+    }
+
+    //Can break using held tool? (or in creative)
+    public static boolean canBreak(Level level, Player player, BlockPos pos) {
+        if (!level.mayInteract(player, pos)) return false;
+        if (player.getAbilities().mayBuild) {
+            if (player.isCreative()) {
+                return true;
+            } else {
+                return !level.getBlockState(pos).is(BlockTags.FEATURES_CANNOT_REPLACE);
+            }
+        } else {
+            return false;
         }
     }
 
@@ -262,7 +287,7 @@ public class SurvivalHelper {
             BlockInWorld blockinworld = new BlockInWorld(level, pos, false);
             return false;
             // FIXME: 20/11/22
-//            return stack.hasAdventureModePlaceTagForBlock(level.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY), blockinworld);
+//            return stack.hasAdventureModePlaceTagForBlock(level.registryAccess().registryOrThrow(Registry.), blockinworld);
         }
     }
 
@@ -300,12 +325,6 @@ public class SurvivalHelper {
         return oldBlockState.getMaterial().isReplaceable() /*&& canPlaceBlockOnSide(level, pos, sidePlacedOn)*/;
     }
 
-
-    //Can break using held tool? (or in creative)
-    public static boolean canBreak(Level level, Player player, BlockPos pos) {
-        BlockState blockState = level.getBlockState(pos);
-        return level.getFluidState(pos).isEmpty();
-    }
 
     public static boolean doesBecomeDoubleSlab(Player player, BlockPos pos, Direction facing) {
         BlockState placedBlockState = player.level.getBlockState(pos);
