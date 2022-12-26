@@ -3,6 +3,7 @@ package dev.huskcasaca.effortless.utils;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.config.ConfigManager;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -131,6 +132,7 @@ public class SurvivalHelper {
 
             //Damage tool
             player.getMainHandItem().mineBlock(level, level.getBlockState(pos), pos, player);
+            Minecraft.getInstance().particleEngine.destroy(pos, level.getBlockState(pos));
 
             level.removeBlock(pos, false);
             return true;
