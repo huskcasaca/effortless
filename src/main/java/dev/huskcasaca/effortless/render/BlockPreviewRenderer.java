@@ -1,7 +1,6 @@
 package dev.huskcasaca.effortless.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.EffortlessClient;
 import dev.huskcasaca.effortless.buildmode.BuildMode;
@@ -111,7 +110,7 @@ public class BlockPreviewRenderer {
         return result;
     }
 
-    private static void renderBlockPreviews(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
+    private static void renderBlockDissolveShader(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
         var player = Minecraft.getInstance().player;
         var dispatcher = Minecraft.getInstance().getBlockRenderer();
 
@@ -127,20 +126,20 @@ public class BlockPreviewRenderer {
 
             if (breaking) {
                 if (canBreak != null && canBreak || SurvivalHelper.canBreak(player.level, player, blockPos)) {
-                    RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
+                    RenderUtils.renderBlockDissolveShader(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
                 }
             } else {
                 if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level, player, blockPosState.coordinate, blockState)) {
                     if (player.isCreative()) {
-                        RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
+                        RenderUtils.renderBlockDissolveShader(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
                         continue;
                     }
                     var count = blockLeft.get(blockState.getBlock());
                     if (count > 0) {
-                        RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
+                        RenderUtils.renderBlockDissolveShader(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
                         blockLeft.put(blockState.getBlock(), count - 1);
                     } else {
-                        RenderUtils.renderBlockPreview(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
+                        RenderUtils.renderBlockDissolveShader(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
                     }
                 }
             }
@@ -149,41 +148,38 @@ public class BlockPreviewRenderer {
 
     private static void renderBlockOutlines(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
         var player = Minecraft.getInstance().player;
+        var dispatcher = Minecraft.getInstance().getBlockRenderer();
+
         if (placeData.isEmpty()) return;
 
         var blockLeft = new HashMap<>(blocksLeft);
 
-        var buffer = RenderUtils.beginLines(multiBufferSource);
         for (BlockPosState blockPosState : placeData) {
             var blockPos = blockPosState.coordinate;
             var blockState = blockPosState.blockState;
             var canBreak = blockPosState.canBreak;
             var canPlace = blockPosState.canPlace;
-            var collisionShape = blockState.getShape(player.level, blockPos);
 
             if (breaking) {
                 if (canBreak != null && canBreak || SurvivalHelper.canBreak(player.level, player, blockPos)) {
-                    RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, collisionShape, true);
-
+                    RenderUtils.renderBlockOutlines(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
                 }
             } else {
                 if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level, player, blockPosState.coordinate, blockState)) {
                     if (player.isCreative()) {
-//                        RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, false);
-                        RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, collisionShape, false);
+                        RenderUtils.renderBlockOutlines(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
                         continue;
                     }
                     var count = blockLeft.get(blockState.getBlock());
                     if (count > 0) {
-                        RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, collisionShape, false);
+                        RenderUtils.renderBlockOutlines(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
                         blockLeft.put(blockState.getBlock(), count - 1);
                     } else {
-                        RenderUtils.renderBlockOutline(poseStack, buffer, blockPos, collisionShape, true);
+                        RenderUtils.renderBlockOutlines(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
                     }
                 }
             }
         }
-        RenderUtils.endLines(multiBufferSource);
     }
 
     private static UseResult getBlockUseResult(List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, boolean breaking) {
@@ -247,7 +243,7 @@ public class BlockPreviewRenderer {
                 if (placed.blockPosStates() != null && !placed.blockPosStates().isEmpty()) {
                     double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();
                     float dissolve = (EffortlessClient.getTicksInGame() - placed.time) / (float) totalTime;
-                    renderBlockPreviews(poseStack, multiBufferSource, placed.blockPosStates(), placed.useResult().valid(), placed.firstPos, placed.secondPos, dissolve, placed.breaking);
+                    renderBlockDissolveShader(poseStack, multiBufferSource, placed.blockPosStates(), placed.useResult().valid(), placed.firstPos, placed.secondPos, dissolve, placed.breaking);
                 }
             }
         }
@@ -383,26 +379,12 @@ public class BlockPreviewRenderer {
         }
 
         //Use fancy shader if config allows, otherwise outlines
-        if (PreviewConfig.useShader() && newCoordinates.size() < PreviewConfig.shaderThresholdRounded()) {
-            renderBlockPreviews(poseStack, multiBufferSource, getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, 0f, breaking);
-        } else {
-//            var camera1 = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-//            poseStack.translate(- camera1.x - 1, - camera1.y, - camera1.z);
-
-            renderBlockOutlines(poseStack, multiBufferSource, getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, 0f, breaking);
-//
-//            VertexConsumer buffer = RenderUtils.beginLines(multiBufferSource);
-//
-//            var color = new Vec3(1f, 1f, 1f);
-//            if (breaking) color = new Vec3(1f, 0f, 0f);
-//
-//            for (int i = newCoordinates.size() - 1; i >= 0; i--) {
-//                VoxelShape collisionShape = blockStates.get(i).getCollisionShape(player.level, newCoordinates.get(i));
-//                RenderUtils.renderBlockOutline(poseStack, buffer, newCoordinates.get(i), collisionShape, color);
-//            }
-//
-//            RenderUtils.endLines(multiBufferSource);
+        switch (ConfigManager.getGlobalPreviewConfig().getBlockPreviewMode()) {
+            case OUTLINES -> renderBlockOutlines(poseStack, multiBufferSource, getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, 0f, breaking);
+//            case BLOCK_TEX -> renderBlockPreviews(poseStack, multiBufferSource, getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, 0f, breaking);
+            case DISSOLVE_SHADER -> renderBlockDissolveShader(poseStack, multiBufferSource, getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), firstPos, secondPos, 0f, breaking);
         }
+
         var placeResult = getBlockUseResult(getBlockPosStates(newCoordinates, blockStates), getPlayerBlockCount(player, blockStates), breaking);
 
         currentPlacing.add(new Preview(getBlockPosStates(player, newCoordinates, blockStates), placeResult, firstPos, secondPos, EffortlessClient.getTicksInGame(), false));
@@ -475,10 +457,9 @@ public class BlockPreviewRenderer {
         if (!doRenderBlockPreviews(player, firstPos)) {
             return;
         }
-        if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() && coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
+        if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() && coordinates.size() > 1/*  && coordinates.size() < PreviewConfig.shaderThresholdRounded() */) {
             lastPlaced.add(new Preview(getBlockPosStates(player, coordinates, blockStates), getBlockUseResult(getBlockPosStates(coordinates, blockStates), getPlayerBlockCount(player, blockStates), false), firstPos, secondPos, EffortlessClient.getTicksInGame(), false));
         }
-
     }
 
     public void onBlocksBroken() {
@@ -492,7 +473,7 @@ public class BlockPreviewRenderer {
         if (doRenderBlockPreviews(player, firstPos)) {
             return;
         }
-        if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() && coordinates.size() > 1 && coordinates.size() < PreviewConfig.shaderThresholdRounded()) {
+        if (coordinates != null && blockStates != null && !coordinates.isEmpty() && blockStates.size() == coordinates.size() && coordinates.size() > 1/*  && coordinates.size() < PreviewConfig.shaderThresholdRounded() */) {
 //                sortOnDistanceToPlayer(coordinates, player);
             lastPlaced.add(new Preview(getBlockPosStates(coordinates, blockStates), getBlockUseResult(getBlockPosStates(coordinates, blockStates), getPlayerBlockCount(player, blockStates), true), firstPos, secondPos, EffortlessClient.getTicksInGame(), true));
         }

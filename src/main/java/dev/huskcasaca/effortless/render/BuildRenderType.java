@@ -108,29 +108,46 @@ public class BuildRenderType extends RenderType {
     private static void setShaderParameters(ShaderInstance shader, final float dissolve, final Vec3 blockPos,
                                             final Vec3 firstPos, final Vec3 secondPos,
                                             final boolean highlight, final boolean red) {
-        Uniform percentileUniform = shader.getUniform("dissolve");
-        Uniform highlightUniform = shader.getUniform("highlight");
-        Uniform redUniform = shader.getUniform("red");
-        Uniform blockposUniform = shader.getUniform("blockpos");
-        Uniform firstposUniform = shader.getUniform("firstpos");
-        Uniform secondposUniform = shader.getUniform("secondpos");
+        var percentileUniform = shader.getUniform("dissolve");
+        var highlightUniform = shader.getUniform("highlight");
+        var redUniform = shader.getUniform("red");
+        var blockPosUniform = shader.getUniform("blockpos");
+        var firstPosUniform = shader.getUniform("firstpos");
+        var secondPosUniform = shader.getUniform("secondpos");
 
         RenderSystem.setShaderTexture(MASK_TEXTURE_INDEX, SHADER_MASK_TEXTURE_LOCATION);
 
-        if (percentileUniform != null) percentileUniform.set(dissolve);
-        else Effortless.log("percentile uniform is null");
-        if (highlightUniform != null) highlightUniform.set(highlight ? 1 : 0);
-        else Effortless.log("highlight uniform is null");
-        if (redUniform != null) redUniform.set(red ? 1 : 0);
-        else Effortless.log("redUniform is null");
+        if (percentileUniform != null) {
+            percentileUniform.set(dissolve);
+        } else {
+            Effortless.log("percentile uniform is null");
+        }
+        if (highlightUniform != null) {
+            highlightUniform.set(highlight ? 1 : 0);
+        } else {
+            Effortless.log("highlight uniform is null");
+        }
+        if (redUniform != null) {
+            redUniform.set(red ? 1 : 0);
+        } else {
+            Effortless.log("redUniform is null");
+        }
 
-        if (blockposUniform != null) blockposUniform.set((float) blockPos.x, (float) blockPos.y, (float) blockPos.z);
-        else Effortless.log("blockpos uniform is null");
-        if (firstposUniform != null) firstposUniform.set((float) firstPos.x, (float) firstPos.y, (float) firstPos.z);
-        else Effortless.log("firstpos uniform is null");
-        if (secondposUniform != null)
-            secondposUniform.set((float) secondPos.x, (float) secondPos.y, (float) secondPos.z);
-        else Effortless.log("secondpos uniform is null");
+        if (blockPosUniform != null) {
+            blockPosUniform.set((float) blockPos.x, (float) blockPos.y, (float) blockPos.z);
+        } else {
+            Effortless.log("blockpos uniform is null");
+        }
+        if (firstPosUniform != null) {
+            firstPosUniform.set((float) firstPos.x, (float) firstPos.y, (float) firstPos.z);
+        } else {
+            Effortless.log("firstpos uniform is null");
+        }
+        if (secondPosUniform != null) {
+            secondPosUniform.set((float) secondPos.x, (float) secondPos.y, (float) secondPos.z);
+        } else {
+            Effortless.log("secondpos uniform is null");
+        }
     }
 
     public static ShaderInstance getDissolveShaderInstance() {
