@@ -4,6 +4,7 @@ import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.config.ConfigManager;
 import dev.huskcasaca.effortless.config.EffortlessConfig;
 import dev.huskcasaca.effortless.config.PreviewConfig;
+import dev.huskcasaca.effortless.render.BlockRenderOptions;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
@@ -68,8 +69,8 @@ public class EffortlessConfigScreen {
 
         final var showBuildInfo = new BooleanEntryData("show_build_info", defaults.getPreviewConfig().isShowBuildInfo(), config.getPreviewConfig().isShowBuildInfo(), config.getPreviewConfig()::setShowBuildInfo);
         final var alwaysShowBlockPreview = new BooleanEntryData("always_show_block_preview", defaults.getPreviewConfig().isAlwaysShowBlockPreview(), config.getPreviewConfig().isAlwaysShowBlockPreview(), config.getPreviewConfig()::setAlwaysShowBlockPreview);
-        final var useShaders = new BooleanEntryData("use_shaders", defaults.getPreviewConfig().isUseShaders(), config.getPreviewConfig().isUseShaders(), config.getPreviewConfig()::setUseShaders);
-        final var shaderThreshold = new SliderEntryData("shader_threshold", defaults.getPreviewConfig().getShaderThreshold(), config.getPreviewConfig().getShaderThreshold(), PreviewConfig.MIN_SHADER_THRESHOLD, PreviewConfig.MAX_SHADER_THRESHOLD, config.getPreviewConfig()::setShaderThreshold);
+//        final var useShaders = new BooleanEntryData("use_shaders", defaults.getPreviewConfig().isUseShaders(), config.getPreviewConfig().isUseShaders(), config.getPreviewConfig()::setUseShaders);
+//        final var shaderThreshold = new SliderEntryData("shader_threshold", defaults.getPreviewConfig().getShaderThreshold(), config.getPreviewConfig().getShaderThreshold(), PreviewConfig.MIN_SHADER_THRESHOLD, PreviewConfig.MAX_SHADER_THRESHOLD, config.getPreviewConfig()::setShaderThreshold);
         final var dissolveTimeMultiplier = new SliderEntryData("shader_dissolve_time_multiplier", defaults.getPreviewConfig().getShaderDissolveTimeMultiplier(), config.getPreviewConfig().getShaderDissolveTimeMultiplier(), PreviewConfig.MIN_SHADER_DISSOLVE_TIME_MULTIPLIER, PreviewConfig.MAX_SHADER_DISSOLVE_TIME_MULTIPLIER, config.getPreviewConfig()::setShaderDissolveTimeMultiplier);
 
 
@@ -90,30 +91,38 @@ public class EffortlessConfigScreen {
                         .build()
         );
         previewSubCat.add(
-                entryBuilder.startBooleanToggle(Component.translatable(useShaders.getTitleKey()), useShaders.currentValue)
-                        .setTooltip(Component.translatable(useShaders.getTooltipKey()))
-                        .setDefaultValue(useShaders.defaultValue)
-                        .setSaveConsumer(useShaders.saveConsumer)
-                        .setYesNoTextSupplier(yesNoTextSupplier)
+                entryBuilder.startEnumSelector(Component.literal("Block Preview Mode"), BlockRenderOptions.class, config.getPreviewConfig().getBlockPreviewMode())
+                        .setTooltip(Component.translatable("effortless.settings.block_preview_type.tooltip"))
+                        .setDefaultValue(defaults.getPreviewConfig().getBlockPreviewMode())
+                        .setSaveConsumer(config.getPreviewConfig()::setBlockPreviewMode)
+                        .setEnumNameProvider(anEnum -> Component.translatable(((BlockRenderOptions) anEnum).getNameKey()))
                         .build()
         );
-        previewSubCat.add(
-                entryBuilder.startIntSlider(Component.translatable(shaderThreshold.getTitleKey()), shaderThreshold.currentValue, shaderThreshold.minValue, shaderThreshold.maxValue)
-                        .setTooltip(
-                                Component.translatable(getSettingsNamespaceTooltip(shaderThreshold.name()))
-                        )
-                        .setDefaultValue(shaderThreshold.defaultValue)
-                        .setSaveConsumer((integer) -> {
-                            int rounded = Math.toIntExact(Math.round(integer / 1000.0));
-                            config.getPreviewConfig().setShaderThreshold(rounded * 1000);
-                        })
-                        .setTextGetter((integer) -> {
-                            // round double
-                            int rounded = Math.toIntExact(Math.round(integer / 1000.0));
-                            return Component.literal(integer <= rounded ? "Disabled" : rounded * 1000 + " blocks");
-                        })
-                        .build()
-        );
+//        previewSubCat.add(
+//                entryBuilder.startBooleanToggle(Component.translatable(useShaders.getTitleKey()), useShaders.currentValue)
+//                        .setTooltip(Component.translatable(useShaders.getTooltipKey()))
+//                        .setDefaultValue(useShaders.defaultValue)
+//                        .setSaveConsumer(useShaders.saveConsumer)
+//                        .setYesNoTextSupplier(yesNoTextSupplier)
+//                        .build()
+//        );
+//        previewSubCat.add(
+//                entryBuilder.startIntSlider(Component.translatable(shaderThreshold.getTitleKey()), shaderThreshold.currentValue, shaderThreshold.minValue, shaderThreshold.maxValue)
+//                        .setTooltip(
+//                                Component.translatable(getSettingsNamespaceTooltip(shaderThreshold.name()))
+//                        )
+//                        .setDefaultValue(shaderThreshold.defaultValue)
+//                        .setSaveConsumer((integer) -> {
+//                            int rounded = Math.toIntExact(Math.round(integer / 1000.0));
+//                            config.getPreviewConfig().setShaderThreshold(rounded * 1000);
+//                        })
+//                        .setTextGetter((integer) -> {
+//                            // round double
+//                            int rounded = Math.toIntExact(Math.round(integer / 1000.0));
+//                            return Component.literal(integer <= rounded ? "Disabled" : rounded * 1000 + " blocks");
+//                        })
+//                        .build()
+//        );
         previewSubCat.add(
                 entryBuilder.startIntSlider(Component.translatable(dissolveTimeMultiplier.getTitleKey()), dissolveTimeMultiplier.currentValue, dissolveTimeMultiplier.minValue, dissolveTimeMultiplier.maxValue)
                         .setTooltip(
