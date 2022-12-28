@@ -52,6 +52,7 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 * Add build orientation option for circle modes
 * Add block count indicator
 * Add preview for insufficient block
+* Add build commands
 * Fix array and mirror block duplication issue
 * Fix block breaking issue in survival mode
 ### 1.5.3

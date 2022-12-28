@@ -11,7 +11,6 @@ import org.joml.Vector4f;
 
 public enum BuildMode {
     DISABLE("disable", new Disable(), Category.BASIC),
-    //    VANILLA("vanilla", new Vanilla(), BuildCategory.BASIC),
     SINGLE("single", new Single(), Category.BASIC /*, BuildOption.BUILD_SPEED*/),
 
     LINE("line", new Line(), Category.SQUARE /*, OptionEnum.THICKNESS*/),
@@ -160,4 +159,5 @@ public enum BuildMode {
     public interface BuildableProvider {
         Buildable getBuildable(BuildAction[] actions);
     }
+
 }

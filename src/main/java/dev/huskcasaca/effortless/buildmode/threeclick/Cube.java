@@ -99,7 +99,7 @@ public class Cube extends ThreeClickBuildable {
     }
 
     @Override
-    protected List<BlockPos> getFinalBlocks(Player player, int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3) {
+    public List<BlockPos> getFinalBlocks(Player player, int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3) {
         return getCubeBlocks(player, x1, y1, z1, x3, y3, z3);
     }
 }

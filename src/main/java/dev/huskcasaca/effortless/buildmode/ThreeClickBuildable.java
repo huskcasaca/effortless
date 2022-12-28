@@ -310,7 +310,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
     protected abstract List<BlockPos> getIntermediateBlocks(Player player, int x1, int y1, int z1, int x2, int y2, int z2);
 
     //After first, second and third pos are known, we want all the blocks
-    protected abstract List<BlockPos> getFinalBlocks(Player player, int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3);
+    public abstract List<BlockPos> getFinalBlocks(Player player, int x1, int y1, int z1, int x2, int y2, int z2, int x3, int y3, int z3);
 
     static class HeightCriteria {
         Vec3 planeBound;

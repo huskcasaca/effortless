@@ -117,6 +117,49 @@ public class SurvivalHelper {
 
     }
 
+    public static boolean useBlock(Level level, Player player, BlockPos pos, BlockState blockState) {
+        if (!level.isLoaded(pos)) return false;
+        var itemStack = player.isCreative() ? new ItemStack(blockState.getBlock()) : InventoryHelper.findItemStackInInventory(player, blockState.getBlock());
+
+        // FIXME: 27/12/22
+        if (blockState.isAir()) {
+            dropBlock(level, player, pos);
+            level.removeBlock(pos, false);
+            return true;
+        }
+
+        if (!(itemStack.getItem() instanceof BlockItem))
+            return false;
+        Block block = ((BlockItem) itemStack.getItem()).getBlock();
+
+        if (!canPlace(level, player, pos, blockState /*, itemStack, skipCollisionCheck, facing.getOpposite()*/)) {
+            return false;
+        }
+        dropBlock(level, player, pos);
+
+        if (!level.setBlock(pos, blockState, 3)) return false;
+        BlockItem.updateCustomBlockEntityTag(level, player, pos, itemStack); //Actually BlockItem::onBlockPlaced but that is protected
+        block.setPlacedBy(level, pos, blockState, player, itemStack);
+        if (player instanceof ServerPlayer) {
+            CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer) player, pos, itemStack);
+            ((ServerPlayer) player).getStats().increment(player, Stats.ITEM_USED.get(itemStack.getItem()), 1);
+        }
+
+        var afterState = level.getBlockState(pos);
+
+        if (true) {
+            var soundtype = afterState.getBlock().getSoundType(afterState);
+            level.playSound(null, pos, soundtype.getPlaceSound(), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+        }
+
+        if (!player.isCreative() && Block.byItem(itemStack.getItem()) == block) {
+            itemStack.shrink(1);
+        }
+
+        return true;
+
+    }
+
     //Used for all breaking of blocks in this mod.
     //Checks if area is loaded, if appropriate tool is used in survival mode, and drops the block directly into the players inventory
     public static boolean breakBlock(Level level, Player player, BlockPos pos, boolean skipChecks) {

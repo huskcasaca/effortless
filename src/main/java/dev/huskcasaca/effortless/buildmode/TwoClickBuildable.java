@@ -71,7 +71,7 @@ public abstract class TwoClickBuildable extends MultipleClickBuildable {
             if (z2 - z1 >= axisLimit) z2 = z1 + axisLimit - 1;
             if (z1 - z2 >= axisLimit) z2 = z1 - axisLimit + 1;
 
-            list.addAll(getAllBlocks(player, x1, y1, z1, x2, y2, z2));
+            list.addAll(getFinalBlocks(player, x1, y1, z1, x2, y2, z2));
         }
 
         return list;
@@ -81,5 +81,5 @@ public abstract class TwoClickBuildable extends MultipleClickBuildable {
     protected abstract BlockPos findSecondPos(Player player, BlockPos firstPos, boolean skipRaytrace);
 
     //After first and second pos are known, we want all the blocks
-    protected abstract List<BlockPos> getAllBlocks(Player player, int x1, int y1, int z1, int x2, int y2, int z2);
+    public abstract List<BlockPos> getFinalBlocks(Player player, int x1, int y1, int z1, int x2, int y2, int z2);
 }
