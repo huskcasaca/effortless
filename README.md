@@ -60,6 +60,9 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 * [ ] Tweakeroo support
 
 ## Changelog
+### 1.6.3
+* Fix action bar text covering issue
+* Fix image resource path converting issue
 ### 1.6.2
 * Fix block breaking issue on server side
 ### 1.6.1
