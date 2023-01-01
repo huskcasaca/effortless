@@ -349,7 +349,7 @@ public class RadialMenuScreen extends Screen {
             font.drawShadow(poseStack, I18n.get(option.getNameKey()), (int) (middleX + buttonDistance - 9), (int) middleY + options.length / -2f * MODE_OPTION_ROW_HEIGHT + 3 + row * MODE_OPTION_ROW_HEIGHT, OPTION_TEXT_COLOR);
         }
 
-        String credits = I18n.get(Effortless.MOD_ID + "."+ "credits");
+        String credits = I18n.get(String.join(".", Effortless.MOD_ID, "building", "credits"));
         font.drawShadow(poseStack, credits, width - font.width(credits) - 10, height - 15, WATERMARK_TEXT_COLOR);
 
         //Draw buildmode text
@@ -450,6 +450,7 @@ public class RadialMenuScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         performAction(true);
+        onClose();
 
         return super.mouseClicked(mouseX, mouseY, button);
     }
