@@ -473,19 +473,12 @@ public class RadialMenuScreen extends Screen {
                 var modeSettings = BuildModeHelper.getModeSettings(player);
                 var modifierSettings = BuildModifierHelper.getModifierSettings(player);
                 switch (lastAction) {
-                    case UNDO -> {
-                        Effortless.log(player, "Undo", true);
-                    }
-                    case REDO -> {
-                        Effortless.log(player, "Redo", true);
-                    }
-                    case REPLACE -> {
-                        Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "ON")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
-                    }
-                    case MAGNET -> {
-                        Effortless.log(player, ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
-                    }
+                    case UNDO -> Effortless.log(player, "Undo", true);
+                    case REDO -> Effortless.log(player, "Redo", true);
+                    case REPLACE -> Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "ON")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
+                    case MAGNET -> Effortless.log(player, ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
                 }
+                lastAction = null;
             }
         }
         super.onClose();
