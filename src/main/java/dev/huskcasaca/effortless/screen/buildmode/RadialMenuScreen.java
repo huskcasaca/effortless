@@ -450,7 +450,6 @@ public class RadialMenuScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         performAction(true);
-        onClose();
 
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -499,7 +498,7 @@ public class RadialMenuScreen extends Screen {
     }
 
     private void performAction(boolean fromMouseClick) {
-        var player = Minecraft.getInstance().player;
+        var player = minecraft.player;
 
         var modeSettings = BuildModeHelper.getModeSettings(player);
 
@@ -514,7 +513,9 @@ public class RadialMenuScreen extends Screen {
             }
             Packets.sendToServer(new ServerboundPlayerSetBuildModePacket(modeSettings));
 
-            if (fromMouseClick) performedActionUsingMouse = true;
+            if (fromMouseClick) {
+                performedActionUsingMouse = true;
+            }
         }
 
         //Perform button action
@@ -526,7 +527,12 @@ public class RadialMenuScreen extends Screen {
             BuildActionHandler.performAction(player, action);
             Packets.sendToServer(new ServerboundPlayerBuildActionPacket(action));
 
-            if (fromMouseClick) performedActionUsingMouse = true;
+            if (fromMouseClick) {
+                performedActionUsingMouse = true;
+            }
+            switch (action) {
+                case UNDO, REDO, SETTINGS, REPLACE -> onClose();
+            }
         }
     }
 
