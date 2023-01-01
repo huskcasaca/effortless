@@ -14,8 +14,6 @@ import net.minecraft.world.entity.player.Player;
 
 public class BuildModeHelper {
 
-    //Retrieves the buildsettings of a player through the modeCapability capability
-    //Never returns null
     public static ModeSettings getModeSettings(Player player) {
         return ((EffortlessDataProvider) player).getModeSettings();
     }
