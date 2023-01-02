@@ -20,16 +20,12 @@ public class BuildModeHelper {
 
     public static String getTranslatedModeOptionName(Player player) {
         BuildMode mode = BuildModeHelper.getModeSettings(player).buildMode();
-        if (mode == BuildMode.DISABLE) {
-            return I18n.get(mode.getNameKey());
-        } else {
-            StringBuilder modeName = new StringBuilder();
-            for (BuildMode.Option option : mode.getOptions()) {
-                modeName.append(I18n.get(BuildActionHandler.getOptionSetting(option).getNameKey()));
-                modeName.append(" ");
-            }
-            return modeName + I18n.get(mode.getNameKey());
+        var modeName = new StringBuilder();
+        for (BuildMode.Option option : mode.getOptions()) {
+            modeName.append(I18n.get(BuildActionHandler.getOptionSetting(option).getNameKey()));
+            modeName.append(" ");
         }
+        return modeName + I18n.get(mode.getNameKey());
     }
 
     public static void setModeSettings(Player player, ModeSettings modeSettings) {
