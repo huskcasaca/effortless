@@ -323,17 +323,17 @@ public class RadialMenuScreen extends Screen {
             final double y = (modeRegion.y1 + modeRegion.y2) * 0.5 * (ringOuterEdge * 0.55 + 0.45 * ringInnerEdge);
 
             RenderSystem.setShaderTexture(0, new ResourceLocation(Effortless.MOD_ID, "textures/mode/" + modeRegion.mode.getName() + ".png"));
-            blit(poseStack, (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
+            blit(poseStack, (int) Math.round(middleX + x - 8), (int) Math.round(middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
         }
 
         //Draw action icons
         for (final MenuButton button : buttons) {
 
-            final double x = (button.x1 + button.x2) / 2 + 0.01;
-            final double y = (button.y1 + button.y2) / 2 + 0.01;
+            final double x = (button.x1 + button.x2) / 2;
+            final double y = (button.y1 + button.y2) / 2;
 
             RenderSystem.setShaderTexture(0, new ResourceLocation(Effortless.MOD_ID, "textures/action/" + button.action.getName() + ".png"));
-            blit(poseStack, (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
+            blit(poseStack, (int) Math.round(middleX + x - 8), (int) Math.round(middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
         }
 
         poseStack.popPose();
