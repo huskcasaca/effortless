@@ -11,6 +11,7 @@ import dev.huskcasaca.effortless.network.protocol.player.*;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.*;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.PacketUtils;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ServerboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
@@ -69,34 +70,38 @@ public abstract class ServerPacketListenerMixin implements ServerEffortlessPacke
 
     @Override
     public void handle(ServerboundPlayerBreakBlockPacket packet) {
+        PacketUtils.ensureRunningOnSameThread(packet, this, player.getLevel());
         BuildModeHandler.onBlockBrokenPacketReceived(player, packet);
     }
 
     @Override
     public void handle(ServerboundPlayerBuildActionPacket packet) {
+        PacketUtils.ensureRunningOnSameThread(packet, this, player.getLevel());
         BuildActionHandler.performAction(player, packet.action());
     }
 
     @Override
     public void handle(ServerboundPlayerPlaceBlockPacket packet) {
+        PacketUtils.ensureRunningOnSameThread(packet, this, player.getLevel());
         BuildModeHandler.onBlockPlacedPacketReceived(player, packet);
-        // TODO: 18/11/22  //Nod RenderHandler to do the dissolve shader effect
-        //            client.execute(() -> BlockPreviewRenderer.onBlocksPlaced());
     }
 
     @Override
     public void handle(ServerboundPlayerSetBuildModePacket packet) {
+        PacketUtils.ensureRunningOnSameThread(packet, this, player.getLevel());
         BuildModeHelper.setModeSettings(player, BuildModeHelper.sanitize(packet.modeSettings(), player));
         BuildModeHandler.initializeMode(player);
     }
 
     @Override
     public void handle(ServerboundPlayerSetBuildModifierPacket packet) {
+        PacketUtils.ensureRunningOnSameThread(packet, this, player.getLevel());
         BuildModifierHelper.setModifierSettings(player, BuildModifierHelper.sanitize(packet.modifierSettings(), player));
     }
 
     @Override
     public void handle(ServerboundPlayerSetBuildReachPacket packet) {
+        PacketUtils.ensureRunningOnSameThread(packet, this, player.getLevel());
         ReachHelper.setReachSettings(player, ReachHelper.sanitize(packet.reachSettings(), player));
         BuildModeHandler.initializeMode(player);
     }
