@@ -35,8 +35,8 @@ public abstract class Slot extends AbstractContainerEventHandler implements Widg
     protected int headerHeight;
     private boolean scrolling;
 
-    public Slot(Minecraft mcIn, int width, int height, int topIn, int bottomIn, int slotHeightIn) {
-        this.minecraft = mcIn;
+    public Slot(Minecraft minecraft, int width, int height, int topIn, int bottomIn, int slotHeightIn) {
+        this.minecraft = minecraft;
         this.width = width;
         this.height = height;
         this.y0 = topIn;

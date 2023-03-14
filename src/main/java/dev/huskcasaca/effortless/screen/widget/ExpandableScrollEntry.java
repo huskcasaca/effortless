@@ -31,11 +31,11 @@ public abstract class ExpandableScrollEntry implements ScrollPane.IScrollEntry {
     }
 
     @Override
-    public void init(List<Widget> renderables) {
-        left = scrollPane.getWidth() / 2 - 140;
-        right = scrollPane.getWidth() / 2 + 140;
-        top = scrollPane.getHeight() / 2 - 100;
-        bottom = scrollPane.getHeight() / 2 + 100;
+    public void init(List<Widget> widgets) {
+        left = Math.round(scrollPane.getWidth() / 2f - 140);
+        right = Math.round(scrollPane.getWidth() / 2f + 140);
+        top = Math.round(scrollPane.getHeight() / 2f - 100);
+        bottom = Math.round(scrollPane.getHeight() / 2f + 100);
     }
 
     @Override

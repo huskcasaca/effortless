@@ -322,18 +322,18 @@ public class RadialMenuScreen extends Screen {
             final double x = (modeRegion.x1 + modeRegion.x2) * 0.5 * (ringOuterEdge * 0.55 + 0.45 * ringInnerEdge);
             final double y = (modeRegion.y1 + modeRegion.y2) * 0.5 * (ringOuterEdge * 0.55 + 0.45 * ringInnerEdge);
 
-            RenderSystem.setShaderTexture(0, new ResourceLocation(Effortless.MOD_ID, "textures/mode/" + modeRegion.mode.name().toLowerCase() + ".png"));
-            blit(poseStack, (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
+            RenderSystem.setShaderTexture(0, new ResourceLocation(Effortless.MOD_ID, "textures/mode/" + modeRegion.mode.getName() + ".png"));
+            blit(poseStack, (int) Math.round(middleX + x - 8), (int) Math.round(middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
         }
 
         //Draw action icons
         for (final MenuButton button : buttons) {
 
-            final double x = (button.x1 + button.x2) / 2 + 0.01;
-            final double y = (button.y1 + button.y2) / 2 + 0.01;
+            final double x = (button.x1 + button.x2) / 2;
+            final double y = (button.y1 + button.y2) / 2;
 
-            RenderSystem.setShaderTexture(0, new ResourceLocation(Effortless.MOD_ID, "textures/action/" + button.action.name().toLowerCase() + ".png"));
-            blit(poseStack, (int) (middleX + x - 8), (int) (middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
+            RenderSystem.setShaderTexture(0, new ResourceLocation(Effortless.MOD_ID, "textures/action/" + button.action.getName() + ".png"));
+            blit(poseStack, (int) Math.round(middleX + x - 8), (int) Math.round(middleY + y - 8), 16, 16, 0, 0, 18, 18, 18, 18);
         }
 
         poseStack.popPose();
@@ -349,7 +349,7 @@ public class RadialMenuScreen extends Screen {
             font.drawShadow(poseStack, I18n.get(option.getNameKey()), (int) (middleX + buttonDistance - 9), (int) middleY + options.length / -2f * MODE_OPTION_ROW_HEIGHT + 3 + row * MODE_OPTION_ROW_HEIGHT, OPTION_TEXT_COLOR);
         }
 
-        String credits = I18n.get(Effortless.MOD_ID + "."+ "credits");
+        String credits = I18n.get(String.join(".", Effortless.MOD_ID, "building", "credits"));
         font.drawShadow(poseStack, credits, width - font.width(credits) - 10, height - 15, WATERMARK_TEXT_COLOR);
 
         //Draw buildmode text
@@ -473,19 +473,12 @@ public class RadialMenuScreen extends Screen {
                 var modeSettings = BuildModeHelper.getModeSettings(player);
                 var modifierSettings = BuildModifierHelper.getModifierSettings(player);
                 switch (lastAction) {
-                    case UNDO -> {
-                        Effortless.log(player, "Undo", true);
-                    }
-                    case REDO -> {
-                        Effortless.log(player, "Redo", true);
-                    }
-                    case REPLACE -> {
-                        Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "ON")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
-                    }
-                    case MAGNET -> {
-                        Effortless.log(player, ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
-                    }
+                    case UNDO -> Effortless.log(player, "Undo", true);
+                    case REDO -> Effortless.log(player, "Redo", true);
+                    case REPLACE -> Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "ON")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
+                    case MAGNET -> Effortless.log(player, ChatFormatting.GOLD + "Item Magnet " + ChatFormatting.RESET + (modeSettings.enableMagnet() ? (ChatFormatting.GREEN + "ON") : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET, true);
                 }
+                lastAction = null;
             }
         }
         super.onClose();
@@ -498,7 +491,7 @@ public class RadialMenuScreen extends Screen {
     }
 
     private void performAction(boolean fromMouseClick) {
-        var player = Minecraft.getInstance().player;
+        var player = minecraft.player;
 
         var modeSettings = BuildModeHelper.getModeSettings(player);
 
@@ -513,7 +506,9 @@ public class RadialMenuScreen extends Screen {
             }
             Packets.sendToServer(new ServerboundPlayerSetBuildModePacket(modeSettings));
 
-            if (fromMouseClick) performedActionUsingMouse = true;
+            if (fromMouseClick) {
+                performedActionUsingMouse = true;
+            }
         }
 
         //Perform button action
@@ -525,7 +520,12 @@ public class RadialMenuScreen extends Screen {
             BuildActionHandler.performAction(player, action);
             Packets.sendToServer(new ServerboundPlayerBuildActionPacket(action));
 
-            if (fromMouseClick) performedActionUsingMouse = true;
+            if (fromMouseClick) {
+                performedActionUsingMouse = true;
+            }
+            switch (action) {
+                case UNDO, REDO, SETTINGS, REPLACE -> onClose();
+            }
         }
     }
 

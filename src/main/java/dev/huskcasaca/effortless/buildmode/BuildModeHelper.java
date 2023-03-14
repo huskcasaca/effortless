@@ -14,24 +14,18 @@ import net.minecraft.world.entity.player.Player;
 
 public class BuildModeHelper {
 
-    //Retrieves the buildsettings of a player through the modeCapability capability
-    //Never returns null
     public static ModeSettings getModeSettings(Player player) {
         return ((EffortlessDataProvider) player).getModeSettings();
     }
 
     public static String getTranslatedModeOptionName(Player player) {
         BuildMode mode = BuildModeHelper.getModeSettings(player).buildMode();
-        if (mode == BuildMode.DISABLE) {
-            return I18n.get(mode.getNameKey());
-        } else {
-            StringBuilder modeName = new StringBuilder();
-            for (BuildMode.Option option : mode.getOptions()) {
-                modeName.append(I18n.get(BuildActionHandler.getOptionSetting(option).getNameKey()));
-                modeName.append(" ");
-            }
-            return modeName + I18n.get(mode.getNameKey());
+        var modeName = new StringBuilder();
+        for (BuildMode.Option option : mode.getOptions()) {
+            modeName.append(I18n.get(BuildActionHandler.getOptionSetting(option).getNameKey()));
+            modeName.append(" ");
         }
+        return modeName + I18n.get(mode.getNameKey());
     }
 
     public static void setModeSettings(Player player, ModeSettings modeSettings) {

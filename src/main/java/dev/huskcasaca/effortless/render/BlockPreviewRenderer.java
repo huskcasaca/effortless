@@ -26,6 +26,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -40,7 +41,7 @@ import java.util.*;
 @Environment(EnvType.CLIENT)
 public class BlockPreviewRenderer {
 
-    private static final BlockPreviewRenderer INSTANCE = new BlockPreviewRenderer();
+    private static final BlockPreviewRenderer INSTANCE = new BlockPreviewRenderer(Minecraft.getInstance());
     private final Minecraft minecraft;
     private final List<Preview> lastPlaced = new ArrayList<>();
     private final List<Preview> currentPlacing = new ArrayList<>();
@@ -50,9 +51,10 @@ public class BlockPreviewRenderer {
     private BlockPos previousFirstPos;
     private BlockPos previousSecondPos;
     private int soundTime = 0;
+    private boolean lastMessage = false;
 
-    public BlockPreviewRenderer() {
-        this.minecraft = Minecraft.getInstance();
+    public BlockPreviewRenderer(Minecraft minecraft) {
+        this.minecraft = minecraft;
     }
 
     public static BlockPreviewRenderer getInstance() {
@@ -110,9 +112,9 @@ public class BlockPreviewRenderer {
         return result;
     }
 
-    private static void renderBlockDissolveShader(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
-        var player = Minecraft.getInstance().player;
-        var dispatcher = Minecraft.getInstance().getBlockRenderer();
+    private void renderBlockDissolveShader(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
+        var player = minecraft.player;
+        var dispatcher = minecraft.getBlockRenderer();
 
         if (placeData.isEmpty()) return;
 
@@ -146,9 +148,9 @@ public class BlockPreviewRenderer {
         }
     }
 
-    private static void renderBlockOutlines(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
-        var player = Minecraft.getInstance().player;
-        var dispatcher = Minecraft.getInstance().getBlockRenderer();
+    private void renderBlockOutlines(PoseStack poseStack, MultiBufferSource.BufferSource multiBufferSource, List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, BlockPos firstPos, BlockPos secondPos, float dissolve, boolean breaking) {
+        var player = minecraft.player;
+        var dispatcher = minecraft.getBlockRenderer();
 
         if (placeData.isEmpty()) return;
 
@@ -182,11 +184,11 @@ public class BlockPreviewRenderer {
         }
     }
 
-    private static UseResult getBlockUseResult(List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, boolean breaking) {
+    private UseResult getBlockUseResult(List<BlockPosState> placeData, Map<Block, Integer> blocksLeft, boolean breaking) {
         if (placeData.isEmpty()) {
             return UseResult.EMPTY;
         }
-        var player = Minecraft.getInstance().player;
+        var player = minecraft.player;
 
         var valid = new HashMap<Block, Integer>();
         var total = new HashMap<Block, Integer>();
@@ -248,9 +250,6 @@ public class BlockPreviewRenderer {
             }
         }
         //Expire
-        if (currentPlacing.isEmpty()) {
-            Effortless.log(player, "", true);
-        }
         currentPlacing.clear();
         lastPlaced.removeIf(placed -> {
             double totalTime = Mth.clampedLerp(30, 60, placed.firstPos.distSqr(placed.secondPos) / 100.0) * PreviewConfig.shaderDissolveTimeMultiplier();
@@ -259,8 +258,9 @@ public class BlockPreviewRenderer {
 
         //Render block previews
         HitResult lookingAt = EffortlessClient.getLookingAt(player);
-        if (BuildModeHelper.getBuildMode(player) == BuildMode.DISABLE)
-            lookingAt = Minecraft.getInstance().hitResult;
+        if (BuildModeHelper.getBuildMode(player) == BuildMode.DISABLE) {
+            lookingAt = minecraft.hitResult;
+        }
 
         ItemStack mainhand = player.getMainHandItem();
         boolean toolInHand = !(!mainhand.isEmpty() && CompatHelper.isItemBlockProxy(mainhand));
@@ -295,6 +295,7 @@ public class BlockPreviewRenderer {
         //Dont render if in normal mode and modifiers are disabled
         //Unless alwaysShowBlockPreview is true in config
         if (!doRenderBlockPreviews(player, startPos)) {
+            clearActionBarMessage(player);
             return;
         }
 
@@ -307,6 +308,7 @@ public class BlockPreviewRenderer {
         }
 
         if (hitSide == null) {
+            clearActionBarMessage(player);
             return;
         }
 
@@ -375,6 +377,7 @@ public class BlockPreviewRenderer {
 
         //Render block previews
         if (blockStates.isEmpty() || newCoordinates.size() != blockStates.size()) {
+            clearActionBarMessage(player);
             return;
         }
 
@@ -389,62 +392,49 @@ public class BlockPreviewRenderer {
 
         currentPlacing.add(new Preview(getBlockPosStates(player, newCoordinates, blockStates), placeResult, firstPos, secondPos, EffortlessClient.getTicksInGame(), false));
 
-        //Display block count and dimensions in actionbar
-        if (BuildModeHandler.isActive(player)) {
-
-            //Find min and max values (not simply firstPos and secondPos because that doesn't work with circles)
-            int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
-            int minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
-            int minZ = Integer.MAX_VALUE, maxZ = Integer.MIN_VALUE;
-            for (var pos : startCoordinates) {
-                if (pos.getX() < minX) minX = pos.getX();
-                if (pos.getX() > maxX) maxX = pos.getX();
-                if (pos.getY() < minY) minY = pos.getY();
-                if (pos.getY() > maxY) maxY = pos.getY();
-                if (pos.getZ() < minZ) minZ = pos.getZ();
-                if (pos.getZ() > maxZ) maxZ = pos.getZ();
-            }
-            var dim = new BlockPos(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
-
-            String dimensions = "(";
-            if (dim.getX() > 1) dimensions += dim.getX() + "x";
-            if (dim.getZ() > 1) dimensions += dim.getZ() + "x";
-            if (dim.getY() > 1) dimensions += dim.getY() + "x";
-            dimensions = dimensions.substring(0, dimensions.length() - 1);
-            if (dimensions.length() > 1) dimensions += ")";
-
-
-            var blockCounter = "" + ChatFormatting.WHITE + placeResult.validBlocks() + ChatFormatting.RESET + (placeResult.isFilled() ? " " : " + " + ChatFormatting.RED + placeResult.wantedBlocks() + ChatFormatting.RESET + " ") + (placeResult.totalBlocks() == 1 ? "block" : "blocks");
-
-            Effortless.log(player, "%s%s%s of %s %s".formatted(ChatFormatting.GOLD, BuildModeHelper.getTranslatedModeOptionName(player), ChatFormatting.RESET, blockCounter, dimensions), true);
-        } else {
-            Effortless.log(player, "", true);
+        if (!BuildModeHandler.isActive(player)) {
+            clearActionBarMessage(player);
+            return;
         }
+        //Display block count and dimensions in actionbar
+        //Find min and max values (not simply firstPos and secondPos because that doesn't work with circles)
+        int minX = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE, maxY = Integer.MIN_VALUE;
+        int minZ = Integer.MAX_VALUE, maxZ = Integer.MIN_VALUE;
+        for (var pos : startCoordinates) {
+            if (pos.getX() < minX) minX = pos.getX();
+            if (pos.getX() > maxX) maxX = pos.getX();
+            if (pos.getY() < minY) minY = pos.getY();
+            if (pos.getY() > maxY) maxY = pos.getY();
+            if (pos.getZ() < minZ) minZ = pos.getZ();
+            if (pos.getZ() > maxZ) maxZ = pos.getZ();
+        }
+        var dim = new BlockPos(maxX - minX + 1, maxY - minY + 1, maxZ - minZ + 1);
 
-        //            VertexConsumer buffer = RenderUtils.beginLines(multiBufferSource);
-//            //Draw outlines if tool in hand
-//            //Find proper raytrace: either normal range or increased range depending on canBreakFar
-//            HitResult objectMouseOver = Minecraft.getInstance().hitResult;
-//            HitResult breakingRaytrace = ReachHelper.isCanBreakFar(player) ? lookingAt : objectMouseOver;
-//            if (toolInHand && breakingRaytrace != null && breakingRaytrace.getType() == HitResult.Type.BLOCK) {
-//                BlockHitResult blockBreakingRaytrace = (BlockHitResult) breakingRaytrace;
-//                List<BlockPos> breakCoordinates = BuildModifierHandler.findCoordinates(player, blockBreakingRaytrace.getBlockPos());
-//
-//                //Only render first outline if further than normal reach
-//                boolean excludeFirst = objectMouseOver != null && objectMouseOver.getType() == HitResult.Type.BLOCK;
-//                for (int i = excludeFirst ? 1 : 0; i < breakCoordinates.size(); i++) {
-//                    var coordinate = breakCoordinates.get(i);
-//
-//                    var blockState = player.level.getBlockState(coordinate);
-//                    if (!blockState.isAir()) {
-//                        if (SurvivalHelper.canBreak(player.level, player, coordinate) || i == 0) {
-//                            VoxelShape collisionShape = blockState.getCollisionShape(player.level, coordinate);
-//                            RenderUtils.renderBlockOutline(poseStack, buffer, coordinate, collisionShape, new Vec3(0f, 0f, 0f));
-//                        }
-//                    }
-//                }
-//            }
-//            RenderUtils.endLines(multiBufferSource);
+        String dimensions = "(";
+        if (dim.getX() > 1) dimensions += dim.getX() + "x";
+        if (dim.getZ() > 1) dimensions += dim.getZ() + "x";
+        if (dim.getY() > 1) dimensions += dim.getY() + "x";
+        dimensions = dimensions.substring(0, dimensions.length() - 1);
+        if (dimensions.length() > 1) dimensions += ")";
+
+
+        var blockCounter = "" + ChatFormatting.WHITE + placeResult.validBlocks() + ChatFormatting.RESET + (placeResult.isFilled() ? " " : " + " + ChatFormatting.RED + placeResult.wantedBlocks() + ChatFormatting.RESET + " ") + (placeResult.totalBlocks() == 1 ? "block" : "blocks");
+
+        displayActionBarMessage(player, "%s%s%s of %s %s".formatted(ChatFormatting.GOLD, BuildModeHelper.getTranslatedModeOptionName(player), ChatFormatting.RESET, blockCounter, dimensions));
+
+    }
+
+    private void displayActionBarMessage(Player player, String message) {
+        Effortless.log(player, message, true);
+        lastMessage = true;
+    }
+
+    private void clearActionBarMessage(Player player) {
+        if (lastMessage) {
+            Effortless.log(player, "", true);
+            lastMessage = false;
+        }
     }
 
     public void onBlocksPlaced() {
@@ -452,7 +442,7 @@ public class BlockPreviewRenderer {
     }
 
     public void onBlocksPlaced(List<BlockPos> coordinates, List<ItemStack> itemStacks, List<BlockState> blockStates, BlockPos firstPos, BlockPos secondPos) {
-        var player = Minecraft.getInstance().player;
+        var player = minecraft.player;
 
         if (!doRenderBlockPreviews(player, firstPos)) {
             return;
@@ -468,7 +458,7 @@ public class BlockPreviewRenderer {
 
     public void onBlocksBroken(List<BlockPos> coordinates, List<ItemStack> itemStacks, List<BlockState> blockStates,
                                BlockPos firstPos, BlockPos secondPos) {
-        var player = Minecraft.getInstance().player;
+        var player = minecraft.player;
 
         if (doRenderBlockPreviews(player, firstPos)) {
             return;
@@ -512,7 +502,7 @@ public class BlockPreviewRenderer {
                 while (count > 0) {
                     var itemStack = new ItemStack(block.asItem());
                     if (itemStack.getMaxStackSize() <= 0) continue;
-                    var used = count > itemStack.getMaxStackSize() ? itemStack.getMaxStackSize() : count;
+                    var used = count > BlockItem.MAX_STACK_SIZE ? BlockItem.MAX_STACK_SIZE : count;
                     itemStack.setCount(used);
                     count -= used;
                     result.add(itemStack);
@@ -529,7 +519,7 @@ public class BlockPreviewRenderer {
                 while (count > 0) {
                     var itemStack = new ItemStack(block.asItem());
                     if (itemStack.getMaxStackSize() <= 0) continue;
-                    var used = count > itemStack.getMaxStackSize() ? itemStack.getMaxStackSize() : count;
+                    var used = count > BlockItem.MAX_STACK_SIZE ? BlockItem.MAX_STACK_SIZE : count;
                     itemStack.setCount(used);
                     count -= used;
                     result.add(itemStack);

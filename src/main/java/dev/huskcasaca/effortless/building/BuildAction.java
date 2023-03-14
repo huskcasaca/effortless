@@ -74,4 +74,8 @@ public enum BuildAction {
         return Effortless.MOD_ID + "." + "action" + "." + name;
     }
 
+    public String getName() {
+        return name;
+    }
+
 }
