@@ -28,6 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class BuildModifierHandler {
 
@@ -192,8 +193,19 @@ public class BuildModifierHandler {
                 coordinates.addAll(Mirror.findCoordinates(player, coordinate));
                 coordinates.addAll(RadialMirror.findCoordinates(player, coordinate));
             }
-        }
 
+            //======Mirror first;Then Array;Append output;by20230325-xdw======
+            var mirror = new LinkedHashSet<>(List.of(blockPos));
+            mirror.addAll(Mirror.findCoordinates(player, blockPos));
+            mirror.addAll(RadialMirror.findCoordinates(player, blockPos));
+            var array = new LinkedHashSet<>(mirror);
+            for (var mir : mirror) {
+                array.addAll(Array.findCoordinates(player, mir));
+            }
+            coordinates.addAll(array);
+            //================================================================
+
+        }
         return coordinates.stream().toList();
     }
 
@@ -249,6 +261,18 @@ public class BuildModifierHandler {
                 blockStates.putAll(RadialMirror.findBlockStates(player, coordinate, blockState1, itemStack, itemStacks));
 
             }
+
+            //======Mirror first;Then Array;Append output======
+            var mirrorBlockstates = new LinkedHashMap<BlockPos,BlockState>();
+            mirrorBlockstates.put(blockPos,blockState);
+            mirrorBlockstates.putAll(Mirror.findBlockStates(player, blockPos, blockState, itemStack, itemStacks));
+            mirrorBlockstates.putAll(RadialMirror.findBlockStates(player, blockPos, blockState, itemStack, itemStacks));
+            var arrayBlockstates = new LinkedHashMap<>(mirrorBlockstates);
+            for(Map.Entry<BlockPos,BlockState> entry: mirrorBlockstates.entrySet()){
+                arrayBlockstates.putAll(Array.findBlockStates(player, entry.getKey(), entry.getValue(), itemStack, itemStacks));
+            }
+            blockStates.putAll(arrayBlockstates);
+            //==================================================
 
             //Adjust blockstates for torches and ladders etc to place on a valid side
             //TODO optimize findCoordinates (done twice now)
