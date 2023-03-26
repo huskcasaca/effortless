@@ -38,7 +38,7 @@ public class BuildModifierHandler {
 //		AbstractRandomizerBagItem.renewRandomness();
 
         //Format hitvec to 0.x
-        hitVec = new Vec3(Math.abs(hitVec.x - ((int) hitVec.x)), Math.abs(hitVec.y - ((int) hitVec.y)), Math.abs(hitVec.z - ((int) hitVec.z)));
+//        hitVec = new Vec3(Math.abs(hitVec.x - ((int) hitVec.x)), Math.abs(hitVec.y - ((int) hitVec.y)), Math.abs(hitVec.z - ((int) hitVec.z)));
 
         //find coordinates and blockstates
         var coordinates = findCoordinates(player, startCoordinates);
@@ -295,16 +295,10 @@ public class BuildModifierHandler {
     }
 
     public static BlockState getBlockStateFromItem(ItemStack itemStack, Player player, BlockPos blockPos, Direction facing, Vec3 hitVec, InteractionHand hand) {
-        var hitresult = new BlockHitResult(hitVec, facing, blockPos, false);
 
         var item = itemStack.getItem();
 
-        if (item instanceof BlockItem) {
-            // FIXME: 23/11/22
-            return ((BlockItem) Item.byBlock(((BlockItem) item).getBlock())).getPlacementState(new BlockPlaceContext(player, hand, itemStack, hitresult));
-        } else {
-            return Block.byItem(item).getStateForPlacement(new BlockPlaceContext(new UseOnContext(player, hand, new BlockHitResult(hitVec, facing, blockPos, false))));
-        }
+        return Block.byItem(item).getStateForPlacement(new BlockPlaceContext(new UseOnContext(player, hand, new BlockHitResult(hitVec.add(blockPos.getX(),blockPos.getY(),blockPos.getZ()), facing, blockPos, false))));
     }
 
     //Returns true if equal (or both null)

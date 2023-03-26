@@ -337,7 +337,7 @@ public class BlockPreviewRenderer {
 
 //                sortOnDistanceToPlayer(newCoordinates, player);
 
-        hitVec = new Vec3(Math.abs(hitVec.x - ((int) hitVec.x)), Math.abs(hitVec.y - ((int) hitVec.y)), Math.abs(hitVec.z - ((int) hitVec.z)));
+        hitVec = hitVec.subtract(firstPos.getX(),firstPos.getY(),firstPos.getZ());
 
         //Get blockstates
         var itemStacks = new ArrayList<ItemStack>();

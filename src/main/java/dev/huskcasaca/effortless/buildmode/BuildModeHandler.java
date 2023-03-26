@@ -94,7 +94,7 @@ public class BuildModeHandler {
 
         var hitVec = buildMode.getInstance().getHitVec(player);
         if (hitVec == null) hitVec = packet.hitVec();
-
+        hitVec = hitVec.subtract(startPos.getX(),startPos.getY(),startPos.getZ());
         BuildModifierHandler.onBlockPlaced(player, coordinates, hitSide, hitVec, packet.placeStartPos());
 
         //Only works when finishing a buildmode is equal to placing some blocks
