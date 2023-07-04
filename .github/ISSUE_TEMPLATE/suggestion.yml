@@ -1,0 +1,19 @@
+name: Suggestion
+description: Suggest something that would improve Effortless
+labels: [ "type: enhancement" ]
+body:
+  -   type: textarea
+      attributes:
+        label: Describe the Suggestion
+        description: What should we add or change to make Effortless better?
+      validations:
+        required: true
+  -   type: textarea
+      attributes:
+        label: Screenshots and Videos
+        description: If applicable, add screenshots or videos to help explain your suggestion.
+      validations:
+        required: false
+  -   type: markdown
+      attributes:
+        value: "Thank you for taking the time to make this suggestion and help improve Effortless!"
