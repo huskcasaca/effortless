@@ -29,7 +29,7 @@ public class SettingsCommand {
             actionCommand.then(Commands.literal(buildAction.getCommandName()).executes(context -> {
                 var player = context.getSource().getPlayer();
                 BuildActionHandler.performAction(player, buildAction);
-                context.getSource().sendSuccess(Component.nullToEmpty("Action set to " + buildAction.getCommandName()), true);
+                context.getSource().sendSuccess(() -> Component.nullToEmpty("Action set to " + buildAction.getCommandName()), true);
                 return 1;
             }));
         });
@@ -38,7 +38,7 @@ public class SettingsCommand {
             var player = context.getSource().getPlayer();
             try {
                 var mode = BuildModifierHelper.getReplaceMode(player);
-                context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
+                context.getSource().sendSuccess(() -> Component.translatable("commands.reserved"), true);
             } catch (Exception e) {
                 context.getSource().sendFailure(Component.translatable("commands.reserved"));
                 e.printStackTrace();
@@ -52,7 +52,7 @@ public class SettingsCommand {
                 try {
                     BuildModifierHelper.setReplaceMode(player, mode);
                     BuildModifierHelper.sync(player);
-                    context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.reserved"), true);
                 } catch (Exception e) {
                     context.getSource().sendFailure(Component.translatable("commands.reserved"));
                     e.printStackTrace();
@@ -65,7 +65,7 @@ public class SettingsCommand {
             var player = context.getSource().getPlayer();
             try {
                 var mode = BuildModeHelper.getBuildMode(player);
-                context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
+                context.getSource().sendSuccess(() -> Component.translatable("commands.reserved"), true);
             } catch (Exception e) {
                 context.getSource().sendFailure(Component.translatable("commands.reserved"));
                 e.printStackTrace();
@@ -79,7 +79,7 @@ public class SettingsCommand {
                 try {
                     BuildModeHelper.setBuildMode(player, mode);
                     BuildModeHelper.sync(player);
-                    context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.reserved"), true);
                 } catch (Exception e) {
                     context.getSource().sendFailure(Component.translatable("commands.reserved"));
                     e.printStackTrace();
@@ -107,7 +107,7 @@ public class SettingsCommand {
                     var value = IntegerArgumentType.getInteger(context, "value");
                     ReachHelper.setMaxReachDistance(player, value);
                     ReachHelper.sync(player);
-                    context.getSource().sendSuccess(Component.translatable("commands.effortless.max_reach_distance.success", player.getDisplayName(), value), true);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.effortless.max_reach_distance.success", player.getDisplayName(), value), true);
                 } catch (Exception e) {
                     context.getSource().sendFailure(Component.translatable("commands.effortless.max_reach_distance.failure", player.getDisplayName()));
                 }
@@ -121,7 +121,7 @@ public class SettingsCommand {
                     var value = IntegerArgumentType.getInteger(context, "value");
                     ReachHelper.setMaxBlockPlacePerAxis(player, value);
                     ReachHelper.sync(player);
-                    context.getSource().sendSuccess(Component.translatable("commands.effortless.max_block_place_per_axis.success", player.getDisplayName(), value), true);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.effortless.max_block_place_per_axis.success", player.getDisplayName(), value), true);
                 } catch (Exception e) {
                     context.getSource().sendFailure(Component.translatable("commands.effortless.max_block_place_per_axis.failure", player.getDisplayName()));
                 }
@@ -135,7 +135,7 @@ public class SettingsCommand {
                     var value = IntegerArgumentType.getInteger(context, "value");
                     ReachHelper.setMaxBlockPlaceAtOnce(player, value);
                     ReachHelper.sync(player);
-                    context.getSource().sendSuccess(Component.translatable("commands.effortless.max_block_place_at_once.success", player.getDisplayName(), value), true);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.effortless.max_block_place_at_once.success", player.getDisplayName(), value), true);
                 } catch (Exception e) {
                     context.getSource().sendFailure(Component.translatable("commands.effortless.max_block_place_at_once.failure", player.getDisplayName()));
                 }
@@ -149,7 +149,7 @@ public class SettingsCommand {
                     var value = BoolArgumentType.getBool(context, "value");
                     ReachHelper.setCanBreakFar(player, value);
                     ReachHelper.sync(player);
-                    context.getSource().sendSuccess(Component.translatable("commands.effortless.can_break_far.success", player.getDisplayName(), value), true);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.effortless.can_break_far.success", player.getDisplayName(), value), true);
                 } catch (Exception e) {
                     context.getSource().sendFailure(Component.translatable("commands.effortless.can_break_far.failure", player.getDisplayName()));
                 }
@@ -163,7 +163,7 @@ public class SettingsCommand {
                     var value = BoolArgumentType.getBool(context, "value");
                     ReachHelper.setEnableUndoRedo(player, value);
                     ReachHelper.sync(player);
-                    context.getSource().sendSuccess(Component.translatable("commands.effortless.enable_undo_redo.success", player.getDisplayName(), value), true);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.effortless.enable_undo_redo.success", player.getDisplayName(), value), true);
                 } catch (Exception e) {
                     context.getSource().sendFailure(Component.translatable("commands.effortless.enable_undo_redo.failure", player.getDisplayName()));
                 }
@@ -177,7 +177,7 @@ public class SettingsCommand {
                     var value = IntegerArgumentType.getInteger(context, "value");
                     ReachHelper.setUndoStackSize(player, value);
                     ReachHelper.sync(player);
-                    context.getSource().sendSuccess(Component.translatable("commands.effortless.undo_stack_size.success", player.getDisplayName(), value), true);
+                    context.getSource().sendSuccess(() -> Component.translatable("commands.effortless.undo_stack_size.success", player.getDisplayName(), value), true);
                 } catch (Exception e) {
                     context.getSource().sendFailure(Component.translatable("commands.effortless.undo_stack_size.failure", player.getDisplayName()));
                 }
