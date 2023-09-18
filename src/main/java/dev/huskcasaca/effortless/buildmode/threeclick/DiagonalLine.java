@@ -21,7 +21,7 @@ public class DiagonalLine extends ThreeClickBuildable {
         int iterations = (int) Math.ceil(first.distanceTo(second) * sampleMultiplier);
         for (double t = 0; t <= 1.0; t += 1.0 / iterations) {
             Vec3 lerp = first.add(second.subtract(first).scale(t));
-            BlockPos candidate = new BlockPos(lerp);
+            BlockPos candidate = BlockPos.containing(lerp);
             //Only add if not equal to the last in the list
             if (list.isEmpty() || !list.get(list.size() - 1).equals(candidate))
                 list.add(candidate);

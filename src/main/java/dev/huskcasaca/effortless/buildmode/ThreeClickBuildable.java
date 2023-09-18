@@ -52,7 +52,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
                 }
             }
         }
-        return new BlockPos(selected.lineBound);
+        return BlockPos.containing(selected.lineBound);
     }
 
 
@@ -101,7 +101,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
                 }
             }
         }
-        return new BlockPos(selected.planeBound);
+        return BlockPos.containing(selected.planeBound);
     }
 
     public static BlockPos findXDepth(Player player, BlockPos secondPos, boolean skipRaytrace) {
@@ -140,7 +140,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
                 }
             }
         }
-        return new BlockPos(selected.planeBound);
+        return BlockPos.containing(selected.planeBound);
     }
 
     public static BlockPos findZDepth(Player player, BlockPos secondPos, boolean skipRaytrace) {
@@ -179,7 +179,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
                 }
             }
         }
-        return new BlockPos(selected.planeBound);
+        return BlockPos.containing(selected.planeBound);
     }
 
 
@@ -327,7 +327,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
 
         //Make it from a plane into a line, on y axis only
         private Vec3 toLongestLine(Vec3 boundVec, BlockPos secondPos) {
-            BlockPos bound = new BlockPos(boundVec);
+            BlockPos bound = BlockPos.containing(boundVec);
             return new Vec3(secondPos.getX(), bound.getY(), secondPos.getZ());
         }
 

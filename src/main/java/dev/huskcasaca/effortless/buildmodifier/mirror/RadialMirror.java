@@ -41,7 +41,7 @@ public class RadialMirror implements Modifier {
             }
 
             Vec3 relNewVec = relStartVec.yRot((float) curAngle);
-            BlockPos newBlockPos = new BlockPos(radialMirrorSettings.position.add(relNewVec));
+            BlockPos newBlockPos = BlockPos.containing(radialMirrorSettings.position.add(relNewVec));
             if (!coordinates.contains(newBlockPos) && !newBlockPos.equals(startPos)) coordinates.add(newBlockPos);
         }
 
@@ -87,7 +87,7 @@ public class RadialMirror implements Modifier {
             }
 
             Vec3 relNewVec = relStartVec.yRot((float) curAngle);
-            BlockPos newBlockPos = new BlockPos(radialMirrorSettings.position.add(relNewVec));
+            BlockPos newBlockPos = BlockPos.containing(radialMirrorSettings.position.add(relNewVec));
 
             //Randomizer bag synergy
 //			if (randomizerBagItem != null) {
