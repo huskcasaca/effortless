@@ -127,11 +127,11 @@ public class BlockPreviewRenderer {
             var canPlace = blockPosState.canPlace;
 
             if (breaking) {
-                if (canBreak != null && canBreak || SurvivalHelper.canBreak(player.level, player, blockPos)) {
+                if (canBreak != null && canBreak || SurvivalHelper.canBreak(player.level(), player, blockPos)) {
                     RenderUtils.renderBlockDissolveShader(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
                 }
             } else {
-                if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level, player, blockPosState.coordinate, blockState)) {
+                if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level(), player, blockPosState.coordinate, blockState)) {
                     if (player.isCreative()) {
                         RenderUtils.renderBlockDissolveShader(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
                         continue;
@@ -163,11 +163,11 @@ public class BlockPreviewRenderer {
             var canPlace = blockPosState.canPlace;
 
             if (breaking) {
-                if (canBreak != null && canBreak || SurvivalHelper.canBreak(player.level, player, blockPos)) {
+                if (canBreak != null && canBreak || SurvivalHelper.canBreak(player.level(), player, blockPos)) {
                     RenderUtils.renderBlockOutlines(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, true);
                 }
             } else {
-                if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level, player, blockPosState.coordinate, blockState)) {
+                if (canPlace != null && canPlace || SurvivalHelper.canPlace(player.level(), player, blockPosState.coordinate, blockState)) {
                     if (player.isCreative()) {
                         RenderUtils.renderBlockOutlines(poseStack, multiBufferSource, dispatcher, blockPos, blockState, dissolve, firstPos, secondPos, false);
                         continue;
@@ -200,14 +200,14 @@ public class BlockPreviewRenderer {
             var blockState = placeDatum.blockState;
 
             if (breaking) {
-                var canBreak = SurvivalHelper.canBreak(player.level, player, blockPos);
+                var canBreak = SurvivalHelper.canBreak(player.level(), player, blockPos);
                 if (canBreak) {
                     valid.put(blockState.getBlock(), valid.getOrDefault(blockState.getBlock(), 0) + 1);
                     total.put(blockState.getBlock(), total.getOrDefault(blockState.getBlock(), 0) + 1);
                 }
 
             } else {
-                var canPlace = SurvivalHelper.canPlace(player.level, player, placeDatum.coordinate, blockState);
+                var canPlace = SurvivalHelper.canPlace(player.level(), player, placeDatum.coordinate, blockState);
                 if (canPlace) {
                     if (player.isCreative()) {
                         valid.put(blockState.getBlock(), valid.getOrDefault(blockState.getBlock(), 0) + 1);
@@ -276,7 +276,7 @@ public class BlockPreviewRenderer {
 
             //Check if tool (or none) in hand
             //TODO 1.13 replaceable
-            boolean replaceable = player.level.getBlockState(startPos).canBeReplaced();
+            boolean replaceable = player.level().getBlockState(startPos).canBeReplaced();
             boolean becomesDoubleSlab = SurvivalHelper.doesBecomeDoubleSlab(player, startPos, blockLookingAt.getDirection());
             if (!BuildModifierHelper.isQuickReplace(player) && !toolInHand && !replaceable && !becomesDoubleSlab) {
                 startPos = startPos.relative(blockLookingAt.getDirection());
@@ -345,7 +345,7 @@ public class BlockPreviewRenderer {
         if (breaking) {
             //Find blockstate of world
             for (var coordinate : newCoordinates) {
-                blockStates.add(player.level.getBlockState(coordinate));
+                blockStates.add(player.level().getBlockState(coordinate));
             }
         } else {
             blockStates.addAll(BuildModifierHandler.findBlockStates(player, startCoordinates, hitVec, hitSide, itemStacks).values());
@@ -370,7 +370,7 @@ public class BlockPreviewRenderer {
 
                 if (blockStates.get(0) != null) {
                     SoundType soundType = blockStates.get(0).getBlock().getSoundType(blockStates.get(0));
-                    player.level.playSound(player, player.blockPosition(), breaking ? soundType.getBreakSound() : soundType.getPlaceSound(), SoundSource.BLOCKS, 0.3f, 0.8f);
+                    player.level().playSound(player, player.blockPosition(), breaking ? soundType.getBreakSound() : soundType.getPlaceSound(), SoundSource.BLOCKS, 0.3f, 0.8f);
                 }
             }
         }
