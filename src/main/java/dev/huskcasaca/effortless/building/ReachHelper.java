@@ -55,7 +55,7 @@ public class ReachHelper {
     }
 
     public static void handleNewPlayer(ServerPlayer player) {
-        if (!player.level.isClientSide) {
+        if (!player.level().isClientSide) {
             Packets.sendToClient(new ClientboundPlayerReachPacket(((EffortlessDataProvider) player).getReachSettings()), player);
         }
     }

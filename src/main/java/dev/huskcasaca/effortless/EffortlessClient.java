@@ -203,7 +203,7 @@ public class EffortlessClient implements ClientModInitializer {
     }
 
     public static HitResult getLookingAt(Player player) {
-        var level = player.level;
+        var level = player.level();
 
         //base distance off of player ability (config)
         float raytraceRange = ReachHelper.getPlacementReach(player) * 4;

@@ -78,9 +78,9 @@ public abstract class PlayerActionMixin {
             if ((blockLookingAt.getLocation().subtract(player.getEyePosition(1f))).lengthSqr() > 25f) {
 
                 var blockPos = blockLookingAt.getBlockPos();
-                var state = player.level.getBlockState(blockPos);
+                var state = player.level().getBlockState(blockPos);
                 var soundtype = state.getBlock().getSoundType(state);
-                player.level.playSound(player, player.blockPosition(), soundtype.getBreakSound(), SoundSource.BLOCKS,
+                player.level().playSound(player, player.blockPosition(), soundtype.getBreakSound(), SoundSource.BLOCKS,
                         0.4f, soundtype.getPitch());
             }
             cir.setReturnValue(true);
@@ -145,7 +145,7 @@ public abstract class PlayerActionMixin {
                     var state = ((BlockItem) itemStack.getItem()).getBlock().defaultBlockState();
                     var blockPos = blockLookingAt.getBlockPos();
                     var soundType = state.getBlock().getSoundType(state);
-                    player.level.playSound(player, player.blockPosition(), soundType.getPlaceSound(), SoundSource.BLOCKS,
+                    player.level().playSound(player, player.blockPosition(), soundType.getPlaceSound(), SoundSource.BLOCKS,
                             0.4f, soundType.getPitch());
                     player.swing(interactionHand);
                 }

@@ -99,7 +99,7 @@ public class BlockPreviewRenderer {
             if (coordinate == null || blockState == null) {
                 throw new IllegalArgumentException("Coordinate or blockstate is null");
             }
-            result.add(new BlockPosState(coordinate, blockState, SurvivalHelper.canPlace(player.level, player, coordinate, blockState), SurvivalHelper.canBreak(player.level, player, coordinate)));
+            result.add(new BlockPosState(coordinate, blockState, SurvivalHelper.canPlace(player.level(), player, coordinate, blockState), SurvivalHelper.canBreak(player.level(), player, coordinate)));
         }
         return result;
     }

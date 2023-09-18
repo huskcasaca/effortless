@@ -193,7 +193,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
     public List<BlockPos> onUse(Player player, BlockPos blockPos, Direction hitSide, Vec3 hitVec, boolean skipRaytrace) {
         List<BlockPos> list = new ArrayList<>();
 
-        var rightClickTable = player.level.isClientSide ? rightClickTableClient : rightClickTableServer;
+        var rightClickTable = player.level().isClientSide ? rightClickTableClient : rightClickTableServer;
         int rightClickNr = rightClickTable.get(player.getUUID());
         rightClickNr++;
         rightClickTable.put(player.getUUID(), rightClickNr);
@@ -234,7 +234,7 @@ public abstract class ThreeClickBuildable extends MultipleClickBuildable {
     @Override
     public List<BlockPos> findCoordinates(Player player, BlockPos blockPos, boolean skipRaytrace) {
         List<BlockPos> list = new ArrayList<>();
-        var rightClickTable = player.level.isClientSide ? rightClickTableClient : rightClickTableServer;
+        var rightClickTable = player.level().isClientSide ? rightClickTableClient : rightClickTableServer;
         int rightClickNr = rightClickTable.get(player.getUUID());
 
         if (rightClickNr == 0) {

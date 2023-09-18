@@ -36,7 +36,7 @@ public class BuildModeHandler {
     public static void onBlockPlacedPacketReceived(Player player, ServerboundPlayerPlaceBlockPacket packet) {
 
         //Check if not in the middle of breaking
-        var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
+        var currentlyBreaking = player.level().isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
         if (currentlyBreaking.get(player) != null && currentlyBreaking.get(player)) {
             //Cancel breaking
             initializeMode(player);
@@ -54,7 +54,7 @@ public class BuildModeHandler {
 
             //Offset in direction of hitSide if not quickreplace and not replaceable
             //TODO 1.13 replaceable
-            boolean replaceable = player.level.getBlockState(startPos).getMaterial().isReplaceable();
+            boolean replaceable = player.level().getBlockState(startPos).canBeReplaced();
             boolean becomesDoubleSlab = SurvivalHelper.doesBecomeDoubleSlab(player, startPos, packet.hitSide());
             if (!modifierSettings.enableQuickReplace() && !replaceable && !becomesDoubleSlab) {
                 startPos = startPos.relative(packet.hitSide());
@@ -112,7 +112,7 @@ public class BuildModeHandler {
     public static void onBlockBroken(Player player, BlockPos startPos, boolean breakStartPos) {
 
         //Check if not in the middle of placing
-        var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
+        var currentlyBreaking = player.level().isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
         if (currentlyBreaking.get(player) != null && !currentlyBreaking.get(player)) {
             //Cancel placing
             initializeMode(player);
@@ -161,25 +161,25 @@ public class BuildModeHandler {
         if (player == null) {
             return;
         }
-        var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
+        var currentlyBreaking = player.level().isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
         currentlyBreaking.remove(player);
 
         BuildModeHelper.getModeSettings(player).buildMode().getInstance().initialize(player);
     }
 
     public static boolean isCurrentlyPlacing(Player player) {
-        var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
+        var currentlyBreaking = player.level().isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
         return currentlyBreaking.get(player) != null && !currentlyBreaking.get(player);
     }
 
     public static boolean isCurrentlyBreaking(Player player) {
-        var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
+        var currentlyBreaking = player.level().isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
         return currentlyBreaking.get(player) != null && currentlyBreaking.get(player);
     }
 
     //Either placing or breaking
     public static boolean isActive(Player player) {
-        var currentlyBreaking = player.level.isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
+        var currentlyBreaking = player.level().isClientSide ? currentlyBreakingClient : currentlyBreakingServer;
         return currentlyBreaking.get(player) != null;
     }
 
@@ -241,7 +241,7 @@ public class BuildModeHandler {
         if (!skipRaytrace) {
             //collision within a 1 block radius to selected is fine
             ClipContext rayTraceContext = new ClipContext(start, lineBound, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, player);
-            HitResult rayTraceResult = player.level.clip(rayTraceContext);
+            HitResult rayTraceResult = player.level().clip(rayTraceContext);
             intersects = rayTraceResult != null && rayTraceResult.getType() == HitResult.Type.BLOCK &&
                     planeBound.subtract(rayTraceResult.getLocation()).lengthSqr() > 4;
         }

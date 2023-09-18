@@ -33,7 +33,7 @@ public class BuildModifierHandler {
 
     //Called from BuildModes
     public static void onBlockPlaced(Player player, List<BlockPos> startCoordinates, Direction hitSide, Vec3 hitVec, boolean placeStartPos) {
-        var level = player.level;
+        var level = player.level();
 //		AbstractRandomizerBagItem.renewRandomness();
 
         //Format hitvec to 0.x
@@ -121,7 +121,7 @@ public class BuildModifierHandler {
     }
 
     public static void onBlockBroken(Player player, List<BlockPos> startCoordinates, boolean breakStartPos) {
-        var level = player.level;
+        var level = player.level();
 
         var coordinates = findCoordinates(player, startCoordinates);
 
