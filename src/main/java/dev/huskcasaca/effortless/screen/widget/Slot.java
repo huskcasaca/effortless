@@ -6,6 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.AbstractContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -71,7 +72,7 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
     protected void updateItemPosition(int p_updateItemPosition_1_, int p_updateItemPosition_2_, int p_updateItemPosition_3_, float partialTicks) {
     }
 
-    protected abstract void renderItem(PoseStack poseStack, int slotIndex, int posX, int posY, int heightIn, int mouseXIn, int mouseYIn, float partialTicks);
+    protected abstract void renderItem(GuiGraphics guiGraphics, int slotIndex, int posX, int posY, int heightIn, int mouseXIn, int mouseYIn, float partialTicks);
 
     protected void renderHeader(int p_renderHeader_1_, int p_renderHeader_2_, Tesselator tesselator) {
     }
@@ -103,7 +104,7 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
         return posY >= (double) this.y0 && posY <= (double) this.y1 && posX >= (double) this.x0 && posX <= (double) this.x1;
     }
 
-    public abstract void render(PoseStack poseStack, int mouseXIn, int mouseYIn, float partialTicks);
+    public abstract void render(GuiGraphics guiGraphics, int mouseXIn, int mouseYIn, float partialTicks);
 
     protected void updateScrollingState(double p_updateScrollingState_1_, double p_updateScrollingState_3_, int p_updateScrollingState_5_) {
         this.scrolling = p_updateScrollingState_5_ == 0 && p_updateScrollingState_1_ >= (double) this.getScrollbarPosition() && p_updateScrollingState_1_ < (double) (this.getScrollbarPosition() + 6);
@@ -210,7 +211,7 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
         return 220;
     }
 
-    protected void renderList(PoseStack poseStack, int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks) {
+    protected void renderList(GuiGraphics guiGraphics, int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks) {
         int i = this.getItemCount();
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
@@ -225,7 +226,6 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
             if (this.renderSelection && this.isSelectedItem(j)) {
                 int i1 = this.x0 + this.width / 2 - this.getRowWidth() / 2;
                 int j1 = this.x0 + this.width / 2 + this.getRowWidth() / 2;
-                RenderSystem.disableTexture();
                 float f = this.isFocused() ? 1.0F : 0.5F;
                 RenderSystem.setShaderColor(f, f, f, 1.0F);
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
@@ -241,15 +241,14 @@ public abstract class Slot extends AbstractContainerEventHandler implements Rend
                 bufferbuilder.vertex(j1 - 1, k - 1, 0.0D).endVertex();
                 bufferbuilder.vertex(i1 + 1, k - 1, 0.0D).endVertex();
                 tesselator.end();
-                RenderSystem.enableTexture();
             }
 
-            this.renderItem(poseStack, j, insideLeft, k, l, mouseXIn, mouseYIn, partialTicks);
+            this.renderItem(guiGraphics, j, insideLeft, k, l, mouseXIn, mouseYIn, partialTicks);
         }
 
     }
 
-    protected boolean isFocused() {
+    public boolean isFocused() {
         return false;
     }
 

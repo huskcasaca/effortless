@@ -1,6 +1,5 @@
 package dev.huskcasaca.effortless.screen.buildmodifier;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.buildmodifier.array.Array;
@@ -13,6 +12,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -89,15 +89,15 @@ public class ArraySettingsPane extends ExpandableScrollEntry {
     }
 
     @Override
-    public void drawEntry(PoseStack poseStack, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY,
+    public void drawEntry(GuiGraphics guiGraphics, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY,
                           boolean isSelected, float partialTicks) {
         int yy = y;
         int offset = 8;
 
-        buttonArrayEnabled.render(poseStack, mouseX, mouseY, partialTicks);
+        buttonArrayEnabled.render(guiGraphics, mouseX, mouseY, partialTicks);
         if (buttonArrayEnabled.isChecked()) {
             buttonArrayEnabled.setY(yy);
-            font.draw(poseStack, "Array enabled", left + offset, yy + 2, 0xFFFFFF);
+            guiGraphics.drawString(font, "Array enabled", left + offset, yy + 2, 0xFFFFFF);
 
             var positionOffsetX0 = left + 8;
             var positionOffsetX1 = left + 160;
@@ -108,15 +108,15 @@ public class ArraySettingsPane extends ExpandableScrollEntry {
             var componentOffsetX = 15;
             var componentOffsetY = -5;
 
-            font.draw(poseStack, "Offset", positionOffsetX0, positionOffsetY0, 0xFFFFFF);
-            font.draw(poseStack, "X", positionOffsetX0 + textOffsetX, positionOffsetY0, 0xFFFFFF);
-            font.draw(poseStack, "Y", positionOffsetX0 + textOffsetX, positionOffsetY0 + 24, 0xFFFFFF);
-            font.draw(poseStack, "Z", positionOffsetX0 + textOffsetX, positionOffsetY0 + 24 * 2, 0xFFFFFF);
+            guiGraphics.drawString(font, "Offset", positionOffsetX0, positionOffsetY0, 0xFFFFFF);
+            guiGraphics.drawString(font, "X", positionOffsetX0 + textOffsetX, positionOffsetY0, 0xFFFFFF);
+            guiGraphics.drawString(font, "Y", positionOffsetX0 + textOffsetX, positionOffsetY0 + 24, 0xFFFFFF);
+            guiGraphics.drawString(font, "Z", positionOffsetX0 + textOffsetX, positionOffsetY0 + 24 * 2, 0xFFFFFF);
             textArrayOffsetX.y = positionOffsetY0 + componentOffsetY;
             textArrayOffsetY.y = positionOffsetY0 + componentOffsetY + 24;
             textArrayOffsetZ.y = positionOffsetY0 + componentOffsetY + 24 * 2;
 
-            font.draw(poseStack, "Count", positionOffsetX1, positionOffsetY0, 0xFFFFFF);
+            guiGraphics.drawString(font, "Count", positionOffsetX1, positionOffsetY0, 0xFFFFFF);
             textArrayCount.y = positionOffsetY0 + componentOffsetY;
 
             int currentReach = Math.max(-1, getArrayReach());
@@ -124,20 +124,20 @@ public class ArraySettingsPane extends ExpandableScrollEntry {
             var reachColor = isCurrentReachValid(currentReach, maxReach) ? ChatFormatting.GRAY : ChatFormatting.RED;
             var reachText = "Reach  " + reachColor + currentReach + ChatFormatting.GRAY + "/" + ChatFormatting.GRAY + maxReach;
 
-            font.draw(poseStack, reachText, positionOffsetX1, positionOffsetY1, 0xFFFFFF);
+            guiGraphics.drawString(font, reachText, positionOffsetX1, positionOffsetY1, 0xFFFFFF);
 
-            arrayNumberFieldList.forEach(numberField -> numberField.drawNumberField(poseStack, mouseX, mouseY, partialTicks));
+            arrayNumberFieldList.forEach(numberField -> numberField.render(guiGraphics, mouseX, mouseY, partialTicks));
         } else {
             buttonArrayEnabled.setY(yy);
-            font.draw(poseStack, "Array disabled", left + offset, yy + 2, 0x999999);
+            guiGraphics.drawString(font, "Array disabled", left + offset, yy + 2, 0x999999);
         }
 
     }
 
-    public void drawTooltip(PoseStack poseStack, Screen guiScreen, int mouseX, int mouseY) {
+    public void drawTooltip(GuiGraphics guiGraphics, Screen guiScreen, int mouseX, int mouseY) {
         //Draw tooltips last
         if (buttonArrayEnabled.isChecked()) {
-            arrayNumberFieldList.forEach(numberField -> numberField.drawTooltip(poseStack, scrollPane.parent, mouseX, mouseY));
+            arrayNumberFieldList.forEach(numberField -> numberField.drawTooltip(guiGraphics, scrollPane.parent, mouseX, mouseY));
         }
     }
 
@@ -168,7 +168,7 @@ public class ArraySettingsPane extends ExpandableScrollEntry {
         boolean arrayEnabled = buttonArrayEnabled.isChecked();
         var arrayOffset = new BlockPos(0, 0, 0);
         try {
-            arrayOffset = new BlockPos(textArrayOffsetX.getNumber(), textArrayOffsetY.getNumber(), textArrayOffsetZ.getNumber());
+            arrayOffset = BlockPos.containing(textArrayOffsetX.getNumber(), textArrayOffsetY.getNumber(), textArrayOffsetZ.getNumber());
         } catch (NumberFormatException | NullPointerException ex) {
             Effortless.log(mc.player, "Array offset not a valid number.");
         }

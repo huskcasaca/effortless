@@ -1,11 +1,11 @@
 package dev.huskcasaca.effortless.screen.widget;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 
@@ -43,7 +43,7 @@ public abstract class ExpandableScrollEntry implements ScrollPane.IScrollEntry {
     }
 
     @Override
-    public void drawTooltip(PoseStack poseStack, Screen guiScreen, int mouseX, int mouseY) {
+    public void drawTooltip(GuiGraphics guiGraphics, Screen guiScreen, int mouseX, int mouseY) {
     }
 
     @Override

@@ -1,6 +1,5 @@
 package dev.huskcasaca.effortless.screen.buildmodifier;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.buildmodifier.mirror.RadialMirror;
@@ -10,6 +9,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
@@ -173,15 +173,15 @@ public class RadialMirrorSettingsPane extends ExpandableScrollEntry {
 
 
     @Override
-    public void drawEntry(PoseStack poseStack, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY,
+    public void drawEntry(GuiGraphics guiGraphics, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY,
                           boolean isSelected, float partialTicks) {
 
         int offset = 8;
 
-        buttonRadialMirrorEnabled.render(poseStack, mouseX, mouseY, partialTicks);
+        buttonRadialMirrorEnabled.render(guiGraphics, mouseX, mouseY, partialTicks);
         if (buttonRadialMirrorEnabled.isChecked()) {
             buttonRadialMirrorEnabled.setY(y);
-            font.draw(poseStack, "Radial mirror enabled", left + offset, y + 2, 0xFFFFFF);
+            guiGraphics.drawString(font, "Radial mirror enabled", left + offset, y + 2, 0xFFFFFF);
 
             var positionOffsetX0 = left + Dimen.SECTION_OFFSET_X0;
             var positionOffsetX1 = left + Dimen.SECTION_OFFSET_X1;
@@ -193,18 +193,18 @@ public class RadialMirrorSettingsPane extends ExpandableScrollEntry {
             var textOffsetX = 40;
             var componentOffsetY = -5;
 
-            font.draw(poseStack, "Position", left + offset, positionOffsetY0, 0xFFFFFF);
-            font.draw(poseStack, "X", positionOffsetX0 + textOffsetX, positionOffsetY0, 0xFFFFFF);
-            font.draw(poseStack, "Y", positionOffsetX0 + textOffsetX, positionOffsetY1, 0xFFFFFF);
-            font.draw(poseStack, "Z", positionOffsetX0 + textOffsetX, positionOffsetY2, 0xFFFFFF);
+            guiGraphics.drawString(font, "Position", left + offset, positionOffsetY0, 0xFFFFFF);
+            guiGraphics.drawString(font, "X", positionOffsetX0 + textOffsetX, positionOffsetY0, 0xFFFFFF);
+            guiGraphics.drawString(font, "Y", positionOffsetX0 + textOffsetX, positionOffsetY1, 0xFFFFFF);
+            guiGraphics.drawString(font, "Z", positionOffsetX0 + textOffsetX, positionOffsetY2, 0xFFFFFF);
             textRadialMirrorPosX.y = positionOffsetY0 + componentOffsetY;
             textRadialMirrorPosY.y = positionOffsetY1 + componentOffsetY;
             textRadialMirrorPosZ.y = positionOffsetY2 + componentOffsetY;
 
-            font.draw(poseStack, "Radius", positionOffsetX1, positionOffsetY0, 0xFFFFFF);
+            guiGraphics.drawString(font, "Radius", positionOffsetX1, positionOffsetY0, 0xFFFFFF);
             textRadialMirrorRadius.y = positionOffsetY0 + componentOffsetY;
 
-            font.draw(poseStack, "Slices", positionOffsetX1, positionOffsetY1, 0xFFFFFF);
+            guiGraphics.drawString(font, "Slices", positionOffsetX1, positionOffsetY1, 0xFFFFFF);
             textRadialMirrorSlices.y = positionOffsetY1 + componentOffsetY;
 
             buttonCurrentPosition.setY(positionOffsetY2 - 6);
@@ -214,22 +214,22 @@ public class RadialMirrorSettingsPane extends ExpandableScrollEntry {
 
             buttonRadialMirrorAlternate.setY(positionOffsetY3);
 
-            radialMirrorButtonList.forEach(button -> button.render(poseStack, mouseX, mouseY, partialTicks));
-            radialMirrorIconButtonList.forEach(button -> button.render(poseStack, mouseX, mouseY, partialTicks));
+            radialMirrorButtonList.forEach(button -> button.render(guiGraphics, mouseX, mouseY, partialTicks));
+            radialMirrorIconButtonList.forEach(button -> button.render(guiGraphics, mouseX, mouseY, partialTicks));
             radialMirrorNumberFieldList
-                    .forEach(numberField -> numberField.drawNumberField(poseStack, mouseX, mouseY, partialTicks));
+                    .forEach(numberField -> numberField.render(guiGraphics, mouseX, mouseY, partialTicks));
         } else {
             buttonRadialMirrorEnabled.setY(y);
-            font.draw(poseStack, "Radial mirror disabled", left + offset, y + 2, 0x999999);
+            guiGraphics.drawString(font, "Radial mirror disabled", left + offset, y + 2, 0x999999);
         }
 
     }
 
-    public void drawTooltip(PoseStack poseStack, Screen guiScreen, int mouseX, int mouseY) {
+    public void drawTooltip(GuiGraphics guiGraphics, Screen guiScreen, int mouseX, int mouseY) {
         //Draw tooltips last
         if (buttonRadialMirrorEnabled.isChecked()) {
-            radialMirrorIconButtonList.forEach(iconButton -> iconButton.drawTooltip(poseStack, scrollPane.parent, mouseX, mouseY));
-            radialMirrorNumberFieldList.forEach(numberField -> numberField.drawTooltip(poseStack, scrollPane.parent, mouseX, mouseY));
+            radialMirrorIconButtonList.forEach(iconButton -> iconButton.drawTooltip(guiGraphics, scrollPane.parent, mouseX, mouseY));
+            radialMirrorNumberFieldList.forEach(numberField -> numberField.drawTooltip(guiGraphics, scrollPane.parent, mouseX, mouseY));
         }
     }
 

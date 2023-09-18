@@ -1,12 +1,13 @@
 package dev.huskcasaca.effortless.screen.widget;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
@@ -23,7 +24,7 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class NumberField extends GuiComponent {
+public class NumberField implements Renderable {
 
     public int x, y, width, height;
     public int buttonWidth = 10;
@@ -89,24 +90,25 @@ public class NumberField extends GuiComponent {
         //Rightclicked inside textfield
         if (flag && button == 1) {
             textField.setValue("");
-            textField.setFocus(true);
+            textField.setFocused(true);
             result = true;
         }
 
         return result;
     }
 
-    public void drawNumberField(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         textField.setY(y + 1);
         minusButton.setY(y - 1);
         plusButton.setY(y - 1);
 
-        textField.render(poseStack, mouseX, mouseY, partialTicks);
-        minusButton.render(poseStack, mouseX, mouseY, partialTicks);
-        plusButton.render(poseStack, mouseX, mouseY, partialTicks);
+        textField.render(guiGraphics, mouseX, mouseY, partialTicks);
+        minusButton.render(guiGraphics, mouseX, mouseY, partialTicks);
+        plusButton.render(guiGraphics, mouseX, mouseY, partialTicks);
     }
 
-    public void drawTooltip(PoseStack poseStack, Screen screen, int mouseX, int mouseY) {
+    public void drawTooltip(GuiGraphics guiGraphics, Screen screen, int mouseX, int mouseY) {
         boolean insideTextField = mouseX >= x + buttonWidth && mouseX < x + width - buttonWidth && mouseY >= y && mouseY < y + height;
         boolean insideMinusButton = mouseX >= x && mouseX < x + buttonWidth && mouseY >= y && mouseY < y + height;
         boolean insidePlusButton = mouseX >= x + width - buttonWidth && mouseX < x + width && mouseY >= y && mouseY < y + height;
@@ -135,7 +137,7 @@ public class NumberField extends GuiComponent {
                     .append(Component.literal("5").withStyle(ChatFormatting.RED)));
         }
 
-        screen.renderComponentTooltip(poseStack, textLines, mouseX - 10, mouseY + 25);
+        guiGraphics.renderComponentTooltip(Minecraft.getInstance().font , textLines, mouseX - 10, mouseY + 25);
 
     }
 

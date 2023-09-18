@@ -6,6 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
@@ -31,12 +32,14 @@ public class Checkbox extends Button {
     }
 
     @Override
-    public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partial) {
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partial) {
         if (this.visible) {
             Minecraft mc = Minecraft.getInstance();
             this.isHovered = mouseX >= this.getX()&& mouseY >= this.getY() && mouseX < this.getX()+ this.boxWidth && mouseY < this.getY() + this.height;
-            ScreenUtils.blitWithBorder(poseStack, WIDGETS_LOCATION, this.getX(), this.getY(), 0, 46, this.boxWidth, this.height, 200, 20, 2, 3, 2, 2, this.getBlitOffset());
-            this.renderBg(poseStack, mc, mouseX, mouseY);
+            float z = 0.0f;
+            ScreenUtils.blitWithBorder(guiGraphics.pose(), WIDGETS_LOCATION, this.getX(), this.getY(), 0, 46, this.boxWidth, this.height, 200, 20, 2, 3, 2, 2, z);
+            // FIXME: renderBG is gone. Live without it for now
+            //this.renderBg(guiGraphics, mc, mouseX, mouseY);
             int color = 14737632;
             int packedFGColor = 0;
             // FIXME: 8/9/22
@@ -47,9 +50,9 @@ public class Checkbox extends Button {
             }
 
             if (this.isChecked)
-                drawCenteredString(poseStack, mc.font, "x", this.getX()+ this.boxWidth / 2 + 1, this.getY() + 1, 14737632);
+                guiGraphics.drawCenteredString(mc.font, "x", this.getX()+ this.boxWidth / 2 + 1, this.getY() + 1, 14737632);
 
-            drawString(poseStack, mc.font, getMessage(), this.getX()+ this.boxWidth + 2, this.getY() + 2, color);
+            guiGraphics.drawString(mc.font, getMessage(), this.getX()+ this.boxWidth + 2, this.getY() + 2, color);
         }
     }
 

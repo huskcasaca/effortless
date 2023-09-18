@@ -10,6 +10,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.gui.screens.Screen;
@@ -67,19 +68,19 @@ public class PlayerSettingsScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(guiGraphics);
 
         int yy = top;
-        font.draw(poseStack, "Shader type", left, yy + 5, 0xFFFFFF);
+        guiGraphics.drawString(font, "Shader type", left, yy + 5, 0xFFFFFF);
 
         yy += 50;
-        font.draw(poseStack, "Shader speed", left, yy + 5, 0xFFFFFF);
+        guiGraphics.drawString(font, "Shader speed", left, yy + 5, 0xFFFFFF);
 
-        super.render(poseStack, mouseX, mouseY, partialTicks);
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
 
         if (showShaderList)
-            this.shaderTypeList.render(poseStack, mouseX, mouseY, partialTicks);
+            this.shaderTypeList.render(guiGraphics, mouseX, mouseY, partialTicks);
     }
 
     @Override
@@ -182,7 +183,7 @@ public class PlayerSettingsScreen extends Screen {
             return super.isMouseOver(mouseX, mouseY);
         }
 
-        protected boolean isFocused() {
+        public boolean isFocused() {
             return PlayerSettingsScreen.this.getFocused() == this;
         }
 
@@ -193,8 +194,8 @@ public class PlayerSettingsScreen extends Screen {
 
         //From AbstractList, disabled parts
         @Override
-        public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-            this.renderBackground(poseStack);
+        public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+            this.renderBackground(guiGraphics);
             int scrollbarPosition = this.getScrollbarPosition();
             int scrollbarPositionWithOffset = scrollbarPosition + 6;
             Tesselator tesselator = Tesselator.getInstance();
@@ -214,16 +215,15 @@ public class PlayerSettingsScreen extends Screen {
             int l = this.y0 + 4 - (int) this.getScrollAmount();
             // TODO: 7/9/22 access private field renderHeader
             if (renderHeader) {
-                this.renderHeader(poseStack, k, l, tesselator);
+                this.renderHeader(guiGraphics, k, l);
             }
 
-            this.renderList(poseStack, mouseX, mouseY, partialTicks);
+            this.renderList(guiGraphics, mouseX, mouseY, partialTicks);
             RenderSystem.disableDepthTest();
 //            this.renderHoleBackground(0, this.y0, 255, 255);
 //            this.renderHoleBackground(this.y1, this.height, 255, 255);
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-            RenderSystem.disableTexture();
 //            int i1 = 4;
 //            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 //            bufferbuilder.pos((double)this.x0, (double)(this.y0 + 4), 0.0D).tex(0.0F, 1.0F).color(0, 0, 0, 0).endVertex();
@@ -269,7 +269,6 @@ public class PlayerSettingsScreen extends Screen {
             }
 
 //            this.renderDecorations(mouseX, mouseY);
-            RenderSystem.enableTexture();
             RenderSystem.disableBlend();
         }
 
@@ -286,9 +285,9 @@ public class PlayerSettingsScreen extends Screen {
             }
 
             @Override
-            public void render(PoseStack poseStack, int itemIndex, int rowTop, int rowLeft, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered, float partialTicks) {
+            public void render(GuiGraphics guiGraphics, int itemIndex, int rowTop, int rowLeft, int rowWidth, int rowHeight, int mouseX, int mouseY, boolean hovered, float partialTicks) {
                 if (rowTop + 10 > ShaderTypeList.this.y0 && rowTop + rowHeight - 5 < ShaderTypeList.this.y1)
-                    drawString(poseStack, font, shaderType.name, ShaderTypeList.this.x0 + 8, rowTop + 4, 0xFFFFFF);
+                    guiGraphics.drawString(font, shaderType.name, ShaderTypeList.this.x0 + 8, rowTop + 4, 0xFFFFFF);
             }
 
             @Override

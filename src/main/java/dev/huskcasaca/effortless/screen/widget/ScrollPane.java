@@ -8,6 +8,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
@@ -69,7 +70,7 @@ public class ScrollPane extends Slot {
 
     //Removed background
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             this.mouseX = mouseX;
             this.mouseY = mouseY;
@@ -88,7 +89,7 @@ public class ScrollPane extends Slot {
             }
 
             //All entries
-            this.renderList(poseStack, insideLeft, insideTop, mouseX, mouseY, partialTicks);
+            this.renderList(guiGraphics, insideLeft, insideTop, mouseX, mouseY, partialTicks);
             RenderSystem.disableDepthTest();
 
             //Dirt overlays on top and bottom
@@ -97,7 +98,6 @@ public class ScrollPane extends Slot {
 
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-            RenderSystem.disableTexture();
 
             //top
 //            bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -146,7 +146,6 @@ public class ScrollPane extends Slot {
             }
 
             //this.renderDecorations(mouseX, mouseY);
-            RenderSystem.enableTexture();
             RenderSystem.disableBlend();
         }
     }
@@ -169,8 +168,8 @@ public class ScrollPane extends Slot {
     }
 
     @Override
-    protected void renderItem(PoseStack poseStack, int slotIndex, int posX, int posY, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
-        this.getListEntry(slotIndex).drawEntry(poseStack, slotIndex, posX, posY, this.getRowWidth(), heightIn, mouseXIn, mouseYIn,
+    protected void renderItem(GuiGraphics guiGraphics, int slotIndex, int posX, int posY, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
+        this.getListEntry(slotIndex).drawEntry(guiGraphics, slotIndex, posX, posY, this.getRowWidth(), heightIn, mouseXIn, mouseYIn,
                 this.getSlotIndexFromScreenCoords(mouseXIn, mouseYIn) == slotIndex, partialTicks);
     }
 
@@ -323,7 +322,7 @@ public class ScrollPane extends Slot {
 
     //Draw in center if it fits
     @Override
-    protected void renderList(PoseStack poseStack, int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks) {
+    protected void renderList(GuiGraphics guiGraphics, int insideLeft, int insideTop, int mouseXIn, int mouseYIn, float partialTicks) {
         int itemCount = this.getItemCount();
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferbuilder = tesselator.getBuilder();
@@ -350,7 +349,6 @@ public class ScrollPane extends Slot {
             if (this.renderSelection && this.isSelectedItem(i)) {
                 int i1 = this.x0 + this.width / 2 - this.getRowWidth() / 2;
                 int j1 = this.x0 + this.width / 2 + this.getRowWidth() / 2;
-                RenderSystem.disableTexture();
                 float f = this.isFocused() ? 1.0F : 0.5F;
                 RenderSystem.setShaderColor(f, f, f, 1.0F);
                 bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
@@ -366,10 +364,9 @@ public class ScrollPane extends Slot {
                 bufferbuilder.vertex(j1 - 1, y - 1, 0.0D).endVertex();
                 bufferbuilder.vertex(i1 + 1, y - 1, 0.0D).endVertex();
                 tesselator.end();
-                RenderSystem.enableTexture();
             }
 
-            this.renderItem(poseStack, i, insideLeft, y, entryHeight2, mouseXIn, mouseYIn, partialTicks);
+            this.renderItem(guiGraphics, i, insideLeft, y, entryHeight2, mouseXIn, mouseYIn, partialTicks);
             y += entryHeight;
         }
     }
@@ -406,9 +403,9 @@ public class ScrollPane extends Slot {
             entry.updateScreen();
     }
 
-    public void drawTooltip(PoseStack poseStack, Screen guiScreen, int mouseX, int mouseY) {
+    public void drawTooltip(GuiGraphics guiGraphics, Screen guiScreen, int mouseX, int mouseY) {
         for (IScrollEntry entry : this.listEntries)
-            entry.drawTooltip(poseStack, guiScreen, mouseX, mouseY);
+            entry.drawTooltip(guiGraphics, guiScreen, mouseX, mouseY);
     }
 
     @Override
@@ -437,7 +434,7 @@ public class ScrollPane extends Slot {
 
         void updateScreen();
 
-        void drawTooltip(PoseStack poseStack, Screen guiScreen, int mouseX, int mouseY);
+        void drawTooltip(GuiGraphics guiGraphics, Screen guiScreen, int mouseX, int mouseY);
 
         boolean charTyped(char eventChar, int eventKey);
 
@@ -447,7 +444,7 @@ public class ScrollPane extends Slot {
 
         void updatePosition(int slotIndex, int x, int y, float partialTicks);
 
-        void drawEntry(PoseStack poseStack, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks);
+        void drawEntry(GuiGraphics guiGraphics, int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks);
 
         /**
          * Called when the mouse is clicked within this entry. Returning true means that something within this entry was

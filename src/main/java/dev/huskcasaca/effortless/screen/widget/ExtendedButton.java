@@ -6,11 +6,15 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+// FIXME: Purpose of this class is to provide a button that auto-abbreviates long texts.
+// However, this seems now to be solved in vanilla itself, by Scrolling the text if too long.
+// i.e. ExtendedButton can just be replaced by normal Button.
 @Environment(EnvType.CLIENT)
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -22,6 +26,7 @@ public class ExtendedButton extends Button {
     /**
      * Draws this button to the screen.
      */
+    /*
     @Override
     public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
         Minecraft mc = Minecraft.getInstance();
@@ -39,4 +44,5 @@ public class ExtendedButton extends Button {
 
         drawCenteredString(poseStack, mc.font, buttonText, this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, 14737632);
     }
+    */
 }

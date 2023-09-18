@@ -1,6 +1,5 @@
 package dev.huskcasaca.effortless.screen.buildmodifier;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskcasaca.effortless.Effortless;
 import dev.huskcasaca.effortless.control.Keys;
 import dev.huskcasaca.effortless.entity.player.ModifierSettings;
@@ -12,6 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -73,14 +73,14 @@ public class ModifierSettingsScreen extends Screen {
     @Override
     //Set colors using GL11, use the fontObj field to display text
     //Use drawTexturedModalRect() to transfers areas of a texture resource to the screen
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(poseStack);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(guiGraphics);
 
-        scrollPane.render(poseStack, mouseX, mouseY, partialTicks);
+        scrollPane.render(guiGraphics, mouseX, mouseY, partialTicks);
 
-        buttonDone.render(poseStack, mouseX, mouseY, partialTicks);
+        buttonDone.render(guiGraphics, mouseX, mouseY, partialTicks);
 
-        scrollPane.drawTooltip(poseStack, this, mouseX, mouseY);
+        scrollPane.drawTooltip(guiGraphics, this, mouseX, mouseY);
     }
 
 

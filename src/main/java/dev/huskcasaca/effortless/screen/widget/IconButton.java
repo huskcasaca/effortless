@@ -1,10 +1,10 @@
 package dev.huskcasaca.effortless.screen.widget;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -53,11 +53,10 @@ public class IconButton extends Button {
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-        super.render(poseStack, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(guiGraphics, mouseX, mouseY, partialTicks);
         if (this.visible) {
             this.isHovered = mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height;
-            RenderSystem.setShaderTexture(0, this.resourceLocation);
             int currentIconX = this.iconX;
             int currentIconY = this.iconY;
 
@@ -67,15 +66,15 @@ public class IconButton extends Button {
             }
 
             //Draws a textured rectangle at the current z-value. Used to be drawTexturedModalRect in Gui.
-            this.blit(poseStack, this.getX(), this.getY(), currentIconX, currentIconY, this.iconWidth, this.iconHeight);
+            guiGraphics.blit(this.resourceLocation, this.getX(), this.getY(), currentIconX, currentIconY, this.iconWidth, this.iconHeight);
         }
     }
 
-    public void drawTooltip(PoseStack poseStack, Screen screen, int mouseX, int mouseY) {
+    public void drawTooltip(GuiGraphics guiGraphics, Screen screen, int mouseX, int mouseY) {
         boolean flag = mouseX >= getX() && mouseX < getX() + width && mouseY >= getY() && mouseY < getY() + height;
 
         if (flag) {
-            screen.renderComponentTooltip(poseStack, tooltip, mouseX - 10, mouseY + 25);
+            guiGraphics.renderComponentTooltip(Minecraft.getInstance().font, tooltip, mouseX - 10, mouseY + 25);
         }
     }
 }

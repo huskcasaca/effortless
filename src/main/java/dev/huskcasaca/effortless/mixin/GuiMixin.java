@@ -11,6 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -50,13 +51,13 @@ public abstract class GuiMixin {
     private static final int SPACING_X = 18;
     private static final int SPACING_Y = 18;
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderSavingIndicator(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = At.Shift.AFTER))
-    private void renderGui(PoseStack poseStack, float f, CallbackInfo ci) {
-        renderBuildMode(poseStack);
-        renderBuildingStack(poseStack);
+    @Inject(method = "render", at = @At(value = "RETURN"))
+    private void renderGui(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
+        renderBuildMode(guiGraphics);
+        renderBuildingStack(guiGraphics);
     }
 
-    private void renderBuildMode(PoseStack poseStack) {
+    private void renderBuildMode(GuiGraphics guiGraphics) {
         if (!ConfigManager.getGlobalPreviewConfig().isShowBuildInfo()) {
             return;
         }
@@ -112,13 +113,14 @@ public abstract class GuiMixin {
         var positionY = screenHeight - 15;
         for (Component text : texts) {
             int j = font.width(text);
-            font.drawShadow(poseStack, text, screenWidth - j - 10, positionY, 16777215);
+            guiGraphics.drawString(font, text, screenWidth-j-10, positionY, 16777215);
+            
             positionY -= 10;
         }
 
     }
 
-    private void renderBuildingStack(PoseStack poseStack) {
+    private void renderBuildingStack(GuiGraphics guiGraphics) {
         if (!ConfigManager.getGlobalPreviewConfig().isShowBuildInfo()) {
             return;
         }
@@ -145,8 +147,8 @@ public abstract class GuiMixin {
         validItemStacks.forEach(stack -> {
             var width = defaultWidth + positionX.get() * SPACING_X * sign;
             var height = defaultHeight + positionY.get() * SPACING_Y;
-            itemRenderer.renderGuiItem(stack, width, height);
-            itemRenderer.renderGuiItemDecorations(getFont(), stack, width, height, Integer.toString(stack.getCount()));
+            guiGraphics.renderItem(stack, width, height);
+            guiGraphics.renderItemDecorations(getFont(), stack, width, height, Integer.toString(stack.getCount()));
             if (positionX.get() >= 8) {
                 positionX.set(0);
                 positionY.getAndIncrement();
@@ -158,8 +160,8 @@ public abstract class GuiMixin {
         invalidItemStacks.forEach(stack -> {
             var width = defaultWidth + positionX.get() * SPACING_X * sign;
             var height = defaultHeight + positionY.get() * SPACING_Y;
-            itemRenderer.renderGuiItem(stack, width, height);
-            itemRenderer.renderGuiItemDecorations(getFont(), stack, width, height, ChatFormatting.RED + Integer.toString(stack.getCount()) + ChatFormatting.RESET);
+            guiGraphics.renderItem(stack, width, height);
+            guiGraphics.renderItemDecorations(getFont(), stack, width, height, ChatFormatting.RED + Integer.toString(stack.getCount()) + ChatFormatting.RESET);
             if (positionX.get() >= 8) {
                 positionX.set(0);
                 positionY.getAndIncrement();
