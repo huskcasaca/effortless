@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.*;
 import org.joml.Matrix4f;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 
@@ -196,7 +196,6 @@ public class ScreenUtils {
         float endBlue = (float) (endColor & 255) / 255.0F;
 
         RenderSystem.enableDepthTest();
-        RenderSystem.disableTexture();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
@@ -211,24 +210,5 @@ public class ScreenUtils {
         tesselator.end();
 
         RenderSystem.disableBlend();
-        RenderSystem.enableTexture();
-    }
-
-    public static void blitInscribed(PoseStack poseStack, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight) {
-        blitInscribed(poseStack, x, y, boundsWidth, boundsHeight, rectWidth, rectHeight, true, true);
-    }
-
-    public static void blitInscribed(PoseStack poseStack, int x, int y, int boundsWidth, int boundsHeight, int rectWidth, int rectHeight, boolean centerX, boolean centerY) {
-        if (rectWidth * boundsHeight > rectHeight * boundsWidth) {
-            int h = boundsHeight;
-            boundsHeight = (int) (boundsWidth * ((double) rectHeight / rectWidth));
-            if (centerY) y += (h - boundsHeight) / 2;
-        } else {
-            int w = boundsWidth;
-            boundsWidth = (int) (boundsHeight * ((double) rectWidth / rectHeight));
-            if (centerX) x += (w - boundsWidth) / 2;
-        }
-
-        GuiComponent.blit(poseStack, x, y, boundsWidth, boundsHeight, 0.0f, 0.0f, rectWidth, rectHeight, rectWidth, rectHeight);
     }
 }
