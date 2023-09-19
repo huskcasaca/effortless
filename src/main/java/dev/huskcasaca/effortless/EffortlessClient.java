@@ -3,14 +3,18 @@ package dev.huskcasaca.effortless;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
+import dev.huskcasaca.effortless.building.BuildAction;
+import dev.huskcasaca.effortless.building.BuildActionHandler;
 import dev.huskcasaca.effortless.buildmode.BuildModeHandler;
 import dev.huskcasaca.effortless.buildmode.BuildModeHelper;
+import dev.huskcasaca.effortless.buildmodifier.BuildModifierHelper;
 import dev.huskcasaca.effortless.control.Keys;
 import dev.huskcasaca.effortless.event.ClientReloadShadersEvent;
 import dev.huskcasaca.effortless.event.ClientScreenEvent;
 import dev.huskcasaca.effortless.event.ClientScreenInputEvent;
 import dev.huskcasaca.effortless.building.ReachHelper;
 import dev.huskcasaca.effortless.network.Packets;
+import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerBuildActionPacket;
 import dev.huskcasaca.effortless.network.protocol.player.ServerboundPlayerSetBuildModePacket;
 import dev.huskcasaca.effortless.render.BlockPreviewRenderer;
 import dev.huskcasaca.effortless.render.BuildRenderType;
@@ -23,13 +27,16 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.commands.Commands;
 import net.minecraft.server.packs.resources.ResourceProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -96,13 +103,17 @@ public class EffortlessClient implements ClientModInitializer {
         }
 //
 //        //QuickReplace toggle
-//        if (keyBindings[1].consumeClick()) {
-//            var modifierSettings = ModifierSettingsManager.getModifierSettings(player);
-//            modifierSettings.setQuickReplace(!modifierSettings.enableQuickReplace());
-//            Effortless.log(player, ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET + (
-//                    modifierSettings.enableQuickReplace() ? "ON" : "OFF"));
-//            Packets.sendToServer(new ModifierSettingsMessage(modifierSettings));
-//        }
+        if (Keys.TOGGLE_REPLACE.getKeyMapping().consumeClick()) {
+            BuildActionHandler.performAction(player, BuildAction.REPLACE);
+            var modifierSettings = BuildModifierHelper.getModifierSettings(player);
+            Packets.sendToServer(new ServerboundPlayerBuildActionPacket(BuildAction.REPLACE));
+            Effortless.log(
+                    player,
+                    ChatFormatting.GOLD + "Replace " + ChatFormatting.RESET
+                            + (modifierSettings.enableReplace() ? (modifierSettings.enableQuickReplace() ? (ChatFormatting.GREEN + "QUICK") : (ChatFormatting.GREEN + "ON")) : (ChatFormatting.RED + "OFF")) + ChatFormatting.RESET,
+                    true
+            );
+        }
 
         //Radial menu
         if (Keys.SHOW_RADIAL_MENU.isDown()) {
