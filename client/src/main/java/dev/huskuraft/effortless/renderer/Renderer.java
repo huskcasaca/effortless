@@ -71,14 +71,33 @@ public abstract class Renderer {
 
     public abstract void drawQuad(RenderStyle renderStyle, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color);
 
-    // TODO: 9/10/23 return void
     public abstract int drawText(Typeface typeface, String string, int x, int y, int color, boolean shadow);
 
     public abstract int drawText(Typeface typeface, Text text, int x, int y, int color, boolean shadow);
 
-    public abstract int drawCenteredText(Typeface typeface, String string, int x, int y, int color, boolean shadow);
+    public int drawTextFromStart(Typeface typeface, String string, int x, int y, int color, boolean shadow) {
+        return drawText(typeface, string, x, y, color, shadow);
+    }
 
-    public abstract int drawCenteredText(Typeface typeface, Text text, int x, int y, int color, boolean shadow);
+    public int drawTextFromStart(Typeface typeface, Text text, int x, int y, int color, boolean shadow) {
+        return drawText(typeface, text, x, y, color, shadow);
+    }
+
+    public int drawTextFromCenter(Typeface typeface, String string, int x, int y, int color, boolean shadow) {
+        return drawText(typeface, string, x - typeface.measureWidth(string) / 2, y, color, shadow);
+    }
+
+    public int drawTextFromCenter(Typeface typeface, Text text, int x, int y, int color, boolean shadow) {
+        return drawText(typeface, text, x - typeface.measureWidth(text) / 2, y, color, shadow);
+    }
+
+    public int drawTextFromEnd(Typeface typeface, String string, int x, int y, int color, boolean shadow) {
+        return drawText(typeface, string, x - typeface.measureWidth(string), y, color, shadow);
+    }
+
+    public int drawTextFromEnd(Typeface typeface, Text text, int x, int y, int color, boolean shadow) {
+        return drawText(typeface, text, x - typeface.measureWidth(text), y, color, shadow);
+    }
 
     public abstract void drawScrollingText(Typeface typeface, Text text, int x0, int y0, int x1, int y1, int color);
 

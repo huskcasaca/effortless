@@ -167,7 +167,7 @@ public class SubtitleManager {
             for (var text : texts) {
                 textY -= 10;
                 var positionX = getContentSide() == AxisDirection.POSITIVE ? getContentWidth() - getTypeface().measureWidth(text) : 0;
-                renderer.drawText(getTypeface(), text, positionX, textY, 0xffffffff, true);
+                renderer.drawTextFromStart(getTypeface(), text, positionX, textY, 0xffffffff, true);
             }
         }
 
@@ -210,7 +210,7 @@ public class SubtitleManager {
             super.renderWidget(renderer, mouseX, mouseY, deltaTick);
 
             var positionX = getContentSide() == AxisDirection.POSITIVE ? getContentWidth() - getTypeface().measureWidth(header) : 0;
-            renderer.drawText(getTypeface(), header, positionX, -getContentHeight() + 2, 0xffffffff, true);
+            renderer.drawTextFromStart(getTypeface(), header, positionX, -getContentHeight() + 2, 0xffffffff, true);
         }
 
         @Override

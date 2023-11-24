@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.gui.AbstractScreen;
 import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.gui.input.EditBox;
-import dev.huskuraft.effortless.gui.text.CenteredStringWidget;
+import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.screen.randomizer.EffortlessRandomizerEditScreen;
 import dev.huskuraft.effortless.text.Text;
 
@@ -30,7 +30,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     private final List<Button> tabButtons = new ArrayList<>();
     private final List<Transformer> transformers;
     private TransformerList entries;
-    private CenteredStringWidget titleString;
+    private TextWidget titleTextWidget;
     private EditBox searchEditBox;
     private Button useTemplateButton;
     private Button cancelButton;
@@ -45,7 +45,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     @Override
     public void onCreate() {
 
-        this.titleString = addWidget(new CenteredStringWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle()));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
                 new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH - 2) / 2, 24, ROW_WIDTH - 2, 20, Text.translate("transformer.template_select.search"))

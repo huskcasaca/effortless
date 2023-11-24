@@ -54,7 +54,7 @@ public class RadialTextIcon extends AbstractWidget {
         renderer.pushPose();
         renderer.translate(getX() + getWidth() / 2f + 1, getY() + getHeight() / 2f - 8, 0);
         renderer.scale(2, 2, 0);
-        renderer.drawCenteredText(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, true);
+        renderer.drawTextFromCenter(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, true);
         renderer.popPose();
     }
 

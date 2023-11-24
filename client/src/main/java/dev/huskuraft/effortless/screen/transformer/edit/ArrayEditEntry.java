@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.EntryList;
 import dev.huskuraft.effortless.gui.checkbox.Checkbox;
 import dev.huskuraft.effortless.gui.input.NumberField;
-import dev.huskuraft.effortless.gui.text.StringWidget;
+import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
@@ -27,7 +27,7 @@ public final class ArrayEditEntry extends TransformerEditEntry<Array> {
         var offsetX = getX() + (getWidth() - width * 3 - offsetComponent * 2) / 2;
         var offsetY = getY() + 1;
 
-        addWidget(new StringWidget(getEntrance(), offsetX + 1, offsetY, Text.text("Position (XYZ)").withStyle(TextStyle.GRAY)));
+        addWidget(new TextWidget(getEntrance(), offsetX + 1, offsetY, Text.text("Position (XYZ)").withStyle(TextStyle.GRAY)));
         offsetY += 11;
         offsetXField = addWidget(new NumberField(getEntrance(), offsetX, offsetY, width, 18));
 
@@ -55,7 +55,7 @@ public final class ArrayEditEntry extends TransformerEditEntry<Array> {
         });
 
         offsetY += 22;
-        addWidget(new StringWidget(getEntrance(), offsetX + 1, offsetY, Text.text("Count").withStyle(TextStyle.GRAY)));
+        addWidget(new TextWidget(getEntrance(), offsetX + 1, offsetY, Text.text("Count").withStyle(TextStyle.GRAY)));
         offsetY += 11;
         countField = addWidget(new NumberField(getEntrance(), offsetX, offsetY, width, 18));
         countField.setTooltip(Text.text("How many copies should be made."));

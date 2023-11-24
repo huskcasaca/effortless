@@ -226,7 +226,7 @@ public class RadialSection<S, B> extends AbstractWidget {
                     textX -= getTypeface().measureWidth(text) / 2;
                 }
                 // FIXME: 27/9/23
-                renderer.drawText(getTypeface(), text, (int) middleX + textX, (int) middleY + textY, WHITE_TEXT_COLOR, true);
+                renderer.drawTextFromStart(getTypeface(), text, (int) middleX + textX, (int) middleY + textY, WHITE_TEXT_COLOR, true);
             }
 
             // background tint

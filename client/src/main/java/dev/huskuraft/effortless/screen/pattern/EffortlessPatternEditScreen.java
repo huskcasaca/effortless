@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.icon.RadialTextIcon;
 import dev.huskuraft.effortless.gui.input.EditBox;
-import dev.huskuraft.effortless.gui.text.CenteredStringWidget;
+import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.screen.randomizer.EffortlessRandomizerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
@@ -31,7 +31,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
     private final Pattern defaultSettings;
     private final int index;
     private Pattern lastSettings;
-    private CenteredStringWidget titleString;
+    private TextWidget titleTextWidget;
     private EditBox nameEditBox;
     private TransformerList entries;
     private Button editButton;
@@ -70,7 +70,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         this.nameEditBox.setHint(Text.translate("pattern.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.name().getString());
 
-        this.titleString = addWidget(new CenteredStringWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle()));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.edit.edit"), button -> {
             if (entries.hasSelected()) {

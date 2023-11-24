@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.gui.EntryList;
 import dev.huskuraft.effortless.gui.button.MoveButton;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.icon.TextIcon;
-import dev.huskuraft.effortless.gui.text.StringWidget;
+import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
@@ -55,7 +55,7 @@ public class TransformerInfoEntry<T extends Transformer> extends EditableEntry<T
                 case DOWN -> getEntryList().moveDown(this);
             }
         }, Orientation.UP, Orientation.DOWN));
-        addWidget(new StringWidget(getEntrance(), getX() + 2 + 32 + 1, getY() + 1, getDisplayName(getItem())));
+        addWidget(new TextWidget(getEntrance(), getX() + 2 + 32 + 1, getY() + 1, getDisplayName(getItem())));
         updateDescriptionWidgets();
     }
 
@@ -79,11 +79,11 @@ public class TransformerInfoEntry<T extends Transformer> extends EditableEntry<T
         var extraDescWidgets = new ArrayList<AbstractWidget>();
         var index = 0;
         for (var component : getBasicComponents(getItem())) {
-            var widget = addWidget(new StringWidget(getEntrance(), 2 + 32 + 1, 1 + 11 * ++index, component));
+            var widget = addWidget(new TextWidget(getEntrance(), 2 + 32 + 1, 1 + 11 * ++index, component));
             basicDescWidgets.add(widget);
         }
         for (var component : getExtraComponents(getItem())) {
-            var widget = addWidget(new StringWidget(getEntrance(), 2 + 32 + 1, 1 + 11 * ++index, component));
+            var widget = addWidget(new TextWidget(getEntrance(), 2 + 32 + 1, 1 + 11 * ++index, component));
             widget.setVisible(false);
             extraDescWidgets.add(widget);
         }
