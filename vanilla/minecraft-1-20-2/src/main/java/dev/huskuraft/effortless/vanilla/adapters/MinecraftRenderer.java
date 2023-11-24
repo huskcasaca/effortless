@@ -207,17 +207,6 @@ class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public int drawCenteredText(Typeface typeface, String string, int x, int y, int color, boolean shadow) {
-        return proxy.drawString(MinecraftClientAdapter.adapt(typeface), string, x - MinecraftClientAdapter.adapt(typeface).width(string) / 2, y, color, shadow);
-    }
-
-    @Override
-    public int drawCenteredText(Typeface typeface, Text text, int x, int y, int color, boolean shadow) {
-        var formattedCharSequence = MinecraftClientAdapter.adapt(text).getVisualOrderText();
-        return proxy.drawString(MinecraftClientAdapter.adapt(typeface), formattedCharSequence, x - MinecraftClientAdapter.adapt(typeface).width(formattedCharSequence) / 2, y, color, shadow);
-    }
-
-    @Override
     public void drawScrollingText(Typeface typeface, Text text, int x0, int y0, int x1, int y1, int color) {
         var textWidth = MinecraftClientAdapter.adapt(typeface).width(MinecraftClientAdapter.adapt(text));
         int containerHeight = (y0 + y1 - 9) / 2 + 1;
@@ -232,7 +221,7 @@ class MinecraftRenderer extends Renderer {
             proxy.drawString(MinecraftClientAdapter.adapt(typeface), MinecraftClientAdapter.adapt(text), x0 - (int) x, containerHeight, color, true);
             proxy.disableScissor();
         } else {
-            drawCenteredText(typeface, text, (x0 + x1) / 2, containerHeight, color, true);
+            drawTextFromCenter(typeface, text, (x0 + x1) / 2, containerHeight, color, true);
         }
     }
 
@@ -298,10 +287,10 @@ class MinecraftRenderer extends Renderer {
     @Override
     public void drawQuad(RenderStyle renderStyle, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color) {
         var matrix4f = proxy.pose().last().pose();
-        float f = (float) FastColor.ARGB32.alpha(color) / 255.0F;
-        float g = (float) FastColor.ARGB32.red(color) / 255.0F;
-        float h = (float) FastColor.ARGB32.green(color) / 255.0F;
-        float p = (float) FastColor.ARGB32.blue(color) / 255.0F;
+        var f = (float) FastColor.ARGB32.alpha(color) / 255.0F;
+        var g = (float) FastColor.ARGB32.red(color) / 255.0F;
+        var h = (float) FastColor.ARGB32.green(color) / 255.0F;
+        var p = (float) FastColor.ARGB32.blue(color) / 255.0F;
         VertexConsumer vertexConsumer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderStyle));
         vertexConsumer.vertex(matrix4f, (float) x0, (float) y0, (float) offset).color(g, h, p, f).endVertex();
         vertexConsumer.vertex(matrix4f, (float) x1, (float) y1, (float) offset).color(g, h, p, f).endVertex();

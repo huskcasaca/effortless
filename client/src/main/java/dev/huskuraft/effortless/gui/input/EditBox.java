@@ -397,7 +397,7 @@ public class EditBox extends AbstractWidget {
 
         if (!string.isEmpty()) {
             String string2 = bl ? string.substring(0, l) : string;
-            p = renderer.drawText(getTypeface(), this.formatter.apply(string2, this.displayPos), n, o, k, true);
+            p = renderer.drawTextFromStart(getTypeface(), this.formatter.apply(string2, this.displayPos), n, o, k, true);
         }
 
         boolean bl3 = this.cursorPos < this.value.length() || this.value.length() >= this.getMaxLength();
@@ -410,15 +410,15 @@ public class EditBox extends AbstractWidget {
         }
 
         if (!string.isEmpty() && bl && l < string.length()) {
-            renderer.drawText(getTypeface(), this.formatter.apply(string.substring(l), this.cursorPos), p, o, k, true);
+            renderer.drawTextFromStart(getTypeface(), this.formatter.apply(string.substring(l), this.cursorPos), p, o, k, true);
         }
 
         if (this.hint != null && string.isEmpty() && !this.isFocused()) {
-            renderer.drawText(getTypeface(), this.hint, p, o, k, true);
+            renderer.drawTextFromStart(getTypeface(), this.hint, p, o, k, true);
         }
 
         if (!bl3 && this.suggestion != null) {
-            renderer.drawText(getTypeface(), this.suggestion, q - 1, o, -8355712, true);
+            renderer.drawTextFromStart(getTypeface(), this.suggestion, q - 1, o, -8355712, true);
         }
 
         int var10002;
@@ -431,7 +431,7 @@ public class EditBox extends AbstractWidget {
                 var10004 = o + 1;
                 renderer.drawRect(q, var10002, var10003, var10004 + 9, -3092272);
             } else {
-                renderer.drawText(getTypeface(), "_", q, o, k, true);
+                renderer.drawTextFromStart(getTypeface(), "_", q, o, k, true);
             }
         }
 

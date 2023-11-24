@@ -12,8 +12,7 @@ import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.gui.icon.TextIcon;
 import dev.huskuraft.effortless.gui.slot.ItemSlot;
-import dev.huskuraft.effortless.gui.text.CenteredStringWidget;
-import dev.huskuraft.effortless.gui.text.StringWidget;
+import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
@@ -25,7 +24,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
 
     private final Consumer<RandomizerSettings> applySettings;
     private RandomizerSettings lastSettings;
-    private CenteredStringWidget titleString;
+    private TextWidget titleTextWidget;
     private RandomizerList entries;
     private Button editButton;
     private Button deleteButton;
@@ -49,7 +48,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.titleString = addWidget(new CenteredStringWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle()));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("randomizer.settings.edit"), button -> {
             if (entries.hasSelected()) {
@@ -135,7 +134,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
         private class ItemRandomizerEntry extends EditableEntry<ItemRandomizer> {
 
             private MoveButton button;
-            private StringWidget nameStringWidget;
+            private TextWidget nameTextWidget;
             //            private RadialTextIcon radialTextIcon;
             private TextIcon textIcon;
             private List<ItemSlot> slots;
@@ -147,7 +146,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
             @Override
             public void onCreate() {
 
-                this.nameStringWidget = addWidget(new StringWidget(getEntrance(), getX() + 2 + 32 + 1, getY() + 2, getDisplayName(getItem())));
+                this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 2 + 32 + 1, getY() + 2, getDisplayName(getItem())));
 //                radialTextIcon = addWidget(new RadialTextIcon(minecraft, getLeft(), getTop(), Dimen.ICON_WIDTH, Dimen.ICON_HEIGHT, indexOf(this), String.valueOf(indexOf(this))));
                 this.textIcon = addWidget(new TextIcon(getEntrance(), getX(), getY(), Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, Text.text("R")));
                 this.button = addWidget(new MoveButton(getEntrance(), getX(), getX(), direction -> {

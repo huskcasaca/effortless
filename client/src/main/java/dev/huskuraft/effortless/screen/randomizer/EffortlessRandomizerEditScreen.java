@@ -14,8 +14,7 @@ import dev.huskuraft.effortless.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.input.NumberField;
 import dev.huskuraft.effortless.gui.slot.ItemSlot;
-import dev.huskuraft.effortless.gui.text.CenteredStringWidget;
-import dev.huskuraft.effortless.gui.text.StringWidget;
+import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.screen.item.EffortlessItemPickerScreen;
 import dev.huskuraft.effortless.text.Text;
@@ -35,7 +34,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
     private final Consumer<ItemRandomizer> applySettings;
     private final ItemRandomizer defaultSettings;
     private ItemRandomizer lastSettings;
-    private CenteredStringWidget titleString;
+    private TextWidget titleTextWidget;
     private ItemStackChanceList entries;
     private EditBox nameEditBox;
     private Button orderButton;
@@ -78,7 +77,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         this.nameEditBox.setHint(Text.translate("randomizer.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.getName());
 
-        this.titleString = addWidget(new CenteredStringWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle()));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("randomizer.edit.order", Text.translate(lastSettings.getOrder().getNameKey())), button -> {
             lastOrder = Randomizer.Order.values()[(lastOrder.ordinal() + 1) % Randomizer.Order.values().length];
@@ -175,8 +174,8 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         public class ItemChanceEntry extends EditableEntry<Chance<ItemStack>> {
 
             private ItemSlot itemSlot;
-            private StringWidget nameStringWidget;
-            private StringWidget chanceStringWidget;
+            private TextWidget nameTextWidget;
+            private TextWidget chanceTextWidget;
             private NumberField numberField;
 
             public ItemChanceEntry(Entrance entrance, Chance<ItemStack> chance) {
@@ -215,15 +214,15 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
                     this.setItem(Chance.itemStack(getItem().content(), count));
                 });
                 this.itemSlot = addWidget(new ItemSlot(getEntrance(), getX(), getY(), Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getItem().content(), Text.text(String.valueOf(getItem().chance()))));
-                this.nameStringWidget = addWidget(new StringWidget(getEntrance(), getX() + 24, getY() + 6, getDisplayName(getItem())));
-                this.chanceStringWidget = addWidget(new StringWidget(getEntrance(), getX() + getWidth() - 50, getY() + 6, Text.empty()));
+                this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getDisplayName(getItem())));
+                this.chanceTextWidget = addWidget(new TextWidget(getEntrance(), getX() + getWidth() - 50, getY() + 6, Text.empty()));
             }
 
             @Override
             public void onReload() {
                 var percentage = String.format("%.2f%%", 100.0 * getItem().chance() / totalCount());
-                chanceStringWidget.setX(((getX() + getWidth()) - 50 - getTypeface().measureWidth(percentage)));
-                chanceStringWidget.setMessage(Text.text(percentage));
+                chanceTextWidget.setX(((getX() + getWidth()) - 50 - getTypeface().measureWidth(percentage)));
+                chanceTextWidget.setMessage(Text.text(percentage));
             }
 
             @Override
@@ -231,7 +230,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
                 super.setItem(item);
                 itemSlot.setItemStack(getItem().content());
                 itemSlot.setDescription(Text.text(String.valueOf(getItem().chance())));
-                nameStringWidget.setMessage(getDisplayName(getItem()));
+                nameTextWidget.setMessage(getDisplayName(getItem()));
             }
 
             // TODO: 8/2/23

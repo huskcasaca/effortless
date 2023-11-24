@@ -10,8 +10,7 @@ import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.slot.ItemSlot;
-import dev.huskuraft.effortless.gui.text.CenteredStringWidget;
-import dev.huskuraft.effortless.gui.text.StringWidget;
+import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
     private static final int ROW_WIDTH = Dimens.RegularEntry.ROW_WIDTH;
 
     private final Consumer<ItemStack> applySettings;
-    private CenteredStringWidget titleString;
+    private TextWidget titleTextWidget;
     private ItemStackList entries;
     private EditBox searchEditBox;
     private Button addButton;
@@ -55,7 +54,7 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
 //        getEntrance().getClient().getRef().populateSearchTree(SearchRegistry.CREATIVE_TAGS, itemStack);
 //        }
 
-        this.titleString = addWidget(new CenteredStringWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle()));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
                 new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH - 2) / 2, 24, ROW_WIDTH - 2, 20, Text.translate("item.picker.search"))
@@ -117,7 +116,7 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
         protected static class ItemStackEntry extends EditableEntry<ItemStack> {
 
             private ItemSlot itemSlot;
-            private StringWidget nameStringWidget;
+            private TextWidget nameTextWidget;
 
             public ItemStackEntry(Entrance entrance, ItemStack itemStack) {
                 super(entrance, itemStack);
@@ -126,14 +125,14 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
             @Override
             public void onCreate() {
                 this.itemSlot = addWidget(new ItemSlot(getEntrance(), getX(), getY(), Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getItem(), Text.empty()));
-                this.nameStringWidget = addWidget(new StringWidget(getEntrance(), getX() + 24, getY() + 6, getDisplayName(getItem())));
+                this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getDisplayName(getItem())));
             }
 
             @Override
             public void setItem(ItemStack item) {
                 super.setItem(item);
                 itemSlot.setItemStack(item);
-                nameStringWidget.setMessage(getDisplayName(item));
+                nameTextWidget.setMessage(getDisplayName(item));
             }
 
             @Override

@@ -10,8 +10,7 @@ import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.gui.icon.RadialTextIcon;
 import dev.huskuraft.effortless.gui.slot.ItemSlot;
-import dev.huskuraft.effortless.gui.text.CenteredStringWidget;
-import dev.huskuraft.effortless.gui.text.StringWidget;
+import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
@@ -23,7 +22,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
     private final Consumer<PatternSettings> applySettings;
     private PatternSettings lastSettings;
-    private CenteredStringWidget titleString;
+    private TextWidget titleTextWidget;
     private PatternList entries;
     private Button editButton;
     private Button deleteButton;
@@ -47,7 +46,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.titleString = addWidget(new CenteredStringWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle()));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.settings.edit"), button -> {
             if (entries.hasSelected()) {
@@ -135,7 +134,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         private class PatternEntry extends EditableEntry<Pattern> {
 
             private RadialTextIcon radialTextIcon;
-            private StringWidget nameStringWidget;
+            private TextWidget nameTextWidget;
             private List<ItemSlot> slots;
 
             protected PatternEntry(Entrance entrance, Pattern pattern) {
@@ -145,7 +144,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
             @Override
             public void onCreate() {
                 this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getX(), getY(), Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, 0, Text.text(String.valueOf(0))));
-                this.nameStringWidget = addWidget(new StringWidget(getEntrance(), getX() + 2 + 32 + 1, getY() + 2, getDisplayName(getItem())));
+                this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 2 + 32 + 1, getY() + 2, getDisplayName(getItem())));
                 updateSlots();
             }
 
@@ -158,7 +157,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
             @Override
             public void setItem(Pattern item) {
                 super.setItem(item);
-                nameStringWidget.setMessage(getDisplayName(getItem()));
+                nameTextWidget.setMessage(getDisplayName(getItem()));
             }
 
             @Override
