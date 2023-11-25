@@ -11,10 +11,7 @@ import dev.huskuraft.effortless.gui.Screen;
 import dev.huskuraft.effortless.gui.Widget;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.screen.transformer.edit.ArrayEditEntry;
-import dev.huskuraft.effortless.screen.transformer.edit.MirrorEditEntry;
-import dev.huskuraft.effortless.screen.transformer.edit.RadialEditEntry;
-import dev.huskuraft.effortless.screen.transformer.edit.TransformerEditEntry;
+import dev.huskuraft.effortless.screen.transformer.edit.*;
 import dev.huskuraft.effortless.screen.transformer.info.*;
 import dev.huskuraft.effortless.screen.transformer.multi.TransformerMultiEntry;
 
@@ -53,9 +50,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
             case ARRAY -> new ArrayInfoEntry(getEntrance(), this, (Array) transformer);
             case MIRROR -> new MirrorInfoEntry(getEntrance(), this, (Mirror) transformer);
             case RADIAL -> new RadialInfoEntry(getEntrance(), this, (Radial) transformer);
-            case RANDOMIZE -> switch (((Randomizer) transformer).getCategory()) {
-                case ITEM -> new ItemRandomizerInfoEntry(getEntrance(), this, (ItemRandomizer) transformer);
-            };
+            case ITEM_RANDOM -> new ItemRandomizerInfoEntry(getEntrance(), this, (ItemRandomizer) transformer);
         };
     }
 
@@ -65,9 +60,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
             case ARRAY -> new ArrayEditEntry(getEntrance(), this, (Array) transformer);
             case MIRROR -> new MirrorEditEntry(getEntrance(), this, (Mirror) transformer);
             case RADIAL -> new RadialEditEntry(getEntrance(), this, (Radial) transformer);
-            case RANDOMIZE -> switch (((Randomizer) transformer).getCategory()) {
-                case ITEM -> new ItemRandomizerInfoEntry(getEntrance(), this, (ItemRandomizer) transformer);
-            };
+            case ITEM_RANDOM -> new ItemRandomizerEditEntry(getEntrance(), this, (ItemRandomizer) transformer);
         };
     }
 

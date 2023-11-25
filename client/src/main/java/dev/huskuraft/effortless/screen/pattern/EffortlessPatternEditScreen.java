@@ -83,11 +83,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
                                 item
                         ).attach();
                     }
-                    case RANDOMIZE -> {
-                        var randomizer = (Randomizer) item;
-                        if (randomizer.getCategory() != Randomizer.Category.ITEM) {
-                            return;
-                        }
+                    case ITEM_RANDOM -> {
                         new EffortlessRandomizerEditScreen(
                                 getEntrance(),
                                 transformer -> entries.replaceSelect(transformer),

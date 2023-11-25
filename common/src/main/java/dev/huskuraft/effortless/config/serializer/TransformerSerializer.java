@@ -24,7 +24,7 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
             case ARRAY -> tag.getAsRecord().get(ArraySerializer::new);
             case MIRROR -> tag.getAsRecord().get(MirrorSerializer::new);
             case RADIAL -> tag.getAsRecord().get(RadialSerializer::new);
-            case RANDOMIZE -> tag.getAsRecord().get(RandomizerSerializer::new);
+            case ITEM_RANDOM -> tag.getAsRecord().get(ItemRandomizerSerializer::new);
         };
     }
 
@@ -35,7 +35,7 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
             case ARRAY -> tag.getAsRecord().put((Array) transformer, ArraySerializer::new);
             case MIRROR -> tag.getAsRecord().put((Mirror) transformer, MirrorSerializer::new);
             case RADIAL -> tag.getAsRecord().put((Radial) transformer, RadialSerializer::new);
-            case RANDOMIZE -> tag.getAsRecord().put((Randomizer<?>) transformer, RandomizerSerializer::new);
+            case ITEM_RANDOM -> tag.getAsRecord().put((ItemRandomizer) transformer, ItemRandomizerSerializer::new);
         }
     }
 
@@ -104,25 +104,25 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
 
     }
 
-    public static class RandomizerSerializer extends TagSerializer<Randomizer<?>> {
-
-        private static final String TAG_CATEGORY = "Category";
-
-        @Override
-        public Randomizer<?> read(TagElement tag) {
-            return switch (tag.getAsRecord().getEnum(TAG_CATEGORY, Randomizer.Category.class)) {
-                case ITEM -> tag.getAsRecord().get(ItemRandomizerSerializer::new);
-            };
-        }
-
-        @Override
-        public void write(TagElement tag, Randomizer<?> randomizer) {
-            tag.getAsRecord().putEnum(TAG_CATEGORY, randomizer.getCategory());
-            if (Objects.requireNonNull(randomizer.getCategory()) == Randomizer.Category.ITEM) {
-                tag.getAsRecord().put((ItemRandomizer) randomizer, ItemRandomizerSerializer::new);
-            }
-        }
-    }
+//    public static class RandomizerSerializer extends TagSerializer<Randomizer<?>> {
+//
+//        private static final String TAG_CATEGORY = "Category";
+//
+//        @Override
+//        public Randomizer<?> read(TagElement tag) {
+//            return switch (tag.getAsRecord().getEnum(TAG_CATEGORY, Randomizer.Category.class)) {
+//                case ITEM -> tag.getAsRecord().get(ItemRandomizerSerializer::new);
+//            };
+//        }
+//
+//        @Override
+//        public void write(TagElement tag, Randomizer<?> randomizer) {
+//            tag.getAsRecord().putEnum(TAG_CATEGORY, randomizer.getCategory());
+//            if (Objects.requireNonNull(randomizer.getCategory()) == Randomizer.Category.ITEM) {
+//                tag.getAsRecord().put((ItemRandomizer) randomizer, ItemRandomizerSerializer::new);
+//            }
+//        }
+//    }
 
     public static class ItemRandomizerSerializer extends TagSerializer<ItemRandomizer> {
 
