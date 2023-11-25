@@ -2,10 +2,10 @@ package dev.huskuraft.effortless.gui.container;
 
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.AbstractContainerWidget;
-import dev.huskuraft.effortless.gui.EntryEventListener;
+import dev.huskuraft.effortless.gui.Entry;
 import dev.huskuraft.effortless.text.Text;
 
-public abstract class AbstractEntry extends AbstractContainerWidget implements EntryEventListener {
+public abstract class AbstractEntry extends AbstractContainerWidget implements Entry {
 
     protected AbstractEntry(Entrance entrance) {
         super(entrance, 0, 0, 0, 0, Text.empty());

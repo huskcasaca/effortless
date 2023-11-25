@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.gui;
 
-public interface EntryEventListener {
+public interface Entry {
 
     void onPositionChange(int from, int to);
 
