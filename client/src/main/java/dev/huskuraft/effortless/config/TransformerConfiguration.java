@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.config;
 
-import dev.huskuraft.effortless.building.pattern.array.Array;
-import dev.huskuraft.effortless.building.pattern.mirror.Mirror;
-import dev.huskuraft.effortless.building.pattern.raidal.Radial;
+import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
+import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
+import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.settings.RandomizerSettings;
 
@@ -10,23 +10,23 @@ import java.util.List;
 
 public class TransformerConfiguration implements Configuration {
 
-    private List<Array> arrays;
+    private List<ArrayTransformer> arrayTransformers;
 
-    private List<Mirror> mirrors;
+    private List<MirrorTransformer> mirrorTransformers;
 
-    private List<Radial> radials;
+    private List<RadialTransformer> radialTransformers;
 
     private List<ItemRandomizer> itemRandomizers;
 
     public TransformerConfiguration(
-            List<Array> arrays,
-            List<Mirror> mirrors,
-            List<Radial> radials,
+            List<ArrayTransformer> arrayTransformers,
+            List<MirrorTransformer> mirrorTransformers,
+            List<RadialTransformer> radialTransformers,
             List<ItemRandomizer> itemRandomizers
     ) {
-        this.arrays = arrays;
-        this.mirrors = mirrors;
-        this.radials = radials;
+        this.arrayTransformers = arrayTransformers;
+        this.mirrorTransformers = mirrorTransformers;
+        this.radialTransformers = radialTransformers;
         this.itemRandomizers = itemRandomizers;
     }
 
@@ -47,28 +47,28 @@ public class TransformerConfiguration implements Configuration {
         this.itemRandomizers = settings.randomizers();
     }
 
-    public List<Array> getArrays() {
-        return arrays;
+    public List<ArrayTransformer> getArrays() {
+        return arrayTransformers;
     }
 
-    public void setArrays(List<Array> arrays) {
-        this.arrays = arrays;
+    public void setArrays(List<ArrayTransformer> arrayTransformers) {
+        this.arrayTransformers = arrayTransformers;
     }
 
-    public List<Mirror> getMirrors() {
-        return mirrors;
+    public List<MirrorTransformer> getMirrors() {
+        return mirrorTransformers;
     }
 
-    public void setMirrors(List<Mirror> mirrors) {
-        this.mirrors = mirrors;
+    public void setMirrors(List<MirrorTransformer> mirrorTransformers) {
+        this.mirrorTransformers = mirrorTransformers;
     }
 
-    public List<Radial> getRadials() {
-        return radials;
+    public List<RadialTransformer> getRadials() {
+        return radialTransformers;
     }
 
-    public void setRadials(List<Radial> radials) {
-        this.radials = radials;
+    public void setRadials(List<RadialTransformer> radialTransformers) {
+        this.radialTransformers = radialTransformers;
     }
 
     public List<ItemRandomizer> getItemRandomizers() {

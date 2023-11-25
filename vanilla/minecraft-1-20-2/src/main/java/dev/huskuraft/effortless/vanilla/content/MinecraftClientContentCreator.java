@@ -2,9 +2,9 @@ package dev.huskuraft.effortless.vanilla.content;
 
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
-import dev.huskuraft.effortless.building.pattern.array.Array;
-import dev.huskuraft.effortless.building.pattern.mirror.Mirror;
-import dev.huskuraft.effortless.building.pattern.raidal.Radial;
+import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
+import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
+import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
@@ -332,9 +332,9 @@ public class MinecraftClientContentCreator extends ContentCreator {
     @Override
     public List<Transformer> getDefaultTransformers() {
         return Stream.of(
-                List.of(Array.ZERO),
-                List.of(Mirror.EMPTY),
-                List.of(Radial.EMPTY),
+                List.of(ArrayTransformer.ZERO),
+                List.of(MirrorTransformer.EMPTY),
+                List.of(RadialTransformer.EMPTY),
                 getDefaultRandomizers()
         ).flatMap(List::stream).collect(Collectors.toList());
     }
@@ -345,7 +345,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                 new Pattern(
                         Text.text("Simple Array Pattern"),
                         List.of(
-                                new Array(new Vector3d(2, 0, 0), 2)
+                                new ArrayTransformer(new Vector3d(2, 0, 0), 2)
                         )
                 )
         );

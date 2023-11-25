@@ -13,9 +13,9 @@ import dev.huskuraft.effortless.text.Text;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class Radial implements Transformer {
+public class RadialTransformer implements Transformer {
 
-    public static final Radial EMPTY = new Radial(null, null);
+    public static final RadialTransformer EMPTY = new RadialTransformer(null, null);
     //    private final boolean enabled;
     private final Vector3d position;
     //    private final double start;
@@ -28,7 +28,7 @@ public class Radial implements Transformer {
 //    private final boolean drawPlanes;
     private final Integer slice;
 
-    public Radial(Vector3d position, Integer slice) {
+    public RadialTransformer(Vector3d position, Integer slice) {
         this.position = position;
         this.slice = slice;
 //        this.axis = axis;

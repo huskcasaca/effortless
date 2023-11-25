@@ -1,14 +1,14 @@
 package dev.huskuraft.effortless.screen.transformer.edit;
 
-import dev.huskuraft.effortless.building.pattern.mirror.Mirror;
+import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.EntryList;
 import dev.huskuraft.effortless.text.Text;
 
-public final class MirrorEditEntry extends TransformerEditEntry<Mirror> {
+public final class MirrorTransformerEditEntry extends TransformerEditEntry<MirrorTransformer> {
 
-    public MirrorEditEntry(Entrance entrance, EntryList entryList, Mirror mirror) {
-        super(entrance, entryList, mirror);
+    public MirrorTransformerEditEntry(Entrance entrance, EntryList entryList, MirrorTransformer mirrorTransformer) {
+        super(entrance, entryList, mirrorTransformer);
     }
 
     @Override

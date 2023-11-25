@@ -12,9 +12,9 @@ import dev.huskuraft.effortless.text.Text;
 
 import java.util.stream.Stream;
 
-public class Mirror implements Transformer {
+public class MirrorTransformer implements Transformer {
 
-    public static final Mirror EMPTY = new Mirror(null, null);
+    public static final MirrorTransformer EMPTY = new MirrorTransformer(null, null);
     //    private final boolean enabled;
     private final Vector3d position;
     //    private final boolean drawLines;
@@ -22,7 +22,7 @@ public class Mirror implements Transformer {
 //    private final int radius;
     private final Axis axis;
 
-    public Mirror(Vector3d position, Axis axis) {
+    public MirrorTransformer(Vector3d position, Axis axis) {
         this.position = position;
         this.axis = axis;
     }

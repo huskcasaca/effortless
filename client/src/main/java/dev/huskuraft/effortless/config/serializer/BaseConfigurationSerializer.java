@@ -50,17 +50,17 @@ public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration
         @Override
         public TransformerConfiguration read(TagElement tag) {
             return new TransformerConfiguration(
-                    tag.getAsRecord().getList(TAG_ARRAYS, TransformerSerializer.ArraySerializer::new),
-                    tag.getAsRecord().getList(TAG_MIRRORS, TransformerSerializer.MirrorSerializer::new),
-                    tag.getAsRecord().getList(TAG_RADIALS, TransformerSerializer.RadialSerializer::new),
+                    tag.getAsRecord().getList(TAG_ARRAYS, TransformerSerializer.ArrayTransformerSerializer::new),
+                    tag.getAsRecord().getList(TAG_MIRRORS, TransformerSerializer.MirrorTransformerSerializer::new),
+                    tag.getAsRecord().getList(TAG_RADIALS, TransformerSerializer.RadialTransformerSerializer::new),
                     tag.getAsRecord().getList(TAG_ITEM_RANDOMIZERS, TransformerSerializer.ItemRandomizerSerializer::new));
         }
 
         @Override
         public void write(TagElement tag, TransformerConfiguration config) {
-            tag.getAsRecord().putList(TAG_ARRAYS, config.getArrays(), TransformerSerializer.ArraySerializer::new);
-            tag.getAsRecord().putList(TAG_MIRRORS, config.getMirrors(), TransformerSerializer.MirrorSerializer::new);
-            tag.getAsRecord().putList(TAG_RADIALS, config.getRadials(), TransformerSerializer.RadialSerializer::new);
+            tag.getAsRecord().putList(TAG_ARRAYS, config.getArrays(), TransformerSerializer.ArrayTransformerSerializer::new);
+            tag.getAsRecord().putList(TAG_MIRRORS, config.getMirrors(), TransformerSerializer.MirrorTransformerSerializer::new);
+            tag.getAsRecord().putList(TAG_RADIALS, config.getRadials(), TransformerSerializer.RadialTransformerSerializer::new);
             tag.getAsRecord().putList(TAG_ITEM_RANDOMIZERS, config.getItemRandomizers(), TransformerSerializer.ItemRandomizerSerializer::new);
         }
     }

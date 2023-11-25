@@ -1,14 +1,14 @@
 package dev.huskuraft.effortless.screen.transformer.edit;
 
-import dev.huskuraft.effortless.building.pattern.raidal.Radial;
+import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.EntryList;
 import dev.huskuraft.effortless.text.Text;
 
-public final class RadialEditEntry extends TransformerEditEntry<Radial> {
+public final class RadialTransformerEditEntry extends TransformerEditEntry<RadialTransformer> {
 
-    public RadialEditEntry(Entrance entrance, EntryList entryList, Radial radial) {
-        super(entrance, entryList, radial);
+    public RadialTransformerEditEntry(Entrance entrance, EntryList entryList, RadialTransformer radialTransformer) {
+        super(entrance, entryList, radialTransformer);
     }
 
     @Override
