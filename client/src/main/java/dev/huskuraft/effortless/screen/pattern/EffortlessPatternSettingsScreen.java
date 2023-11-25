@@ -4,13 +4,15 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.settings.PatternSettings;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.AbstractScreen;
+import dev.huskuraft.effortless.gui.AbstractWidget;
 import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.gui.icon.RadialTextIcon;
-import dev.huskuraft.effortless.gui.slot.ItemSlot;
+import dev.huskuraft.effortless.gui.icon.TextIcon;
 import dev.huskuraft.effortless.gui.text.TextWidget;
+import dev.huskuraft.effortless.screen.transformer.info.TransformerInfoEntry;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
@@ -135,7 +137,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
             private RadialTextIcon radialTextIcon;
             private TextWidget nameTextWidget;
-            private List<ItemSlot> slots;
+            private List<AbstractWidget> slots;
 
             protected PatternEntry(Entrance entrance, Pattern pattern) {
                 super(entrance, pattern);
@@ -176,10 +178,10 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
             }
 
             private void updateSlots() {
-                var slots = new ArrayList<ItemSlot>();
+                var slots = new ArrayList<AbstractWidget>();
                 var slot = 0;
-                for (var holder : getItem().transformers()) {
-                    slots.add(addWidget(new ItemSlot(getEntrance(), getX() + slot * Dimens.SLOT_OFFSET_X + Dimens.ICON_WIDTH + 1, getY() + 10 + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getEntrance().getContentCreator().emptyItemStack(), Text.empty())));
+                for (var transformer : getItem().transformers()) {
+                    slots.add(addWidget(new TextIcon(getEntrance(), getX() + slot * Dimens.SLOT_OFFSET_X + Dimens.ICON_WIDTH + 2, getY() + 10 + 4, 18, 18, TransformerInfoEntry.getSymbol(transformer))));
                     if (slot++ == MAX_SLOT_COUNT) {
                         break;
                     }

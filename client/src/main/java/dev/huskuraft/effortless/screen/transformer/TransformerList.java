@@ -48,8 +48,8 @@ public final class TransformerList extends EditableEntryList<Transformer> {
     }
 
     @SuppressWarnings("unchecked")
-    private TransformerInfoEntry<Transformer> createInfoHolder(Transformer transformer) {
-        return (TransformerInfoEntry) switch (transformer.getType()) {
+    public TransformerInfoEntry<Transformer> createInfoHolder(Transformer transformer) {
+        return (TransformerInfoEntry<Transformer>) switch (transformer.getType()) {
             case ARRAY -> new ArrayInfoEntry(getEntrance(), this, (Array) transformer);
             case MIRROR -> new MirrorInfoEntry(getEntrance(), this, (Mirror) transformer);
             case RADIAL -> new RadialInfoEntry(getEntrance(), this, (Radial) transformer);
@@ -61,7 +61,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
 
     @SuppressWarnings("unchecked")
     private TransformerEditEntry<Transformer> createEditHolder(Transformer transformer) {
-        return (TransformerEditEntry) switch (transformer.getType()) {
+        return (TransformerEditEntry<Transformer>) switch (transformer.getType()) {
             case ARRAY -> new ArrayEditEntry(getEntrance(), this, (Array) transformer);
             case MIRROR -> new MirrorEditEntry(getEntrance(), this, (Mirror) transformer);
             case RADIAL -> new RadialEditEntry(getEntrance(), this, (Radial) transformer);

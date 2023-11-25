@@ -48,7 +48,7 @@ public class TransformerInfoEntry<T extends Transformer> extends EditableEntry<T
 
     @Override
     public void onCreate() {
-        icon = addWidget(new TextIcon(getEntrance(), getX(), getY(), getSymbol(getItem())));
+        icon = addWidget(new TextIcon(getEntrance(), getX(), getY(), Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, getSymbol(getItem())));
         button = addWidget(new MoveButton(getEntrance(), getX(), getY(), direction -> {
             switch (direction) {
                 case UP -> getEntryList().moveUp(this);
@@ -129,12 +129,12 @@ public class TransformerInfoEntry<T extends Transformer> extends EditableEntry<T
         return Text.text(transformer.getName());
     }
 
-    protected Text getSymbol(T transformer) {
+    public static Text getSymbol(Transformer transformer) {
         return switch (transformer.getType()) {
             case ARRAY -> Text.text("AT");
             case MIRROR -> Text.text("MT");
             case RADIAL -> Text.text("RT");
-            case RANDOMIZE -> Text.text("R");
+            case RANDOMIZE -> Text.text("IR");
         };
 //            if (getDisplayName(transformer).getString().isBlank()) {
 //                return Component.empty();
