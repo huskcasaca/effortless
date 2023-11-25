@@ -2,9 +2,9 @@ package dev.huskuraft.effortless.networking.serializer;
 
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
-import dev.huskuraft.effortless.building.pattern.array.Array;
-import dev.huskuraft.effortless.building.pattern.mirror.Mirror;
-import dev.huskuraft.effortless.building.pattern.raidal.Radial;
+import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
+import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
+import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
@@ -13,17 +13,15 @@ import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.networking.BufferSerializer;
 
-import java.util.Objects;
-
 public class TransformerSerializer extends BufferSerializer<Transformer> {
 
     @Override
     public Transformer read(Buffer buffer) {
         return switch (buffer.readEnum(Transformers.class)) {
-            case ARRAY -> buffer.read(new ArraySerializer());
-            case MIRROR -> buffer.read(new MirrorSerializer());
-            case RADIAL -> buffer.read(new RadialSerializer());
-            case ITEM_RANDOM -> buffer.read(new ItemRandomizerSerializer());
+            case ARRAY -> buffer.read(new ArrayTransformerSerializer());
+            case MIRROR -> buffer.read(new MirrorTransformerSerializer());
+            case RADIAL -> buffer.read(new RadialTransformerSerializer());
+            case ITEM_RAND -> buffer.read(new ItemRandomizerSerializer());
         };
     }
 
@@ -31,18 +29,18 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
     public void write(Buffer buffer, Transformer transformer) {
         buffer.writeEnum(transformer.getType());
         switch (transformer.getType()) {
-            case ARRAY -> buffer.write((Array) transformer, new ArraySerializer());
-            case MIRROR -> buffer.write((Mirror) transformer, new MirrorSerializer());
-            case RADIAL -> buffer.write((Radial) transformer, new RadialSerializer());
-            case ITEM_RANDOM -> buffer.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
+            case ARRAY -> buffer.write((ArrayTransformer) transformer, new ArrayTransformerSerializer());
+            case MIRROR -> buffer.write((MirrorTransformer) transformer, new MirrorTransformerSerializer());
+            case RADIAL -> buffer.write((RadialTransformer) transformer, new RadialTransformerSerializer());
+            case ITEM_RAND -> buffer.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
         }
     }
 
-    static class ArraySerializer extends BufferSerializer<Array> {
+    static class ArrayTransformerSerializer extends BufferSerializer<ArrayTransformer> {
 
         @Override
-        public Array read(Buffer buffer) {
-            return new Array(
+        public ArrayTransformer read(Buffer buffer) {
+            return new ArrayTransformer(
                     buffer.readDouble(),
                     buffer.readDouble(),
                     buffer.readDouble(),
@@ -51,20 +49,20 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         }
 
         @Override
-        public void write(Buffer buffer, Array array) {
-            buffer.writeDouble(array.x());
-            buffer.writeDouble(array.y());
-            buffer.writeDouble(array.z());
-            buffer.writeInt(array.count());
+        public void write(Buffer buffer, ArrayTransformer arrayTransformer) {
+            buffer.writeDouble(arrayTransformer.x());
+            buffer.writeDouble(arrayTransformer.y());
+            buffer.writeDouble(arrayTransformer.z());
+            buffer.writeInt(arrayTransformer.count());
         }
 
     }
 
-    static class MirrorSerializer extends BufferSerializer<Mirror> {
+    static class MirrorTransformerSerializer extends BufferSerializer<MirrorTransformer> {
 
         @Override
-        public Mirror read(Buffer buffer) {
-            return new Mirror(
+        public MirrorTransformer read(Buffer buffer) {
+            return new MirrorTransformer(
                     new Vector3d(
                             buffer.readDouble(),
                             buffer.readDouble(),
@@ -75,20 +73,20 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         }
 
         @Override
-        public void write(Buffer buffer, Mirror mirror) {
-            buffer.writeDouble(mirror.position().getX());
-            buffer.writeDouble(mirror.position().getY());
-            buffer.writeDouble(mirror.position().getZ());
-            buffer.writeEnum(mirror.axis());
+        public void write(Buffer buffer, MirrorTransformer mirrorTransformer) {
+            buffer.writeDouble(mirrorTransformer.position().getX());
+            buffer.writeDouble(mirrorTransformer.position().getY());
+            buffer.writeDouble(mirrorTransformer.position().getZ());
+            buffer.writeEnum(mirrorTransformer.axis());
         }
 
     }
 
-    static class RadialSerializer extends BufferSerializer<Radial> {
+    static class RadialTransformerSerializer extends BufferSerializer<RadialTransformer> {
 
         @Override
-        public Radial read(Buffer buffer) {
-            return new Radial(
+        public RadialTransformer read(Buffer buffer) {
+            return new RadialTransformer(
                     new Vector3d(
                             buffer.readDouble(),
                             buffer.readDouble(),
@@ -99,11 +97,11 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         }
 
         @Override
-        public void write(Buffer buffer, Radial radial) {
-            buffer.writeDouble(radial.position().getX());
-            buffer.writeDouble(radial.position().getY());
-            buffer.writeDouble(radial.position().getZ());
-            buffer.writeInt(radial.slice());
+        public void write(Buffer buffer, RadialTransformer radialTransformer) {
+            buffer.writeDouble(radialTransformer.position().getX());
+            buffer.writeDouble(radialTransformer.position().getY());
+            buffer.writeDouble(radialTransformer.position().getZ());
+            buffer.writeInt(radialTransformer.slice());
         }
 
     }

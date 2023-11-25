@@ -134,7 +134,7 @@ public class TransformerInfoEntry<T extends Transformer> extends EditableEntry<T
             case ARRAY -> Text.text("AT");
             case MIRROR -> Text.text("MT");
             case RADIAL -> Text.text("RT");
-            case ITEM_RANDOM -> Text.text("IR");
+            case ITEM_RAND -> Text.text("IR");
         };
 //            if (getDisplayName(transformer).getString().isBlank()) {
 //                return Component.empty();

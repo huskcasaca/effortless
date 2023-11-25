@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.screen.transformer;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.AbstractScreen;
 import dev.huskuraft.effortless.gui.Dimens;
@@ -16,7 +15,6 @@ import dev.huskuraft.effortless.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
@@ -65,7 +63,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
                                 item
                         ).attach();
                     }
-                    case ITEM_RANDOM -> {
+                    case ITEM_RAND -> {
                         detach();
                         new EffortlessRandomizerEditScreen(
                                 getEntrance(),

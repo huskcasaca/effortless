@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.screen.transformer.edit;
 
-import dev.huskuraft.effortless.building.pattern.array.Array;
+import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.EntryList;
@@ -10,13 +10,13 @@ import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
-public final class ArrayEditEntry extends TransformerEditEntry<Array> {
+public final class ArrayTransformerEditEntry extends TransformerEditEntry<ArrayTransformer> {
 
     private Checkbox buttonArrayEnabled;
     private NumberField offsetXField, offsetYField, offsetZField, countField;
 
-    public ArrayEditEntry(Entrance entrance, EntryList entryList, Array array) {
-        super(entrance, entryList, array);
+    public ArrayTransformerEditEntry(Entrance entrance, EntryList entryList, ArrayTransformer arrayTransformer) {
+        super(entrance, entryList, arrayTransformer);
     }
 
     @Override
@@ -82,7 +82,7 @@ public final class ArrayEditEntry extends TransformerEditEntry<Array> {
     }
 
     @Override
-    public void setItem(Array item) {
+    public void setItem(ArrayTransformer item) {
         super.setItem(item);
     }
 }

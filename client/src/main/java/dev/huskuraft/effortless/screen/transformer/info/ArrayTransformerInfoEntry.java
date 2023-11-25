@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.screen.transformer.info;
 
-import dev.huskuraft.effortless.building.pattern.array.Array;
+import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.EntryList;
 import dev.huskuraft.effortless.text.Text;
@@ -10,21 +10,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ArrayInfoEntry extends TransformerInfoEntry<Array> {
+public class ArrayTransformerInfoEntry extends TransformerInfoEntry<ArrayTransformer> {
 
-    public ArrayInfoEntry(Entrance entrance, EntryList entryList, Array array) {
-        super(entrance, entryList, array);
+    public ArrayTransformerInfoEntry(Entrance entrance, EntryList entryList, ArrayTransformer arrayTransformer) {
+        super(entrance, entryList, arrayTransformer);
     }
 
     @Override
-    protected List<Text> getBasicComponents(Array transformer) {
+    protected List<Text> getBasicComponents(ArrayTransformer transformer) {
         var position = Text.translate("transformer.array.offset", getPositionDescription(transformer.offset())).withStyle(TextStyle.GRAY);
         var repeats = Text.translate("transformer.array.count", getIntegerDescription(transformer.count())).withStyle(TextStyle.GRAY);
         return Stream.of(position, repeats).collect(Collectors.toList());
     }
 
     @Override
-    protected Text getDisplayName(Array transformer) {
+    protected Text getDisplayName(ArrayTransformer transformer) {
         return Text.text("Array Transformer");
     }
 }

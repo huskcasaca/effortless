@@ -12,20 +12,20 @@ import dev.huskuraft.effortless.text.Text;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class Array implements Transformer {
+public class ArrayTransformer implements Transformer {
 
-    public static final Array ZERO = new Array(new Vector3d(0, 0, 0), 0);
+    public static final ArrayTransformer ZERO = new ArrayTransformer(new Vector3d(0, 0, 0), 0);
 
     private final double x;
     private final double y;
     private final double z;
     private final int count;
 
-    public Array(Vector3d offset, Integer count) {
+    public ArrayTransformer(Vector3d offset, Integer count) {
         this(offset.getX(), offset.getY(), offset.getZ(), count);
     }
 
-    public Array(double x, double y, double z, int count) {
+    public ArrayTransformer(double x, double y, double z, int count) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -83,19 +83,19 @@ public class Array implements Transformer {
         return count;
     }
 
-    public Array withOffsetX(double x) {
-        return new Array(x, y, z, count);
+    public ArrayTransformer withOffsetX(double x) {
+        return new ArrayTransformer(x, y, z, count);
     }
 
-    public Array withOffsetY(double y) {
-        return new Array(x, y, z, count);
+    public ArrayTransformer withOffsetY(double y) {
+        return new ArrayTransformer(x, y, z, count);
     }
 
-    public Array withOffsetZ(double z) {
-        return new Array(x, y, z, count);
+    public ArrayTransformer withOffsetZ(double z) {
+        return new ArrayTransformer(x, y, z, count);
     }
 
-    public Array withCount(int count) {
-        return new Array(x, y, z, count);
+    public ArrayTransformer withCount(int count) {
+        return new ArrayTransformer(x, y, z, count);
     }
 }

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.screen.transformer.info;
 
-import dev.huskuraft.effortless.building.pattern.mirror.Mirror;
+import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.EntryList;
@@ -11,21 +11,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MirrorInfoEntry extends TransformerInfoEntry<Mirror> {
+public class MirrorTransformerInfoEntry extends TransformerInfoEntry<MirrorTransformer> {
 
-    public MirrorInfoEntry(Entrance entrance, EntryList entryList, Mirror mirror) {
-        super(entrance, entryList, mirror);
+    public MirrorTransformerInfoEntry(Entrance entrance, EntryList entryList, MirrorTransformer mirrorTransformer) {
+        super(entrance, entryList, mirrorTransformer);
     }
 
     @Override
-    protected List<Text> getBasicComponents(Mirror transformer) {
+    protected List<Text> getBasicComponents(MirrorTransformer transformer) {
         var position = Text.text("Position: %s", getPositionDescription(transformer.position())).withStyle(TextStyle.GRAY);
         var axis = Text.text("Plane: %s", getPlaneDescription(transformer.axis())).withStyle(TextStyle.GRAY);
         return Stream.of(position, axis).collect(Collectors.toList());
     }
 
     @Override
-    protected Text getDisplayName(Mirror transformer) {
+    protected Text getDisplayName(MirrorTransformer transformer) {
         return Text.text("Mirror Transformer");
     }
 

@@ -1,11 +1,10 @@
 package dev.huskuraft.effortless.screen.transformer;
 
 import dev.huskuraft.effortless.building.pattern.Transformer;
-import dev.huskuraft.effortless.building.pattern.array.Array;
-import dev.huskuraft.effortless.building.pattern.mirror.Mirror;
-import dev.huskuraft.effortless.building.pattern.raidal.Radial;
+import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
+import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
+import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.Screen;
 import dev.huskuraft.effortless.gui.Widget;
@@ -47,20 +46,20 @@ public final class TransformerList extends EditableEntryList<Transformer> {
     @SuppressWarnings("unchecked")
     public TransformerInfoEntry<Transformer> createInfoHolder(Transformer transformer) {
         return (TransformerInfoEntry<Transformer>) switch (transformer.getType()) {
-            case ARRAY -> new ArrayInfoEntry(getEntrance(), this, (Array) transformer);
-            case MIRROR -> new MirrorInfoEntry(getEntrance(), this, (Mirror) transformer);
-            case RADIAL -> new RadialInfoEntry(getEntrance(), this, (Radial) transformer);
-            case ITEM_RANDOM -> new ItemRandomizerInfoEntry(getEntrance(), this, (ItemRandomizer) transformer);
+            case ARRAY -> new ArrayTransformerInfoEntry(getEntrance(), this, (ArrayTransformer) transformer);
+            case MIRROR -> new MirrorTransformerInfoEntry(getEntrance(), this, (MirrorTransformer) transformer);
+            case RADIAL -> new RadialTransformerInfoEntry(getEntrance(), this, (RadialTransformer) transformer);
+            case ITEM_RAND -> new ItemRandomizerInfoEntry(getEntrance(), this, (ItemRandomizer) transformer);
         };
     }
 
     @SuppressWarnings("unchecked")
     private TransformerEditEntry<Transformer> createEditHolder(Transformer transformer) {
         return (TransformerEditEntry<Transformer>) switch (transformer.getType()) {
-            case ARRAY -> new ArrayEditEntry(getEntrance(), this, (Array) transformer);
-            case MIRROR -> new MirrorEditEntry(getEntrance(), this, (Mirror) transformer);
-            case RADIAL -> new RadialEditEntry(getEntrance(), this, (Radial) transformer);
-            case ITEM_RANDOM -> new ItemRandomizerEditEntry(getEntrance(), this, (ItemRandomizer) transformer);
+            case ARRAY -> new ArrayTransformerEditEntry(getEntrance(), this, (ArrayTransformer) transformer);
+            case MIRROR -> new MirrorTransformerEditEntry(getEntrance(), this, (MirrorTransformer) transformer);
+            case RADIAL -> new RadialTransformerEditEntry(getEntrance(), this, (RadialTransformer) transformer);
+            case ITEM_RAND -> new ItemRandomizerEditEntry(getEntrance(), this, (ItemRandomizer) transformer);
         };
     }
 

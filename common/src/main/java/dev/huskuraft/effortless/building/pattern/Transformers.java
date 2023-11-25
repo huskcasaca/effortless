@@ -6,7 +6,7 @@ public enum Transformers {
     ARRAY("array"),
     MIRROR("mirror"),
     RADIAL("radial"),
-    ITEM_RANDOM("item_random");
+    ITEM_RAND("item_rand");
 
     private final String name;
 
