@@ -98,7 +98,7 @@ public class ItemRandomizer implements Randomizer<ItemStack> {
 
     @Override
     public Transformers getType() {
-        return Transformers.RANDOMIZE;
+        return Transformers.ITEM_RANDOM;
     }
 
     @Override

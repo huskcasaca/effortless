@@ -65,10 +65,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
                                 item
                         ).attach();
                     }
-                    case RANDOMIZE -> {
-                        if (Objects.requireNonNull(((Randomizer) item).getCategory()) != Randomizer.Category.ITEM) {
-                            return;
-                        }
+                    case ITEM_RANDOM -> {
                         detach();
                         new EffortlessRandomizerEditScreen(
                                 getEntrance(),

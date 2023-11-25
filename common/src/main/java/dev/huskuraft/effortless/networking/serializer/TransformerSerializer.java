@@ -23,7 +23,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
             case ARRAY -> buffer.read(new ArraySerializer());
             case MIRROR -> buffer.read(new MirrorSerializer());
             case RADIAL -> buffer.read(new RadialSerializer());
-            case RANDOMIZE -> buffer.read(new RandomizerSerializer());
+            case ITEM_RANDOM -> buffer.read(new ItemRandomizerSerializer());
         };
     }
 
@@ -34,7 +34,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
             case ARRAY -> buffer.write((Array) transformer, new ArraySerializer());
             case MIRROR -> buffer.write((Mirror) transformer, new MirrorSerializer());
             case RADIAL -> buffer.write((Radial) transformer, new RadialSerializer());
-            case RANDOMIZE -> buffer.write((Randomizer<?>) transformer, new RandomizerSerializer());
+            case ITEM_RANDOM -> buffer.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
         }
     }
 
@@ -108,25 +108,25 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
 
     }
 
-    static class RandomizerSerializer extends BufferSerializer<Randomizer<?>> {
-
-        @Override
-        public Randomizer<?> read(Buffer buffer) {
-            return switch (buffer.readEnum(Randomizer.Category.class)) {
-                case ITEM -> {
-                    yield buffer.read(new ItemRandomizerSerializer());
-                }
-            };
-        }
-
-        @Override
-        public void write(Buffer buffer, Randomizer<?> randomizer) {
-            buffer.writeEnum(randomizer.getCategory());
-            if (Objects.requireNonNull(randomizer.getCategory()) == Randomizer.Category.ITEM) {
-                buffer.write((ItemRandomizer) randomizer, new ItemRandomizerSerializer());
-            }
-        }
-    }
+//    static class RandomizerSerializer extends BufferSerializer<Randomizer<?>> {
+//
+//        @Override
+//        public Randomizer<?> read(Buffer buffer) {
+//            return switch (buffer.readEnum(Randomizer.Category.class)) {
+//                case ITEM -> {
+//                    yield buffer.read(new ItemRandomizerSerializer());
+//                }
+//            };
+//        }
+//
+//        @Override
+//        public void write(Buffer buffer, Randomizer<?> randomizer) {
+//            buffer.writeEnum(randomizer.getCategory());
+//            if (Objects.requireNonNull(randomizer.getCategory()) == Randomizer.Category.ITEM) {
+//                buffer.write((ItemRandomizer) randomizer, new ItemRandomizerSerializer());
+//            }
+//        }
+//    }
 
     static class ItemRandomizerSerializer extends BufferSerializer<ItemRandomizer> {
 
