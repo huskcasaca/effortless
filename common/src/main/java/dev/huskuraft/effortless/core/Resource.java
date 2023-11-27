@@ -24,4 +24,9 @@ public abstract class Resource {
 
     public abstract String getPath();
 
+    @Override
+    public String toString() {
+        return getNamespace() + ":" + getPath();
+    }
+
 }
