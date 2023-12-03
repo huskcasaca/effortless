@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.core;
 
-import dev.huskuraft.effortless.text.Text;
-
 public enum Position {
 
     DISABLED("disabled"),
@@ -15,8 +13,7 @@ public enum Position {
     }
 
     public String getNameKey() {
-        // TODO: 15/9/22 use ResourceLocation
-        return Text.asKey("position", name);
+        return "effortless.position.%s".formatted(name);
     }
 
     public AxisDirection getAxis() {

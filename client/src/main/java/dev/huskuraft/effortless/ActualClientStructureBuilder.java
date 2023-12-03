@@ -36,22 +36,24 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     }
 
     private static Text getStateComponent(BuildState state) {
-        return Text.translate(Text.asKey("state", switch (state) {
+        return Text.translate("effortless.state.%s".formatted(
+                switch (state) {
                     case IDLE -> "idle";
                     case PLACE_BLOCK -> "place_block";
                     case BREAK_BLOCK -> "break_block";
-                })
-        );
+                }
+        ));
     }
 
     private static Text getTracingComponent(TracingResult result) {
-        return Text.translate(Text.asKey("tracing", switch (result) {
+        return Text.translate("effortless.tracing.%s".formatted(
+                switch (result) {
                     case SUCCESS_FULFILLED -> "success_fulfilled";
                     case SUCCESS_PARTIAL -> "success_partial";
                     case PASS -> "pass";
                     case FAILED -> "failed";
-                })
-        );
+                }
+        ));
     }
 
     private ClientEntrance getEntrance() {

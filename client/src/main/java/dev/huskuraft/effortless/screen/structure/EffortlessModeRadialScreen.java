@@ -24,7 +24,7 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
     private final Key assignedKey;
 
     public EffortlessModeRadialScreen(Entrance entrance, Key assignedKey) {
-        super(entrance, Text.translate(Text.asKey("screen", "build_mode_radial")));
+        super(entrance, Text.translate("effortless.building.radial.title"));
         this.assignedKey = assignedKey;
     }
 

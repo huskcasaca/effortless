@@ -42,7 +42,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
     private RadialTextIcon radialTextIcon;
 
     public EffortlessPatternEditScreen(Entrance entrance, Consumer<Pattern> consumer, Pattern pattern, int index) {
-        super(entrance, Text.translate("pattern.edit.title"));
+        super(entrance, Text.translate("effortless.pattern.edit.title"));
         this.applySettings = consumer;
         this.defaultSettings = pattern;
         this.lastSettings = pattern;
@@ -66,12 +66,12 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
                 new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH) / 2 + 40, 24, ROW_WIDTH - 40, 20, null)
         );
         this.nameEditBox.setMaxLength(MAX_PATTERN_NAME_LENGTH);
-        this.nameEditBox.setHint(Text.translate("pattern.edit.name_hint"));
+        this.nameEditBox.setHint(Text.translate("effortless.pattern.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.name().getString());
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.edit.edit"), button -> {
+        this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.edit"), button -> {
             if (entries.hasSelected()) {
                 var item = entries.getSelected().getItem();
                 switch (item.getType()) {
@@ -94,21 +94,21 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
             }
         }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
 
-        this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("randomizer.settings.delete"), button -> {
+        this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
                 updateSettings();
             }
         }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
 
-        this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.edit.duplicate"), button -> {
+        this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem());
                 updateSettings();
             }
         }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
 
-        this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.edit.add"), button -> {
+        this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.add"), button -> {
             new EffortlessTransformerTemplateSelectScreen(
                     getEntrance(),
                     transformer -> {
@@ -120,12 +120,12 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
             updateSettings();
         }).bounds(getWidth() / 2 + 82, getHeight() - 52, 72, 20).build());
 
-        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.edit.save"), button -> {
+        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.save"), button -> {
             updateSettings();
             applySettings.accept(lastSettings);
             detach();
         }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.edit.cancel"), button -> {
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.cancel"), button -> {
             detach();
         }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
 

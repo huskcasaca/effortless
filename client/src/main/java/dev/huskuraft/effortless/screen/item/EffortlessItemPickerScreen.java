@@ -30,7 +30,7 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
     private Button cancelButton;
 
     public EffortlessItemPickerScreen(Entrance entrance, Consumer<ItemStack> consumer) {
-        super(entrance, Text.translate("item.picker.title"));
+        super(entrance, Text.translate("effortless.item.picker.title"));
         this.applySettings = consumer;
     }
 
@@ -57,19 +57,19 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH - 2) / 2, 24, ROW_WIDTH - 2, 20, Text.translate("item.picker.search"))
+                new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH - 2) / 2, 24, ROW_WIDTH - 2, 20, Text.translate("effortless.item.picker.search"))
         );
         this.searchEditBox.setMaxLength(MAX_SEARCH_NAME_LENGTH);
-        this.searchEditBox.setHint(Text.translate("item.picker.search_hint"));
+        this.searchEditBox.setHint(Text.translate("effortless.item.picker.search_hint"));
         this.searchEditBox.setResponder(text -> {
             setSearchResult(text);
         });
 
-        this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("item.picker.add"), button -> {
+        this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.item.picker.add"), button -> {
             applySettings.accept(entries.getSelected().getItem());
             detach();
         }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("item.picker.cancel"), button -> {
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.item.picker.cancel"), button -> {
             detach();
         }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
 

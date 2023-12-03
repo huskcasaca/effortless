@@ -39,7 +39,7 @@ public interface Randomizer<T> extends Transformer {
         }
 
         public String getNameKey() {
-            return Text.asKey("randomizer.order", getName());
+            return "effortless.randomizer.order.%s".formatted(getName());
         }
 
         public String getName() {
@@ -58,7 +58,7 @@ public interface Randomizer<T> extends Transformer {
         }
 
         public String getNameKey() {
-            return Text.asKey("randomizer.target", getName());
+            return "effortless.randomizer.target.%s".formatted(getName());
         }
 
         public String getName() {
@@ -78,7 +78,7 @@ public interface Randomizer<T> extends Transformer {
         }
 
         public String getNameKey() {
-            return Text.asKey("randomizer.category", getName());
+            return "effortless.randomizer.category.%s".formatted(getName());
         }
 
         public String getName() {

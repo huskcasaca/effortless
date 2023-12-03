@@ -29,7 +29,7 @@ enum ActualKeys implements Key {
     private KeyBinding keyBinding;
 
     ActualKeys(String description, KeyCodes defaultKey) {
-        this.description = "key." + Text.asKey(description, "desc");
+        this.description = "key.effortless.%s.desc".formatted(description);
         this.key = defaultKey;
         this.modifiable = !description.isEmpty();
     }

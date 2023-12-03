@@ -18,8 +18,8 @@ public class ArrayTransformerInfoEntry extends TransformerInfoEntry<ArrayTransfo
 
     @Override
     protected List<Text> getBasicComponents(ArrayTransformer transformer) {
-        var position = Text.translate("transformer.array.offset", getPositionDescription(transformer.offset())).withStyle(TextStyle.GRAY);
-        var repeats = Text.translate("transformer.array.count", getIntegerDescription(transformer.count())).withStyle(TextStyle.GRAY);
+        var position = Text.translate("effortless.transformer.array.offset", getPositionDescription(transformer.offset())).withStyle(TextStyle.GRAY);
+        var repeats = Text.translate("effortless.transformer.array.count", getIntegerDescription(transformer.count())).withStyle(TextStyle.GRAY);
         return Stream.of(position, repeats).collect(Collectors.toList());
     }
 

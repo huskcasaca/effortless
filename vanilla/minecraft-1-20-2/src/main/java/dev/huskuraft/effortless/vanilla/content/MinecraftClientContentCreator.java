@@ -44,7 +44,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
 
     // FIXME: 24/10/23
     private static String getKey(String key) {
-        return I18n.get(Text.asKey("transformer", "randomize", "example", key));
+        return I18n.get("effortless.transformer.randomize.example.%s".formatted(key));
     }
 
     @Override

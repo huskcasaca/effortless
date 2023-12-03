@@ -108,9 +108,9 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     // TODO: 20/9/23 move
     public static <T extends Option> Button<T> option(T option) {
         return button(
-                Text.translate(Text.asKey("option", option.getCategory())),
-                Text.translate(Text.asKey("action", option.getName())),
-                Resource.of("textures/option/" + option.getName() + ".png"),
+                Text.translate("effortless.option.%s".formatted(option.getCategory())),
+                Text.translate("effortless.action.%s".formatted(option.getName())),
+                Resource.of("textures/option/%s.png".formatted(option.getName())),
                 option
         );
     }

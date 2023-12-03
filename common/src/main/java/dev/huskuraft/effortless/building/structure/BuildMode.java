@@ -64,7 +64,7 @@ public enum BuildMode {
     }
 
     public String getNameKey() {
-        return Text.asKey("mode", name);
+        return "effortless.mode.%s".formatted(name);
     }
 
     public Text getNameComponent() {
@@ -72,7 +72,7 @@ public enum BuildMode {
     }
 
     public Resource getIcon() {
-        return Resource.of("textures/mode/" + name + ".png");
+        return Resource.of("textures/mode/%s.png".formatted(name));
     }
 
     public boolean isDisabled() {

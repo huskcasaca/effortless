@@ -4,8 +4,6 @@ import dev.huskuraft.effortless.Effortless;
 
 public abstract class Text {
 
-    public static final String MOD_ID = "effortless";
-
     public static Text empty() {
         return Effortless.getInstance().getContentCreator().empty();
     }
@@ -24,10 +22,6 @@ public abstract class Text {
 
     public static Text translate(String text, Text... args) {
         return Effortless.getInstance().getContentCreator().translate(text, args);
-    }
-
-    public static String asKey(String... path) {
-        return String.join(".", MOD_ID, String.join(".", path));
     }
 
     public abstract Text withStyle(TextStyle... styles);
