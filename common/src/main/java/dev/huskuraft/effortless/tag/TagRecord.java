@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 public abstract class TagRecord extends TagElement {
 
     public <T extends Enum<T>> T getEnum(String key, Class<T> clazz) {
-        var id = Resource.of(getString(key));
+        var id = Resource.decompose(getString(key));
         return Enum.valueOf(clazz, id.getPath().toUpperCase(Locale.ROOT));
     }
 
