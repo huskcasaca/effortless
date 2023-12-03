@@ -9,7 +9,6 @@ import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.core.Entrance;
-import dev.huskuraft.effortless.gui.selection.RadialSection;
 import dev.huskuraft.effortless.input.Key;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
 import dev.huskuraft.effortless.text.Text;
@@ -20,10 +19,10 @@ import java.util.stream.Stream;
 
 public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern, Option> {
 
-    private static final RadialSection.Button<Option> UNDO_OPTION = option(UndoRedo.UNDO);
-    private static final RadialSection.Button<Option> REDO_OPTION = option(UndoRedo.REDO);
-    private static final RadialSection.Button<Option> SETTING_OPTION = option(Settings.MODE_SETTINGS);
-    private static final RadialSection.Button<Option> REPLACE_OPTION = option(ReplaceMode.DISABLED);
+    private static final Button<Option> UNDO_OPTION = option(UndoRedo.UNDO);
+    private static final Button<Option> REDO_OPTION = option(UndoRedo.REDO);
+    private static final Button<Option> SETTING_OPTION = option(Settings.MODE_SETTINGS);
+    private static final Button<Option> REPLACE_OPTION = option(ReplaceMode.DISABLED);
 
     private final Key assignedKey;
 
@@ -32,7 +31,7 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
         this.assignedKey = assignedKey;
     }
 
-    public static RadialSection.Slot<Pattern> slot(Pattern pattern) {
+    public static Slot<Pattern> slot(Pattern pattern) {
         return slot(
                 pattern.name(),
                 pattern == Pattern.DISABLED ? BuildMode.DISABLED.getIcon() : BuildMode.SPHERE.getIcon(),
@@ -57,7 +56,7 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
         getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), feature);
     }
 
-    private List<RadialSection.Slot<Pattern>> getSlots() {
+    private List<Slot<Pattern>> getSlots() {
         var settingPatterns = getEntrance().getConfigManager().getConfig().getPatternConfig().getPatterns();
         return Stream.concat(
                 Stream.concat(Stream.of(Pattern.DISABLED), settingPatterns.stream()),
@@ -77,22 +76,22 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
     public void onCreate() {
         super.onCreate();
 
-        radial.setLeftButtons(
+        setLeftButtons(
                 buttonSet(REDO_OPTION, UNDO_OPTION),
                 buttonSet(SETTING_OPTION, REPLACE_OPTION)
         );
 
-        radial.setRadialSlots(
+        setRadialSlots(
                 getSlots()
         );
-        radial.setRadialSelectResponder(slot -> {
+        setRadialSelectResponder(slot -> {
             if (slot.getContent() == Pattern.RESERVED) {
 
             } else {
                 selectPattern(slot.getContent());
             }
         });
-//        radial.setRadialOptionSelectResponder(entry -> {
+//        setRadialOptionSelectResponder(entry -> {
 //            if (entry.getContent() instanceof SingleSelectFeature) {
 //                selectBuildFeature((SingleSelectFeature) entry.getContent());
 //            }
@@ -106,7 +105,7 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
     @Override
     public void onReload() {
         var context = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer());
-        radial.setSelectedSlots(slot(context.pattern()));
+        setSelectedSlots(slot(context.pattern()));
     }
 
 }
