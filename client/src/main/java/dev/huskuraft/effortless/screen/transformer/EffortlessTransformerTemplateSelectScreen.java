@@ -35,7 +35,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     private Transformers selectedType;
 
     public EffortlessTransformerTemplateSelectScreen(Entrance entrance, Consumer<Transformer> consumer, List<Transformer> transformers) {
-        super(entrance, Text.translate("transformer.template_select.title"));
+        super(entrance, Text.translate("effortless.transformer.template_select.title"));
         this.applySettings = consumer;
         this.transformers = transformers;
     }
@@ -46,10 +46,10 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH - 2) / 2, 24, ROW_WIDTH - 2, 20, Text.translate("transformer.template_select.search"))
+                new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH - 2) / 2, 24, ROW_WIDTH - 2, 20, Text.translate("effortless.transformer.template_select.search"))
         );
 
-        this.useTemplateButton = addWidget(Button.builder(getEntrance(), Text.translate("transformer.template_select.use_template"), button -> {
+        this.useTemplateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.template_select.use_template"), button -> {
             if (entries.hasSelected()) {
                 var item = entries.getSelected().getItem();
                 switch (item.getType()) {
@@ -93,7 +93,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
         }
         this.entries = addWidget(new TransformerList(getEntrance(), 0, 78, getWidth(), getHeight() - 78 - 36, this, false, TransformerList.EntryType.INFO));
         this.searchEditBox.setMaxLength(MAX_SEARCH_NAME_LENGTH);
-        this.searchEditBox.setHint(Text.translate("transformer.template_select.search_hint"));
+        this.searchEditBox.setHint(Text.translate("effortless.transformer.template_select.search_hint"));
         this.searchEditBox.setResponder(text -> {
             setSearchResult(text);
         });

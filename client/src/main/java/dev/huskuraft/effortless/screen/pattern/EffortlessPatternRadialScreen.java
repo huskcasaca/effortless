@@ -27,7 +27,7 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
     private final Key assignedKey;
 
     public EffortlessPatternRadialScreen(Entrance entrance, Key assignedKey) {
-        super(entrance, Text.translate(Text.asKey("screen", "pattern_radial")));
+        super(entrance, Text.translate("effortless.pattern.radial.title"));
         this.assignedKey = assignedKey;
     }
 

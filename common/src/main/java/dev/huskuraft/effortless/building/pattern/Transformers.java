@@ -15,7 +15,7 @@ public enum Transformers {
     }
 
     public String getNameKey() {
-        return Text.asKey("transformer", getName());
+        return "effortless.transformer.%s".formatted(getName());
     }
 
     public String getName() {

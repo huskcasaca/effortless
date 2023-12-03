@@ -17,7 +17,7 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
     private Button cancelButton;
 
     public EffortlessTransformerEditScreen(Entrance entrance, Consumer<Transformer> consumer, Transformer transformer) {
-        super(entrance, Text.translate("transformer.edit.title"));
+        super(entrance, Text.translate("effortless.transformer.edit.title"));
         this.applySettings = consumer;
         this.defaultSettings = transformer;
     }
@@ -27,11 +27,11 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
         this.entries = addWidget(new TransformerList(getEntrance(), 0, 50, getWidth(), getHeight() - 50 - 36, this, false, TransformerList.EntryType.EDIT));
         this.entries.insertSelected(defaultSettings);
 
-        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("transformer.edit.save"), button -> {
+        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.save"), button -> {
             applySettings.accept(entries.getSelected().getItem());
             detach();
         }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("transformer.edit.cancel"), button -> {
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.cancel"), button -> {
             detach();
         }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
     }

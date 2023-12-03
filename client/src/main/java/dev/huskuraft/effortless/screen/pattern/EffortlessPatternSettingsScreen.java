@@ -35,7 +35,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
     private Button cancelButton;
 
     public EffortlessPatternSettingsScreen(Entrance entrance, Consumer<PatternSettings> consumer, PatternSettings patternSettings) {
-        super(entrance, Text.translate("pattern.settings.title"));
+        super(entrance, Text.translate("effortless.pattern.settings.title"));
         this.applySettings = consumer;
         this.lastSettings = patternSettings;
     }
@@ -50,7 +50,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
     public void onCreate() {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.settings.edit"), button -> {
+        this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.edit"), button -> {
             if (entries.hasSelected()) {
                 new EffortlessPatternEditScreen(
                         getEntrance(),
@@ -64,21 +64,21 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
             }
         }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
 
-        this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.settings.delete"), button -> {
+        this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
                 updateSettings();
             }
         }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
 
-        this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.settings.duplicate"), button -> {
+        this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem());
                 updateSettings();
             }
         }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
 
-        this.newButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.settings.new"), button -> {
+        this.newButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.new"), button -> {
             new EffortlessPatternEditScreen(
                     getEntrance(),
                     pattern -> {
@@ -90,16 +90,16 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
             ).attach();
         }).bounds(getWidth() / 2 + 82, getHeight() - 52, 72, 20).build());
 
-        this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.settings.reset"), button -> {
+        this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.reset"), button -> {
             entries.reset(getEntrance().getContentCreator().getDefaultPatterns());
         }).bounds(getWidth() / 2 - 154, getHeight() - 52, 308, 20).build());
 
-        this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.settings.done"), button -> {
+        this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.done"), button -> {
             updateSettings();
             applySettings.accept(lastSettings);
             detach();
         }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("pattern.settings.cancel"), button -> {
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.cancel"), button -> {
             detach();
         }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
         this.entries = addWidget(new PatternList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 60));
