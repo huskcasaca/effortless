@@ -212,13 +212,14 @@ class MinecraftRenderer extends Renderer {
         int containerHeight = (y0 + y1 - 9) / 2 + 1;
         int containerWidth = x1 - x0;
         if (textWidth > containerWidth) {
-            int extraWidth = textWidth - containerWidth;
+            var paddingWidth = 8;
+            int extraWidth = textWidth - containerWidth + paddingWidth;
             var d = Util.getMillis() / 1000.0;
             var e = MathUtils.max(extraWidth * 0.5, 3.0);
             var f = MathUtils.sin(1.5707963267948966 * MathUtils.cos(6.283185307179586 * d / e)) / 2.0 + 0.5;
             var x = MathUtils.lerp(f, 0.0, extraWidth);
             proxy.enableScissor(x0, y0, x1, y1);
-            proxy.drawString(MinecraftClientAdapter.adapt(typeface), MinecraftClientAdapter.adapt(text), x0 - (int) x, containerHeight, color, true);
+            proxy.drawString(MinecraftClientAdapter.adapt(typeface), MinecraftClientAdapter.adapt(text), x0 - (int) x + paddingWidth / 2, containerHeight, color, true);
             proxy.disableScissor();
         } else {
             drawTextFromCenter(typeface, text, (x0 + x1) / 2, containerHeight, color, true);
