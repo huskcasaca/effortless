@@ -123,7 +123,7 @@
   "effortless.transformer.array": "Array",
   "effortless.transformer.mirror": "Mirror",
   "effortless.transformer.radial": "Radial",
-  "effortless.transformer.randomize": "Randomize",
+  "effortless.transformer.item_rand": "Item Randomize",
 
   "effortless.transformer.randomize.example.empty": "Empty",
   "effortless.transformer.randomize.example.variant_cobblestone": "Cobblestone Variant",
@@ -215,7 +215,7 @@
   "effortless.pattern.edit.edit": "Edit",
   "effortless.pattern.edit.delete": "Delete",
   "effortless.pattern.edit.duplicate": "Duplicate",
-  "effortless.pattern.edit.add": "Add Trans.",
+  "effortless.pattern.edit.add": "Add Transformer",
   "effortless.pattern.edit.save": "Save",
   "effortless.pattern.edit.cancel": "Cancel",
 
