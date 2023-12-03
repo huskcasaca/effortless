@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.renderer;
 
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.gui.Typeface;
+import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
 
@@ -99,7 +100,24 @@ public abstract class Renderer {
         return drawText(typeface, text, x - typeface.measureWidth(text), y, color, shadow);
     }
 
-    public abstract void drawScrollingText(Typeface typeface, Text text, int x0, int y0, int x1, int y1, int color);
+    public void drawScrollingText(Typeface typeface, Text text, int x0, int y0, int x1, int y1, int color) {
+        var textWidth = typeface.measureWidth(text);
+        int containerHeight = (y0 + y1 - 9) / 2 + 1;
+        int containerWidth = x1 - x0;
+        if (textWidth > containerWidth) {
+            var paddingWidth = 8;
+            int extraWidth = textWidth - containerWidth + paddingWidth;
+            var d = System.currentTimeMillis() / 1000.0;
+            var e = MathUtils.max(extraWidth * 0.5, 3.0);
+            var f = MathUtils.sin(1.5707963267948966 * MathUtils.cos(6.283185307179586 * d / e)) / 2.0 + 0.5;
+            var x = MathUtils.lerp(f, 0.0, extraWidth);
+            enableScissor(x0, y0, x1, y1);
+            drawText(typeface, text, x0 - (int) x + paddingWidth / 2, containerHeight, color, true);
+            disableScissor();
+        } else {
+            drawTextFromCenter(typeface, text, (x0 + x1) / 2, containerHeight, color, true);
+        }
+    }
 
     public abstract void drawTexture(Resource texture, int x, int y, int x0, int y0, int width, int height);
 
