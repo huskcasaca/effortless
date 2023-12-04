@@ -8,10 +8,6 @@ import dev.huskuraft.effortless.text.Text;
 
 public class TextIcon extends AbstractWidget {
 
-    public TextIcon(Entrance entrance, int x, int y, Text message) {
-        this(entrance, x, y, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, message);
-    }
-
     public TextIcon(Entrance entrance, int x, int y, int width, int height, Text message) {
         super(entrance, x, y, width, height, message);
     }
@@ -24,7 +20,7 @@ public class TextIcon extends AbstractWidget {
 
         renderer.pushPose();
         renderer.translate(getX(), getY(), 0);
-        renderer.scale(getWidth() * 1f / Dimens.SLOT_WIDTH, getHeight() * 1f / Dimens.SLOT_HEIGHT, 0);
+        renderer.scale(getWidth() * 1f / 16, getHeight() * 1f / 16, 0);
         renderer.drawTextFromCenter(getTypeface(), getMessage(), 8, 8 - getTypeface().measureHeight(getMessage()) / 2, 0xFFFFFFFF, true);
         renderer.popPose();
     }

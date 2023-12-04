@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.gui.container;
 
 import dev.huskuraft.effortless.core.Entrance;
+import dev.huskuraft.effortless.gui.Widget;
 
 import java.util.Collection;
 import java.util.List;
@@ -74,6 +75,42 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
 
     public void moveDownSelected() {
         moveDown(indexOfSelected());
+    }
+
+    @Override
+    public void moveUp(Widget widget) {
+        var index = indexOf(widget);
+        if (index > 0) {
+            moveUp(index);
+            setScrollAmountNoClamp(getScrollAmount() - getOrThrow(index).getHeight());
+        }
+    }
+
+    @Override
+    public void moveDown(Widget widget) {
+        var index = indexOf(widget);
+        if (index < children().size() - 1) {
+            moveDown(index);
+            setScrollAmountNoClamp(getScrollAmount() + getOrThrow(index).getHeight());
+        }
+    }
+
+    @Override
+    public void moveUpNoClamp(Widget widget) {
+        var index = indexOf(widget);
+        if (index > 0) {
+            moveUp(indexOf(widget));
+            setScrollAmountNoClamp(getScrollAmount() - getOrThrow(index).getHeight());
+        }
+    }
+
+    @Override
+    public void moveDownNoClamp(Widget widget) {
+        var index = indexOf(widget);
+        if (index < children().size() - 1) {
+            moveDown(indexOf(widget));
+            setScrollAmountNoClamp(getScrollAmount() + getOrThrow(index).getHeight());
+        }
     }
 
     public void swap(int i, int j) {

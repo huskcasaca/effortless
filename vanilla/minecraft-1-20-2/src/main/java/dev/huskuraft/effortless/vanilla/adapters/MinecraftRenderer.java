@@ -25,7 +25,9 @@ import java.util.Optional;
 
 class MinecraftRenderer extends Renderer {
 
+    @Deprecated
     private static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation("textures/gui/options_background.png");
+    @Deprecated
     private static final ResourceLocation STATS_ICONS_LOCATION = new ResourceLocation("textures/gui/container/stats_icons.png");
 
     private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));

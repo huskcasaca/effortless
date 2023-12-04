@@ -15,11 +15,11 @@ public class Dimens {
     public static final int SLOT_OFFSET_X = 20;
     public static final int SLOT_OFFSET_Y = 20;
 
-    public static final int ICON_WIDTH = 32;
-    public static final int ICON_HEIGHT = 32;
+    public static final int ICON_WIDTH = 30;
+    public static final int ICON_HEIGHT = 30;
 
-    public static final int SLOT_WIDTH = 16;
-    public static final int SLOT_HEIGHT = 16;
+    public static final int SLOT_WIDTH = 18;
+    public static final int SLOT_HEIGHT = 18;
 
     public static final int BUTTON_GAP = 8;
 
