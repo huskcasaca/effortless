@@ -48,14 +48,14 @@ public class TransformerInfoEntry<T extends Transformer> extends EditableEntry<T
 
     @Override
     public void onCreate() {
-        icon = addWidget(new TextIcon(getEntrance(), getX(), getY(), Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, getSymbol(getItem())));
+        icon = addWidget(new TextIcon(getEntrance(), getX() + 1, getY() + 1, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, getSymbol(getItem())));
         button = addWidget(new MoveButton(getEntrance(), getX(), getY(), direction -> {
             switch (direction) {
                 case UP -> getEntryList().moveUp(this);
                 case DOWN -> getEntryList().moveDown(this);
             }
         }, Orientation.UP, Orientation.DOWN));
-        addWidget(new TextWidget(getEntrance(), getX() + 2 + 32 + 1, getY() + 1, getDisplayName(getItem())));
+        addWidget(new TextWidget(getEntrance(), getX() + Dimens.ICON_WIDTH + 2 + 1, getY() + 1, getDisplayName(getItem())));
         updateDescriptionWidgets();
     }
 
@@ -119,7 +119,7 @@ public class TransformerInfoEntry<T extends Transformer> extends EditableEntry<T
     @Override
     public int getHeight() {
         var count = basicDescWidgets.size() + (getEntryList().getSelected() == this ? extraDescWidgets.size() : 0);
-        return MathUtils.max(36, 14 + count * 11);
+        return MathUtils.max(Dimens.ICON_HEIGHT + 4, 14 + count * 11);
     }
 
     protected Text getDisplayName(T transformer) {

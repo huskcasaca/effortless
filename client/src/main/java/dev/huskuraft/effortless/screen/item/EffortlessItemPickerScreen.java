@@ -6,10 +6,7 @@ import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.gui.AbstractScreen;
 import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.button.Button;
-import dev.huskuraft.effortless.gui.container.EditableEntry;
-import dev.huskuraft.effortless.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.gui.input.EditBox;
-import dev.huskuraft.effortless.gui.slot.ItemSlot;
 import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 
@@ -97,63 +94,4 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
         entries.setScrollAmount(0);
     }
 
-    private static final class ItemStackList extends EditableEntryList<ItemStack> {
-
-        public ItemStackList(Entrance entrance, int x, int y, int width, int height) {
-            super(entrance, x, y, width, height);
-        }
-
-        @Override
-        protected int getScrollbarPosition() {
-            return this.getWidth() / 2 + 160;
-        }
-
-        @Override
-        protected EditableEntry<ItemStack> createHolder(ItemStack item) {
-            return new ItemStackEntry(getEntrance(), item);
-        }
-
-        protected static class ItemStackEntry extends EditableEntry<ItemStack> {
-
-            private ItemSlot itemSlot;
-            private TextWidget nameTextWidget;
-
-            public ItemStackEntry(Entrance entrance, ItemStack itemStack) {
-                super(entrance, itemStack);
-            }
-
-            @Override
-            public void onCreate() {
-                this.itemSlot = addWidget(new ItemSlot(getEntrance(), getX(), getY(), Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getItem(), Text.empty()));
-                this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getDisplayName(getItem())));
-            }
-
-            @Override
-            public void setItem(ItemStack item) {
-                super.setItem(item);
-                itemSlot.setItemStack(item);
-                nameTextWidget.setMessage(getDisplayName(item));
-            }
-
-            @Override
-            public Text getNarration() {
-                return Text.translate("narrator.select", getDisplayName(getItem()));
-            }
-
-            @Override
-            public int getWidth() {
-                return Dimens.RegularEntry.ROW_WIDTH;
-            }
-
-            @Override
-            public int getHeight() {
-                return 24;
-            }
-
-            private Text getDisplayName(ItemStack itemStack) {
-                return itemStack.getHoverName();
-            }
-
-        }
-    }
 }

@@ -21,8 +21,9 @@ public class ItemSlot extends AbstractWidget {
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
 
-        renderer.drawItemSlotBackgroundTexture(getX() + 1, getY() + 1);
-        renderer.drawItem(getTypeface(), itemStack, getX() + 1, getY() + 1, getMessage());
+//        renderer.drawItemSlotBackgroundTexture(getX() + 1, getY() + 1);
+        renderer.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
+        renderer.drawItem(getTypeface(), itemStack, getX(), getY(), getMessage());
     }
 
     public void setItemStack(ItemStack itemStack) {

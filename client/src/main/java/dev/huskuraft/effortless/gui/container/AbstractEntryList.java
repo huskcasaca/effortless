@@ -487,6 +487,16 @@ public abstract class AbstractEntryList<E extends AbstractEntry> extends Abstrac
     }
 
     @Override
+    public void moveDownNoClamp(Widget widget) {
+
+    }
+
+    @Override
+    public void moveUpNoClamp(Widget widget) {
+
+    }
+
+    @Override
     public boolean isEditable() {
         return false;
     }

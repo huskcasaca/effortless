@@ -6,6 +6,10 @@ public interface EntryList {
 
     void moveDown(Widget widget);
 
+    void moveUpNoClamp(Widget widget);
+
+    void moveDownNoClamp(Widget widget);
+
     boolean isEditable();
 
     Entry getSelected();
