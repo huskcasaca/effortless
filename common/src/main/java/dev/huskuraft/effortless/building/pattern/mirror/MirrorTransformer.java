@@ -14,8 +14,11 @@ import java.util.stream.Stream;
 
 public class MirrorTransformer implements Transformer {
 
-    public static final MirrorTransformer EMPTY = new MirrorTransformer(null, null);
+    public static final MirrorTransformer ZERO_X = new MirrorTransformer(Vector3d.ZERO, Axis.X);
+    public static final MirrorTransformer ZERO_Y = new MirrorTransformer(Vector3d.ZERO, Axis.Y);
+    public static final MirrorTransformer ZERO_Z = new MirrorTransformer(Vector3d.ZERO, Axis.Z);
     //    private final boolean enabled;
+
     private final Vector3d position;
     //    private final boolean drawLines;
 //    private final boolean drawPlanes;
