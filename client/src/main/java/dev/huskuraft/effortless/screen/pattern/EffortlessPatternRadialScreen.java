@@ -60,7 +60,7 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
         var settingPatterns = getEntrance().getConfigManager().getConfig().getPatternConfig().getPatterns();
         return Stream.concat(
                 Stream.concat(Stream.of(Pattern.DISABLED), settingPatterns.stream()),
-                Stream.generate(() -> Pattern.RESERVED).limit(Math.max(12 - settingPatterns.size() - 1, 0))
+                Stream.generate(() -> Pattern.EMPTY).limit(Math.max(12 - settingPatterns.size() - 1, 0))
         ).map(EffortlessPatternRadialScreen::slot).toList();
     }
 
@@ -85,7 +85,7 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
                 getSlots()
         );
         setRadialSelectResponder(slot -> {
-            if (slot.getContent() == Pattern.RESERVED) {
+            if (slot.getContent() == Pattern.EMPTY) {
 
             } else {
                 selectPattern(slot.getContent());
