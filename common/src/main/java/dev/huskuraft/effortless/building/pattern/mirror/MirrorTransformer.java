@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.text.Text;
 
 import java.util.stream.Stream;
 
-public class MirrorTransformer implements Transformer {
+public class MirrorTransformer extends Transformer {
 
     public static final MirrorTransformer ZERO_X = new MirrorTransformer(Vector3d.ZERO, Axis.X);
     public static final MirrorTransformer ZERO_Y = new MirrorTransformer(Vector3d.ZERO, Axis.Y);

@@ -6,9 +6,9 @@ import dev.huskuraft.effortless.text.Text;
 
 import java.util.Collection;
 
-public interface Randomizer<T> extends Transformer {
+public abstract class Randomizer<T> extends Transformer {
 
-    static Category extract(Object object) {
+    public static Category extract(Object object) {
         if (object instanceof ItemStack) {
             return Category.ITEM;
         }
@@ -16,17 +16,17 @@ public interface Randomizer<T> extends Transformer {
 
     }
 
-    Order getOrder();
+    public abstract Order getOrder();
 
-    Target getTarget();
+    public abstract Target getTarget();
 
-    Category getCategory();
+    public abstract Category getCategory();
 
-    Collection<Chance<T>> getChances();
+    public abstract Collection<Chance<T>> getChances();
 
-    Source<T> asSource(long seed);
+    public abstract Source<T> asSource(long seed);
 
-    enum Order {
+    public static enum Order {
         SEQUENCE("sequence"),
         RANDOM("random");
 
@@ -45,7 +45,7 @@ public interface Randomizer<T> extends Transformer {
         }
     }
 
-    enum Target {
+    public static enum Target {
         SINGLE("single"),
         GROUP("group");
 
@@ -64,7 +64,7 @@ public interface Randomizer<T> extends Transformer {
         }
     }
 
-    enum Category {
+    public static enum Category {
         ITEM("item", ItemStack.class);
 
         private final String name;

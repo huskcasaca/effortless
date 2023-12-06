@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ItemRandomizer implements Randomizer<ItemStack> {
+public class ItemRandomizer extends Randomizer<ItemStack> {
 
     public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.no_name"), Order.SEQUENCE, Target.SINGLE, Category.ITEM, Collections.emptyList());
 

@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.text.Text;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class ArrayTransformer implements Transformer {
+public class ArrayTransformer extends Transformer {
 
     public static final ArrayTransformer ZERO = new ArrayTransformer(new Vector3d(0, 0, 0), 0);
 
