@@ -333,8 +333,10 @@ public class MinecraftClientContentCreator extends ContentCreator {
     public List<Transformer> getDefaultTransformers() {
         return Stream.of(
                 List.of(ArrayTransformer.ZERO),
-                List.of(MirrorTransformer.EMPTY),
-                List.of(RadialTransformer.EMPTY),
+                List.of(MirrorTransformer.ZERO_X),
+                List.of(MirrorTransformer.ZERO_Y),
+                List.of(MirrorTransformer.ZERO_Z),
+                List.of(RadialTransformer.ZERO),
                 getDefaultRandomizers()
         ).flatMap(List::stream).collect(Collectors.toList());
     }

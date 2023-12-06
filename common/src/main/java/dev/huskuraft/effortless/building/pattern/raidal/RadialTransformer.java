@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class RadialTransformer implements Transformer {
 
-    public static final RadialTransformer EMPTY = new RadialTransformer(Vector3d.ZERO, 0);
+    public static final RadialTransformer ZERO = new RadialTransformer(Vector3d.ZERO, 0);
     //    private final boolean enabled;
     private final Vector3d position;
     //    private final double start;
