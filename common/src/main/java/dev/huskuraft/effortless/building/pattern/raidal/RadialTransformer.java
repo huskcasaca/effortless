@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.text.Text;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class RadialTransformer implements Transformer {
+public class RadialTransformer extends Transformer {
 
     public static final RadialTransformer ZERO = new RadialTransformer(Vector3d.ZERO, 0);
     //    private final boolean enabled;

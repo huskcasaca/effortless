@@ -6,18 +6,18 @@ import dev.huskuraft.effortless.text.Text;
 
 import java.util.stream.Stream;
 
-public interface Transformer {
+public abstract class Transformer {
     // TODO: 12/9/23
     //    private final boolean enabled;
 
-    BatchOperation transform(TransformableOperation operation);
+    public abstract BatchOperation transform(TransformableOperation operation);
 
-    Text getName();
+    public abstract Text getName();
 
-    Transformers getType();
+    public abstract Transformers getType();
 
-    Stream<Text> getSearchableTags();
+    public abstract Stream<Text> getSearchableTags();
 
-    boolean isValid();
+    public abstract boolean isValid();
 
 }
