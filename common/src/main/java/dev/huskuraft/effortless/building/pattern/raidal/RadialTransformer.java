@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class RadialTransformer implements Transformer {
 
-    public static final RadialTransformer EMPTY = new RadialTransformer(null, null);
+    public static final RadialTransformer EMPTY = new RadialTransformer(Vector3d.ZERO, 0);
     //    private final boolean enabled;
     private final Vector3d position;
     //    private final double start;
@@ -26,9 +26,9 @@ public class RadialTransformer implements Transformer {
 //    private final boolean alternate;
 //    private final boolean drawLines;
 //    private final boolean drawPlanes;
-    private final Integer slice;
+    private final int slice;
 
-    public RadialTransformer(Vector3d position, Integer slice) {
+    public RadialTransformer(Vector3d position, int slice) {
         this.position = position;
         this.slice = slice;
 //        this.axis = axis;
@@ -73,7 +73,7 @@ public class RadialTransformer implements Transformer {
         return position;
     }
 
-    public Integer slices() {
+    public int slices() {
         return slice;
     }
 }
