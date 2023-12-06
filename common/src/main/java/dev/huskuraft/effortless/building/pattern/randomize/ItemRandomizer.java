@@ -15,16 +15,16 @@ import java.util.stream.Stream;
 
 public class ItemRandomizer implements Randomizer<ItemStack> {
 
-    public static final ItemRandomizer EMPTY = ItemRandomizer.create("empty", Order.SEQUENCE, Target.SINGLE, Category.ITEM, Collections.emptyList());
+    public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.no_name"), Order.SEQUENCE, Target.SINGLE, Category.ITEM, Collections.emptyList());
 
-    private final String name;
+    private final Text name;
     private final Order order;
     private final Target target;
     private final Category category;
 
     private final Collection<Chance<ItemStack>> chances;
 
-    public ItemRandomizer(String name, Order order, Target target, Category category, Collection<Chance<ItemStack>> chances) {
+    public ItemRandomizer(Text name, Order order, Target target, Category category, Collection<Chance<ItemStack>> chances) {
         this.name = name;
         this.order = order;
         this.target = target;
@@ -32,7 +32,7 @@ public class ItemRandomizer implements Randomizer<ItemStack> {
         this.chances = chances;
     }
 
-    public static ItemRandomizer create(String name, Order order, Target target, Category category, Collection<Chance<ItemStack>> chances) {
+    public static ItemRandomizer create(Text name, Order order, Target target, Category category, Collection<Chance<ItemStack>> chances) {
         for (var chance : chances) {
             if (category != Randomizer.extract(chance.content())) {
                 throw new IllegalArgumentException("All chances must be of the same category");
@@ -41,7 +41,7 @@ public class ItemRandomizer implements Randomizer<ItemStack> {
         return new ItemRandomizer(name, order, target, category, chances);
     }
 
-    public static ItemRandomizer create(String name, ItemStack content) {
+    public static ItemRandomizer create(Text name, ItemStack content) {
         return create(name, Order.SEQUENCE, Target.SINGLE, Category.ITEM, List.of(Chance.of(content)));
     }
 
@@ -74,11 +74,6 @@ public class ItemRandomizer implements Randomizer<ItemStack> {
     }
 
     @Override
-    public ItemRandomizer rename(String name) {
-        return new ItemRandomizer(name, order, target, category, chances);
-    }
-
-    @Override
     public BatchOperation transform(TransformableOperation operation) {
         var source = asSource(operation.getContext().uuid().getMostSignificantBits());
         if (operation instanceof DeferredBatchOperation deferredBatchOperation) {
@@ -92,7 +87,7 @@ public class ItemRandomizer implements Randomizer<ItemStack> {
     }
 
     @Override
-    public String getName() {
+    public Text getName() {
         return name;
     }
 
@@ -105,7 +100,7 @@ public class ItemRandomizer implements Randomizer<ItemStack> {
     public Stream<Text> getSearchableTags() {
         return Stream.concat(
                 Stream.of(
-                        Text.text(name),
+                        name,
                         Text.translate(order.getNameKey()),
                         Text.translate(target.getNameKey()),
                         Text.translate(category.getNameKey())),

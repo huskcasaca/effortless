@@ -26,8 +26,6 @@ public interface Randomizer<T> extends Transformer {
 
     Source<T> asSource(long seed);
 
-    Randomizer<T> rename(String name);
-
     enum Order {
         SEQUENCE("sequence"),
         RANDOM("random");

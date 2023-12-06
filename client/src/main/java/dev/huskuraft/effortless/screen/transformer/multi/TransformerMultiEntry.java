@@ -5,18 +5,18 @@ import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.EntryList;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.screen.transformer.edit.TransformerEditEntry;
-import dev.huskuraft.effortless.screen.transformer.info.TransformerInfoEntry;
+import dev.huskuraft.effortless.screen.transformer.tooltip.TransformerTooltipEntry;
 import dev.huskuraft.effortless.text.Text;
 
 @Deprecated
 public class TransformerMultiEntry<T extends Transformer> extends EditableEntry<T> {
 
     private final TransformerEditEntry<T> edit;
-    private final TransformerInfoEntry<T> info;
+    private final TransformerTooltipEntry<T> info;
 
     private EditableEntry<T> lastEntry;
 
-    public TransformerMultiEntry(Entrance entrance, EntryList entryList, TransformerInfoEntry<T> info, TransformerEditEntry<T> edit, T item) {
+    public TransformerMultiEntry(Entrance entrance, EntryList entryList, TransformerTooltipEntry<T> info, TransformerEditEntry<T> edit, T item) {
         super(entrance, entryList, item);
         this.edit = edit;
         this.info = info;

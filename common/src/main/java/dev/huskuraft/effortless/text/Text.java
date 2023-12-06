@@ -32,4 +32,8 @@ public abstract class Text {
 
     public abstract String getString();
 
+    public boolean isBlank() {
+        return getString().isBlank();
+    }
+
 }

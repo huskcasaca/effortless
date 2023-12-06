@@ -2,7 +2,6 @@ package dev.huskuraft.effortless.gui.icon;
 
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.AbstractWidget;
-import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.text.Text;
 
@@ -20,9 +19,15 @@ public class TextIcon extends AbstractWidget {
 
         renderer.pushPose();
         renderer.translate(getX(), getY(), 0);
-        renderer.scale(getWidth() * 1f / 16, getHeight() * 1f / 16, 0);
-        renderer.drawTextFromCenter(getTypeface(), getMessage(), 8, 8 - getTypeface().measureHeight(getMessage()) / 2, 0xFFFFFFFF, true);
+        renderer.scale(getWidth() / 18f, getHeight() / 18f, 0);
+        renderer.translate(18f / 2 + 0.5f, 18f / 2 + 0.5f, 0);
+        renderer.pushPose();
+        var factor = Math.min(14f / getTypeface().measureWidth(getMessage()), 1f);
+        renderer.scale(factor, factor, 0);
+        renderer.translate(0, -getTypeface().measureHeight(getMessage()) / 2f, 0);
+        renderer.drawTextFromCenter(getTypeface(), getMessage(), 0,  0, 0xFFFFFFFF, false);
         renderer.popPose();
-    }
+        renderer.popPose();
 
+    }
 }

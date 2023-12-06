@@ -101,7 +101,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
             buffer.writeDouble(radialTransformer.position().getX());
             buffer.writeDouble(radialTransformer.position().getY());
             buffer.writeDouble(radialTransformer.position().getZ());
-            buffer.writeInt(radialTransformer.slice());
+            buffer.writeInt(radialTransformer.slices());
         }
 
     }
@@ -131,7 +131,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         @Override
         public ItemRandomizer read(Buffer buffer) {
             return ItemRandomizer.create(
-                    buffer.readNullable(Buffer::readString),
+                    buffer.readNullable(Buffer::readText),
                     buffer.readEnum(Randomizer.Order.class),
                     buffer.readEnum(Randomizer.Target.class),
                     buffer.readEnum(Randomizer.Category.class),
@@ -143,7 +143,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
 
         @Override
         public void write(Buffer buffer, ItemRandomizer randomizer) {
-            buffer.writeNullable(randomizer.getName(), Buffer::writeString);
+            buffer.writeNullable(randomizer.getName(), Buffer::writeText);
             buffer.writeEnum(randomizer.getOrder());
             buffer.writeEnum(randomizer.getTarget());
             buffer.writeEnum(randomizer.getCategory());

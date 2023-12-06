@@ -7,14 +7,10 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.Screen;
-import dev.huskuraft.effortless.gui.Widget;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.screen.randomizer.EffortlessRandomizerSettingsScreen;
-import dev.huskuraft.effortless.screen.randomizer.ItemRandomizerEntry;
 import dev.huskuraft.effortless.screen.transformer.edit.*;
-import dev.huskuraft.effortless.screen.transformer.info.*;
-import dev.huskuraft.effortless.screen.transformer.multi.TransformerMultiEntry;
+import dev.huskuraft.effortless.screen.transformer.tooltip.*;
 
 public final class TransformerList extends EditableEntryList<Transformer> {
 
@@ -39,29 +35,29 @@ public final class TransformerList extends EditableEntryList<Transformer> {
     @Override
     protected EditableEntry<Transformer> createHolder(Transformer transformer) {
         return switch (type) {
-            case INFO -> createInfoHolder(transformer);
-            case EDIT -> createEditHolder(transformer);
+            case TOOLTIP -> createTooltipHolder(transformer);
+            case EDITOR -> createEditorHolder(transformer);
             case FOCUS -> null;
         };
     }
 
     @SuppressWarnings("unchecked")
-    public EditableEntry<Transformer> createInfoHolder(Transformer transformer) {
+    public EditableEntry<Transformer> createTooltipHolder(Transformer transformer) {
         return (EditableEntry<Transformer>) switch (transformer.getType()) {
-            case ARRAY -> new ArrayTransformerInfoEntry(getEntrance(), this, (ArrayTransformer) transformer);
-            case MIRROR -> new MirrorTransformerInfoEntry(getEntrance(), this, (MirrorTransformer) transformer);
-            case RADIAL -> new RadialTransformerInfoEntry(getEntrance(), this, (RadialTransformer) transformer);
-            case ITEM_RAND -> new ItemRandomizerEntry(getEntrance(), this, (ItemRandomizer) transformer);
+            case ARRAY -> new ArrayTransformerTooltipEntry(getEntrance(), this, (ArrayTransformer) transformer);
+            case MIRROR -> new MirrorTransformerTooltipEntry(getEntrance(), this, (MirrorTransformer) transformer);
+            case RADIAL -> new RadialTransformerTooltipEntry(getEntrance(), this, (RadialTransformer) transformer);
+            case ITEM_RAND -> new ItemRandomizerTooltipEntry(getEntrance(), this, (ItemRandomizer) transformer);
         };
     }
 
     @SuppressWarnings("unchecked")
-    private EditableEntry<Transformer> createEditHolder(Transformer transformer) {
+    private EditableEntry<Transformer> createEditorHolder(Transformer transformer) {
         return (EditableEntry<Transformer>) switch (transformer.getType()) {
             case ARRAY -> new ArrayTransformerEditEntry(getEntrance(), this, (ArrayTransformer) transformer);
             case MIRROR -> new MirrorTransformerEditEntry(getEntrance(), this, (MirrorTransformer) transformer);
             case RADIAL -> new RadialTransformerEditEntry(getEntrance(), this, (RadialTransformer) transformer);
-            case ITEM_RAND -> new ItemRandomizerEntry(getEntrance(), this, (ItemRandomizer) transformer);
+            case ITEM_RAND -> new ItemRandomizerTooltipEntry(getEntrance(), this, (ItemRandomizer) transformer);
         };
     }
 
@@ -71,8 +67,8 @@ public final class TransformerList extends EditableEntryList<Transformer> {
     }
 
     public enum EntryType {
-        INFO,
-        EDIT,
+        TOOLTIP,
+        EDITOR,
         FOCUS
     }
 

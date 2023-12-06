@@ -40,8 +40,8 @@ public class ArrayTransformer implements Transformer {
     }
 
     @Override
-    public String getName() {
-        return "array";
+    public Text getName() {
+        return Text.translate("effortless.transformer.array");
     }
 
     @Override

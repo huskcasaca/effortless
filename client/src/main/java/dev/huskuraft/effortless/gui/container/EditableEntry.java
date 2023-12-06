@@ -18,12 +18,21 @@ public abstract class EditableEntry<T> extends AbstractEntry {
         this.item = item;
     }
 
-    public T getItem() {
+    public final T getItem() {
         return item;
     }
 
-    public void setItem(T item) {
+    public final void setItem(T item) {
         this.item = item;
+        onBindItem();
+    }
+
+    @Override
+    public void onLoad() {
+        onBindItem();
+    }
+
+    public void onBindItem() {
     }
 
     public EntryList getEntryList() {

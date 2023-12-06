@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.icon.RadialTextIcon;
 import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.text.TextWidget;
-import dev.huskuraft.effortless.screen.randomizer.EffortlessRandomizerEditScreen;
+import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
@@ -129,7 +129,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
             detach();
         }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
 
-        this.entries = addWidget(new TransformerList(getEntrance(), 0, 54, getWidth(), getHeight() - 54 - 60, this, true, TransformerList.EntryType.INFO));
+        this.entries = addWidget(new TransformerList(getEntrance(), 0, 54, getWidth(), getHeight() - 54 - 60, this, true, TransformerList.EntryType.TOOLTIP));
         this.entries.reset(lastSettings.transformers());
     }
 

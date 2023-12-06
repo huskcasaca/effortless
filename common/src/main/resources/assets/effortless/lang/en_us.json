@@ -120,11 +120,18 @@
   "effortless.tracing.pass": "Disabled",
   "effortless.tracing.failed": "Failed",
 
-  "effortless.transformer.array": "Array",
-  "effortless.transformer.mirror": "Mirror",
-  "effortless.transformer.radial": "Radial",
-  "effortless.transformer.item_rand": "Item Randomize",
+  "effortless.transformer.no_name": "No Name",
 
+  "effortless.transformer.array": "Array",
+  "effortless.transformer.array.count": "Count",
+  "effortless.transformer.array.offset": "Offset",
+
+  "effortless.transformer.mirror": "Mirror",
+  "effortless.transformer.mirror.axis": "Axis",
+  "effortless.transformer.radial": "Radial",
+  "effortless.transformer.radial.slices": "Slices",
+
+  "effortless.transformer.item_rand": "Item Randomize",
   "effortless.transformer.randomize.example.empty": "Empty",
   "effortless.transformer.randomize.example.variant_cobblestone": "Cobblestone Variant",
   "effortless.transformer.randomize.example.variant_stone_brick": "Stone Brick Variant",
@@ -148,12 +155,15 @@
   "effortless.randomizer.target.group": "Group",
   "effortless.randomizer.category.item": "Item",
 
-  "effortless.position.undefined": "Undefined",
-  "effortless.integer.undefined": "Undefined",
   "effortless.axis.undefined": "Undefined",
-  "effortless.axis.x": "East West",
-  "effortless.axis.y": "Top Bottom",
-  "effortless.axis.z": "South North",
+  "effortless.axis.x": "X",
+  "effortless.axis.y": "Y",
+  "effortless.axis.z": "Z",
+  "effortless.axis.x_plane": "East West",
+  "effortless.axis.y_plane": "Top Bottom",
+  "effortless.axis.z_plane": "South North",
+
+
 
   "commands.effortless.max_reach_distance.success": "Set maxReachDistance of %s to %s",
   "commands.effortless.max_reach_distance.failure": "Failed to set maxReachDistance of %s",
@@ -199,6 +209,8 @@
   "effortless.item.picker.add": "Add Item",
   "effortless.item.picker.cancel": "Cancel",
 
+  "effortless.pattern.no_name": "No Name",
+
   "effortless.pattern.radial.title": "Effortless Building",
 
   "effortless.pattern.settings.title": "Pattern Settings",
@@ -226,8 +238,6 @@
 
   "effortless.transformer.edit.title": "Edit Transformer",
   "effortless.transformer.edit.save": "Save",
-  "effortless.transformer.edit.cancel": "Cancel",
+  "effortless.transformer.edit.cancel": "Cancel"
 
-  "effortless.transformer.array.offset": "Offset: %s",
-  "effortless.transformer.array.count": "Count: %s"
 }

@@ -24,7 +24,7 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.entries = addWidget(new TransformerList(getEntrance(), 0, 50, getWidth(), getHeight() - 50 - 36, this, false, TransformerList.EntryType.EDIT));
+        this.entries = addWidget(new TransformerList(getEntrance(), 0, 50, getWidth(), getHeight() - 50 - 36, this, false, TransformerList.EntryType.EDITOR));
         this.entries.insertSelected(defaultSettings);
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.save"), button -> {

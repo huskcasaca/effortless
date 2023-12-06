@@ -129,12 +129,14 @@ public abstract class AbstractEntryList<E extends AbstractEntry> extends Abstrac
 
     public void addEntry(E entry) {
         entry.onCreate();
+        entry.onLoad();
         children().add(entry);
         entry.onPositionChange(-1, children().size() - 1);
     }
 
     public void addEntry(int index, E entry) {
         entry.onCreate();
+        entry.onLoad();
         children().add(index, entry);
         entry.onPositionChange(-1, index);
         // FIXME: 24/9/23
