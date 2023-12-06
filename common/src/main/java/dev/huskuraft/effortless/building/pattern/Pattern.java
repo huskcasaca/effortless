@@ -6,8 +6,8 @@ import java.util.List;
 
 public final class Pattern {
 
-    public static final Pattern DISABLED = new Pattern(Text.translate("effortless.pattern.disable"), List.of());
-    public static final Pattern RESERVED = new Pattern(Text.translate("effortless.pattern.reserved"), List.of());
+    public static final Pattern DISABLED = new Pattern(Text.translate("effortless.pattern.disabled"), List.of());
+    public static final Pattern EMPTY = new Pattern(Text.translate("effortless.pattern.empty"), List.of());
     public static final Pattern DEFAULT = new Pattern(Text.translate("effortless.pattern.default"), List.of());
 
     private final Text name;

@@ -210,6 +210,9 @@
   "effortless.item.picker.cancel": "Cancel",
 
   "effortless.pattern.no_name": "No Name",
+  "effortless.pattern.default": "New Pattern",
+  "effortless.pattern.disabled": "Disabled",
+  "effortless.pattern.empty": "Empty",
 
   "effortless.pattern.radial.title": "Effortless Building",
 

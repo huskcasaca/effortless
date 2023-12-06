@@ -39,7 +39,7 @@ public record Context(
                         RaisedEdge.RAISE_LONG_EDGE,
                         ReplaceMode.DISABLED),
                 new PatternParams(
-                        Pattern.DEFAULT),
+                        Pattern.DISABLED),
                 new ReachParams(0, 0)
         );
     }
