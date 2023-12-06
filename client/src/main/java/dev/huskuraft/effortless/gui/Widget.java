@@ -6,6 +6,8 @@ public interface Widget extends Renderable, Tickable, InputHandler {
 
     void onCreate();
 
+    void onLoad();
+
     void onReload();
 
     void onDestroy();

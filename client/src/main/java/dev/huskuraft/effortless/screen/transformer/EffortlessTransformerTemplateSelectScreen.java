@@ -9,7 +9,6 @@ import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.text.TextWidget;
-import dev.huskuraft.effortless.screen.randomizer.EffortlessRandomizerEditScreen;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.ArrayList;
@@ -91,7 +90,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
                     }).bounds(getWidth() / 2 - TAB_WIDTH / 2 + TAB_WIDTH / Transformers.values().length * type.ordinal() + GAP_WIDTH / 2, 48 + 4, TAB_WIDTH / Transformers.values().length - GAP_WIDTH, 20).build())
             );
         }
-        this.entries = addWidget(new TransformerList(getEntrance(), 0, 78, getWidth(), getHeight() - 78 - 36, this, false, TransformerList.EntryType.INFO));
+        this.entries = addWidget(new TransformerList(getEntrance(), 0, 78, getWidth(), getHeight() - 78 - 36, this, false, TransformerList.EntryType.TOOLTIP));
         this.searchEditBox.setMaxLength(MAX_SEARCH_NAME_LENGTH);
         this.searchEditBox.setHint(Text.translate("effortless.transformer.template_select.search_hint"));
         this.searchEditBox.setResponder(text -> {

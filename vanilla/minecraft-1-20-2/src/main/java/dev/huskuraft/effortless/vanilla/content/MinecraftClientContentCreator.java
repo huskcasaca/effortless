@@ -66,18 +66,18 @@ public class MinecraftClientContentCreator extends ContentCreator {
     public List<ItemRandomizer> getDefaultRandomizers() {
 
         var variantCobblestone = ItemRandomizer.create(
-                "variant_cobblestone", Randomizer.Order.RANDOM, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("variant_cobblestone"), Randomizer.Order.RANDOM, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.COBBLESTONE, (byte) 1),
                         chance(Items.MOSSY_COBBLESTONE, (byte) 1)));
         var variantStoneBrick = ItemRandomizer.create(
-                "variant_stone_brick", Randomizer.Order.RANDOM, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("variant_stone_brick"), Randomizer.Order.RANDOM, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.STONE_BRICKS, (byte) 1),
                         chance(Items.MOSSY_STONE_BRICKS, (byte) 1),
                         chance(Items.CRACKED_STONE_BRICKS, (byte) 1)));
         var allOres = ItemRandomizer.create(
-                "all_ores", Randomizer.Order.RANDOM, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("all_ores"), Randomizer.Order.RANDOM, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.COAL_ORE, (byte) 1),
                         chance(Items.COPPER_ORE, (byte) 1),
@@ -88,7 +88,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.DIAMOND_ORE, (byte) 1),
                         chance(Items.EMERALD_ORE, (byte) 1)));
         var allDeepslateOres = ItemRandomizer.create(
-                "all_deepslate_ores", Randomizer.Order.RANDOM, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("all_deepslate_ores"), Randomizer.Order.RANDOM, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.DEEPSLATE_COAL_ORE, (byte) 1),
                         chance(Items.DEEPSLATE_COPPER_ORE, (byte) 1),
@@ -99,7 +99,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.DEEPSLATE_DIAMOND_ORE, (byte) 1),
                         chance(Items.DEEPSLATE_EMERALD_ORE, (byte) 1)));
         var colorfulCarpet = ItemRandomizer.create(
-                "colorful_carpet", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_carpet"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_CARPET, (byte) 1),
                         chance(Items.LIGHT_GRAY_CARPET, (byte) 1),
@@ -118,7 +118,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_CARPET, (byte) 1),
                         chance(Items.PINK_CARPET, (byte) 1)));
         var colorfulConcrete = ItemRandomizer.create(
-                "colorful_concrete", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_concrete"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_CONCRETE, (byte) 1),
                         chance(Items.LIGHT_GRAY_CONCRETE, (byte) 1),
@@ -137,7 +137,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_CONCRETE, (byte) 1),
                         chance(Items.PINK_CONCRETE, (byte) 1)));
         var colorfulConcretePowder = ItemRandomizer.create(
-                "colorful_concrete_powder", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_concrete_powder"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_CONCRETE_POWDER, (byte) 1),
                         chance(Items.LIGHT_GRAY_CONCRETE_POWDER, (byte) 1),
@@ -156,7 +156,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_CONCRETE_POWDER, (byte) 1),
                         chance(Items.PINK_CONCRETE_POWDER, (byte) 1)));
         var colorfulWool = ItemRandomizer.create(
-                "colorful_wool", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_wool"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_WOOL, (byte) 1),
                         chance(Items.LIGHT_GRAY_WOOL, (byte) 1),
@@ -175,7 +175,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_WOOL, (byte) 1),
                         chance(Items.PINK_WOOL, (byte) 1)));
         var colorfulStainedGlass = ItemRandomizer.create(
-                "colorful_stained_glass", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_stained_glass"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_STAINED_GLASS, (byte) 1),
                         chance(Items.LIGHT_GRAY_STAINED_GLASS, (byte) 1),
@@ -194,7 +194,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_STAINED_GLASS, (byte) 1),
                         chance(Items.PINK_STAINED_GLASS, (byte) 1)));
         var colorfulStainedGlassPane = ItemRandomizer.create(
-                "colorful_stained_glass_pane", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_stained_glass_pane"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_STAINED_GLASS_PANE, (byte) 1),
                         chance(Items.LIGHT_GRAY_STAINED_GLASS_PANE, (byte) 1),
@@ -213,7 +213,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_STAINED_GLASS_PANE, (byte) 1),
                         chance(Items.PINK_STAINED_GLASS_PANE, (byte) 1)));
         var colorfulTerracotta = ItemRandomizer.create(
-                "colorful_terracotta", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_terracotta"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_TERRACOTTA, (byte) 1),
                         chance(Items.LIGHT_GRAY_TERRACOTTA, (byte) 1),
@@ -232,7 +232,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_TERRACOTTA, (byte) 1),
                         chance(Items.PINK_TERRACOTTA, (byte) 1)));
         var colorfulGlazedTerracotta = ItemRandomizer.create(
-                "colorful_glazed_terracotta", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_glazed_terracotta"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_GLAZED_TERRACOTTA, (byte) 1),
                         chance(Items.LIGHT_GRAY_GLAZED_TERRACOTTA, (byte) 1),
@@ -251,7 +251,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_GLAZED_TERRACOTTA, (byte) 1),
                         chance(Items.PINK_GLAZED_TERRACOTTA, (byte) 1)));
         var colorfulShulkerBox = ItemRandomizer.create(
-                "colorful_shulker_box", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_shulker_box"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_SHULKER_BOX, (byte) 1),
                         chance(Items.LIGHT_GRAY_SHULKER_BOX, (byte) 1),
@@ -270,7 +270,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_SHULKER_BOX, (byte) 1),
                         chance(Items.PINK_SHULKER_BOX, (byte) 1)));
         var colorfulBed = ItemRandomizer.create(
-                "colorful_bed", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_bed"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_BED, (byte) 1),
                         chance(Items.LIGHT_GRAY_BED, (byte) 1),
@@ -289,7 +289,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.MAGENTA_BED, (byte) 1),
                         chance(Items.PINK_BED, (byte) 1)));
         var colorfulBanner = ItemRandomizer.create(
-                "colorful_banner", Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
+                Text.translate("colorful_banner"), Randomizer.Order.SEQUENCE, Randomizer.Target.SINGLE, Randomizer.Category.ITEM,
                 List.of(
                         chance(Items.WHITE_BANNER, (byte) 1),
                         chance(Items.LIGHT_GRAY_BANNER, (byte) 1),
@@ -326,7 +326,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                 colorfulShulkerBox,
                 colorfulBed,
                 colorfulBanner
-        ).map(randomizer -> randomizer.rename(getKey(randomizer.getName()))).collect(Collectors.toList());
+        ).collect(Collectors.toList());
     }
 
     @Override

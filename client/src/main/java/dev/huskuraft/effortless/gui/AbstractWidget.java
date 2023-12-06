@@ -55,6 +55,11 @@ public abstract class AbstractWidget implements Widget {
     }
 
     @Override
+    public void onLoad() {
+
+    }
+
+    @Override
     public void onReload() {
 
     }

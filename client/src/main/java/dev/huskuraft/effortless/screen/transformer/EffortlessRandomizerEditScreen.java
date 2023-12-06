@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.screen.randomizer;
+package dev.huskuraft.effortless.screen.transformer;
 
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
@@ -60,7 +60,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
 
     private void updateSettings() {
         lastSettings = ItemRandomizer.create(
-                nameEditBox.getValue(),
+                Text.text(nameEditBox.getValue()), // TODO: 6/12/23 use default if no changes
                 lastOrder,
                 lastTarget,
                 Randomizer.Category.ITEM,
@@ -75,7 +75,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         );
         this.nameEditBox.setMaxLength(MAX_RANDOMIZER_NAME_LENGTH);
         this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
-        this.nameEditBox.setValue(lastSettings.getName());
+        this.nameEditBox.setValue(lastSettings.getName().getString());
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
@@ -226,8 +226,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
             }
 
             @Override
-            public void setItem(Chance<ItemStack> item) {
-                super.setItem(item);
+            public void onBindItem() {
                 itemSlot.setItemStack(getItem().content());
                 itemSlot.setDescription(Text.text(String.valueOf(getItem().chance())));
                 nameTextWidget.setMessage(getDisplayName(getItem()));

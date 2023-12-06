@@ -14,6 +14,6 @@ public abstract class TransformerEditEntry<T extends Transformer> extends Editab
 
     @Override
     public Text getNarration() {
-        return Text.text(getItem().getName());
+        return getItem().getName();
     }
 }

@@ -12,7 +12,7 @@ public interface Transformer {
 
     BatchOperation transform(TransformableOperation operation);
 
-    String getName();
+    Text getName();
 
     Transformers getType();
 

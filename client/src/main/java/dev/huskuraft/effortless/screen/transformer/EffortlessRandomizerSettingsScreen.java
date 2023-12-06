@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.screen.randomizer;
+package dev.huskuraft.effortless.screen.transformer;
 
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.settings.RandomizerSettings;
@@ -74,7 +74,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
                         entries.insertSelected(randomizer);
                         updateSettings();
                     },
-                    ItemRandomizer.EMPTY.rename("")
+                    ItemRandomizer.EMPTY
             ).attach();
         }).bounds(getWidth() / 2 + 82, getHeight() - 52, 72, 20).build());
 

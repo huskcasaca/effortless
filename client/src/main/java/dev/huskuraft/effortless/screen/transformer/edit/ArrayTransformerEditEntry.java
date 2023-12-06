@@ -81,8 +81,4 @@ public final class ArrayTransformerEditEntry extends TransformerEditEntry<ArrayT
         return Text.empty();
     }
 
-    @Override
-    public void setItem(ArrayTransformer item) {
-        super.setItem(item);
-    }
 }

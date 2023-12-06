@@ -36,8 +36,8 @@ public class MirrorTransformer implements Transformer {
     }
 
     @Override
-    public String getName() {
-        return "mirror";
+    public Text getName() {
+        return Text.translate("effortless.transformer.mirror");
     }
 
     @Override

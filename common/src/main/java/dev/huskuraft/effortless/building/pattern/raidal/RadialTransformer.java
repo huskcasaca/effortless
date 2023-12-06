@@ -46,8 +46,8 @@ public class RadialTransformer implements Transformer {
     }
 
     @Override
-    public String getName() {
-        return "radial";
+    public Text getName() {
+        return Text.translate("effortless.transformer.radial");
     }
 
     @Override
@@ -73,7 +73,7 @@ public class RadialTransformer implements Transformer {
         return position;
     }
 
-    public Integer slice() {
+    public Integer slices() {
         return slice;
     }
 }

@@ -24,8 +24,7 @@ public class ItemStackEntry extends EditableEntry<ItemStack> {
     }
 
     @Override
-    public void setItem(ItemStack item) {
-        super.setItem(item);
+    public void onBindItem() {
         itemSlot.setItemStack(item);
         nameTextWidget.setMessage(getDisplayName(item));
     }

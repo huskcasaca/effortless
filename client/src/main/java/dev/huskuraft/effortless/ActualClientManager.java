@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.gui.Screen;
 import dev.huskuraft.effortless.input.KeyRegistry;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
-import dev.huskuraft.effortless.screen.randomizer.EffortlessRandomizerSettingsScreen;
+import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerSettingsScreen;
 import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
 import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.platform.ClientManager;

@@ -28,6 +28,7 @@ class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
         getProxy().setHeight(height);
         getProxy().onDestroy();
         getProxy().onCreate();
+        getProxy().onLoad();
     }
 
     @Override
@@ -36,6 +37,7 @@ class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
         getProxy().setHeight(height);
         getProxy().onDestroy();
         getProxy().onCreate();
+        getProxy().onLoad();
     }
 
     @Override

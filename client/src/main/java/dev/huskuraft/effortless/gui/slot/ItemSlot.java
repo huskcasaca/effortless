@@ -2,12 +2,10 @@ package dev.huskuraft.effortless.gui.slot;
 
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.ItemStack;
-import dev.huskuraft.effortless.gui.AbstractWidget;
 import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.text.Text;
 
-// FIXME: 27/9/23 render
-public class ItemSlot extends AbstractWidget {
+public class ItemSlot extends Slot {
 
     private ItemStack itemStack;
 
@@ -16,6 +14,10 @@ public class ItemSlot extends AbstractWidget {
         this.itemStack = itemStack;
     }
 
+    @Override
+    public int getFullWidth() {
+        return getWidth();
+    }
 
     @Override
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
