@@ -2,6 +2,8 @@ package dev.huskuraft.effortless.building.pattern;
 
 import dev.huskuraft.effortless.core.*;
 
+import java.util.Objects;
+
 public class RefactorContext {
 
     private final Item item;
@@ -11,7 +13,7 @@ public class RefactorContext {
     }
 
     public static RefactorContext of(Item item) {
-        return new RefactorContext(item);
+        return new RefactorContext(Objects.requireNonNull(item));
     }
 
     public BlockData refactor(Player player, BlockInteraction blockInteraction) {

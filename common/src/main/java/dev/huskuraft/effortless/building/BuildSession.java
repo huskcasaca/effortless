@@ -53,7 +53,9 @@ public final class BuildSession implements Session {
         var operations = createBaseDeferred(world, player, context, storage);
 
         for (var transformer : context.pattern().transformers()) {
-            operations = transformer.transform(operations);
+            if (transformer.isValid()) {
+                operations = transformer.transform(operations);
+            }
         }
         operations = operations.flatten();
         operations = operations.filter(OperationFilter.distinctByLocation());
