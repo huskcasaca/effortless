@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
 
@@ -85,7 +86,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
 
         for (var type : Transformers.values()) {
             tabButtons.add(
-                    addWidget(Button.builder(getEntrance(), Text.translate(type.getNameKey()), button -> {
+                    addWidget(Button.builder(getEntrance(), type.getName(), button -> {
                         setSelectedType(type);
                     }).bounds(getWidth() / 2 - TAB_WIDTH / 2 + TAB_WIDTH / Transformers.values().length * type.ordinal() + GAP_WIDTH / 2, 48 + 4, TAB_WIDTH / Transformers.values().length - GAP_WIDTH, 20).build())
             );
@@ -104,7 +105,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     public void onReload() {
         useTemplateButton.setActive(entries.hasSelected());
         for (var tabButton : tabButtons) {
-            tabButton.setActive(!tabButton.getMessage().equals(Text.translate(selectedType.getNameKey())));
+            tabButton.setActive(!tabButton.getMessage().equals(selectedType.getName()));
         }
     }
 
