@@ -39,4 +39,13 @@ class MinecraftText extends Text {
         return getRef().getString();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftText fabricText && getRef().equals(fabricText.getRef());
+    }
+
+    @Override
+    public int hashCode() {
+        return getRef().hashCode();
+    }
 }

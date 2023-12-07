@@ -14,12 +14,8 @@ public enum Transformers {
         this.name = name;
     }
 
-    public String getNameKey() {
-        return "effortless.transformer.%s".formatted(getName());
-    }
-
-    public String getName() {
-        return name;
+    public Text getName() {
+        return Text.translate("effortless.transformer.%s".formatted(name));
     }
 
 }

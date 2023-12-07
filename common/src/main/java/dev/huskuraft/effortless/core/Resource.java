@@ -3,7 +3,11 @@ package dev.huskuraft.effortless.core;
 public abstract class Resource {
 
     public static Resource decompose(String value, String separator) {
-        return of(value.split(separator)[0], value.split(separator)[1]);
+        try {
+            return of(value.split(separator)[0], value.split(separator)[1]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new ArrayIndexOutOfBoundsException(e + "for value: " + value);
+        }
     }
 
     public static Resource decompose(String value) {

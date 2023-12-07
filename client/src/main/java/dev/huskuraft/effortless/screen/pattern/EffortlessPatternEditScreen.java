@@ -33,6 +33,8 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
     private TextWidget titleTextWidget;
     private EditBox nameEditBox;
     private TransformerList entries;
+    private Button upButton;
+    private Button downButton;
     private Button editButton;
     private Button deleteButton;
     private Button duplicateButton;
@@ -65,6 +67,17 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         this.nameEditBox.setValue(lastSettings.name().getString());
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+
+        this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
+            if (entries.hasSelected()) {
+                entries.moveUpSelected();
+            }
+        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
+        this.downButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.down"), button -> {
+            if (entries.hasSelected()) {
+                entries.moveDownSelected();
+            }
+        }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.edit"), button -> {
             if (entries.hasSelected()) {
@@ -132,10 +145,18 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
 
     @Override
     public void onReload() {
+        upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
+        downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
         editButton.setActive(entries.hasSelected());
         deleteButton.setActive(entries.hasSelected());
         duplicateButton.setActive(entries.hasSelected());
         saveButton.setActive(isContentValid());
+
+        upButton.setVisible(getEntrance().getClient().hasAltDown());
+        downButton.setVisible(getEntrance().getClient().hasAltDown());
+        editButton.setVisible(!getEntrance().getClient().hasAltDown());
+        deleteButton.setVisible(!getEntrance().getClient().hasAltDown());
+
         lastSettings = new Pattern(Text.text(nameEditBox.getValue()), entries.items());
     }
 

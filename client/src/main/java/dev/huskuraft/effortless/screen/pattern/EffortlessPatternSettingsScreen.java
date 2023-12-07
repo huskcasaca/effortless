@@ -16,6 +16,8 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
     private PatternSettings lastSettings;
     private TextWidget titleTextWidget;
     private PatternList entries;
+    private Button upButton;
+    private Button downButton;
     private Button editButton;
     private Button deleteButton;
     private Button duplicateButton;
@@ -33,6 +35,18 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
     @Override
     public void onCreate() {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+
+        this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
+            if (entries.hasSelected()) {
+                entries.moveUpSelected();
+            }
+        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
+        this.downButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.down"), button -> {
+            if (entries.hasSelected()) {
+                entries.moveDownSelected();
+            }
+        }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
+
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.edit"), button -> {
             if (entries.hasSelected()) {
@@ -74,7 +88,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
         this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.reset"), button -> {
             entries.reset(getEntrance().getContentCreator().getDefaultPatterns());
-        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 308, 20).build());
+        }).bounds(getWidth() / 2 + 4, getHeight() - 52, 150, 20).build());
 
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.done"), button -> {
             applySettings.accept(lastSettings);
@@ -89,10 +103,14 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
     @Override
     public void onReload() {
+        upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
+        downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
         editButton.setActive(entries.hasSelected());
         deleteButton.setActive(entries.hasSelected());
         duplicateButton.setActive(entries.hasSelected());
 
+        upButton.setVisible(getEntrance().getClient().hasAltDown());
+        downButton.setVisible(getEntrance().getClient().hasAltDown());
         editButton.setVisible(!getEntrance().getClient().hasAltDown());
         deleteButton.setVisible(!getEntrance().getClient().hasAltDown());
         duplicateButton.setVisible(!getEntrance().getClient().hasAltDown());
