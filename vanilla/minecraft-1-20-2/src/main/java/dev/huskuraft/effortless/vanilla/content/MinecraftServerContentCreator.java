@@ -33,55 +33,35 @@ public class MinecraftServerContentCreator extends ContentCreator {
     }
 
     @Override
-    public TagRecord emptyTagRecord() {
+    public TagRecord tagRecord() {
         return MinecraftAdapter.adapt(new CompoundTag());
     }
 
     @Override
-    public ItemStack emptyItemStack() {
+    public Item item(Resource resource) {
+        return MinecraftAdapter.adapt(BuiltInRegistries.ITEM.get(MinecraftAdapter.adapt(resource)));
+    }
+
+    @Override
+    public ItemStack itemStack() {
         return MinecraftAdapter.adapt(net.minecraft.world.item.ItemStack.EMPTY);
     }
 
     @Override
-    public ItemStack emptyItemStack(Item item, int count) {
+    public ItemStack itemStack(Item item, int count) {
         var itemStack = new net.minecraft.world.item.ItemStack(MinecraftAdapter.adapt(item), count);
         return MinecraftAdapter.adapt(itemStack);
     }
 
     @Override
-    public ItemStack emptyItemStack(Item item, int count, TagRecord tag) {
+    public ItemStack itemStack(Item item, int count, TagRecord tag) {
         var itemStack = new net.minecraft.world.item.ItemStack(MinecraftAdapter.adapt(item), count);
         itemStack.setTag(MinecraftAdapter.adapt(tag));
         return MinecraftAdapter.adapt(itemStack);
     }
 
     @Override
-    public List<ItemRandomizer> getDefaultRandomizers() {
-        return List.of();
-    }
-
-    @Override
-    public List<Transformer> getDefaultTransformers() {
-        return List.of();
-    }
-
-    @Override
-    public List<Pattern> getDefaultPatterns() {
-        return List.of();
-    }
-
-    @Override
-    public SearchTree<ItemStack> getItemsSearchTree(SearchBy searchBy) {
-        return SearchTree.empty();
-    }
-
-    @Override
-    public <T> SearchTree<T> createSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
-        return SearchTree.empty();
-    }
-
-    @Override
-    public Text empty() {
+    public Text text() {
         return MinecraftAdapter.adapt(Component.empty());
     }
 
@@ -106,7 +86,27 @@ public class MinecraftServerContentCreator extends ContentCreator {
     }
 
     @Override
-    public Item item(Resource resource) {
-        return MinecraftAdapter.adapt(BuiltInRegistries.ITEM.get(MinecraftAdapter.adapt(resource)));
+    public List<ItemRandomizer> getDefaultRandomizers() {
+        return List.of();
+    }
+
+    @Override
+    public List<Transformer> getDefaultTransformers() {
+        return List.of();
+    }
+
+    @Override
+    public List<Pattern> getDefaultPatterns() {
+        return List.of();
+    }
+
+    @Override
+    public SearchTree<ItemStack> itemStackSearchTree(SearchBy searchBy) {
+        return SearchTree.empty();
+    }
+
+    @Override
+    public <T> SearchTree<T> searchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
+        return SearchTree.empty();
     }
 }

@@ -10,15 +10,15 @@ import java.util.List;
 public abstract class ItemStack implements TagSerializable {
 
     public static ItemStack empty() {
-        return Effortless.getInstance().getContentCreator().emptyItemStack();
+        return Effortless.getInstance().getContentCreator().itemStack();
     }
 
     public static ItemStack of(Item item, int count) {
-        return Effortless.getInstance().getContentCreator().emptyItemStack(item, count);
+        return Effortless.getInstance().getContentCreator().itemStack(item, count);
     }
 
     public static ItemStack of(Item item, int count, TagRecord tag) {
-        return Effortless.getInstance().getContentCreator().emptyItemStack(item, count, tag);
+        return Effortless.getInstance().getContentCreator().itemStack(item, count, tag);
     }
 
     public abstract List<Text> getDescription(Player player, TooltipType flag);

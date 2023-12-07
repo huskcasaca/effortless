@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.Effortless;
 public abstract class Text {
 
     public static Text empty() {
-        return Effortless.getInstance().getContentCreator().empty();
+        return Effortless.getInstance().getContentCreator().text();
     }
 
     public static Text text(String text) {
