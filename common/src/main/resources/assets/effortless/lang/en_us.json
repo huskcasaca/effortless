@@ -121,6 +121,7 @@
   "effortless.tracing.failed": "Failed",
 
   "effortless.transformer.no_name": "No Name",
+  "effortless.transformer.empty": "Empty",
 
   "effortless.transformer.array": "Array",
   "effortless.transformer.array.count": "Count",

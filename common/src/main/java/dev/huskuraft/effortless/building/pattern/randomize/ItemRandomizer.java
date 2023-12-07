@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class ItemRandomizer extends Randomizer<ItemStack> {
 
-    public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.no_name"), Order.SEQUENCE, Target.SINGLE, Category.ITEM, Collections.emptyList());
+    public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.empty"), Order.SEQUENCE, Target.SINGLE, Category.ITEM, Collections.emptyList());
 
     private final Text name;
     private final Order order;
