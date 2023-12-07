@@ -1,16 +1,18 @@
 package dev.huskuraft.effortless.building.pattern.randomize;
 
+import dev.huskuraft.effortless.core.Item;
+
 import java.util.Random;
 import java.util.stream.IntStream;
 
 public interface Source<T> {
 
     static <T> Source<T> createUnordered(Randomizer<T> randomizer, long seed) {
-        return new Unordered<>(randomizer, seed);
+        return new Unordered<>(mapRandomizer(randomizer), seed);
     }
 
     static <T> Source<T> createSequence(Randomizer<T> randomizer) {
-        return new Sequence<>(randomizer);
+        return new Sequence<>(mapRandomizer(randomizer));
     }
 
     static <T> Source<T> createSingle(T item) {
@@ -34,10 +36,10 @@ public interface Source<T> {
 //            this(randomizer, newSeed() ^ System.nanoTime());
 //        }
 
-        public Unordered(Randomizer<T> randomizer, long seed) {
+        public Unordered(T[] randomizer, long seed) {
             super(seed);
             this.seed = seed;
-            this.items = mapRandomizer(randomizer);
+            this.items = randomizer;
         }
 
         @Override
@@ -54,8 +56,8 @@ public interface Source<T> {
         private final T[] items;
         private int index = 0;
 
-        public Sequence(Randomizer<T> randomizer) {
-            this.items = mapRandomizer(randomizer);
+        public Sequence(T[] items) {
+            this.items = items;
         }
 
         @Override

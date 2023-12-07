@@ -76,6 +76,9 @@ public class ItemRandomizer extends Randomizer<Item> {
 
     @Override
     public BatchOperation transform(TransformableOperation operation) {
+        if (!isValid()) {
+            return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation));
+        }
         var source = asSource(operation.getContext().uuid().getMostSignificantBits());
         if (operation instanceof DeferredBatchOperation deferredBatchOperation) {
             return switch (target) {
@@ -111,7 +114,7 @@ public class ItemRandomizer extends Randomizer<Item> {
 
     @Override
     public boolean isValid() {
-        return true;
+        return !getChances().isEmpty();
     }
 
 }
