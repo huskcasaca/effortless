@@ -31,7 +31,7 @@ public class PatternEntry extends EditableEntry<Pattern> {
     public void onCreate() {
         this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getX(), getY(), Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, 0, Text.empty()));
         this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + Dimens.ICON_WIDTH + 2, getY() + 2, getDisplayName(getItem())));
-        this.slotContainer = addWidget(new SlotContainer(getEntrance(), getX() + Dimens.ICON_WIDTH + 2, getY() + 14, 0, 0));
+        this.slotContainer = addWidget(new SlotContainer(getEntrance(), getX() + Dimens.ICON_WIDTH + 2, getY() + 12, 0, 0));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class PatternEntry extends EditableEntry<Pattern> {
     @Override
     public void onBindItem() {
         nameTextWidget.setMessage(getDisplayName(getItem()));
-        slotContainer.setEntries(getItem().transformers().stream().map(transformer -> new SlotData.TextSymbol(TransformerTooltipEntry.getSymbol(transformer), TransformerTooltipEntry.getSymbol(transformer))).collect(Collectors.toList()));
+        slotContainer.setEntries(getItem().transformers().stream().map(transformer -> new SlotData.TextSymbol(TransformerTooltipEntry.getSymbol(transformer), Text.empty())).collect(Collectors.toList()));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class PatternEntry extends EditableEntry<Pattern> {
 
     @Override
     public int getHeight() {
-        return 24 + 12;
+        return Dimens.ICON_HEIGHT + 4;
     }
 
     private void updateSlots() {

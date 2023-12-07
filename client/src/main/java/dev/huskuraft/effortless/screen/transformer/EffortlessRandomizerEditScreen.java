@@ -11,12 +11,16 @@ import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
+import dev.huskuraft.effortless.gui.icon.RadialTextIcon;
+import dev.huskuraft.effortless.gui.icon.TextIcon;
 import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.input.NumberField;
 import dev.huskuraft.effortless.gui.slot.ItemSlot;
+import dev.huskuraft.effortless.gui.slot.TextSlot;
 import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.screen.item.EffortlessItemPickerScreen;
+import dev.huskuraft.effortless.screen.transformer.tooltip.TransformerTooltipEntry;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
@@ -29,7 +33,6 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
     private static final int MAX_RANDOMIZER_NAME_LENGTH = 255;
     private static final int MIN_ITEM_COUNT = 0;
     private static final int MAX_ITEM_COUNT = 99;
-    private static final int ROW_WIDTH = Dimens.RegularEntry.ROW_WIDTH;
 
     private final Consumer<ItemRandomizer> applySettings;
     private final ItemRandomizer defaultSettings;
@@ -45,6 +48,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
     private Button addButton;
     private Button saveButton;
     private Button cancelButton;
+    private TextSlot textSlot;
 
     private Randomizer.Order lastOrder;
     private Randomizer.Target lastTarget;
@@ -70,25 +74,30 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
     @Override
     public void onCreate() {
 
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+
+        this.textSlot = addWidget(new TextSlot(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, Text.empty()));
+
         this.nameEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH - 2) / 2, 24, ROW_WIDTH - 2, 20, null)
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2 + 40, 24, Dimens.RegularEntry.ROW_WIDTH - 40, 20, null)
         );
         this.nameEditBox.setMaxLength(MAX_RANDOMIZER_NAME_LENGTH);
         this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.getName().getString());
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
-
         this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.order", Text.translate(lastSettings.getOrder().getNameKey())), button -> {
             lastOrder = Randomizer.Order.values()[(lastOrder.ordinal() + 1) % Randomizer.Order.values().length];
             orderButton.setMessage(Text.translate("effortless.randomizer.edit.order", Text.translate(lastOrder.getNameKey())));
             updateSettings();
-        }).bounds(getWidth() / 2 - 154, 48 + 4, 150, 20).build());
+        }).bounds(getWidth() / 2 - 154, 48 + 6, 150, 20).build());
         this.supplierButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.target", Text.translate(lastTarget.getNameKey())), button -> {
             lastTarget = Randomizer.Target.values()[(lastTarget.ordinal() + 1) % Randomizer.Target.values().length];
             supplierButton.setMessage(Text.translate("effortless.randomizer.edit.target", Text.translate(lastTarget.getNameKey())));
             updateSettings();
-        }).bounds(getWidth() / 2 + 4, 48 + 4, 150, 20).build());
+        }).bounds(getWidth() / 2 + 4, 48 + 6, 150, 20).build());
+
+        this.entries = addWidget(new ItemStackChanceList(getEntrance(), 0, 82, getWidth(), getHeight() - 82 - 60));
+        this.entries.reset(lastSettings.getChances());
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
             if (entries.hasSelected()) {
@@ -125,13 +134,12 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.cancel"), button -> {
             detach();
         }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
-
-        this.entries = addWidget(new ItemStackChanceList(getEntrance(), 0, 78, getWidth(), getHeight() - 78 - 60));
-        this.entries.reset(lastSettings.getChances());
     }
 
     @Override
     public void onReload() {
+        textSlot.setMessage(TransformerTooltipEntry.getSymbol(lastSettings));
+
         upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
         downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
         deleteButton.setActive(entries.hasSelected());

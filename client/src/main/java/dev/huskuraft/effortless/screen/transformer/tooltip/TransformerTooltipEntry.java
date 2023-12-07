@@ -35,7 +35,7 @@ public class TransformerTooltipEntry<T extends Transformer> extends EditableEntr
     public void onCreate() {
         this.textSlot = addWidget(new dev.huskuraft.effortless.gui.slot.TextSlot(getEntrance(), getX(), getY(), Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, getSymbol()));
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getX() + Dimens.ICON_WIDTH + 2, getY() + 2, getDisplayName()));
-        this.slotContainer = addWidget(new SlotContainer(getEntrance(), getX() + Dimens.ICON_WIDTH + 2, getY() + 14, 0, 0));
+        this.slotContainer = addWidget(new SlotContainer(getEntrance(), getX() + Dimens.ICON_WIDTH + 2, getY() + 12, 0, 0));
     }
 
     @Override

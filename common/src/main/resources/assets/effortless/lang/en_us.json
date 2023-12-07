@@ -240,6 +240,7 @@
   "effortless.transformer.template_select.use_template": "Use Template",
 
   "effortless.transformer.edit.title": "Edit Transformer",
+  "effortless.transformer.edit.name_hint": "Transformer Name",
   "effortless.transformer.edit.save": "Save",
   "effortless.transformer.edit.cancel": "Cancel"
 
