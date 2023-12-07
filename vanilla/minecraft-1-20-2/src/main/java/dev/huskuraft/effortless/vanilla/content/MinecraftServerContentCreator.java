@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 public class MinecraftServerContentCreator extends ContentCreator {
 
     @Override
-    public Buffer allocateButter() {
+    public Buffer buffer() {
         return MinecraftAdapter.adapt(new FriendlyByteBuf(Unpooled.buffer()));
     }
 
