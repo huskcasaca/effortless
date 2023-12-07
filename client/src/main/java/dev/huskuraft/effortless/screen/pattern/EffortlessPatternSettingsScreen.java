@@ -30,12 +30,6 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         this.lastSettings = patternSettings;
     }
 
-    private void updateSettings() {
-        lastSettings = new PatternSettings(
-                entries.items()
-        );
-    }
-
     @Override
     public void onCreate() {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
@@ -46,7 +40,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
                         getEntrance(),
                         pattern -> {
                             entries.replaceSelect(pattern);
-                            updateSettings();
+                            onReload();
                         },
                         entries.getSelected().getItem(),
                         entries.indexOfSelected()
@@ -57,14 +51,12 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
-                updateSettings();
             }
         }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
 
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem());
-                updateSettings();
             }
         }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
 
@@ -73,7 +65,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
                     getEntrance(),
                     pattern -> {
                         entries.insertSelected(pattern);
-                        updateSettings();
+                        onReload();
                     },
                     Pattern.DEFAULT,
                     entries.indexOfSelected() == -1 ? entries.children().size() : entries.indexOfSelected() + 1
@@ -85,7 +77,6 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         }).bounds(getWidth() / 2 - 154, getHeight() - 52, 308, 20).build());
 
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.done"), button -> {
-            updateSettings();
             applySettings.accept(lastSettings);
             detach();
         }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
@@ -107,6 +98,10 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         duplicateButton.setVisible(!getEntrance().getClient().hasAltDown());
         newButton.setVisible(!getEntrance().getClient().hasAltDown());
         resetButton.setVisible(getEntrance().getClient().hasAltDown());
+
+        lastSettings = new PatternSettings(
+                entries.items()
+        );
     }
 
 }

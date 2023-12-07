@@ -62,15 +62,6 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         this.lastTarget = randomizer.getTarget();
     }
 
-    private void updateSettings() {
-        lastSettings = ItemRandomizer.create(
-                Text.text(nameEditBox.getValue()), // TODO: 6/12/23 use default if no changes
-                lastOrder,
-                lastTarget,
-                Randomizer.Category.ITEM,
-                entries.items());
-    }
-
     @Override
     public void onCreate() {
 
@@ -88,12 +79,10 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.order", Text.translate(lastSettings.getOrder().getNameKey())), button -> {
             lastOrder = Randomizer.Order.values()[(lastOrder.ordinal() + 1) % Randomizer.Order.values().length];
             orderButton.setMessage(Text.translate("effortless.randomizer.edit.order", Text.translate(lastOrder.getNameKey())));
-            updateSettings();
         }).bounds(getWidth() / 2 - 154, 48 + 6, 150, 20).build());
         this.supplierButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.target", Text.translate(lastTarget.getNameKey())), button -> {
             lastTarget = Randomizer.Target.values()[(lastTarget.ordinal() + 1) % Randomizer.Target.values().length];
             supplierButton.setMessage(Text.translate("effortless.randomizer.edit.target", Text.translate(lastTarget.getNameKey())));
-            updateSettings();
         }).bounds(getWidth() / 2 + 4, 48 + 6, 150, 20).build());
 
         this.entries = addWidget(new ItemStackChanceList(getEntrance(), 0, 82, getWidth(), getHeight() - 82 - 60));
@@ -102,32 +91,28 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
             if (entries.hasSelected()) {
                 entries.moveUpSelected();
-                updateSettings();
             }
         }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
         this.downButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.down"), button -> {
             if (entries.hasSelected()) {
                 entries.moveDownSelected();
-                updateSettings();
             }
         }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.delete"), button -> {
             entries.deleteSelected();
-            updateSettings();
         }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.add"), button -> {
             new EffortlessItemPickerScreen(
                     getEntrance(),
                     itemStack -> {
                         entries.insertSelected(Chance.itemStack(itemStack, (byte) 1));
-                        updateSettings();
+                        onReload();
                     }
             ).attach();
         }).bounds(getWidth() / 2 + 82, getHeight() - 52, 72, 20).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.save"), button -> {
-            updateSettings();
             applySettings.accept(lastSettings);
             detach();
         }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
@@ -144,6 +129,13 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
         deleteButton.setActive(entries.hasSelected());
         addButton.setActive(entries.children().size() <= MAX_RANDOMIZER_SIZE);
+
+        lastSettings = ItemRandomizer.create(
+                Text.text(nameEditBox.getValue()), // TODO: 6/12/23 use default if no changes
+                lastOrder,
+                lastTarget,
+                Randomizer.Category.ITEM,
+                entries.items());
     }
 
     public static final class ItemStackChanceList extends EditableEntryList<Chance<ItemStack>> {

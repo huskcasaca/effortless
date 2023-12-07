@@ -30,12 +30,6 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
         this.lastSettings = randomizerSettings;
     }
 
-    private void updateSettings() {
-        lastSettings = new RandomizerSettings(
-                entries.items()
-        );
-    }
-
     @Override
     public void onCreate() {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
@@ -46,7 +40,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
                         getEntrance(),
                         randomizer -> {
                             entries.replaceSelect(randomizer);
-                            updateSettings();
+                            onReload();
                         },
                         entries.getSelected().getItem()
                 ).attach();
@@ -56,14 +50,12 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
-                updateSettings();
             }
         }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
 
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem());
-                updateSettings();
             }
         }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
 
@@ -72,7 +64,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
                     getEntrance(),
                     randomizer -> {
                         entries.insertSelected(randomizer);
-                        updateSettings();
+                        onReload();
                     },
                     ItemRandomizer.EMPTY
             ).attach();
@@ -83,7 +75,6 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
         }).bounds(getWidth() / 2 - 154, getHeight() - 52, 308, 20).build());
 
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.done"), button -> {
-            updateSettings();
             applySettings.accept(lastSettings);
             detach();
         }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
@@ -105,6 +96,10 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
         duplicateButton.setVisible(!getEntrance().getClient().hasAltDown());
         newButton.setVisible(!getEntrance().getClient().hasAltDown());
         resetButton.setVisible(getEntrance().getClient().hasAltDown());
+
+        lastSettings = new RandomizerSettings(
+                entries.items()
+        );
     }
 
 }

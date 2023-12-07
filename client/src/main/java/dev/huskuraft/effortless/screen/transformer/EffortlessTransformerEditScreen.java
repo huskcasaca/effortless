@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.slot.TextSlot;
 import dev.huskuraft.effortless.gui.text.TextWidget;
+import dev.huskuraft.effortless.screen.transformer.tooltip.TransformerTooltipEntry;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.function.Consumer;
@@ -57,6 +58,7 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
 
     @Override
     public void onReload() {
-        super.onReload();
+        textSlot.setMessage(TransformerTooltipEntry.getSymbol(entries.getSelected().getItem()));
+
     }
 }

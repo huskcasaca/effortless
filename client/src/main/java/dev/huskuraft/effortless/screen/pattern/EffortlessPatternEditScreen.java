@@ -53,13 +53,8 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         return List.of();
     }
 
-    private void updateSettings() {
-        lastSettings = new Pattern(Text.text(nameEditBox.getValue()), entries.items());
-    }
-
     @Override
     public void onCreate() {
-
         this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getWidth() / 2 - (ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, index, Text.text(String.valueOf(index + 1))));
 
         this.nameEditBox = addWidget(
@@ -78,14 +73,20 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
                     case ARRAY, MIRROR, RADIAL -> {
                         new EffortlessTransformerEditScreen(
                                 getEntrance(),
-                                transformer -> entries.replaceSelect(transformer),
+                                transformer -> {
+                                    entries.replaceSelect(transformer);
+                                    onReload();
+                                },
                                 item
                         ).attach();
                     }
                     case ITEM_RAND -> {
                         new EffortlessRandomizerEditScreen(
                                 getEntrance(),
-                                transformer -> entries.replaceSelect(transformer),
+                                transformer -> {
+                                    entries.replaceSelect(transformer);
+                                    onReload();
+                                },
                                 (ItemRandomizer) item
                         ).attach();
                     }
@@ -97,14 +98,12 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
-                updateSettings();
             }
         }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
 
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem());
-                updateSettings();
             }
         }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
 
@@ -113,15 +112,13 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
                     getEntrance(),
                     transformer -> {
                         entries.insertSelected(transformer);
-                        updateSettings();
+                        onReload();
                     },
                     getEntrance().getContentCreator().getDefaultTransformers()
             ).attach();
-            updateSettings();
         }).bounds(getWidth() / 2 + 82, getHeight() - 52, 72, 20).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.save"), button -> {
-            updateSettings();
             applySettings.accept(lastSettings);
             detach();
         }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
@@ -139,6 +136,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         deleteButton.setActive(entries.hasSelected());
         duplicateButton.setActive(entries.hasSelected());
         saveButton.setActive(isContentValid());
+        lastSettings = new Pattern(Text.text(nameEditBox.getValue()), entries.items());
     }
 
     private boolean isContentValid() {
