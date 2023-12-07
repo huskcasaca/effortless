@@ -66,6 +66,7 @@ final class ActualClientConfigManager extends ClientConfigManager {
             new BaseConfigurationSerializer().write(tag, config);
             getEntrance().getConfigWriter().write(new FileOutputStream(configFile), tag);
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.warning("Cannot save config file");
         }
     }
@@ -81,9 +82,9 @@ final class ActualClientConfigManager extends ClientConfigManager {
     @Override
     public BaseConfiguration getConfig() {
         synchronized (this) {
-            if (config == null) {
-                readConfig();
-            }
+//            if (config == null) {
+            readConfig();
+//            }
             return config;
         }
     }

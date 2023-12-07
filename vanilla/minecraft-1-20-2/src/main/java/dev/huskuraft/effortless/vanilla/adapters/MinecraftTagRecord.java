@@ -1,15 +1,18 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.tag.TagElement;
 import dev.huskuraft.effortless.tag.TagReader;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.tag.TagWriter;
 import dev.huskuraft.effortless.text.Text;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -194,18 +197,8 @@ class MinecraftTagRecord extends TagRecord {
     }
 
     @Override
-    public ItemStack getItemStack(String key) {
-        return MinecraftAdapter.adapt(net.minecraft.world.item.ItemStack.of(getRef().getCompound(key)));
-    }
-
-    @Override
     public TagElement getElement(String key) {
         return MinecraftAdapter.adapt(getRef().get(key));
-    }
-
-    @Override
-    public void putItemStack(String key, ItemStack value) {
-        getRef().put(key, MinecraftAdapter.adapt(value).getOrCreateTag());
     }
 
     @Override

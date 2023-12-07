@@ -3,7 +3,9 @@ package dev.huskuraft.effortless.content;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
@@ -19,6 +21,10 @@ public abstract class ContentCreator {
     public abstract TagRecord emptyTagRecord();
 
     public abstract ItemStack emptyItemStack();
+
+    public abstract ItemStack emptyItemStack(Item item, int count);
+
+    public abstract ItemStack emptyItemStack(Item item, int count, TagRecord tag);
 
     public abstract List<ItemRandomizer> getDefaultRandomizers();
 
@@ -39,5 +45,7 @@ public abstract class ContentCreator {
     public abstract Text translate(String text);
 
     public abstract Text translate(String text, Text... args);
+
+    public abstract Item item(Resource resource);
 
 }

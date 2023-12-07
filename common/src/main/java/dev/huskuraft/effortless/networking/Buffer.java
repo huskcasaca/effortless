@@ -119,6 +119,7 @@ public abstract class Buffer {
 //
 //    public abstract void writeDoubleArray(double[] value);
 
+    // TODO: 7/12/23 extract
     public abstract void writeItemStack(ItemStack value);
 
     public abstract void writeTagRecord(TagRecord value);

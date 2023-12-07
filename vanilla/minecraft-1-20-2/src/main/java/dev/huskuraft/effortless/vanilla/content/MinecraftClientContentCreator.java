@@ -35,7 +35,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MinecraftClientContentCreator extends ContentCreator {
+public class MinecraftClientContentCreator extends MinecraftServerContentCreator {
 
     private static Chance<ItemStack> chance(Item item, byte count) {
         return Chance.itemStack(MinecraftClientAdapter.adapt(item), count);
@@ -44,21 +44,6 @@ public class MinecraftClientContentCreator extends ContentCreator {
     // FIXME: 24/10/23
     private static Text name(String key) {
         return Text.translate("effortless.transformer.randomize.example.%s".formatted(key));
-    }
-
-    @Override
-    public Buffer allocateButter() {
-        return MinecraftAdapter.adapt(new FriendlyByteBuf(Unpooled.buffer()));
-    }
-
-    @Override
-    public TagRecord emptyTagRecord() {
-        return MinecraftAdapter.adapt(new CompoundTag());
-    }
-
-    @Override
-    public ItemStack emptyItemStack() {
-        return MinecraftAdapter.adapt(net.minecraft.world.item.ItemStack.EMPTY);
     }
 
     @Override
@@ -369,31 +354,6 @@ public class MinecraftClientContentCreator extends ContentCreator {
     @Override
     public <T> SearchTree<T> createSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
         return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> MinecraftClientAdapter.adapt(text).getString())).search(query);
-    }
-
-    @Override
-    public Text empty() {
-        return MinecraftAdapter.adapt(Component.empty());
-    }
-
-    @Override
-    public Text text(String text) {
-        return MinecraftAdapter.adapt(Component.literal(text));
-    }
-
-    @Override
-    public Text text(String text, Text... args) {
-        return MinecraftAdapter.adapt(Component.translatable(text, Arrays.stream(args).map(MinecraftAdapter::adapt).toArray(Object[]::new)));
-    }
-
-    @Override
-    public Text translate(String text) {
-        return MinecraftAdapter.adapt(Component.translatable(text));
-    }
-
-    @Override
-    public Text translate(String text, Text... args) {
-        return MinecraftAdapter.adapt(Component.translatable(text, Arrays.stream(args).map(MinecraftAdapter::adapt).toArray(Object[]::new)));
     }
 
 }

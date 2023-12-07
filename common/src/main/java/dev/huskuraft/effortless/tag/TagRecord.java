@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.tag;
 
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.text.Text;
@@ -19,6 +20,10 @@ public abstract class TagRecord extends TagElement {
     public abstract String getString(String key);
 
     public abstract Text getText(String key);
+
+    public Resource getResource(String key) {
+        return Resource.decompose(getString(key));
+    };
 
     public abstract boolean getBoolean(String key);
 
@@ -48,7 +53,17 @@ public abstract class TagRecord extends TagElement {
 
     public abstract double[] getDoubleArray(String key);
 
-    public abstract ItemStack getItemStack(String key);
+    public final Item getItem(String key) {
+        return Item.fromId(getResource(key));
+    }
+
+    public final ItemStack getItemStack(String key) {
+        return getElement(key, () -> (tag1) -> ItemStack.of(
+                tag1.getAsRecord().getItem("Item"),
+                tag1.getAsRecord().getInt("Count"),
+                tag1.getAsRecord().getElement("Tag").getAsRecord()
+        ));
+    };
 
     public abstract TagElement getElement(String key);
 
@@ -66,6 +81,10 @@ public abstract class TagRecord extends TagElement {
     public abstract void putString(String key, String value);
 
     public abstract void putText(String key, Text value);
+
+    public void putResource(String key, Resource value) {
+        putString(key, value.toString());
+    };
 
     public abstract void putBoolean(String key, boolean value);
 
@@ -95,7 +114,17 @@ public abstract class TagRecord extends TagElement {
 
     public abstract void putDoubleArray(String key, double[] value);
 
-    public abstract void putItemStack(String key, ItemStack value);
+    public final void putItem(String key, Item value) {
+        putResource(key, value.getId());
+    }
+
+    public final void putItemStack(String key, ItemStack value) {
+        putElement(key, value, () -> (tag1, itemStack) -> {
+            tag1.getAsRecord().putItem("Item", itemStack.getItem());
+            tag1.getAsRecord().putInt("Count", itemStack.getStackSize());
+            tag1.getAsRecord().putElement("Tag", itemStack.getTag());
+        });
+    };
 
     public abstract void putElement(String key, TagElement value);
 
