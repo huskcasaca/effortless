@@ -36,16 +36,19 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
     public void onCreate() {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
+        this.entries = addWidget(new PatternList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 60));
+        this.entries.reset(lastSettings.patterns());
+
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
             if (entries.hasSelected()) {
                 entries.moveUpSelected();
             }
-        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
         this.downButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.down"), button -> {
             if (entries.hasSelected()) {
                 entries.moveDownSelected();
             }
-        }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.edit"), button -> {
@@ -60,19 +63,19 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
                         entries.indexOfSelected()
                 ).attach();
             }
-        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
             }
-        }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem());
             }
-        }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
         this.newButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.new"), button -> {
             new EffortlessPatternEditScreen(
@@ -84,21 +87,19 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
                     Pattern.DEFAULT,
                     entries.indexOfSelected() == -1 ? entries.children().size() : entries.indexOfSelected() + 1
             ).attach();
-        }).bounds(getWidth() / 2 + 82, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.reset"), button -> {
             entries.reset(getEntrance().getContentCreator().getDefaultPatterns());
-        }).bounds(getWidth() / 2 + 4, getHeight() - 52, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.5f).build());
 
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.done"), button -> {
             applySettings.accept(lastSettings);
             detach();
-        }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.cancel"), button -> {
             detach();
-        }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
-        this.entries = addWidget(new PatternList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 60));
-        this.entries.reset(lastSettings.patterns());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
     }
 
     @Override

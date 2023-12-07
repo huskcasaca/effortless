@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 
 public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
 
@@ -76,11 +75,11 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
                 }
             }
 
-        }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         // FIXME: 21/10/23
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("gui.cancel"), button -> {
             detach();
-        }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
         this.searchEditBox.setValue("");
 
@@ -88,9 +87,10 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
             tabButtons.add(
                     addWidget(Button.builder(getEntrance(), type.getName(), button -> {
                         setSelectedType(type);
-                    }).bounds(getWidth() / 2 - TAB_WIDTH / 2 + TAB_WIDTH / Transformers.values().length * type.ordinal() + GAP_WIDTH / 2, 48 + 4, TAB_WIDTH / Transformers.values().length - GAP_WIDTH, 20).build())
+                    }).setBoundsGrid(getWidth(), 78, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
             );
         }
+
         this.entries = addWidget(new TransformerList(getEntrance(), 0, 78, getWidth(), getHeight() - 78 - 36, this, false, TransformerList.EntryType.TOOLTIP));
         this.searchEditBox.setMaxLength(MAX_SEARCH_NAME_LENGTH);
         this.searchEditBox.setHint(Text.translate("effortless.transformer.template_select.search_hint"));
