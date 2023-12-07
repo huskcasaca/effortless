@@ -78,11 +78,11 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.order", Text.translate(lastSettings.getOrder().getNameKey())), button -> {
             lastOrder = Randomizer.Order.values()[(lastOrder.ordinal() + 1) % Randomizer.Order.values().length];
             orderButton.setMessage(Text.translate("effortless.randomizer.edit.order", Text.translate(lastOrder.getNameKey())));
-        }).bounds(getWidth() / 2 - 154, 48 + 6, 150, 20).build());
+        }).setBoundsGrid(getWidth(), 82, 0f, 0f, 0.5f).build());
         this.supplierButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.target", Text.translate(lastTarget.getNameKey())), button -> {
             lastTarget = Randomizer.Target.values()[(lastTarget.ordinal() + 1) % Randomizer.Target.values().length];
             supplierButton.setMessage(Text.translate("effortless.randomizer.edit.target", Text.translate(lastTarget.getNameKey())));
-        }).bounds(getWidth() / 2 + 4, 48 + 6, 150, 20).build());
+        }).setBoundsGrid(getWidth(), 82, 0f, 0.5f, 0.5f).build());
 
         this.entries = addWidget(new ItemChanceList(getEntrance(), 0, 82, getWidth(), getHeight() - 82 - 60));
         this.entries.reset(lastSettings.getChances());
@@ -91,16 +91,16 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
             if (entries.hasSelected()) {
                 entries.moveUpSelected();
             }
-        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
         this.downButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.down"), button -> {
             if (entries.hasSelected()) {
                 entries.moveDownSelected();
             }
-        }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.delete"), button -> {
             entries.deleteSelected();
-        }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.add"), button -> {
             new EffortlessItemPickerScreen(
                     getEntrance(),
@@ -109,15 +109,15 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
                         onReload();
                     }
             ).attach();
-        }).bounds(getWidth() / 2 + 82, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.save"), button -> {
             applySettings.accept(lastSettings);
             detach();
-        }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.cancel"), button -> {
             detach();
-        }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
     }
 
     @Override

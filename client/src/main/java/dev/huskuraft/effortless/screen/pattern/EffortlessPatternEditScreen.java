@@ -72,12 +72,12 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
             if (entries.hasSelected()) {
                 entries.moveUpSelected();
             }
-        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
         this.downButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.down"), button -> {
             if (entries.hasSelected()) {
                 entries.moveDownSelected();
             }
-        }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.edit"), button -> {
             if (entries.hasSelected()) {
@@ -106,19 +106,19 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
                 }
 
             }
-        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
             }
-        }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem());
             }
-        }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.add"), button -> {
             new EffortlessTransformerTemplateSelectScreen(
@@ -129,15 +129,15 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
                     },
                     getEntrance().getContentCreator().getDefaultTransformers()
             ).attach();
-        }).bounds(getWidth() / 2 + 82, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.save"), button -> {
             applySettings.accept(lastSettings);
             detach();
-        }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.cancel"), button -> {
             detach();
-        }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
         this.entries = addWidget(new TransformerList(getEntrance(), 0, 54, getWidth(), getHeight() - 54 - 60, this, true, TransformerList.EntryType.TOOLTIP));
         this.entries.reset(lastSettings.transformers());

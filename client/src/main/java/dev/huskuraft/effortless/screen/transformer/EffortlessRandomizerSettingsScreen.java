@@ -45,19 +45,19 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
                         entries.getSelected().getItem()
                 ).attach();
             }
-        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
             }
-        }).bounds(getWidth() / 2 - 76, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem());
             }
-        }).bounds(getWidth() / 2 + 4, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
         this.newButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.new"), button -> {
             new EffortlessRandomizerEditScreen(
@@ -68,19 +68,19 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
                     },
                     ItemRandomizer.EMPTY
             ).attach();
-        }).bounds(getWidth() / 2 + 82, getHeight() - 52, 72, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.reset"), button -> {
             entries.reset(getEntrance().getContentCreator().getDefaultRandomizers());
-        }).bounds(getWidth() / 2 - 154, getHeight() - 52, 308, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 1f).build());
 
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.done"), button -> {
             applySettings.accept(lastSettings);
             detach();
-        }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.cancel"), button -> {
             detach();
-        }).bounds(getWidth() / 2 + 4, getHeight() - 28, 150, 20).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
         this.entries = addWidget(new ItemRandomizerList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 60));
         this.entries.reset(lastSettings.randomizers());
     }
