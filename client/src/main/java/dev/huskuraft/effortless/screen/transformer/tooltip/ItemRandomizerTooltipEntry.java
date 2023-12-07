@@ -17,7 +17,7 @@ public class ItemRandomizerTooltipEntry extends TransformerTooltipEntry<ItemRand
 
     @Override
     protected List<SlotData> getInfo() {
-        return getItem().getChances().stream().map(chance -> new SlotData.ItemSymbol(chance.content(), Text.text(String.valueOf(chance.chance())))).collect(Collectors.toList());
+        return getItem().getChances().stream().map(chance -> new SlotData.ItemStackSymbol(chance.content().getDefaultStack(), Text.text(String.valueOf(chance.chance())))).collect(Collectors.toList());
     }
 
 }

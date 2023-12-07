@@ -26,8 +26,8 @@ public class SlotContainer extends AbstractContainerWidget {
             if (entry instanceof SlotData.TextSymbol textEntry) {
                 var slot = this.addWidget(new TextSlot(getEntrance(), getX() + width, getY(), Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, textEntry.text(), textEntry.symbol()));
                 width += slot.getFullWidth() + 2;
-            } else if (entry instanceof SlotData.ItemSymbol itemEntry) {
-                var slot = this.addWidget(new ItemSlot(getEntrance(), getX() + width, getY(), Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, itemEntry.item(), itemEntry.symbol()));
+            } else if (entry instanceof SlotData.ItemStackSymbol itemEntry) {
+                var slot = this.addWidget(new ItemSlot(getEntrance(), getX() + width, getY(), Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, itemEntry.itemStack(), itemEntry.symbol()));
                 width += slot.getFullWidth() + 2;
             }
         }

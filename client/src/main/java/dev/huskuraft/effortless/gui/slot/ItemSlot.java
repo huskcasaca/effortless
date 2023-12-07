@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.gui.slot;
 
 import dev.huskuraft.effortless.core.Entrance;
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.text.Text;
@@ -8,6 +9,11 @@ import dev.huskuraft.effortless.text.Text;
 public class ItemSlot extends Slot {
 
     private ItemStack itemStack;
+
+    public ItemSlot(Entrance entrance, int x, int y, int width, int height, Item item, Text message) {
+        super(entrance, x, y, width, height, message);
+        this.itemStack = item.getDefaultStack();
+    }
 
     public ItemSlot(Entrance entrance, int x, int y, int width, int height, ItemStack itemStack, Text message) {
         super(entrance, x, y, width, height, message);

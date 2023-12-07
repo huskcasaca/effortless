@@ -136,7 +136,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
                     buffer.readEnum(Randomizer.Target.class),
                     buffer.readEnum(Randomizer.Category.class),
                     buffer.readCollection(buffer1 -> {
-                        return Chance.itemStack(buffer1.readItemStack(), buffer1.readByte());
+                        return Chance.of(buffer1.readItem(), buffer1.readByte());
                     })
             );
         }
@@ -148,7 +148,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
             buffer.writeEnum(randomizer.getTarget());
             buffer.writeEnum(randomizer.getCategory());
             buffer.writeCollection(randomizer.getChances(), (buf, chance) -> {
-                buf.writeItemStack(chance.content());
+                buf.writeItem(chance.content());
                 buf.writeByte(chance.chance());
             });
         }

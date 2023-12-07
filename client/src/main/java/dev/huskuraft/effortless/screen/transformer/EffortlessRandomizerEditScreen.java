@@ -4,6 +4,7 @@ import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 import dev.huskuraft.effortless.core.Entrance;
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.gui.AbstractScreen;
@@ -11,8 +12,6 @@ import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.gui.icon.RadialTextIcon;
-import dev.huskuraft.effortless.gui.icon.TextIcon;
 import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.input.NumberField;
 import dev.huskuraft.effortless.gui.slot.ItemSlot;
@@ -38,7 +37,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
     private final ItemRandomizer defaultSettings;
     private ItemRandomizer lastSettings;
     private TextWidget titleTextWidget;
-    private ItemStackChanceList entries;
+    private ItemChanceList entries;
     private EditBox nameEditBox;
     private Button orderButton;
     private Button supplierButton;
@@ -85,7 +84,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
             supplierButton.setMessage(Text.translate("effortless.randomizer.edit.target", Text.translate(lastTarget.getNameKey())));
         }).bounds(getWidth() / 2 + 4, 48 + 6, 150, 20).build());
 
-        this.entries = addWidget(new ItemStackChanceList(getEntrance(), 0, 82, getWidth(), getHeight() - 82 - 60));
+        this.entries = addWidget(new ItemChanceList(getEntrance(), 0, 82, getWidth(), getHeight() - 82 - 60));
         this.entries.reset(lastSettings.getChances());
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
@@ -105,8 +104,8 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.add"), button -> {
             new EffortlessItemPickerScreen(
                     getEntrance(),
-                    itemStack -> {
-                        entries.insertSelected(Chance.itemStack(itemStack, (byte) 1));
+                    item -> {
+                        entries.insertSelected(Chance.of(item, (byte) 1));
                         onReload();
                     }
             ).attach();
@@ -138,14 +137,14 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
                 entries.items());
     }
 
-    public static final class ItemStackChanceList extends EditableEntryList<Chance<ItemStack>> {
+    public static final class ItemChanceList extends EditableEntryList<Chance<Item>> {
 
-        public ItemStackChanceList(Entrance entrance, int x, int y, int width, int height) {
+        public ItemChanceList(Entrance entrance, int x, int y, int width, int height) {
             super(entrance, x, y, width, height);
         }
 
-        public static List<Text> getRandomizerEntryTooltip(Player player, Chance<ItemStack> chance, int totalCount) {
-            var components = chance.content().getDescription(player, ItemStack.TooltipType.ADVANCED_CREATIVE);
+        public static List<Text> getRandomizerEntryTooltip(Player player, Chance<Item> chance, int totalCount) {
+            var components = chance.content().getDefaultStack().getDescription(player, ItemStack.TooltipType.ADVANCED_CREATIVE);
             var percentage = String.format("%.2f%%", 100.0 * chance.chance() / totalCount);
             components.add(
                     Text.empty()
@@ -162,7 +161,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         }
 
         @Override
-        protected EditableEntry<Chance<ItemStack>> createHolder(Chance<ItemStack> item) {
+        protected EditableEntry<Chance<Item>> createHolder(Chance<Item> item) {
             return new ItemChanceEntry(getEntrance(), item);
         }
 
@@ -171,14 +170,14 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
             return items().stream().mapToInt(Chance::chance).sum();
         }
 
-        public class ItemChanceEntry extends EditableEntry<Chance<ItemStack>> {
+        public class ItemChanceEntry extends EditableEntry<Chance<Item>> {
 
             private ItemSlot itemSlot;
             private TextWidget nameTextWidget;
             private TextWidget chanceTextWidget;
             private NumberField numberField;
 
-            public ItemChanceEntry(Entrance entrance, Chance<ItemStack> chance) {
+            public ItemChanceEntry(Entrance entrance, Chance<Item> chance) {
                 super(entrance, chance);
             }
 
@@ -211,7 +210,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
                         count = Byte.parseByte(string);
                     } catch (NumberFormatException ignored) {
                     }
-                    this.setItem(Chance.itemStack(getItem().content(), count));
+                    this.setItem(Chance.of(getItem().content(), count));
                 });
                 this.itemSlot = addWidget(new ItemSlot(getEntrance(), getX() + 1, getY() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getItem().content(), Text.text(String.valueOf(getItem().chance()))));
                 this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getDisplayName(getItem())));
@@ -227,7 +226,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
 
             @Override
             public void onBindItem() {
-                itemSlot.setItemStack(getItem().content());
+                itemSlot.setItemStack(getItem().content().getDefaultStack());
                 itemSlot.setDescription(Text.text(String.valueOf(getItem().chance())));
                 nameTextWidget.setMessage(getDisplayName(getItem()));
             }
@@ -238,8 +237,8 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
                 return Text.translate("narrator.select", getDisplayName(getItem()));
             }
 
-            private Text getDisplayName(Chance<ItemStack> chance) {
-                return chance.content().getHoverName();
+            private Text getDisplayName(Chance<Item> chance) {
+                return chance.content().getDefaultStack().getHoverName();
             }
 
             @Override

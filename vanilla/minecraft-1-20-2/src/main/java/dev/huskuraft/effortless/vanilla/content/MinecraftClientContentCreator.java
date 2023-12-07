@@ -8,28 +8,19 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
-import dev.huskuraft.effortless.content.ContentCreator;
 import dev.huskuraft.effortless.content.SearchBy;
 import dev.huskuraft.effortless.content.SearchTree;
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.math.Vector3d;
-import dev.huskuraft.effortless.networking.Buffer;
-import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
-import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;
 import net.minecraft.client.searchtree.SearchRegistry;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -37,8 +28,8 @@ import java.util.stream.Stream;
 
 public class MinecraftClientContentCreator extends MinecraftServerContentCreator {
 
-    private static Chance<ItemStack> chance(Item item, byte count) {
-        return Chance.itemStack(MinecraftClientAdapter.adapt(item), count);
+    private static Chance<Item> chance(net.minecraft.world.item.Item item, byte count) {
+        return Chance.of(MinecraftClientAdapter.adapt(item), count);
     }
 
     // FIXME: 24/10/23
