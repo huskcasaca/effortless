@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.core;
 
+import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.tag.TagSerializable;
 import dev.huskuraft.effortless.text.Text;
@@ -7,6 +8,18 @@ import dev.huskuraft.effortless.text.Text;
 import java.util.List;
 
 public abstract class ItemStack implements TagSerializable {
+
+    public static ItemStack empty() {
+        return Effortless.getInstance().getContentCreator().emptyItemStack();
+    }
+
+    public static ItemStack of(Item item, int count) {
+        return Effortless.getInstance().getContentCreator().emptyItemStack(item, count);
+    }
+
+    public static ItemStack of(Item item, int count, TagRecord tag) {
+        return Effortless.getInstance().getContentCreator().emptyItemStack(item, count, tag);
+    }
 
     public abstract List<Text> getDescription(Player player, TooltipType flag);
 

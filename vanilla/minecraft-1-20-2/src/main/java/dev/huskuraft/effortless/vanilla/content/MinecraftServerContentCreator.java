@@ -6,18 +6,22 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.content.ContentCreator;
 import dev.huskuraft.effortless.content.SearchBy;
 import dev.huskuraft.effortless.content.SearchTree;
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import io.netty.buffer.Unpooled;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -36,6 +40,19 @@ public class MinecraftServerContentCreator extends ContentCreator {
     @Override
     public ItemStack emptyItemStack() {
         return MinecraftAdapter.adapt(net.minecraft.world.item.ItemStack.EMPTY);
+    }
+
+    @Override
+    public ItemStack emptyItemStack(Item item, int count) {
+        var itemStack = new net.minecraft.world.item.ItemStack(MinecraftAdapter.adapt(item), count);
+        return MinecraftAdapter.adapt(itemStack);
+    }
+
+    @Override
+    public ItemStack emptyItemStack(Item item, int count, TagRecord tag) {
+        var itemStack = new net.minecraft.world.item.ItemStack(MinecraftAdapter.adapt(item), count);
+        itemStack.setTag(MinecraftAdapter.adapt(tag));
+        return MinecraftAdapter.adapt(itemStack);
     }
 
     @Override
@@ -88,4 +105,8 @@ public class MinecraftServerContentCreator extends ContentCreator {
         return MinecraftAdapter.adapt(Component.translatable(text, Arrays.stream(args).map(MinecraftAdapter::adapt).toArray(Object[]::new)));
     }
 
+    @Override
+    public Item item(Resource resource) {
+        return MinecraftAdapter.adapt(BuiltInRegistries.ITEM.get(MinecraftAdapter.adapt(resource)));
+    }
 }

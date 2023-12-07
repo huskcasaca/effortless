@@ -206,6 +206,9 @@ public class MinecraftAdapter {
         if (tag == null) {
             return null;
         }
+        if (tag instanceof MinecraftTagRecord tagRecord) {
+            return tagRecord.getRef();
+        }
         return ((MinecraftTagElement) tag).getRef();
     }
 

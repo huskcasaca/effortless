@@ -2,6 +2,8 @@ package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.core.Resource;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 
 class MinecraftItem extends Item {
@@ -24,6 +26,11 @@ class MinecraftItem extends Item {
     @Override
     public boolean isBlockItem() {
         return getRef() instanceof BlockItem;
+    }
+
+    @Override
+    public Resource getId() {
+        return MinecraftAdapter.adapt(BuiltInRegistries.ITEM.getKey(getRef()));
     }
 
     @Override
