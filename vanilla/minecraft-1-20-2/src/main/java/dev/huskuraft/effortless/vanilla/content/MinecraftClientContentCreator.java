@@ -339,7 +339,7 @@ public class MinecraftClientContentCreator extends MinecraftServerContentCreator
     }
 
     @Override
-    public SearchTree<ItemStack> getItemsSearchTree(SearchBy searchBy) {
+    public SearchTree<ItemStack> itemStackSearchTree(SearchBy searchBy) {
         var player = Minecraft.getInstance().player;
         CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), true, player.clientLevel.registryAccess());
 
@@ -352,7 +352,7 @@ public class MinecraftClientContentCreator extends MinecraftServerContentCreator
     }
 
     @Override
-    public <T> SearchTree<T> createSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
+    public <T> SearchTree<T> searchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
         return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> MinecraftClientAdapter.adapt(text).getString())).search(query);
     }
 

@@ -61,7 +61,7 @@ final class ActualClientConfigManager extends ClientConfigManager {
             var configFile = new File(dataDir, CONFIG_NAME);
 
 
-            var tag = getEntrance().getContentCreator().emptyTagRecord();
+            var tag = getEntrance().getContentCreator().tagRecord();
             config.validate();
             new BaseConfigurationSerializer().write(tag, config);
             getEntrance().getConfigWriter().write(new FileOutputStream(configFile), tag);

@@ -18,25 +18,17 @@ public abstract class ContentCreator {
 
     public abstract Buffer buffer();
 
-    public abstract TagRecord emptyTagRecord();
+    public abstract TagRecord tagRecord();
 
-    public abstract ItemStack emptyItemStack();
+    public abstract Item item(Resource resource);
 
-    public abstract ItemStack emptyItemStack(Item item, int count);
+    public abstract ItemStack itemStack();
 
-    public abstract ItemStack emptyItemStack(Item item, int count, TagRecord tag);
+    public abstract ItemStack itemStack(Item item, int count);
 
-    public abstract List<ItemRandomizer> getDefaultRandomizers();
+    public abstract ItemStack itemStack(Item item, int count, TagRecord tag);
 
-    public abstract List<Transformer> getDefaultTransformers();
-
-    public abstract List<Pattern> getDefaultPatterns();
-
-    public abstract SearchTree<ItemStack> getItemsSearchTree(SearchBy searchBy);
-
-    public abstract <T> SearchTree<T> createSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor);
-
-    public abstract Text empty();
+    public abstract Text text();
 
     public abstract Text text(String text);
 
@@ -46,6 +38,14 @@ public abstract class ContentCreator {
 
     public abstract Text translate(String text, Text... args);
 
-    public abstract Item item(Resource resource);
+    public abstract List<ItemRandomizer> getDefaultRandomizers();
+
+    public abstract List<Transformer> getDefaultTransformers();
+
+    public abstract List<Pattern> getDefaultPatterns();
+
+    public abstract SearchTree<ItemStack> itemStackSearchTree(SearchBy searchBy);
+
+    public abstract <T> SearchTree<T> searchTree(List<T> list, Function<T, Stream<Text>> keyExtractor);
 
 }
