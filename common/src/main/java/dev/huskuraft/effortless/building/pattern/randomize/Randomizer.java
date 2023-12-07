@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.pattern.randomize;
 
 import dev.huskuraft.effortless.building.pattern.Transformer;
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.text.Text;
 
@@ -9,7 +10,7 @@ import java.util.Collection;
 public abstract class Randomizer<T> extends Transformer {
 
     public static Category extract(Object object) {
-        if (object instanceof ItemStack) {
+        if (object instanceof Item) {
             return Category.ITEM;
         }
         throw new IllegalArgumentException("Invalid object: " + object);

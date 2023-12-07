@@ -42,7 +42,7 @@ public final class BuildSession implements Session {
             case BREAK_BLOCK ->
                     context.collect().map(interaction -> createBlockBreakOperationFromHit(world, player, context, storage, interaction));
         });
-        return ItemRandomizer.create(null, player.getItemStack(InteractionHand.MAIN)).transform(operations);
+        return ItemRandomizer.create(null, player.getItemStack(InteractionHand.MAIN).getItem()).transform(operations);
     }
 
     private static BatchOperation create(World world, Player player, Context context) {

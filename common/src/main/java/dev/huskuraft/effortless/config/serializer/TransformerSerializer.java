@@ -139,7 +139,7 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
                     tag.getAsRecord().getEnum(TAG_SUPPLIER, Randomizer.Target.class),
                     tag.getAsRecord().getEnum(TAG_CATEGORY, Randomizer.Category.class),
                     tag.getAsRecord().getList(TAG_CHANCES, () -> tag1 -> {
-                        return Chance.itemStack(tag1.getAsRecord().getItemStack(TAG_CONTENT), tag1.getAsRecord().getByte(TAG_CHANCE));
+                        return Chance.of(tag1.getAsRecord().getItem(TAG_CONTENT), tag1.getAsRecord().getByte(TAG_CHANCE));
                     })
             );
         }
@@ -151,7 +151,7 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
             tag.getAsRecord().putEnum(TAG_SUPPLIER, randomizer.getTarget());
             tag.getAsRecord().putEnum(TAG_CATEGORY, randomizer.getCategory());
             tag.getAsRecord().putList(TAG_CHANCES, randomizer.getChances(), () -> (tag1, chance) -> {
-                tag1.getAsRecord().putItemStack(TAG_CONTENT, chance.content());
+                tag1.getAsRecord().putItem(TAG_CONTENT, chance.content());
                 tag1.getAsRecord().putByte(TAG_CHANCE, chance.chance());
             });
         }

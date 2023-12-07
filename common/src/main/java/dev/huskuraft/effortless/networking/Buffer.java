@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.networking;
 
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
@@ -55,6 +56,8 @@ public abstract class Buffer {
 //    public abstract float[] readFloatArray();
 //
 //    public abstract double[] readDoubleArray();
+
+    public abstract Item readItem();
 
     public abstract ItemStack readItemStack();
 
@@ -118,6 +121,8 @@ public abstract class Buffer {
 //    public abstract void writeFloatArray(float[] value);
 //
 //    public abstract void writeDoubleArray(double[] value);
+
+    public abstract void writeItem(Item value);
 
     // TODO: 7/12/23 extract
     public abstract void writeItemStack(ItemStack value);

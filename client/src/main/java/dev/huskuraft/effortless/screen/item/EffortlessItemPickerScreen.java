@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.screen.item;
 
 import dev.huskuraft.effortless.content.SearchBy;
 import dev.huskuraft.effortless.core.Entrance;
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.gui.AbstractScreen;
 import dev.huskuraft.effortless.gui.Dimens;
@@ -19,14 +20,14 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
     private static final int MAX_SEARCH_NAME_LENGTH = 255;
     private static final int ROW_WIDTH = Dimens.RegularEntry.ROW_WIDTH;
 
-    private final Consumer<ItemStack> applySettings;
+    private final Consumer<Item> applySettings;
     private TextWidget titleTextWidget;
     private ItemStackList entries;
     private EditBox searchEditBox;
     private Button addButton;
     private Button cancelButton;
 
-    public EffortlessItemPickerScreen(Entrance entrance, Consumer<ItemStack> consumer) {
+    public EffortlessItemPickerScreen(Entrance entrance, Consumer<Item> consumer) {
         super(entrance, Text.translate("effortless.item.picker.title"));
         this.applySettings = consumer;
     }
@@ -35,10 +36,10 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
     public void onCreate() {
 //        if (this.minecraft != null) {
         var player = getEntrance().getClient().getPlayer();
-        var itemStacks = new ArrayList<ItemStack>();
+        var itemStacks = new ArrayList<Item>();
         if (player != null) {
 //            CreativeModeTabs.tryRebuildTabContents(((LocalPlayer) player).connection.enabledFeatures(), FabricAdapter.adapt(player).canUseGameMasterBlocks(), FabricAdapter.adapt(player).level().registryAccess());
-            itemStacks.add(getEntrance().getContentCreator().itemStack());
+            itemStacks.add(getEntrance().getContentCreator().itemStack().getItem());
 //            itemStack.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
 //            itemStack.add(new ItemStack(Items.AIR));
 //            itemStack.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
@@ -63,7 +64,7 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
         });
 
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.item.picker.add"), button -> {
-            applySettings.accept(entries.getSelected().getItem());
+            applySettings.accept(entries.getSelected().getItem().getItem());
             detach();
         }).bounds(getWidth() / 2 - 154, getHeight() - 28, 150, 20).build());
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.item.picker.cancel"), button -> {

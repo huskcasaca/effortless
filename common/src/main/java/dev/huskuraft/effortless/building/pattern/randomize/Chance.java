@@ -1,16 +1,11 @@
 package dev.huskuraft.effortless.building.pattern.randomize;
 
 import dev.huskuraft.effortless.core.Item;
-import dev.huskuraft.effortless.core.ItemStack;
 
 public interface Chance<T> {
 
-    static Chance<ItemStack> itemStack(Item item, byte chance) {
-        return itemStack(item.getDefaultStack(), chance);
-    }
-
-    static Chance<ItemStack> itemStack(ItemStack itemStack, byte chance) {
-        return of(itemStack, chance);
+    static Chance<Item> item(Item item, byte chance) {
+        return of(item, chance);
     }
 
     static <T> Chance<T> of(T content) {

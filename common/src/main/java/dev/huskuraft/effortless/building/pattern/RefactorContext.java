@@ -1,24 +1,21 @@
 package dev.huskuraft.effortless.building.pattern;
 
-import dev.huskuraft.effortless.core.BlockInteraction;
-import dev.huskuraft.effortless.core.BlockData;
-import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.core.*;
 
 public class RefactorContext {
 
-    private final ItemStack itemStack;
+    private final Item item;
 
-    public RefactorContext(ItemStack itemStack) {
-        this.itemStack = itemStack;
+    public RefactorContext(Item item) {
+        this.item = item;
     }
 
-    public static RefactorContext of(ItemStack itemStack) {
-        return new RefactorContext(itemStack);
+    public static RefactorContext of(Item item) {
+        return new RefactorContext(item);
     }
 
     public BlockData refactor(Player player, BlockInteraction blockInteraction) {
-        return itemStack.getBlockData(player, blockInteraction);
+        return item.getDefaultStack().getBlockData(player, blockInteraction);
     }
 
 }

@@ -1,9 +1,11 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
+import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.UUID;
@@ -86,6 +88,11 @@ class MinecraftBuffer extends Buffer {
     }
 
     @Override
+    public Item readItem() {
+        return MinecraftAdapter.adapt(getRef().readById(BuiltInRegistries.ITEM));
+    }
+
+    @Override
     public ItemStack readItemStack() {
         return MinecraftAdapter.adapt(getRef().readItem());
     }
@@ -158,6 +165,11 @@ class MinecraftBuffer extends Buffer {
     @Override
     public void writeDouble(double value) {
         getRef().writeDouble(value);
+    }
+
+    @Override
+    public void writeItem(Item value) {
+        getRef().writeId(BuiltInRegistries.ITEM, MinecraftAdapter.adapt(value));
     }
 
     @Override
