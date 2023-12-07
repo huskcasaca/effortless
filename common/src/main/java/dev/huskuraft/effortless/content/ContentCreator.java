@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 public abstract class ContentCreator {
 
-    public abstract Buffer allocateButter();
+    public abstract Buffer buffer();
 
     public abstract TagRecord emptyTagRecord();
 
