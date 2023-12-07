@@ -308,6 +308,7 @@ public class MinecraftClientContentCreator extends ContentCreator {
                         chance(Items.PINK_BANNER, (byte) 1)));
 
         return Stream.of(
+                ItemRandomizer.EMPTY,
                 variantCobblestone,
                 variantStoneBrick,
 
