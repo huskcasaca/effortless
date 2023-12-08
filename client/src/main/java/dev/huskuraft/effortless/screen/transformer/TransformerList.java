@@ -9,8 +9,13 @@ import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.Screen;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.screen.transformer.edit.*;
-import dev.huskuraft.effortless.screen.transformer.tooltip.*;
+import dev.huskuraft.effortless.screen.transformer.edit.ArrayTransformerEditEntry;
+import dev.huskuraft.effortless.screen.transformer.edit.MirrorTransformerEditEntry;
+import dev.huskuraft.effortless.screen.transformer.edit.RadialTransformerEditEntry;
+import dev.huskuraft.effortless.screen.transformer.tooltip.ArrayTransformerTooltipEntry;
+import dev.huskuraft.effortless.screen.transformer.tooltip.ItemRandomizerTooltipEntry;
+import dev.huskuraft.effortless.screen.transformer.tooltip.MirrorTransformerTooltipEntry;
+import dev.huskuraft.effortless.screen.transformer.tooltip.RadialTransformerTooltipEntry;
 
 public final class TransformerList extends EditableEntryList<Transformer> {
 

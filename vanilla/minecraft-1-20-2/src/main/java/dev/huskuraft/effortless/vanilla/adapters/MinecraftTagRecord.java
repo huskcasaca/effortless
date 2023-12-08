@@ -1,18 +1,14 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.core.ItemStack;
-import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.tag.TagElement;
 import dev.huskuraft.effortless.tag.TagReader;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.tag.TagWriter;
 import dev.huskuraft.effortless.text.Text;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.Collection;

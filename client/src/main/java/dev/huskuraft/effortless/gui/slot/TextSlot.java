@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.text.Text;
 
 public class TextSlot extends Slot {
 
-    private Text symbol;
+    private final Text symbol;
 
     public TextSlot(Entrance entrance, int x, int y, int width, int height, Text message) {
         this(entrance, x, y, width, height, message, null);
@@ -44,7 +44,7 @@ public class TextSlot extends Slot {
             renderer.pushPose();
             renderer.scale(18f / getTypeface().getLineHeight(), 18f / getTypeface().getLineHeight(), 0);
             renderer.translate(0, -getTypeface().measureHeight(getSymbol()) / 2f, 0);
-            renderer.drawTextFromCenter(getTypeface(), getSymbol(), 0,  0, 0xFF6C6C6C, false);
+            renderer.drawTextFromCenter(getTypeface(), getSymbol(), 0, 0, 0xFF6C6C6C, false);
             renderer.popPose();
             renderer.popPose();
             renderer.disableScissor();
@@ -56,7 +56,7 @@ public class TextSlot extends Slot {
         renderer.translate(18f - 1, 18f, 0);
         renderer.pushPose();
         renderer.translate(0, -getTypeface().measureHeight(getMessage()), 0);
-        renderer.drawTextFromEnd(getTypeface(), getMessage(), 0,  0, 0xFFFFFFFF, true);
+        renderer.drawTextFromEnd(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, true);
         renderer.popPose();
         renderer.popPose();
         renderer.popPose();

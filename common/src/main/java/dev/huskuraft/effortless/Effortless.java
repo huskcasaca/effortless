@@ -11,21 +11,17 @@ import dev.huskuraft.effortless.packets.AllPacketListener;
 
 public abstract class Effortless extends Entrance {
 
+    public static final String MOD_ID = "effortless";
+    public static final Resource CHANNEL_ID = Resource.of("default_channel");
+    public static final int COMPATIBILITY_VERSION = 1;
     protected static Effortless instance;
+    private final EventsRegistry registry = new EventsRegistry();
+    private final Channel<AllPacketListener> channel = new ActualServerChannel(this, Effortless.CHANNEL_ID);
+    private final StructureBuilder structureBuilder = new ActualServerStructureBuilder(this);
 
     public static Effortless getInstance() {
         return instance;
     }
-
-    public static final String MOD_ID = "effortless";
-    public static final Resource CHANNEL_ID = Resource.of("default_channel");
-
-    public static final int COMPATIBILITY_VERSION = 1;
-
-    private final EventsRegistry registry = new EventsRegistry();
-
-    private final Channel<AllPacketListener> channel = new ActualServerChannel(this, Effortless.CHANNEL_ID);
-    private final StructureBuilder structureBuilder = new ActualServerStructureBuilder(this);
 
     @Override
     public Channel<AllPacketListener> getChannel() {

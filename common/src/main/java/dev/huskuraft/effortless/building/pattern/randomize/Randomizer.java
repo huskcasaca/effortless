@@ -10,16 +10,16 @@ import java.util.UUID;
 
 public abstract class Randomizer<T> extends Transformer {
 
+    public Randomizer(UUID id, Text name) {
+        super(id, name);
+    }
+
     public static Category extract(Object object) {
         if (object instanceof Item) {
             return Category.ITEM;
         }
         throw new IllegalArgumentException("Invalid object: " + object);
 
-    }
-
-    public Randomizer(UUID id, Text name) {
-        super(id, name);
     }
 
     public abstract Order getOrder();

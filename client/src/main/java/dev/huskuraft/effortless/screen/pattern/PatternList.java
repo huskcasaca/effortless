@@ -2,7 +2,6 @@ package dev.huskuraft.effortless.screen.pattern;
 
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.core.Entrance;
-import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
 

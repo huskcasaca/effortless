@@ -6,8 +6,6 @@ import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.platform.Server;
 import dev.huskuraft.effortless.text.Text;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.GameMasterBlock;
 
 import java.util.UUID;

@@ -42,6 +42,10 @@ public class Button extends AbstractButton {
     }
 
     public static class Builder {
+        private static final int BUTTON_WIDTH = 72;
+        private static final int BUTTON_HEIGHT = 20;
+        private static final int BUTTON_HORIZONTAL_PADDING = 6;
+        private static final int SINGLE_VERTICAL_PADDING = 4;
         private final Text message;
         private final OnPress onPress;
         private final Entrance entrance;
@@ -51,11 +55,6 @@ public class Button extends AbstractButton {
         private int y;
         private int width = 150;
         private int height = 20;
-
-        private static final int BUTTON_WIDTH = 72;
-        private static final int BUTTON_HEIGHT = 20;
-        private static final int BUTTON_HORIZONTAL_PADDING = 6;
-        private static final int SINGLE_VERTICAL_PADDING = 4;
 
         public Builder(Entrance entrance, Text text, OnPress onPress) {
             this.entrance = entrance;

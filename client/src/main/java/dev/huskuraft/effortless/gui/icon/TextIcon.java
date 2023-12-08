@@ -25,7 +25,7 @@ public class TextIcon extends AbstractWidget {
         var factor = Math.min(14f / getTypeface().measureWidth(getMessage()), 1f);
         renderer.scale(factor, factor, 0);
         renderer.translate(0, -getTypeface().measureHeight(getMessage()) / 2f, 0);
-        renderer.drawTextFromCenter(getTypeface(), getMessage(), 0,  0, 0xFFFFFFFF, false);
+        renderer.drawTextFromCenter(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, false);
         renderer.popPose();
         renderer.popPose();
 
