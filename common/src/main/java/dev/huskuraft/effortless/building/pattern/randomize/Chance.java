@@ -6,6 +6,9 @@ import java.util.Objects;
 
 public interface Chance<T> {
 
+   int MIN_ITEM_COUNT = 0;
+   int MAX_ITEM_COUNT = 99;
+
     static Chance<Item> item(Item item, byte chance) {
         return of(item, chance);
     }
