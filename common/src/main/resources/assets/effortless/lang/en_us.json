@@ -203,6 +203,7 @@
   "effortless.randomizer.edit.add": "Add Item",
   "effortless.randomizer.edit.save": "Save",
   "effortless.randomizer.edit.cancel": "Cancel",
+  "effortless.randomizer.edit.total_probability": "Total Probability: %s",
 
   "effortless.item.picker.title": "Search Item",
   "effortless.item.picker.search": "Search",
@@ -243,6 +244,12 @@
   "effortless.transformer.edit.title": "Edit Transformer",
   "effortless.transformer.edit.name_hint": "Transformer Name",
   "effortless.transformer.edit.save": "Save",
-  "effortless.transformer.edit.cancel": "Cancel"
+  "effortless.transformer.edit.cancel": "Cancel",
 
+
+  "effortless.build.summary.structure": "Structure",
+  "effortless.build.summary.state": "State",
+  "effortless.build.summary.tracing": "Tracing",
+  "effortless.build.summary.placed_blocks": "Placed Blocks",
+  "effortless.build.summary.destroyed_blocks": "Destroyed Blocks"
 }

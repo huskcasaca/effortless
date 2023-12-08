@@ -52,11 +52,7 @@ public class MirrorTransformer extends Transformer {
 
     @Override
     public Stream<Text> getSearchableTags() {
-        if (isValid()) {
-            return Stream.of(Text.text("mirror"), Text.text(position.toString()), Text.text(String.valueOf(axis))); // TODO: 28/8/23
-        } else {
-            return Stream.of(Text.text("mirror"));
-        }
+        return Stream.of(getName(), Text.text(position.toString()), Text.text(String.valueOf(axis)));
     }
 
     @Override
