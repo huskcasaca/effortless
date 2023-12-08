@@ -150,7 +150,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
                     Text.empty()
             );
             components.add(
-                    Text.text("Total Probability:").withStyle(TextStyle.GRAY).append(Text.text(" ")).append(Text.text(percentage).withStyle(TextStyle.GOLD).append(Text.text(" (" + chance.chance() + "/" + totalCount + ")").withStyle(TextStyle.DARK_GRAY)))
+                    Text.translate("effortless.randomizer.edit.total_probability", Text.text(percentage).withStyle(TextStyle.GOLD).append(Text.text(" (" + chance.chance() + "/" + totalCount + ")").withStyle(TextStyle.DARK_GRAY))).withStyle(TextStyle.GRAY)
             );
             return components;
         }

@@ -56,11 +56,7 @@ public class ArrayTransformer extends Transformer {
 
     @Override
     public Stream<Text> getSearchableTags() {
-        if (isValid()) {
-            return Stream.of(Text.text("array"), Text.text(offset().toString()), Text.text(String.valueOf(count)));
-        } else {
-            return Stream.of(Text.text("array"));
-        }
+        return Stream.of(getName(), Text.text(offset().toString()), Text.text(String.valueOf(count)));
     }
 
     @Override

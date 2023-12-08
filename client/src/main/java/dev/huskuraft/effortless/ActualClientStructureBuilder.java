@@ -245,6 +245,10 @@ final class ActualClientStructureBuilder extends StructureBuilder {
         return EventResult.interruptTrue();
     }
 
+    private UUID nextUUIDByTag(UUID uuid, String tag) {
+        return new UUID(uuid.getMostSignificantBits() + tag.hashCode(), uuid.getLeastSignificantBits());
+    }
+
     public void showOperationResult(UUID uuid, OperationResult result) {
         getEntrance().getClientManager().getOperationsRenderer().showResult(uuid, result);
         if (result instanceof BatchOperationResult result1) {
@@ -263,13 +267,13 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     }
 
     public void showSummaryOverlay(UUID uuid, OperationResult result, int priority) {
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems("placed" + uuid, Text.text("Placed Blocks").withStyle(TextStyle.WHITE), result.get(ItemType.PLAYER_USED), priority);
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems("destroyed" + uuid, Text.text("Destroyed Blocks").withStyle(TextStyle.RED), result.get(ItemType.WORLD_DROPPED), priority);
+        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE), result.get(ItemType.PLAYER_USED), priority);
+        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED), result.get(ItemType.WORLD_DROPPED), priority);
     }
 
     public void showContextOverlay(UUID uuid, Context context, int priority) {
         var texts = new ArrayList<Text>();
-        texts.add(Text.text("Structure").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(context.buildMode().getNameComponent().withStyle(TextStyle.GOLD)));
+        texts.add(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(context.buildMode().getNameComponent().withStyle(TextStyle.GOLD)));
         var replace = AbstractRadialScreen.option(context.replaceMode());
         texts.add(replace.getCategoryComponent().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(replace.getNameComponent().withStyle(TextStyle.GOLD)));
 
@@ -280,10 +284,10 @@ final class ActualClientStructureBuilder extends StructureBuilder {
             texts.add(button.getCategoryComponent().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(button.getNameComponent().withStyle(TextStyle.GOLD)));
         }
 
-        texts.add(Text.text("State").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getStateComponent(context.state()).withStyle(TextStyle.GOLD)));
-        texts.add(Text.text("Tracing").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getTracingComponent(context.tracingResult()).withStyle(TextStyle.GOLD)));
+        texts.add(Text.translate("effortless.build.summary.state").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getStateComponent(context.state()).withStyle(TextStyle.GOLD)));
+        texts.add(Text.translate("effortless.build.summary.tracing").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getTracingComponent(context.tracingResult()).withStyle(TextStyle.GOLD)));
 
-        getEntrance().getClientManager().getSubtitleManager().showMessages("info" + uuid, texts, priority);
+        getEntrance().getClientManager().getSubtitleManager().showMessages(nextUUIDByTag(uuid, "info"), texts, priority);
     }
 
     public void showLocalPlayerPreview(Player player, Context context) {

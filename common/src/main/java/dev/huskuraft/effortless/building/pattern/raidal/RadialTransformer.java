@@ -59,11 +59,7 @@ public class RadialTransformer extends Transformer {
 
     @Override
     public Stream<Text> getSearchableTags() {
-        if (isValid()) {
-            return Stream.of(Text.text("radial"), Text.text(position.toString()), Text.text(String.valueOf(slice)));
-        } else {
-            return Stream.of(Text.text("radial"));
-        }
+        return Stream.of(getName(), Text.text(position.toString()), Text.text(String.valueOf(slice)));
     }
 
     @Override
