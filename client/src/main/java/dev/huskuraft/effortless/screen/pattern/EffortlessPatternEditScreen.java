@@ -22,10 +22,6 @@ import java.util.function.Consumer;
 
 public class EffortlessPatternEditScreen extends AbstractScreen {
 
-    private static final int MAX_TRANSFORMER_SIZE = 8;
-    private static final int MAX_PATTERN_NAME_LENGTH = 255;
-    private static final int ROW_WIDTH = Dimens.RegularEntry.ROW_WIDTH;
-
     private final Consumer<Pattern> applySettings;
     private final Pattern defaultSettings;
     private final int index;
@@ -57,12 +53,12 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getWidth() / 2 - (ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, index, Text.text(String.valueOf(index + 1))));
+        this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, index, Text.text(String.valueOf(index + 1))));
 
         this.nameEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH) / 2 + 40, 24, ROW_WIDTH - 40, 20, null)
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2 + 40, 24, Dimens.RegularEntry.ROW_WIDTH - 40, 20, null)
         );
-        this.nameEditBox.setMaxLength(MAX_PATTERN_NAME_LENGTH);
+        this.nameEditBox.setMaxLength(255);
         this.nameEditBox.setHint(Text.translate("effortless.pattern.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.name().getString());
 

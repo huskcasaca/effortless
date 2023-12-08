@@ -9,9 +9,6 @@ import java.util.List;
 
 public class SlotContainer extends AbstractContainerWidget {
 
-    private static final int ROW_WIDTH = Dimens.RegularEntry.ROW_WIDTH;
-    private static final int MAX_SLOT_COUNT = Dimens.RegularEntry.MAX_SLOT_COUNT;
-
     private boolean wrapLines = false;
 
     public SlotContainer(Entrance entrance, int x, int y, int width, int height) {

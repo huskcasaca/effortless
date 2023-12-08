@@ -18,11 +18,6 @@ import java.util.function.Consumer;
 
 public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
 
-    private static final int MAX_SEARCH_NAME_LENGTH = 255;
-    private static final int TAB_WIDTH = 312;
-    private static final int GAP_WIDTH = 4;
-    private static final int ROW_WIDTH = Dimens.RegularEntry.ROW_WIDTH;
-
     private final Consumer<Transformer> applySettings;
     private final List<Button> tabButtons = new ArrayList<>();
     private final List<Transformer> transformers;
@@ -45,7 +40,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH - 2) / 2, 24, ROW_WIDTH - 2, 20, Text.translate("effortless.transformer.template_select.search"))
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH - 2) / 2, 24, Dimens.RegularEntry.ROW_WIDTH - 2, 20, Text.translate("effortless.transformer.template_select.search"))
         );
 
         this.useTemplateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.template_select.use_template"), button -> {
@@ -92,7 +87,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
         }
 
         this.entries = addWidget(new TransformerList(getEntrance(), 0, 78, getWidth(), getHeight() - 78 - 36, this, false, TransformerList.EntryType.TOOLTIP));
-        this.searchEditBox.setMaxLength(MAX_SEARCH_NAME_LENGTH);
+        this.searchEditBox.setMaxLength(255);
         this.searchEditBox.setHint(Text.translate("effortless.transformer.template_select.search_hint"));
         this.searchEditBox.setResponder(text -> {
             setSearchResult(text);
