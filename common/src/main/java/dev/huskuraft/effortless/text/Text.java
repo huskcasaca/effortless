@@ -36,4 +36,8 @@ public abstract class Text {
         return getString().isBlank();
     }
 
+    @Override
+    public String toString() {
+        return getString();
+    }
 }

@@ -26,7 +26,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
         super(entrance, text);
     }
 
-    protected static <T> Slot<T> slot(Text name, Resource icon, Color tintColor, T slot) {
+    protected static <T> Slot<T> slot(Text name, Resource icon, Color tintColor, T content) {
         return new Slot<>() {
             @Override
             public Text getNameComponent() {
@@ -50,13 +50,13 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
             @Override
             public T getContent() {
-                return slot;
+                return content;
             }
 
         };
     }
 
-    protected static <T> Button<T> button(Text category, Text name, Resource icon, T option) {
+    protected static <T> Button<T> button(Text category, Text name, Resource icon, T content) {
         return new Button<>() {
             @Override
             public Text getNameComponent() {
@@ -80,7 +80,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
             @Override
             public T getContent() {
-                return option;
+                return content;
             }
 
         };

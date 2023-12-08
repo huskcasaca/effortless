@@ -10,6 +10,8 @@ import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
 
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -29,6 +31,11 @@ public class RadialTransformer extends Transformer {
     private final int slice;
 
     public RadialTransformer(Vector3d position, int slice) {
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, slice);
+    }
+
+    public RadialTransformer(UUID id, Text name, Vector3d position, int slice) {
+        super(id, name);
         this.position = position;
         this.slice = slice;
 //        this.axis = axis;
@@ -43,11 +50,6 @@ public class RadialTransformer extends Transformer {
             var angle = 2 * MathUtils.PI / slice * i;
             return operation.revolve(RevolveContext.absolute(position, angle));
         }));
-    }
-
-    @Override
-    public Text getName() {
-        return Text.translate("effortless.transformer.radial");
     }
 
     @Override
@@ -75,5 +77,23 @@ public class RadialTransformer extends Transformer {
 
     public int slices() {
         return slice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RadialTransformer that)) return false;
+        if (!super.equals(o)) return false;
+
+        if (slice != that.slice) return false;
+        return Objects.equals(position, that.position);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (position != null ? position.hashCode() : 0);
+        result = 31 * result + slice;
+        return result;
     }
 }

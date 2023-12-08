@@ -41,6 +41,8 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         @Override
         public ArrayTransformer read(Buffer buffer) {
             return new ArrayTransformer(
+                    buffer.readUUID(),
+                    buffer.readText(),
                     buffer.readDouble(),
                     buffer.readDouble(),
                     buffer.readDouble(),
@@ -50,6 +52,8 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
 
         @Override
         public void write(Buffer buffer, ArrayTransformer arrayTransformer) {
+            buffer.writeUUID(arrayTransformer.getId());
+            buffer.writeText(arrayTransformer.getName());
             buffer.writeDouble(arrayTransformer.x());
             buffer.writeDouble(arrayTransformer.y());
             buffer.writeDouble(arrayTransformer.z());
@@ -63,6 +67,8 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         @Override
         public MirrorTransformer read(Buffer buffer) {
             return new MirrorTransformer(
+                    buffer.readUUID(),
+                    buffer.readText(),
                     new Vector3d(
                             buffer.readDouble(),
                             buffer.readDouble(),
@@ -74,6 +80,8 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
 
         @Override
         public void write(Buffer buffer, MirrorTransformer mirrorTransformer) {
+            buffer.writeUUID(mirrorTransformer.getId());
+            buffer.writeText(mirrorTransformer.getName());
             buffer.writeDouble(mirrorTransformer.position().getX());
             buffer.writeDouble(mirrorTransformer.position().getY());
             buffer.writeDouble(mirrorTransformer.position().getZ());
@@ -87,6 +95,8 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         @Override
         public RadialTransformer read(Buffer buffer) {
             return new RadialTransformer(
+                    buffer.readUUID(),
+                    buffer.readText(),
                     new Vector3d(
                             buffer.readDouble(),
                             buffer.readDouble(),
@@ -98,6 +108,8 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
 
         @Override
         public void write(Buffer buffer, RadialTransformer radialTransformer) {
+            buffer.writeUUID(radialTransformer.getId());
+            buffer.writeText(radialTransformer.getName());
             buffer.writeDouble(radialTransformer.position().getX());
             buffer.writeDouble(radialTransformer.position().getY());
             buffer.writeDouble(radialTransformer.position().getZ());
@@ -130,8 +142,9 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
 
         @Override
         public ItemRandomizer read(Buffer buffer) {
-            return ItemRandomizer.create(
-                    buffer.readNullable(Buffer::readText),
+            return new ItemRandomizer(
+                    buffer.readUUID(),
+                    buffer.readText(),
                     buffer.readEnum(Randomizer.Order.class),
                     buffer.readEnum(Randomizer.Target.class),
                     buffer.readEnum(Randomizer.Category.class),
@@ -142,12 +155,13 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         }
 
         @Override
-        public void write(Buffer buffer, ItemRandomizer randomizer) {
-            buffer.writeNullable(randomizer.getName(), Buffer::writeText);
-            buffer.writeEnum(randomizer.getOrder());
-            buffer.writeEnum(randomizer.getTarget());
-            buffer.writeEnum(randomizer.getCategory());
-            buffer.writeCollection(randomizer.getChances(), (buf, chance) -> {
+        public void write(Buffer buffer, ItemRandomizer itemRandomizer) {
+            buffer.writeUUID(itemRandomizer.getId());
+            buffer.writeText(itemRandomizer.getName());
+            buffer.writeEnum(itemRandomizer.getOrder());
+            buffer.writeEnum(itemRandomizer.getTarget());
+            buffer.writeEnum(itemRandomizer.getCategory());
+            buffer.writeCollection(itemRandomizer.getChances(), (buf, chance) -> {
                 buf.writeItem(chance.content());
                 buf.writeByte(chance.chance());
             });

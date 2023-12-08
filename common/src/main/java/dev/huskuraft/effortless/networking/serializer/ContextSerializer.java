@@ -30,7 +30,8 @@ public class ContextSerializer extends BufferSerializer<Context> {
                         buffer.readEnum(ReplaceMode.class)),
                 new Context.PatternParams(
                         new Pattern(
-                                buffer.readNullable(Buffer::readText),
+                                buffer.readUUID(),
+                                buffer.readText(),
                                 buffer.readCollection(new TransformerSerializer())
                         )),
                 new Context.ReachParams(0, 0)
@@ -52,7 +53,8 @@ public class ContextSerializer extends BufferSerializer<Context> {
         buffer.writeEnum(context.raisedEdge());
         buffer.writeEnum(context.replaceMode());
 
-        buffer.writeNullable(context.patternParams().pattern().name(), Buffer::writeText);
+        buffer.writeUUID(context.patternParams().pattern().id());
+        buffer.writeText(context.patternParams().pattern().name());
         buffer.writeCollection(context.patternParams().pattern().transformers(), new TransformerSerializer());
     }
 

@@ -10,6 +10,8 @@ import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
 
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public class MirrorTransformer extends Transformer {
@@ -26,6 +28,11 @@ public class MirrorTransformer extends Transformer {
     private final Axis axis;
 
     public MirrorTransformer(Vector3d position, Axis axis) {
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.mirror"), position, axis);
+    }
+
+    public MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis) {
+        super(id, name);
         this.position = position;
         this.axis = axis;
     }
@@ -36,11 +43,6 @@ public class MirrorTransformer extends Transformer {
                 operation,
                 operation.mirror(MirrorContext.of(position, axis))
         ));
-    }
-
-    @Override
-    public Text getName() {
-        return Text.translate("effortless.transformer.mirror");
     }
 
     @Override
@@ -70,4 +72,21 @@ public class MirrorTransformer extends Transformer {
         return axis;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MirrorTransformer that)) return false;
+        if (!super.equals(o)) return false;
+
+        if (!Objects.equals(position, that.position)) return false;
+        return axis == that.axis;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (position != null ? position.hashCode() : 0);
+        result = 31 * result + (axis != null ? axis.hashCode() : 0);
+        return result;
+    }
 }

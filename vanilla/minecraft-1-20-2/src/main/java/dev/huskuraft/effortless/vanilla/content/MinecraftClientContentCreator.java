@@ -320,12 +320,7 @@ public class MinecraftClientContentCreator extends MinecraftServerContentCreator
     @Override
     public List<Pattern> getDefaultPatterns() {
         return List.of(
-                new Pattern(
-                        Text.text("Simple Array Pattern"),
-                        List.of(
-                                new ArrayTransformer(new Vector3d(2, 0, 0), 2)
-                        )
-                )
+                Pattern.DEFAULT
         );
     }
 

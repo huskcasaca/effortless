@@ -6,6 +6,7 @@ import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public abstract class Randomizer<T> extends Transformer {
 
@@ -15,6 +16,10 @@ public abstract class Randomizer<T> extends Transformer {
         }
         throw new IllegalArgumentException("Invalid object: " + object);
 
+    }
+
+    public Randomizer(UUID id, Text name) {
+        super(id, name);
     }
 
     public abstract Order getOrder();
@@ -27,7 +32,7 @@ public abstract class Randomizer<T> extends Transformer {
 
     public abstract Source<T> asSource(long seed);
 
-    public static enum Order {
+    public enum Order {
         SEQUENCE("sequence"),
         RANDOM("random");
 
@@ -46,7 +51,7 @@ public abstract class Randomizer<T> extends Transformer {
         }
     }
 
-    public static enum Target {
+    public enum Target {
         SINGLE("single"),
         GROUP("group");
 
@@ -65,7 +70,7 @@ public abstract class Randomizer<T> extends Transformer {
         }
     }
 
-    public static enum Category {
+    public enum Category {
         ITEM("item", ItemStack.class);
 
         private final String name;
