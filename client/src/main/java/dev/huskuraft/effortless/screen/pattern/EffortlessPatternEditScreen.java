@@ -58,7 +58,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         this.nameEditBox = addWidget(
                 new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2 + 40, 24, Dimens.RegularEntry.ROW_WIDTH - 40, 20, null)
         );
-        this.nameEditBox.setMaxLength(255);
+        this.nameEditBox.setMaxLength(Pattern.MAX_NAME_LENGTH);
         this.nameEditBox.setHint(Text.translate("effortless.pattern.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.name().getString());
 

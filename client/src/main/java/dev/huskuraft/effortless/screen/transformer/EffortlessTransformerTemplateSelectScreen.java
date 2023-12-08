@@ -87,7 +87,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
         }
 
         this.entries = addWidget(new TransformerList(getEntrance(), 0, 78, getWidth(), getHeight() - 78 - 36, this, false, TransformerList.EntryType.TOOLTIP));
-        this.searchEditBox.setMaxLength(255);
+        this.searchEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
         this.searchEditBox.setHint(Text.translate("effortless.transformer.template_select.search_hint"));
         this.searchEditBox.setResponder(text -> {
             setSearchResult(text);
