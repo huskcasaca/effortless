@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.building.operation.batch;
 
 import dev.huskuraft.effortless.building.operation.BlockPositionLocatable;
-import dev.huskuraft.effortless.building.operation.ItemType;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
+import dev.huskuraft.effortless.building.operation.ItemType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.core.BlockPosition;
 import dev.huskuraft.effortless.core.ItemStack;

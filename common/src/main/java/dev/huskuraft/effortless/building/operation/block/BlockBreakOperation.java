@@ -2,10 +2,10 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
-import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
-import dev.huskuraft.effortless.building.pattern.RevolveContext;
+import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
+import dev.huskuraft.effortless.building.pattern.RevolveContext;
 import dev.huskuraft.effortless.core.*;
 
 import java.util.Collections;

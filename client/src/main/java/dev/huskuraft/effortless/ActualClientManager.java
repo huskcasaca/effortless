@@ -6,10 +6,6 @@ import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.gui.Screen;
 import dev.huskuraft.effortless.input.KeyRegistry;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
-import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerSettingsScreen;
-import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
 import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.platform.ClientManager;
 import dev.huskuraft.effortless.platform.SubtitleManager;
@@ -17,6 +13,10 @@ import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
 import dev.huskuraft.effortless.renderer.transformer.TransformerRenderer;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
+import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
+import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerSettingsScreen;
 
 import java.util.Stack;
 

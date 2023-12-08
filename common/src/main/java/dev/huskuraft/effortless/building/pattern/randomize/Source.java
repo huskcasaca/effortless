@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.building.pattern.randomize;
 
-import dev.huskuraft.effortless.core.Item;
-
 import java.util.Random;
 import java.util.stream.IntStream;
 

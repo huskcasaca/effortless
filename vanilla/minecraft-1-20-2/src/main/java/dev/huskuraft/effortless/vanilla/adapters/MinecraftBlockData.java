@@ -2,8 +2,8 @@ package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.core.BlockData;
-import dev.huskuraft.effortless.core.Revolve;
 import dev.huskuraft.effortless.core.Item;
+import dev.huskuraft.effortless.core.Revolve;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;

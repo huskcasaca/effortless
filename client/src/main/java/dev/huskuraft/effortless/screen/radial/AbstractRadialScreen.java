@@ -12,8 +12,8 @@ import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class AbstractRadialScreen<S, B> extends AbstractScreen {
@@ -21,6 +21,42 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     private static final float FADE_SPEED = 0.5f;
     private static final int WATERMARK_TEXT_COLOR = 0x8d7f7f7f;
     private static final int DEFAULT_RADIAL_SLOTS = 12;
+    private static final ColorState RADIAL_SLOT_COLOR_STATE = new ColorState(
+            new Color(0f, 0f, 0f, 0.42f),
+            new Color(0f, 0f, 0f, 0.42f),
+            new Color(0.24f, 0.24f, 0.24f, 0.50f),
+            new Color(0.36f, 0.36f, 0.36f, 0.64f),
+            new Color(0.42f, 0.42f, 0.42f, 0.64f)
+    );
+    private static final ColorState RADIAL_BUTTON_COLOR_STATE = RADIAL_SLOT_COLOR_STATE;
+    private static final int WHITE_TEXT_COLOR = 0xffffffff;
+    private static final int OPTION_TEXT_COLOR = 0xeeeeeeff;
+    private static final double RING_INNER_EDGE = 32;
+    private static final double RING_OUTER_EDGE = 67;
+    private static final double CATEGORY_LINE_OUTER_EDGE = 36;
+    private static final double TEXT_DISTANCE = 84;
+    private static final double SECTION_OFFSET_X = 112;
+    private static final double SECTION_OFFSET_Y = 0;
+    private static final int BUTTON_WIDTH = 22;
+    private static final int BUTTON_HEIGHT = 22;
+    private static final double BUTTON_OFFSET_X = 26;
+    private static final double BUTTON_OFFSET_Y = 26;
+    private static final double TITLE_HEIGHT = 10;
+    private static final int MIN_RADIAL_SIZE = 8;
+    private static final float MOUSE_SCROLL_THRESHOLD = 1;
+    private Consumer<Slot<S>> radialSelectResponder;
+    private Consumer<Slot<S>> radialSwipeResponder;
+    private Consumer<Button<B>> radialOptionSelectResponder;
+    private List<? extends Slot<S>> radialSlots = List.of();
+    private List<? extends ButtonSet<B>> leftButtons = List.of();
+    private List<? extends ButtonSet<B>> rightButtons = List.of();
+    private Slot<S> hoveredSlot;
+    private Button<B> hoveredButton;
+    private Collection<? extends Slot<S>> selectedSlot = new HashSet<>();
+    private Collection<? extends Button<B>> selectedButton = new HashSet<>();
+    private float lastScrollOffset = 0;
+    // TODO: 20/2/23 rename
+    private float visibility = 1;
 
     public AbstractRadialScreen(Entrance entrance, Text text) {
         super(entrance, text);
@@ -125,50 +161,6 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     public boolean isPauseGame() {
         return true;
     }
-
-
-    private static final ColorState RADIAL_SLOT_COLOR_STATE = new ColorState(
-            new Color(0f, 0f, 0f, 0.42f),
-            new Color(0f, 0f, 0f, 0.42f),
-            new Color(0.24f, 0.24f, 0.24f, 0.50f),
-            new Color(0.36f, 0.36f, 0.36f, 0.64f),
-            new Color(0.42f, 0.42f, 0.42f, 0.64f)
-    );
-
-    private static final ColorState RADIAL_BUTTON_COLOR_STATE = RADIAL_SLOT_COLOR_STATE;
-    private static final int WHITE_TEXT_COLOR = 0xffffffff;
-    private static final int OPTION_TEXT_COLOR = 0xeeeeeeff;
-    private static final double RING_INNER_EDGE = 32;
-    private static final double RING_OUTER_EDGE = 67;
-    private static final double CATEGORY_LINE_OUTER_EDGE = 36;
-    private static final double TEXT_DISTANCE = 84;
-    private static final double SECTION_OFFSET_X = 112;
-    private static final double SECTION_OFFSET_Y = 0;
-    private static final int BUTTON_WIDTH = 22;
-    private static final int BUTTON_HEIGHT = 22;
-    private static final double BUTTON_OFFSET_X = 26;
-    private static final double BUTTON_OFFSET_Y = 26;
-    private static final double TITLE_HEIGHT = 10;
-    private static final int MIN_RADIAL_SIZE = 8;
-    private static final float MOUSE_SCROLL_THRESHOLD = 1;
-
-    private Consumer<Slot<S>> radialSelectResponder;
-    private Consumer<Slot<S>> radialSwipeResponder;
-    private Consumer<Button<B>> radialOptionSelectResponder;
-
-    private List<? extends Slot<S>> radialSlots = List.of();
-    private List<? extends ButtonSet<B>> leftButtons = List.of();
-    private List<? extends ButtonSet<B>> rightButtons = List.of();
-
-    private Slot<S> hoveredSlot;
-    private Button<B> hoveredButton;
-
-    private Collection<? extends Slot<S>> selectedSlot = new HashSet<>();
-    private Collection<? extends Button<B>> selectedButton = new HashSet<>();
-
-    private float lastScrollOffset = 0;
-    // TODO: 20/2/23 rename
-    private float visibility = 1;
 
 //    public RadialSection(Entrance entrance, int x, int y, int width, int height, Text message) {
 //        super(entrance, x, y, width, height, message);

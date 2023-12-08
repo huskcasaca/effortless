@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.tag;
 
 import dev.huskuraft.effortless.core.Item;
-import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.Collection;
@@ -24,7 +24,7 @@ public abstract class TagRecord extends TagElement {
 
     public Resource getResource(String key) {
         return Resource.decompose(getString(key));
-    };
+    }
 
     public abstract boolean getBoolean(String key);
 
@@ -64,7 +64,7 @@ public abstract class TagRecord extends TagElement {
                 tag1.getAsRecord().getInt("Count"),
                 tag1.getAsRecord().getElement("Tag").getAsRecord()
         ));
-    };
+    }
 
     public abstract TagElement getElement(String key);
 
@@ -85,7 +85,7 @@ public abstract class TagRecord extends TagElement {
 
     public void putResource(String key, Resource value) {
         putString(key, value.toString());
-    };
+    }
 
     public abstract void putBoolean(String key, boolean value);
 
@@ -125,7 +125,7 @@ public abstract class TagRecord extends TagElement {
             tag1.getAsRecord().putInt("Count", itemStack.getStackSize());
             tag1.getAsRecord().putElement("Tag", itemStack.getTag());
         });
-    };
+    }
 
     public abstract void putElement(String key, TagElement value);
 

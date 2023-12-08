@@ -44,7 +44,7 @@ public class TextWidget extends AbstractWidget {
             case START -> renderer.drawTextFromStart(getTypeface(), getMessage(), getX(), getY(), this.color, true);
             case CENTER -> renderer.drawTextFromCenter(getTypeface(), getMessage(), getX(), getY(), this.color, true);
             case END -> renderer.drawTextFromEnd(getTypeface(), getMessage(), getX(), getY(), this.color, true);
-        };
+        }
     }
 
     public enum Gravity {

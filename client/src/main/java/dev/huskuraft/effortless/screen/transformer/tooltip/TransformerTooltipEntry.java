@@ -31,6 +31,15 @@ public class TransformerTooltipEntry<T extends Transformer> extends EditableEntr
         return decimalFormat.format(number);
     }
 
+    public static Text getSymbol(Transformer transformer) {
+        return switch (transformer.getType()) {
+            case ARRAY -> Text.text("AT");
+            case MIRROR -> Text.text("MT");
+            case RADIAL -> Text.text("RT");
+            case ITEM_RAND -> Text.text("IR");
+        };
+    }
+
     @Override
     public void onCreate() {
         this.textSlot = addWidget(new dev.huskuraft.effortless.gui.slot.TextSlot(getEntrance(), getX(), getY(), Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, getSymbol()));
@@ -53,7 +62,6 @@ public class TransformerTooltipEntry<T extends Transformer> extends EditableEntr
     public Text getNarration() {
         return Text.translate("narrator.select", getDisplayName());
     }
-
 
     protected List<SlotData> getInfo() {
         return Collections.emptyList();
@@ -78,15 +86,6 @@ public class TransformerTooltipEntry<T extends Transformer> extends EditableEntr
 
     protected Text getSymbol() {
         return getSymbol(getItem());
-    }
-
-    public static Text getSymbol(Transformer transformer) {
-        return switch (transformer.getType()) {
-            case ARRAY -> Text.text("AT");
-            case MIRROR -> Text.text("MT");
-            case RADIAL -> Text.text("RT");
-            case ITEM_RAND -> Text.text("IR");
-        };
     }
 
 }

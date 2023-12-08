@@ -12,7 +12,6 @@ import dev.huskuraft.effortless.content.SearchBy;
 import dev.huskuraft.effortless.content.SearchTree;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
-import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
 import net.minecraft.client.Minecraft;

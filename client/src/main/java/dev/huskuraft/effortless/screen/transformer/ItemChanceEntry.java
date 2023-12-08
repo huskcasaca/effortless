@@ -28,11 +28,6 @@ public class ItemChanceEntry extends EditableEntry<Chance<Item>> {
         super(entrance, itemChanceList, chance);
     }
 
-    @Override
-    public ItemChanceList getEntryList() {
-        return (ItemChanceList) super.getEntryList();
-    }
-
     public static List<Text> getRandomizerEntryTooltip(Player player, Chance<Item> chance, int totalCount) {
         var components = new ArrayList<>(chance.content().getDefaultStack().getDescription(player, ItemStack.TooltipType.ADVANCED_CREATIVE));
         var percentage = String.format("%.2f%%", 100.0 * chance.chance() / totalCount);
@@ -43,6 +38,11 @@ public class ItemChanceEntry extends EditableEntry<Chance<Item>> {
                 Text.translate("effortless.randomizer.edit.total_probability", Text.text(percentage).withStyle(TextStyle.GOLD).append(Text.text(" (" + chance.chance() + "/" + totalCount + ")").withStyle(TextStyle.DARK_GRAY))).withStyle(TextStyle.GRAY)
         );
         return components;
+    }
+
+    @Override
+    public ItemChanceList getEntryList() {
+        return (ItemChanceList) super.getEntryList();
     }
 
     @Override

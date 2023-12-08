@@ -3,7 +3,6 @@ package dev.huskuraft.effortless;
 import dev.huskuraft.effortless.input.Key;
 import dev.huskuraft.effortless.input.KeyBinding;
 import dev.huskuraft.effortless.input.KeyCodes;
-import dev.huskuraft.effortless.text.Text;
 
 enum ActualKeys implements Key {
 

@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.gui.slot;
 
-import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.text.Text;
 

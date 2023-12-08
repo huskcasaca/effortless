@@ -4,7 +4,6 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.core.*;
-import dev.huskuraft.effortless.core.BlockInteraction;
 
 public abstract class BlockOperation extends TransformableOperation {
 
