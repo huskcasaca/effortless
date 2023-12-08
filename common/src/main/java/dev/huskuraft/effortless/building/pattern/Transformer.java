@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 
 public abstract class Transformer {
 
+    public static final int MAX_NAME_LENGTH = 255;
+
     private final UUID id;
     private final Text name;
 

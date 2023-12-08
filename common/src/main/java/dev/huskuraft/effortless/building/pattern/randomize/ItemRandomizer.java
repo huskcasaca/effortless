@@ -13,6 +13,8 @@ import java.util.stream.Stream;
 
 public class ItemRandomizer extends Randomizer<Item> {
 
+    public static final int MAX_CHANCE_SIZE = 36; // Inventory.INVENTORY_SIZE // FIXME: 23/10/23 move
+
     public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.empty"), Order.SEQUENCE, Target.SINGLE, Category.ITEM, Collections.emptyList());
 
     private final Order order;

@@ -18,9 +18,6 @@ import java.util.function.Consumer;
 
 public class EffortlessRandomizerEditScreen extends AbstractScreen {
 
-    private static final int MAX_RANDOMIZER_SIZE = 36; // Inventory.INVENTORY_SIZE // FIXME: 23/10/23 move
-    private static final int MAX_RANDOMIZER_NAME_LENGTH = 255;
-
     private final Consumer<ItemRandomizer> applySettings;
     private final ItemRandomizer defaultSettings;
     private ItemRandomizer lastSettings;
@@ -59,7 +56,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         this.nameEditBox = addWidget(
                 new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2 + 40, 24, Dimens.RegularEntry.ROW_WIDTH - 40, 20, null)
         );
-        this.nameEditBox.setMaxLength(MAX_RANDOMIZER_NAME_LENGTH);
+        this.nameEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
         this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.getName().getString());
 
@@ -115,7 +112,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
         downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
         deleteButton.setActive(entries.hasSelected());
-        addButton.setActive(entries.children().size() <= MAX_RANDOMIZER_SIZE);
+        addButton.setActive(entries.children().size() <= ItemRandomizer.MAX_CHANCE_SIZE);
 
         lastSettings = ItemRandomizer.create(
                 Text.text(nameEditBox.getValue()), // TODO: 6/12/23 use default if no changes

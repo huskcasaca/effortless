@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.screen.item;
 
+import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.content.SearchBy;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.Item;
@@ -53,7 +54,7 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
         this.searchEditBox = addWidget(
                 new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH - 2) / 2, 24, Dimens.RegularEntry.ROW_WIDTH - 2, 20, Text.translate("effortless.item.picker.search"))
         );
-        this.searchEditBox.setMaxLength(255);
+        this.searchEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
         this.searchEditBox.setHint(Text.translate("effortless.item.picker.search_hint"));
         this.searchEditBox.setResponder(text -> {
             setSearchResult(text);

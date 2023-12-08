@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.screen.transformer;
 
 import dev.huskuraft.effortless.building.pattern.Transformer;
+import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.AbstractScreen;
 import dev.huskuraft.effortless.gui.AbstractWidget;
@@ -40,7 +41,7 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
         this.nameEditBox = addWidget(
                 new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2 + 40, 24, Dimens.RegularEntry.ROW_WIDTH - 40, 20, null)
         );
-        this.nameEditBox.setMaxLength(255);
+        this.nameEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
         this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
 
         this.entries = addWidget(new TransformerList(getEntrance(), 0, 54, getWidth(), getHeight() - 54 - 36, this, false, TransformerList.EntryType.EDITOR));

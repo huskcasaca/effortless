@@ -11,6 +11,9 @@ public final class Pattern {
     public static final Pattern DISABLED = new Pattern(Text.translate("effortless.pattern.disabled"), List.of());
     public static final Pattern EMPTY = new Pattern(Text.translate("effortless.pattern.empty"), List.of());
     public static final Pattern DEFAULT = new Pattern(Text.translate("effortless.pattern.default"), List.of());
+
+    public static final int MAX_NAME_LENGTH = 255;
+
     private final UUID id;
     private final Text name;
     private final List<Transformer> transformers;
