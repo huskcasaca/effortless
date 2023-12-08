@@ -16,9 +16,6 @@ import java.util.function.Consumer;
 
 public class EffortlessItemPickerScreen extends AbstractScreen {
 
-    private static final int MAX_SEARCH_NAME_LENGTH = 255;
-    private static final int ROW_WIDTH = Dimens.RegularEntry.ROW_WIDTH;
-
     private final Consumer<Item> applySettings;
     private TextWidget titleTextWidget;
     private ItemStackList entries;
@@ -54,9 +51,9 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (ROW_WIDTH - 2) / 2, 24, ROW_WIDTH - 2, 20, Text.translate("effortless.item.picker.search"))
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH - 2) / 2, 24, Dimens.RegularEntry.ROW_WIDTH - 2, 20, Text.translate("effortless.item.picker.search"))
         );
-        this.searchEditBox.setMaxLength(MAX_SEARCH_NAME_LENGTH);
+        this.searchEditBox.setMaxLength(255);
         this.searchEditBox.setHint(Text.translate("effortless.item.picker.search_hint"));
         this.searchEditBox.setResponder(text -> {
             setSearchResult(text);

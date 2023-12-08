@@ -16,9 +16,6 @@ import java.util.stream.Collectors;
 
 public class PatternEntry extends EditableEntry<Pattern> {
 
-    private static final int ROW_WIDTH = Dimens.RegularEntry.ROW_WIDTH;
-    private static final int MAX_SLOT_COUNT = Dimens.RegularEntry.MAX_SLOT_COUNT;
-
     private RadialTextIcon radialTextIcon;
     private TextWidget nameTextWidget;
     private SlotContainer slotContainer;
