@@ -175,6 +175,14 @@ public abstract class AbstractEntryList<E extends AbstractEntry> extends Abstrac
         this.setFocused(null);
     }
 
+    public void swap(int i, int j) {
+        if (i == j) return;
+        if (i < 0 || j < 0 || i >= children().size() || j >= children().size()) return;
+        var old = children().get(i);
+        children().set(i, children().get(j)).onPositionChange(i, j);
+        children().set(j, old).onPositionChange(j, i);
+    }
+
     protected int getEntrySize() {
         return this.children().size();
     }

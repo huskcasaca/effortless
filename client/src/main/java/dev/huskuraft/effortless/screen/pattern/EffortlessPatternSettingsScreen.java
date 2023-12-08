@@ -50,7 +50,6 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
             }
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
-
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.edit"), button -> {
             if (entries.hasSelected()) {
                 new EffortlessPatternEditScreen(
