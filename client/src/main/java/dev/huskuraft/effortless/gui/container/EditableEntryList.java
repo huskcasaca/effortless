@@ -113,14 +113,6 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
         }
     }
 
-    public void swap(int i, int j) {
-        if (i == j) return;
-        if (i < 0 || j < 0 || i >= children().size() || j >= children().size()) return;
-        var old = children().get(i);
-        children().set(i, children().get(j));
-        children().set(j, old);
-    }
-
     public void reset(Collection<? extends T> items) {
         int i = indexOf(getSelected());
         clearEntries();
