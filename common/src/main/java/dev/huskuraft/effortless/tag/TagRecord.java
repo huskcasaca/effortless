@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.text.Text;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public abstract class TagRecord extends TagElement {
@@ -133,5 +134,13 @@ public abstract class TagRecord extends TagElement {
     public abstract <T> void put(T value, Supplier<TagWriter<T>> supplier);
 
     public abstract <T> void putList(String key, Collection<T> collection, Supplier<TagWriter<T>> supplier);
+
+    public UUID getUUID(String key) {
+        return UUID.fromString(getString(key));
+    }
+
+    public void putUUID(String key, UUID value) {
+        putString(key, value.toString());
+    }
 
 }

@@ -157,7 +157,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         editButton.setVisible(!getEntrance().getClient().hasAltDown());
         deleteButton.setVisible(!getEntrance().getClient().hasAltDown());
 
-        lastSettings = new Pattern(Text.text(nameEditBox.getValue()), entries.items());
+        lastSettings = new Pattern(lastSettings.id(), Text.text(nameEditBox.getValue()), entries.items());
     }
 
     private boolean isContentValid() {

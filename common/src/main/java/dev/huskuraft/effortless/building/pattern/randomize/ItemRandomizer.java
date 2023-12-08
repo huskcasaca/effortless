@@ -6,27 +6,23 @@ import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.core.Item;
-import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.text.Text;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class ItemRandomizer extends Randomizer<Item> {
 
     public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.empty"), Order.SEQUENCE, Target.SINGLE, Category.ITEM, Collections.emptyList());
 
-    private final Text name;
     private final Order order;
     private final Target target;
     private final Category category;
 
     private final Collection<Chance<Item>> chances;
 
-    public ItemRandomizer(Text name, Order order, Target target, Category category, Collection<Chance<Item>> chances) {
-        this.name = name;
+    public ItemRandomizer(UUID uuid, Text name, Order order, Target target, Category category, Collection<Chance<Item>> chances) {
+        super(uuid, name);
         this.order = order;
         this.target = target;
         this.category = category;
@@ -39,7 +35,7 @@ public class ItemRandomizer extends Randomizer<Item> {
                 throw new IllegalArgumentException("All chances must be of the same category");
             }
         }
-        return new ItemRandomizer(name, order, target, category, chances);
+        return new ItemRandomizer(UUID.randomUUID(), name, order, target, category, chances);
     }
 
     public static ItemRandomizer create(Text name, Item content) {
@@ -91,11 +87,6 @@ public class ItemRandomizer extends Randomizer<Item> {
     }
 
     @Override
-    public Text getName() {
-        return name;
-    }
-
-    @Override
     public Transformers getType() {
         return Transformers.ITEM_RAND;
     }
@@ -104,7 +95,7 @@ public class ItemRandomizer extends Randomizer<Item> {
     public Stream<Text> getSearchableTags() {
         return Stream.concat(
                 Stream.of(
-                        name,
+                        getName(),
                         Text.translate(order.getNameKey()),
                         Text.translate(target.getNameKey()),
                         Text.translate(category.getNameKey())),
@@ -117,4 +108,25 @@ public class ItemRandomizer extends Randomizer<Item> {
         return !getChances().isEmpty();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemRandomizer that)) return false;
+        if (!super.equals(o)) return false;
+
+        if (order != that.order) return false;
+        if (target != that.target) return false;
+        if (category != that.category) return false;
+        return Objects.equals(chances, that.chances);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (order != null ? order.hashCode() : 0);
+        result = 31 * result + (target != null ? target.hashCode() : 0);
+        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (chances != null ? chances.hashCode() : 0);
+        return result;
+    }
 }

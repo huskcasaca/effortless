@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
 
+import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -21,11 +22,20 @@ public class ArrayTransformer extends Transformer {
     private final double z;
     private final int count;
 
-    public ArrayTransformer(Vector3d offset, Integer count) {
+    public ArrayTransformer(Vector3d offset, int count) {
         this(offset.getX(), offset.getY(), offset.getZ(), count);
     }
 
+    public ArrayTransformer(UUID id, Text name, Vector3d offset, int count) {
+        this(id, name, offset.getX(), offset.getY(), offset.getZ(), count);
+    }
+
     public ArrayTransformer(double x, double y, double z, int count) {
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.array"), x, y, z, count);
+    }
+
+    public ArrayTransformer(UUID id, Text name, double x, double y, double z, int count) {
+        super(id, name);
         this.x = x;
         this.y = y;
         this.z = z;
@@ -37,11 +47,6 @@ public class ArrayTransformer extends Transformer {
         return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(0, count).mapToObj(i -> {
             return operation.move(MoveContext.relative(x * i, y * i, z * i));
         }));
-    }
-
-    @Override
-    public Text getName() {
-        return Text.translate("effortless.transformer.array");
     }
 
     @Override
@@ -97,5 +102,31 @@ public class ArrayTransformer extends Transformer {
 
     public ArrayTransformer withCount(int count) {
         return new ArrayTransformer(x, y, z, count);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ArrayTransformer that)) return false;
+        if (!super.equals(o)) return false;
+
+        if (Double.compare(that.x, x) != 0) return false;
+        if (Double.compare(that.y, y) != 0) return false;
+        if (Double.compare(that.z, z) != 0) return false;
+        return count == that.count;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        long temp;
+        temp = Double.doubleToLongBits(x);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(z);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + count;
+        return result;
     }
 }

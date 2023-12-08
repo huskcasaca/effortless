@@ -123,7 +123,7 @@ final class ActualClientManager extends ClientManager {
         new EffortlessPatternSettingsScreen(
                 getEntrance(),
                 pattern -> {
-                    getEntrance().getStructureBuilder().setPattern(getRunningClient().getPlayer(), Pattern.DISABLED);
+                    getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
                     getEntrance().getConfigManager().editConfig(config -> {
                         config.getPatternConfig().setPatternSettings(pattern);
                     });
