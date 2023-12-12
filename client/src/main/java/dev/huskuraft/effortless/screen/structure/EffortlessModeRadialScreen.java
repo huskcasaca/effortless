@@ -16,10 +16,10 @@ import java.util.Arrays;
 
 public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, Option> {
 
-    private static final Button<Option> UNDO_OPTION = option(UndoRedo.UNDO);
-    private static final Button<Option> REDO_OPTION = option(UndoRedo.REDO);
-    private static final Button<Option> SETTING_OPTION = option(Settings.MODE_SETTINGS);
-    private static final Button<Option> REPLACE_OPTION = option(ReplaceMode.DISABLED);
+    private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
+    private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
+    private static final Button<Option> SETTING_OPTION = button(Settings.MODE_SETTINGS);
+    private static final Button<Option> REPLACE_OPTION = button(ReplaceMode.DISABLED);
 
     private final Key assignedKey;
 
@@ -92,10 +92,10 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
 
         setSelectedSlots(slot(context.buildMode()));
         setRightButtons(
-                Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Option option) -> option(option)).toList())).toList()
+                Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Option option) -> button(option)).toList())).toList()
         );
         setSelectedButtons(
-                context.buildFeatures().stream().map(EffortlessModeRadialScreen::<Option>option).toList()
+                context.buildFeatures().stream().map(EffortlessModeRadialScreen::<Option>button).toList()
         );
     }
 

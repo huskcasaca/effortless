@@ -274,13 +274,13 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     public void showContextOverlay(UUID uuid, Context context, int priority) {
         var texts = new ArrayList<Text>();
         texts.add(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(context.buildMode().getNameComponent().withStyle(TextStyle.GOLD)));
-        var replace = AbstractRadialScreen.option(context.replaceMode());
+        var replace = AbstractRadialScreen.button(context.replaceMode());
         texts.add(replace.getCategoryComponent().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(replace.getNameComponent().withStyle(TextStyle.GOLD)));
 
         for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
             if (option.isEmpty()) continue;
-            var button = AbstractRadialScreen.option(option.get());
+            var button = AbstractRadialScreen.button(option.get());
             texts.add(button.getCategoryComponent().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(button.getNameComponent().withStyle(TextStyle.GOLD)));
         }
 

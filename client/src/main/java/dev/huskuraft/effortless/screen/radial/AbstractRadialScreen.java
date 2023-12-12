@@ -142,7 +142,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     }
 
     // TODO: 20/9/23 move
-    public static <T extends Option> Button<T> option(T option) {
+    public static <T extends Option> Button<T> button(T option) {
         return button(
                 Text.translate("effortless.option.%s".formatted(option.getCategory())),
                 Text.translate("effortless.action.%s".formatted(option.getName())),
