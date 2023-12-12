@@ -11,7 +11,6 @@ import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.slot.TextSlot;
 import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.screen.item.EffortlessItemPickerScreen;
-import dev.huskuraft.effortless.screen.transformer.tooltip.TransformerTooltipEntry;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.function.Consumer;
@@ -107,7 +106,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
 
     @Override
     public void onReload() {
-        textSlot.setMessage(TransformerTooltipEntry.getSymbol(lastSettings));
+        textSlot.setMessage(TransformerEntry.getSymbol(lastSettings));
 
         upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
         downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
