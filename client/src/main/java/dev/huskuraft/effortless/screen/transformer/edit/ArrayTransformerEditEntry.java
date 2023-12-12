@@ -76,9 +76,4 @@ public final class ArrayTransformerEditEntry extends TransformerEditEntry<ArrayT
         return 68;
     }
 
-    @Override
-    public Text getNarration() {
-        return Text.empty();
-    }
-
 }

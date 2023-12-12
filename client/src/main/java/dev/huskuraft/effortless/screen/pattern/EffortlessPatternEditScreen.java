@@ -135,7 +135,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new TransformerList(getEntrance(), 0, 54, getWidth(), getHeight() - 54 - 60, this, true, TransformerList.EntryType.TOOLTIP));
+        this.entries = addWidget(new TransformerList(getEntrance(), 0, 54, getWidth(), getHeight() - 54 - 60));
         this.entries.reset(lastSettings.transformers());
     }
 

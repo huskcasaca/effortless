@@ -126,6 +126,9 @@
   "effortless.transformer.array": "Array",
   "effortless.transformer.array.count": "Count",
   "effortless.transformer.array.offset": "Offset",
+  "effortless.transformer.array.offset.x": "Offset X",
+  "effortless.transformer.array.offset.y": "Offset Y",
+  "effortless.transformer.array.offset.z": "Offset Z",
 
   "effortless.transformer.mirror": "Mirror",
   "effortless.transformer.mirror.axis": "Axis",
@@ -245,7 +248,6 @@
   "effortless.transformer.edit.name_hint": "Transformer Name",
   "effortless.transformer.edit.save": "Save",
   "effortless.transformer.edit.cancel": "Cancel",
-
 
   "effortless.build.summary.structure": "Structure",
   "effortless.build.summary.state": "State",

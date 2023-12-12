@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.gui.icon.RadialTextIcon;
 import dev.huskuraft.effortless.gui.slot.SlotContainer;
 import dev.huskuraft.effortless.gui.slot.SlotData;
 import dev.huskuraft.effortless.gui.text.TextWidget;
-import dev.huskuraft.effortless.screen.transformer.tooltip.TransformerTooltipEntry;
+import dev.huskuraft.effortless.screen.transformer.TransformerEntry;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
@@ -40,7 +40,7 @@ public class PatternEntry extends EditableEntry<Pattern> {
     @Override
     public void onBindItem() {
         nameTextWidget.setMessage(getDisplayName(getItem()));
-        slotContainer.setEntries(getItem().transformers().stream().map(transformer -> new SlotData.TextSymbol(TransformerTooltipEntry.getSymbol(transformer), Text.empty())).collect(Collectors.toList()));
+        slotContainer.setEntries(getItem().transformers().stream().map(transformer -> new SlotData.TextSymbol(TransformerEntry.getSymbol(transformer), Text.empty())).collect(Collectors.toList()));
     }
 
     @Override

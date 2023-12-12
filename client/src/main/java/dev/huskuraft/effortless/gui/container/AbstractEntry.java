@@ -28,7 +28,9 @@ public abstract class AbstractEntry extends AbstractContainerWidget implements E
     }
 
     @Deprecated
-    public abstract Text getNarration();
+    public Text getNarration() {
+        return Text.empty();
+    }
 
     @Override
     public void render(Renderer renderer, int mouseX, int mouseY, float deltaTick) {

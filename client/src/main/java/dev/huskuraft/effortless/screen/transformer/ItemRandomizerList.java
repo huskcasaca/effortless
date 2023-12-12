@@ -4,7 +4,6 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.container.EditableEntry;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.screen.transformer.tooltip.ItemRandomizerTooltipEntry;
 
 public final class ItemRandomizerList extends EditableEntryList<ItemRandomizer> {
 
@@ -14,7 +13,7 @@ public final class ItemRandomizerList extends EditableEntryList<ItemRandomizer> 
 
     @Override
     protected EditableEntry<ItemRandomizer> createHolder(ItemRandomizer item) {
-        return new ItemRandomizerTooltipEntry(getEntrance(), this, item);
+        return new TransformerEntry.ItemRandomizerEntry(getEntrance(), this, item);
     }
 
 }
