@@ -49,18 +49,6 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
         }
     }
 
-    private void selectBuildMode(BuildMode mode) {
-        getEntrance().getStructureBuilder().setBuildMode(getEntrance().getClient().getPlayer(), mode);
-    }
-
-    private void selectBuildFeature(SingleSelectFeature feature) {
-        getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), feature);
-    }
-
-    private void selectBuildFeature(MultiSelectFeature feature) {
-        getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), feature);
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -73,14 +61,14 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
                 Arrays.stream(BuildMode.values()).map(mode -> slot(mode)).toList()
         );
         setRadialSelectResponder(slot -> {
-            selectBuildMode(slot.getContent());
+            getEntrance().getStructureBuilder().setBuildMode(getEntrance().getClient().getPlayer(), slot.getContent());
         });
         setRadialOptionSelectResponder(entry -> {
             if (entry.getContent() instanceof SingleSelectFeature singleSelectFeature) {
-                selectBuildFeature(singleSelectFeature);
+                getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), singleSelectFeature);
             }
             if (entry.getContent() instanceof MultiSelectFeature multiSelectFeature) {
-                selectBuildFeature(multiSelectFeature);
+                getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), multiSelectFeature);
             }
 
         });
@@ -92,7 +80,7 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
 
         setSelectedSlots(slot(context.buildMode()));
         setRightButtons(
-                Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Option option) -> button(option)).toList())).toList()
+                Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map(EffortlessModeRadialScreen::<Option>button).toList())).toList()
         );
         setSelectedButtons(
                 context.buildFeatures().stream().map(EffortlessModeRadialScreen::<Option>button).toList()

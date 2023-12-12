@@ -141,7 +141,6 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
         };
     }
 
-    // TODO: 20/9/23 move
     public static <T extends Option> Button<T> button(T option) {
         return button(
                 Text.translate("effortless.option.%s".formatted(option.getCategory())),
@@ -153,18 +152,12 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
     @Override
     public void onCreate() {
-//        this.radial = addWidget(new RadialSection<>(getEntrance(), 0, 0, this.getWidth(), this.getHeight(), Text.empty()));
-//        this.radial.setVisibility(1f);
     }
 
     @Override
     public boolean isPauseGame() {
         return true;
     }
-
-//    public RadialSection(Entrance entrance, int x, int y, int width, int height, Text message) {
-//        super(entrance, x, y, width, height, message);
-//    }
 
     @Override
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
@@ -377,13 +370,13 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                 var x = (SECTION_OFFSET_X + BUTTON_OFFSET_X * col) * direction.getStep();
                 var y = (SECTION_OFFSET_Y + BUTTON_OFFSET_Y * (row - (buttonSets.size() - 1) / 2f)) * 1;
 
-                var x1 = x - BUTTON_WIDTH / 2;
-                var y1 = y - BUTTON_HEIGHT / 2;
+                var x1 = x - BUTTON_WIDTH / 2d;
+                var y1 = y - BUTTON_HEIGHT / 2d;
 
-                var x2 = x + BUTTON_WIDTH / 2;
-                var y2 = y + BUTTON_HEIGHT / 2;
+                var x2 = x + BUTTON_WIDTH / 2d;
+                var y2 = y + BUTTON_HEIGHT / 2d;
 
-                var isActivated = selectedButton != null && selectedButton.contains(button);
+                var isActivated = selectedButton != null && selectedButton.stream().anyMatch(b -> Objects.equals(b.getContent(), button.getContent()));
                 var isHovered = x1 <= mouseCenterX && x2 >= mouseCenterX && y1 <= mouseCenterY && y2 >= mouseCenterY;
 
                 var color = RADIAL_BUTTON_COLOR_STATE.defaultColor();
