@@ -74,7 +74,7 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
 
     @Override
     public void onReload() {
-        textSlot.setMessage(TransformerEntry.getSymbol(lastSettings));
+        textSlot.setMessage(TransformerList.Entry.getSymbol(lastSettings));
     }
 
 }

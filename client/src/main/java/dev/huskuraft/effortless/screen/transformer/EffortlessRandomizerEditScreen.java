@@ -106,7 +106,7 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
 
     @Override
     public void onReload() {
-        textSlot.setMessage(TransformerEntry.getSymbol(lastSettings));
+        textSlot.setMessage(TransformerList.Entry.getSymbol(lastSettings));
 
         upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
         downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);

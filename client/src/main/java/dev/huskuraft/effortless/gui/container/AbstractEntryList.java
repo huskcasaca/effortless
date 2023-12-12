@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
-public abstract class AbstractEntryList<E extends AbstractEntry> extends AbstractContainerWidget implements EntryList, Tickable {
+public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> extends AbstractContainerWidget implements EntryList, Tickable {
 
     private final boolean backgroundTransparent = true;
     private final boolean renderShadow = true;
@@ -516,4 +516,37 @@ public abstract class AbstractEntryList<E extends AbstractEntry> extends Abstrac
         DOWN
     }
 
+    public abstract static class Entry extends AbstractContainerWidget implements EntryList.Entry {
+
+        protected Entry(Entrance entrance) {
+            super(entrance, 0, 0, 0, 0, Text.empty());
+        }
+
+        @Override
+        public void onPositionChange(int from, int to) {
+
+        }
+
+        @Override
+        public void onSelected() {
+
+        }
+
+        @Override
+        public void onDeselected() {
+
+        }
+
+        @Deprecated
+        public Text getNarration() {
+            return Text.empty();
+        }
+
+        @Override
+        public void render(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+            renderer.enableScissor(getX(), getY(), getX() + getWidth(), getY() + getHeight());
+            super.render(renderer, mouseX, mouseY, deltaTick);
+            renderer.disableScissor();
+        }
+    }
 }

@@ -15,7 +15,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
     private final Consumer<RandomizerSettings> applySettings;
     private RandomizerSettings lastSettings;
     private TextWidget titleTextWidget;
-    private ItemRandomizerList entries;
+    private TransformerList entries;
     private Button editButton;
     private Button deleteButton;
     private Button duplicateButton;
@@ -42,7 +42,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
                             entries.replaceSelect(randomizer);
                             onReload();
                         },
-                        entries.getSelected().getItem()
+                        (ItemRandomizer) entries.getSelected().getItem()
                 ).attach();
             }
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
@@ -81,7 +81,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.cancel"), button -> {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
-        this.entries = addWidget(new ItemRandomizerList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 60));
+        this.entries = addWidget(new TransformerList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 60));
         this.entries.reset(lastSettings.randomizers());
     }
 
@@ -98,7 +98,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
         resetButton.setVisible(getEntrance().getClient().hasAltDown());
 
         lastSettings = new RandomizerSettings(
-                entries.items()
+                entries.items().stream().map(ItemRandomizer.class::cast).toList()
         );
     }
 
