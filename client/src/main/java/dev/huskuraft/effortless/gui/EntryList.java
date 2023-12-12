@@ -14,4 +14,13 @@ public interface EntryList {
 
     Entry getSelected();
 
+    interface Entry {
+
+        void onPositionChange(int from, int to);
+
+        void onSelected();
+
+        void onDeselected();
+
+    }
 }

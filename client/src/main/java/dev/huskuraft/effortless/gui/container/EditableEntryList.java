@@ -1,12 +1,13 @@
 package dev.huskuraft.effortless.gui.container;
 
 import dev.huskuraft.effortless.core.Entrance;
+import dev.huskuraft.effortless.gui.EntryList;
 import dev.huskuraft.effortless.gui.Widget;
 
 import java.util.Collection;
 import java.util.List;
 
-public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEntry<T>> {
+public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEntryList.Entry<T>> {
 
     protected EditableEntryList(Entrance entrance, int x, int y, int width, int height) {
         super(entrance, x, y, width, height);
@@ -17,7 +18,7 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
         return this.getWidth() / 2 + 160;
     }
 
-    protected abstract EditableEntry<T> createHolder(T item);
+    protected abstract Entry<T> createHolder(T item);
 
     public boolean hasSelected() {
         return getSelected() != null;
@@ -45,11 +46,11 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
         }
     }
 
-    public EditableEntry<T> get(int i) {
+    public Entry<T> get(int i) {
         return children().get(i);
     }
 
-    public EditableEntry<T> getSelected() {
+    public Entry<T> getSelected() {
         return super.getSelected();
     }
 
@@ -131,4 +132,41 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
         return children().stream().map(entry -> entry.item).toList();
     }
 
+    public abstract static class Entry<T> extends AbstractEntryList.Entry {
+
+        private final EntryList entryList;
+        protected T item;
+
+        protected Entry(Entrance entrance, T item) {
+            this(entrance, null, item);
+        }
+
+        protected Entry(Entrance entrance, EntryList entryList, T item) {
+            super(entrance);
+            this.entryList = entryList;
+            this.item = item;
+        }
+
+        public T getItem() {
+            return item;
+        }
+
+        public void setItem(T item) {
+            this.item = item;
+            onBindItem();
+        }
+
+        @Override
+        public void onLoad() {
+            onBindItem();
+        }
+
+        public void onBindItem() {
+        }
+
+        public EntryList getEntryList() {
+            return entryList;
+        }
+
+    }
 }

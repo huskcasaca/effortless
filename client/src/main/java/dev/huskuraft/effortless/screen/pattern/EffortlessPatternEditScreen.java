@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.gui.AbstractScreen;
 import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.button.Button;
-import dev.huskuraft.effortless.gui.container.EditableEntry;
+import dev.huskuraft.effortless.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.gui.icon.RadialTextIcon;
 import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.text.TextWidget;
@@ -157,7 +157,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
     }
 
     private boolean isContentValid() {
-        return !entries.children().isEmpty() && entries.children().stream().map(EditableEntry::getItem).allMatch(Transformer::isValid);
+        return !entries.children().isEmpty() && entries.children().stream().map(EditableEntryList.Entry::getItem).allMatch(Transformer::isValid);
     }
 
 }
