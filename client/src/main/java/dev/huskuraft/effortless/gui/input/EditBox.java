@@ -162,7 +162,6 @@ public class EditBox extends AbstractWidget {
         if (this.responder != null) {
             this.responder.accept(string);
         }
-
     }
 
     private void deleteText(int i) {
@@ -171,7 +170,6 @@ public class EditBox extends AbstractWidget {
         } else {
             this.deleteChars(i);
         }
-
     }
 
     public void deleteWords(int i) {
