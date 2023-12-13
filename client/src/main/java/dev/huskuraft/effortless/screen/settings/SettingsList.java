@@ -24,10 +24,6 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
         return this.getWidth() / 2 + 160;
     }
 
-    public void addFloatEntry(Text title, Text symbol, Float value, Consumer<Float> consumer) {
-        addEntry(new FloatEntry(getEntrance(), this, title, symbol, value, consumer));
-    }
-
     public void addDoubleEntry(Text title, Text symbol, Double value, Consumer<Double> consumer) {
         addEntry(new DoubleEntry(getEntrance(), this, title, symbol, value, consumer));
     }
@@ -48,34 +44,10 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
         public void onCreate() {
             super.onCreate();
 
-            numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY() + 1, 72, 18));
-            numberField.setFilter(NumberField.DOUBLE_FILTER);
-            numberField.setNumber(getItem());
-            numberField.setResponder(number -> {
-                setItem(number.doubleValue());
-            });
-
-        }
-
-    }
-
-    public static final class FloatEntry extends Entry<Float> {
-
-        private NumberField numberField;
-
-        public FloatEntry(Entrance entrance, EntryList entryList, Text title, Text symbol, Float value, Consumer<Float> consumer) {
-            super(entrance, entryList, title, symbol, value, consumer);
-        }
-
-        @Override
-        public void onCreate() {
-            super.onCreate();
-
-            numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY() + 1, 72, 18));
-            numberField.setFilter(NumberField.DOUBLE_FILTER);
-            numberField.setNumber(getItem());
-            numberField.setResponder(number -> {
-                setItem(number.floatValue());
+            numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY() + 1, 72, 18, NumberField.TYPE_DOUBLE));
+            numberField.setValue(getItem());
+            numberField.setValueChangeListener(value -> {
+                setItem(value.doubleValue());
             });
 
         }
@@ -94,11 +66,10 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
         public void onCreate() {
             super.onCreate();
 
-            numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY() + 1, 72, 18));
-            numberField.setFilter(NumberField.INTEGER_FILTER);
-            numberField.setNumber(getItem());
-            numberField.setResponder(number -> {
-                setItem(number.intValue());
+            numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY() + 1, 72, 18, NumberField.TYPE_INTEGER));
+            numberField.setValue(getItem());
+            numberField.setValueChangeListener(value -> {
+                setItem(value.intValue());
             });
 
         }
