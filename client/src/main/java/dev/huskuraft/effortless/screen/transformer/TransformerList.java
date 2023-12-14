@@ -130,9 +130,9 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         protected List<SlotData> getData() {
             return List.of(
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().x())), Text.translate("effortless.axis.x")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().y())), Text.translate("effortless.axis.y")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().z())), Text.translate("effortless.axis.z")),
+                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().getX())), Text.translate("effortless.axis.x")),
+                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().getY())), Text.translate("effortless.axis.y")),
+                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().getZ())), Text.translate("effortless.axis.z")),
                     new SlotData.TextSymbol(Text.text(formatDouble(getItem().count())), Text.translate("effortless.transformer.array.count"))
             );
         }

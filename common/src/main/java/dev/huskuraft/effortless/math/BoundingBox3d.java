@@ -7,6 +7,30 @@ public class BoundingBox3d {
 
     private static final double EPSILON = 1.0E-7;
 
+    public double getMinX() {
+        return minX;
+    }
+
+    public double getMinY() {
+        return minY;
+    }
+
+    public double getMinZ() {
+        return minZ;
+    }
+
+    public double getMaxX() {
+        return maxX;
+    }
+
+    public double getMaxY() {
+        return maxY;
+    }
+
+    public double getMaxZ() {
+        return maxZ;
+    }
+
     public final double minX;
     public final double minY;
     public final double minZ;
@@ -181,6 +205,14 @@ public class BoundingBox3d {
 
     public boolean contains(double d, double e, double f) {
         return d >= this.minX && d < this.maxX && e >= this.minY && e < this.maxY && f >= this.minZ && f < this.maxZ;
+    }
+
+    public boolean containsIn(Vector3d vector) {
+        return this.containsIn(vector.getX(), vector.getY(), vector.getZ());
+    }
+
+    public boolean containsIn(double d, double e, double f) {
+        return d >= this.minX && d <= this.maxX && e >= this.minY && e <= this.maxY && f >= this.minZ && f <= this.maxZ;
     }
 
     public Vector3d getSize() {

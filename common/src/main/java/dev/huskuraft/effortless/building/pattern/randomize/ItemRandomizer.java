@@ -111,6 +111,11 @@ public class ItemRandomizer extends Randomizer<Item> {
     }
 
     @Override
+    public boolean isIntermediate() {
+        return false;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ItemRandomizer that)) return false;

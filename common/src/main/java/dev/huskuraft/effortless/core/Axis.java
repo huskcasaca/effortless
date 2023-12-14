@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.core;
 
+import dev.huskuraft.effortless.text.Text;
+
 public enum Axis {
     X("x") {
         public int choose(int x, int y, int z) {
@@ -35,8 +37,12 @@ public enum Axis {
         this.name = name;
     }
 
+    public Text getDisplayName() {
+        return Text.translate("effortless.axis.%s".formatted(name));
+    }
+
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public boolean isVertical() {

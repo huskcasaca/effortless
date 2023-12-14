@@ -12,7 +12,11 @@ public class Button extends AbstractButton {
     public static final int SMALL_WIDTH = 120;
     public static final int DEFAULT_WIDTH = 150;
     public static final int DEFAULT_HEIGHT = 20;
-    protected final OnPress onPress;
+    private OnPress onPress;
+
+    public Button(Entrance entrance, int i, int j, int k, int l, Text message) {
+        this(entrance, i, j, k, l, message, null);
+    }
 
     public Button(Entrance entrance, int i, int j, int k, int l, Text message, OnPress onPress) {
         super(entrance, i, j, k, l, message);
@@ -23,11 +27,17 @@ public class Button extends AbstractButton {
         return new Builder(entrance, text, onPress);
     }
 
-    public void onPress() {
-        this.onPress.onPress(this);
+    protected void onPress() {
+        if (onPress != null) {
+            this.onPress.onPress(this);
+        }
     }
 
-//	protected MutableComponent createNarrationMessage() {
+    public void setOnPressListener(OnPress onPress) {
+        this.onPress = onPress;
+    }
+
+    //	protected MutableComponent createNarrationMessage() {
 //		return this.createNarration.createNarrationMessage(() -> {
 //			return super.createNarrationMessage();
 //		});

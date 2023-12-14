@@ -11,7 +11,7 @@ public abstract class AbstractButton extends AbstractWidget {
         super(entrance, x, y, width, height, message);
     }
 
-    public abstract void onPress();
+    protected abstract void onPress();
 
     public void onClick(double d, double e) {
         onPress();
