@@ -1,9 +1,13 @@
 package dev.huskuraft.effortless.screen.settings;
 
+import dev.huskuraft.effortless.building.PositionType;
+import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.core.Entrance;
+import dev.huskuraft.effortless.core.Tuple2;
 import dev.huskuraft.effortless.gui.AbstractWidget;
 import dev.huskuraft.effortless.gui.Dimens;
 import dev.huskuraft.effortless.gui.EntryList;
+import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.gui.container.AbstractEntryList;
 import dev.huskuraft.effortless.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.gui.input.NumberField;
@@ -11,6 +15,8 @@ import dev.huskuraft.effortless.gui.slot.TextSlot;
 import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
@@ -24,29 +30,88 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
         return this.getWidth() / 2 + 160;
     }
 
-    public void addDoubleEntry(Text title, Text symbol, Double value, Consumer<Double> consumer) {
-        addEntry(new DoubleEntry(getEntrance(), this, title, symbol, value, consumer));
+    public void addPositionEntry(Axis axis, Tuple2<PositionType, Double> value, Consumer<Tuple2<PositionType, Double>> consumer) {
+        addEntry(new PositionEntry(getEntrance(), this, axis, value, consumer));
     }
 
-    public void addIntegerEntry(Text title, Text symbol, Integer value, Consumer<Integer> consumer) {
-        addEntry(new IntegerEntry(getEntrance(), this, title, symbol, value, consumer));
+    public void addDoubleEntry(Text title, Text symbol, Double value, Double min, Double max, Consumer<Double> consumer) {
+        addEntry(new DoubleEntry(getEntrance(), this, title, symbol, value, min, max, consumer));
     }
 
-    public static final class DoubleEntry extends Entry<Double> {
+    public void addIntegerEntry(Text title, Text symbol, Integer value, Integer min, Integer max, Consumer<Integer> consumer) {
+        addEntry(new IntegerEntry(getEntrance(), this, title, symbol, value, min, max, consumer));
+    }
 
+    public <T> void addValuesEntry(Text title, Text symbol, List<Text> messages, List<T> values, int index, Consumer<T> consumer) {
+        addEntry(new SelectorEntry<>(getEntrance(), this, title, symbol, messages, values, index, consumer));
+    }
+
+    public static final class PositionEntry extends Entry<Tuple2<PositionType, Double>> {
+
+        private Button typeButton;
         private NumberField numberField;
+        private Button teleportButton;
+        private Axis axis;
 
-        public DoubleEntry(Entrance entrance, EntryList entryList, Text title, Text symbol, Double value, Consumer<Double> consumer) {
-            super(entrance, entryList, title, symbol, value, consumer);
+        public PositionEntry(Entrance entrance, EntryList entryList, Axis axis, Tuple2<PositionType, Double> value, Consumer<Tuple2<PositionType, Double>> consumer) {
+            super(entrance, entryList, Text.translate("effortless.position.%s".formatted(axis.getName())), Text.text(axis.name().toUpperCase(Locale.ROOT)), value, consumer);
+            this.axis = axis;
         }
 
         @Override
         public void onCreate() {
             super.onCreate();
 
-            numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY() + 1, 72, 18, NumberField.TYPE_DOUBLE));
-            numberField.setValue(getItem());
-            numberField.setValueChangeListener(value -> {
+            this.typeButton = addWidget(new Button(getEntrance(), getX() + getWidth() - 60, getY(), 60, 20, getItem().value1().getDisplayName()));
+            this.typeButton.setOnPressListener(button -> {
+                setItem(getItem().withValue1(PositionType.values()[(getItem().value1().ordinal() + 1) % PositionType.values().length]).withValue2(0d));
+                numberField.setValue(getItem().value2());
+                typeButton.setMessage(getItem().value1().getDisplayName());
+                teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
+            });
+
+            this.numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 60 - 72, getY(), 72, 20, NumberField.TYPE_DOUBLE));
+            this.numberField.setValueRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
+            this.numberField.setValue(getItem().value2());
+            this.numberField.setValueChangeListener(value -> {
+                setItem(getItem().withValue2(value.doubleValue()));
+            });
+
+            this.teleportButton = addWidget(new Button(getEntrance(), getX() + getWidth() - 60 - 72 - 20, getY(), 20, 20, Text.text("P")));
+            this.teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
+            this.teleportButton.setOnPressListener(button -> {
+                setItem(getItem().withValue2(switch (axis) {
+                    case X -> getEntrance().getClient().getPlayer().getPosition().getX();
+                    case Y -> getEntrance().getClient().getPlayer().getPosition().getY();
+                    case Z -> getEntrance().getClient().getPlayer().getPosition().getZ();
+                }));
+                numberField.setValue(getItem().value2());
+            });
+
+        }
+
+    }
+
+    public static final class DoubleEntry extends Entry<Double> {
+
+        private NumberField numberField;
+        private final Double min;
+        private final Double max;
+
+        public DoubleEntry(Entrance entrance, EntryList entryList, Text title, Text symbol, Double value, Double min, Double max, Consumer<Double> consumer) {
+            super(entrance, entryList, title, symbol, value, consumer);
+            this.min = min;
+            this.max = max;
+        }
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+
+            this.numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY(), 72, 20, NumberField.TYPE_DOUBLE));
+            this.numberField.setValueRange(min, max);
+            this.numberField.setValue(getItem());
+            this.numberField.setValueChangeListener(value -> {
                 setItem(value.doubleValue());
             });
 
@@ -57,18 +122,23 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
     public static final class IntegerEntry extends Entry<Integer> {
 
         private NumberField numberField;
+        private final Integer min;
+        private final Integer max;
 
-        public IntegerEntry(Entrance entrance, EntryList entryList, Text title, Text symbol, Integer value, Consumer<Integer> consumer) {
+        public IntegerEntry(Entrance entrance, EntryList entryList, Text title, Text symbol, Integer value, Integer min, Integer max, Consumer<Integer> consumer) {
             super(entrance, entryList, title, symbol, value, consumer);
+            this.min = min;
+            this.max = max;
         }
 
         @Override
         public void onCreate() {
             super.onCreate();
 
-            numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY() + 1, 72, 18, NumberField.TYPE_INTEGER));
-            numberField.setValue(getItem());
-            numberField.setValueChangeListener(value -> {
+            this.numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY(), 72, 20, NumberField.TYPE_INTEGER));
+            this.numberField.setValueRange(min, max);
+            this.numberField.setValue(getItem());
+            this.numberField.setValueChangeListener(value -> {
                 setItem(value.intValue());
             });
 
@@ -76,7 +146,36 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
 
     }
 
-    public abstract static class Entry<T extends Object> extends EditableEntryList.Entry<T> {
+    public static final class SelectorEntry<T> extends Entry<T> {
+
+        private Button button;
+        private final List<Text> messages;
+        private final List<T> values;
+        private int index;
+
+        public SelectorEntry(Entrance entrance, EntryList entryList, Text title, Text symbol, List<Text> messages, List<T> values, int index, Consumer<T> consumer) {
+            super(entrance, entryList, title, symbol, values.get(index), consumer);
+            this.messages = messages;
+            this.values = values;
+            this.index = index;
+        }
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+
+            this.button = addWidget(new Button(getEntrance(), getX() + getWidth() - 60, getY(), 60, 20, messages.get(index)));
+            this.button.setOnPressListener(button -> {
+                index = (index + 1) % messages.size();
+                button.setMessage(messages.get(index));
+                setItem(values.get(index));
+            });
+
+        }
+
+    }
+
+    public abstract static class Entry<T> extends EditableEntryList.Entry<T> {
 
         protected TextSlot textSlot;
         protected AbstractWidget titleTextWidget;

@@ -9,7 +9,6 @@ import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 import dev.huskuraft.effortless.core.Axis;
-import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.networking.BufferSerializer;
 
@@ -43,9 +42,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
             return new ArrayTransformer(
                     buffer.readUUID(),
                     buffer.readText(),
-                    buffer.readDouble(),
-                    buffer.readDouble(),
-                    buffer.readDouble(),
+                    buffer.readVector3d(),
                     buffer.readInt()
             );
         }
@@ -54,9 +51,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         public void write(Buffer buffer, ArrayTransformer arrayTransformer) {
             buffer.writeUUID(arrayTransformer.getId());
             buffer.writeText(arrayTransformer.getName());
-            buffer.writeDouble(arrayTransformer.x());
-            buffer.writeDouble(arrayTransformer.y());
-            buffer.writeDouble(arrayTransformer.z());
+            buffer.writeVector3d(arrayTransformer.offset());
             buffer.writeInt(arrayTransformer.count());
         }
 
@@ -69,11 +64,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
             return new MirrorTransformer(
                     buffer.readUUID(),
                     buffer.readText(),
-                    new Vector3d(
-                            buffer.readDouble(),
-                            buffer.readDouble(),
-                            buffer.readDouble()
-                    ),
+                    buffer.readVector3d(),
                     buffer.readEnum(Axis.class)
             );
         }
@@ -82,9 +73,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         public void write(Buffer buffer, MirrorTransformer mirrorTransformer) {
             buffer.writeUUID(mirrorTransformer.getId());
             buffer.writeText(mirrorTransformer.getName());
-            buffer.writeDouble(mirrorTransformer.position().getX());
-            buffer.writeDouble(mirrorTransformer.position().getY());
-            buffer.writeDouble(mirrorTransformer.position().getZ());
+            buffer.writeVector3d(mirrorTransformer.position());
             buffer.writeEnum(mirrorTransformer.axis());
         }
 
@@ -97,11 +86,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
             return new RadialTransformer(
                     buffer.readUUID(),
                     buffer.readText(),
-                    new Vector3d(
-                            buffer.readDouble(),
-                            buffer.readDouble(),
-                            buffer.readDouble()
-                    ),
+                    buffer.readVector3d(),
                     buffer.readInt()
             );
         }
@@ -110,9 +95,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         public void write(Buffer buffer, RadialTransformer radialTransformer) {
             buffer.writeUUID(radialTransformer.getId());
             buffer.writeText(radialTransformer.getName());
-            buffer.writeDouble(radialTransformer.position().getX());
-            buffer.writeDouble(radialTransformer.position().getY());
-            buffer.writeDouble(radialTransformer.position().getZ());
+            buffer.writeVector3d(radialTransformer.position());
             buffer.writeInt(radialTransformer.slices());
         }
 

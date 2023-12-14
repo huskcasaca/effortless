@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.building.pattern;
 
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
+import dev.huskuraft.effortless.math.BoundingBox3d;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.Objects;
@@ -12,8 +13,13 @@ public abstract class Transformer {
 
     public static final int MAX_NAME_LENGTH = 255;
 
-    private final UUID id;
-    private final Text name;
+    public static final BoundingBox3d POSITION_BOUND = new BoundingBox3d(
+            Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE,
+            Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE
+    );
+
+    protected final UUID id;
+    protected final Text name;
 
     public Transformer(UUID id, Text name) {
         this.id = id;
@@ -35,6 +41,8 @@ public abstract class Transformer {
     public abstract Stream<Text> getSearchableTags();
 
     public abstract boolean isValid();
+
+    public abstract boolean isIntermediate();
 
     @Override
     public boolean equals(Object o) {

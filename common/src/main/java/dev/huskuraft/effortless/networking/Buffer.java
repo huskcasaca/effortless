@@ -2,6 +2,10 @@ package dev.huskuraft.effortless.networking;
 
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.math.Vector2d;
+import dev.huskuraft.effortless.math.Vector2i;
+import dev.huskuraft.effortless.math.Vector3d;
+import dev.huskuraft.effortless.math.Vector3i;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
 
@@ -140,5 +144,42 @@ public abstract class Buffer {
         }
     }
 
+    public Vector3d readVector3d() {
+        return new Vector3d(readDouble(), readDouble(), readDouble());
+    }
+
+    public void writeVector3d(Vector3d vector) {
+        writeDouble(vector.getX());
+        writeDouble(vector.getY());
+        writeDouble(vector.getZ());
+    }
+
+    public Vector2d readVector2d() {
+        return new Vector2d(readDouble(), readDouble());
+    }
+
+    public void writeVector2d(Vector2d vector) {
+        writeDouble(vector.getX());
+        writeDouble(vector.getZ());
+    }
+
+    public Vector3i readVector3i() {
+        return new Vector3i(readInt(), readInt(), readInt());
+    }
+
+    public void writeVector3i(Vector3i vector) {
+        writeInt(vector.getX());
+        writeInt(vector.getY());
+        writeInt(vector.getZ());
+    }
+
+    public Vector2i readVector2i() {
+        return new Vector2i(readInt(), readInt());
+    }
+
+    public void writeVector2i(Vector2i vector) {
+        writeInt(vector.getX());
+        writeInt(vector.getZ());
+    }
 
 }

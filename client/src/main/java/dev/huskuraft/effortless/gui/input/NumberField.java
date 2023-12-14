@@ -5,6 +5,8 @@ import dev.huskuraft.effortless.gui.AbstractContainerWidget;
 import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.text.Text;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -12,24 +14,24 @@ import java.util.function.Consumer;
 
 public class NumberField extends AbstractContainerWidget {
 
-    private record Range(Number low, Number high) {
+    private record Range(Number min, Number max) {
 
         public static final Range UNBOUNDED = new Range(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         public boolean contains(int number) {
-            return (number >= low.intValue() && number <= high.intValue());
+            return (number >= min.intValue() && number <= max.intValue());
         }
 
         public boolean contains(double number) {
-            return (number >= low.doubleValue() && number <= high.doubleValue());
+            return (number >= min.doubleValue() && number <= max.doubleValue());
         }
 
         public boolean isBelow(Number number) {
-            return (number.doubleValue() < low.doubleValue());
+            return (number.doubleValue() < min.doubleValue());
         }
 
         public boolean isAbove(Number number) {
-            return (number.doubleValue() > high.doubleValue());
+            return (number.doubleValue() > max.doubleValue());
         }
     }
 
@@ -54,15 +56,15 @@ public class NumberField extends AbstractContainerWidget {
         }
         this.type = type;
 
-        this.textField = addWidget(new EditBox(entrance, x + buttonWidth + 1, y + 1, width - 2 * buttonWidth - 2, height - 2, Text.empty()));
-        this.minusButton = addWidget(new Button(entrance, x, y - 1, buttonWidth, height + 2, Text.text("-"), button -> {
+        this.textField = addWidget(new EditBox(entrance, x + buttonWidth + 1, y + 2, width - 2 * buttonWidth - 2, height - 4, Text.empty()));
+        this.minusButton = addWidget(new Button(entrance, x, y, buttonWidth, height, Text.text("-"), button -> {
             float valueChanged = 1f;
             if (getEntrance().getClient().hasControlDown()) valueChanged = 5f;
             if (getEntrance().getClient().hasShiftDown()) valueChanged = 10f;
 
             setValue(getNumber().doubleValue() - valueChanged);
         }));
-        this.plusButton = addWidget(new Button(entrance, x + width - buttonWidth, y - 1, buttonWidth, height + 2, Text.text("+"), button -> {
+        this.plusButton = addWidget(new Button(entrance, x + width - buttonWidth, y, buttonWidth, height, Text.text("+"), button -> {
             float valueChanged = 1f;
             if (getEntrance().getClient().hasControlDown()) valueChanged = 5f;
             if (getEntrance().getClient().hasShiftDown()) valueChanged = 10f;
@@ -76,23 +78,21 @@ public class NumberField extends AbstractContainerWidget {
             try {
                 var value = format.parse(text);
                 if (range.isBelow(value)) {
-                    setValue(range.low());
+                    setValue(range.min());
                     return false;
                 } else if (range.isAbove(value)) {
-                    setValue(range.high());
+                    setValue(range.max());
                     return false;
                 }
             } catch (ParseException e) {
             }
             try {
-                switch (type) {
-                    case TYPE_DOUBLE -> Double.parseDouble(text);
-                    case TYPE_INTEGER -> Integer.parseInt(text);
-                    default -> {
-                        return false;
-                    }
-                }
-                return true;
+                return switch (type) {
+                    case TYPE_DOUBLE ->
+                            Double.parseDouble(text) == BigDecimal.valueOf(Double.parseDouble(text)).setScale(3, RoundingMode.DOWN).doubleValue();
+                    case TYPE_INTEGER -> Integer.parseInt(text) == Integer.parseInt(text);
+                    default -> false;
+                };
             } catch (NumberFormatException e) {
                 return false;
             }
@@ -127,8 +127,8 @@ public class NumberField extends AbstractContainerWidget {
         });
     }
 
-    public void setValueRange(Number low, Number high) {
-        this.range = new Range(low, high);
+    public void setValueRange(Number min, Number max) {
+        this.range = new Range(min, max);
     }
 
     public void setTooltipMessage(Text tooltip) {
