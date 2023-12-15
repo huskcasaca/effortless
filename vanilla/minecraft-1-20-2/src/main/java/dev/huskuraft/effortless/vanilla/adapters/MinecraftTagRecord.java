@@ -13,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Supplier;
 
 class MinecraftTagRecord extends TagRecord {
 
@@ -38,13 +37,13 @@ class MinecraftTagRecord extends TagRecord {
     }
 
     @Override
-    public Text getText(String key) {
-        return MinecraftAdapter.adapt(Component.Serializer.fromJson(getRef().getString(key)));
+    public void putString(String key, String value) {
+        getRef().putString(key, value);
     }
 
     @Override
-    public void putString(String key, String value) {
-        getRef().putString(key, value);
+    public Text getText(String key) {
+        return MinecraftAdapter.adapt(Component.Serializer.fromJson(getRef().getString(key)));
     }
 
     @Override
@@ -203,42 +202,32 @@ class MinecraftTagRecord extends TagRecord {
     }
 
     @Override
-    public <T> T getElement(String key, Supplier<TagReader<T>> supplier) {
-        return supplier.get().read(new MinecraftTagElement(getRef().get(key)));
+    public <T> T getElement(String key, TagReader<T> reader) {
+        return reader.read(new MinecraftTagElement(getRef().get(key)));
     }
 
     @Override
-    public <T> void putElement(String key, T value, Supplier<TagWriter<T>> supplier) {
+    public <T> void putElement(String key, T value, TagWriter<T> writer) {
         var tag = new MinecraftTagElement(new CompoundTag());
-        supplier.get().write(tag, value);
+        writer.write(tag, value);
         getRef().put(key, tag.getRef());
     }
 
     @Override
-    public <T> T get(Supplier<TagReader<T>> supplier) {
-        return supplier.get().read(this);
-    }
-
-    @Override
-    public <T> void put(T value, Supplier<TagWriter<T>> supplier) {
-        supplier.get().write(this, value);
-    }
-
-    @Override
-    public <T> List<T> getList(String key, Supplier<TagReader<T>> supplier) {
+    public <T> List<T> getList(String key, TagReader<T> writer) {
         var list = new ArrayList<T>();
         for (var tag : getRef().getList(key, Tag.TAG_COMPOUND)) {
-            list.add(supplier.get().read(new MinecraftTagRecord((CompoundTag) tag)));
+            list.add(writer.read(new MinecraftTagRecord((CompoundTag) tag)));
         }
         return list;
     }
 
     @Override
-    public <T> void putList(String key, Collection<T> collection, Supplier<TagWriter<T>> supplier) {
+    public <T> void putList(String key, Collection<T> collection, TagWriter<T> writer) {
         var listTag = new ListTag();
         for (var value : collection) {
             var tag = new MinecraftTagRecord(new CompoundTag());
-            supplier.get().write(tag, value);
+            writer.write(tag, value);
             listTag.add(tag.getRef());
         }
         getRef().put(key, listTag);

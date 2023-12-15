@@ -15,7 +15,7 @@ public class PatternSerializer extends TagSerializer<Pattern> {
         return new Pattern(
                 tag.getAsRecord().getUUID(TAG_ID),
                 tag.getAsRecord().getText(TAG_NAME),
-                tag.getAsRecord().getList(TAG_TRANSFORMERS, TransformerSerializer::new)
+                tag.getAsRecord().getList(TAG_TRANSFORMERS, new TransformerSerializer())
         );
     }
 
@@ -23,7 +23,7 @@ public class PatternSerializer extends TagSerializer<Pattern> {
     public void write(TagElement tag, Pattern pattern) {
         tag.getAsRecord().putUUID(TAG_ID, pattern.id());
         tag.getAsRecord().putText(TAG_NAME, pattern.name());
-        tag.getAsRecord().putList(TAG_TRANSFORMERS, pattern.transformers(), TransformerSerializer::new);
+        tag.getAsRecord().putList(TAG_TRANSFORMERS, pattern.transformers(), new TransformerSerializer());
     }
 
 
