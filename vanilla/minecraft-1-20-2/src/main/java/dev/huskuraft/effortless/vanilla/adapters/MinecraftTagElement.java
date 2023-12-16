@@ -1,25 +1,40 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.tag.TagElement;
+import dev.huskuraft.effortless.tag.TagPrimitive;
 import dev.huskuraft.effortless.tag.TagRecord;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 
+import java.util.Objects;
+
 class MinecraftTagElement extends TagElement {
 
-    private final Tag tag;
+    private Tag tag;
 
     MinecraftTagElement(Tag tag) {
         this.tag = tag;
     }
 
     public Tag getRef() {
-        return tag;
+        return Objects.requireNonNull(tag);
+    }
+
+    public void setRef(Tag tag) {
+        this.tag = tag;
     }
 
     @Override
-    public TagRecord getAsRecord() {
-        return new MinecraftTagRecord((CompoundTag) getRef());
+    public TagRecord asRecord() {
+        if (tag == null) {
+            this.tag = new CompoundTag();
+        }
+        return new MinecraftTagRecord(this);
+    }
+
+    @Override
+    public TagPrimitive asPrimitive() {
+        return new MinecraftTagPrimitive(this);
     }
 
     @Override

@@ -204,9 +204,6 @@ public class MinecraftAdapter {
         if (tag == null) {
             return null;
         }
-        if (tag instanceof MinecraftTagRecord tagRecord) {
-            return tagRecord.getRef();
-        }
         return ((MinecraftTagElement) tag).getRef();
     }
 
@@ -214,7 +211,7 @@ public class MinecraftAdapter {
         if (tag == null) {
             return null;
         }
-        return new MinecraftTagRecord(tag);
+        return new MinecraftTagElement(tag).asRecord();
     }
 
     public static CompoundTag adapt(TagRecord tag) {

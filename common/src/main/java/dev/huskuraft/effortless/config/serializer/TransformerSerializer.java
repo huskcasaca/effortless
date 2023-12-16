@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.config.serializer;
 
+import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
@@ -12,30 +13,32 @@ import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.tag.TagElement;
 import dev.huskuraft.effortless.tag.TagSerializer;
 
+import java.util.Arrays;
+
 public class TransformerSerializer extends TagSerializer<Transformer> {
 
-    private static final String TAG_ID = "Id";
+    private static final String TAG_ID = "id";
     private static final String TAG_NAME = "Name";
     private static final String TAG_TYPE = "Type";
 
     @Override
     public Transformer read(TagElement tag) {
-        return switch (tag.getAsRecord().getEnum(TAG_TYPE, Transformers.class)) {
-            case ARRAY -> tag.getAsRecord().get(new ArrayTransformerSerializer());
-            case MIRROR -> tag.getAsRecord().get(new MirrorTransformerSerializer());
-            case RADIAL -> tag.getAsRecord().get(new RadialTransformerSerializer());
-            case ITEM_RAND -> tag.getAsRecord().get(new ItemRandomizerSerializer());
+        return switch (tag.asRecord().getEnum(TAG_TYPE, Transformers.class)) {
+            case ARRAY -> tag.asRecord().get(new ArrayTransformerSerializer());
+            case MIRROR -> tag.asRecord().get(new MirrorTransformerSerializer());
+            case RADIAL -> tag.asRecord().get(new RadialTransformerSerializer());
+            case ITEM_RAND -> tag.asRecord().get(new ItemRandomizerSerializer());
         };
     }
 
     @Override
     public void write(TagElement tag, Transformer transformer) {
-        tag.getAsRecord().putEnum(TAG_TYPE, transformer.getType());
+        tag.asRecord().putEnum(TAG_TYPE, transformer.getType());
         switch (transformer.getType()) {
-            case ARRAY -> tag.getAsRecord().put((ArrayTransformer) transformer, new ArrayTransformerSerializer());
-            case MIRROR -> tag.getAsRecord().put((MirrorTransformer) transformer, new MirrorTransformerSerializer());
-            case RADIAL -> tag.getAsRecord().put((RadialTransformer) transformer, new RadialTransformerSerializer());
-            case ITEM_RAND -> tag.getAsRecord().put((ItemRandomizer) transformer, new ItemRandomizerSerializer());
+            case ARRAY -> tag.asRecord().put((ArrayTransformer) transformer, new ArrayTransformerSerializer());
+            case MIRROR -> tag.asRecord().put((MirrorTransformer) transformer, new MirrorTransformerSerializer());
+            case RADIAL -> tag.asRecord().put((RadialTransformer) transformer, new RadialTransformerSerializer());
+            case ITEM_RAND -> tag.asRecord().put((ItemRandomizer) transformer, new ItemRandomizerSerializer());
         }
     }
 
@@ -47,44 +50,51 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
         @Override
         public ArrayTransformer read(TagElement tag) {
             return new ArrayTransformer(
-                    tag.getAsRecord().getUUID(TAG_ID),
-                    tag.getAsRecord().getText(TAG_NAME),
-                    tag.getAsRecord().getElement(TAG_OFFSET, new Vector3dSerializer()),
-                    tag.getAsRecord().getInt(TAG_COUNT)
+                    tag.asRecord().getUUID(TAG_ID),
+                    tag.asRecord().getText(TAG_NAME),
+                    tag.asRecord().getVector3d(TAG_OFFSET),
+                    tag.asRecord().getInt(TAG_COUNT)
             );
         }
 
         @Override
-        public void write(TagElement tag, ArrayTransformer arrayTransformer) {
-            tag.getAsRecord().putUUID(TAG_ID, arrayTransformer.getId());
-            tag.getAsRecord().putText(TAG_NAME, arrayTransformer.getName());
-            tag.getAsRecord().putElement(TAG_OFFSET, arrayTransformer.offset(), new Vector3dSerializer());
-            tag.getAsRecord().putInt(TAG_COUNT, arrayTransformer.count());
+        public void write(TagElement tag, ArrayTransformer transformer) {
+            tag.asRecord().putUUID(TAG_ID, transformer.getId());
+            tag.asRecord().putText(TAG_NAME, transformer.getName());
+            tag.asRecord().putVector3d(TAG_OFFSET, transformer.offset());
+            tag.asRecord().putInt(TAG_COUNT, transformer.count());
         }
 
     }
 
     public static class MirrorTransformerSerializer extends TagSerializer<MirrorTransformer> {
 
-        private static final String TAG_OFFSET = "Offset";
+        private static final String TAG_POSITION = "Position";
+        private static final String TAG_POSITION_TYPE = "PositionType";
         private static final String TAG_AXIS = "Axis";
 
         @Override
         public MirrorTransformer read(TagElement tag) {
             return new MirrorTransformer(
-                    tag.getAsRecord().getUUID(TAG_ID),
-                    tag.getAsRecord().getText(TAG_NAME),
-                    tag.getAsRecord().getElement(TAG_OFFSET, Vector3dSerializer::new),
-                    tag.getAsRecord().getEnum(TAG_AXIS, Axis.class)
+                    tag.asRecord().getUUID(TAG_ID),
+                    tag.asRecord().getText(TAG_NAME),
+                    tag.asRecord().getVector3d(TAG_POSITION),
+                    tag.asRecord().getList(TAG_POSITION_TYPE, (tag1) -> {
+                        return tag1.asPrimitive().getEnum(PositionType.class);
+                    }).toArray(PositionType[]::new),
+                    tag.asRecord().getEnum(TAG_AXIS, Axis.class)
             );
         }
 
         @Override
-        public void write(TagElement tag, MirrorTransformer mirrorTransformer) {
-            tag.getAsRecord().putUUID(TAG_ID, mirrorTransformer.getId());
-            tag.getAsRecord().putText(TAG_NAME, mirrorTransformer.getName());
-            tag.getAsRecord().putElement(TAG_OFFSET, mirrorTransformer.position(), Vector3dSerializer::new);
-            tag.getAsRecord().putEnum(TAG_AXIS, mirrorTransformer.axis());
+        public void write(TagElement tag, MirrorTransformer transformer) {
+            tag.asRecord().putUUID(TAG_ID, transformer.getId());
+            tag.asRecord().putText(TAG_NAME, transformer.getName());
+            tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
+            tag.asRecord().putList(TAG_POSITION_TYPE, Arrays.asList(transformer.getPositionType()), (tag1, positionType) -> {
+                tag1.asPrimitive().putEnum(positionType);
+            });
+            tag.asRecord().putEnum(TAG_AXIS, transformer.axis());
         }
 
     }
@@ -92,24 +102,31 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
     public static class RadialTransformerSerializer extends TagSerializer<RadialTransformer> {
 
         private static final String TAG_POSITION = "Position";
+        private static final String TAG_POSITION_TYPE = "PositionType";
         private static final String TAG_SLICE = "Slice";
 
         @Override
         public RadialTransformer read(TagElement tag) {
             return new RadialTransformer(
-                    tag.getAsRecord().getUUID(TAG_ID),
-                    tag.getAsRecord().getText(TAG_NAME),
-                    tag.getAsRecord().getElement(TAG_POSITION, new Vector3dSerializer()),
-                    tag.getAsRecord().getInt(TAG_SLICE)
+                    tag.asRecord().getUUID(TAG_ID),
+                    tag.asRecord().getText(TAG_NAME),
+                    tag.asRecord().getVector3d(TAG_POSITION),
+                    tag.asRecord().getList(TAG_POSITION_TYPE, (tag1) -> {
+                        return tag1.asPrimitive().getEnum(PositionType.class);
+                    }).toArray(PositionType[]::new),
+                    tag.asRecord().getInt(TAG_SLICE)
             );
         }
 
         @Override
-        public void write(TagElement tag, RadialTransformer radialTransformer) {
-            tag.getAsRecord().putUUID(TAG_ID, radialTransformer.getId());
-            tag.getAsRecord().putText(TAG_NAME, radialTransformer.getName());
-            tag.getAsRecord().putElement(TAG_POSITION, radialTransformer.position(), new Vector3dSerializer());
-            tag.getAsRecord().putInt(TAG_SLICE, radialTransformer.slices());
+        public void write(TagElement tag, RadialTransformer transformer) {
+            tag.asRecord().putUUID(TAG_ID, transformer.getId());
+            tag.asRecord().putText(TAG_NAME, transformer.getName());
+            tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
+            tag.asRecord().putList(TAG_POSITION_TYPE, Arrays.asList(transformer.getPositionType()), (tag1, positionType) -> {
+                tag1.asPrimitive().putEnum(positionType);
+            });
+            tag.asRecord().putInt(TAG_SLICE, transformer.slices());
         }
 
     }
@@ -136,7 +153,7 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
 
     public static class ItemRandomizerSerializer extends TagSerializer<ItemRandomizer> {
 
-        private static final String TAG_ID = "Id";
+        private static final String TAG_ID = "id";
         private static final String TAG_NAME = "Name";
         private static final String TAG_ORDER = "Order";
         private static final String TAG_SUPPLIER = "Supplier";
@@ -148,27 +165,27 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
         @Override
         public ItemRandomizer read(TagElement tag) {
             return new ItemRandomizer(
-                    tag.getAsRecord().getUUID(TAG_ID),
-                    tag.getAsRecord().getText(TAG_NAME),
-                    tag.getAsRecord().getEnum(TAG_ORDER, Randomizer.Order.class),
-                    tag.getAsRecord().getEnum(TAG_SUPPLIER, Randomizer.Target.class),
-                    tag.getAsRecord().getEnum(TAG_CATEGORY, Randomizer.Category.class),
-                    tag.getAsRecord().getList(TAG_CHANCES, tag1 -> {
-                        return Chance.of(tag1.getAsRecord().getItem(TAG_CONTENT), tag1.getAsRecord().getByte(TAG_CHANCE));
+                    tag.asRecord().getUUID(TAG_ID),
+                    tag.asRecord().getText(TAG_NAME),
+                    tag.asRecord().getEnum(TAG_ORDER, Randomizer.Order.class),
+                    tag.asRecord().getEnum(TAG_SUPPLIER, Randomizer.Target.class),
+                    tag.asRecord().getEnum(TAG_CATEGORY, Randomizer.Category.class),
+                    tag.asRecord().getList(TAG_CHANCES, tag1 -> {
+                        return Chance.of(tag1.asRecord().getItem(TAG_CONTENT), tag1.asRecord().getByte(TAG_CHANCE));
                     })
             );
         }
 
         @Override
         public void write(TagElement tag, ItemRandomizer randomizer) {
-            tag.getAsRecord().putUUID(TAG_ID, randomizer.getId());
-            tag.getAsRecord().putText(TAG_NAME, randomizer.getName());
-            tag.getAsRecord().putEnum(TAG_ORDER, randomizer.getOrder());
-            tag.getAsRecord().putEnum(TAG_SUPPLIER, randomizer.getTarget());
-            tag.getAsRecord().putEnum(TAG_CATEGORY, randomizer.getCategory());
-            tag.getAsRecord().putList(TAG_CHANCES, randomizer.getChances(), (tag1, chance) -> {
-                tag1.getAsRecord().putItem(TAG_CONTENT, chance.content());
-                tag1.getAsRecord().putByte(TAG_CHANCE, chance.chance());
+            tag.asRecord().putUUID(TAG_ID, randomizer.getId());
+            tag.asRecord().putText(TAG_NAME, randomizer.getName());
+            tag.asRecord().putEnum(TAG_ORDER, randomizer.getOrder());
+            tag.asRecord().putEnum(TAG_SUPPLIER, randomizer.getTarget());
+            tag.asRecord().putEnum(TAG_CATEGORY, randomizer.getCategory());
+            tag.asRecord().putList(TAG_CHANCES, randomizer.getChances(), (tag1, chance) -> {
+                tag1.asRecord().putItem(TAG_CONTENT, chance.content());
+                tag1.asRecord().putByte(TAG_CHANCE, chance.chance());
             });
         }
 

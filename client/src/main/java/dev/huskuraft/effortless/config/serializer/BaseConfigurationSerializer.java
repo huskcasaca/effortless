@@ -16,17 +16,17 @@ public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration
     @Override
     public BaseConfiguration read(TagElement tag) {
         return new BaseConfiguration(
-                tag.getAsRecord().getElement(TAG_PREVIEW_CONFIG, new PreviewConfigurationSerializer()),
-                tag.getAsRecord().getElement(TAG_TRANSFORMER_CONFIG, new TransformerConfigurationSerializer()),
-                tag.getAsRecord().getElement(TAG_PATTERN_CONFIG, new PatternConfigurationSerializer())
+                tag.asRecord().getElement(TAG_PREVIEW_CONFIG, new PreviewConfigurationSerializer()),
+                tag.asRecord().getElement(TAG_TRANSFORMER_CONFIG, new TransformerConfigurationSerializer()),
+                tag.asRecord().getElement(TAG_PATTERN_CONFIG, new PatternConfigurationSerializer())
         );
     }
 
     @Override
     public void write(TagElement tag, BaseConfiguration config) {
-        tag.getAsRecord().putElement(TAG_PREVIEW_CONFIG, config.getPreviewConfig(), new PreviewConfigurationSerializer());
-        tag.getAsRecord().putElement(TAG_TRANSFORMER_CONFIG, config.getTransformerConfig(), new TransformerConfigurationSerializer());
-        tag.getAsRecord().putElement(TAG_PATTERN_CONFIG, config.getPatternConfig(), new PatternConfigurationSerializer());
+        tag.asRecord().putElement(TAG_PREVIEW_CONFIG, config.getPreviewConfig(), new PreviewConfigurationSerializer());
+        tag.asRecord().putElement(TAG_TRANSFORMER_CONFIG, config.getTransformerConfig(), new TransformerConfigurationSerializer());
+        tag.asRecord().putElement(TAG_PATTERN_CONFIG, config.getPatternConfig(), new PatternConfigurationSerializer());
     }
 
     public static class PreviewConfigurationSerializer extends TagSerializer<PreviewConfiguration> {
@@ -36,7 +36,7 @@ public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration
         }
 
         public void write(TagElement tag, PreviewConfiguration config) {
-
+            tag.asRecord(); // avoid NPE
         }
     }
 
@@ -50,18 +50,18 @@ public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration
         @Override
         public TransformerConfiguration read(TagElement tag) {
             return new TransformerConfiguration(
-                    tag.getAsRecord().getList(TAG_ARRAYS, new TransformerSerializer.ArrayTransformerSerializer()),
-                    tag.getAsRecord().getList(TAG_MIRRORS, new TransformerSerializer.MirrorTransformerSerializer()),
-                    tag.getAsRecord().getList(TAG_RADIALS, new TransformerSerializer.RadialTransformerSerializer()),
-                    tag.getAsRecord().getList(TAG_ITEM_RANDOMIZERS, new TransformerSerializer.ItemRandomizerSerializer()));
+                    tag.asRecord().getList(TAG_ARRAYS, new TransformerSerializer.ArrayTransformerSerializer()),
+                    tag.asRecord().getList(TAG_MIRRORS, new TransformerSerializer.MirrorTransformerSerializer()),
+                    tag.asRecord().getList(TAG_RADIALS, new TransformerSerializer.RadialTransformerSerializer()),
+                    tag.asRecord().getList(TAG_ITEM_RANDOMIZERS, new TransformerSerializer.ItemRandomizerSerializer()));
         }
 
         @Override
         public void write(TagElement tag, TransformerConfiguration config) {
-            tag.getAsRecord().putList(TAG_ARRAYS, config.getArrays(), new TransformerSerializer.ArrayTransformerSerializer());
-            tag.getAsRecord().putList(TAG_MIRRORS, config.getMirrors(), new TransformerSerializer.MirrorTransformerSerializer());
-            tag.getAsRecord().putList(TAG_RADIALS, config.getRadials(), new TransformerSerializer.RadialTransformerSerializer());
-            tag.getAsRecord().putList(TAG_ITEM_RANDOMIZERS, config.getItemRandomizers(), new TransformerSerializer.ItemRandomizerSerializer());
+            tag.asRecord().putList(TAG_ARRAYS, config.getArrays(), new TransformerSerializer.ArrayTransformerSerializer());
+            tag.asRecord().putList(TAG_MIRRORS, config.getMirrors(), new TransformerSerializer.MirrorTransformerSerializer());
+            tag.asRecord().putList(TAG_RADIALS, config.getRadials(), new TransformerSerializer.RadialTransformerSerializer());
+            tag.asRecord().putList(TAG_ITEM_RANDOMIZERS, config.getItemRandomizers(), new TransformerSerializer.ItemRandomizerSerializer());
         }
     }
 
@@ -73,13 +73,13 @@ public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration
         @Override
         public PatternConfiguration read(TagElement tag) {
             return new PatternConfiguration(
-                    tag.getAsRecord().getList(TAG_PATTERNS, new PatternSerializer())
+                    tag.asRecord().getList(TAG_PATTERNS, new PatternSerializer())
             );
         }
 
         @Override
         public void write(TagElement tag, PatternConfiguration Config) {
-            tag.getAsRecord().putList(TAG_PATTERNS, Config.getPatterns(), new PatternSerializer());
+            tag.asRecord().putList(TAG_PATTERNS, Config.getPatterns(), new PatternSerializer());
         }
     }
 
