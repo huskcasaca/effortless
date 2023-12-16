@@ -116,6 +116,16 @@ public class ItemRandomizer extends Randomizer<Item> {
     }
 
     @Override
+    public ItemRandomizer withName(Text name) {
+        return new ItemRandomizer(id, name, order, target, category, chances);
+    }
+
+    @Override
+    public ItemRandomizer withId(UUID id) {
+        return new ItemRandomizer(id, name, order, target, category, chances);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ItemRandomizer that)) return false;

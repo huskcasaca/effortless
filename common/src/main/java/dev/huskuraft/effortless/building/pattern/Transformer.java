@@ -44,6 +44,14 @@ public abstract class Transformer {
 
     public abstract boolean isIntermediate();
 
+    public abstract Transformer withName(Text name);
+
+    public abstract Transformer withId(UUID id);
+
+    public Transformer withRandomId() {
+        return withId(UUID.randomUUID());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

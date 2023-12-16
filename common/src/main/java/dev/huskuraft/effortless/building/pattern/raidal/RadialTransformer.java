@@ -117,6 +117,16 @@ public class RadialTransformer extends Transformer {
         return positionType[0] != PositionType.ABSOLUTE || positionType[1] != PositionType.ABSOLUTE || positionType[2] != PositionType.ABSOLUTE;
     }
 
+    @Override
+    public RadialTransformer withName(Text name) {
+        return new RadialTransformer(id, name, position, positionType, slice);
+    }
+
+    @Override
+    public RadialTransformer withId(UUID id) {
+        return new RadialTransformer(id, name, position, positionType, slice);
+    }
+
     public Vector3d position() {
         return position;
     }

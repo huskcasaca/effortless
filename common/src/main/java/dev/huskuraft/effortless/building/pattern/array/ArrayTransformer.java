@@ -70,6 +70,16 @@ public class ArrayTransformer extends Transformer {
         return false;
     }
 
+    @Override
+    public ArrayTransformer withName(Text name) {
+        return new ArrayTransformer(id, name, offset, count);
+    }
+
+    @Override
+    public ArrayTransformer withId(UUID id) {
+        return new ArrayTransformer(id, name, offset, count);
+    }
+
     public Vector3d offset() {
         return offset;
     }

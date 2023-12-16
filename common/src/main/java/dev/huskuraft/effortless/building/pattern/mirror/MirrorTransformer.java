@@ -70,6 +70,16 @@ public class MirrorTransformer extends Transformer {
         return positionType[0] != PositionType.ABSOLUTE || positionType[1] != PositionType.ABSOLUTE || positionType[2] != PositionType.ABSOLUTE;
     }
 
+    @Override
+    public MirrorTransformer withName(Text name) {
+        return new MirrorTransformer(id, name, position, positionType, axis);
+    }
+
+    @Override
+    public MirrorTransformer withId(UUID id) {
+        return new MirrorTransformer(id, name, position, positionType, axis);
+    }
+
     public Vector3d position() {
         return position;
     }
