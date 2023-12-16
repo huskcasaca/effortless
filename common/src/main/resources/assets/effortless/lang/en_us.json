@@ -256,9 +256,7 @@
   "effortless.build.summary.placed_blocks": "Placed Blocks",
   "effortless.build.summary.destroyed_blocks": "Destroyed Blocks",
   "effortless.position.move_to_player": "Move To Player",
-  "effortless.position.x": "Position X",
-  "effortless.position.y": "Position Y",
-  "effortless.position.z": "Position Z",
+  "effortless.position": "Position %s",
   "effortless.position.absolute": "Absolute",
   "effortless.position.relative": "Relative",
   "effortless.position.relative_once": "Relative Once"

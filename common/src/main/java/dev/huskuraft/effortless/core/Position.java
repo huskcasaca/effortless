@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.core;
 
+import dev.huskuraft.effortless.text.Text;
+
 public enum Position {
 
     DISABLED("disabled"),
@@ -12,8 +14,8 @@ public enum Position {
         this.name = name;
     }
 
-    public String getNameKey() {
-        return "effortless.position.%s".formatted(name);
+    public Text getDisplayName() {
+        return Text.translate("effortless.position.%s".formatted(name));
     }
 
     public AxisDirection getAxis() {

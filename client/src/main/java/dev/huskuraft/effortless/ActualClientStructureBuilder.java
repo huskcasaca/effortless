@@ -275,13 +275,13 @@ final class ActualClientStructureBuilder extends StructureBuilder {
         var texts = new ArrayList<Text>();
         texts.add(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
         var replace = AbstractRadialScreen.button(context.replaceMode());
-        texts.add(replace.getCategoryComponent().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(replace.getNameComponent().withStyle(TextStyle.GOLD)));
+        texts.add(replace.getDisplayCategory().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(replace.getDisplayName().withStyle(TextStyle.GOLD)));
 
         for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
             if (option.isEmpty()) continue;
             var button = AbstractRadialScreen.button(option.get());
-            texts.add(button.getCategoryComponent().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(button.getNameComponent().withStyle(TextStyle.GOLD)));
+            texts.add(button.getDisplayCategory().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(button.getDisplayName().withStyle(TextStyle.GOLD)));
         }
 
         texts.add(Text.translate("effortless.build.summary.state").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getStateComponent(context.state()).withStyle(TextStyle.GOLD)));
