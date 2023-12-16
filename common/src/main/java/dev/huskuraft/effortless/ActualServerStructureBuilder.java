@@ -34,7 +34,7 @@ final class ActualServerStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public BuildingResult update(Player player, UnaryOperator<Context> updater) {
+    public BuildingResult updateContext(Player player, UnaryOperator<Context> updater) {
         return null;
     }
 

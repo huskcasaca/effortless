@@ -67,7 +67,7 @@ final class ActualClientStructureBuilder extends StructureBuilder {
 
     @Override
     public BuildingResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction) {
-        return update(player, context -> {
+        return updateContext(player, context -> {
             if (interaction == null) {
                 return context.reset();
             }
@@ -93,7 +93,7 @@ final class ActualClientStructureBuilder extends StructureBuilder {
 
     @Override
     public Context getContextTraced(Player player) {
-        var context = getContext(player);
+        var context = getContext(player).finalize(player, BuildStage.INTERACT);
         if (context.noClicks()) {
             if (player.getItemStack(InteractionHand.MAIN).isEmpty()) {
                 context = context.withBreakingState();
@@ -112,17 +112,17 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     // from settings screen
     @Override
     public void setBuildMode(Player player, BuildMode buildMode) {
-        update(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
+        updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
     }
 
     @Override
     public void setBuildFeature(Player player, SingleSelectFeature feature) {
-        update(player, context -> context.withBuildFeature(feature));
+        updateContext(player, context -> context.withBuildFeature(feature));
     }
 
     @Override
     public void setBuildFeature(Player player, MultiSelectFeature feature) {
-        update(player, context -> {
+        updateContext(player, context -> {
             var features = context.buildFeatures().stream().filter(f -> f.getClass().equals(feature.getClass())).collect(Collectors.toSet());
             if (features.contains(feature)) {
                 if (features.size() > 1) {
@@ -137,12 +137,11 @@ final class ActualClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void setPattern(Player player, Pattern pattern) {
-        update(player, context -> {
-            return context.withPattern(pattern);
+        updateContext(player, context -> {
+            return context.withPattern(pattern).finalize(player, BuildStage.UPDATE_CONTEXT);
         });
     }
 
-    @Override
     public void onPlayerBreak(Player player) {
         var context = getContext(player);
         var result = context.withBreakingState().trace(player);
@@ -179,14 +178,15 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public BuildingResult update(Player player, UnaryOperator<Context> updater) {
+    public BuildingResult updateContext(Player player, UnaryOperator<Context> updater) {
         var context = getContext(player);
         var updated = updater.apply(context);
         if (updated.isFulfilled()) {
 
-            showLocalPlayerPreviewOnce(player, updated);
+            var finalized = updated.finalize(player, BuildStage.INTERACT);
+            showLocalPlayerPreviewOnce(player, finalized);
 
-            getEntrance().getChannel().sendPacket(new PlayerBuildPacket(updated));
+            getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalized));
             setContext(player, updated.reset());
 
             return BuildingResult.COMPLETED;

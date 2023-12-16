@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building.pattern;
 
+import dev.huskuraft.effortless.building.BuildSession;
+import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.math.BoundingBox3d;
@@ -52,6 +54,10 @@ public abstract class Transformer {
         return withId(UUID.randomUUID());
     }
 
+    public Transformer finalize(BuildSession session, BuildStage stage) {
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,6 +73,5 @@ public abstract class Transformer {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
-
 
 }

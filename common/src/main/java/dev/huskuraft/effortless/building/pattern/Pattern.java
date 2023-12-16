@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building.pattern;
 
+import dev.huskuraft.effortless.building.BuildSession;
+import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
@@ -51,6 +53,16 @@ public final class Pattern {
 
     public Pattern withRandomId() {
         return new Pattern(UUID.randomUUID(), name, transformers);
+    }
+
+    public Pattern withTransformers(List<Transformer> transformers) {
+        return new Pattern(id, name, transformers);
+    }
+
+    public Pattern finalize(BuildSession session, BuildStage stage) {
+        return withTransformers(
+                transformers().stream().map(transformer -> transformer.finalize(session, stage)).toList()
+        );
     }
 
     @Override
