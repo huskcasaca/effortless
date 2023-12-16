@@ -16,7 +16,6 @@ import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
 public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
@@ -54,7 +53,7 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
         private Axis axis;
 
         public PositionEntry(Entrance entrance, EntryList entryList, Axis axis, Tuple2<PositionType, Double> value, Consumer<Tuple2<PositionType, Double>> consumer) {
-            super(entrance, entryList, Text.translate("effortless.position.%s".formatted(axis.getName())), Text.text(axis.name().toUpperCase(Locale.ROOT)), value, consumer);
+            super(entrance, entryList, Text.translate("effortless.position", axis.getDisplayName()), axis.getDisplayName(), value, consumer);
             this.axis = axis;
         }
 

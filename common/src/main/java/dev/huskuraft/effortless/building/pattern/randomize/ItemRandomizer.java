@@ -98,9 +98,9 @@ public class ItemRandomizer extends Randomizer<Item> {
         return Stream.concat(
                 Stream.of(
                         getName(),
-                        Text.translate(order.getNameKey()),
-                        Text.translate(target.getNameKey()),
-                        Text.translate(category.getNameKey())),
+                        order.getDisplayName(),
+                        target.getDisplayName(),
+                        category.getDisplayName()),
                 chances.stream().map(Chance::content).map(item -> item.getDefaultStack().getHoverName())
         );
     }

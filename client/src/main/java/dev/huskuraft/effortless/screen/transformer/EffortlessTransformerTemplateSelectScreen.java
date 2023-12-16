@@ -80,7 +80,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
 
         for (var type : Transformers.values()) {
             tabButtons.add(
-                    addWidget(Button.builder(getEntrance(), type.getName(), button -> {
+                    addWidget(Button.builder(getEntrance(), type.getDisplayName(), button -> {
                         setSelectedType(type);
                     }).setBoundsGrid(getWidth(), 78, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
             );
@@ -100,7 +100,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     public void onReload() {
         useTemplateButton.setActive(entries.hasSelected());
         for (var tabButton : tabButtons) {
-            tabButton.setActive(!tabButton.getMessage().equals(selectedType.getName()));
+            tabButton.setActive(!tabButton.getMessage().equals(selectedType.getDisplayName()));
         }
     }
 

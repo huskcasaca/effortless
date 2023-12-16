@@ -14,7 +14,7 @@ public enum Transformers {
         this.name = name;
     }
 
-    public Text getName() {
+    public Text getDisplayName() {
         return Text.translate("effortless.transformer.%s".formatted(name));
     }
 

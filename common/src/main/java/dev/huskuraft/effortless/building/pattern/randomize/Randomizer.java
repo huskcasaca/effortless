@@ -42,8 +42,8 @@ public abstract class Randomizer<T> extends Transformer {
             this.name = name;
         }
 
-        public String getNameKey() {
-            return "effortless.randomizer.order.%s".formatted(getName());
+        public Text getDisplayName() {
+            return Text.translate("effortless.randomizer.order.%s".formatted(name));
         }
 
         public String getName() {
@@ -61,10 +61,9 @@ public abstract class Randomizer<T> extends Transformer {
             this.name = name;
         }
 
-        public String getNameKey() {
-            return "effortless.randomizer.target.%s".formatted(getName());
+        public Text getDisplayName() {
+            return Text.translate("effortless.randomizer.target.%s".formatted(name));
         }
-
         public String getName() {
             return name;
         }
@@ -81,8 +80,8 @@ public abstract class Randomizer<T> extends Transformer {
             this.clazz = clazz;
         }
 
-        public String getNameKey() {
-            return "effortless.randomizer.category.%s".formatted(getName());
+        public Text getDisplayName() {
+            return Text.translate("effortless.randomizer.category.%s".formatted(name));
         }
 
         public String getName() {

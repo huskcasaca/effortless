@@ -64,12 +64,12 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     protected static <T> Slot<T> slot(Text name, Resource icon, Color tintColor, T content) {
         return new Slot<>() {
             @Override
-            public Text getNameComponent() {
+            public Text getDisplayName() {
                 return name;
             }
 
             @Override
-            public Text getCategoryComponent() {
+            public Text getDisplayCategory() {
                 return null;
             }
 
@@ -91,15 +91,15 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
         };
     }
 
-    protected static <T> Button<T> button(Text category, Text name, Resource icon, T content) {
+    protected static <T> Button<T> button(Text name, Text category, Resource icon, T content) {
         return new Button<>() {
             @Override
-            public Text getNameComponent() {
+            public Text getDisplayName() {
                 return name;
             }
 
             @Override
-            public Text getCategoryComponent() {
+            public Text getDisplayCategory() {
                 return category;
             }
 
@@ -129,7 +129,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     protected static <T> ButtonSet<T> buttonSet(List<? extends Button<T>> entries) {
         return new ButtonSet<>() {
             @Override
-            public Text getNameComponent() {
+            public Text getDisplayName() {
                 return null;
             }
 
@@ -142,9 +142,9 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
     public static <T extends Option> Button<T> button(T option) {
         return button(
-                Text.translate("effortless.option.%s".formatted(option.getCategory())),
-                Text.translate("effortless.action.%s".formatted(option.getName())),
-                Resource.of("textures/option/%s.png".formatted(option.getName())),
+                option.getDisplayName(),
+                option.getDisplayCategory(),
+                option.getIcon(),
                 option
         );
     }
@@ -312,7 +312,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                 int textX = (int) (x * TEXT_DISTANCE);
                 int textY = (int) (y * TEXT_DISTANCE) - getTypeface().getLineHeight() / 2;
 
-                var text = slot.getNameComponent();
+                var text = slot.getDisplayName();
 
                 if (x <= -0.2) {
                     textX -= getTypeface().measureWidth(text);
@@ -411,8 +411,8 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
             renderer.drawTooltip(
                     getTypeface(),
                     List.of(
-                            hoveredButton.getCategoryComponent().copy().withStyle(TextStyle.WHITE),
-                            hoveredButton.getNameComponent().copy().withStyle(TextStyle.GOLD)
+                            hoveredButton.getDisplayCategory().withStyle(TextStyle.WHITE),
+                            hoveredButton.getDisplayName().withStyle(TextStyle.GOLD)
                     ), mouseX, mouseY);
         }
     }
@@ -437,9 +437,9 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
     public interface Slot<T> {
 
-        Text getNameComponent();
+        Text getDisplayName();
 
-        Text getCategoryComponent();
+        Text getDisplayCategory();
 
         Resource getIcon();
 
@@ -451,9 +451,9 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
     public interface Button<T> {
 
-        Text getNameComponent();
+        Text getDisplayName();
 
-        Text getCategoryComponent();
+        Text getDisplayCategory();
 
         Resource getIcon();
 
@@ -465,7 +465,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
     public interface ButtonSet<T> {
 
-        Text getNameComponent();
+        Text getDisplayName();
 
         List<? extends Button<T>> getButtons();
 

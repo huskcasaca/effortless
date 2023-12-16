@@ -59,13 +59,13 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.getName().getString());
 
-        this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.order", Text.translate(lastSettings.getOrder().getNameKey())), button -> {
+        this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.order", lastSettings.getOrder().getDisplayName()), button -> {
             lastOrder = Randomizer.Order.values()[(lastOrder.ordinal() + 1) % Randomizer.Order.values().length];
-            orderButton.setMessage(Text.translate("effortless.randomizer.edit.order", Text.translate(lastOrder.getNameKey())));
+            orderButton.setMessage(Text.translate("effortless.randomizer.edit.order", lastOrder.getDisplayName()));
         }).setBoundsGrid(getWidth(), 82, 0f, 0f, 0.5f).build());
-        this.supplierButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.target", Text.translate(lastTarget.getNameKey())), button -> {
+        this.supplierButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.target", lastTarget.getDisplayName()), button -> {
             lastTarget = Randomizer.Target.values()[(lastTarget.ordinal() + 1) % Randomizer.Target.values().length];
-            supplierButton.setMessage(Text.translate("effortless.randomizer.edit.target", Text.translate(lastTarget.getNameKey())));
+            supplierButton.setMessage(Text.translate("effortless.randomizer.edit.target", lastTarget.getDisplayName()));
         }).setBoundsGrid(getWidth(), 82, 0f, 0.5f, 0.5f).build());
 
         this.entries = addWidget(new ItemChanceList(getEntrance(), 0, 82, getWidth(), getHeight() - 82 - 60));
