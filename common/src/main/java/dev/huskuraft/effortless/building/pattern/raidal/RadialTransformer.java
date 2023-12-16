@@ -39,11 +39,7 @@ public class RadialTransformer extends Transformer {
     private final int slice;
 
     public RadialTransformer(Vector3d position, int slice) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, slice);
-    }
-
-    public RadialTransformer(UUID id, Text name, Vector3d position, int slice) {
-        this(id, name, position, new PositionType[]{PositionType.ABSOLUTE, PositionType.ABSOLUTE, PositionType.ABSOLUTE}, slice);
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, new PositionType[]{PositionType.ABSOLUTE, PositionType.ABSOLUTE, PositionType.ABSOLUTE}, slice);
     }
 
     public RadialTransformer(UUID id, Text name, Vector3d position, PositionType[] positionType, int slice) {
@@ -71,15 +67,15 @@ public class RadialTransformer extends Transformer {
     }
 
     public RadialTransformer withPositionX(double x) {
-        return new RadialTransformer(id, name, position.withX(x), slice);
+        return new RadialTransformer(id, name, position.withX(x), positionType, slice);
     }
 
     public RadialTransformer withPositionY(double y) {
-        return new RadialTransformer(id, name, position.withY(y), slice);
+        return new RadialTransformer(id, name, position.withY(y), positionType, slice);
     }
 
     public RadialTransformer withPositionZ(double z) {
-        return new RadialTransformer(id, name, position.withZ(z), slice);
+        return new RadialTransformer(id, name, position.withZ(z), positionType, slice);
     }
 
     public RadialTransformer withPositionType(PositionType positionType) {
@@ -103,7 +99,7 @@ public class RadialTransformer extends Transformer {
     }
 
     public RadialTransformer withSlice(int slice) {
-        return new RadialTransformer(id, name, position, slice);
+        return new RadialTransformer(id, name, position, positionType, slice);
     }
 
     @Override

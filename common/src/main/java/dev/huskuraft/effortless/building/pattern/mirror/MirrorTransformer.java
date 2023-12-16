@@ -21,7 +21,6 @@ public class MirrorTransformer extends Transformer {
     public static final MirrorTransformer ZERO_Y = new MirrorTransformer(Vector3d.ZERO, Axis.Y);
     public static final MirrorTransformer ZERO_Z = new MirrorTransformer(Vector3d.ZERO, Axis.Z);
 
-
     //    private final boolean enabled;
 
     private final Vector3d position;
@@ -33,11 +32,7 @@ public class MirrorTransformer extends Transformer {
     private final Axis axis;
 
     public MirrorTransformer(Vector3d position, Axis axis) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.mirror"), position, axis);
-    }
-
-    public MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis) {
-        this(id, name, position, new PositionType[]{PositionType.ABSOLUTE, PositionType.ABSOLUTE, PositionType.ABSOLUTE}, axis);
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.mirror"), position, new PositionType[]{PositionType.ABSOLUTE, PositionType.ABSOLUTE, PositionType.ABSOLUTE}, axis);
     }
 
     public MirrorTransformer(UUID id, Text name, Vector3d position, PositionType[] positionType, Axis axis) {

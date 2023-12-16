@@ -71,7 +71,7 @@ public abstract class Buffer {
         return reader.read(this);
     }
 
-    public <T> List<T> readCollection(BufferReader<T> reader) {
+    public <T> List<T> readList(BufferReader<T> reader) {
         var i = readInt();
         var collection = new ArrayList<T>();
 
@@ -137,7 +137,7 @@ public abstract class Buffer {
         writer.write(this, value);
     }
 
-    public <T> void writeCollection(Collection<T> collection, BufferWriter<T> writer) {
+    public <T> void writeList(Collection<T> collection, BufferWriter<T> writer) {
         writeInt(collection.size());
         for (var object : collection) {
             write(object, writer);

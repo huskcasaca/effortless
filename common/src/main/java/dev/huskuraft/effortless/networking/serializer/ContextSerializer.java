@@ -18,7 +18,7 @@ public class ContextSerializer extends BufferSerializer<Context> {
                 buffer.readEnum(BuildState.class),
                 buffer.readEnum(BuildType.class),
                 new Context.BuildInteractions(
-                        buffer.readCollection(buffer1 -> buffer1.readNullable(new BlockInteractionSerializer()))
+                        buffer.readList(buffer1 -> buffer1.readNullable(new BlockInteractionSerializer()))
                 ),
                 new Context.StructureParams(
                         buffer.readEnum(BuildMode.class),
@@ -32,7 +32,7 @@ public class ContextSerializer extends BufferSerializer<Context> {
                         new Pattern(
                                 buffer.readUUID(),
                                 buffer.readText(),
-                                buffer.readCollection(new TransformerSerializer())
+                                buffer.readList(new TransformerSerializer())
                         )),
                 new Context.ReachParams(0, 0)
         );
@@ -43,7 +43,7 @@ public class ContextSerializer extends BufferSerializer<Context> {
         buffer.writeUUID(context.uuid());
         buffer.writeEnum(context.state());
         buffer.writeEnum(context.type());
-        buffer.writeCollection(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
+        buffer.writeList(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
 
         buffer.writeEnum(context.buildMode());
         buffer.writeEnum(context.circleStart());
@@ -55,7 +55,7 @@ public class ContextSerializer extends BufferSerializer<Context> {
 
         buffer.writeUUID(context.patternParams().pattern().id());
         buffer.writeText(context.patternParams().pattern().name());
-        buffer.writeCollection(context.patternParams().pattern().transformers(), new TransformerSerializer());
+        buffer.writeList(context.patternParams().pattern().transformers(), new TransformerSerializer());
     }
 
 }
