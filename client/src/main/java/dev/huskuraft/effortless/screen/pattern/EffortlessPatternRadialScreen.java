@@ -7,8 +7,8 @@ import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
-import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.core.Entrance;
+import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.input.Key;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
 import dev.huskuraft.effortless.text.Text;
@@ -32,9 +32,22 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
     }
 
     public static Slot<Pattern> slot(Pattern pattern) {
+
+        if (pattern == Pattern.DISABLED) return slot(
+                pattern.name(),
+                Resource.of("textures/mode/disabled.png"),
+                new Color(0.25f, 0.25f, 0.25f, 0.5f),
+                pattern
+        );
+        if (pattern == Pattern.EMPTY) return slot(
+                pattern.name(),
+                Resource.of("textures/mode/empty.png"),
+                new Color(0.25f, 0.25f, 0.25f, 0.5f),
+                pattern
+        );
         return slot(
                 pattern.name(),
-                pattern == Pattern.DISABLED ? BuildMode.DISABLED.getIcon() : BuildMode.SPHERE.getIcon(),
+                Resource.of("textures/mode/sphere.png"),
                 new Color(0.25f, 0.25f, 0.25f, 0.5f),
                 pattern
         );
