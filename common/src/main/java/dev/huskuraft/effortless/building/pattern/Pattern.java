@@ -40,6 +40,18 @@ public final class Pattern {
         return transformers;
     }
 
+    public Pattern withName(Text name) {
+        return new Pattern(id, name, transformers);
+    }
+
+    public Pattern withId(UUID id) {
+        return new Pattern(id, name, transformers);
+    }
+
+    public Pattern withRandomId() {
+        return new Pattern(UUID.randomUUID(), name, transformers);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

@@ -112,7 +112,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
 
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.duplicate"), button -> {
             if (entries.hasSelected()) {
-                entries.insertSelected(entries.getSelected().getItem());
+                entries.insertSelected(entries.getSelected().getItem().withRandomId());
             }
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
