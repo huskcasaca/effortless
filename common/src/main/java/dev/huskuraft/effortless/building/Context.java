@@ -242,6 +242,10 @@ public record Context(
         return new Context(uuid, state, type, interactions, structureParams, patternParams.withPattern(pattern), reachParams);
     }
 
+    public Context finalize(Player player, BuildStage stage) {
+        return withPattern(pattern().finalize(new BuildSession(player.getWorld(), player, this), stage));
+    }
+
     // new context for idle
     public Context reset() {
         return new Context(

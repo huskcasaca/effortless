@@ -14,7 +14,7 @@ public abstract class StructureBuilder {
 
     public abstract BuildingResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction);
 
-    public abstract BuildingResult update(Player player, UnaryOperator<Context> updater);
+    public abstract BuildingResult updateContext(Player player, UnaryOperator<Context> updater);
 
     public abstract Context getDefaultContext();
 

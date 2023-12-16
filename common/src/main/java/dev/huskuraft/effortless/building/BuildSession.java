@@ -68,4 +68,7 @@ public final class BuildSession implements Session {
         return create(world, player, context);
     }
 
+    public Player getPlayer() {
+        return player;
+    }
 }

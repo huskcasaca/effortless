@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building.pattern.raidal;
 
+import dev.huskuraft.effortless.building.BuildSession;
+import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
@@ -115,6 +117,23 @@ public class RadialTransformer extends Transformer {
     @Override
     public boolean isIntermediate() {
         return positionType[0] != PositionType.ABSOLUTE || positionType[1] != PositionType.ABSOLUTE || positionType[2] != PositionType.ABSOLUTE;
+    }
+
+
+    @Override
+    public RadialTransformer finalize(BuildSession session, BuildStage stage) {
+        return switch (stage) {
+            case NONE -> this;
+            case UPDATE_CONTEXT, INTERACT -> new RadialTransformer(id, name, new Vector3d(
+                    positionType[0].getStage() == stage ? position.getX() + session.getPlayer().getPosition().getX() : position.getX(),
+                    positionType[1].getStage() == stage ? position.getY() + session.getPlayer().getPosition().getY() : position.getY(),
+                    positionType[2].getStage() == stage ? position.getZ() + session.getPlayer().getPosition().getZ() : position.getZ()
+            ), new PositionType[]{
+                    positionType[0].getStage() == stage ? PositionType.ABSOLUTE : positionType[0],
+                    positionType[1].getStage() == stage ? PositionType.ABSOLUTE : positionType[1],
+                    positionType[2].getStage() == stage ? PositionType.ABSOLUTE : positionType[2]
+            }, slice);
+        };
     }
 
     @Override
