@@ -1,13 +1,9 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.tag.TagElement;
-import dev.huskuraft.effortless.tag.TagReader;
-import dev.huskuraft.effortless.tag.TagRecord;
-import dev.huskuraft.effortless.tag.TagWriter;
+import dev.huskuraft.effortless.tag.*;
 import dev.huskuraft.effortless.text.Text;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -16,19 +12,24 @@ import java.util.List;
 
 class MinecraftTagRecord extends TagRecord {
 
-    private final CompoundTag tag;
+    private final MinecraftTagElement proxy;
 
-    MinecraftTagRecord(CompoundTag tag) {
-        this.tag = tag;
+    MinecraftTagRecord(MinecraftTagElement tag) {
+        this.proxy = tag;
     }
 
     public CompoundTag getRef() {
-        return tag;
+        return (CompoundTag) proxy.getRef();
     }
 
     @Override
-    public TagRecord getAsRecord() {
+    public TagRecord asRecord() {
         return this;
+    }
+
+    @Override
+    public TagPrimitive asPrimitive() {
+        return new MinecraftTagPrimitive(proxy);
     }
 
     @Override
@@ -208,7 +209,7 @@ class MinecraftTagRecord extends TagRecord {
 
     @Override
     public <T> void putElement(String key, T value, TagWriter<T> writer) {
-        var tag = new MinecraftTagElement(new CompoundTag());
+        var tag = new MinecraftTagElement(null);
         writer.write(tag, value);
         getRef().put(key, tag.getRef());
     }
@@ -216,8 +217,8 @@ class MinecraftTagRecord extends TagRecord {
     @Override
     public <T> List<T> getList(String key, TagReader<T> writer) {
         var list = new ArrayList<T>();
-        for (var tag : getRef().getList(key, Tag.TAG_COMPOUND)) {
-            list.add(writer.read(new MinecraftTagRecord((CompoundTag) tag)));
+        for (var tag : (ListTag) getRef().get(key)) {
+            list.add(writer.read(new MinecraftTagElement(tag)));
         }
         return list;
     }
@@ -226,7 +227,7 @@ class MinecraftTagRecord extends TagRecord {
     public <T> void putList(String key, Collection<T> collection, TagWriter<T> writer) {
         var listTag = new ListTag();
         for (var value : collection) {
-            var tag = new MinecraftTagRecord(new CompoundTag());
+            var tag = new MinecraftTagElement(null);
             writer.write(tag, value);
             listTag.add(tag.getRef());
         }

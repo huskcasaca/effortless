@@ -3,6 +3,10 @@ package dev.huskuraft.effortless.tag;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.core.Resource;
+import dev.huskuraft.effortless.math.Vector2d;
+import dev.huskuraft.effortless.math.Vector2i;
+import dev.huskuraft.effortless.math.Vector3d;
+import dev.huskuraft.effortless.math.Vector3i;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.Collection;
@@ -133,17 +137,61 @@ public abstract class TagRecord extends TagElement {
 
     public final ItemStack getItemStack(String key) {
         return getElement(key, (tag1) -> ItemStack.of(
-                tag1.getAsRecord().getItem("Item"),
-                tag1.getAsRecord().getInt("Count"),
-                tag1.getAsRecord().getElement("Tag").getAsRecord()
+                tag1.asRecord().getItem("Item"),
+                tag1.asRecord().getInt("Count"),
+                tag1.asRecord().getElement("Tag").asRecord()
         ));
     }
 
     public final void putItemStack(String key, ItemStack value) {
         putElement(key, value, (tag1, itemStack) -> {
-            tag1.getAsRecord().putItem("Item", itemStack.getItem());
-            tag1.getAsRecord().putInt("Count", itemStack.getStackSize());
-            tag1.getAsRecord().putElement("Tag", itemStack.getTag());
+            tag1.asRecord().putItem("Item", itemStack.getItem());
+            tag1.asRecord().putInt("Count", itemStack.getStackSize());
+            tag1.asRecord().putElement("Tag", itemStack.getTag());
+        });
+    }
+
+    public final Vector3d getVector3d(String key) {
+        var positions = getList(key, (tag1) -> tag1.asPrimitive().getDouble()).stream().mapToDouble(Double::doubleValue).toArray();
+        return new Vector3d(positions[0], positions[1], positions[2]);
+    }
+
+    public final void putVector3d(String key, Vector3d value) {
+        putList(key, List.of(value.getX(), value.getY(), value.getZ()), (tag1, value1) -> {
+            tag1.asPrimitive().putDouble(value1);
+        });
+    }
+
+    public final Vector3i getVector3i(String key) {
+        var positions = getList(key, (tag1) -> tag1.asPrimitive().getInt()).stream().mapToInt(Integer::intValue).toArray();
+        return new Vector3i(positions[0], positions[1], positions[2]);
+    }
+
+    public final void putVector3i(String key, Vector3i value) {
+        putList(key, List.of(value.getX(), value.getY(), value.getZ()), (tag1, value1) -> {
+            tag1.asPrimitive().putInt(value1);
+        });
+    }
+
+    public final Vector2d getVector2d(String key) {
+        var positions = getList(key, (tag1) -> tag1.asPrimitive().getDouble()).stream().mapToDouble(Double::doubleValue).toArray();
+        return new Vector2d(positions[0], positions[1]);
+    }
+
+    public final void putVector2d(String key, Vector2d value) {
+        putList(key, List.of(value.getX(), value.getZ()), (tag1, value1) -> {
+            tag1.asPrimitive().putDouble(value1);
+        });
+    }
+
+    public final Vector2i getVector2i(String key) {
+        var positions = getList(key, (tag1) -> tag1.asPrimitive().getInt()).stream().mapToInt(Integer::intValue).toArray();
+        return new Vector2i(positions[0], positions[1]);
+    }
+
+    public final void putVector2i(String key, Vector2i value) {
+        putList(key, List.of(value.getX(), value.getZ()), (tag1, value1) -> {
+            tag1.asPrimitive().putInt(value1);
         });
     }
 
