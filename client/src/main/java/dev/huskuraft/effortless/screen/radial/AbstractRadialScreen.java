@@ -29,8 +29,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
             new Color(0.42f, 0.42f, 0.42f, 0.64f)
     );
     private static final ColorState RADIAL_BUTTON_COLOR_STATE = RADIAL_SLOT_COLOR_STATE;
-    private static final int WHITE_TEXT_COLOR = 0xffffffff;
-    private static final int OPTION_TEXT_COLOR = 0xeeeeeeff;
+    private static final int WHITE_TEXT_COLOR = 0xFFFFFF;
     private static final double RING_INNER_EDGE = 32;
     private static final double RING_OUTER_EDGE = 67;
     private static final double CATEGORY_LINE_OUTER_EDGE = 36;

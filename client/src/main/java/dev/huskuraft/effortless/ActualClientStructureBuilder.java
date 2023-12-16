@@ -273,7 +273,7 @@ final class ActualClientStructureBuilder extends StructureBuilder {
 
     public void showContextOverlay(UUID uuid, Context context, int priority) {
         var texts = new ArrayList<Text>();
-        texts.add(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(context.buildMode().getNameComponent().withStyle(TextStyle.GOLD)));
+        texts.add(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
         var replace = AbstractRadialScreen.button(context.replaceMode());
         texts.add(replace.getCategoryComponent().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(replace.getNameComponent().withStyle(TextStyle.GOLD)));
 

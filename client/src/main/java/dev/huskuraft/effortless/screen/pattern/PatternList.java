@@ -82,7 +82,7 @@ public final class PatternList extends EditableEntryList<Pattern> {
 
         private Text getDisplayName(Pattern pattern) {
             if (pattern.name().isBlank()) {
-                return Text.translate("effortless.pattern.no_name").withStyle(TextStyle.GRAY, TextStyle.ITALIC);
+                return Text.translate("effortless.pattern.no_name").withStyle(TextStyle.GRAY);
             }
             return pattern.name();
         }

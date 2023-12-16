@@ -114,7 +114,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
 
         protected Text getDisplayName() {
             if (getItem().getName().isBlank()) {
-                return Text.translate("effortless.transformer.no_name").withStyle(TextStyle.GRAY, TextStyle.ITALIC);
+                return Text.translate("effortless.transformer.no_name").withStyle(TextStyle.GRAY);
             }
             return getItem().getName();
         }
