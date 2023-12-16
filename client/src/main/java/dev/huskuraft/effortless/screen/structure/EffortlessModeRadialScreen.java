@@ -30,7 +30,7 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
 
     public static Slot<BuildMode> slot(BuildMode mode) {
         return slot(
-                mode.getNameComponent(),
+                mode.getDisplayName(),
                 mode.getIcon(),
                 mode.getTintColor(),
                 mode

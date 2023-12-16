@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.building.structure.builder.singles.Single;
 import dev.huskuraft.effortless.building.structure.builder.triples.*;
 import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.text.TextStyle;
 
 import java.awt.*;
 
@@ -64,12 +65,11 @@ public enum BuildMode {
         return name;
     }
 
-    public String getNameKey() {
-        return "effortless.mode.%s".formatted(name);
-    }
-
-    public Text getNameComponent() {
-        return Text.translate(getNameKey());
+    public Text getDisplayName() {
+        if (isDisabled()) {
+            return Text.translate("effortless.mode.%s".formatted(name)).withStyle(TextStyle.GRAY);
+        }
+        return Text.translate("effortless.mode.%s".formatted(name));
     }
 
     public Resource getIcon() {

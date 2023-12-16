@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.text.Text;
 
 public class TextWidget extends AbstractWidget {
 
-    private int color = 16777215;
+    private int color = 0xFFFFFF;
     private Gravity gravity = Gravity.START;
 
     public TextWidget(Entrance entrance, int x, int y, Text message) {
