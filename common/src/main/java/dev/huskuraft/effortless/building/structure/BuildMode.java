@@ -2,8 +2,9 @@ package dev.huskuraft.effortless.building.structure;
 
 import dev.huskuraft.effortless.building.structure.builder.Builder;
 import dev.huskuraft.effortless.building.structure.builder.doubles.Circle;
+import dev.huskuraft.effortless.building.structure.builder.doubles.Floor;
 import dev.huskuraft.effortless.building.structure.builder.doubles.Line;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Square;
+import dev.huskuraft.effortless.building.structure.builder.doubles.Wall;
 import dev.huskuraft.effortless.building.structure.builder.singles.Disable;
 import dev.huskuraft.effortless.building.structure.builder.singles.Single;
 import dev.huskuraft.effortless.building.structure.builder.triples.*;
@@ -17,9 +18,9 @@ public enum BuildMode {
     SINGLE("single", new Single(), Category.BASIC /*, BuildOption.BUILD_SPEED*/),
 
     LINE("line", new Line(), Category.SQUARE /*, OptionEnum.THICKNESS*/),
-    SQUARE("square", new Square(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
-    //    WALL("wall", new Wall(), Category.SQUARE, BuildFeature.PLANE_FILLING),
-//    FLOOR("floor", new Floor(), Category.SQUARE, BuildFeature.PLANE_FILLING),
+    //    SQUARE("square", new Square(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
+    WALL("wall", new Wall(), Category.SQUARE, BuildFeature.PLANE_FILLING),
+    FLOOR("floor", new Floor(), Category.SQUARE, BuildFeature.PLANE_FILLING),
     CUBE("cube", new Cube(), Category.SQUARE, BuildFeature.CUBE_FILLING),
 
     DIAGONAL_LINE("diagonal_line", new DiagonalLine(), Category.DIAGONAL),
