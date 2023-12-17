@@ -5,21 +5,22 @@ import dev.huskuraft.effortless.core.AxisDirection;
 import dev.huskuraft.effortless.core.BlockPosition;
 import dev.huskuraft.effortless.core.Orientation;
 import dev.huskuraft.effortless.math.Vector3d;
-import dev.huskuraft.effortless.renderer.RenderStyle;
+import dev.huskuraft.effortless.renderer.RenderType;
 import dev.huskuraft.effortless.renderer.Renderer;
 
 import java.util.*;
 
 public class BlockClusterOutline extends Outline {
 
-    static Vector3d xyz = new Vector3d(-.5, -.5, -.5);
-    static Vector3d Xyz = new Vector3d(.5, -.5, -.5);
-    static Vector3d xYz = new Vector3d(-.5, .5, -.5);
-    static Vector3d XYz = new Vector3d(.5, .5, -.5);
-    static Vector3d xyZ = new Vector3d(-.5, -.5, .5);
-    static Vector3d XyZ = new Vector3d(.5, -.5, .5);
-    static Vector3d xYZ = new Vector3d(-.5, .5, .5);
-    static Vector3d XYZ = new Vector3d(.5, .5, .5);
+    private static Vector3d xyz = new Vector3d(-.5, -.5, -.5);
+    private static Vector3d Xyz = new Vector3d(.5, -.5, -.5);
+    private static Vector3d xYz = new Vector3d(-.5, .5, -.5);
+    private static Vector3d XYz = new Vector3d(.5, .5, -.5);
+    private static Vector3d xyZ = new Vector3d(-.5, -.5, .5);
+    private static Vector3d XyZ = new Vector3d(.5, -.5, .5);
+    private static Vector3d xYZ = new Vector3d(-.5, .5, .5);
+    private static Vector3d XYZ = new Vector3d(.5, .5, .5);
+
     private final Cluster cluster;
 
     public BlockClusterOutline(Iterable<BlockPosition> selection) {
@@ -54,7 +55,7 @@ public class BlockClusterOutline extends Outline {
         renderer.popLayer();
     }
 
-    protected void renderBlockFace(Renderer renderer, RenderStyle renderStyle, BlockPosition blockPosition, Orientation face) {
+    protected void renderBlockFace(Renderer renderer, RenderType renderType, BlockPosition blockPosition, Orientation face) {
         var camera = renderer.getCameraPosition();
         var center = blockPosition.getCenter();
         var offset = face.getNormal().toVector3();
@@ -66,17 +67,17 @@ public class BlockClusterOutline extends Outline {
 
         switch (face) {
             case DOWN ->
-                    renderer.drawQuad(renderStyle, xyz, Xyz, XyZ, xyZ, params.lightMap, params.getColor().getRGB(), face);
+                    renderer.drawQuad(renderType, xyz, Xyz, XyZ, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
             case EAST ->
-                    renderer.drawQuad(renderStyle, XYz, XYZ, XyZ, Xyz, params.lightMap, params.getColor().getRGB(), face);
+                    renderer.drawQuad(renderType, XYz, XYZ, XyZ, Xyz, params.getLightMap(), params.getColor().getRGB(), face);
             case NORTH ->
-                    renderer.drawQuad(renderStyle, xYz, XYz, Xyz, xyz, params.lightMap, params.getColor().getRGB(), face);
+                    renderer.drawQuad(renderType, xYz, XYz, Xyz, xyz, params.getLightMap(), params.getColor().getRGB(), face);
             case SOUTH ->
-                    renderer.drawQuad(renderStyle, XYZ, xYZ, xyZ, XyZ, params.lightMap, params.getColor().getRGB(), face);
+                    renderer.drawQuad(renderType, XYZ, xYZ, xyZ, XyZ, params.getLightMap(), params.getColor().getRGB(), face);
             case UP ->
-                    renderer.drawQuad(renderStyle, xYZ, XYZ, XYz, xYz, params.lightMap, params.getColor().getRGB(), face);
+                    renderer.drawQuad(renderType, xYZ, XYZ, XYz, xYz, params.getLightMap(), params.getColor().getRGB(), face);
             case WEST ->
-                    renderer.drawQuad(renderStyle, xYZ, xYz, xyz, xyZ, params.lightMap, params.getColor().getRGB(), face);
+                    renderer.drawQuad(renderType, xYZ, xYz, xyz, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
         }
 
         renderer.popPose();

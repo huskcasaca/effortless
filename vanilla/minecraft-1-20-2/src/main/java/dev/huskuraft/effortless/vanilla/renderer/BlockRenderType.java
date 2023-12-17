@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.io.IOException;
 import java.util.OptionalDouble;
 import java.util.function.BiConsumer;
@@ -39,8 +38,7 @@ public class BlockRenderType extends RenderType {
                     .setShaderState(POSITION_COLOR_SHADER)
                     .setLayeringState(VIEW_OFFSET_Z_LAYERING)
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-//                .setTextureState(RenderStateShard.NO_TEXTURE)
-                    .setDepthTestState(NO_DEPTH_TEST)
+                    .setDepthTestState(LEQUAL_DEPTH_TEST)
 //                .setLightmapState(RenderStateShard.NO_LIGHTMAP)
                     .setWriteMaskState(COLOR_WRITE)
                     .setCullState(NO_CULL)
@@ -51,12 +49,12 @@ public class BlockRenderType extends RenderType {
         super(p_173178_, p_173179_, p_173180_, p_173181_, p_173182_, p_173183_, p_173184_, p_173185_);
     }
 
-    public static RenderType blockPreview(Color color) {
-        var name = Integer.toString(color.getRGB());
+    public static RenderType blockPreview(int color) {
+        var name = Integer.toString(color);
         var texture = new TexturingStateShard("ef_block_texturing_" + name, () -> {
             var colorUniform = Shaders.tintedSolidShader().getUniform("TintColor");
             if (colorUniform != null) {
-                colorUniform.set(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+                colorUniform.set((color >> 16 & 255) / 255f, (color >> 8 & 255) / 255f, (color & 255) / 255f, (color >>> 24) / 255f);
             }
         }, () -> {
         });

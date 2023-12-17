@@ -1,21 +1,90 @@
-package dev.huskuraft.effortless.renderer.transformer;
+package dev.huskuraft.effortless.renderer.pattern;
 
+import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.renderer.Renderer;
 
 import java.awt.*;
 
-public class TransformerRenderer {
+public abstract class TransformerRenderer {
 
     private static final Color COLOR_PLANE = new Color(0, 0, 0, 72);
     private static final Color COLOR_LINE = new Color(0, 0, 0, 200);
-    private static final Vector3d EPSILON = new Vector3d(0.001, 0.001, 0.001); //prevents z-fighting
+    private static final Vector3d EPSILON = new Vector3d(0.001, 0.001, 0.001);
 
-    public void tick() {
+    public abstract void render(Renderer renderer, float deltaTick);
 
+    protected void renderPlaneByAxis(Renderer renderer, Vector3d position, Integer range, Axis axis, Color color) {
+        var renderStyle = renderer.getStyleProvider().planes();
+        var cam = renderer.getCameraPosition();
+        var pos = new Vector3d(axis != Axis.X ? cam.getX() : position.getX(), axis != Axis.Y ? cam.getY() : position.getY(), axis != Axis.Z ? cam.getZ() : position.getZ());
+        var min = pos.subtract(range, range, range);
+        var max = pos.add(range, range, range);
+
+        renderer.pushPose();
+        renderer.translate(-cam.getX(), -cam.getY(), -cam.getZ());
+        switch (axis) {
+            case Y -> {
+                var v1 = new Vector3d((float) max.getX(), (float) pos.getY(), (float) max.getZ());
+                var v2 = new Vector3d((float) min.getX(), (float) pos.getY(), (float) max.getZ());
+                var v3 = new Vector3d((float) min.getX(), (float) pos.getY(), (float) min.getZ());
+                var v4 = new Vector3d((float) max.getX(), (float) pos.getY(), (float) min.getZ());
+                renderer.drawQuad(renderStyle, v1, v2, v3, v4, 0, color.getRGB(), null);
+            }
+            case Z -> {
+                var v1 = new Vector3d((float) max.getX(), (float) min.getY(), (float) pos.getZ());
+                var v2 = new Vector3d((float) min.getX(), (float) min.getY(), (float) pos.getZ());
+                var v3 = new Vector3d((float) min.getX(), (float) max.getY(), (float) pos.getZ());
+                var v4 = new Vector3d((float) max.getX(), (float) max.getY(), (float) pos.getZ());
+                renderer.drawQuad(renderStyle, v1, v2, v3, v4, 0, color.getRGB(), null);
+            }
+            case X -> {
+                var v1 = new Vector3d((float) pos.getX(), (float) min.getY(), (float) min.getZ());
+                var v2 = new Vector3d((float) pos.getX(), (float) min.getY(), (float) max.getZ());
+                var v3 = new Vector3d((float) pos.getX(), (float) max.getY(), (float) max.getZ());
+                var v4 = new Vector3d((float) pos.getX(), (float) max.getY(), (float) min.getZ());
+                renderer.drawQuad(renderStyle, v1, v2, v3, v4, 0, color.getRGB(), null);
+            }
+        }
+        renderer.popPose();
     }
 
-    public void render(Renderer renderer, float deltaTick) {
+//    public void renderPlaneByAxis(Vector3d v1, Vector3d v2, Axis axis, Color color) {
+//
+//        pushPose();
+//        translate(-getCameraPosition().getX(), -getCameraPosition().getY(), -getCameraPosition().getZ());
+//
+//        var buffer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(getStyleProvider().planes()));
+//        var matrix = proxy.pose().last().pose();
+//
+//        var min = v1;
+//        var max = v2;
+//
+//        switch (axis) {
+//            case Y -> {
+//                buffer.vertex(matrix, (float) max.getX(), (float) max.getY(), (float) max.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//                buffer.vertex(matrix, (float) min.getX(), (float) max.getY(), (float) min.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//                buffer.vertex(matrix, (float) min.getX(), (float) min.getY(), (float) min.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//                buffer.vertex(matrix, (float) max.getX(), (float) min.getY(), (float) max.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//            }
+//            case Z -> {
+//                buffer.vertex(matrix, (float) max.getX(), (float) max.getY(), (float) max.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//                buffer.vertex(matrix, (float) min.getX(), (float) min.getY(), (float) max.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//                buffer.vertex(matrix, (float) min.getX(), (float) min.getY(), (float) min.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//                buffer.vertex(matrix, (float) max.getX(), (float) max.getY(), (float) min.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//            }
+//            case X -> {
+//                buffer.vertex(matrix, (float) max.getX(), (float) max.getY(), (float) max.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//                buffer.vertex(matrix, (float) max.getX(), (float) min.getY(), (float) min.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//                buffer.vertex(matrix, (float) min.getX(), (float) min.getY(), (float) min.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//                buffer.vertex(matrix, (float) min.getX(), (float) max.getY(), (float) max.getZ()).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+//            }
+//        }
+//
+//        popPose();
+//    }
+
+
 //        //Mirror lines and areas
 //        var player = minecraft.player;
 //        var mirrorSettings = EffortlessBuilder.getInstance().getTransformerSettings(player).mirrorSettings();
@@ -31,9 +100,8 @@ public class TransformerRenderer {
 //            var pos = radialMirrorSettings.position().subtract(camera.getPosition());
 //            renderRadial(multiBufferSource, pos.add(EPSILON), radialMirrorSettings.radius(), radialMirrorSettings.slices(), radialMirrorSettings.drawPlanes(), radialMirrorSettings.drawLines());
 //        }
-    }
 
-//    private void drawAxisPlane(VertexConsumer buffer, Vec3 pos, Integer range, Axis axis, Color color) {
+    //    private void drawAxisPlane(VertexConsumer buffer, Vec3 pos, Integer range, Axis axis, Color color) {
 //
 //        var min = pos.subtract(range, range, range);
 //        var max = pos.add(range, range, range);
@@ -95,27 +163,6 @@ public class TransformerRenderer {
 //        buffer.vertex((float) posB.x, (float) posB.y, (float) posB.z).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).normal(1F, 1F, 1F).endVertex();
 //    }
 //
-//    private void renderMirror(MultiBufferSource.BufferSource multiBufferSource, Vec3 pos, Integer radius, List<Axis> axis, boolean drawPlanes, boolean drawLines) {
-//        if (drawPlanes) {
-//            for (Axis a : axis) {
-//                VertexConsumer buffer = ((MultiBufferSource) multiBufferSource).getBuffer(FabricRenderLayers.planes());
-//                drawAxisPlane(buffer, pos, radius, a, COLOR_PLANE);
-//                multiBufferSource.endBatch();
-//            }
-//        }
-//        if (drawLines) {
-//            for (Axis a : axis) {
-//                VertexConsumer buffer = multiBufferSource.getBuffer(FabricRenderLayers.lines());
-//                for (Axis a1 : Axis.values()) {
-//                    if (a1 != a) {
-//                        drawAxisLine(buffer, pos, radius, a1, COLOR_LINE);
-//                    }
-//                }
-//                multiBufferSource.endBatch();
-//            }
-//        }
-//
-//    }
 //
 //    private void renderRadial(MultiBufferSource.BufferSource multiBufferSource, Vec3 pos, Integer radius, Integer slices, boolean drawPlanes, boolean drawLines) {
 //        float angle = 2f * (float) BaseMth.PI / slices;
@@ -151,6 +198,5 @@ public class TransformerRenderer {
 //            multiBufferSource.endBatch();
 //        }
 //    }
-
 }
 

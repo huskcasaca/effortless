@@ -7,7 +7,6 @@ import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.List;
 
 public abstract class Renderer {
@@ -46,11 +45,11 @@ public abstract class Renderer {
 
     public abstract void drawHorizontalLine(int x1, int x2, int y, int color);
 
-    public abstract void drawHorizontalLine(RenderStyle renderStyle, int x1, int x2, int y, int color);
+    public abstract void drawHorizontalLine(RenderType renderType, int x1, int x2, int y, int color);
 
     public abstract void drawVerticalLine(int x, int y1, int y2, int color);
 
-    public abstract void drawVerticalLine(RenderStyle renderStyle, int x, int y1, int y2, int color);
+    public abstract void drawVerticalLine(RenderType renderType, int x, int y1, int y2, int color);
 
     public abstract void drawBorder(int i, int j, int k, int l, int m);
 
@@ -58,19 +57,19 @@ public abstract class Renderer {
 
     public abstract void drawRect(int x1, int y1, int x2, int y2, int color, int z);
 
-    public abstract void drawRect(RenderStyle renderStyle, int x1, int y1, int x2, int y2, int color);
+    public abstract void drawRect(RenderType renderType, int x1, int y1, int x2, int y2, int color);
 
-    public abstract void drawRect(RenderStyle renderStyle, int x1, int y1, int x2, int y2, int color, int z);
+    public abstract void drawRect(RenderType renderType, int x1, int y1, int x2, int y2, int color, int z);
 
     public abstract void drawGradientRect(int startX, int startY, int endX, int endY, int colorStart, int colorEnd);
 
     public abstract void drawGradientRect(int startX, int startY, int endX, int endY, int colorStart, int colorEnd, int z);
 
-    public abstract void drawGradientRect(RenderStyle renderStyle, int startX, int startY, int endX, int endY, int colorStart, int colorEnd, int z);
+    public abstract void drawGradientRect(RenderType renderType, int startX, int startY, int endX, int endY, int colorStart, int colorEnd, int z);
 
     public abstract void drawQuad(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color);
 
-    public abstract void drawQuad(RenderStyle renderStyle, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color);
+    public abstract void drawQuad(RenderType renderType, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color);
 
     public abstract int drawText(Typeface typeface, String string, int x, int y, int color, boolean shadow);
 
@@ -141,11 +140,12 @@ public abstract class Renderer {
 
     public abstract void drawTooltip(Typeface typeface, ItemStack itemStack, int x, int y);
 
-    public abstract void drawBlockModelByCamera(World world, BlockPosition blockPosition, BlockData blockData, Color color);
 
-    public abstract void drawQuad(RenderStyle renderStyle, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Orientation normal);
+    public abstract void drawBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color);
 
-    public abstract void drawQuadUV(RenderStyle renderStyle, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
+    public abstract void drawQuad(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Orientation normal);
+
+    public abstract void drawQuadUV(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
                                     float minV, float maxU, float maxV, int uv2, int color, Orientation normal);
 
     public abstract RenderStyleProvider getStyleProvider();

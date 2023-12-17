@@ -72,11 +72,11 @@ public abstract class Outline {
         var camera = renderer.getCameraPosition();
         start = start.subtract(camera);
         end = end.subtract(camera);
-        var lineWidth = params.getLineWidth();
+        var lineWidth = getParams().getLineWidth();
         if (lineWidth == 0)
             return;
 
-        var renderType = renderer.getStyleProvider().outlineSolid(true);
+        var renderStyle = renderer.getStyleProvider().outlineSolid(true);
 
         var diff = end.subtract(start);
         if (diff.getX() + diff.getY() + diff.getZ() < 0) {
@@ -107,31 +107,31 @@ public abstract class Outline {
         var a4 = plane.add(start);
         var b4 = plane.add(end);
 
-        if (params.disableNormals) {
+        if (getParams().disableNormals) {
             face = Orientation.UP;
-            renderer.drawQuad(renderType, b4, b3, b2, b1, params.lightMap, params.getColor().getRGB(), face);
-            renderer.drawQuad(renderType, a1, a2, a3, a4, params.lightMap, params.getColor().getRGB(), face);
-            renderer.drawQuad(renderType, a1, b1, b2, a2, params.lightMap, params.getColor().getRGB(), face);
-            renderer.drawQuad(renderType, a2, b2, b3, a3, params.lightMap, params.getColor().getRGB(), face);
-            renderer.drawQuad(renderType, a3, b3, b4, a4, params.lightMap, params.getColor().getRGB(), face);
-            renderer.drawQuad(renderType, a4, b4, b1, a1, params.lightMap, params.getColor().getRGB(), face);
+            renderer.drawQuad(renderStyle, b4, b3, b2, b1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.drawQuad(renderStyle, a1, a2, a3, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.drawQuad(renderStyle, a1, b1, b2, a2, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.drawQuad(renderStyle, a2, b2, b3, a3, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.drawQuad(renderStyle, a3, b3, b4, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.drawQuad(renderStyle, a4, b4, b1, a1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
             return;
         }
 
-        renderer.drawQuad(renderType, b4, b3, b2, b1, params.lightMap, params.getColor().getRGB(), face);
-        renderer.drawQuad(renderType, a1, a2, a3, a4, params.lightMap, params.getColor().getRGB(), face.getOpposite());
+        renderer.drawQuad(renderStyle, b4, b3, b2, b1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+        renderer.drawQuad(renderStyle, a1, a2, a3, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face.getOpposite());
         var vec = a1.subtract(a4);
         face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
-        renderer.drawQuad(renderType, a1, b1, b2, a2, params.lightMap, params.getColor().getRGB(), face);
+        renderer.drawQuad(renderStyle, a1, b1, b2, a2, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         vec = rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
-        renderer.drawQuad(renderType, a2, b2, b3, a3, params.lightMap, params.getColor().getRGB(), face);
+        renderer.drawQuad(renderStyle, a2, b2, b3, a3, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         vec = rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
-        renderer.drawQuad(renderType, a3, b3, b4, a4, params.lightMap, params.getColor().getRGB(), face);
+        renderer.drawQuad(renderStyle, a3, b3, b4, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         vec = rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
-        renderer.drawQuad(renderType, a4, b4, b1, a1, params.lightMap, params.getColor().getRGB(), face);
+        renderer.drawQuad(renderStyle, a4, b4, b1, a1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
     }
 
     public static class OutlineParams {
@@ -225,6 +225,10 @@ public abstract class Outline {
 
         public Orientation getHighlightedFace() {
             return highlightedFace;
+        }
+
+        public int getLightMap() {
+            return lightMap;
         }
 
         public Color getColor() {

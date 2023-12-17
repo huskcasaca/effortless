@@ -179,20 +179,22 @@ final class ActualClientStructureBuilder extends StructureBuilder {
 
     @Override
     public BuildingResult updateContext(Player player, UnaryOperator<Context> updater) {
-        var context = getContext(player);
-        var updated = updater.apply(context);
-        if (updated.isFulfilled()) {
+        var context = updater.apply(getContext(player));
+        if (context.isFulfilled()) {
 
-            var finalized = updated.finalize(player, BuildStage.INTERACT);
-            showLocalPlayerPreviewOnce(player, finalized);
+            var finalized = context.finalize(player, BuildStage.INTERACT);
+            var result = finalized.withPreviewOnceType().createSession(player.getWorld(), player).build().commit();
+
+            showOperationResult(context.uuid(), result);
+            showSummaryOverlay(context.uuid(), result, 1000);
 
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalized));
-            setContext(player, updated.reset());
+            setContext(player, context.reset());
 
             return BuildingResult.COMPLETED;
         } else {
-            setContext(player, updated);
-            if (updated.isIdle()) {
+            setContext(player, context);
+            if (context.isIdle()) {
                 return BuildingResult.CANCELED;
             } else {
                 return BuildingResult.PARTIAL;
@@ -205,24 +207,31 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     }
 
     public void onClientTick(Client client, TickPhase phase) {
-        switch (phase) {
-
-            case START -> {
-                var player = getEntrance().getClient().getPlayer();
-                if (player != null && !getContext(player).isDisabled()) {
-                    var context = getContextTraced(player).withPreviewType();
-                    showLocalPlayerPreview(player, context);
-                    getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
-                }
-            }
-            case END -> {
-            }
+        if (phase == TickPhase.END) {
+            return;
         }
+        var player = getEntrance().getClient().getPlayer();
+        if (player == null || getContext(player).isDisabled()) {
+            return;
+        }
+        var context = getContextTraced(player).withPreviewType();
+
+        var result = context.withPreviewType().createSession(player.getWorld(), player).build().commit();
+
+        showOperationResult(context.uuid(), result);
+        showPattern(context.uuid(), context);
+
+        showContextOverlay(context.uuid(), context, 0);
+        showSummaryOverlay(context.uuid(), result, 1);
+
+        getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
     }
 
     @Override
     public void onContextReceived(Player player, Context context) {
-        showRemotePlayerPreview(player, context);
+        var result = context.createSession(player.getWorld(), player).build().commit();
+
+        showSummaryOverlay(context.uuid(), result, 1);
     }
 
     private EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
@@ -247,6 +256,10 @@ final class ActualClientStructureBuilder extends StructureBuilder {
 
     private UUID nextUUIDByTag(UUID uuid, String tag) {
         return new UUID(uuid.getMostSignificantBits() + tag.hashCode(), uuid.getLeastSignificantBits());
+    }
+
+    public void showPattern(UUID uuid, Context context) {
+        getEntrance().getClientManager().getPatternRenderer().showPattern(uuid, context);
     }
 
     public void showOperationResult(UUID uuid, OperationResult result) {
@@ -289,27 +302,5 @@ final class ActualClientStructureBuilder extends StructureBuilder {
 
         getEntrance().getClientManager().getSubtitleManager().showMessages(nextUUIDByTag(uuid, "info"), texts, priority);
     }
-
-    public void showLocalPlayerPreview(Player player, Context context) {
-        var result = context.withPreviewType().createSession(player.getWorld(), player).build().commit();
-
-        showOperationResult(context.uuid(), result);
-        showContextOverlay(context.uuid(), context, 0);
-        showSummaryOverlay(context.uuid(), result, 1);
-    }
-
-    public void showLocalPlayerPreviewOnce(Player player, Context context) {
-        var result = context.withPreviewOnceType().createSession(player.getWorld(), player).build().commit();
-
-        showOperationResult(context.uuid(), result);
-        showSummaryOverlay(context.uuid(), result, 1000);
-    }
-
-    public void showRemotePlayerPreview(Player player, Context context) {
-        var result = context.createSession(player.getWorld(), player).build().commit();
-
-        showSummaryOverlay(context.uuid(), result, 1);
-    }
-
 
 }
