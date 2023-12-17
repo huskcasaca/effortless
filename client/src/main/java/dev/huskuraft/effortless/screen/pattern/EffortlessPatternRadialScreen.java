@@ -34,23 +34,23 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
     public static Slot<Pattern> slot(Pattern pattern) {
 
         if (pattern == Pattern.DISABLED) return slot(
+                pattern.id(),
                 pattern.name(),
                 Resource.of("textures/mode/disabled.png"),
                 new Color(0.25f, 0.25f, 0.25f, 0.5f),
-                pattern
-        );
+                pattern);
         if (pattern == Pattern.EMPTY) return slot(
+                pattern.id(),
                 pattern.name(),
                 Resource.of("textures/mode/empty.png"),
                 new Color(0.25f, 0.25f, 0.25f, 0.5f),
-                pattern
-        );
+                pattern);
         return slot(
+                pattern.id(),
                 pattern.name(),
                 Resource.of("textures/mode/sphere.png"),
                 new Color(0.25f, 0.25f, 0.25f, 0.5f),
-                pattern
-        );
+                pattern);
     }
 
     public Key getAssignedKey() {

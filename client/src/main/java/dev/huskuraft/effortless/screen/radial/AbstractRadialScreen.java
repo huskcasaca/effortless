@@ -61,8 +61,14 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
         super(entrance, text);
     }
 
-    protected static <T> Slot<T> slot(Text name, Resource icon, Color tintColor, T content) {
+    protected static <T> Slot<T> slot(Object id, Text name, Resource icon, Color tintColor, T content) {
         return new Slot<>() {
+
+            @Override
+            public Object getId() {
+                return id;
+            }
+
             @Override
             public Text getDisplayName() {
                 return name;
@@ -91,8 +97,14 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
         };
     }
 
-    protected static <T> Button<T> button(Text name, Text category, Resource icon, T content) {
+    protected static <T> Button<T> button(Object id, Text name, Text category, Resource icon, T content) {
         return new Button<>() {
+
+            @Override
+            public Object getId() {
+                return id;
+            }
+
             @Override
             public Text getDisplayName() {
                 return name;
@@ -142,11 +154,11 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
     public static <T extends Option> Button<T> button(T option) {
         return button(
+                option,
                 option.getDisplayName(),
                 option.getDisplayCategory(),
                 option.getIcon(),
-                option
-        );
+                option);
     }
 
     @Override
@@ -295,7 +307,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
             var y1m2 = MathUtils.sin(lRad + outerGap) * ringOuterEdge;
             var y2m2 = MathUtils.sin(rRad - outerGap) * ringOuterEdge;
 
-            var isActivated = selectedSlot.stream().anyMatch(obj -> Objects.equals(obj.getContent(), slot.getContent()));
+            var isActivated = selectedSlot.stream().anyMatch(obj -> Objects.equals(obj.getId(), slot.getId()));
             var isMouseInQuad = inTriangle(x1m1, y1m1, x2m2, y2m2, x2m1, y2m1, mouseCenterX, mouseCenterY) || inTriangle(x1m1, y1m1, x1m2, y1m2, x2m2, y2m2, mouseCenterX, mouseCenterY);
             var isHovered = (lRad <= mouseRad && mouseRad <= rRad || lRad <= mouseRad - 2 * MathUtils.PI && mouseRad - 2 * MathUtils.PI <= rRad) && isMouseInQuad;
 
@@ -375,7 +387,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                 var x2 = x + BUTTON_WIDTH / 2d;
                 var y2 = y + BUTTON_HEIGHT / 2d;
 
-                var isActivated = selectedButton != null && selectedButton.stream().anyMatch(b -> Objects.equals(b.getContent(), button.getContent()));
+                var isActivated = selectedButton != null && selectedButton.stream().anyMatch(b -> Objects.equals(b.getId(), button.getId()));
                 var isHovered = x1 <= mouseCenterX && x2 >= mouseCenterX && y1 <= mouseCenterY && y2 >= mouseCenterY;
 
                 var color = RADIAL_BUTTON_COLOR_STATE.defaultColor();
@@ -437,6 +449,8 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
     public interface Slot<T> {
 
+        Object getId();
+
         Text getDisplayName();
 
         Text getDisplayCategory();
@@ -450,6 +464,8 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     }
 
     public interface Button<T> {
+
+        Object getId();
 
         Text getDisplayName();
 
