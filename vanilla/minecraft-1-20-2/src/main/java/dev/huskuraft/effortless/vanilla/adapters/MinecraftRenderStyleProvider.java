@@ -1,58 +1,55 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.core.Resource;
-import dev.huskuraft.effortless.renderer.RenderStyle;
 import dev.huskuraft.effortless.renderer.RenderStyleProvider;
+import dev.huskuraft.effortless.renderer.RenderType;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import dev.huskuraft.effortless.vanilla.renderer.OutlineRenderType;
-import net.minecraft.client.renderer.RenderType;
-
-import java.awt.*;
 
 class MinecraftRenderStyleProvider extends RenderStyleProvider {
 
     @Override
-    public RenderStyle gui() {
-        return MinecraftClientAdapter.adapt(RenderType.gui());
+    public RenderType gui() {
+        return MinecraftClientAdapter.adapt(net.minecraft.client.renderer.RenderType.gui());
     }
 
     @Override
-    public RenderStyle guiOverlay() {
-        return MinecraftClientAdapter.adapt(RenderType.guiOverlay());
+    public RenderType guiOverlay() {
+        return MinecraftClientAdapter.adapt(net.minecraft.client.renderer.RenderType.guiOverlay());
     }
 
     @Override
-    public RenderStyle guiTextHighlight() {
-        return MinecraftClientAdapter.adapt(RenderType.guiTextHighlight());
+    public RenderType guiTextHighlight() {
+        return MinecraftClientAdapter.adapt(net.minecraft.client.renderer.RenderType.guiTextHighlight());
     }
 
     @Override
-    public RenderStyle lines() {
+    public RenderType lines() {
         return MinecraftClientAdapter.adapt(BlockRenderType.EF_LINES);
     }
 
     @Override
-    public RenderStyle planes() {
+    public RenderType planes() {
         return MinecraftClientAdapter.adapt(BlockRenderType.EF_PLANES);
     }
 
     @Override
-    public RenderStyle solid(Color color) {
+    public RenderType solid(int color) {
         return MinecraftClientAdapter.adapt(BlockRenderType.blockPreview(color));
     }
 
     @Override
-    public RenderStyle outlineSolid() {
+    public RenderType outlineSolid() {
         return MinecraftClientAdapter.adapt(OutlineRenderType.outlineSolid());
     }
 
     @Override
-    public RenderStyle outlineSolid(boolean overlap) {
+    public RenderType outlineSolid(boolean overlap) {
         return MinecraftClientAdapter.adapt(OutlineRenderType.outlineSolid(overlap));
     }
 
     @Override
-    public RenderStyle outlineTranslucent(Resource texture, boolean cull) {
+    public RenderType outlineTranslucent(Resource texture, boolean cull) {
         return MinecraftClientAdapter.adapt(OutlineRenderType.outlineTranslucent(MinecraftClientAdapter.adapt(texture), cull));
     }
 }

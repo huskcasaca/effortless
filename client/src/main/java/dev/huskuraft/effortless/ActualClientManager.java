@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.platform.SubtitleManager;
 import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
-import dev.huskuraft.effortless.renderer.transformer.TransformerRenderer;
+import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
@@ -29,7 +29,7 @@ final class ActualClientManager extends ClientManager {
 
     private final OperationsRenderer operationsRenderer;
     private final OutlineRenderer outlineRenderer;
-    private final TransformerRenderer transformerRenderer;
+    private final PatternRenderer patternRenderer;
 
     private Client client;
 
@@ -39,7 +39,7 @@ final class ActualClientManager extends ClientManager {
 
         this.operationsRenderer = new OperationsRenderer();
         this.outlineRenderer = new OutlineRenderer();
-        this.transformerRenderer = new TransformerRenderer();
+        this.patternRenderer = new PatternRenderer();
 
         getEntrance().getEventRegistry().onRegisterKeys().register(this::onRegisterKeys);
         getEntrance().getEventRegistry().onKeyPress().register(this::onKeyPress);
@@ -76,8 +76,8 @@ final class ActualClientManager extends ClientManager {
     }
 
     @Override
-    public TransformerRenderer getTransformerRenderer() {
-        return transformerRenderer;
+    public PatternRenderer getPatternRenderer() {
+        return patternRenderer;
     }
 
     @Override
@@ -199,9 +199,9 @@ final class ActualClientManager extends ClientManager {
 
                 operationsRenderer.tick();
                 outlineRenderer.tick();
-                transformerRenderer.tick();
             }
             case END -> {
+                patternRenderer.tick();
             }
         }
     }
@@ -214,7 +214,7 @@ final class ActualClientManager extends ClientManager {
 
         outlineRenderer.render(renderer, deltaTick);
         operationsRenderer.render(renderer, deltaTick);
-        transformerRenderer.render(renderer, deltaTick);
+        patternRenderer.render(renderer, deltaTick);
         renderer.draw();
 
     }

@@ -7,13 +7,12 @@ import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.input.KeyBinding;
 import dev.huskuraft.effortless.input.KeyCodes;
 import dev.huskuraft.effortless.platform.Client;
-import dev.huskuraft.effortless.renderer.RenderStyle;
+import dev.huskuraft.effortless.renderer.RenderType;
 import dev.huskuraft.effortless.renderer.Renderer;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
 
 public class MinecraftClientAdapter extends MinecraftAdapter {
 
@@ -65,18 +64,18 @@ public class MinecraftClientAdapter extends MinecraftAdapter {
         return new MinecraftRenderer(guiGraphics);
     }
 
-    public static RenderStyle adapt(RenderType renderType) {
+    public static RenderType adapt(net.minecraft.client.renderer.RenderType renderType) {
         if (renderType == null) {
             return null;
         }
-        return new MinecraftRenderStyle(renderType);
+        return new MinecraftRenderType(renderType);
     }
 
-    public static RenderType adapt(RenderStyle renderStyle) {
-        if (renderStyle == null) {
+    public static net.minecraft.client.renderer.RenderType adapt(RenderType renderType) {
+        if (renderType == null) {
             return null;
         }
-        return ((MinecraftRenderStyle) renderStyle).getRef();
+        return ((MinecraftRenderType) renderType).getRef();
     }
 
     public static Typeface adapt(Font font) {

@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.platform;
 import dev.huskuraft.effortless.gui.Screen;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
-import dev.huskuraft.effortless.renderer.transformer.TransformerRenderer;
+import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
 
 public abstract class ClientManager {
 
@@ -23,6 +23,6 @@ public abstract class ClientManager {
 
     public abstract OutlineRenderer getOutlineRenderer();
 
-    public abstract TransformerRenderer getTransformerRenderer();
+    public abstract PatternRenderer getPatternRenderer();
 
 }
