@@ -29,20 +29,20 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
         return this.getWidth() / 2 + 160;
     }
 
-    public void addPositionEntry(Axis axis, Tuple2<PositionType, Double> value, Consumer<Tuple2<PositionType, Double>> consumer) {
-        addEntry(new PositionEntry(getEntrance(), this, axis, value, consumer));
+    public PositionEntry addPositionEntry(Axis axis, Tuple2<PositionType, Double> value, Consumer<Tuple2<PositionType, Double>> consumer) {
+        return (PositionEntry) addEntry(new PositionEntry(getEntrance(), this, axis, value, consumer));
     }
 
-    public void addDoubleEntry(Text title, Text symbol, Double value, Double min, Double max, Consumer<Double> consumer) {
-        addEntry(new DoubleEntry(getEntrance(), this, title, symbol, value, min, max, consumer));
+    public DoubleEntry addDoubleEntry(Text title, Text symbol, Double value, Double min, Double max, Consumer<Double> consumer) {
+        return (DoubleEntry) addEntry(new DoubleEntry(getEntrance(), this, title, symbol, value, min, max, consumer));
     }
 
-    public void addIntegerEntry(Text title, Text symbol, Integer value, Integer min, Integer max, Consumer<Integer> consumer) {
-        addEntry(new IntegerEntry(getEntrance(), this, title, symbol, value, min, max, consumer));
+    public IntegerEntry addIntegerEntry(Text title, Text symbol, Integer value, Integer min, Integer max, Consumer<Integer> consumer) {
+        return (IntegerEntry) addEntry(new IntegerEntry(getEntrance(), this, title, symbol, value, min, max, consumer));
     }
 
-    public <T> void addValuesEntry(Text title, Text symbol, List<Text> messages, List<T> values, int index, Consumer<T> consumer) {
-        addEntry(new SelectorEntry<>(getEntrance(), this, title, symbol, messages, values, index, consumer));
+    public <T> SelectorEntry<T> addValuesEntry(Text title, Text symbol, List<Text> messages, List<T> values, int index, Consumer<T> consumer) {
+        return (SelectorEntry<T>) addEntry(new SelectorEntry<>(getEntrance(), this, title, symbol, messages, values, index, consumer));
     }
 
     public static final class PositionEntry extends Entry<Tuple2<PositionType, Double>> {
@@ -89,6 +89,11 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
 
         }
 
+        public void setAxis(Axis axis) {
+            this.axis = axis;
+            setMessage(Text.translate("effortless.position", axis.getDisplayName()));
+            setSymbol(axis.getDisplayName());
+        }
     }
 
     public static final class DoubleEntry extends Entry<Double> {
@@ -183,7 +188,7 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
 
         protected Entry(Entrance entrance, EntryList entryList, Text title, Text symbol, T value, Consumer<T> consumer) {
             super(entrance, entryList, value);
-            setMessage(title);
+            super.setMessage(title);
             this.symbol = symbol;
             this.consumer = consumer;
         }
@@ -194,8 +199,19 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
             this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getMessage()));
         }
 
+        @Override
+        public void setMessage(Text text) {
+            super.setMessage(text);
+            this.titleTextWidget.setMessage(getMessage());
+        }
+
         public Text getSymbol() {
             return symbol;
+        }
+
+        public void setSymbol(Text symbol) {
+            this.symbol = symbol;
+            this.textSlot.setMessage(getSymbol());
         }
 
         @Override

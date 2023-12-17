@@ -127,14 +127,15 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         return false;
     }
 
-    public void addEntry(E entry) {
+    public E addEntry(E entry) {
         entry.onCreate();
         entry.onLoad();
         children().add(entry);
         entry.onPositionChange(-1, children().size() - 1);
+        return entry;
     }
 
-    public void addEntry(int index, E entry) {
+    public E addEntry(int index, E entry) {
         entry.onCreate();
         entry.onLoad();
         children().add(index, entry);
@@ -145,6 +146,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
                 children().get(i).onPositionChange(i - 1, i);
             }
         }
+        return entry;
     }
 
     public boolean removeEntry(E entry) {

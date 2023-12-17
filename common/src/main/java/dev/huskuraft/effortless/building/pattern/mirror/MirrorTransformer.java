@@ -102,8 +102,20 @@ public class MirrorTransformer extends Transformer {
         return position;
     }
 
+    public double getPosition(Axis axis) {
+        return switch (axis) {
+            case X -> position.getX();
+            case Y -> position.getY();
+            case Z -> position.getZ();
+        };
+    }
+
     public PositionType[] getPositionType() {
         return positionType;
+    }
+
+    public PositionType getPositionType(Axis axis) {
+        return positionType[axis.ordinal()];
     }
 
     public PositionType getPositionTypeX() {
