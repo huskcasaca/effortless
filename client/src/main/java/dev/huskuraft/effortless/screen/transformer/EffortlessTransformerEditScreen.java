@@ -15,6 +15,7 @@ import dev.huskuraft.effortless.gui.button.Button;
 import dev.huskuraft.effortless.gui.input.EditBox;
 import dev.huskuraft.effortless.gui.slot.TextSlot;
 import dev.huskuraft.effortless.gui.text.TextWidget;
+import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.screen.settings.SettingsList;
 import dev.huskuraft.effortless.text.Text;
 
@@ -68,10 +69,14 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.array.count"), Text.text("C"), ((ArrayTransformer) lastSettings).count(), ArrayTransformer.MIN_COUNT, ArrayTransformer.MAX_COUNT, value -> this.lastSettings = ((ArrayTransformer) lastSettings).withCount(value));
             }
             case MIRROR -> {
-                this.entries.addPositionEntry(Axis.X, new Tuple2<>(((MirrorTransformer) lastSettings).getPositionTypeX(), ((MirrorTransformer) lastSettings).position().getX()), value -> this.lastSettings = ((MirrorTransformer) lastSettings).withPositionTypeX(value.value1()).withPositionX(value.value2()));
-                this.entries.addPositionEntry(Axis.Y, new Tuple2<>(((MirrorTransformer) lastSettings).getPositionTypeY(), ((MirrorTransformer) lastSettings).position().getY()), value -> this.lastSettings = ((MirrorTransformer) lastSettings).withPositionTypeY(value.value1()).withPositionY(value.value2()));
-                this.entries.addPositionEntry(Axis.Z, new Tuple2<>(((MirrorTransformer) lastSettings).getPositionTypeZ(), ((MirrorTransformer) lastSettings).position().getZ()), value -> this.lastSettings = ((MirrorTransformer) lastSettings).withPositionTypeZ(value.value1()).withPositionZ(value.value2()));
-                this.entries.addValuesEntry(Text.translate("effortless.transformer.mirror.axis"), Text.text("A"), Arrays.stream(Axis.values()).map(Axis::getDisplayName).toList(), Arrays.stream(Axis.values()).toList(), ((MirrorTransformer) lastSettings).axis().ordinal(), value -> this.lastSettings = ((MirrorTransformer) lastSettings).withAxis(value));
+                var mirrorTransformer = (MirrorTransformer) lastSettings;
+                this.entries.addPositionEntry(mirrorTransformer.axis(), new Tuple2<>(mirrorTransformer.getPositionType(mirrorTransformer.axis()), mirrorTransformer.getPosition(mirrorTransformer.axis())), value -> {
+                    this.lastSettings = mirrorTransformer.withPositionType(value.value1()).withPosition(new Vector3d(value.value2(), value.value2(), value.value2()));
+                });
+                this.entries.addValuesEntry(Text.translate("effortless.transformer.mirror.axis"), Text.text("A"), Arrays.stream(Axis.values()).map(Axis::getDisplayName).toList(), Arrays.stream(Axis.values()).toList(), mirrorTransformer.axis().ordinal(), value -> {
+                    (((SettingsList.PositionEntry) this.entries.getWidget(0))).setAxis(value);
+                    this.lastSettings = mirrorTransformer.withAxis(value);
+                });
             }
             case RADIAL -> {
                 this.entries.addPositionEntry(Axis.X, new Tuple2<>(((RadialTransformer) lastSettings).getPositionTypeX(), ((RadialTransformer) lastSettings).position().getX()), value -> this.lastSettings = ((RadialTransformer) lastSettings).withPositionTypeX(value.value1()).withPositionX(value.value2()));
