@@ -15,12 +15,17 @@ import dev.huskuraft.effortless.renderer.Renderer;
 
 public abstract class EffortlessClient extends ClientEntrance {
 
+    protected static EffortlessClient instance;
     private final ClientEventsRegistry registry = new ClientEventsRegistry();
 
     private final Channel<AllPacketListener> channel = new ActualClientChannel(this, Effortless.CHANNEL_ID);
     private final ClientConfigManager configManager = new ActualClientConfigManager(this);
     private final StructureBuilder structureBuilder = new ActualClientStructureBuilder(this);
     private final ClientManager clientManager = new ActualClientManager(this);
+
+    public static EffortlessClient getInstance() {
+        return instance;
+    }
 
     @Override
     public Channel<AllPacketListener> getChannel() {

@@ -94,6 +94,8 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
+
+        instance = this;
         onClientStart(MinecraftClientAdapter.adapt(Minecraft.getInstance()));
         onRegisterNetwork(receiver -> {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
