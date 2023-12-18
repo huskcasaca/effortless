@@ -35,6 +35,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
     @Override
     public void onInitializeClient() {
 
+        instance = this;
         onClientStart(MinecraftClientAdapter.adapt(Minecraft.getInstance()));
         onRegisterNetwork(receiver -> {
             var channelId = MinecraftAdapter.adapt(Effortless.CHANNEL_ID);
