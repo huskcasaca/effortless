@@ -143,6 +143,8 @@ public abstract class Renderer {
 
     public abstract void drawBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color);
 
+    public abstract void drawLine(RenderType renderType, Vector3d v1, Vector3d v2, int uv2, int color);
+
     public abstract void drawQuad(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Orientation normal);
 
     public abstract void drawQuadUV(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
