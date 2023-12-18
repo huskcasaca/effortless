@@ -326,6 +326,13 @@ class MinecraftRenderer extends Renderer {
     }
 
     @Override
+    public void drawLine(RenderType renderType, Vector3d v1, Vector3d v2, int uv2, int color) {
+        var vertexConsumer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderType));
+        vertex(vertexConsumer, v1, 1, 1, uv2, color, null);
+        vertex(vertexConsumer, v2, 1, 1, uv2, color, null);
+    }
+
+    @Override
     public void drawQuad(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4,
                          int uv2, int color, Orientation normal) {
         drawQuadUV(renderType, v1, v2, v3, v4, 0, 0, 1, 1, uv2, color, normal);
