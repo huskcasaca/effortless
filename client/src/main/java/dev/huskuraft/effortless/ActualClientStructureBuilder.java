@@ -10,9 +10,9 @@ import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.events.api.EventResult;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.platform.Client;
+import dev.huskuraft.effortless.renderer.LightTexture;
 import dev.huskuraft.effortless.renderer.RenderStyleProvider;
 import dev.huskuraft.effortless.renderer.opertaion.SurfaceColor;
-import dev.huskuraft.effortless.renderer.outliner.Outline;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
@@ -267,7 +267,7 @@ final class ActualClientStructureBuilder extends StructureBuilder {
         if (result instanceof BatchOperationResult result1) {
             var cluster = getEntrance().getClientManager().getOutlineRenderer().showCluster(result1.getOperation().getContext().uuid(), result1.locations())
                     .texture(RenderStyleProvider.CHECKERED_THIN_TEXTURE_LOCATION)
-                    .lightMap(Outline.LightTexture.FULL_BLOCK)
+                    .lightMap(LightTexture.FULL_BLOCK)
                     .disableNormals()
                     .stroke(1 / 64f);
             switch (result.getOperation().getContext().state()) {

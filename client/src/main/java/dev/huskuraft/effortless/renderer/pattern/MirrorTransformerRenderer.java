@@ -1,6 +1,8 @@
 package dev.huskuraft.effortless.renderer.pattern;
 
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
+import dev.huskuraft.effortless.core.Axis;
+import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.renderer.Renderer;
 
 import java.awt.*;
@@ -17,26 +19,18 @@ public class MirrorTransformerRenderer extends TransformerRenderer {
 
     @Override
     public void render(Renderer renderer, float deltaTick) {
-        renderPlaneByAxis(renderer, transformer.position(), 1024, transformer.axis(), new Color(0, 0, 0, 72));
-//        if (drawPlanes) {
-//            for (Axis a : axis) {
-//                VertexConsumer buffer = ((MultiBufferSource) multiBufferSource).getBuffer(FabricRenderLayers.planes());
-//                drawAxisPlane(buffer, position, radius, a, COLOR_PLANE);
-//                multiBufferSource.endBatch();
-//            }
-//        }
-//        if (drawLines) {
-//            for (Axis a : axis) {
-//                VertexConsumer buffer = multiBufferSource.getBuffer(FabricRenderLayers.lines());
-//                for (Axis a1 : Axis.values()) {
-//                    if (a1 != a) {
-//                        drawAxisLine(buffer, position, radius, a1, COLOR_LINE);
-//                    }
-//                }
-//                multiBufferSource.endBatch();
-//            }
-//        }
+        var axis = transformer.axis();
+        var cam = renderer.getCameraPosition();
+        var position = transformer.position();
+        var planeCenter = new Vector3d(axis != Axis.X ? cam.getX() : position.getX(), axis != Axis.Y ? cam.getY() : position.getY(), axis != Axis.Z ? cam.getZ() : position.getZ());
 
+        renderPlaneByAxis(renderer, planeCenter, 1024, transformer.axis(), new Color(0, 0, 0, 72));
+        for (var value : Axis.values()) {
+            if (value == axis) {
+                continue;
+            }
+            renderLineByAxis(renderer, planeCenter, 1024, value, new Color(0, 0, 0, 200));
+        }
     }
 
 }

@@ -88,6 +88,10 @@ public class ArrayTransformer extends Transformer {
         return count;
     }
 
+    public Integer copyCount() {
+        return Math.max(0, count - 1);
+    }
+
     public ArrayTransformer withOffset(Vector3d offset) {
         return new ArrayTransformer(id, name, offset, count);
     }

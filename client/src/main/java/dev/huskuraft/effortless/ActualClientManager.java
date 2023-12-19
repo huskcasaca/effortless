@@ -199,9 +199,9 @@ final class ActualClientManager extends ClientManager {
 
                 operationsRenderer.tick();
                 outlineRenderer.tick();
+                patternRenderer.tick();
             }
             case END -> {
-                patternRenderer.tick();
             }
         }
     }
@@ -212,9 +212,9 @@ final class ActualClientManager extends ClientManager {
 
     public void onRenderEnd(Renderer renderer, float deltaTick) {
 
+        patternRenderer.render(renderer, deltaTick);
         outlineRenderer.render(renderer, deltaTick);
         operationsRenderer.render(renderer, deltaTick);
-        patternRenderer.render(renderer, deltaTick);
         renderer.draw();
 
     }

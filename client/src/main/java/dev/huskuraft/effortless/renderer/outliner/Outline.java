@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
-import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.core.Orientation;
 import dev.huskuraft.effortless.core.Resource;
-import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;
+import dev.huskuraft.effortless.renderer.LightTexture;
+import dev.huskuraft.effortless.renderer.RenderUtils;
 import dev.huskuraft.effortless.renderer.Renderer;
 
 import javax.annotation.Nullable;
@@ -17,33 +17,6 @@ public abstract class Outline {
 
     protected Outline() {
         params = new OutlineParams();
-    }
-
-    private static Vector3d rotate(Vector3d vector, double degree, Axis axis) {
-        if (degree == 0)
-            return vector;
-        if (vector == Vector3d.ZERO)
-            return vector;
-
-        float angle = (float) (degree / 180f * MathUtils.PI);
-        double sin = MathUtils.sin(angle);
-        double cos = MathUtils.cos(angle);
-        double x = vector.getX();
-        double y = vector.getY();
-        double z = vector.getZ();
-
-        if (axis == Axis.X)
-            return new Vector3d(x, y * cos - z * sin, z * cos + y * sin);
-        if (axis == Axis.Y)
-            return new Vector3d(x * cos + z * sin, y, z * cos - x * sin);
-        if (axis == Axis.Z)
-            return new Vector3d(x * cos - y * sin, y * cos + x * sin, z);
-        return vector;
-    }
-
-    public static Vector3d calculateAxisAlignedPlane(Vector3d vector) {
-        vector = vector.normalize();
-        return new Vector3d(1, 1, 1).subtract(MathUtils.abs(vector.getX()), MathUtils.abs(vector.getY()), MathUtils.abs(vector.getZ()));
     }
 
     public abstract void render(Renderer renderer, float deltaTick);
@@ -87,7 +60,7 @@ public abstract class Outline {
         }
 
         var extension = diff.normalize().scale(lineWidth / 2);
-        var plane = calculateAxisAlignedPlane(diff);
+        var plane = RenderUtils.calculateAxisAlignedPlane(diff);
         var face = Orientation.getNearest(diff.getX(), diff.getY(), diff.getZ());
         var axis = face.getAxis();
 
@@ -97,13 +70,13 @@ public abstract class Outline {
 
         var a1 = plane.add(start);
         var b1 = plane.add(end);
-        plane = rotate(plane, -90, axis);
+        plane = RenderUtils.rotate(plane, -90, axis);
         var a2 = plane.add(start);
         var b2 = plane.add(end);
-        plane = rotate(plane, -90, axis);
+        plane = RenderUtils.rotate(plane, -90, axis);
         var a3 = plane.add(start);
         var b3 = plane.add(end);
-        plane = rotate(plane, -90, axis);
+        plane = RenderUtils.rotate(plane, -90, axis);
         var a4 = plane.add(start);
         var b4 = plane.add(end);
 
@@ -123,20 +96,20 @@ public abstract class Outline {
         var vec = a1.subtract(a4);
         face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
         renderer.drawQuad(renderStyle, a1, b1, b2, a2, getParams().getLightMap(), getParams().getColor().getRGB(), face);
-        vec = rotate(vec, -90, axis);
+        vec = RenderUtils.rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
         renderer.drawQuad(renderStyle, a2, b2, b3, a3, getParams().getLightMap(), getParams().getColor().getRGB(), face);
-        vec = rotate(vec, -90, axis);
+        vec = RenderUtils.rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
         renderer.drawQuad(renderStyle, a3, b3, b4, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
-        vec = rotate(vec, -90, axis);
+        vec = RenderUtils.rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
         renderer.drawQuad(renderStyle, a4, b4, b1, a1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
     }
 
     public static class OutlineParams {
         protected Optional<Resource> faceTexture;
-        protected Optional<Resource> hightlightedFaceTexture;
+        protected Optional<Resource> highlightedFaceTexture;
         protected Orientation highlightedFace;
         protected boolean fadeLineWidth;
         protected boolean disableCull;
@@ -147,7 +120,7 @@ public abstract class Outline {
         private float lineWidth;
 
         public OutlineParams() {
-            faceTexture = hightlightedFaceTexture = Optional.empty();
+            faceTexture = highlightedFaceTexture = Optional.empty();
             alpha = 1;
             lineWidth = 1 / 32f;
             fadeLineWidth = true;
@@ -198,7 +171,7 @@ public abstract class Outline {
 
         public OutlineParams textures(Resource texture, Resource highlightTexture) {
             this.faceTexture = Optional.ofNullable(texture);
-            this.hightlightedFaceTexture = Optional.ofNullable(highlightTexture);
+            this.highlightedFaceTexture = Optional.ofNullable(highlightTexture);
             return this;
         }
 
@@ -235,12 +208,6 @@ public abstract class Outline {
             return new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue(), (int) (rgb.getAlpha() * alpha));
         }
 
-    }
-
-    public static class LightTexture {
-        public static final int FULL_BRIGHT = 15728880;
-        public static final int FULL_SKY = 15728640;
-        public static final int FULL_BLOCK = 240;
     }
 
 }
