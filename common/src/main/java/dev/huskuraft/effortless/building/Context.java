@@ -39,7 +39,8 @@ public record Context(
                         RaisedEdge.RAISE_LONG_EDGE,
                         ReplaceMode.DISABLED),
                 new PatternParams(
-                        Pattern.DISABLED),
+                        Pattern.DISABLED,
+                        UUID.randomUUID().getMostSignificantBits()),
                 new ReachParams(0, 0)
         );
     }
@@ -164,6 +165,10 @@ public record Context(
         return patternParams.pattern();
     }
 
+    public long patternSeed() {
+        return patternParams.seed();
+    }
+
     public TracingResult tracingResult() {
         if (isIdle()) {
             return TracingResult.PASS;
@@ -242,12 +247,16 @@ public record Context(
         return new Context(uuid, state, type, interactions, structureParams, patternParams.withPattern(pattern), reachParams);
     }
 
+    public Context withRandomPatternSeed() {
+        return new Context(uuid, state, type, interactions, structureParams, patternParams.withRandomSeed(), reachParams);
+    }
+
     public Context finalize(Player player, BuildStage stage) {
         return withPattern(pattern().finalize(new BuildSession(player.getWorld(), player, this), stage));
     }
 
     // new context for idle
-    public Context reset() {
+    public Context resetBuildState() {
         return new Context(
                 UUID.randomUUID(),
                 BuildState.IDLE,
@@ -379,11 +388,16 @@ public record Context(
     }
 
     public record PatternParams(
-            Pattern pattern
+            Pattern pattern,
+            long seed
     ) {
 
         public PatternParams withPattern(Pattern pattern) {
-            return new PatternParams(pattern);
+            return new PatternParams(pattern, seed);
+        }
+
+        public PatternParams withRandomSeed() {
+            return new PatternParams(pattern, UUID.randomUUID().getMostSignificantBits());
         }
     }
 

@@ -77,7 +77,7 @@ public class ItemRandomizer extends Randomizer<Item> {
         if (!isValid()) {
             return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation));
         }
-        var source = asSource(operation.getContext().uuid().getMostSignificantBits());
+        var source = asSource(operation.getContext().patternSeed());
         if (operation instanceof DeferredBatchOperation deferredBatchOperation) {
             return switch (target) {
                 case SINGLE -> deferredBatchOperation.mapEach(o -> o.refactor(RefactorContext.of(source.next())));

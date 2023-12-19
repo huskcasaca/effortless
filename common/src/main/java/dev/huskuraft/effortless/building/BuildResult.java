@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building;
 
-public enum BuildingResult {
+public enum BuildResult {
     COMPLETED,
     PARTIAL,
     CANCELED; // state inconsistent or become idle

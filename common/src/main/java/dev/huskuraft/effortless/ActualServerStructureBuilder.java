@@ -24,17 +24,17 @@ final class ActualServerStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public BuildingResult perform(Player player, BuildState state) {
+    public BuildResult perform(Player player, BuildState state) {
         return null;
     }
 
     @Override
-    public BuildingResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction) {
+    public BuildResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction) {
         return null;
     }
 
     @Override
-    public BuildingResult updateContext(Player player, UnaryOperator<Context> updater) {
+    public BuildResult updateContext(Player player, UnaryOperator<Context> updater) {
         return null;
     }
 
