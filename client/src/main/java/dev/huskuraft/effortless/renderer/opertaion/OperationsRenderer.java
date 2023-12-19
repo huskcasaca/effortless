@@ -4,6 +4,7 @@ import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
+import dev.huskuraft.effortless.renderer.RenderFadeEntry;
 import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationPreview;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationPreview;
@@ -16,7 +17,7 @@ import java.util.function.BiFunction;
 
 public class OperationsRenderer {
 
-    private final Map<Object, Entry<?>> results = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Object, RenderFadeEntry<? extends OperationPreview>> results = Collections.synchronizedMap(new HashMap<>());
     private final Map<Class<?>, BiFunction<OperationsRenderer, OperationResult, ? extends OperationPreview>> resultRendererMap = Collections.synchronizedMap(new HashMap<>());
 
     public OperationsRenderer() {
@@ -43,7 +44,7 @@ public class OperationsRenderer {
     }
 
     public <R extends OperationResult> void showResult(Object id, R result) {
-        results.put(id, new Entry<>(createRenderer(result)));
+        results.put(id, new RenderFadeEntry<>(createRenderer(result)));
     }
 
     public void tick() {
@@ -58,39 +59,9 @@ public class OperationsRenderer {
     }
 
     public void render(Renderer renderer, float deltaTick) {
-        for (var entry : results.entrySet()) {
-            entry.getValue().getResult().render(renderer, deltaTick);
-        }
-    }
-
-    private static class Entry<R extends OperationPreview> {
-
-        private static final int FADE_TICKS = 0;
-
-        private final R result;
-        private int ticksTillRemoval;
-
-        public Entry(R result) {
-            this.result = result;
-            ticksTillRemoval = 5;
-        }
-
-        public void tick() {
-            ticksTillRemoval--;
-        }
-
-        public boolean isAlive() {
-            return ticksTillRemoval >= FADE_TICKS;
-        }
-
-        public boolean isFading() {
-            return ticksTillRemoval < 0;
-        }
-
-        public R getResult() {
-            return result;
-        }
-
+        results.forEach((k, v) -> {
+            v.getValue().render(renderer, deltaTick);
+        });
     }
 
 }

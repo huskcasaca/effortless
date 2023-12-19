@@ -150,6 +150,8 @@ public abstract class Renderer {
     public abstract void drawQuadUV(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
                                     float minV, float maxU, float maxV, int uv2, int color, Orientation normal);
 
+    public abstract void drawNameTag(Typeface typeface, Text text);
+
     public abstract RenderStyleProvider getStyleProvider();
 
 }
