@@ -101,7 +101,7 @@ final class ActualClientStructureBuilder extends StructureBuilder {
                 context = context.withPlacingState();
             }
         }
-        return context.withNextHitTraceBy(player).withUUID(player.getId());
+        return context.withNextHitTraceBy(player);
     }
 
     @Override
