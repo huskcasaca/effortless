@@ -61,21 +61,21 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public BuildingResult perform(Player player, BuildState state) {
+    public BuildResult perform(Player player, BuildState state) {
         return perform(player, state, null);
     }
 
     @Override
-    public BuildingResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction) {
+    public BuildResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction) {
         return updateContext(player, context -> {
             if (interaction == null) {
-                return context.reset();
+                return context.resetBuildState();
             }
             if (interaction.getTarget() != Interaction.Target.BLOCK) {
-                return context.reset();
+                return context.resetBuildState();
             }
             if (context.isBuilding() && context.state() != state) {
-                return context.reset();
+                return context.resetBuildState();
             }
             return context.withState(state).withNextInteraction(interaction);
         });
@@ -178,7 +178,7 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public BuildingResult updateContext(Player player, UnaryOperator<Context> updater) {
+    public BuildResult updateContext(Player player, UnaryOperator<Context> updater) {
         var context = updater.apply(getContext(player));
         if (context.isFulfilled()) {
 
@@ -189,15 +189,15 @@ final class ActualClientStructureBuilder extends StructureBuilder {
             showSummaryOverlay(context.uuid(), result, 1000);
 
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalized));
-            setContext(player, context.reset());
+            setContext(player, context.resetBuildState());
 
-            return BuildingResult.COMPLETED;
+            return BuildResult.COMPLETED;
         } else {
             setContext(player, context);
             if (context.isIdle()) {
-                return BuildingResult.CANCELED;
+                return BuildResult.CANCELED;
             } else {
-                return BuildingResult.PARTIAL;
+                return BuildResult.PARTIAL;
             }
         }
     }
@@ -214,6 +214,7 @@ final class ActualClientStructureBuilder extends StructureBuilder {
         if (player == null || getContext(player).isDisabled()) {
             return;
         }
+        setContext(player, getContext(player).withRandomPatternSeed());
         var context = getContextTraced(player).withPreviewType();
 
         var result = context.withPreviewType().createSession(player.getWorld(), player).build().commit();

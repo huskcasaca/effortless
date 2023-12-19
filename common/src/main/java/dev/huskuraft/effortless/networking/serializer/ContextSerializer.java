@@ -33,7 +33,8 @@ public class ContextSerializer extends BufferSerializer<Context> {
                                 buffer.readUUID(),
                                 buffer.readText(),
                                 buffer.readList(new TransformerSerializer())
-                        )),
+                        ),
+                        buffer.readLong()),
                 new Context.ReachParams(0, 0)
         );
     }
@@ -56,6 +57,7 @@ public class ContextSerializer extends BufferSerializer<Context> {
         buffer.writeUUID(context.patternParams().pattern().id());
         buffer.writeText(context.patternParams().pattern().name());
         buffer.writeList(context.patternParams().pattern().transformers(), new TransformerSerializer());
+        buffer.writeLong(context.patternParams().seed());
     }
 
 }

@@ -10,11 +10,11 @@ import java.util.function.UnaryOperator;
 
 public abstract class StructureBuilder {
 
-    public abstract BuildingResult perform(Player player, BuildState state);
+    public abstract BuildResult perform(Player player, BuildState state);
 
-    public abstract BuildingResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction);
+    public abstract BuildResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction);
 
-    public abstract BuildingResult updateContext(Player player, UnaryOperator<Context> updater);
+    public abstract BuildResult updateContext(Player player, UnaryOperator<Context> updater);
 
     public abstract Context getDefaultContext();
 
