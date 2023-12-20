@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.renderer;
 
 import dev.huskuraft.effortless.core.Resource;
 
-public abstract class RenderStyleProvider {
+public abstract class RenderTypes {
 
     public static final Resource BLANK_TEXTURE_LOCATION = Resource.of("textures/misc/blank.png");
     public static final Resource CHECKERED_TEXTURE_LOCATION = Resource.of("textures/misc/checkerboard.png");

@@ -380,7 +380,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
             renderer.drawGradientRect(x0, y0, x1, y1, 0xa1101010, 0x8c101010);
         } else {
             renderer.setShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
-            renderer.drawPanelBackgroundTexture(x0, y0, x1 - x0, y1 - y0, (float) x1, (float) (y1 + (int) this.getScrollAmount()));
+            renderer.drawPanelBackgroundTexture(x0, y0, (float) x1, (float) (y1 + (int) this.getScrollAmount()), x1 - x0, y1 - y0);
             renderer.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
         renderer.pushPose();
@@ -390,8 +390,8 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         renderer.popPose();
 
         if (this.renderShadow) {
-            renderer.drawGradientRect(renderer.getStyleProvider().guiOverlay(), this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0, 0);
-            renderer.drawGradientRect(renderer.getStyleProvider().guiOverlay(), this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216, 0);
+            renderer.drawGradientRect(renderer.renderTypes().guiOverlay(), this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0, 0);
+            renderer.drawGradientRect(renderer.renderTypes().guiOverlay(), this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216, 0);
         }
 
         var renderScrollBar = this.getMaxScroll();

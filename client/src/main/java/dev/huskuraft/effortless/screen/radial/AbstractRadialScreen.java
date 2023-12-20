@@ -347,6 +347,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
             var y2m3 = MathUtils.sin(rRad - innerGap) * categoryOuterEdge;
 
             renderer.drawQuad((int) (middleX + x1m1), (int) (middleY + y1m1), (int) (middleX + x2m1), (int) (middleY + y2m1), (int) (middleX + x2m3), (int) (middleY + y2m3), (int) (middleX + x1m3), (int) (middleY + y1m3), 200, color.getRGB());
+            renderer.draw();
 
             // icon
             if (slot.getIcon() != null) {
@@ -355,9 +356,10 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
                 renderer.pushPose();
                 renderer.translate(0, 0, 300);
-                renderer.drawTexture(slot.getIcon(), (int) MathUtils.round(middleX + iconX - 8), (int) MathUtils.round(middleY + iconY - 8), 0, 0, 16, 16, 18, 18, 18, 18);
+                renderer.drawTexture(slot.getIcon(), (int) MathUtils.round(middleX + iconX - 8), (int) MathUtils.round(middleY + iconY - 8), 16, 16, 0f, 0f, 18, 18, 18, 18);
                 renderer.popPose();
             }
+            renderer.draw();
 
         }
 
@@ -399,17 +401,18 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                     hoveredButton = button;
                 }
 
-                renderer.drawRect(renderer.getStyleProvider().gui(), (int) (middleX + x1), (int) (middleY + y1), (int) (middleX + x2), (int) (middleY + y2), color.getRGB(), 0);
-
+                renderer.drawRect(renderer.renderTypes().gui(), (int) (middleX + x1), (int) (middleY + y1), (int) (middleX + x2), (int) (middleY + y2), color.getRGB(), 0);
+                renderer.draw();
                 // icon
                 if (button.getIcon() != null) {
                     renderer.pushPose();
                     var iconX = x;
                     var iconY = y;
                     renderer.translate((int) MathUtils.round(middleX + iconX - 8), (int) MathUtils.round(middleY + iconY - 8), 0);
-                    renderer.drawTexture(button.getIcon(), 0, 0, 0, 0, 16, 16, 18, 18, 18, 18);
+                    renderer.drawTexture(button.getIcon(), 0, 0, 16, 16, 0f, 0f, 18, 18, 18, 18);
                     renderer.popPose();
                 }
+                renderer.draw();
 
             }
         }

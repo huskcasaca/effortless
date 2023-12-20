@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.core.Resource;
-import dev.huskuraft.effortless.renderer.RenderStyleProvider;
 import dev.huskuraft.effortless.renderer.RenderType;
+import dev.huskuraft.effortless.renderer.RenderTypes;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import dev.huskuraft.effortless.vanilla.renderer.OutlineRenderType;
 
-class MinecraftRenderStyleProvider extends RenderStyleProvider {
+class MinecraftRenderTypes extends RenderTypes {
 
     @Override
     public RenderType gui() {

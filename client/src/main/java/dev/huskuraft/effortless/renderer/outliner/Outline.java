@@ -49,7 +49,7 @@ public abstract class Outline {
         if (lineWidth == 0)
             return;
 
-        var renderStyle = renderer.getStyleProvider().outlineSolid(true);
+        var renderStyle = renderer.renderTypes().outlineSolid(true);
 
         var diff = end.subtract(start);
         if (diff.getX() + diff.getY() + diff.getZ() < 0) {
