@@ -40,7 +40,7 @@ public class BlockClusterOutline extends Outline {
         if (!faceTexture.isPresent())
             return;
 
-        var translucentType = renderer.getStyleProvider().outlineTranslucent(faceTexture.get(), true);
+        var translucentType = renderer.renderTypes().outlineTranslucent(faceTexture.get(), true);
 
         renderer.pushLayer();
 

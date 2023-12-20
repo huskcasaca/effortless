@@ -9,31 +9,6 @@ import org.joml.Vector4f;
 
 public interface VertexBuffer {
 
-    class ARGB32 {
-        public ARGB32() {
-        }
-
-        public static int alpha(int packedColor) {
-            return packedColor >>> 24;
-        }
-
-        public static int red(int packedColor) {
-            return packedColor >> 16 & 255;
-        }
-
-        public static int green(int packedColor) {
-            return packedColor >> 8 & 255;
-        }
-
-        public static int blue(int packedColor) {
-            return packedColor & 255;
-        }
-
-        public static int color(int alpha, int red, int green, int blue) {
-            return alpha << 24 | red << 16 | green << 8 | blue;
-        }
-    }
-
     VertexBuffer vertex(double x, double y, double z);
 
     VertexBuffer color(int red, int green, int blue, int alpha);
@@ -57,7 +32,7 @@ public interface VertexBuffer {
     }
 
     default VertexBuffer color(int color) {
-        return this.color(ARGB32.red(color), ARGB32.green(color), ARGB32.blue(color), ARGB32.alpha(color));
+        return this.color(RenderUtils.ARGB32.red(color), RenderUtils.ARGB32.green(color), RenderUtils.ARGB32.blue(color), RenderUtils.ARGB32.alpha(color));
     }
 
     default VertexBuffer uv2(int lightmapUV) {
@@ -88,5 +63,6 @@ public interface VertexBuffer {
         var zOffset = normal != null ? normal.getStepZ() : 0;
         return this.normal(matrix, xOffset, yOffset, zOffset);
     }
+
 
 }

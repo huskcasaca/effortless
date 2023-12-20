@@ -36,4 +36,29 @@ public final class RenderUtils {
         return new Vector3d(1, 1, 1).subtract(MathUtils.abs(vector.getX()), MathUtils.abs(vector.getY()), MathUtils.abs(vector.getZ()));
     }
 
+    public class ARGB32 {
+        public ARGB32() {
+        }
+
+        public static int alpha(int packedColor) {
+            return packedColor >>> 24;
+        }
+
+        public static int red(int packedColor) {
+            return packedColor >> 16 & 255;
+        }
+
+        public static int green(int packedColor) {
+            return packedColor >> 8 & 255;
+        }
+
+        public static int blue(int packedColor) {
+            return packedColor & 255;
+        }
+
+        public static int color(int alpha, int red, int green, int blue) {
+            return alpha << 24 | red << 16 | green << 8 | blue;
+        }
+    }
+
 }

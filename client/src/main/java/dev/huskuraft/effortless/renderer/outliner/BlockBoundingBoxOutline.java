@@ -74,7 +74,7 @@ public class BlockBoundingBoxOutline extends Outline {
         params.alpha =
                 orientation == params.getHighlightedFace() && params.highlightedFaceTexture.isPresent() ? 1 : 0.5f;
 
-        var renderType = renderer.getStyleProvider().outlineTranslucent(faceTexture, !noCull);
+        var renderType = renderer.renderTypes().outlineTranslucent(faceTexture, !noCull);
         renderer.pushLayer();
 
         var axis = orientation.getAxis();

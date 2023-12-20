@@ -49,7 +49,7 @@ public abstract class AbstractButton extends AbstractWidget {
 
     public void renderButtonBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         renderer.setShaderColor(1.0F, 1.0F, 1.0F, this.getAlpha());
-        renderer.drawWidgetBackgroundTexture(getX(), getY(), getWidth(), getHeight(), isActive(), isHoveredOrFocused());
+        renderer.drawButtonTexture(getX(), getY(), getWidth(), getHeight(), isActive(), isHoveredOrFocused());
         renderer.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         renderString(renderer, getTypeface(), (isActive() ? 16777215 : 10526880) | (int) MathUtils.ceil(this.getAlpha() * 255.0F) << 24);
     }

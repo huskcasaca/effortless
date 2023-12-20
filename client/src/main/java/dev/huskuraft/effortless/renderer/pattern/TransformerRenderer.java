@@ -20,7 +20,7 @@ public abstract class TransformerRenderer {
     public abstract void render(Renderer renderer, float deltaTick);
 
     protected void renderPlaneByAxis(Renderer renderer, Vector3d pos, Integer range, Axis axis, Color color) {
-        var renderStyle = renderer.getStyleProvider().planes();
+        var renderStyle = renderer.renderTypes().planes();
         var cam = renderer.camera().position();
         var min = new Vector3d(-range, -range, -range);
         var max = new Vector3d(range, range, range);
@@ -90,7 +90,7 @@ public abstract class TransformerRenderer {
             return;
         }
 
-        var renderStyle = renderer.getStyleProvider().outlineSolid();
+        var renderStyle = renderer.renderTypes().outlineSolid();
 
         var diff = end.subtract(start);
         if (diff.getX() + diff.getY() + diff.getZ() < 0) {
@@ -153,7 +153,7 @@ public abstract class TransformerRenderer {
 //        pushPose();
 //        translate(-getCameraPosition().getX(), -getCameraPosition().getY(), -getCameraPosition().getZ());
 //
-//        var buffer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(getStyleProvider().planes()));
+//        var buffer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderTypes().planes()));
 //        var matrix = proxy.pose().last().pose();
 //
 //        var min = v1;
