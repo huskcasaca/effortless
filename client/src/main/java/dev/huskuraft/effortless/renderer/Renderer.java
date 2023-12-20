@@ -5,6 +5,8 @@ import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -17,29 +19,36 @@ public abstract class Renderer {
 
     public abstract int getOptionColor(float alpha);
 
-    public abstract Vector3d getCameraPosition();
+    public abstract Camera camera();
 
     public abstract void pushPose();
 
     public abstract void popPose();
 
+    public abstract Matrix4f lastPose();
+
+    public abstract Matrix3f lastPoseNormal();
+
     public abstract void pushLayer();
 
     public abstract void popLayer();
 
-    public abstract void translate(double d, double e, double f);
+    public abstract void translate(double x, double y, double z);
 
-    public abstract void translate(float d, float e, float f);
+    public abstract void translate(float x, float y, float z);
 
-    public abstract void scale(double d, double e, double f);
+    public abstract void scale(double x, double y, double z);
 
-    public abstract void scale(float d, float e, float f);
+    public abstract void scale(float x, float y, float z);
 
     public abstract void enableScissor(int x1, int y1, int x2, int y2);
 
     public abstract void disableScissor();
 
     public abstract void setShaderColor(float red, float green, float blue, float alpha);
+
+    public abstract VertexBuffer vertexBuffer(RenderType renderType);
+
 
     public abstract void draw();
 
@@ -69,7 +78,7 @@ public abstract class Renderer {
 
     public abstract void drawQuad(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color);
 
-    public abstract void drawQuad(RenderType renderType, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color);
+//    public abstract void drawQuad(RenderType renderType, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color);
 
     public abstract int drawText(Typeface typeface, String string, int x, int y, int color, boolean shadow);
 
@@ -143,15 +152,46 @@ public abstract class Renderer {
 
     public abstract void drawBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color);
 
-    public abstract void drawLine(RenderType renderType, Vector3d v1, Vector3d v2, int uv2, int color);
-
-    public abstract void drawQuad(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Orientation normal);
-
-    public abstract void drawQuadUV(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
-                                    float minV, float maxU, float maxV, int uv2, int color, Orientation normal);
+//    public abstract void drawLine(RenderType renderType, Vector3d v1, Vector3d v2, int uv2, int color);
+//
+//    public abstract void drawQuad(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Orientation normal);
+//
+//    public abstract void drawQuadUV(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
+//                                    float minV, float maxU, float maxV, int uv2, int color, Orientation normal);
 
     public abstract void drawNameTag(Typeface typeface, Text text);
 
     public abstract RenderStyleProvider getStyleProvider();
+
+    public final void drawQuad(RenderType renderType, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color) {
+        var buffer = vertexBuffer(renderType);
+
+        buffer.vertex(lastPose(), x0, y0, offset).color(color).endVertex();
+        buffer.vertex(lastPose(), x1, y1, offset).color(color).endVertex();
+        buffer.vertex(lastPose(), x2, y2, offset).color(color).endVertex();
+        buffer.vertex(lastPose(), x3, y3, offset).color(color).endVertex();
+    }
+
+    public final void drawLine(RenderType renderType, Vector3d v1, Vector3d v2, int uv2, int color) {
+        var buffer = vertexBuffer(renderType);
+
+        buffer.vertex(lastPose(), v1).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
+        buffer.vertex(lastPose(), v2).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
+    }
+
+    public final void drawQuad(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4,
+                               int uv2, int color, Orientation normal) {
+        drawQuadUV(renderType, v1, v2, v3, v4, 0, 0, 1, 1, uv2, color, normal);
+    }
+
+    public final void drawQuadUV(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
+                                 float minV, float maxU, float maxV, int uv2, int color, Orientation normal) {
+        var buffer = vertexBuffer(renderType);
+
+        buffer.vertex(lastPose(), v1).color(color).uv(minU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
+        buffer.vertex(lastPose(), v2).color(color).uv(maxU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
+        buffer.vertex(lastPose(), v3).color(color).uv(maxU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
+        buffer.vertex(lastPose(), v4).color(color).uv(minU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
+    }
 
 }
