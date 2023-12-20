@@ -21,7 +21,7 @@ public abstract class TransformerRenderer {
 
     protected void renderPlaneByAxis(Renderer renderer, Vector3d pos, Integer range, Axis axis, Color color) {
         var renderStyle = renderer.getStyleProvider().planes();
-        var cam = renderer.getCameraPosition();
+        var cam = renderer.camera().position();
         var min = new Vector3d(-range, -range, -range);
         var max = new Vector3d(range, range, range);
 
@@ -83,7 +83,7 @@ public abstract class TransformerRenderer {
     }
 
     protected void renderAACuboidLine(Renderer renderer, Vector3d start, Vector3d end, float width, int color, boolean disableNormals) {
-        var camera = renderer.getCameraPosition();
+        var camera = renderer.camera().position();
         start = start.subtract(camera);
         end = end.subtract(camera);
         if (width == 0) {

@@ -36,7 +36,7 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
                 var v1 = interactionPosition.add(transformer.offset().multiply(i));
                 var v2 = interactionPosition.add(transformer.offset().multiply(i + 1));
                 renderAACuboidLine(renderer, v1, v2, 1 / 32f, 0xFFFFFF, true);
-                var cam = renderer.getCameraPosition();
+                var cam = renderer.camera().position();
                 renderer.pushPose();
                 var mid = v1.add(v2).divide(2);
                 renderer.translate(-cam.getX() + mid.getX(), -cam.getY() + mid.getY(), -cam.getZ() + mid.getZ());

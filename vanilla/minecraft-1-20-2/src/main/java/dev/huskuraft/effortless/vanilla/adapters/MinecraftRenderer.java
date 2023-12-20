@@ -1,14 +1,11 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;
-import dev.huskuraft.effortless.renderer.RenderStyleProvider;
-import dev.huskuraft.effortless.renderer.RenderType;
-import dev.huskuraft.effortless.renderer.Renderer;
+import dev.huskuraft.effortless.renderer.*;
 import dev.huskuraft.effortless.text.Text;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -59,8 +56,23 @@ class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public Vector3d getCameraPosition() {
-        return MinecraftClientAdapter.adapt(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
+    public Camera camera() {
+        return new Camera() {
+            @Override
+            public Vector3d position() {
+                return MinecraftClientAdapter.adapt(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
+            }
+
+            @Override
+            public Quaternionf rotation() {
+                return Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
+            }
+
+            @Override
+            public float eyeHeight() {
+                return Minecraft.getInstance().gameRenderer.getMainCamera().getEntity().getEyeHeight();
+            }
+        };
     }
 
     @Override
@@ -73,10 +85,12 @@ class MinecraftRenderer extends Renderer {
         proxy.pose().popPose();
     }
 
+    @Override
     public Matrix4f lastPose() {
         return proxy.pose().last().pose();
     }
 
+    @Override
     public Matrix3f lastPoseNormal() {
         return proxy.pose().last().normal();
     }
@@ -90,23 +104,23 @@ class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void translate(double d, double e, double f) {
-        proxy.pose().translate(d, e, f);
+    public void translate(double x, double y, double z) {
+        proxy.pose().translate(x, y, z);
     }
 
     @Override
-    public void translate(float d, float e, float f) {
-        proxy.pose().translate(d, e, f);
+    public void translate(float x, float y, float z) {
+        proxy.pose().translate(x, y, z);
     }
 
     @Override
-    public void scale(double d, double e, double f) {
-        proxy.pose().scale((float) d, (float) e, (float) f);
+    public void scale(double x, double y, double z) {
+        proxy.pose().scale((float) x, (float) y, (float) z);
     }
 
     @Override
-    public void scale(float d, float e, float f) {
-        proxy.pose().scale(d, e, f);
+    public void scale(float x, float y, float z) {
+        proxy.pose().scale(x, y, z);
     }
 
     @Override
@@ -122,6 +136,11 @@ class MinecraftRenderer extends Renderer {
     @Override
     public void setShaderColor(float red, float green, float blue, float alpha) {
         proxy.setColor(red, green, blue, alpha);
+    }
+
+    @Override
+    public VertexBuffer vertexBuffer(RenderType renderType) {
+        return new MinecraftVertexBuffer(proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderType)));
     }
 
     @Override
@@ -299,60 +318,31 @@ class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void drawQuad(RenderType renderType, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color) {
-        var vertexConsumer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderType));
-        vertexConsumer.vertex(lastPose(), x0, y0, offset).color(color).endVertex();
-        vertexConsumer.vertex(lastPose(), x1, y1, offset).color(color).endVertex();
-        vertexConsumer.vertex(lastPose(), x2, y2, offset).color(color).endVertex();
-        vertexConsumer.vertex(lastPose(), x3, y3, offset).color(color).endVertex();
-    }
-
-    @Override
     public void drawBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color) {
         var scale = 129 / 128f;
-        var camera = getCameraPosition();
+        var camera = camera().position();
         var dispatcher = Minecraft.getInstance().getBlockRenderer();
-        var renderLayer = getStyleProvider().solid(color);
-        var buffer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderLayer));
+        var buffer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(getStyleProvider().solid(color)));
         var worldRef = MinecraftClientAdapter.adapt(world);
         var blockStateRef = MinecraftClientAdapter.adapt(blockData);
         var blockPosRef = MinecraftClientAdapter.adapt(blockPosition);
-        var model = dispatcher.getBlockModel(blockStateRef);
-        var seed = blockStateRef.getSeed(blockPosRef);
 
         pushPose();
         translate(blockPosRef.getX() - camera.getX(), blockPosRef.getY() - camera.getY(), blockPosRef.getZ() - camera.getZ());
         translate((scale - 1) / -2, (scale - 1) / -2, (scale - 1) / -2);
         scale(scale, scale, scale);
-        dispatcher.getModelRenderer().tesselateBlock(worldRef, model, blockStateRef, blockPosRef, proxy.pose(), buffer, false, RAND, seed, OverlayTexture.NO_OVERLAY);
+        dispatcher.getModelRenderer().tesselateBlock(
+                worldRef,
+                dispatcher.getBlockModel(blockStateRef),
+                blockStateRef,
+                blockPosRef,
+                proxy.pose(),
+                buffer,
+                false,
+                RAND,
+                blockStateRef.getSeed(blockPosRef),
+                OverlayTexture.NO_OVERLAY);
         popPose();
-    }
-
-    @Override
-    public void drawLine(RenderType renderType, Vector3d v1, Vector3d v2, int uv2, int color) {
-        var vertexConsumer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderType));
-        vertex(vertexConsumer, v1, 1, 1, uv2, color, null);
-        vertex(vertexConsumer, v2, 1, 1, uv2, color, null);
-    }
-
-    @Override
-    public void drawQuad(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4,
-                         int uv2, int color, Orientation normal) {
-        drawQuadUV(renderType, v1, v2, v3, v4, 0, 0, 1, 1, uv2, color, normal);
-    }
-
-    @Override
-    public void drawQuadUV(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
-                           float minV, float maxU, float maxV, int uv2, int color, Orientation normal) {
-        var vertexConsumer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderType));
-        vertex(vertexConsumer, v1, minU, minV, uv2, color, normal);
-        vertex(vertexConsumer, v2, maxU, minV, uv2, color, normal);
-        vertex(vertexConsumer, v3, maxU, maxV, uv2, color, normal);
-        vertex(vertexConsumer, v4, minU, maxV, uv2, color, normal);
-    }
-
-    public Quaternionf getCameraRotation() {
-        return Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
     }
 
     public void drawNameTag(Typeface typeface, Text text) {
@@ -368,7 +358,7 @@ class MinecraftRenderer extends Renderer {
         var f = 0f; //entity.getNameTagOffsetY();
         poseStack.pushPose();
         poseStack.translate(0.0F, f, 0.0F);
-        poseStack.mulPose(getCameraRotation());
+        poseStack.mulPose(camera().rotation());
         poseStack.scale(-0.025F, -0.025F, 0.025F);
         var matrix4f = poseStack.last().pose();
         var g = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
@@ -388,29 +378,6 @@ class MinecraftRenderer extends Renderer {
         poseStack.popPose();
     }
 
-    private void vertex(VertexConsumer vertexConsumer, Vector3d pos, float u, float v, int uv2, int color, Orientation normal) {
-        vertex(vertexConsumer, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ(), u, v, uv2, color, normal);
-    }
-
-    private void vertex(VertexConsumer vertexConsumer, float x, float y, float z, float u, float v, int uv2, int color, Orientation normal) {
-        var xOffset = 0;
-        var yOffset = 0;
-        var zOffset = 0;
-
-        if (normal != null) {
-            xOffset = normal.getStepX();
-            yOffset = normal.getStepY();
-            zOffset = normal.getStepZ();
-        }
-        vertexConsumer.vertex(lastPose(), x, y, z)
-                .color(color)
-                .uv(u, v)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(uv2)
-                .normal(lastPoseNormal(), xOffset, yOffset, zOffset)
-                .endVertex();
-
-    }
 
     @Override
     public RenderStyleProvider getStyleProvider() {

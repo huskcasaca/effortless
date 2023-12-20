@@ -21,7 +21,7 @@ public class BlockBoundingBoxOutline extends Outline {
     }
 
     public void renderBB(Renderer renderer, BoundingBox3d bb) {
-        var projectedView = renderer.getCameraPosition();
+        var projectedView = renderer.camera().position();
         var noCull = bb.contains(projectedView);
         bb = bb.inflate(noCull ? -1 / 128d : 1 / 128d);
         noCull |= params.disableCull;

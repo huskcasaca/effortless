@@ -56,7 +56,7 @@ public class BlockClusterOutline extends Outline {
     }
 
     protected void renderBlockFace(Renderer renderer, RenderType renderType, BlockPosition blockPosition, Orientation face) {
-        var camera = renderer.getCameraPosition();
+        var camera = renderer.camera().position();
         var center = blockPosition.getCenter();
         var offset = face.getNormal().toVector3();
         offset = offset.scale(1 / 128d);

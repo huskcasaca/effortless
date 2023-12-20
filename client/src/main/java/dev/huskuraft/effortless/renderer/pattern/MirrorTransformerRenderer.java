@@ -20,7 +20,7 @@ public class MirrorTransformerRenderer extends TransformerRenderer {
     @Override
     public void render(Renderer renderer, float deltaTick) {
         var axis = transformer.axis();
-        var cam = renderer.getCameraPosition();
+        var cam = renderer.camera().position();
         var position = transformer.position();
         var planeCenter = new Vector3d(axis != Axis.X ? cam.getX() : position.getX(), axis != Axis.Y ? cam.getY() : position.getY(), axis != Axis.Z ? cam.getZ() : position.getZ());
 
