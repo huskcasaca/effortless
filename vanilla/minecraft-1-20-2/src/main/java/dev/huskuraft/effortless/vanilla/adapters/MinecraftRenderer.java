@@ -110,49 +110,49 @@ class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void draw() {
+    public void flush() {
         proxy.flush();
     }
 
     @Override
-    public int drawText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, FontDisplay mode, int lightMap) {
+    public int renderText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, FontDisplay mode, int lightMap) {
         var width = MinecraftClientAdapter.adapt(typeface).drawInBatch(MinecraftClientAdapter.adapt(text), x, y, color, shadow, lastPose(), proxy.bufferSource(), Font.DisplayMode.values()[mode.ordinal()], backgroundColor, lightMap);
-        draw();
+        flush();
         return width;
     }
 
     @Override
-    public void drawTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
+    public void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
         proxy.innerBlit(MinecraftClientAdapter.adapt(resource), x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
     }
 
     @Override
-    public void drawPanelBackgroundTexture(int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
+    public void renderPanelBackgroundTexture(int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
 //        drawTexture(MinecraftClientAdapter.adapt(BACKGROUND_LOCATION), x, y, 0, uOffset, vOffset, uWidth, vHeight, 32, 32);
     }
 
     @Override
-    public void drawButtonTexture(int x, int y, int width, int height, boolean active, boolean focused) {
+    public void renderButtonTexture(int x, int y, int width, int height, boolean active, boolean focused) {
         proxy.blitSprite(BUTTON_SPRITES.get(active, focused), x, y, width, height);
     }
 
     @Override
-    public void drawItem(ItemStack stack, int x, int y) {
+    public void renderItem(ItemStack stack, int x, int y) {
         proxy.renderItem(MinecraftClientAdapter.adapt(stack), x, y);
     }
 
     @Override
-    public void drawTooltip(Typeface typeface, List<Text> list, int x, int y) {
+    public void renderTooltip(Typeface typeface, List<Text> list, int x, int y) {
         proxy.renderTooltip(MinecraftClientAdapter.adapt(typeface), list.stream().map(MinecraftAdapter::adapt).toList(), Optional.empty(), x, y);
     }
 
     @Override
-    public void drawTooltip(Typeface typeface, ItemStack itemStack, int x, int y) {
+    public void renderTooltip(Typeface typeface, ItemStack itemStack, int x, int y) {
         proxy.renderTooltip(MinecraftClientAdapter.adapt(typeface), MinecraftClientAdapter.adapt(itemStack), x, y);
     }
 
     @Override
-    public void drawBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color) {
+    public void renderBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color) {
         var scale = 129 / 128f;
         var camera = camera().position();
         var dispatcher = Minecraft.getInstance().getBlockRenderer();

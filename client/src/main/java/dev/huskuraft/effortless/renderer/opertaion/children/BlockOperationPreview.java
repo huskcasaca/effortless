@@ -26,7 +26,7 @@ public class BlockOperationPreview implements OperationPreview {
         var color = result.getColor();
         if (color == null) return;
 
-        renderer.drawBlockInWorld(world, blockPosition, blockData, color.getRGB());
+        renderer.renderBlockInWorld(world, blockPosition, blockData, color.getRGB());
     }
 
 }

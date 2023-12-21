@@ -332,11 +332,11 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                     textX -= getTypeface().measureWidth(text) / 2;
                 }
                 // FIXME: 27/9/23
-                renderer.drawTextFromStart(getTypeface(), text, (int) middleX + textX, (int) middleY + textY, WHITE_TEXT_COLOR, true);
+                renderer.renderTextFromStart(getTypeface(), text, (int) middleX + textX, (int) middleY + textY, WHITE_TEXT_COLOR, true);
             }
 
             // background tint
-            renderer.drawQuad((int) (middleX + x1m1), (int) (middleY + y1m1), (int) (middleX + x2m1), (int) (middleY + y2m1), (int) (middleX + x2m2), (int) (middleY + y2m2), (int) (middleX + x1m2), (int) (middleY + y1m2), 100, color.getRGB());
+            renderer.renderQuad((int) (middleX + x1m1), (int) (middleY + y1m1), (int) (middleX + x2m1), (int) (middleY + y2m1), (int) (middleX + x2m2), (int) (middleY + y2m2), (int) (middleX + x1m2), (int) (middleY + y1m2), 100, color.getRGB());
 
             // category line
             color = slot.getTintColor();
@@ -346,8 +346,8 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
             var y1m3 = MathUtils.sin(lRad + innerGap) * categoryOuterEdge;
             var y2m3 = MathUtils.sin(rRad - innerGap) * categoryOuterEdge;
 
-            renderer.drawQuad((int) (middleX + x1m1), (int) (middleY + y1m1), (int) (middleX + x2m1), (int) (middleY + y2m1), (int) (middleX + x2m3), (int) (middleY + y2m3), (int) (middleX + x1m3), (int) (middleY + y1m3), 200, color.getRGB());
-            renderer.draw();
+            renderer.renderQuad((int) (middleX + x1m1), (int) (middleY + y1m1), (int) (middleX + x2m1), (int) (middleY + y2m1), (int) (middleX + x2m3), (int) (middleY + y2m3), (int) (middleX + x1m3), (int) (middleY + y1m3), 200, color.getRGB());
+            renderer.flush();
 
             // icon
             if (slot.getIcon() != null) {
@@ -356,10 +356,10 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
                 renderer.pushPose();
                 renderer.translate(0, 0, 300);
-                renderer.drawTexture(slot.getIcon(), (int) MathUtils.round(middleX + iconX - 8), (int) MathUtils.round(middleY + iconY - 8), 16, 16, 0f, 0f, 18, 18, 18, 18);
+                renderer.renderTexture(slot.getIcon(), (int) MathUtils.round(middleX + iconX - 8), (int) MathUtils.round(middleY + iconY - 8), 16, 16, 0f, 0f, 18, 18, 18, 18);
                 renderer.popPose();
             }
-            renderer.draw();
+            renderer.flush();
 
         }
 
@@ -401,18 +401,18 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                     hoveredButton = button;
                 }
 
-                renderer.drawRect(renderer.renderTypes().gui(), (int) (middleX + x1), (int) (middleY + y1), (int) (middleX + x2), (int) (middleY + y2), color.getRGB(), 0);
-                renderer.draw();
+                renderer.renderRect(renderer.renderTypes().gui(), (int) (middleX + x1), (int) (middleY + y1), (int) (middleX + x2), (int) (middleY + y2), color.getRGB(), 0);
+                renderer.flush();
                 // icon
                 if (button.getIcon() != null) {
                     renderer.pushPose();
                     var iconX = x;
                     var iconY = y;
                     renderer.translate((int) MathUtils.round(middleX + iconX - 8), (int) MathUtils.round(middleY + iconY - 8), 0);
-                    renderer.drawTexture(button.getIcon(), 0, 0, 16, 16, 0f, 0f, 18, 18, 18, 18);
+                    renderer.renderTexture(button.getIcon(), 0, 0, 16, 16, 0f, 0f, 18, 18, 18, 18);
                     renderer.popPose();
                 }
-                renderer.draw();
+                renderer.flush();
 
             }
         }
@@ -423,7 +423,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
         super.renderWidgetOverlay(renderer, mouseX, mouseY, deltaTick);
 
         if (hoveredButton != null) {
-            renderer.drawTooltip(
+            renderer.renderTooltip(
                     getTypeface(),
                     List.of(
                             hoveredButton.getDisplayCategory().withStyle(TextStyle.WHITE),

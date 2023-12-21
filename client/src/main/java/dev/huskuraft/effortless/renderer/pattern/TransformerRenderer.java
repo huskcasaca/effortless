@@ -54,7 +54,7 @@ public abstract class TransformerRenderer {
                 v4 = new Vector3d((float) cen.x(), (float) max.y(), (float) min.z());
             }
         }
-        renderer.drawQuad(renderStyle, v1, v2, v3, v4, 0, color.getRGB(), null);
+        renderer.renderQuad(renderStyle, v1, v2, v3, v4, 0, color.getRGB(), null);
         renderer.popPose();
     }
 
@@ -123,29 +123,29 @@ public abstract class TransformerRenderer {
 
         if (disableNormals) {
             face = Orientation.UP;
-            renderer.drawQuad(renderStyle, b4, b3, b2, b1, LightTexture.FULL_BLOCK, color, face);
-            renderer.drawQuad(renderStyle, a1, a2, a3, a4, LightTexture.FULL_BLOCK, color, face);
-            renderer.drawQuad(renderStyle, a1, b1, b2, a2, LightTexture.FULL_BLOCK, color, face);
-            renderer.drawQuad(renderStyle, a2, b2, b3, a3, LightTexture.FULL_BLOCK, color, face);
-            renderer.drawQuad(renderStyle, a3, b3, b4, a4, LightTexture.FULL_BLOCK, color, face);
-            renderer.drawQuad(renderStyle, a4, b4, b1, a1, LightTexture.FULL_BLOCK, color, face);
+            renderer.renderQuad(renderStyle, b4, b3, b2, b1, LightTexture.FULL_BLOCK, color, face);
+            renderer.renderQuad(renderStyle, a1, a2, a3, a4, LightTexture.FULL_BLOCK, color, face);
+            renderer.renderQuad(renderStyle, a1, b1, b2, a2, LightTexture.FULL_BLOCK, color, face);
+            renderer.renderQuad(renderStyle, a2, b2, b3, a3, LightTexture.FULL_BLOCK, color, face);
+            renderer.renderQuad(renderStyle, a3, b3, b4, a4, LightTexture.FULL_BLOCK, color, face);
+            renderer.renderQuad(renderStyle, a4, b4, b1, a1, LightTexture.FULL_BLOCK, color, face);
             return;
         }
 
-        renderer.drawQuad(renderStyle, b4, b3, b2, b1, LightTexture.FULL_BLOCK, color, face);
-        renderer.drawQuad(renderStyle, a1, a2, a3, a4, LightTexture.FULL_BLOCK, color, face.getOpposite());
+        renderer.renderQuad(renderStyle, b4, b3, b2, b1, LightTexture.FULL_BLOCK, color, face);
+        renderer.renderQuad(renderStyle, a1, a2, a3, a4, LightTexture.FULL_BLOCK, color, face.getOpposite());
         var vec = a1.sub(a4);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
-        renderer.drawQuad(renderStyle, a1, b1, b2, a2, LightTexture.FULL_BLOCK, color, face);
+        renderer.renderQuad(renderStyle, a1, b1, b2, a2, LightTexture.FULL_BLOCK, color, face);
         vec = rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
-        renderer.drawQuad(renderStyle, a2, b2, b3, a3, LightTexture.FULL_BLOCK, color, face);
+        renderer.renderQuad(renderStyle, a2, b2, b3, a3, LightTexture.FULL_BLOCK, color, face);
         vec = rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
-        renderer.drawQuad(renderStyle, a3, b3, b4, a4, LightTexture.FULL_BLOCK, color, face);
+        renderer.renderQuad(renderStyle, a3, b3, b4, a4, LightTexture.FULL_BLOCK, color, face);
         vec = rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
-        renderer.drawQuad(renderStyle, a4, b4, b1, a1, LightTexture.FULL_BLOCK, color, face);
+        renderer.renderQuad(renderStyle, a4, b4, b1, a1, LightTexture.FULL_BLOCK, color, face);
     }
 
 //    public void renderPlaneByAxis(Vector3d v1, Vector3d v2, Axis axis, Color color) {
