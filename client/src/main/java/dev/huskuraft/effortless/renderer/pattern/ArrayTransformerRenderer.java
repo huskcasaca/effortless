@@ -44,7 +44,6 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
                 renderer.translate(-cam.x() + mid.x(), -cam.y() + mid.y(), -cam.z() + mid.z());
                 renderer.pushPose();
 
-                renderer.pushPose();
                 renderer.rotate(renderer.camera().rotation());
                 renderer.scale(-0.025F, -0.025F, 0.025F);
                 var text = Text.text(transformer.offset().toString());
