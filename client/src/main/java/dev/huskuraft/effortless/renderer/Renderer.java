@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -29,9 +30,15 @@ public abstract class Renderer {
 
     public abstract Matrix3f lastPoseNormal();
 
-    public abstract void pushLayer();
+    public void pushLayer() {
+    }
 
-    public abstract void popLayer();
+    public void popLayer() {
+    }
+
+    public final void translate(Vector3d vector) {
+        translate(vector.x(), vector.y(), vector.z());
+    }
 
     public final void translate(double x, double y, double z) {
         translate((float) x, (float) y, (float) z);
@@ -41,9 +48,46 @@ public abstract class Renderer {
         lastPose().translate(x, y, z);
     }
 
-    public abstract void scale(double x, double y, double z);
+    public final void scale(double n) {
+        scale(n, n, n);
+    }
 
-    public abstract void scale(float x, float y, float z);
+    public final void scale(Vector3d vector) {
+        scale(vector.x(), vector.y(), vector.z());
+    }
+
+    public final void scale(double x, double y, double z) {
+        scale((float) x, (float) y, (float) z);
+    }
+
+    public final void scale(float x, float y, float z) {
+        lastPose().scale(x, y, z);
+        if (x == y && y == z) {
+            if (x > 0.0F) {
+                return;
+            }
+            lastPoseNormal().scale(-1.0F);
+        }
+        var f = 1.0F / x;
+        var g = 1.0F / y;
+        var h = 1.0F / z;
+        var i = RenderUtils.fastInvCubeRoot(f * g * h);
+        lastPoseNormal().scale(i * f, i * g, i * h);
+    }
+
+    public final void rotate(Quaternionf quaternion) {
+        lastPose().rotate(quaternion);
+        lastPoseNormal().rotate(quaternion);
+    }
+
+    public final void rotate(Quaternionf quaternion, float x, float y, float z) {
+        lastPose().rotateAround(quaternion, x, y, z);
+        lastPoseNormal().rotate(quaternion);
+    }
+
+    public final void mul(Matrix4f matrix) {
+        lastPose().mul(matrix);
+    }
 
     public abstract void enableScissor(int x1, int y1, int x2, int y2);
 
@@ -55,11 +99,11 @@ public abstract class Renderer {
 
     public abstract void draw();
 
-    public void drawHorizontalLine(int x1, int x2, int y, int color) {
+    public final void drawHorizontalLine(int x1, int x2, int y, int color) {
         drawHorizontalLine(renderTypes().gui(), x1, x2, y, color);
     }
 
-    public void drawHorizontalLine(RenderType renderType, int x1, int x2, int y, int color) {
+    public final void drawHorizontalLine(RenderType renderType, int x1, int x2, int y, int color) {
         if (x2 < x1) {
             int i = x1;
             x1 = x2;
@@ -68,11 +112,11 @@ public abstract class Renderer {
         drawRect(renderType, x1, y, x2 + 1, y + 1, color);
     }
 
-    public void drawVerticalLine(int x, int y1, int y2, int color) {
+    public final void drawVerticalLine(int x, int y1, int y2, int color) {
         drawVerticalLine(renderTypes().gui(), x, y1, y2, color);
     }
 
-    public void drawVerticalLine(RenderType renderType, int x, int y1, int y2, int color) {
+    public final void drawVerticalLine(RenderType renderType, int x, int y1, int y2, int color) {
         if (y2 < y1) {
             int i = y1;
             y1 = y2;
@@ -88,26 +132,26 @@ public abstract class Renderer {
     }
 
 
-    public void drawBorder(int x, int y, int width, int height, int color) {
+    public final void drawBorder(int x, int y, int width, int height, int color) {
         drawRect(x, y, x + width, y + 1, color);
         drawRect(x, y + height - 1, x + width, y + height, color);
         drawRect(x, y + 1, x + 1, y + height - 1, color);
         drawRect(x + width - 1, y + 1, x + width, y + height - 1, color);
     }
 
-    public void drawRect(int x1, int y1, int x2, int y2, int color) {
+    public final void drawRect(int x1, int y1, int x2, int y2, int color) {
         drawRect(renderTypes().gui(), x1, y1, x2, y2, color, 0);
     }
 
-    public void drawRect(int x1, int y1, int x2, int y2, int color, int z) {
+    public final void drawRect(int x1, int y1, int x2, int y2, int color, int z) {
         drawRect(renderTypes().gui(), x1, y1, x2, y2, color, z);
     }
 
-    public void drawRect(RenderType renderType, int x1, int y1, int x2, int y2, int color) {
+    public final void drawRect(RenderType renderType, int x1, int y1, int x2, int y2, int color) {
         drawRect(renderType, x1, y1, x2, y2, color, 0);
     }
 
-    public void drawRect(RenderType renderType, int x1, int y1, int x2, int y2, int color, int z) {
+    public final void drawRect(RenderType renderType, int x1, int y1, int x2, int y2, int color, int z) {
         int i;
         if (x1 < x2) {
             i = x1;
@@ -152,7 +196,7 @@ public abstract class Renderer {
         draw();
     }
 
-    public void drawQuad(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int offset, int color) {
+    public final void drawQuad(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int offset, int color) {
         drawQuad(renderTypes().gui(), x1, y1, x2, y2, x3, y3, x4, y4, offset, color);
     }
 
@@ -178,8 +222,6 @@ public abstract class Renderer {
         buffer.vertex(lastPose(), v3).color(color).uv(maxU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
         buffer.vertex(lastPose(), v4).color(color).uv(minU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
     }
-
-//    public abstract void drawQuad(RenderType renderType, int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3, int offset, int color);
 
     public abstract int drawText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, FontDisplay mode, int lightMap);
 
@@ -265,19 +307,6 @@ public abstract class Renderer {
 
     public abstract void drawBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color);
 
-//    public abstract void drawLine(RenderType renderType, Vector3d v1, Vector3d v2, int uv2, int color);
-//
-//    public abstract void drawQuad(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Orientation normal);
-//
-//    public abstract void drawQuadUV(RenderType renderType, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
-//                                    float minV, float maxU, float maxV, int uv2, int color, Orientation normal);
-
-    public abstract void drawNameTag(Typeface typeface, Text text);
-
     public abstract RenderTypes renderTypes();
-
-
-
-
 
 }

@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.math.Vector3d;
@@ -88,24 +87,6 @@ class MinecraftRenderer extends Renderer {
     @Override
     public Matrix3f lastPoseNormal() {
         return proxy.pose().last().normal();
-    }
-
-    @Override
-    public void pushLayer() {
-    }
-
-    @Override
-    public void popLayer() {
-    }
-
-    @Override
-    public void scale(double x, double y, double z) {
-        proxy.pose().scale((float) x, (float) y, (float) z);
-    }
-
-    @Override
-    public void scale(float x, float y, float z) {
-        proxy.pose().scale(x, y, z);
     }
 
     @Override
@@ -197,40 +178,6 @@ class MinecraftRenderer extends Renderer {
                 OverlayTexture.NO_OVERLAY);
         popPose();
     }
-
-    public void drawNameTag(Typeface typeface, Text text) {
-
-        var distanceToSqr = 100;
-        var component = MinecraftClientAdapter.adapt(text);
-        if (distanceToSqr > 4096.0) {
-            return;
-        }
-        var i = 15728880;
-        PoseStack poseStack = proxy.pose();
-        var bl = false; // !entity.isDiscrete();
-        var f = 0f; //entity.getNameTagOffsetY();
-        poseStack.pushPose();
-        poseStack.translate(0.0F, f, 0.0F);
-        poseStack.mulPose(camera().rotation());
-        poseStack.scale(-0.025F, -0.025F, 0.025F);
-        var matrix4f = poseStack.last().pose();
-        var g = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
-        var k = (int) (g * 255.0F) << 24;
-        var font = MinecraftClientAdapter.adapt(typeface);
-        var h = (float) (-font.width(component) / 2);
-//
-        font.drawInBatch(component, h, 0f, -1, false, matrix4f, proxy.bufferSource(), Font.DisplayMode.NORMAL, 0, i);
-
-//        drawTextFromCenter(typeface, text, 0, 0, 0xffffff, false);
-//        drawText(typeface, Text.text("Testing Text"), 0, 0, 0xffffff, false);
-//        font.drawInBatch(component, h, 0f, 553648127, false, matrix4f, proxy.bufferSource(), bl ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL, k, i);
-//        if (bl) {
-//            font.drawInBatch(component, h, 0f, -1, false, matrix4f, proxy.bufferSource(), Font.DisplayMode.NORMAL, 0, i);
-//        }
-//
-        poseStack.popPose();
-    }
-
 
     @Override
     public RenderTypes renderTypes() {
