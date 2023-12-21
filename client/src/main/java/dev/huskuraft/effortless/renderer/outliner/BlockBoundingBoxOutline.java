@@ -78,10 +78,10 @@ public class BlockBoundingBoxOutline extends Outline {
         renderer.pushLayer();
 
         var axis = orientation.getAxis();
-        var uDiff = p2.subtract(p1);
-        var vDiff = p4.subtract(p1);
-        var maxU = (float) MathUtils.abs(axis == Axis.X ? uDiff.getZ() : uDiff.getX());
-        var maxV = (float) MathUtils.abs(axis == Axis.Y ? vDiff.getZ() : vDiff.getY());
+        var uDiff = p2.sub(p1);
+        var vDiff = p4.sub(p1);
+        var maxU = (float) MathUtils.abs(axis == Axis.X ? uDiff.z() : uDiff.x());
+        var maxV = (float) MathUtils.abs(axis == Axis.Y ? vDiff.z() : vDiff.y());
         renderer.drawQuadUV(renderType, p1, p2, p3, p4, 0, 0, maxU, maxV, getParams().getLightMap(), getParams().getColor().getRGB(), Orientation.UP);
 
         params.alpha = alphaBefore;

@@ -80,9 +80,9 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
             this.teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
             this.teleportButton.setOnPressListener(button -> {
                 setItem(getItem().withValue2(switch (axis) {
-                    case X -> getEntrance().getClient().getPlayer().getPosition().getX();
-                    case Y -> getEntrance().getClient().getPlayer().getPosition().getY();
-                    case Z -> getEntrance().getClient().getPlayer().getPosition().getZ();
+                    case X -> getEntrance().getClient().getPlayer().getPosition().x();
+                    case Y -> getEntrance().getClient().getPlayer().getPosition().y();
+                    case Z -> getEntrance().getClient().getPlayer().getPosition().z();
                 }));
                 numberField.setValue(getItem().value2());
             });

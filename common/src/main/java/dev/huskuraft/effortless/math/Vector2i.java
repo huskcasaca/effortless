@@ -33,24 +33,6 @@ public class Vector2i {
     }
 
     /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public int getX() {
-        return x;
-    }
-
-    /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public int getBlockX() {
-        return x;
-    }
-
-    /**
      * Set the X coordinate.
      *
      * @param x the new X
@@ -61,24 +43,6 @@ public class Vector2i {
     }
 
     /**
-     * Get the Z coordinate.
-     *
-     * @return the z coordinate
-     */
-    public int getZ() {
-        return z;
-    }
-
-    /**
-     * Get the Z coordinate.
-     *
-     * @return the z coordinate
-     */
-    public int getBlockZ() {
-        return z;
-    }
-
-    /**
      * Set the Z coordinate.
      *
      * @param z the new Z
@@ -86,6 +50,24 @@ public class Vector2i {
      */
     public Vector2i withZ(int z) {
         return Vector2i.at(x, z);
+    }
+
+    /**
+     * Get the X coordinate.
+     *
+     * @return the x coordinate
+     */
+    public int x() {
+        return x;
+    }
+
+    /**
+     * Get the Z coordinate.
+     *
+     * @return the z coordinate
+     */
+    public int z() {
+        return z;
     }
 
     /**
@@ -135,8 +117,8 @@ public class Vector2i {
      * @param other the other vector
      * @return a new vector
      */
-    public Vector2i subtract(Vector2i other) {
-        return subtract(other.x, other.z);
+    public Vector2i sub(Vector2i other) {
+        return sub(other.x, other.z);
     }
 
     /**
@@ -147,7 +129,7 @@ public class Vector2i {
      * @param z the value to subtract
      * @return a new vector
      */
-    public Vector2i subtract(int x, int z) {
+    public Vector2i sub(int x, int z) {
         return Vector2i.at(this.x - x, this.z - z);
     }
 
@@ -158,7 +140,7 @@ public class Vector2i {
      * @param others an array of vectors
      * @return a new vector
      */
-    public Vector2i subtract(Vector2i... others) {
+    public Vector2i sub(Vector2i... others) {
         int newX = x;
         int newZ = z;
 
@@ -176,8 +158,8 @@ public class Vector2i {
      * @param other the other vector
      * @return a new vector
      */
-    public Vector2i multiply(Vector2i other) {
-        return multiply(other.x, other.z);
+    public Vector2i mul(Vector2i other) {
+        return mul(other.x, other.z);
     }
 
     /**
@@ -187,7 +169,7 @@ public class Vector2i {
      * @param z the value to multiply
      * @return a new vector
      */
-    public Vector2i multiply(int x, int z) {
+    public Vector2i mul(int x, int z) {
         return Vector2i.at(this.x * x, this.z * z);
     }
 
@@ -197,7 +179,7 @@ public class Vector2i {
      * @param others an array of vectors
      * @return a new vector
      */
-    public Vector2i multiply(Vector2i... others) {
+    public Vector2i mul(Vector2i... others) {
         int newX = x;
         int newZ = z;
 
@@ -215,8 +197,8 @@ public class Vector2i {
      * @param n the value to multiply
      * @return a new vector
      */
-    public Vector2i multiply(int n) {
-        return multiply(n, n);
+    public Vector2i mul(int n) {
+        return mul(n, n);
     }
 
     /**
@@ -225,8 +207,8 @@ public class Vector2i {
      * @param other the other vector
      * @return a new vector
      */
-    public Vector2i divide(Vector2i other) {
-        return divide(other.x, other.z);
+    public Vector2i div(Vector2i other) {
+        return div(other.x, other.z);
     }
 
     /**
@@ -236,7 +218,7 @@ public class Vector2i {
      * @param z the value to divide by
      * @return a new vector
      */
-    public Vector2i divide(int x, int z) {
+    public Vector2i div(int x, int z) {
         return Vector2i.at(this.x / x, this.z / z);
     }
 
@@ -246,8 +228,8 @@ public class Vector2i {
      * @param n the value to divide by
      * @return a new vector
      */
-    public Vector2i divide(int n) {
-        return divide(n, n);
+    public Vector2i div(int n) {
+        return div(n, n);
     }
 
     /**
@@ -437,46 +419,8 @@ public class Vector2i {
         );
     }
 
-    public Vector2d toVector2() {
+    public Vector2d toVector2d() {
         return Vector2d.at(x, z);
-    }
-
-    /**
-     * Creates a 3D vector by adding a zero Y component to this vector.
-     *
-     * @return a new vector
-     */
-    public Vector3d toVector3() {
-        return toVector3(0);
-    }
-
-    /**
-     * Creates a 3D vector by adding the specified Y component to this vector.
-     *
-     * @param y the Y component
-     * @return a new vector
-     */
-    public Vector3d toVector3(double y) {
-        return Vector3d.at(x, y, z);
-    }
-
-    /**
-     * Creates a 3D vector by adding a zero Y component to this vector.
-     *
-     * @return a new vector
-     */
-    public Vector3i toVector3i() {
-        return toVector3i(0);
-    }
-
-    /**
-     * Creates a 3D vector by adding the specified Y component to this vector.
-     *
-     * @param y the Y component
-     * @return a new vector
-     */
-    public Vector3i toVector3i(int y) {
-        return Vector3i.at(x, y, z);
     }
 
     @Override

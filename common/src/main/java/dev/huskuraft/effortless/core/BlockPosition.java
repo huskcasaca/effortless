@@ -22,34 +22,34 @@ public final class BlockPosition extends Vector3i {
     }
 
     public static BlockPosition at(Vector3d vector) {
-        return at(vector.getX(), vector.getY(), vector.getZ());
+        return at(vector.x(), vector.y(), vector.z());
     }
 
     public static BlockPosition at(Vector3i vector) {
-        return at(vector.getX(), vector.getY(), vector.getZ());
+        return at(vector.x(), vector.y(), vector.z());
     }
 
     public BlockPosition offset(int i, int j, int k) {
-        return i == 0 && j == 0 && k == 0 ? this : new BlockPosition(getX() + i, getY() + j, getZ() + k);
+        return i == 0 && j == 0 && k == 0 ? this : new BlockPosition(x() + i, y() + j, z() + k);
     }
 
     public Vector3d getCenter() {
-        return toVector3().add(0.5, 0.5, 0.5);
+        return toVector3d().add(0.5, 0.5, 0.5);
     }
 
     public BlockPosition offset(Vector3i vector) {
-        return offset(vector.getX(), vector.getY(), vector.getZ());
+        return offset(vector.x(), vector.y(), vector.z());
     }
 
-    public BlockPosition subtract(Vector3i vector) {
-        return offset(-vector.getX(), -vector.getY(), -vector.getZ());
+    public BlockPosition sub(Vector3i vector) {
+        return offset(-vector.x(), -vector.y(), -vector.z());
     }
 
-    public BlockPosition multiply(int i) {
+    public BlockPosition mul(int i) {
         if (i == 1) {
             return this;
         } else {
-            return i == 0 ? ZERO : new BlockPosition(getX() * i, getY() * i, getZ() * i);
+            return i == 0 ? ZERO : new BlockPosition(x() * i, y() * i, z() * i);
         }
     }
 
@@ -102,11 +102,11 @@ public final class BlockPosition extends Vector3i {
     }
 
     public BlockPosition relative(Orientation orientation) {
-        return new BlockPosition(getX() + orientation.getStepX(), getY() + orientation.getStepY(), getZ() + orientation.getStepZ());
+        return new BlockPosition(x() + orientation.getStepX(), y() + orientation.getStepY(), z() + orientation.getStepZ());
     }
 
     public BlockPosition relative(Orientation orientation, int i) {
-        return i == 0 ? this : new BlockPosition(getX() + orientation.getStepX() * i, getY() + orientation.getStepY() * i, getZ() + orientation.getStepZ() * i);
+        return i == 0 ? this : new BlockPosition(x() + orientation.getStepX() * i, y() + orientation.getStepY() * i, z() + orientation.getStepZ() * i);
     }
 
     public BlockPosition relative(Axis axis, int i) {
@@ -116,21 +116,21 @@ public final class BlockPosition extends Vector3i {
             int j = axis == Axis.X ? i : 0;
             int k = axis == Axis.Y ? i : 0;
             int l = axis == Axis.Z ? i : 0;
-            return new BlockPosition(getX() + j, getY() + k, getZ() + l);
+            return new BlockPosition(x() + j, y() + k, z() + l);
         }
     }
 
     public BlockPosition rotate(Revolve revolve) {
         return switch (revolve) {
-            case CLOCKWISE_90 -> new BlockPosition(-getZ(), getY(), getX());
-            case CLOCKWISE_180 -> new BlockPosition(-getX(), getY(), -getZ());
-            case COUNTERCLOCKWISE_90 -> new BlockPosition(getZ(), getY(), -getX());
+            case CLOCKWISE_90 -> new BlockPosition(-z(), y(), x());
+            case CLOCKWISE_180 -> new BlockPosition(-x(), y(), -z());
+            case COUNTERCLOCKWISE_90 -> new BlockPosition(z(), y(), -x());
             default -> this;
         };
     }
 
     public BlockPosition cross(Vector3i vector) {
-        return new BlockPosition(getY() * vector.getZ() - getZ() * vector.getY(), getZ() * vector.getX() - getX() * vector.getZ(), getX() * vector.getY() - getY() * vector.getX());
+        return new BlockPosition(y() * vector.z() - z() * vector.y(), z() * vector.x() - x() * vector.z(), x() * vector.y() - y() * vector.x());
     }
 
     public int get(Axis axis) {

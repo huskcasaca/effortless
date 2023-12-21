@@ -125,9 +125,9 @@ public class RadialTransformer extends Transformer {
         return switch (stage) {
             case NONE -> this;
             case UPDATE_CONTEXT, INTERACT -> new RadialTransformer(id, name, new Vector3d(
-                    positionType[0].getStage() == stage ? position.getX() + session.getPlayer().getPosition().getX() : position.getX(),
-                    positionType[1].getStage() == stage ? position.getY() + session.getPlayer().getPosition().getY() : position.getY(),
-                    positionType[2].getStage() == stage ? position.getZ() + session.getPlayer().getPosition().getZ() : position.getZ()
+                    positionType[0].getStage() == stage ? position.x() + session.getPlayer().getPosition().x() : position.x(),
+                    positionType[1].getStage() == stage ? position.y() + session.getPlayer().getPosition().y() : position.y(),
+                    positionType[2].getStage() == stage ? position.z() + session.getPlayer().getPosition().z() : position.z()
             ), new PositionType[]{
                     positionType[0].getStage() == stage ? PositionType.ABSOLUTE : positionType[0],
                     positionType[1].getStage() == stage ? PositionType.ABSOLUTE : positionType[1],

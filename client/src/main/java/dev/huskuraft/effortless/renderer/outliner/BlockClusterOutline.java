@@ -31,9 +31,9 @@ public class BlockClusterOutline extends Outline {
     @Override
     public void render(Renderer renderer, float deltaTick) {
         cluster.visibleEdges.forEach(edge -> {
-            var start = edge.blockPosition.toVector3();
+            var start = edge.blockPosition.toVector3d();
             var direction = Orientation.get(AxisDirection.POSITIVE, edge.axis);
-            renderAACuboidLine(renderer, start, edge.blockPosition.relative(direction).toVector3());
+            renderAACuboidLine(renderer, start, edge.blockPosition.relative(direction).toVector3d());
         });
 
         var faceTexture = params.faceTexture;
@@ -58,12 +58,12 @@ public class BlockClusterOutline extends Outline {
     protected void renderBlockFace(Renderer renderer, RenderType renderType, BlockPosition blockPosition, Orientation face) {
         var camera = renderer.camera().position();
         var center = blockPosition.getCenter();
-        var offset = face.getNormal().toVector3();
-        offset = offset.scale(1 / 128d);
-        center = center.subtract(camera).add(offset);
+        var offset = face.getNormal().toVector3d();
+        offset = offset.mul(1 / 128d);
+        center = center.sub(camera).add(offset);
 
         renderer.pushPose();
-        renderer.translate(center.getX(), center.getY(), center.getZ());
+        renderer.translate(center.x(), center.y(), center.z());
 
         switch (face) {
             case DOWN ->

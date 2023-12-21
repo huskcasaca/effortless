@@ -57,12 +57,12 @@ public class Cube extends TripleClickBuilder {
     public static Stream<BlockPosition> collectCubePlaneBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
-        var x2 = context.secondBlockPosition().getX();
-        var y2 = context.secondBlockPosition().getY();
-        var z2 = context.secondBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+        var x2 = context.secondBlockPosition().x();
+        var y2 = context.secondBlockPosition().y();
+        var z2 = context.secondBlockPosition().z();
 
         switch (context.cubeFilling()) {
             case CUBE_SKELETON -> Square.addHollowSquareBlocks(list, x1, x2, y1, y2, z1, z2);
@@ -76,12 +76,12 @@ public class Cube extends TripleClickBuilder {
     public static Stream<BlockPosition> collectCubeBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
-        var x3 = context.thirdBlockPosition().getX();
-        var y3 = context.thirdBlockPosition().getY();
-        var z3 = context.thirdBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+        var x3 = context.thirdBlockPosition().x();
+        var y3 = context.thirdBlockPosition().y();
+        var z3 = context.thirdBlockPosition().z();
 
         switch (context.cubeFilling()) {
             case CUBE_FULL -> addFullCubeBlocks(list, x1, x3, y1, y3, z1, z3);
@@ -104,12 +104,12 @@ public class Cube extends TripleClickBuilder {
 
     @Override
     protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
-        var x2 = context.secondBlockPosition().getX();
-        var y2 = context.secondBlockPosition().getY();
-        var z2 = context.secondBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+        var x2 = context.secondBlockPosition().x();
+        var y2 = context.secondBlockPosition().y();
+        var z2 = context.secondBlockPosition().z();
 
         if (y1 == y2) {
             if (x1 == x2 && z1 == z2) {

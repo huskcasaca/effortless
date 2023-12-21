@@ -48,15 +48,15 @@ public class BoundingBox3d {
     }
 
     public BoundingBox3d(Vector3i vector) {
-        this(vector.getX(), vector.getY(), vector.getZ(), vector.getX() + 1, vector.getY() + 1, vector.getZ() + 1);
+        this(vector.x(), vector.y(), vector.z(), vector.x() + 1, vector.y() + 1, vector.z() + 1);
     }
 
     public BoundingBox3d(Vector3i start, Vector3i end) {
-        this(start.getX(), start.getY(), start.getZ(), end.getX(), end.getY(), end.getZ());
+        this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
     }
 
     public BoundingBox3d(Vector3d start, Vector3d end) {
-        this(start.getX(), start.getY(), start.getZ(), end.getX(), end.getY(), end.getZ());
+        this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
     }
 
     public static BoundingBox3d of(BoundingBox3i boundingBox) {
@@ -64,11 +64,11 @@ public class BoundingBox3d {
     }
 
     public static BoundingBox3d unitCubeFromLowerCorner(Vector3d vector) {
-        return new BoundingBox3d(vector.getX(), vector.getY(), vector.getZ(), vector.getX() + 1.0, vector.getY() + 1.0, vector.getZ() + 1.0);
+        return new BoundingBox3d(vector.x(), vector.y(), vector.z(), vector.x() + 1.0, vector.y() + 1.0, vector.z() + 1.0);
     }
 
     public static BoundingBox3d ofSize(Vector3d vector, double x, double y, double z) {
-        return new BoundingBox3d(vector.getX() - x / 2.0, vector.getY() - y / 2.0, vector.getZ() - z / 2.0, vector.getX() + x / 2.0, vector.getY() + y / 2.0, vector.getZ() + z / 2.0);
+        return new BoundingBox3d(vector.x() - x / 2.0, vector.y() - y / 2.0, vector.z() - z / 2.0, vector.x() + x / 2.0, vector.y() + y / 2.0, vector.z() + z / 2.0);
     }
 
     public BoundingBox3d withMinX(double a) {
@@ -100,11 +100,11 @@ public class BoundingBox3d {
     }
 
     public BoundingBox3d move(Vector3i vector) {
-        return new BoundingBox3d(this.minX + (double) vector.getX(), this.minY + (double) vector.getY(), this.minZ + (double) vector.getZ(), this.maxX + (double) vector.getX(), this.maxY + (double) vector.getY(), this.maxZ + (double) vector.getZ());
+        return new BoundingBox3d(this.minX + (double) vector.x(), this.minY + (double) vector.y(), this.minZ + (double) vector.z(), this.maxX + (double) vector.x(), this.maxY + (double) vector.y(), this.maxZ + (double) vector.z());
     }
 
     public BoundingBox3d move(Vector3d vector) {
-        return this.move(vector.getX(), vector.getY(), vector.getZ());
+        return this.move(vector.x(), vector.y(), vector.z());
     }
 
     public BoundingBox3d contract(double x, double y, double z) {
@@ -136,7 +136,7 @@ public class BoundingBox3d {
     }
 
     public BoundingBox3d expandTowards(Vector3d vector) {
-        return this.expandTowards(vector.getX(), vector.getY(), vector.getZ());
+        return this.expandTowards(vector.x(), vector.y(), vector.z());
     }
 
     public BoundingBox3d expandTowards(double x, double y, double z) {
@@ -196,11 +196,11 @@ public class BoundingBox3d {
     }
 
     public boolean intersects(Vector3d start, Vector3d end) {
-        return this.intersects(MathUtils.min(start.getX(), end.getX()), MathUtils.min(start.getY(), end.getY()), MathUtils.min(start.getZ(), end.getZ()), MathUtils.max(start.getX(), end.getX()), MathUtils.max(start.getY(), end.getY()), MathUtils.max(start.getZ(), end.getZ()));
+        return this.intersects(MathUtils.min(start.x(), end.x()), MathUtils.min(start.y(), end.y()), MathUtils.min(start.z(), end.z()), MathUtils.max(start.x(), end.x()), MathUtils.max(start.y(), end.y()), MathUtils.max(start.z(), end.z()));
     }
 
     public boolean contains(Vector3d vector) {
-        return this.contains(vector.getX(), vector.getY(), vector.getZ());
+        return this.contains(vector.x(), vector.y(), vector.z());
     }
 
     public boolean contains(double d, double e, double f) {
@@ -208,7 +208,7 @@ public class BoundingBox3d {
     }
 
     public boolean containsIn(Vector3d vector) {
-        return this.containsIn(vector.getX(), vector.getY(), vector.getZ());
+        return this.containsIn(vector.x(), vector.y(), vector.z());
     }
 
     public boolean containsIn(double d, double e, double f) {
@@ -270,9 +270,9 @@ public class BoundingBox3d {
     }
 
     public double distanceSq(Vector3d vector) {
-        double d = MathUtils.max(MathUtils.max(this.minX - vector.getX(), vector.getX() - this.maxX), 0.0);
-        double e = MathUtils.max(MathUtils.max(this.minY - vector.getY(), vector.getY() - this.maxY), 0.0);
-        double f = MathUtils.max(MathUtils.max(this.minZ - vector.getZ(), vector.getZ() - this.maxZ), 0.0);
+        double d = MathUtils.max(MathUtils.max(this.minX - vector.x(), vector.x() - this.maxX), 0.0);
+        double e = MathUtils.max(MathUtils.max(this.minY - vector.y(), vector.y() - this.maxY), 0.0);
+        double f = MathUtils.max(MathUtils.max(this.minZ - vector.z(), vector.z() - this.maxZ), 0.0);
         return d * d + e * e + f * f;
     }
 

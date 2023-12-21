@@ -40,15 +40,6 @@ public class Vector3d {
     }
 
     /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public double getX() {
-        return x;
-    }
-
-    /**
      * Set the X coordinate.
      *
      * @param x the new X
@@ -56,15 +47,6 @@ public class Vector3d {
      */
     public Vector3d withX(double x) {
         return Vector3d.at(x, y, z);
-    }
-
-    /**
-     * Get the Y coordinate.
-     *
-     * @return the y coordinate
-     */
-    public double getY() {
-        return y;
     }
 
     /**
@@ -78,15 +60,6 @@ public class Vector3d {
     }
 
     /**
-     * Get the Z coordinate.
-     *
-     * @return the z coordinate
-     */
-    public double getZ() {
-        return z;
-    }
-
-    /**
      * Set the Z coordinate.
      *
      * @param z the new Z
@@ -94,6 +67,33 @@ public class Vector3d {
      */
     public Vector3d withZ(double z) {
         return Vector3d.at(x, y, z);
+    }
+
+    /**
+     * Get the X coordinate.
+     *
+     * @return the x coordinate
+     */
+    public double x() {
+        return x;
+    }
+
+    /**
+     * Get the Y coordinate.
+     *
+     * @return the y coordinate
+     */
+    public double y() {
+        return y;
+    }
+
+    /**
+     * Get the Z coordinate.
+     *
+     * @return the z coordinate
+     */
+    public double z() {
+        return z;
     }
 
     /**
@@ -146,8 +146,8 @@ public class Vector3d {
      * @param other the other vector
      * @return a new vector
      */
-    public Vector3d subtract(Vector3d other) {
-        return subtract(other.x, other.y, other.z);
+    public Vector3d sub(Vector3d other) {
+        return sub(other.x, other.y, other.z);
     }
 
     /**
@@ -159,7 +159,7 @@ public class Vector3d {
      * @param z the value to subtract
      * @return a new vector
      */
-    public Vector3d subtract(double x, double y, double z) {
+    public Vector3d sub(double x, double y, double z) {
         return Vector3d.at(this.x - x, this.y - y, this.z - z);
     }
 
@@ -170,7 +170,7 @@ public class Vector3d {
      * @param others an array of vectors
      * @return a new vector
      */
-    public Vector3d subtract(Vector3d... others) {
+    public Vector3d sub(Vector3d... others) {
         double newX = x;
         double newY = y;
         double newZ = z;
@@ -184,16 +184,6 @@ public class Vector3d {
         return Vector3d.at(newX, newY, newZ);
     }
 
-    /**
-     * Scale this vector by a scalar.
-     *
-     * @param a the value to scale
-     * @return a new vector
-     */
-
-    public Vector3d scale(double a) {
-        return multiply(a, a, a);
-    }
 
     /**
      * Reverse this vector.
@@ -201,7 +191,7 @@ public class Vector3d {
      * @return a new vector
      */
     public Vector3d reverse() {
-        return scale(-1.0);
+        return mul(-1.0);
     }
 
     /**
@@ -210,8 +200,8 @@ public class Vector3d {
      * @param other the other vector
      * @return a new vector
      */
-    public Vector3d multiply(Vector3d other) {
-        return multiply(other.x, other.y, other.z);
+    public Vector3d mul(Vector3d other) {
+        return mul(other.x, other.y, other.z);
     }
 
     /**
@@ -222,7 +212,7 @@ public class Vector3d {
      * @param z the value to multiply
      * @return a new vector
      */
-    public Vector3d multiply(double x, double y, double z) {
+    public Vector3d mul(double x, double y, double z) {
         return Vector3d.at(this.x * x, this.y * y, this.z * z);
     }
 
@@ -232,7 +222,7 @@ public class Vector3d {
      * @param others an array of vectors
      * @return a new vector
      */
-    public Vector3d multiply(Vector3d... others) {
+    public Vector3d mul(Vector3d... others) {
         double newX = x;
         double newY = y;
         double newZ = z;
@@ -252,8 +242,8 @@ public class Vector3d {
      * @param n the value to multiply
      * @return a new vector
      */
-    public Vector3d multiply(double n) {
-        return multiply(n, n, n);
+    public Vector3d mul(double n) {
+        return mul(n, n, n);
     }
 
     /**
@@ -262,8 +252,8 @@ public class Vector3d {
      * @param other the other vector
      * @return a new vector
      */
-    public Vector3d divide(Vector3d other) {
-        return divide(other.x, other.y, other.z);
+    public Vector3d div(Vector3d other) {
+        return div(other.x, other.y, other.z);
     }
 
     /**
@@ -274,7 +264,7 @@ public class Vector3d {
      * @param z the value to divide by
      * @return a new vector
      */
-    public Vector3d divide(double x, double y, double z) {
+    public Vector3d div(double x, double y, double z) {
         return Vector3d.at(this.x / x, this.y / y, this.z / z);
     }
 
@@ -284,8 +274,8 @@ public class Vector3d {
      * @param n the value to divide by
      * @return a new vector
      */
-    public Vector3d divide(double n) {
-        return divide(n, n, n);
+    public Vector3d div(double n) {
+        return div(n, n, n);
     }
 
     /**
@@ -336,7 +326,7 @@ public class Vector3d {
      * @return a new vector
      */
     public Vector3d normalize() {
-        return divide(length());
+        return div(length());
     }
 
     /**
@@ -465,16 +455,16 @@ public class Vector3d {
      * @return pitch in radians
      */
     public double toPitch() {
-        double x = getX();
-        double z = getZ();
+        double x = x();
+        double z = z();
 
         if (x == 0 && z == 0) {
-            return getY() > 0 ? -90 : 90;
+            return y() > 0 ? -90 : 90;
         } else {
             double x2 = x * x;
             double z2 = z * z;
             double xz = MathUtils.sqrt(x2 + z2);
-            return MathUtils.deg(MathUtils.atan(-getY() / xz));
+            return MathUtils.deg(MathUtils.atan(-y() / xz));
         }
     }
 
@@ -484,8 +474,8 @@ public class Vector3d {
      * @return yaw in radians
      */
     public double toYaw() {
-        double x = getX();
-        double z = getZ();
+        double x = x();
+        double z = z();
 
         double t = MathUtils.atan2(-x, z);
         double tau = 2 * MathUtils.PI;
@@ -530,14 +520,6 @@ public class Vector3d {
         return Vector3i.at(x, y, z);
     }
 
-    /**
-     * Creates a 2D vector by dropping the Y component from this vector.
-     *
-     * @return a new {@link Vector2d}
-     */
-    public Vector2d toVector2() {
-        return Vector2d.at(x, z);
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -573,8 +555,8 @@ public class Vector3d {
 
     private static final class YzxOrderComparator {
         private static final Comparator<Vector3d> YZX_ORDER = Comparator
-                .comparingDouble(Vector3d::getY)
-                .thenComparingDouble(Vector3d::getZ)
-                .thenComparingDouble(Vector3d::getX);
+                .comparingDouble(Vector3d::y)
+                .thenComparingDouble(Vector3d::z)
+                .thenComparingDouble(Vector3d::x);
     }
 }

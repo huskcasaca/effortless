@@ -18,9 +18,9 @@ public class Vector3dSerializer extends BufferSerializer<Vector3d> {
 
     @Override
     public void write(Buffer buffer, Vector3d vector) {
-        buffer.writeDouble(vector.getX());
-        buffer.writeDouble(vector.getY());
-        buffer.writeDouble(vector.getZ());
+        buffer.writeDouble(vector.x());
+        buffer.writeDouble(vector.y());
+        buffer.writeDouble(vector.z());
     }
 
 }

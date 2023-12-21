@@ -49,7 +49,7 @@ public interface VertexBuffer {
     }
 
     default VertexBuffer vertex(Matrix4f matrix, Vector3d vector3d) {
-        return vertex(matrix, (float) vector3d.getX(), (float) vector3d.getY(), (float) vector3d.getZ());
+        return vertex(matrix, (float) vector3d.x(), (float) vector3d.y(), (float) vector3d.z());
     }
 
     default VertexBuffer normal(Matrix3f matrix, float x, float y, float z) {

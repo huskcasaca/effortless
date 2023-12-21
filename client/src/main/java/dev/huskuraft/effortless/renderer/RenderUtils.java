@@ -18,9 +18,9 @@ public final class RenderUtils {
         float angle = (float) (degree / 180f * MathUtils.PI);
         double sin = MathUtils.sin(angle);
         double cos = MathUtils.cos(angle);
-        double x = vector.getX();
-        double y = vector.getY();
-        double z = vector.getZ();
+        double x = vector.x();
+        double y = vector.y();
+        double z = vector.z();
 
         if (axis == Axis.X)
             return new Vector3d(x, y * cos - z * sin, z * cos + y * sin);
@@ -33,7 +33,7 @@ public final class RenderUtils {
 
     public static Vector3d calculateAxisAlignedPlane(Vector3d vector) {
         vector = vector.normalize();
-        return new Vector3d(1, 1, 1).subtract(MathUtils.abs(vector.getX()), MathUtils.abs(vector.getY()), MathUtils.abs(vector.getZ()));
+        return new Vector3d(1, 1, 1).sub(MathUtils.abs(vector.x()), MathUtils.abs(vector.y()), MathUtils.abs(vector.z()));
     }
 
     public class ARGB32 {

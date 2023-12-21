@@ -18,9 +18,9 @@ public class BlockPositionSerializer extends BufferSerializer<BlockPosition> {
 
     @Override
     public void write(Buffer buffer, BlockPosition blockPosition) {
-        buffer.writeInt(blockPosition.getX());
-        buffer.writeInt(blockPosition.getY());
-        buffer.writeInt(blockPosition.getZ());
+        buffer.writeInt(blockPosition.x());
+        buffer.writeInt(blockPosition.y());
+        buffer.writeInt(blockPosition.z());
     }
 
 }

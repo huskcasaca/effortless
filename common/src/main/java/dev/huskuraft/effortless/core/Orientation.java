@@ -52,7 +52,7 @@ public enum Orientation {
         var i = Float.MIN_VALUE;
 
         for (var direction2 : values()) {
-            float j = f * (float) direction2.normal.getX() + g * (float) direction2.normal.getY() + h * (float) direction2.normal.getZ();
+            float j = f * (float) direction2.normal.x() + g * (float) direction2.normal.y() + h * (float) direction2.normal.z();
             if (j > i) {
                 i = j;
                 direction = direction2;
@@ -181,15 +181,15 @@ public enum Orientation {
     }
 
     public int getStepX() {
-        return this.normal.getX();
+        return this.normal.x();
     }
 
     public int getStepY() {
-        return this.normal.getY();
+        return this.normal.y();
     }
 
     public int getStepZ() {
-        return this.normal.getZ();
+        return this.normal.z();
     }
 
     public Vector3d step() {

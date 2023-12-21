@@ -40,7 +40,7 @@ public class RevolveContext {
 
     private static BlockData rotateBlockState(Player player, BlockPosition startPos, Vector3d relVec, BlockData blockData, boolean alternate) {
         BlockData newBlockData;
-        double angleToCenter = MathUtils.atan2(relVec.getX(), relVec.getZ()); //between -PI and PI
+        double angleToCenter = MathUtils.atan2(relVec.x(), relVec.z()); //between -PI and PI
 
         if (angleToCenter < -0.751 * MathUtils.PI || angleToCenter > 0.749 * MathUtils.PI) {
             newBlockData = blockData.rotate(Revolve.CLOCKWISE_180);

@@ -44,12 +44,12 @@ public class Line extends DoubleClickBuilder {
     public static Stream<BlockPosition> collectLineBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
-        var x2 = context.secondBlockPosition().getX();
-        var y2 = context.secondBlockPosition().getY();
-        var z2 = context.secondBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+        var x2 = context.secondBlockPosition().x();
+        var y2 = context.secondBlockPosition().y();
+        var z2 = context.secondBlockPosition().z();
 
         if (x1 != x2) {
             addXLineBlocks(list, x1, x2, y1, z1);
@@ -106,25 +106,25 @@ public class Line extends DoubleClickBuilder {
         public Vector3d lineVec() {
             var pos = Vector3i.at(center);
             var bound = Vector3i.at(planeVec());
-            var size = bound.subtract(pos);
+            var size = bound.sub(pos);
 
-            size = Vector3i.at(MathUtils.abs(size.getX()), MathUtils.abs(size.getY()), MathUtils.abs(size.getZ()));
-            int longest = MathUtils.max(size.getX(), MathUtils.max(size.getY(), size.getZ()));
-            if (longest == size.getX()) {
-                return new Vector3d(bound.getX(), pos.getY(), pos.getZ());
+            size = Vector3i.at(MathUtils.abs(size.x()), MathUtils.abs(size.y()), MathUtils.abs(size.z()));
+            int longest = MathUtils.max(size.x(), MathUtils.max(size.y(), size.z()));
+            if (longest == size.x()) {
+                return new Vector3d(bound.x(), pos.y(), pos.z());
             }
-            if (longest == size.getY()) {
-                return new Vector3d(pos.getX(), bound.getY(), pos.getZ());
+            if (longest == size.y()) {
+                return new Vector3d(pos.x(), bound.y(), pos.z());
             }
-            if (longest == size.getZ()) {
-                return new Vector3d(pos.getX(), pos.getY(), bound.getZ());
+            if (longest == size.z()) {
+                return new Vector3d(pos.x(), pos.y(), bound.z());
             }
             return null;
         }
 
         @Override
         public double distanceToLineSqr() {
-            return planeVec().subtract(lineVec()).lengthSq() * (axis == Axis.Y ? 2 : 1);
+            return planeVec().sub(lineVec()).lengthSq() * (axis == Axis.Y ? 2 : 1);
         }
     }
 }
