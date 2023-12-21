@@ -181,7 +181,7 @@ class MinecraftRenderer extends Renderer {
         var blockPosRef = MinecraftClientAdapter.adapt(blockPosition);
 
         pushPose();
-        translate(blockPosRef.getX() - camera.getX(), blockPosRef.getY() - camera.getY(), blockPosRef.getZ() - camera.getZ());
+        translate(blockPosRef.getX() - camera.x(), blockPosRef.getY() - camera.y(), blockPosRef.getZ() - camera.z());
         translate((scale - 1) / -2, (scale - 1) / -2, (scale - 1) / -2);
         scale(scale, scale, scale);
         dispatcher.getModelRenderer().tesselateBlock(

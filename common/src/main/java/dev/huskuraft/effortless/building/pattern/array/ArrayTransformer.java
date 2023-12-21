@@ -46,7 +46,7 @@ public class ArrayTransformer extends Transformer {
     @Override
     public BatchOperation transform(TransformableOperation operation) {
         return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(0, count).mapToObj(i -> {
-            return operation.move(MoveContext.relative(offset.multiply(i)));
+            return operation.move(MoveContext.relative(offset.mul(i)));
         }));
     }
 

@@ -122,9 +122,9 @@ public abstract class TripleClickBuilder extends AbstractClickBuilder {
             var pos = BlockPosition.at(center);
             var bound = BlockPosition.at(planeVec());
             return switch (axis) {
-                case X -> new Vector3d(bound.getX(), pos.getY(), pos.getZ());
-                case Y -> new Vector3d(pos.getX(), bound.getY(), pos.getZ());
-                case Z -> new Vector3d(pos.getX(), pos.getY(), bound.getZ());
+                case X -> new Vector3d(bound.x(), pos.y(), pos.z());
+                case Y -> new Vector3d(pos.x(), bound.y(), pos.z());
+                case Z -> new Vector3d(pos.x(), pos.y(), bound.z());
             };
         }
 

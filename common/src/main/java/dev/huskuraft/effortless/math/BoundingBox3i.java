@@ -23,11 +23,11 @@ public class BoundingBox3i {
     }
 
     public BoundingBox3i(Vector3i vector) {
-        this(vector.getX(), vector.getY(), vector.getZ(), vector.getX(), vector.getY(), vector.getZ());
+        this(vector.x(), vector.y(), vector.z(), vector.x(), vector.y(), vector.z());
     }
 
     public static BoundingBox3i fromCorners(Vector3i start, Vector3i end) {
-        return new BoundingBox3i(MathUtils.min(start.getX(), end.getX()), MathUtils.min(start.getY(), end.getY()), MathUtils.min(start.getZ(), end.getZ()), MathUtils.max(start.getX(), end.getX()), MathUtils.max(start.getY(), end.getY()), MathUtils.max(start.getZ(), end.getZ()));
+        return new BoundingBox3i(MathUtils.min(start.x(), end.x()), MathUtils.min(start.y(), end.y()), MathUtils.min(start.z(), end.z()), MathUtils.max(start.x(), end.x()), MathUtils.max(start.y(), end.y()), MathUtils.max(start.z(), end.z()));
     }
 
     public static BoundingBox3i infinite() {
@@ -63,7 +63,7 @@ public class BoundingBox3i {
     }
 
     public BoundingBox3i move(Vector3i vector) {
-        return this.move(vector.getX(), vector.getY(), vector.getZ());
+        return this.move(vector.x(), vector.y(), vector.z());
     }
 
     public boolean intersects(BoundingBox3i boundingBox) {
@@ -75,7 +75,7 @@ public class BoundingBox3i {
     }
 
     public boolean contains(Vector3i vector) {
-        return contains(vector.getX(), vector.getY(), vector.getZ());
+        return contains(vector.x(), vector.y(), vector.z());
     }
 
     public boolean contains(int x, int y, int z) {

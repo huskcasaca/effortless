@@ -63,9 +63,9 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
 
         switch (lastSettings.getType()) {
             case ARRAY -> {
-                this.entries.addDoubleEntry(Text.translate("effortless.transformer.array.offset.x"), Text.text("X"), ((ArrayTransformer) lastSettings).offset().getX(), ArrayTransformer.OFFSET_BOUND.getMinX(), ArrayTransformer.OFFSET_BOUND.getMaxX(), value -> this.lastSettings = ((ArrayTransformer) lastSettings).withOffsetX(value));
-                this.entries.addDoubleEntry(Text.translate("effortless.transformer.array.offset.y"), Text.text("Y"), ((ArrayTransformer) lastSettings).offset().getY(), ArrayTransformer.OFFSET_BOUND.getMinY(), ArrayTransformer.OFFSET_BOUND.getMaxY(), value -> this.lastSettings = ((ArrayTransformer) lastSettings).withOffsetY(value));
-                this.entries.addDoubleEntry(Text.translate("effortless.transformer.array.offset.z"), Text.text("Z"), ((ArrayTransformer) lastSettings).offset().getZ(), ArrayTransformer.OFFSET_BOUND.getMinZ(), ArrayTransformer.OFFSET_BOUND.getMaxZ(), value -> this.lastSettings = ((ArrayTransformer) lastSettings).withOffsetZ(value));
+                this.entries.addDoubleEntry(Text.translate("effortless.transformer.array.offset.x"), Text.text("X"), ((ArrayTransformer) lastSettings).offset().x(), ArrayTransformer.OFFSET_BOUND.getMinX(), ArrayTransformer.OFFSET_BOUND.getMaxX(), value -> this.lastSettings = ((ArrayTransformer) lastSettings).withOffsetX(value));
+                this.entries.addDoubleEntry(Text.translate("effortless.transformer.array.offset.y"), Text.text("Y"), ((ArrayTransformer) lastSettings).offset().y(), ArrayTransformer.OFFSET_BOUND.getMinY(), ArrayTransformer.OFFSET_BOUND.getMaxY(), value -> this.lastSettings = ((ArrayTransformer) lastSettings).withOffsetY(value));
+                this.entries.addDoubleEntry(Text.translate("effortless.transformer.array.offset.z"), Text.text("Z"), ((ArrayTransformer) lastSettings).offset().z(), ArrayTransformer.OFFSET_BOUND.getMinZ(), ArrayTransformer.OFFSET_BOUND.getMaxZ(), value -> this.lastSettings = ((ArrayTransformer) lastSettings).withOffsetZ(value));
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.array.count"), Text.text("C"), ((ArrayTransformer) lastSettings).count(), ArrayTransformer.MIN_COUNT, ArrayTransformer.MAX_COUNT, value -> this.lastSettings = ((ArrayTransformer) lastSettings).withCount(value));
             }
             case MIRROR -> {
@@ -79,9 +79,9 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
                 });
             }
             case RADIAL -> {
-                this.entries.addPositionEntry(Axis.X, new Tuple2<>(((RadialTransformer) lastSettings).getPositionTypeX(), ((RadialTransformer) lastSettings).position().getX()), value -> this.lastSettings = ((RadialTransformer) lastSettings).withPositionTypeX(value.value1()).withPositionX(value.value2()));
-                this.entries.addPositionEntry(Axis.Y, new Tuple2<>(((RadialTransformer) lastSettings).getPositionTypeY(), ((RadialTransformer) lastSettings).position().getY()), value -> this.lastSettings = ((RadialTransformer) lastSettings).withPositionTypeY(value.value1()).withPositionY(value.value2()));
-                this.entries.addPositionEntry(Axis.Z, new Tuple2<>(((RadialTransformer) lastSettings).getPositionTypeZ(), ((RadialTransformer) lastSettings).position().getZ()), value -> this.lastSettings = ((RadialTransformer) lastSettings).withPositionTypeZ(value.value1()).withPositionZ(value.value2()));
+                this.entries.addPositionEntry(Axis.X, new Tuple2<>(((RadialTransformer) lastSettings).getPositionTypeX(), ((RadialTransformer) lastSettings).position().x()), value -> this.lastSettings = ((RadialTransformer) lastSettings).withPositionTypeX(value.value1()).withPositionX(value.value2()));
+                this.entries.addPositionEntry(Axis.Y, new Tuple2<>(((RadialTransformer) lastSettings).getPositionTypeY(), ((RadialTransformer) lastSettings).position().y()), value -> this.lastSettings = ((RadialTransformer) lastSettings).withPositionTypeY(value.value1()).withPositionY(value.value2()));
+                this.entries.addPositionEntry(Axis.Z, new Tuple2<>(((RadialTransformer) lastSettings).getPositionTypeZ(), ((RadialTransformer) lastSettings).position().z()), value -> this.lastSettings = ((RadialTransformer) lastSettings).withPositionTypeZ(value.value1()).withPositionZ(value.value2()));
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.slices"), Text.text("S"), ((RadialTransformer) lastSettings).slices(), RadialTransformer.SLICE_RANGE.min(), RadialTransformer.SLICE_RANGE.max(), value -> this.lastSettings = ((RadialTransformer) lastSettings).withSlice(value));
             }
             case ITEM_RAND -> {

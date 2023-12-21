@@ -29,7 +29,7 @@ public class MoveContext {
     public BlockInteraction move(BlockInteraction blockInteraction) {
         var direction = blockInteraction.getDirection();
         var blockPosition = move(blockInteraction.getBlockPosition());
-        var location = blockInteraction.getPosition().add(blockPosition.subtract(blockInteraction.getBlockPosition()).toVector3());
+        var location = blockInteraction.getPosition().add(blockPosition.sub(blockInteraction.getBlockPosition()).toVector3d());
 
         return new BlockInteraction(location, direction, blockPosition, blockInteraction.isInside());
     }

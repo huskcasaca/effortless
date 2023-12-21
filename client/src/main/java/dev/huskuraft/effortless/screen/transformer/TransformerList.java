@@ -130,9 +130,9 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         protected List<SlotData> getData() {
             return List.of(
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().getX())), Text.translate("effortless.axis.x")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().getY())), Text.translate("effortless.axis.y")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().getZ())), Text.translate("effortless.axis.z")),
+                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().x())), Text.translate("effortless.axis.x")),
+                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().y())), Text.translate("effortless.axis.y")),
+                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().z())), Text.translate("effortless.axis.z")),
                     new SlotData.TextSymbol(Text.text(formatDouble(getItem().count())), Text.translate("effortless.transformer.array.count"))
             );
         }
@@ -178,9 +178,9 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         protected List<SlotData> getData() {
             return List.of(
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().getX())), Axis.X.getDisplayName()),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().getY())), Axis.Y.getDisplayName()),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().getZ())), Axis.Z.getDisplayName()),
+                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().x())), Axis.X.getDisplayName()),
+                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().y())), Axis.Y.getDisplayName()),
+                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().z())), Axis.Z.getDisplayName()),
                     new SlotData.TextSymbol(Text.text(formatDouble(getItem().slices())), Text.translate("effortless.transformer.radial.slices"))
             );
         }

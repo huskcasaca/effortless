@@ -19,9 +19,9 @@ public class MirrorContext {
 
     public Vector3d mirror(Vector3d vec) {
         return switch (axis) {
-            case Y -> new Vector3d(vec.getX(), center.getY() + (center.getY() - vec.getY()), vec.getZ());
-            case X -> new Vector3d(center.getX() + (center.getX() - vec.getX()), vec.getY(), vec.getZ());
-            case Z -> new Vector3d(vec.getX(), vec.getY(), center.getZ() + (center.getZ() - vec.getZ()));
+            case Y -> new Vector3d(vec.x(), center.y() + (center.y() - vec.y()), vec.z());
+            case X -> new Vector3d(center.x() + (center.x() - vec.x()), vec.y(), vec.z());
+            case Z -> new Vector3d(vec.x(), vec.y(), center.z() + (center.z() - vec.z()));
         };
     }
 

@@ -18,9 +18,9 @@ public abstract class BlockPositionStream implements BaseStream<BlockPosition, B
     private static BlockPosition recover(BlockPosition original, Axis first, Axis second) {
         var third = Axis.values()[3 - first.ordinal() - second.ordinal()];
         var arr = new int[3];
-        arr[first.ordinal()] = original.getX();
-        arr[second.ordinal()] = original.getY();
-        arr[third.ordinal()] = original.getZ();
+        arr[first.ordinal()] = original.x();
+        arr[second.ordinal()] = original.y();
+        arr[third.ordinal()] = original.z();
         return new BlockPosition(arr[0], arr[1], arr[2]);
     }
 
@@ -45,7 +45,7 @@ public abstract class BlockPositionStream implements BaseStream<BlockPosition, B
     }
 
     private static Iterable<BlockPosition> betweenClosed(BlockPosition start, BlockPosition end) {
-        return betweenClosed(start.getX(), start.getY(), start.getZ(), end.getX(), end.getY(), end.getZ());
+        return betweenClosed(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
     }
 
     private static Iterable<BlockPosition> betweenClosed(int x1, int y1, int z1, int x2, int y2, int z2) {

@@ -19,17 +19,17 @@ public class SlopeFloor extends TripleClickBuilder {
     public static Stream<BlockPosition> collectSlopeFloorBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
 
-        var x2 = context.secondBlockPosition().getX();
-        var y2 = context.secondBlockPosition().getY();
-        var z2 = context.secondBlockPosition().getZ();
+        var x2 = context.secondBlockPosition().x();
+        var y2 = context.secondBlockPosition().y();
+        var z2 = context.secondBlockPosition().z();
 
-        var x3 = context.thirdBlockPosition().getX();
-        var y3 = context.thirdBlockPosition().getY();
-        var z3 = context.thirdBlockPosition().getZ();
+        var x3 = context.thirdBlockPosition().x();
+        var y3 = context.thirdBlockPosition().y();
+        var z3 = context.thirdBlockPosition().z();
 
         int axisLimit = context.maxBlockPlacePerAxis();
 
@@ -63,7 +63,7 @@ public class SlopeFloor extends TripleClickBuilder {
             // copy diagonal line on x axis
             for (int z = lowest; z <= highest; z++) {
                 for (BlockPosition blockPosition : diagonalLineBlocks) {
-                    list.add(new BlockPosition(blockPosition.getX(), blockPosition.getY(), z));
+                    list.add(new BlockPosition(blockPosition.x(), blockPosition.y(), z));
                 }
             }
 
@@ -83,7 +83,7 @@ public class SlopeFloor extends TripleClickBuilder {
             // copy diagonal line on x axis
             for (int x = lowest; x <= highest; x++) {
                 for (BlockPosition blockPosition : diagonalLineBlocks) {
-                    list.add(new BlockPosition(x, blockPosition.getY(), blockPosition.getZ()));
+                    list.add(new BlockPosition(x, blockPosition.y(), blockPosition.z()));
                 }
             }
         }

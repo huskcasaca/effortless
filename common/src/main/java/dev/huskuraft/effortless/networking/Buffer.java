@@ -149,9 +149,9 @@ public abstract class Buffer {
     }
 
     public void writeVector3d(Vector3d vector) {
-        writeDouble(vector.getX());
-        writeDouble(vector.getY());
-        writeDouble(vector.getZ());
+        writeDouble(vector.x());
+        writeDouble(vector.y());
+        writeDouble(vector.z());
     }
 
     public Vector2d readVector2d() {
@@ -159,8 +159,8 @@ public abstract class Buffer {
     }
 
     public void writeVector2d(Vector2d vector) {
-        writeDouble(vector.getX());
-        writeDouble(vector.getZ());
+        writeDouble(vector.x());
+        writeDouble(vector.z());
     }
 
     public Vector3i readVector3i() {
@@ -168,9 +168,9 @@ public abstract class Buffer {
     }
 
     public void writeVector3i(Vector3i vector) {
-        writeInt(vector.getX());
-        writeInt(vector.getY());
-        writeInt(vector.getZ());
+        writeInt(vector.x());
+        writeInt(vector.y());
+        writeInt(vector.z());
     }
 
     public Vector2i readVector2i() {
@@ -178,8 +178,8 @@ public abstract class Buffer {
     }
 
     public void writeVector2i(Vector2i vector) {
-        writeInt(vector.getX());
-        writeInt(vector.getZ());
+        writeInt(vector.x());
+        writeInt(vector.z());
     }
 
 }

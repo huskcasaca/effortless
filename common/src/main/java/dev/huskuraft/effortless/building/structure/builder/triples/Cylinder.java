@@ -17,30 +17,30 @@ public class Cylinder extends TripleClickBuilder {
     public static Stream<BlockPosition> collectCylinderBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
-        var x2 = context.secondBlockPosition().getX();
-        var y2 = context.secondBlockPosition().getY();
-        var z2 = context.secondBlockPosition().getZ();
-        var x3 = context.thirdBlockPosition().getX();
-        var y3 = context.thirdBlockPosition().getY();
-        var z3 = context.thirdBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+        var x2 = context.secondBlockPosition().x();
+        var y2 = context.secondBlockPosition().y();
+        var z2 = context.secondBlockPosition().z();
+        var x3 = context.thirdBlockPosition().x();
+        var y3 = context.thirdBlockPosition().y();
+        var z3 = context.thirdBlockPosition().z();
 
         if (y1 == y2) {
             for (int y = y1; y1 < y3 ? y <= y3 : y >= y3; y += y1 < y3 ? 1 : -1) {
                 int y0 = y;
-                list.addAll(Circle.collectCircleBlocks(context).map(blockPosition -> new BlockPosition(blockPosition.getX(), y0, blockPosition.getZ())).toList());
+                list.addAll(Circle.collectCircleBlocks(context).map(blockPosition -> new BlockPosition(blockPosition.x(), y0, blockPosition.z())).toList());
             }
         } else if (x1 == x2) {
             for (int x = x1; x1 < x3 ? x <= x3 : x >= x3; x += x1 < x3 ? 1 : -1) {
                 int x0 = x;
-                list.addAll(Circle.collectCircleBlocks(context).map(blockPosition -> new BlockPosition(x0, blockPosition.getY(), blockPosition.getZ())).toList());
+                list.addAll(Circle.collectCircleBlocks(context).map(blockPosition -> new BlockPosition(x0, blockPosition.y(), blockPosition.z())).toList());
             }
         } else if (z1 == z2) {
             for (int z = z1; z1 < z3 ? z <= z3 : z >= z3; z += z1 < z3 ? 1 : -1) {
                 int z0 = z;
-                list.addAll(Circle.collectCircleBlocks(context).map(blockPosition -> new BlockPosition(blockPosition.getX(), blockPosition.getY(), z0)).toList());
+                list.addAll(Circle.collectCircleBlocks(context).map(blockPosition -> new BlockPosition(blockPosition.x(), blockPosition.y(), z0)).toList());
             }
         }
 
@@ -60,12 +60,12 @@ public class Cylinder extends TripleClickBuilder {
     @Override
     protected BlockInteraction traceThirdInteraction(Player player, Context context) {
 
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
-        var x2 = context.secondBlockPosition().getX();
-        var y2 = context.secondBlockPosition().getY();
-        var z2 = context.secondBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+        var x2 = context.secondBlockPosition().x();
+        var y2 = context.secondBlockPosition().y();
+        var z2 = context.secondBlockPosition().z();
 
         if (y1 == y2) {
             return traceLineY(player, context);

@@ -33,12 +33,12 @@ public class Wall extends DoubleClickBuilder {
     public static Stream<BlockPosition> collectWallBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
-        var x2 = context.secondBlockPosition().getX();
-        var y2 = context.secondBlockPosition().getY();
-        var z2 = context.secondBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+        var x2 = context.secondBlockPosition().x();
+        var y2 = context.secondBlockPosition().y();
+        var z2 = context.secondBlockPosition().z();
 
         if (x1 == x2) {
             switch (context.planeFilling()) {
@@ -77,8 +77,8 @@ public class Wall extends DoubleClickBuilder {
         }
 
         public double angle() {
-            var wall = planeVec().subtract(startVec());
-            return wall.getX() * look.getX() + wall.getZ() * look.getZ();
+            var wall = planeVec().sub(startVec());
+            return wall.x() * look.x() + wall.z() * look.z();
         }
 
         public double distanceAngle() {

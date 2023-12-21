@@ -18,19 +18,19 @@ public class DiagonalLine extends TripleClickBuilder {
     public static Stream<BlockPosition> collectPlaneDiagonalLineBlocks(Context context, float sampleMultiplier) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
-        var x2 = context.secondBlockPosition().getX();
-        var y2 = context.secondBlockPosition().getY();
-        var z2 = context.secondBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+        var x2 = context.secondBlockPosition().x();
+        var y2 = context.secondBlockPosition().y();
+        var z2 = context.secondBlockPosition().z();
 
         var first = new Vector3d(x1, y1, z1).add(0.5, 0.5, 0.5);
         var second = new Vector3d(x2, y2, z2).add(0.5, 0.5, 0.5);
 
         var iterations = (int) MathUtils.ceil(first.distance(second) * sampleMultiplier);
         for (double t = 0; t <= 1.0; t += 1.0 / iterations) {
-            Vector3d lerp = first.add(second.subtract(first).scale(t));
+            Vector3d lerp = first.add(second.sub(first).mul(t));
             BlockPosition candidate = BlockPosition.at(lerp);
             // only add if not equal to the last in the list
             if (list.isEmpty() || !list.get(list.size() - 1).equals(candidate))
@@ -43,19 +43,19 @@ public class DiagonalLine extends TripleClickBuilder {
     public static Stream<BlockPosition> collectDiagonalLineBlocks(Context context, float sampleMultiplier) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().getX();
-        var y1 = context.firstBlockPosition().getY();
-        var z1 = context.firstBlockPosition().getZ();
-        var x2 = context.thirdBlockPosition().getX();
-        var y2 = context.thirdBlockPosition().getY();
-        var z2 = context.thirdBlockPosition().getZ();
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+        var x2 = context.thirdBlockPosition().x();
+        var y2 = context.thirdBlockPosition().y();
+        var z2 = context.thirdBlockPosition().z();
 
         var first = new Vector3d(x1, y1, z1).add(0.5, 0.5, 0.5);
         var second = new Vector3d(x2, y2, z2).add(0.5, 0.5, 0.5);
 
         int iterations = (int) MathUtils.ceil(first.distance(second) * sampleMultiplier);
         for (double t = 0; t <= 1.0; t += 1.0 / iterations) {
-            Vector3d lerp = first.add(second.subtract(first).scale(t));
+            Vector3d lerp = first.add(second.sub(first).mul(t));
             BlockPosition candidate = BlockPosition.at(lerp);
             // only add if not equal to the last in the list
             if (list.isEmpty() || !list.get(list.size() - 1).equals(candidate))

@@ -26,7 +26,7 @@ public abstract class TransformerRenderer {
         var max = new Vector3d(range, range, range);
 
         renderer.pushPose();
-        renderer.translate(-cam.getX() + pos.getX(), -cam.getY() + pos.getY(), -cam.getZ() + pos.getZ());
+        renderer.translate(-cam.x() + pos.x(), -cam.y() + pos.y(), -cam.z() + pos.z());
         var cen = Vector3d.ZERO;
 
         var v1 = Vector3d.ZERO;
@@ -36,22 +36,22 @@ public abstract class TransformerRenderer {
 
         switch (axis) {
             case Y -> {
-                v1 = new Vector3d((float) max.getX(), (float) cen.getY(), (float) max.getZ());
-                v2 = new Vector3d((float) min.getX(), (float) cen.getY(), (float) max.getZ());
-                v3 = new Vector3d((float) min.getX(), (float) cen.getY(), (float) min.getZ());
-                v4 = new Vector3d((float) max.getX(), (float) cen.getY(), (float) min.getZ());
+                v1 = new Vector3d((float) max.x(), (float) cen.y(), (float) max.z());
+                v2 = new Vector3d((float) min.x(), (float) cen.y(), (float) max.z());
+                v3 = new Vector3d((float) min.x(), (float) cen.y(), (float) min.z());
+                v4 = new Vector3d((float) max.x(), (float) cen.y(), (float) min.z());
             }
             case Z -> {
-                v1 = new Vector3d((float) max.getX(), (float) min.getY(), (float) cen.getZ());
-                v2 = new Vector3d((float) min.getX(), (float) min.getY(), (float) cen.getZ());
-                v3 = new Vector3d((float) min.getX(), (float) max.getY(), (float) cen.getZ());
-                v4 = new Vector3d((float) max.getX(), (float) max.getY(), (float) cen.getZ());
+                v1 = new Vector3d((float) max.x(), (float) min.y(), (float) cen.z());
+                v2 = new Vector3d((float) min.x(), (float) min.y(), (float) cen.z());
+                v3 = new Vector3d((float) min.x(), (float) max.y(), (float) cen.z());
+                v4 = new Vector3d((float) max.x(), (float) max.y(), (float) cen.z());
             }
             case X -> {
-                v1 = new Vector3d((float) cen.getX(), (float) min.getY(), (float) min.getZ());
-                v2 = new Vector3d((float) cen.getX(), (float) min.getY(), (float) max.getZ());
-                v3 = new Vector3d((float) cen.getX(), (float) max.getY(), (float) max.getZ());
-                v4 = new Vector3d((float) cen.getX(), (float) max.getY(), (float) min.getZ());
+                v1 = new Vector3d((float) cen.x(), (float) min.y(), (float) min.z());
+                v2 = new Vector3d((float) cen.x(), (float) min.y(), (float) max.z());
+                v3 = new Vector3d((float) cen.x(), (float) max.y(), (float) max.z());
+                v4 = new Vector3d((float) cen.x(), (float) max.y(), (float) min.z());
             }
         }
         renderer.drawQuad(renderStyle, v1, v2, v3, v4, 0, color.getRGB(), null);
@@ -60,23 +60,23 @@ public abstract class TransformerRenderer {
 
     protected void renderLineByAxis(Renderer renderer, Vector3d pos, Integer range, Axis axis, Color color) {
 
-        var min = pos.subtract(range, range, range);
+        var min = pos.sub(range, range, range);
         var max = pos.add(range, range, range);
 
         var v1 = Vector3d.ZERO;
         var v2 = Vector3d.ZERO;
         switch (axis) {
             case Y -> {
-                v1 = new Vector3d((float) pos.getX(), (float) min.getY(), (float) pos.getZ());
-                v2 = new Vector3d((float) pos.getX(), (float) max.getY(), (float) pos.getZ());
+                v1 = new Vector3d((float) pos.x(), (float) min.y(), (float) pos.z());
+                v2 = new Vector3d((float) pos.x(), (float) max.y(), (float) pos.z());
             }
             case Z -> {
-                v1 = new Vector3d((float) pos.getX(), (float) pos.getY(), (float) min.getZ());
-                v2 = new Vector3d((float) pos.getX(), (float) pos.getY(), (float) max.getZ());
+                v1 = new Vector3d((float) pos.x(), (float) pos.y(), (float) min.z());
+                v2 = new Vector3d((float) pos.x(), (float) pos.y(), (float) max.z());
             }
             case X -> {
-                v1 = new Vector3d((float) min.getX(), (float) pos.getY(), (float) pos.getZ());
-                v2 = new Vector3d((float) max.getX(), (float) pos.getY(), (float) pos.getZ());
+                v1 = new Vector3d((float) min.x(), (float) pos.y(), (float) pos.z());
+                v2 = new Vector3d((float) max.x(), (float) pos.y(), (float) pos.z());
             }
         }
         renderAACuboidLine(renderer, v1, v2, 1 / 32f, 0xFFFFFF, true);
@@ -84,30 +84,30 @@ public abstract class TransformerRenderer {
 
     protected void renderAACuboidLine(Renderer renderer, Vector3d start, Vector3d end, float width, int color, boolean disableNormals) {
         var camera = renderer.camera().position();
-        start = start.subtract(camera);
-        end = end.subtract(camera);
+        start = start.sub(camera);
+        end = end.sub(camera);
         if (width == 0) {
             return;
         }
 
         var renderStyle = renderer.renderTypes().outlineSolid();
 
-        var diff = end.subtract(start);
-        if (diff.getX() + diff.getY() + diff.getZ() < 0) {
+        var diff = end.sub(start);
+        if (diff.x() + diff.y() + diff.z() < 0) {
             var temp = start;
             start = end;
             end = temp;
-            diff = diff.scale(-1);
+            diff = diff.mul(-1);
         }
 
-        var extension = diff.normalize().scale(width / 2);
+        var extension = diff.normalize().mul(width / 2);
         var plane = calculateAxisAlignedPlane(diff);
-        var face = Orientation.getNearest(diff.getX(), diff.getY(), diff.getZ());
+        var face = Orientation.getNearest(diff.x(), diff.y(), diff.z());
         var axis = face.getAxis();
 
-        start = start.subtract(extension);
+        start = start.sub(extension);
         end = end.add(extension);
-        plane = plane.scale(width / 2);
+        plane = plane.mul(width / 2);
 
         var a1 = plane.add(start);
         var b1 = plane.add(end);
@@ -134,17 +134,17 @@ public abstract class TransformerRenderer {
 
         renderer.drawQuad(renderStyle, b4, b3, b2, b1, LightTexture.FULL_BLOCK, color, face);
         renderer.drawQuad(renderStyle, a1, a2, a3, a4, LightTexture.FULL_BLOCK, color, face.getOpposite());
-        var vec = a1.subtract(a4);
-        face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
+        var vec = a1.sub(a4);
+        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
         renderer.drawQuad(renderStyle, a1, b1, b2, a2, LightTexture.FULL_BLOCK, color, face);
         vec = rotate(vec, -90, axis);
-        face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
+        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
         renderer.drawQuad(renderStyle, a2, b2, b3, a3, LightTexture.FULL_BLOCK, color, face);
         vec = rotate(vec, -90, axis);
-        face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
+        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
         renderer.drawQuad(renderStyle, a3, b3, b4, a4, LightTexture.FULL_BLOCK, color, face);
         vec = rotate(vec, -90, axis);
-        face = Orientation.getNearest(vec.getX(), vec.getY(), vec.getZ());
+        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
         renderer.drawQuad(renderStyle, a4, b4, b1, a1, LightTexture.FULL_BLOCK, color, face);
     }
 

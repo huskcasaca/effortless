@@ -22,7 +22,7 @@ public class MirrorTransformerRenderer extends TransformerRenderer {
         var axis = transformer.axis();
         var cam = renderer.camera().position();
         var position = transformer.position();
-        var planeCenter = new Vector3d(axis != Axis.X ? cam.getX() : position.getX(), axis != Axis.Y ? cam.getY() : position.getY(), axis != Axis.Z ? cam.getZ() : position.getZ());
+        var planeCenter = new Vector3d(axis != Axis.X ? cam.x() : position.x(), axis != Axis.Y ? cam.y() : position.y(), axis != Axis.Z ? cam.z() : position.z());
 
         renderPlaneByAxis(renderer, planeCenter, 1024, transformer.axis(), new Color(0, 0, 0, 72));
         for (var value : Axis.values()) {

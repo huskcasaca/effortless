@@ -110,7 +110,7 @@ public class MinecraftAdapter {
         if (vector == null) {
             return null;
         }
-        return new Vec3(vector.getX(), vector.getY(), vector.getZ());
+        return new Vec3(vector.x(), vector.y(), vector.z());
     }
 
     public static Vector3i adapt(Vec3i vec3i) {
@@ -124,7 +124,7 @@ public class MinecraftAdapter {
         if (vector == null) {
             return null;
         }
-        return new Vec3i(vector.getX(), vector.getY(), vector.getZ());
+        return new Vec3i(vector.x(), vector.y(), vector.z());
     }
 
     public static BlockPosition adapt(BlockPos blockPos) {
@@ -139,7 +139,7 @@ public class MinecraftAdapter {
         if (blockPosition == null) {
             return null;
         }
-        return new BlockPos(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+        return new BlockPos(blockPosition.x(), blockPosition.y(), blockPosition.z());
     }
 
     public static Interaction adapt(HitResult hitResult) {

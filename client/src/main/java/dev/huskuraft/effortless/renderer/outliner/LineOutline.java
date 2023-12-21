@@ -56,7 +56,7 @@ public class LineOutline extends Outline {
             var start = lockStart ? this.end : this.start;
             var end = lockStart ? this.start : this.end;
 
-            start = end.add(this.start.subtract(end).scale(distanceToTarget));
+            start = end.add(this.start.sub(end).mul(distanceToTarget));
             renderCuboidLine(renderer, start, end);
         }
 
