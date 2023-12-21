@@ -35,17 +35,17 @@ class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public int getWindowWidth() {
+    public int windowWidth() {
         return proxy.guiWidth();
     }
 
     @Override
-    public int getWindowHeight() {
+    public int windowHeight() {
         return proxy.guiHeight();
     }
 
     @Override
-    public int getOptionColor(float alpha) {
+    public int optionColor(float alpha) {
         return Minecraft.getInstance().options.getBackgroundColor(alpha);
     }
 
