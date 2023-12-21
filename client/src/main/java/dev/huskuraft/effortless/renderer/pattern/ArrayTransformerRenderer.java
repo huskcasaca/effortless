@@ -2,6 +2,8 @@ package dev.huskuraft.effortless.renderer.pattern;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
+import dev.huskuraft.effortless.renderer.FontDisplay;
+import dev.huskuraft.effortless.renderer.LightTexture;
 import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.text.Text;
 
@@ -41,7 +43,12 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
                 var mid = v1.add(v2).div(2);
                 renderer.translate(-cam.x() + mid.x(), -cam.y() + mid.y(), -cam.z() + mid.z());
                 renderer.pushPose();
-                renderer.drawNameTag(typeface, Text.text("X1 Y10 Z2"));
+
+                renderer.pushPose();
+                renderer.rotate(renderer.camera().rotation());
+                renderer.scale(-0.025F, -0.025F, 0.025F);
+                var text = Text.text(transformer.offset().toString());
+                renderer.drawText(typeface, text, -typeface.measureWidth(text) / 2, 0, 0xFFFFFFFF, 0, false, FontDisplay.NORMAL, LightTexture.FULL_BRIGHT);
                 renderer.popPose();
                 renderer.popPose();
             }
