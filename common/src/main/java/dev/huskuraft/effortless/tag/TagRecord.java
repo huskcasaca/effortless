@@ -179,7 +179,7 @@ public abstract class TagRecord extends TagElement {
     }
 
     public final void putVector2d(String key, Vector2d value) {
-        putList(key, List.of(value.x(), value.z()), (tag1, value1) -> {
+        putList(key, List.of(value.x(), value.y()), (tag1, value1) -> {
             tag1.asPrimitive().putDouble(value1);
         });
     }
@@ -190,7 +190,7 @@ public abstract class TagRecord extends TagElement {
     }
 
     public final void putVector2i(String key, Vector2i value) {
-        putList(key, List.of(value.x(), value.z()), (tag1, value1) -> {
+        putList(key, List.of(value.x(), value.y()), (tag1, value1) -> {
             tag1.asPrimitive().putInt(value1);
         });
     }

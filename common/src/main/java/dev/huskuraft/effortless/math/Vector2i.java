@@ -6,30 +6,30 @@ public class Vector2i {
     public static final Vector2i ONE = new Vector2i(1, 1);
 
     public static final Vector2i UNIT_X = new Vector2i(1, 0);
-    public static final Vector2i UNIT_Z = new Vector2i(0, 1);
+    public static final Vector2i UNIT_Y = new Vector2i(0, 1);
     public static final Vector2i UNIT_MINUS_X = new Vector2i(-1, 0);
-    public static final Vector2i UNIT_MINUS_Z = new Vector2i(0, -1);
+    public static final Vector2i UNIT_MINUS_Y = new Vector2i(0, -1);
 
     private final int x;
-    private final int z;
+    private final int y;
 
     /**
      * Construct an instance.
      *
      * @param x the X coordinate
-     * @param z the Z coordinate
+     * @param y the Y coordinate
      */
-    public Vector2i(int x, int z) {
+    public Vector2i(int x, int y) {
         this.x = x;
-        this.z = z;
+        this.y = y;
     }
 
-    public static Vector2i at(double x, double z) {
-        return at((int) MathUtils.floor(x), (int) MathUtils.floor(z));
+    public static Vector2i at(double x, double y) {
+        return at((int) MathUtils.floor(x), (int) MathUtils.floor(y));
     }
 
-    public static Vector2i at(int x, int z) {
-        return new Vector2i(x, z);
+    public static Vector2i at(int x, int y) {
+        return new Vector2i(x, y);
     }
 
     /**
@@ -39,17 +39,17 @@ public class Vector2i {
      * @return a new vector
      */
     public Vector2i withX(int x) {
-        return Vector2i.at(x, z);
+        return Vector2i.at(x, y);
     }
 
     /**
      * Set the Z coordinate.
      *
-     * @param z the new Z
+     * @param y the new Y
      * @return a new vector
      */
-    public Vector2i withZ(int z) {
-        return Vector2i.at(x, z);
+    public Vector2i withY(int y) {
+        return Vector2i.at(x, y);
     }
 
     /**
@@ -62,12 +62,12 @@ public class Vector2i {
     }
 
     /**
-     * Get the Z coordinate.
+     * Get the Y coordinate.
      *
-     * @return the z coordinate
+     * @return the y coordinate
      */
-    public int z() {
-        return z;
+    public int y() {
+        return y;
     }
 
     /**
@@ -77,18 +77,18 @@ public class Vector2i {
      * @return a new vector
      */
     public Vector2i add(Vector2i other) {
-        return add(other.x, other.z);
+        return add(other.x, other.y);
     }
 
     /**
      * Add another vector to this vector and return the result as a new vector.
      *
      * @param x the value to add
-     * @param z the value to add
+     * @param y the value to add
      * @return a new vector
      */
-    public Vector2i add(int x, int z) {
-        return Vector2i.at(this.x + x, this.z + z);
+    public Vector2i add(int x, int y) {
+        return Vector2i.at(this.x + x, this.y + y);
     }
 
     /**
@@ -100,14 +100,14 @@ public class Vector2i {
      */
     public Vector2i add(Vector2i... others) {
         int newX = x;
-        int newZ = z;
+        int newY = y;
 
         for (Vector2i other : others) {
             newX += other.x;
-            newZ += other.z;
+            newY += other.y;
         }
 
-        return Vector2i.at(newX, newZ);
+        return Vector2i.at(newX, newY);
     }
 
     /**
@@ -118,7 +118,7 @@ public class Vector2i {
      * @return a new vector
      */
     public Vector2i sub(Vector2i other) {
-        return sub(other.x, other.z);
+        return sub(other.x, other.y);
     }
 
     /**
@@ -126,11 +126,11 @@ public class Vector2i {
      * as a new vector.
      *
      * @param x the value to subtract
-     * @param z the value to subtract
+     * @param y the value to subtract
      * @return a new vector
      */
-    public Vector2i sub(int x, int z) {
-        return Vector2i.at(this.x - x, this.z - z);
+    public Vector2i sub(int x, int y) {
+        return Vector2i.at(this.x - x, this.y - y);
     }
 
     /**
@@ -142,14 +142,14 @@ public class Vector2i {
      */
     public Vector2i sub(Vector2i... others) {
         int newX = x;
-        int newZ = z;
+        int newY = y;
 
         for (Vector2i other : others) {
             newX -= other.x;
-            newZ -= other.z;
+            newY -= other.y;
         }
 
-        return Vector2i.at(newX, newZ);
+        return Vector2i.at(newX, newY);
     }
 
     /**
@@ -159,18 +159,18 @@ public class Vector2i {
      * @return a new vector
      */
     public Vector2i mul(Vector2i other) {
-        return mul(other.x, other.z);
+        return mul(other.x, other.y);
     }
 
     /**
      * Multiply this vector by another vector on each component.
      *
      * @param x the value to multiply
-     * @param z the value to multiply
+     * @param y the value to multiply
      * @return a new vector
      */
-    public Vector2i mul(int x, int z) {
-        return Vector2i.at(this.x * x, this.z * z);
+    public Vector2i mul(int x, int y) {
+        return Vector2i.at(this.x * x, this.y * y);
     }
 
     /**
@@ -181,14 +181,14 @@ public class Vector2i {
      */
     public Vector2i mul(Vector2i... others) {
         int newX = x;
-        int newZ = z;
+        int newY = y;
 
         for (Vector2i other : others) {
             newX *= other.x;
-            newZ *= other.z;
+            newY *= other.y;
         }
 
-        return Vector2i.at(newX, newZ);
+        return Vector2i.at(newX, newY);
     }
 
     /**
@@ -208,18 +208,18 @@ public class Vector2i {
      * @return a new vector
      */
     public Vector2i div(Vector2i other) {
-        return div(other.x, other.z);
+        return div(other.x, other.y);
     }
 
     /**
      * Divide this vector by another vector on each component.
      *
      * @param x the value to divide by
-     * @param z the value to divide by
+     * @param y the value to divide by
      * @return a new vector
      */
-    public Vector2i div(int x, int z) {
-        return Vector2i.at(this.x / x, this.z / z);
+    public Vector2i div(int x, int y) {
+        return Vector2i.at(this.x / x, this.y / y);
     }
 
     /**
@@ -235,12 +235,12 @@ public class Vector2i {
     /**
      * Shift all components right.
      *
-     * @param x the value to shift x by
-     * @param z the value to shift z by
+     * @param x the value to shift X by
+     * @param y the value to shift Y by
      * @return a new vector
      */
-    public Vector2i shr(int x, int z) {
-        return at(this.x >> x, this.z >> z);
+    public Vector2i shr(int x, int y) {
+        return at(this.x >> x, this.y >> y);
     }
 
     /**
@@ -268,7 +268,7 @@ public class Vector2i {
      * @return length, squared
      */
     public int lengthSq() {
-        return x * x + z * z;
+        return x * x + y * y;
     }
 
     /**
@@ -289,8 +289,8 @@ public class Vector2i {
      */
     public int distanceSq(Vector2i other) {
         int dx = other.x - x;
-        int dz = other.z - z;
-        return dx * dx + dz * dz;
+        int dy = other.y - y;
+        return dx * dx + dy * dy;
     }
 
     /**
@@ -302,8 +302,8 @@ public class Vector2i {
     public Vector2i normalize() {
         double len = length();
         double x = this.x / len;
-        double z = this.z / len;
-        return Vector2i.at(x, z);
+        double y = this.y / len;
+        return Vector2i.at(x, y);
     }
 
     /**
@@ -313,7 +313,7 @@ public class Vector2i {
      * @return the dot product of this and the other vector
      */
     public int dot(Vector2i other) {
-        return x * other.x + z * other.z;
+        return x * other.x + y * other.y;
     }
 
     /**
@@ -325,7 +325,7 @@ public class Vector2i {
      */
     public boolean containedWithin(Vector2i min, Vector2i max) {
         return x >= min.x && x <= max.x
-                && z >= min.z && z <= max.z;
+                && y >= min.y && y <= max.y;
     }
 
     /**
@@ -367,30 +367,30 @@ public class Vector2i {
      * @return a new vector
      */
     public Vector2i abs() {
-        return Vector2i.at(MathUtils.abs(x), MathUtils.abs(z));
+        return Vector2i.at(MathUtils.abs(x), MathUtils.abs(y));
     }
 
     /**
      * Perform a 2D transformation on this vector and return a new one.
      *
      * @param angle      in degrees
-     * @param aboutX     about which x coordinate to rotate
-     * @param aboutZ     about which z coordinate to rotate
+     * @param aboutX     about which X coordinate to rotate
+     * @param aboutY     about which Y coordinate to rotate
      * @param translateX what to add after rotation
-     * @param translateZ what to add after rotation
+     * @param translateY what to add after rotation
      * @return a new vector
      */
-    public Vector2i transform2D(double angle, double aboutX, double aboutZ, double translateX, double translateZ) {
+    public Vector2i transform2D(double angle, double aboutX, double aboutY, double translateX, double translateY) {
         angle = MathUtils.rad(angle);
         double x = this.x - aboutX;
-        double z = this.z - aboutZ;
+        double y = this.y - aboutY;
         double cos = MathUtils.cos(angle);
         double sin = MathUtils.sin(angle);
-        double x2 = x * cos - z * sin;
-        double z2 = x * sin + z * cos;
+        double x2 = x * cos - y * sin;
+        double y2 = x * sin + y * cos;
         return Vector2i.at(
                 x2 + aboutX + translateX,
-                z2 + aboutZ + translateZ);
+                y2 + aboutY + translateY);
     }
 
     /**
@@ -402,7 +402,7 @@ public class Vector2i {
     public Vector2i getMinimum(Vector2i v2) {
         return new Vector2i(
                 MathUtils.min(x, v2.x),
-                MathUtils.min(z, v2.z)
+                MathUtils.min(y, v2.y)
         );
     }
 
@@ -415,12 +415,12 @@ public class Vector2i {
     public Vector2i getMaximum(Vector2i v2) {
         return new Vector2i(
                 MathUtils.max(x, v2.x),
-                MathUtils.max(z, v2.z)
+                MathUtils.max(y, v2.y)
         );
     }
 
     public Vector2d toVector2d() {
-        return Vector2d.at(x, z);
+        return Vector2d.at(x, y);
     }
 
     @Override
@@ -429,18 +429,18 @@ public class Vector2i {
             return false;
         }
 
-        return other.x == this.x && other.z == this.z;
+        return other.x == this.x && other.y == this.y;
 
     }
 
     @Override
     public int hashCode() {
-        return (x << 16) ^ z;
+        return (x << 16) ^ y;
     }
 
     @Override
     public String toString() {
-        return "(" + x + ", " + z + ")";
+        return "(" + x + ", " + y + ")";
     }
 
     /**
@@ -449,6 +449,6 @@ public class Vector2i {
      * @return string
      */
     public String toParserString() {
-        return x + "," + z;
+        return x + "," + y;
     }
 }

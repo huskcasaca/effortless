@@ -6,26 +6,26 @@ public class Vector2d {
     public static final Vector2d ONE = new Vector2d(1, 1);
 
     public static final Vector2d UNIT_X = new Vector2d(1, 0);
-    public static final Vector2d UNIT_Z = new Vector2d(0, 1);
+    public static final Vector2d UNIT_Y = new Vector2d(0, 1);
     public static final Vector2d UNIT_MINUS_X = new Vector2d(-1, 0);
-    public static final Vector2d UNIT_MINUS_Z = new Vector2d(0, -1);
+    public static final Vector2d UNIT_MINUS_Y = new Vector2d(0, -1);
 
     private final double x;
-    private final double z;
+    private final double y;
 
     /**
      * Construct an instance.
      *
      * @param x the X coordinate
-     * @param z the Z coordinate
+     * @param y the Y coordinate
      */
-    public Vector2d(double x, double z) {
+    public Vector2d(double x, double y) {
         this.x = x;
-        this.z = z;
+        this.y = y;
     }
 
-    public static Vector2d at(double x, double z) {
-        return new Vector2d(x, z);
+    public static Vector2d at(double x, double y) {
+        return new Vector2d(x, y);
     }
 
     /**
@@ -35,17 +35,17 @@ public class Vector2d {
      * @return a new vector
      */
     public Vector2d withX(double x) {
-        return Vector2d.at(x, z);
+        return Vector2d.at(x, y);
     }
 
     /**
-     * Set the Z coordinate.
+     * Set the Y coordinate.
      *
-     * @param z the new Z
+     * @param y the new Y
      * @return a new vector
      */
-    public Vector2d withZ(double z) {
-        return Vector2d.at(x, z);
+    public Vector2d withY(double y) {
+        return Vector2d.at(x, y);
     }
 
     /**
@@ -58,12 +58,12 @@ public class Vector2d {
     }
 
     /**
-     * Get the Z coordinate.
+     * Get the Y coordinate.
      *
-     * @return the z coordinate
+     * @return the y coordinate
      */
-    public double z() {
-        return z;
+    public double y() {
+        return y;
     }
 
     /**
@@ -73,18 +73,18 @@ public class Vector2d {
      * @return a new vector
      */
     public Vector2d add(Vector2d other) {
-        return add(other.x, other.z);
+        return add(other.x, other.y);
     }
 
     /**
      * Add another vector to this vector and return the result as a new vector.
      *
      * @param x the value to add
-     * @param z the value to add
+     * @param y the value to add
      * @return a new vector
      */
-    public Vector2d add(double x, double z) {
-        return Vector2d.at(this.x + x, this.z + z);
+    public Vector2d add(double x, double y) {
+        return Vector2d.at(this.x + x, this.y + y);
     }
 
     /**
@@ -96,14 +96,14 @@ public class Vector2d {
      */
     public Vector2d add(Vector2d... others) {
         double newX = x;
-        double newZ = z;
+        double newY = y;
 
         for (Vector2d other : others) {
             newX += other.x;
-            newZ += other.z;
+            newY += other.y;
         }
 
-        return Vector2d.at(newX, newZ);
+        return Vector2d.at(newX, newY);
     }
 
     /**
@@ -114,7 +114,7 @@ public class Vector2d {
      * @return a new vector
      */
     public Vector2d sub(Vector2d other) {
-        return sub(other.x, other.z);
+        return sub(other.x, other.y);
     }
 
     /**
@@ -122,11 +122,11 @@ public class Vector2d {
      * as a new vector.
      *
      * @param x the value to subtract
-     * @param z the value to subtract
+     * @param y the value to subtract
      * @return a new vector
      */
-    public Vector2d sub(double x, double z) {
-        return Vector2d.at(this.x - x, this.z - z);
+    public Vector2d sub(double x, double y) {
+        return Vector2d.at(this.x - x, this.y - y);
     }
 
     /**
@@ -138,14 +138,14 @@ public class Vector2d {
      */
     public Vector2d sub(Vector2d... others) {
         double newX = x;
-        double newZ = z;
+        double newY = y;
 
         for (Vector2d other : others) {
             newX -= other.x;
-            newZ -= other.z;
+            newY -= other.y;
         }
 
-        return Vector2d.at(newX, newZ);
+        return Vector2d.at(newX, newY);
     }
 
     /**
@@ -155,18 +155,18 @@ public class Vector2d {
      * @return a new vector
      */
     public Vector2d mul(Vector2d other) {
-        return mul(other.x, other.z);
+        return mul(other.x, other.y);
     }
 
     /**
      * Multiply this vector by another vector on each component.
      *
      * @param x the value to multiply
-     * @param z the value to multiply
+     * @param y the value to multiply
      * @return a new vector
      */
-    public Vector2d mul(double x, double z) {
-        return Vector2d.at(this.x * x, this.z * z);
+    public Vector2d mul(double x, double y) {
+        return Vector2d.at(this.x * x, this.y * y);
     }
 
     /**
@@ -177,14 +177,14 @@ public class Vector2d {
      */
     public Vector2d mul(Vector2d... others) {
         double newX = x;
-        double newZ = z;
+        double newY = y;
 
         for (Vector2d other : others) {
             newX *= other.x;
-            newZ *= other.z;
+            newY *= other.y;
         }
 
-        return Vector2d.at(newX, newZ);
+        return Vector2d.at(newX, newY);
     }
 
     /**
@@ -204,18 +204,18 @@ public class Vector2d {
      * @return a new vector
      */
     public Vector2d div(Vector2d other) {
-        return div(other.x, other.z);
+        return div(other.x, other.y);
     }
 
     /**
      * Divide this vector by another vector on each component.
      *
      * @param x the value to divide by
-     * @param z the value to divide by
+     * @param y the value to divide by
      * @return a new vector
      */
-    public Vector2d div(double x, double z) {
-        return Vector2d.at(this.x / x, this.z / z);
+    public Vector2d div(double x, double y) {
+        return Vector2d.at(this.x / x, this.y / y);
     }
 
     /**
@@ -243,7 +243,7 @@ public class Vector2d {
      * @return length, squared
      */
     public double lengthSq() {
-        return x * x + z * z;
+        return x * x + y * y;
     }
 
     /**
@@ -264,8 +264,8 @@ public class Vector2d {
      */
     public double distanceSq(Vector2d other) {
         double dx = other.x - x;
-        double dz = other.z - z;
-        return dx * dx + dz * dz;
+        double dy = other.y - y;
+        return dx * dx + dy * dy;
     }
 
     /**
@@ -285,7 +285,7 @@ public class Vector2d {
      * @return the dot product of this and the other vector
      */
     public double dot(Vector2d other) {
-        return x * other.x + z * other.z;
+        return x * other.x + y * other.y;
     }
 
     /**
@@ -297,7 +297,7 @@ public class Vector2d {
      */
     public boolean containedWithin(Vector2d min, Vector2d max) {
         return x >= min.x && x <= max.x
-                && z >= min.z && z <= max.z;
+                && y >= min.y && y <= max.y;
     }
 
     /**
@@ -306,7 +306,7 @@ public class Vector2d {
      * @return a new vector
      */
     public Vector2d floor() {
-        return Vector2d.at(MathUtils.floor(x), MathUtils.floor(z));
+        return Vector2d.at(MathUtils.floor(x), MathUtils.floor(y));
     }
 
     /**
@@ -315,7 +315,7 @@ public class Vector2d {
      * @return a new vector
      */
     public Vector2d ceil() {
-        return Vector2d.at(MathUtils.ceil(x), MathUtils.ceil(z));
+        return Vector2d.at(MathUtils.ceil(x), MathUtils.ceil(y));
     }
 
     /**
@@ -326,7 +326,7 @@ public class Vector2d {
      * @return a new vector
      */
     public Vector2d round() {
-        return Vector2d.at(MathUtils.floor(x + 0.5), MathUtils.floor(z + 0.5));
+        return Vector2d.at(MathUtils.floor(x + 0.5), MathUtils.floor(y + 0.5));
     }
 
     /**
@@ -336,7 +336,7 @@ public class Vector2d {
      * @return a new vector
      */
     public Vector2d abs() {
-        return Vector2d.at(MathUtils.abs(x), MathUtils.abs(z));
+        return Vector2d.at(MathUtils.abs(x), MathUtils.abs(y));
     }
 
     /**
@@ -344,22 +344,22 @@ public class Vector2d {
      *
      * @param angle      in degrees
      * @param aboutX     about which x coordinate to rotate
-     * @param aboutZ     about which z coordinate to rotate
+     * @param aboutY     about which y coordinate to rotate
      * @param translateX what to add after rotation
-     * @param translateZ what to add after rotation
+     * @param translateY what to add after rotation
      * @return a new vector
      */
-    public Vector2d transform2D(double angle, double aboutX, double aboutZ, double translateX, double translateZ) {
+    public Vector2d transform2D(double angle, double aboutX, double aboutY, double translateX, double translateY) {
         angle = MathUtils.rad(angle);
         double x = this.x - aboutX;
-        double z = this.z - aboutZ;
+        double y = this.y - aboutY;
         double cos = MathUtils.cos(angle);
         double sin = MathUtils.sin(angle);
-        double x2 = x * cos - z * sin;
-        double z2 = x * sin + z * cos;
+        double x2 = x * cos - y * sin;
+        double y2 = x * sin + y * cos;
         return new Vector2d(
                 x2 + aboutX + translateX,
-                z2 + aboutZ + translateZ);
+                y2 + aboutY + translateY);
     }
 
     /**
@@ -371,7 +371,7 @@ public class Vector2d {
     public Vector2d getMinimum(Vector2d v2) {
         return new Vector2d(
                 MathUtils.min(x, v2.x),
-                MathUtils.min(z, v2.z)
+                MathUtils.min(y, v2.y)
         );
     }
 
@@ -384,7 +384,7 @@ public class Vector2d {
     public Vector2d getMaximum(Vector2d v2) {
         return new Vector2d(
                 MathUtils.max(x, v2.x),
-                MathUtils.max(z, v2.z)
+                MathUtils.max(y, v2.y)
         );
     }
 
@@ -394,7 +394,7 @@ public class Vector2d {
      * @return a new {@link Vector2i}
      */
     public Vector2i toVector2i() {
-        return Vector2i.at(x, z);
+        return Vector2i.at(x, y);
     }
 
     @Override
@@ -403,7 +403,7 @@ public class Vector2d {
             return false;
         }
 
-        return other.x == this.x && other.z == this.z;
+        return other.x == this.x && other.y == this.y;
 
     }
 
@@ -411,13 +411,13 @@ public class Vector2d {
     public int hashCode() {
         int hash = 17;
         hash = 31 * hash + Double.hashCode(x);
-        hash = 31 * hash + Double.hashCode(z);
+        hash = 31 * hash + Double.hashCode(y);
         return hash;
     }
 
     @Override
     public String toString() {
-        return "(" + x + ", " + z + ")";
+        return "(" + x + ", " + y + ")";
     }
 
     /**
@@ -426,6 +426,6 @@ public class Vector2d {
      * @return string
      */
     public String toParserString() {
-        return x + "," + z;
+        return x + "," + y;
     }
 }

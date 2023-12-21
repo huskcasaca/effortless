@@ -160,7 +160,7 @@ public abstract class Buffer {
 
     public void writeVector2d(Vector2d vector) {
         writeDouble(vector.x());
-        writeDouble(vector.z());
+        writeDouble(vector.y());
     }
 
     public Vector3i readVector3i() {
@@ -179,7 +179,7 @@ public abstract class Buffer {
 
     public void writeVector2i(Vector2i vector) {
         writeInt(vector.x());
-        writeInt(vector.z());
+        writeInt(vector.y());
     }
 
 }
