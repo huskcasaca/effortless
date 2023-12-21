@@ -49,7 +49,7 @@ public abstract class AbstractButton extends AbstractWidget {
 
     public void renderButtonBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         renderer.setShaderColor(1.0F, 1.0F, 1.0F, this.getAlpha());
-        renderer.drawButtonTexture(getX(), getY(), getWidth(), getHeight(), isActive(), isHoveredOrFocused());
+        renderer.renderButtonTexture(getX(), getY(), getWidth(), getHeight(), isActive(), isHoveredOrFocused());
         renderer.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         renderString(renderer, getTypeface(), (isActive() ? 16777215 : 10526880) | (int) MathUtils.ceil(this.getAlpha() * 255.0F) << 24);
     }
@@ -61,7 +61,7 @@ public abstract class AbstractButton extends AbstractWidget {
     protected void renderScrollingString(Renderer renderer, Typeface typeface, int x, int y) {
         int k = this.getX() + x;
         int l = this.getX() + this.getWidth() - x;
-        renderer.drawScrollingText(typeface, this.getMessage(), k, this.getY(), l, this.getY() + this.getHeight(), y);
+        renderer.renderScrollingText(typeface, this.getMessage(), k, this.getY(), l, this.getY() + this.getHeight(), y);
     }
 
 

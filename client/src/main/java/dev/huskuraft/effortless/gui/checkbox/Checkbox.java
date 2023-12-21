@@ -48,9 +48,9 @@ public class Checkbox extends Button {
         }
 
         if (this.isChecked)
-            renderer.drawTextFromCenter(getTypeface(), "x", this.getX() + this.getCheckboxSize() / 2 + 1, this.getY() + 1, 14737632, true);
+            renderer.renderTextFromCenter(getTypeface(), "x", this.getX() + this.getCheckboxSize() / 2 + 1, this.getY() + 1, 14737632, true);
 
-        renderer.drawTextFromStart(getTypeface(), getMessage(), this.getX() + this.getCheckboxSize() + 2, this.getY() + 2, color, true);
+        renderer.renderTextFromStart(getTypeface(), getMessage(), this.getX() + this.getCheckboxSize() + 2, this.getY() + 2, color, true);
     }
 
     @Override

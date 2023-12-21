@@ -90,7 +90,7 @@ public abstract class AbstractWidget implements Widget {
 
     public void renderWidgetOverlay(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         if (isHovered()) {
-            renderer.drawTooltip(getTypeface(), getTooltip(), mouseX, mouseY);
+            renderer.renderTooltip(getTypeface(), getTooltip(), mouseX, mouseY);
         }
     }
 

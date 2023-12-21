@@ -48,7 +48,7 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
                 renderer.rotate(renderer.camera().rotation());
                 renderer.scale(-0.025F, -0.025F, 0.025F);
                 var text = Text.text(transformer.offset().toString());
-                renderer.drawText(typeface, text, -typeface.measureWidth(text) / 2, 0, 0xFFFFFFFF, 0, false, FontDisplay.NORMAL, LightTexture.FULL_BRIGHT);
+                renderer.renderText(typeface, text, -typeface.measureWidth(text) / 2, 0, 0xFFFFFFFF, 0, false, FontDisplay.NORMAL, LightTexture.FULL_BRIGHT);
                 renderer.popPose();
                 renderer.popPose();
             }

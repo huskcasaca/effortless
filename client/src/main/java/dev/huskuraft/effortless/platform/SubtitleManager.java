@@ -82,7 +82,7 @@ public class SubtitleManager {
                 }
                 entry.setContentSide(contentSide);
                 renderer.pushPose();
-                renderer.drawRect(entry.getWidth(), 0, 0, -entry.getHeight(), renderer.getOptionColor(0.8f * entry.getAlpha()));
+                renderer.renderRect(entry.getWidth(), 0, 0, -entry.getHeight(), renderer.getOptionColor(0.8f * entry.getAlpha()));
                 renderer.translate(entry.getPaddingX(), -entry.getPaddingY(), 0);
                 entry.render(renderer, 0, 0, deltaTick);
                 renderer.popPose();
@@ -167,7 +167,7 @@ public class SubtitleManager {
             for (var text : texts) {
                 textY -= 10;
                 var positionX = getContentSide() == AxisDirection.POSITIVE ? getContentWidth() - getTypeface().measureWidth(text) : 0;
-                renderer.drawTextFromStart(getTypeface(), text, positionX, textY, 0xffffffff, true);
+                renderer.renderTextFromStart(getTypeface(), text, positionX, textY, 0xffffffff, true);
             }
         }
 
@@ -210,7 +210,7 @@ public class SubtitleManager {
             super.renderWidget(renderer, mouseX, mouseY, deltaTick);
 
             var positionX = getContentSide() == AxisDirection.POSITIVE ? getContentWidth() - getTypeface().measureWidth(header) : 0;
-            renderer.drawTextFromStart(getTypeface(), header, positionX, -getContentHeight() + 2, 0xffffffff, true);
+            renderer.renderTextFromStart(getTypeface(), header, positionX, -getContentHeight() + 2, 0xffffffff, true);
         }
 
         @Override
@@ -247,7 +247,7 @@ public class SubtitleManager {
                 var x = i * ITEM_SPACING_X;
                 var y = j * ITEM_SPACING_Y - ITEM_SPACING_Y * (int) MathUtils.ceil(1f * itemStacks.size() / MAX_COLUMN);
 
-                renderer.drawItem(getTypeface(), itemStack, x, y, Text.text(String.valueOf(itemStack.getStackSize())));
+                renderer.renderItem(getTypeface(), itemStack, x, y, Text.text(String.valueOf(itemStack.getStackSize())));
 
                 if (i < MAX_COLUMN - 1) {
                     i += 1;

@@ -39,7 +39,7 @@ public class RadialTextIcon extends AbstractWidget {
             var color = Dimens.CellRing.RADIAL_COLOR;
             if (selected % Dimens.CellRing.RADIAL_SIZE == i) color = Dimens.CellRing.HIGHLIGHT_COLOR;
 
-            renderer.drawQuad((int) (middleX + x1m1), (int) (middleY + y1m1), (int) (middleX + x2m1), (int) (middleY + y2m1), (int) (middleX + x2m2), (int) (middleY + y2m2), (int) (middleX + x1m2), (int) (middleY + y1m2), 0, color.getRGB());
+            renderer.renderQuad((int) (middleX + x1m1), (int) (middleY + y1m1), (int) (middleX + x2m1), (int) (middleY + y2m1), (int) (middleX + x2m2), (int) (middleY + y2m2), (int) (middleX + x1m2), (int) (middleY + y1m2), 0, color.getRGB());
 
         }
     }
@@ -48,13 +48,13 @@ public class RadialTextIcon extends AbstractWidget {
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
 
-        renderer.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
+        renderer.renderRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
         renderRadialSlices(renderer, getX() + getWidth() / 2, getY() + getHeight() / 2, Dimens.CellRing.RING_INNER_EDGE, Dimens.CellRing.RING_OUTER_EDGE, index + 1);
 
         renderer.pushPose();
         renderer.translate(getX() + getWidth() / 2f + 1, getY() + getHeight() / 2f - 8, 0);
         renderer.scale(2, 2, 0);
-        renderer.drawTextFromCenter(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, true);
+        renderer.renderTextFromCenter(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, true);
         renderer.popPose();
     }
 

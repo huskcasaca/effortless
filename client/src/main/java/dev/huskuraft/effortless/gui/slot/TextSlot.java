@@ -32,7 +32,7 @@ public class TextSlot extends Slot {
         renderer.pushPose();
         renderer.translate(getFullWidth() - getWidth(), 0, 0);
 
-        renderer.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
+        renderer.renderRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
 
         if (symbol != null) {
             renderer.enableScissor(getX() + getFullWidth() - getWidth(), getY(), getX() + getFullWidth(), getY() + getHeight());
@@ -44,7 +44,7 @@ public class TextSlot extends Slot {
             renderer.pushPose();
             renderer.scale(18f / getTypeface().getLineHeight(), 18f / getTypeface().getLineHeight(), 0);
             renderer.translate(0, -getTypeface().measureHeight(getSymbol()) / 2f, 0);
-            renderer.drawTextFromCenter(getTypeface(), getSymbol(), 0, 0, 0xFF6C6C6C, false);
+            renderer.renderTextFromCenter(getTypeface(), getSymbol(), 0, 0, 0xFF6C6C6C, false);
             renderer.popPose();
             renderer.popPose();
             renderer.disableScissor();
@@ -56,7 +56,7 @@ public class TextSlot extends Slot {
         renderer.translate(18f - 1, 18f, 0);
         renderer.pushPose();
         renderer.translate(0, -getTypeface().measureHeight(getMessage()), 0);
-        renderer.drawTextFromEnd(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, true);
+        renderer.renderTextFromEnd(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, true);
         renderer.popPose();
         renderer.popPose();
         renderer.popPose();

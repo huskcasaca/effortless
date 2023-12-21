@@ -15,7 +15,7 @@ public class TextIcon extends AbstractWidget {
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
 
-        renderer.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
+        renderer.renderRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
 
         renderer.pushPose();
         renderer.translate(getX(), getY(), 0);
@@ -25,7 +25,7 @@ public class TextIcon extends AbstractWidget {
         var factor = Math.min(14f / getTypeface().measureWidth(getMessage()), 1f);
         renderer.scale(factor, factor, 0);
         renderer.translate(0, -getTypeface().measureHeight(getMessage()) / 2f, 0);
-        renderer.drawTextFromCenter(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, false);
+        renderer.renderTextFromCenter(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, false);
         renderer.popPose();
         renderer.popPose();
 

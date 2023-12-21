@@ -57,10 +57,10 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
     @Override
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         if (isTransparentBackground() && getEntrance().getClient().isLoaded()) {
-            renderer.drawGradientRect(0, 0, this.getWidth(), this.getHeight(), -1072689136, -804253680);
+            renderer.renderGradientRect(0, 0, this.getWidth(), this.getHeight(), -1072689136, -804253680);
         } else {
             renderer.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
-            renderer.drawPanelBackgroundTexture(0, 0, 0F, 0F, getWidth(), getHeight());
+            renderer.renderPanelBackgroundTexture(0, 0, 0F, 0F, getWidth(), getHeight());
             renderer.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);

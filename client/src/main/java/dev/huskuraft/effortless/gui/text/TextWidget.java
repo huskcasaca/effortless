@@ -41,9 +41,9 @@ public class TextWidget extends AbstractWidget {
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
         switch (gravity) {
-            case START -> renderer.drawTextFromStart(getTypeface(), getMessage(), getX(), getY(), this.color, true);
-            case CENTER -> renderer.drawTextFromCenter(getTypeface(), getMessage(), getX(), getY(), this.color, true);
-            case END -> renderer.drawTextFromEnd(getTypeface(), getMessage(), getX(), getY(), this.color, true);
+            case START -> renderer.renderTextFromStart(getTypeface(), getMessage(), getX(), getY(), this.color, true);
+            case CENTER -> renderer.renderTextFromCenter(getTypeface(), getMessage(), getX(), getY(), this.color, true);
+            case END -> renderer.renderTextFromEnd(getTypeface(), getMessage(), getX(), getY(), this.color, true);
         }
     }
 

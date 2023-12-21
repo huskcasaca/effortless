@@ -67,17 +67,17 @@ public class BlockClusterOutline extends Outline {
 
         switch (face) {
             case DOWN ->
-                    renderer.drawQuad(renderType, xyz, Xyz, XyZ, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderType, xyz, Xyz, XyZ, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
             case EAST ->
-                    renderer.drawQuad(renderType, XYz, XYZ, XyZ, Xyz, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderType, XYz, XYZ, XyZ, Xyz, params.getLightMap(), params.getColor().getRGB(), face);
             case NORTH ->
-                    renderer.drawQuad(renderType, xYz, XYz, Xyz, xyz, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderType, xYz, XYz, Xyz, xyz, params.getLightMap(), params.getColor().getRGB(), face);
             case SOUTH ->
-                    renderer.drawQuad(renderType, XYZ, xYZ, xyZ, XyZ, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderType, XYZ, xYZ, xyZ, XyZ, params.getLightMap(), params.getColor().getRGB(), face);
             case UP ->
-                    renderer.drawQuad(renderType, xYZ, XYZ, XYz, xYz, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderType, xYZ, XYZ, XYz, xYz, params.getLightMap(), params.getColor().getRGB(), face);
             case WEST ->
-                    renderer.drawQuad(renderType, xYZ, xYz, xyz, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderType, xYZ, xYz, xyz, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
         }
 
         renderer.popPose();

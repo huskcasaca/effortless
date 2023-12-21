@@ -30,8 +30,8 @@ public class ItemSlot extends Slot {
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
 
 //        renderer.drawItemSlotBackgroundTexture(getX() + 1, getY() + 1);
-        renderer.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
-        renderer.drawItem(getTypeface(), itemStack, getX(), getY(), getMessage());
+        renderer.renderRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
+        renderer.renderItem(getTypeface(), itemStack, getX(), getY(), getMessage());
     }
 
     public void setItemStack(ItemStack itemStack) {
