@@ -90,14 +90,14 @@ public record Context(
     }
 
     public boolean isFulfilled() {
-        return isBuilding() && structureParams().buildMode().getInstance().totalClicks(this) == clicks();
+        return isBuilding() && structureParams().buildMode().getInstance().totalClicks(this) == interactionsSize();
     }
 
-    public int clicks() {
+    public int interactionsSize() {
         return interactions.size();
     }
 
-    public boolean noClicks() {
+    public boolean isInteractionEmpty() {
         return interactions.isEmpty();
     }
 
@@ -187,14 +187,6 @@ public record Context(
         }
     }
 
-    public Context withRandomUUID() {
-        return withUUID(UUID.randomUUID());
-    }
-
-    public Context withUUID(UUID uuid) {
-        return new Context(uuid, state, type, interactions, structureParams, patternParams, reachParams);
-    }
-
     public Context withPlacingState() {
         return this.withState(BuildState.PLACE_BLOCK);
     }
@@ -227,7 +219,7 @@ public record Context(
         return new Context(uuid, state, type, BuildInteractions.EMPTY, structureParams, patternParams, reachParams);
     }
 
-    public Context withNextHitTraceBy(Player player) {
+    public Context withNextInteractionTraced(Player player) {
         return withNextInteraction(trace(player));
     }
 

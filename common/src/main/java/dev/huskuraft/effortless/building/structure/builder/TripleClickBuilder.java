@@ -84,7 +84,7 @@ public abstract class TripleClickBuilder extends AbstractClickBuilder {
 
     @Override
     public BlockInteraction trace(Player player, Context context) {
-        return switch (context.clicks()) {
+        return switch (context.interactionsSize()) {
             case 0 -> traceFirstInteraction(player, context);
             case 1 -> traceSecondInteraction(player, context);
             case 2 -> traceThirdInteraction(player, context);
@@ -94,7 +94,7 @@ public abstract class TripleClickBuilder extends AbstractClickBuilder {
 
     @Override
     public Stream<BlockPosition> collect(Context context) {
-        return switch (context.clicks()) {
+        return switch (context.interactionsSize()) {
             case 1 -> collectStartBlocks(context);
             case 2 -> collectInterBlocks(context);
             case 3 -> collectFinalBlocks(context);

@@ -23,7 +23,7 @@ public abstract class DoubleClickBuilder extends AbstractClickBuilder {
 
     @Override
     public BlockInteraction trace(Player player, Context context) {
-        return switch (context.clicks()) {
+        return switch (context.interactionsSize()) {
             case 0 -> traceFirstInteraction(player, context);
             case 1 -> traceSecondInteraction(player, context);
             default -> null;
@@ -32,7 +32,7 @@ public abstract class DoubleClickBuilder extends AbstractClickBuilder {
 
     @Override
     public Stream<BlockPosition> collect(Context context) {
-        return switch (context.clicks()) {
+        return switch (context.interactionsSize()) {
             case 1 -> collectFirstBlocks(context);
             case 2 -> collectFinalBlocks(context);
             default -> Stream.empty();

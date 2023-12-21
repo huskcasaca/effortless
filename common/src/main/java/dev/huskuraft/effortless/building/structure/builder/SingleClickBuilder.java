@@ -15,7 +15,7 @@ public abstract class SingleClickBuilder extends AbstractClickBuilder {
 
     @Override
     public BlockInteraction trace(Player player, Context context) {
-        return switch (context.clicks()) {
+        return switch (context.interactionsSize()) {
             case 0 -> traceFirstInteraction(player, context);
             default -> null;
         };
