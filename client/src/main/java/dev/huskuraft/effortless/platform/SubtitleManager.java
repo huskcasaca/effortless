@@ -67,7 +67,7 @@ public class SubtitleManager {
         var contentSide = AxisDirection.NEGATIVE;
         renderer.pushPose();
         var x = 0f;
-        var y = renderer.getWindowHeight() * 1f;
+        var y = renderer.windowHeight() * 1f;
         renderer.translate(x, y, 0);
         renderer.translate(-1f * contentSide.getStep(), 0, 0);
         renderer.translate(0, -8, 0);
@@ -82,7 +82,7 @@ public class SubtitleManager {
                 }
                 entry.setContentSide(contentSide);
                 renderer.pushPose();
-                renderer.renderRect(entry.getWidth(), 0, 0, -entry.getHeight(), renderer.getOptionColor(0.8f * entry.getAlpha()));
+                renderer.renderRect(entry.getWidth(), 0, 0, -entry.getHeight(), renderer.optionColor(0.8f * entry.getAlpha()));
                 renderer.translate(entry.getPaddingX(), -entry.getPaddingY(), 0);
                 entry.render(renderer, 0, 0, deltaTick);
                 renderer.popPose();

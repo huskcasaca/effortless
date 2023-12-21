@@ -14,11 +14,11 @@ import java.util.List;
 
 public abstract class Renderer {
 
-    public abstract int getWindowWidth();
+    public abstract int windowWidth();
 
-    public abstract int getWindowHeight();
+    public abstract int windowHeight();
 
-    public abstract int getOptionColor(float alpha);
+    public abstract int optionColor(float alpha);
 
     public abstract Camera camera();
 
