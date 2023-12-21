@@ -219,11 +219,11 @@ final class ActualClientStructureBuilder extends StructureBuilder {
 
         var result = context.withPreviewType().createSession(player.getWorld(), player).build().commit();
 
-        showOperationResult(context.uuid(), result);
-        showPattern(context.uuid(), context);
+        showOperationResult(player.getId(), result);
+        showPattern(player.getId(), context);
 
-        showContextOverlay(context.uuid(), context, 0);
-        showSummaryOverlay(context.uuid(), result, 1);
+        showContextOverlay(player.getId(), context, 0);
+        showSummaryOverlay(player.getId(), result, 1);
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
     }
