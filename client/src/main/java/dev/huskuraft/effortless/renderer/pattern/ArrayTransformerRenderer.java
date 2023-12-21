@@ -22,7 +22,7 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
                 EffortlessClient.getInstance().getClientManager().getRunningClient().getPlayer()
         );
 
-        if (context.clicks() == 0) {
+        if (context.interactionsSize() == 0) {
             return;
         }
         var typeface = EffortlessClient.getInstance().getClient().getTypeface();

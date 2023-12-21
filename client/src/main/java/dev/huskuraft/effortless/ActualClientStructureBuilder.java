@@ -94,14 +94,14 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     @Override
     public Context getContextTraced(Player player) {
         var context = getContext(player).finalize(player, BuildStage.INTERACT);
-        if (context.noClicks()) {
+        if (context.isInteractionEmpty()) {
             if (player.getItemStack(InteractionHand.MAIN).isEmpty()) {
                 context = context.withBreakingState();
             } else {
                 context = context.withPlacingState();
             }
         }
-        return context.withNextHitTraceBy(player);
+        return context.withNextInteractionTraced(player);
     }
 
     @Override
