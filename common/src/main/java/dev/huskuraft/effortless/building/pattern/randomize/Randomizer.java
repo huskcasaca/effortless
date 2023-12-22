@@ -64,6 +64,7 @@ public abstract class Randomizer<T> extends Transformer {
         public Text getDisplayName() {
             return Text.translate("effortless.randomizer.target.%s".formatted(name));
         }
+
         public String getName() {
             return name;
         }

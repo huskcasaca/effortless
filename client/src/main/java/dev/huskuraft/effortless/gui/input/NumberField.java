@@ -14,30 +14,8 @@ import java.util.function.Consumer;
 
 public class NumberField extends AbstractContainerWidget {
 
-    private record Range(Number min, Number max) {
-
-        public static final Range UNBOUNDED = new Range(Integer.MIN_VALUE, Integer.MAX_VALUE);
-
-        public boolean contains(int number) {
-            return (number >= min.intValue() && number <= max.intValue());
-        }
-
-        public boolean contains(double number) {
-            return (number >= min.doubleValue() && number <= max.doubleValue());
-        }
-
-        public boolean isBelow(Number number) {
-            return (number.doubleValue() < min.doubleValue());
-        }
-
-        public boolean isAbove(Number number) {
-            return (number.doubleValue() > max.doubleValue());
-        }
-    }
-
     public static final int TYPE_INTEGER = 0;
     public static final int TYPE_DOUBLE = 1;
-
     private final int buttonWidth = 10;
     private final EditBox textField;
     private final Button minusButton;
@@ -45,7 +23,6 @@ public class NumberField extends AbstractContainerWidget {
     private final NumberFormat format;
     private final int type;
     private Range range;
-
     public NumberField(Entrance entrance, int x, int y, int width, int height, int type) {
         super(entrance, x, y, width, height, Text.empty());
         this.format = new DecimalFormat();
@@ -155,6 +132,27 @@ public class NumberField extends AbstractContainerWidget {
 //                                .append(Text.text("5").withStyle(TextStyle.RED))
 //                ).filter(Objects::nonNull).toList()
 //        );
+    }
+
+    private record Range(Number min, Number max) {
+
+        public static final Range UNBOUNDED = new Range(Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        public boolean contains(int number) {
+            return (number >= min.intValue() && number <= max.intValue());
+        }
+
+        public boolean contains(double number) {
+            return (number >= min.doubleValue() && number <= max.doubleValue());
+        }
+
+        public boolean isBelow(Number number) {
+            return (number.doubleValue() < min.doubleValue());
+        }
+
+        public boolean isAbove(Number number) {
+            return (number.doubleValue() > max.doubleValue());
+        }
     }
 
 }

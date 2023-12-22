@@ -98,9 +98,9 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
 
     public static final class DoubleEntry extends Entry<Double> {
 
-        private NumberField numberField;
         private final Double min;
         private final Double max;
+        private NumberField numberField;
 
         public DoubleEntry(Entrance entrance, EntryList entryList, Text title, Text symbol, Double value, Double min, Double max, Consumer<Double> consumer) {
             super(entrance, entryList, title, symbol, value, consumer);
@@ -125,9 +125,9 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
 
     public static final class IntegerEntry extends Entry<Integer> {
 
-        private NumberField numberField;
         private final Integer min;
         private final Integer max;
+        private NumberField numberField;
 
         public IntegerEntry(Entrance entrance, EntryList entryList, Text title, Text symbol, Integer value, Integer min, Integer max, Consumer<Integer> consumer) {
             super(entrance, entryList, title, symbol, value, consumer);
@@ -152,9 +152,9 @@ public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
 
     public static final class SelectorEntry<T> extends Entry<T> {
 
-        private Button button;
         private final List<Text> messages;
         private final List<T> values;
+        private Button button;
         private int index;
 
         public SelectorEntry(Entrance entrance, EntryList entryList, Text title, Text symbol, List<Text> messages, List<T> values, int index, Consumer<T> consumer) {
