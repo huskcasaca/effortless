@@ -6,6 +6,42 @@ import java.util.function.Consumer;
 public class BoundingBox3d {
 
     private static final double EPSILON = 1.0E-7;
+    public final double minX;
+    public final double minY;
+    public final double minZ;
+    public final double maxX;
+    public final double maxY;
+    public final double maxZ;
+
+    public BoundingBox3d(double x0, double y0, double z0, double x1, double y1, double z1) {
+        this.minX = MathUtils.min(x0, x1);
+        this.minY = MathUtils.min(y0, y1);
+        this.minZ = MathUtils.min(z0, z1);
+        this.maxX = MathUtils.max(x0, x1);
+        this.maxY = MathUtils.max(y0, y1);
+        this.maxZ = MathUtils.max(z0, z1);
+    }
+    public BoundingBox3d(Vector3i vector) {
+        this(vector.x(), vector.y(), vector.z(), vector.x() + 1, vector.y() + 1, vector.z() + 1);
+    }
+    public BoundingBox3d(Vector3i start, Vector3i end) {
+        this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
+    }
+    public BoundingBox3d(Vector3d start, Vector3d end) {
+        this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
+    }
+
+    public static BoundingBox3d of(BoundingBox3i boundingBox) {
+        return new BoundingBox3d(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ(), boundingBox.maxX() + 1, boundingBox.maxY() + 1, boundingBox.maxZ() + 1);
+    }
+
+    public static BoundingBox3d unitCubeFromLowerCorner(Vector3d vector) {
+        return new BoundingBox3d(vector.x(), vector.y(), vector.z(), vector.x() + 1.0, vector.y() + 1.0, vector.z() + 1.0);
+    }
+
+    public static BoundingBox3d ofSize(Vector3d vector, double x, double y, double z) {
+        return new BoundingBox3d(vector.x() - x / 2.0, vector.y() - y / 2.0, vector.z() - z / 2.0, vector.x() + x / 2.0, vector.y() + y / 2.0, vector.z() + z / 2.0);
+    }
 
     public double getMinX() {
         return minX;
@@ -29,46 +65,6 @@ public class BoundingBox3d {
 
     public double getMaxZ() {
         return maxZ;
-    }
-
-    public final double minX;
-    public final double minY;
-    public final double minZ;
-    public final double maxX;
-    public final double maxY;
-    public final double maxZ;
-
-    public BoundingBox3d(double x0, double y0, double z0, double x1, double y1, double z1) {
-        this.minX = MathUtils.min(x0, x1);
-        this.minY = MathUtils.min(y0, y1);
-        this.minZ = MathUtils.min(z0, z1);
-        this.maxX = MathUtils.max(x0, x1);
-        this.maxY = MathUtils.max(y0, y1);
-        this.maxZ = MathUtils.max(z0, z1);
-    }
-
-    public BoundingBox3d(Vector3i vector) {
-        this(vector.x(), vector.y(), vector.z(), vector.x() + 1, vector.y() + 1, vector.z() + 1);
-    }
-
-    public BoundingBox3d(Vector3i start, Vector3i end) {
-        this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
-    }
-
-    public BoundingBox3d(Vector3d start, Vector3d end) {
-        this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
-    }
-
-    public static BoundingBox3d of(BoundingBox3i boundingBox) {
-        return new BoundingBox3d(boundingBox.minX(), boundingBox.minY(), boundingBox.minZ(), boundingBox.maxX() + 1, boundingBox.maxY() + 1, boundingBox.maxZ() + 1);
-    }
-
-    public static BoundingBox3d unitCubeFromLowerCorner(Vector3d vector) {
-        return new BoundingBox3d(vector.x(), vector.y(), vector.z(), vector.x() + 1.0, vector.y() + 1.0, vector.z() + 1.0);
-    }
-
-    public static BoundingBox3d ofSize(Vector3d vector, double x, double y, double z) {
-        return new BoundingBox3d(vector.x() - x / 2.0, vector.y() - y / 2.0, vector.z() - z / 2.0, vector.x() + x / 2.0, vector.y() + y / 2.0, vector.z() + z / 2.0);
     }
 
     public BoundingBox3d withMinX(double a) {
