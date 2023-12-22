@@ -24,7 +24,7 @@ include 'client'
 
 ['fabric', 'forge', 'vanilla'].forEach { platform ->
     include "$platform"
-    ['1-20-2'].forEach { port ->
+    ['1-20-2', '1-20-3'].forEach { port ->
         include "${platform}:minecraft-${port}"
     }
 }
