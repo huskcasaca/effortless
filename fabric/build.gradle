@@ -78,9 +78,6 @@ subprojects {
     remapJar {
         dependsOn shadowJar
         inputFile = shadowJar.archiveFile
-        doLast {
-            inputFile.get().getAsFile().delete()
-        }
     }
 
     assemble {
