@@ -85,6 +85,10 @@ subprojects {
 
     assemble {
         dependsOn remapJar
+        doLast {
+            rootProject.file("output").mkdir()
+            remapJar.archiveFile.get().getAsFile().renameTo(rootProject.file("output/${shadowJar.archiveFile.get().getAsFile().name}"))
+        }
     }
 
 }

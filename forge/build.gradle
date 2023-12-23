@@ -24,7 +24,7 @@ subprojects {
     repositories {}
 
     minecraft {
-        mappings channel: 'official', version: mapping_version
+        mappings channel: mapping_channel, version: mapping_version
         accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
         copyIdeResources = true
         runs {
@@ -84,17 +84,17 @@ subprojects {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         var replaceProperties = [
-                minecraft_version: minecraft_version,
-//                minecraft_version_range : minecraft_version_range,
-                forge_version    : forge_version,
-//                forge_version_range     : forge_version_range,
-//                loader_version_range    : loader_version_range,
-                mod_id           : mod_id,
-                mod_name         : mod_name,
-                mod_license      : mod_license,
-                mod_version      : mod_version,
-                mod_authors      : mod_authors,
-                mod_description  : mod_description,
+                minecraft_version      : minecraft_version,
+                minecraft_version_range: minecraft_version_range,
+                forge_version          : forge_version,
+                forge_version_range    : forge_version_range,
+                loader_version_range   : loader_version_range,
+                mod_id                 : mod_id,
+                mod_name               : mod_name,
+                mod_license            : mod_license,
+                mod_version            : mod_version,
+                mod_authors            : mod_authors,
+                mod_description        : mod_description,
         ]
         inputs.properties replaceProperties
 
@@ -138,11 +138,17 @@ subprojects {
         }
         relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.forge'
         minimize()
-        archiveClassifier = ""
+        archiveClassifier.set('')
     }
-
 
     reobf {
         shadowJar {}
     }
+    assemble {
+        doLast {
+            rootProject.file("output").mkdir()
+            shadowJar.archiveFile.get().getAsFile().renameTo(rootProject.file("output/${shadowJar.archiveFile.get().getAsFile().name}"))
+        }
+    }
+
 }
