@@ -87,7 +87,7 @@ subprojects {
         dependsOn remapJar
         doLast {
             rootProject.file("output").mkdir()
-            remapJar.archiveFile.get().getAsFile().renameTo(rootProject.file("output/${shadowJar.archiveFile.get().getAsFile().name}"))
+            remapJar.archiveFile.get().getAsFile().renameTo(rootProject.file("output/${remapJar.archiveFile.get().getAsFile().name}"))
         }
     }
 
