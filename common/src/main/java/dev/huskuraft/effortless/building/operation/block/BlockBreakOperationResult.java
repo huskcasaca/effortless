@@ -33,7 +33,7 @@ public class BlockBreakOperationResult extends BlockOperationResult {
             }
             case WORLD_DROPPED -> {
                 if (result.success()) {
-                    var color = getColor();
+                    var color = Color.RED;
                     if (color != null) {
                         yield outputs().stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getRGB())).toList();
                     }

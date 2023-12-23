@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.platform;
 
+import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.core.AxisDirection;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.ItemStack;
@@ -247,7 +248,14 @@ public class SubtitleManager {
                 var x = i * ITEM_SPACING_X;
                 var y = j * ITEM_SPACING_Y - ITEM_SPACING_Y * (int) MathUtils.ceil(1f * itemStacks.size() / MAX_COLUMN);
 
-                renderer.renderItem(getTypeface(), itemStack, x, y, Text.text(String.valueOf(itemStack.getStackSize())));
+                var text = Text.text(String.valueOf(itemStack.getStackSize()));
+                var color = ItemStackUtils.getColorTag(itemStack);
+
+                renderer.renderItem(itemStack, x + 1, y + 1);
+                renderer.pushPose();
+                renderer.translate(0, 0, 200F);
+                renderer.renderText(getTypeface(), text, x + 19 - 2 - getTypeface().measureWidth(text), y + 6 + 3, color == 0 ? 16777215 : color, true);
+                renderer.popPose();
 
                 if (i < MAX_COLUMN - 1) {
                     i += 1;

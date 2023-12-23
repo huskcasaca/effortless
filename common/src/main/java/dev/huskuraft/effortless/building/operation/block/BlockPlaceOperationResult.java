@@ -44,7 +44,7 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
     public Color getColor() {
         return switch (result) {
             case SUCCESS, CONSUME -> new Color(235, 235, 235);
-            case FAIL_ITEM_INSUFFICIENT -> new Color(235, 235, 235);
+            case FAIL_ITEM_INSUFFICIENT -> new Color(255, 0, 0);
             default -> null;
         };
     }
