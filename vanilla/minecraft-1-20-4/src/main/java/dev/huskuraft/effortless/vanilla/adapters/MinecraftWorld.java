@@ -91,10 +91,10 @@ class MinecraftWorld extends World {
             return false;
         }
 
-        playerRef.setItemInHand(InteractionHand.MAIN_HAND, originalItemStackRef);
+//        playerRef.setItemInHand(InteractionHand.MAIN_HAND, originalItemStackRef);
 
         var innerContext = new BlockPlaceContext(playerRef, InteractionHand.MAIN_HAND, itemStackRef, blockHitResultRef);
-        if (levelRef.setBlock(innerContext.getClickedPos(), blockStateRef, 11)) {
+        if (!levelRef.setBlock(innerContext.getClickedPos(), blockStateRef, 11)) {
             playerRef.setItemInHand(InteractionHand.MAIN_HAND, originalItemStackRef);
             return false;
         }
