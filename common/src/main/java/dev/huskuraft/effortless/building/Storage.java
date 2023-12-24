@@ -44,6 +44,7 @@ public interface Storage {
 
             private final Map<Item, ItemStack> cache = new HashMap<>();
 
+            // FIXME: 24/12/23
             @Override
             public Optional<ItemStack> searchByItem(Item item) {
                 var last = cache.get(item);
@@ -56,7 +57,7 @@ public interface Storage {
                         return Optional.of(itemStack);
                     }
                 }
-                cache.put(item, null);
+                cache.put(item, ItemStack.empty());
                 return Optional.empty();
             }
 
