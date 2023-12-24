@@ -38,26 +38,26 @@ public final class BlockPlaceOperation extends BlockOperation {
         }
 
         // action permission
-        if (!player.canInteract(getInteraction().getBlockPosition())) {
+        if (!player.canInteractBlock(getInteraction())) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
         }
 
         switch (context.replaceMode()) {
             case DISABLED -> {
-                if (!player.canPlaceBlock(getInteraction().getBlockPosition())) {
+                if (!player.getWorld().getBlockData(getInteraction().getBlockPosition()).isReplaceable(player, getInteraction())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
             case NORMAL, QUICK -> {
-                if (!player.canBreakBlock(getInteraction().getBlockPosition())) {
+                if (!player.getGameType().isCreative() && !player.getWorld().getBlockData(getInteraction().getBlockPosition()).isDestroyable()) {
+                    return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
+                }
+                if (!player.canAttackBlock(getInteraction().getBlockPosition())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
         }
         // action permission
-
-        // action permission
-
         var itemStack = storage.searchByItem(blockData.getItem()).orElse(null);
 
         if (itemStack == null || itemStack.isEmpty()) {
@@ -73,11 +73,13 @@ public final class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
-        if (!world.placeBlock(player, interaction, blockData, itemStack)) {
-            return BlockOperationResult.Type.FAIL_INTERNAL;
-        } else {
-            return BlockOperationResult.Type.SUCCESS;
-        }
+        // compatible layer
+        var originalItemStack = player.getItemStack(InteractionHand.MAIN);
+        player.setItemStack(InteractionHand.MAIN, itemStack);
+        var placed = player.placeBlock(interaction, blockData, itemStack);
+        player.setItemStack(InteractionHand.MAIN, originalItemStack);
+
+        return placed ? BlockOperationResult.Type.SUCCESS : BlockOperationResult.Type.FAIL_INTERNAL;
 
     }
 

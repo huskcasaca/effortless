@@ -30,7 +30,7 @@ public final class BlockBreakOperation extends BlockOperation {
         }
 
         // action permission
-        if (!player.canInteract(interaction.getBlockPosition())) {
+        if (!player.canInteractBlock(getInteraction())) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
         }
 
@@ -39,19 +39,23 @@ public final class BlockBreakOperation extends BlockOperation {
 //            return BlockInteractionResult.FAIL_PLAYER_CANNOT_ATTACK;
 //        }
 
-        // action permission
-        if (!player.canBreakBlock(interaction.getBlockPosition())) {
+        // world permission
+        if (!player.getGameType().isCreative() && !player.getWorld().getBlockData(getInteraction().getBlockPosition()).isDestroyable()) {
+            return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
+        }
+        // player permission
+        if (!player.canAttackBlock(getInteraction().getBlockPosition())) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
         }
 
-        if (world.getBlockData(interaction.getBlockPosition()).isAir()) {
+        if (world.getBlockData(getInteraction().getBlockPosition()).isAir()) {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
         if (context.isPreview() && world.isClient()) {
             return BlockOperationResult.Type.CONSUME;
         }
 
-        if (world.breakBlock(player, interaction)) {
+        if (player.breakBlock(getInteraction())) {
             return BlockOperationResult.Type.SUCCESS;
         } else {
             return BlockOperationResult.Type.FAIL_INTERNAL;

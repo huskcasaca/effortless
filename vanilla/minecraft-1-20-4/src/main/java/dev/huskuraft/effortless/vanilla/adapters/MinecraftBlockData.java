@@ -1,10 +1,8 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.core.Axis;
-import dev.huskuraft.effortless.core.BlockData;
-import dev.huskuraft.effortless.core.Item;
-import dev.huskuraft.effortless.core.Revolve;
+import dev.huskuraft.effortless.core.*;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
@@ -109,4 +107,23 @@ class MinecraftBlockData extends BlockData {
         };
     }
 
+    @Override
+    public boolean isReplaceable(Player player, BlockInteraction interaction) {
+        return getRef().canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
+                MinecraftAdapter.adapt(player),
+                MinecraftAdapter.adapt(interaction.getHand()),
+                MinecraftAdapter.adapt(player.getItemStack(interaction.getHand())),
+                MinecraftAdapter.adapt(interaction)
+        ));
+    }
+
+    @Override
+    public boolean isReplaceable() {
+        return getRef().canBeReplaced();
+    }
+
+    @Override
+    public boolean isDestroyable() {
+        return !getRef().is(BlockTags.FEATURES_CANNOT_REPLACE);
+    }
 }

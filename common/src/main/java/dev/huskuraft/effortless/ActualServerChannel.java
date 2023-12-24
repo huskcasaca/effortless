@@ -37,7 +37,7 @@ final class ActualServerChannel extends Channel<AllPacketListener> {
 
     @Override
     public void receivePacket(Packet packet, Player player) {
-        player.getWorld().getServer().execute(() -> {
+        player.getServer().execute(() -> {
             try {
                 packet.handle(listener, player);
             } catch (Exception exception) {

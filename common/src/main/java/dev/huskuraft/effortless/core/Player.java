@@ -33,14 +33,16 @@ public abstract class Player {
 
     public abstract void swing(InteractionHand hand);
 
-    public abstract boolean canInteract(BlockPosition blockPosition);
+    public abstract boolean canInteractBlock(BlockInteraction interaction);
 
-    public abstract boolean canBreakBlock(BlockPosition blockPosition);
-
-    public abstract boolean canPlaceBlock(BlockPosition blockPosition);
+    public abstract boolean canAttackBlock(BlockPosition blockPosition);
 
     public abstract GameMode getGameType();
 
     public abstract BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids);
+
+    public abstract boolean placeBlock(BlockInteraction interaction, BlockData blockData, ItemStack itemStack);
+
+    public abstract boolean breakBlock(BlockInteraction interaction);
 
 }

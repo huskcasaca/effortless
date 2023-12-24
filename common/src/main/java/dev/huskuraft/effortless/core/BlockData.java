@@ -10,4 +10,9 @@ public abstract class BlockData {
 
     public abstract Item getItem();
 
+    public abstract boolean isReplaceable(Player player, BlockInteraction interaction);
+
+    public abstract boolean isReplaceable();
+
+    public abstract boolean isDestroyable();
 }

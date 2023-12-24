@@ -11,19 +11,19 @@ import java.util.stream.Stream;
 public class Single extends SingleClickBuilder {
 
     public static BlockInteraction traceSingle(Player player, Context context) {
-        var target = player.raytrace(context.maxReachDistance(), 1f, false);
+        var interaction = player.raytrace(context.maxReachDistance(), 1f, false);
 
-        var startPos = target.getBlockPosition();
+        var startPos = interaction.getBlockPosition();
 
         var tracingAbsolute = context.isBreakingBlock() || context.replaceMode().isQuick();
-        var replaceable = player.getWorld().isBlockPlaceable(startPos);
+        var replaceable = player.getWorld().getBlockData(startPos).isReplaceable(player, interaction);
 
         var tracingRelative = !tracingAbsolute && !replaceable;
 
         if (tracingRelative) {
-            startPos = startPos.relative(target.getDirection());
+            startPos = startPos.relative(interaction.getDirection());
         }
-        return target.withPosition(startPos);
+        return interaction.withPosition(startPos);
     }
 
     public static Stream<BlockPosition> collectSingleBlocks(Context context) {
