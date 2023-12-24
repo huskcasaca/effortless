@@ -6,11 +6,11 @@ import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.platform.Server;
 import dev.huskuraft.effortless.text.Text;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.GameMasterBlock;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -115,10 +115,21 @@ class MinecraftPlayer extends Player {
     }
 
     @Override
-    public boolean placeBlock(
-            BlockInteraction interaction,
-            BlockData blockData,
-            ItemStack itemStack) {
+    public boolean tryPlaceBlock(BlockInteraction interaction, BlockData blockData, ItemStack itemStack) {
+        return ((BlockItem) MinecraftAdapter.adapt(blockData).getBlock().asItem()).place(new BlockPlaceContext(getRef(), MinecraftAdapter.adapt(interaction.getHand()), MinecraftAdapter.adapt(itemStack), MinecraftAdapter.adapt(interaction))).consumesAction();
+    }
+
+    @Override
+    public boolean tryBreakBlock(BlockInteraction interaction) {
+        var blockPosRef = MinecraftAdapter.adapt(interaction.getBlockPosition());
+        if (getRef() instanceof ServerPlayer serverPlayer) {
+            return serverPlayer.gameMode.destroyBlock(blockPosRef);
+        }
+        return Minecraft.getInstance().gameMode.destroyBlock(blockPosRef);
+    }
+
+    @Override
+    public boolean tryPlaceBlockNoCheck(BlockInteraction interaction, BlockData blockData, ItemStack itemStack) {
 
         var playerRef = getRef();
         var levelRef = MinecraftAdapter.adapt(getWorld());
@@ -126,11 +137,22 @@ class MinecraftPlayer extends Player {
         var blockStateRef = MinecraftAdapter.adapt(blockData);
         var blockItemRef = (BlockItem) blockStateRef.getBlock().asItem();
         var blockHitResultRef = MinecraftAdapter.adapt(interaction);
+        var handRef = MinecraftAdapter.adapt(interaction.getHand());
         var blockPosRef = blockHitResultRef.getBlockPos();
 
-        var innerContext = new BlockPlaceContext(playerRef, net.minecraft.world.InteractionHand.MAIN_HAND, itemStackRef, blockHitResultRef);
-        if (!levelRef.setBlock(innerContext.getClickedPos(), blockStateRef, 11)) {
+        var innerContext = new BlockPlaceContext(playerRef, handRef, itemStackRef, blockHitResultRef);
+        var isRemoved = levelRef.setBlock(innerContext.getClickedPos(), blockStateRef, 11);
+        if (!isRemoved) {
             return false;
+        }
+        var blockStateRef2 = levelRef.getBlockState(blockPosRef);
+        if (blockStateRef2.is(blockStateRef.getBlock())) {
+//            blockStateRef2 = blockItemRef.updateBlockStateFromTag(blockPosRef, levelRef, itemStack, blockStateRef2);
+//            blockItemRef.updateCustomBlockEntityTag(blockPosRef, levelRef, player, itemStack, blockStateRef2);
+            blockStateRef2.getBlock().setPlacedBy(levelRef, blockPosRef, blockStateRef2, playerRef, itemStackRef);
+            if (playerRef instanceof ServerPlayer) {
+                CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer) player, blockPosRef, itemStackRef);
+            }
         }
         if (!playerRef.getAbilities().instabuild) {
             playerRef.getMainHandItem().shrink(1);
@@ -145,9 +167,7 @@ class MinecraftPlayer extends Player {
     }
 
     @Override
-    public boolean breakBlock(
-            BlockInteraction interaction) {
-
+    public boolean tryBreakBlockNoCheck(BlockInteraction interaction) {
         var playerRef = getRef();
         var levelRef = MinecraftAdapter.adapt(getWorld());
         var blockPosRef = MinecraftAdapter.adapt(interaction.getBlockPosition());
@@ -157,8 +177,8 @@ class MinecraftPlayer extends Player {
         var fluidStateRef = levelRef.getFluidState(blockPosRef);
 
         blockRef.playerWillDestroy(levelRef, blockPosRef, blockStateRef, playerRef);
-        var removed = levelRef.setBlock(blockPosRef, fluidStateRef.createLegacyBlock(), 11);
-        if (removed) {
+        var isRemoved = levelRef.setBlock(blockPosRef, fluidStateRef.createLegacyBlock(), 11);
+        if (isRemoved) {
             blockRef.destroy(levelRef, blockPosRef, blockStateRef);
         }
         // server
@@ -167,13 +187,12 @@ class MinecraftPlayer extends Player {
         }
         var itemStackRef = playerRef.getMainHandItem();
         var itemStackRef2 = itemStackRef.copy();
-        var correctTool = playerRef.hasCorrectToolForDrops(blockStateRef);
+        var isCorrectTool = playerRef.hasCorrectToolForDrops(blockStateRef);
         itemStackRef.mineBlock(levelRef, blockStateRef, blockPosRef, playerRef);
-        if (removed && correctTool) {
+        if (isRemoved && isCorrectTool) {
             blockRef.playerDestroy(levelRef, playerRef, blockPosRef, blockStateRef, blockEntityRef, itemStackRef2);
             return true;
         }
         return false;
     }
-
 }

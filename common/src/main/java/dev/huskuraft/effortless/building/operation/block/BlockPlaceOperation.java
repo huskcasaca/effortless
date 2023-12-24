@@ -76,7 +76,7 @@ public final class BlockPlaceOperation extends BlockOperation {
         // compatible layer
         var originalItemStack = player.getItemStack(InteractionHand.MAIN);
         player.setItemStack(InteractionHand.MAIN, itemStack);
-        var placed = player.placeBlock(interaction, blockData, itemStack);
+        var placed = player.tryPlaceBlock(interaction, blockData, itemStack);
         player.setItemStack(InteractionHand.MAIN, originalItemStack);
 
         return placed ? BlockOperationResult.Type.SUCCESS : BlockOperationResult.Type.FAIL_INTERNAL;

@@ -55,7 +55,7 @@ public final class BlockBreakOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
-        if (player.breakBlock(getInteraction())) {
+        if (player.tryBreakBlock(getInteraction())) {
             return BlockOperationResult.Type.SUCCESS;
         } else {
             return BlockOperationResult.Type.FAIL_INTERNAL;
