@@ -1,5 +1,9 @@
 package dev.huskuraft.effortless.platform;
 
-public class GameVersion {
+public record GameVersion(
+        int major,
+        int minor,
+        int patch
+) {
 
 }

@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless;
 
+import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.config.*;
 import dev.huskuraft.effortless.config.serializer.BaseConfigurationSerializer;
 import dev.huskuraft.effortless.core.ClientEntrance;
@@ -104,9 +106,9 @@ final class ActualClientConfigManager extends ClientConfigManager {
                         List.of(),
                         List.of(),
                         List.of(),
-                        getEntrance().getGamePlatform().getDefaultRandomizers()),
+                        ItemRandomizer.getDefaultItemRandomizers()),
                 new PatternConfiguration(
-                        getEntrance().getGamePlatform().getDefaultPatterns())
+                        Pattern.getDefaultPatterns())
         );
     }
 

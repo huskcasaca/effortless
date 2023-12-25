@@ -1,8 +1,5 @@
 package dev.huskuraft.effortless.vanilla.platform;
 
-import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.pattern.Transformer;
-import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.core.Resource;
@@ -24,6 +21,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -40,8 +38,8 @@ public class MinecraftCommonGamePlatform extends GamePlatform {
     }
 
     @Override
-    public Item newItem(Resource resource) {
-        return MinecraftAdapter.adapt(BuiltInRegistries.ITEM.get(MinecraftAdapter.adapt(resource)));
+    public Optional<Item> newOptionalItem(Resource resource) {
+        return BuiltInRegistries.ITEM.getOptional(MinecraftAdapter.adapt(resource)).map(MinecraftAdapter::adapt);
     }
 
     @Override
@@ -85,21 +83,6 @@ public class MinecraftCommonGamePlatform extends GamePlatform {
     @Override
     public Text newTranslatableText(String text, Text... args) {
         return MinecraftAdapter.adapt(Component.translatable(text, Arrays.stream(args).map(MinecraftAdapter::adapt).toArray(Object[]::new)));
-    }
-
-    @Override
-    public List<ItemRandomizer> getDefaultRandomizers() {
-        return List.of();
-    }
-
-    @Override
-    public List<Transformer> getDefaultTransformers() {
-        return List.of();
-    }
-
-    @Override
-    public List<Pattern> getDefaultPatterns() {
-        return List.of();
     }
 
     @Override

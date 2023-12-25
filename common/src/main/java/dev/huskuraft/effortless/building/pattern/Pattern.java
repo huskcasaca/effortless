@@ -88,5 +88,11 @@ public final class Pattern {
                 "transformers=" + transformers + ']';
     }
 
+    public static List<Pattern> getDefaultPatterns() {
+        return List.of(
+                Pattern.DEFAULT
+        );
+    }
+
 
 }

@@ -71,7 +71,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.reset"), button -> {
-            entries.reset(getEntrance().getGamePlatform().getDefaultRandomizers());
+            entries.reset(ItemRandomizer.getDefaultItemRandomizers());
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 1f).build());
 
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.done"), button -> {

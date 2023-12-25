@@ -4,11 +4,17 @@ import dev.huskuraft.effortless.building.BuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
+import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
+import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
+import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
+import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.math.BoundingBox3d;
 import dev.huskuraft.effortless.text.Text;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class Transformer {
@@ -73,5 +79,17 @@ public abstract class Transformer {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
+
+    public static List<Transformer> getDefaultTransformers() {
+        return Stream.of(
+                List.of(ArrayTransformer.ZERO),
+                List.of(MirrorTransformer.ZERO_X),
+                List.of(MirrorTransformer.ZERO_Y),
+                List.of(MirrorTransformer.ZERO_Z),
+                List.of(RadialTransformer.ZERO),
+                ItemRandomizer.getDefaultItemRandomizers()
+        ).flatMap(List::stream).collect(Collectors.toList());
+    }
+
 
 }
