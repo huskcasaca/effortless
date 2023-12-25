@@ -1,12 +1,9 @@
 package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
-import dev.huskuraft.effortless.config.ConfigReader;
-import dev.huskuraft.effortless.config.ConfigWriter;
 import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import dev.huskuraft.effortless.vanilla.content.MinecraftCommonGamePlatform;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -64,16 +61,6 @@ public class ForgeEffortless extends Effortless {
     @Override
     public Path getConfigDir() {
         return FMLLoader.getGamePath().resolve("config");
-    }
-
-    @Override
-    public ConfigReader getConfigReader() {
-        return input -> MinecraftAdapter.adapt(NbtIo.readCompressed(input));
-    }
-
-    @Override
-    public ConfigWriter getConfigWriter() {
-        return (output, config) -> NbtIo.writeCompressed(MinecraftAdapter.adapt(config), output);
     }
 
     @Override

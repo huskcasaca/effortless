@@ -3,19 +3,22 @@ package dev.huskuraft.effortless.vanilla.content;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.platform.GamePlatform;
-import dev.huskuraft.effortless.platform.SearchBy;
-import dev.huskuraft.effortless.platform.SearchTree;
+import dev.huskuraft.effortless.config.ConfigReader;
+import dev.huskuraft.effortless.config.ConfigWriter;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.networking.Buffer;
+import dev.huskuraft.effortless.platform.GamePlatform;
+import dev.huskuraft.effortless.platform.SearchBy;
+import dev.huskuraft.effortless.platform.SearchTree;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
@@ -108,4 +111,15 @@ public class MinecraftCommonGamePlatform extends GamePlatform {
     public <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
         return SearchTree.empty();
     }
+
+    @Override
+    public ConfigReader getConfigReader() {
+        return input -> MinecraftAdapter.adapt(NbtIo.readCompressed(input));
+    }
+
+    @Override
+    public ConfigWriter getConfigWriter() {
+        return (output, config) -> NbtIo.writeCompressed(MinecraftAdapter.adapt(config), output);
+    }
+
 }

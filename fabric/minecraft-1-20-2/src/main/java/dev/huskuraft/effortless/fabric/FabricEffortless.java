@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.fabric;
 
 import dev.huskuraft.effortless.Effortless;
-import dev.huskuraft.effortless.config.ConfigReader;
-import dev.huskuraft.effortless.config.ConfigWriter;
 import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import dev.huskuraft.effortless.vanilla.content.MinecraftCommonGamePlatform;
@@ -10,7 +8,6 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.nio.file.Path;
@@ -51,16 +48,6 @@ public class FabricEffortless extends Effortless implements ModInitializer {
     @Override
     public Path getConfigDir() {
         return FabricLoader.getInstance().getConfigDir();
-    }
-
-    @Override
-    public ConfigReader getConfigReader() {
-        return input -> MinecraftAdapter.adapt(NbtIo.readCompressed(input));
-    }
-
-    @Override
-    public ConfigWriter getConfigWriter() {
-        return (output, config) -> NbtIo.writeCompressed(MinecraftAdapter.adapt(config), output);
     }
 
     @Override

@@ -3,15 +3,13 @@ package dev.huskuraft.effortless.fabric;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.config.ConfigReader;
-import dev.huskuraft.effortless.config.ConfigWriter;
-import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.fabric.events.GuiRenderEvents;
 import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
 import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
+import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
 import dev.huskuraft.effortless.vanilla.content.MinecraftClientGamePlatform;
@@ -26,8 +24,6 @@ import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.nbt.NbtAccounter;
-import net.minecraft.nbt.NbtIo;
 
 import java.nio.file.Path;
 
@@ -107,16 +103,6 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
     @Override
     public Path getConfigDir() {
         return FabricLoader.getInstance().getConfigDir();
-    }
-
-    @Override
-    public ConfigReader getConfigReader() {
-        return input -> MinecraftClientAdapter.adapt(NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap()));
-    }
-
-    @Override
-    public ConfigWriter getConfigWriter() {
-        return (output, config) -> NbtIo.writeCompressed(MinecraftClientAdapter.adapt(config), output);
     }
 
     @Override

@@ -2,11 +2,9 @@ package dev.huskuraft.effortless.core;
 
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.config.ConfigManager;
-import dev.huskuraft.effortless.config.ConfigReader;
-import dev.huskuraft.effortless.config.ConfigWriter;
-import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.events.EventsRegistry;
 import dev.huskuraft.effortless.networking.Channel;
+import dev.huskuraft.effortless.platform.GamePlatform;
 
 import java.nio.file.Path;
 import java.util.logging.Logger;
@@ -34,10 +32,6 @@ public abstract class Entrance {
     public abstract Path getGameDir();
 
     public abstract Path getConfigDir();
-
-    public abstract ConfigReader getConfigReader();
-
-    public abstract ConfigWriter getConfigWriter();
 
     public abstract GamePlatform getGamePlatform();
 
