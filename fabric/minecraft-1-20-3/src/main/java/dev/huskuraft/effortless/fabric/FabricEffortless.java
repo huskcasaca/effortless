@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.fabric;
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
-import dev.huskuraft.effortless.vanilla.content.MinecraftCommonGamePlatform;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonGamePlatform;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;

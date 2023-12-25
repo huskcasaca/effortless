@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
 import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
-import dev.huskuraft.effortless.vanilla.content.MinecraftClientGamePlatform;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftClientGamePlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

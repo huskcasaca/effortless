@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.vanilla.content;
+package dev.huskuraft.effortless.vanilla.platform;
 
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
@@ -18,7 +18,6 @@ import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -115,7 +114,7 @@ public class MinecraftCommonGamePlatform extends GamePlatform {
 
     @Override
     public TagIoReader getTagIoReader() {
-        return input -> MinecraftAdapter.adapt(NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap()));
+        return input -> MinecraftAdapter.adapt(NbtIo.readCompressed(input));
     }
 
     @Override

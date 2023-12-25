@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.vanilla.content;
+package dev.huskuraft.effortless.vanilla.platform;
 
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
@@ -8,10 +8,10 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
-import dev.huskuraft.effortless.platform.SearchBy;
-import dev.huskuraft.effortless.platform.SearchTree;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.platform.SearchBy;
+import dev.huskuraft.effortless.platform.SearchTree;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
 import net.minecraft.client.Minecraft;

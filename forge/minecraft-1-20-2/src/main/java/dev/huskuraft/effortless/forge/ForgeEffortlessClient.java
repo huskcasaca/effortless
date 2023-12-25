@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
-import dev.huskuraft.effortless.vanilla.content.MinecraftClientGamePlatform;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftClientGamePlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;

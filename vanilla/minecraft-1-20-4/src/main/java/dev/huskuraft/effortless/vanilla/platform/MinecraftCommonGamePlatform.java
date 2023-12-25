@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.vanilla.content;
+package dev.huskuraft.effortless.vanilla.platform;
 
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
