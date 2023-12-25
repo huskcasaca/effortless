@@ -3,12 +3,12 @@ package dev.huskuraft.effortless.platform;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.config.ConfigReader;
-import dev.huskuraft.effortless.config.ConfigWriter;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.networking.Buffer;
+import dev.huskuraft.effortless.tag.TagIoReader;
+import dev.huskuraft.effortless.tag.TagIoWriter;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
 
@@ -50,8 +50,8 @@ public abstract class GamePlatform {
 
     public abstract <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor);
 
-    public abstract ConfigReader getConfigReader();
+    public abstract TagIoReader getTagIoReader();
 
-    public abstract ConfigWriter getConfigWriter();
+    public abstract TagIoWriter getTagIoWriter();
 
 }

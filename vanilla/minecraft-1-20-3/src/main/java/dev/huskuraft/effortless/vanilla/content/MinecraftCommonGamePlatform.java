@@ -3,8 +3,6 @@ package dev.huskuraft.effortless.vanilla.content;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.config.ConfigReader;
-import dev.huskuraft.effortless.config.ConfigWriter;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.core.Resource;
@@ -12,6 +10,8 @@ import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.platform.SearchBy;
 import dev.huskuraft.effortless.platform.SearchTree;
+import dev.huskuraft.effortless.tag.TagIoReader;
+import dev.huskuraft.effortless.tag.TagIoWriter;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
@@ -114,12 +114,12 @@ public class MinecraftCommonGamePlatform extends GamePlatform {
     }
 
     @Override
-    public ConfigReader getConfigReader() {
+    public TagIoReader getTagIoReader() {
         return input -> MinecraftAdapter.adapt(NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap()));
     }
 
     @Override
-    public ConfigWriter getConfigWriter() {
+    public TagIoWriter getTagIoWriter() {
         return (output, config) -> NbtIo.writeCompressed(MinecraftAdapter.adapt(config), output);
     }
 
