@@ -1,17 +1,24 @@
+![Radial Menu](assets/logo.png)
+
 # Effortless
 [Effortless]() is a multiplatform mod for placing and breaking blocks in Minecraft. It offers a set of modes allowing players to create structures and designs with ease. Additionally, it includes an randomizer that randomly selects items from a pre-defined list for random placement.
 
 ## Screenshots
 ### Building Menu
-![Radial Menu](screenshots/radial_menu.png)
+
+![Radial Menu](assets/screenshots/radial_menu.png)
 ### Line Mode
-![Line Mode](screenshots/line_mode.png)
+
+![Line Mode](assets/screenshots/line_mode.png)
 ### Filled Wall Mode
-![Filled Wall Mode](screenshots/filled_wall_mode.png)
+
+![Filled Wall Mode](assets/screenshots/filled_wall_mode.png)
 ### Filled Floor Mode
-![Filled Floor Mode](screenshots/filled_floor_mode.png)
+
+![Filled Floor Mode](assets/screenshots/filled_floor_mode.png)
 ### Filled Cube Mode
-![Filled Cube Mode](screenshots/filled_cube_mode.png)
+
+![Filled Cube Mode](assets/screenshots/filled_cube_mode.png)
 
 ## Building
 Hold ALT key to switch build modes in the radial panel. There are buttons for undo/redo, transformer settings and replace modes on the left. The options for each build mode (like a filled vs hollow wall) are on the right.
