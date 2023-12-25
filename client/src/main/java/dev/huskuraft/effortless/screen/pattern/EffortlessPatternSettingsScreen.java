@@ -89,7 +89,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.reset"), button -> {
-            entries.reset(getEntrance().getContentCreator().getDefaultPatterns());
+            entries.reset(getEntrance().getGamePlatform().getDefaultPatterns());
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.5f).build());
 
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.done"), button -> {

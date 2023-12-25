@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.Effortless;
 public abstract class Item {
 
     public static Item fromId(Resource id) {
-        return Effortless.getInstance().getContentCreator().item(id);
+        return Effortless.getInstance().getGamePlatform().newItem(id);
     }
 
     public abstract ItemStack getDefaultStack();

@@ -123,7 +123,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
                         entries.insertSelected(transformer);
                         onReload();
                     },
-                    getEntrance().getContentCreator().getDefaultTransformers()
+                    getEntrance().getGamePlatform().getDefaultTransformers()
             ).attach();
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 

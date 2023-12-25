@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.config.ConfigManager;
 import dev.huskuraft.effortless.config.ConfigReader;
 import dev.huskuraft.effortless.config.ConfigWriter;
-import dev.huskuraft.effortless.content.ContentCreator;
+import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.events.EventsRegistry;
 import dev.huskuraft.effortless.networking.Channel;
 
@@ -39,7 +39,7 @@ public abstract class Entrance {
 
     public abstract ConfigWriter getConfigWriter();
 
-    public abstract ContentCreator getContentCreator();
+    public abstract GamePlatform getGamePlatform();
 
     public abstract Environment getEnvironment();
 

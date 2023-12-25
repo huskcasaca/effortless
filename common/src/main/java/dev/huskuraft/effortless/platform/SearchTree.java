@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.content;
+package dev.huskuraft.effortless.platform;
 
 import java.util.List;
 import java.util.function.Function;

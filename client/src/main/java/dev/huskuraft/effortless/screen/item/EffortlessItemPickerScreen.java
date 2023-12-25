@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.screen.item;
 
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.content.SearchBy;
+import dev.huskuraft.effortless.platform.SearchBy;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.gui.AbstractScreen;
@@ -36,7 +36,7 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
         var itemStacks = new ArrayList<Item>();
         if (player != null) {
 //            CreativeModeTabs.tryRebuildTabContents(((LocalPlayer) player).connection.enabledFeatures(), FabricAdapter.adapt(player).canUseGameMasterBlocks(), FabricAdapter.adapt(player).level().registryAccess());
-            itemStacks.add(getEntrance().getContentCreator().itemStack().getItem());
+            itemStacks.add(getEntrance().getGamePlatform().newItemStack().getItem());
 //            itemStack.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
 //            itemStack.add(new ItemStack(Items.AIR));
 //            itemStack.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
@@ -82,10 +82,10 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
 
     private void setSearchResult(String string) {
         if (string.startsWith("#")) {
-            var searchTree = getEntrance().getContentCreator().itemStackSearchTree(SearchBy.TAG);
+            var searchTree = getEntrance().getGamePlatform().newItemStackSearchTree(SearchBy.TAG);
             entries.reset(searchTree.search(string.substring(1).toLowerCase(Locale.ROOT)));
         } else {
-            var searchTree = getEntrance().getContentCreator().itemStackSearchTree(SearchBy.NAME);
+            var searchTree = getEntrance().getGamePlatform().newItemStackSearchTree(SearchBy.NAME);
             entries.reset(searchTree.search(string.toLowerCase(Locale.ROOT)));
         }
         entries.setSelected(null);

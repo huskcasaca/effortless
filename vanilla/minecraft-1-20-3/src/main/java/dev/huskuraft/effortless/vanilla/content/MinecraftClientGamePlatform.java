@@ -8,8 +8,8 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
-import dev.huskuraft.effortless.content.SearchBy;
-import dev.huskuraft.effortless.content.SearchTree;
+import dev.huskuraft.effortless.platform.SearchBy;
+import dev.huskuraft.effortless.platform.SearchTree;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.text.Text;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MinecraftClientContentCreator extends MinecraftServerContentCreator {
+public class MinecraftClientGamePlatform extends MinecraftCommonGamePlatform {
 
     private static Chance<Item> chance(net.minecraft.world.item.Item item, byte count) {
         return Chance.of(MinecraftClientAdapter.adapt(item), count);
@@ -324,7 +324,7 @@ public class MinecraftClientContentCreator extends MinecraftServerContentCreator
     }
 
     @Override
-    public SearchTree<ItemStack> itemStackSearchTree(SearchBy searchBy) {
+    public SearchTree<ItemStack> newItemStackSearchTree(SearchBy searchBy) {
         var player = Minecraft.getInstance().player;
         CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), true, player.clientLevel.registryAccess());
 
@@ -337,7 +337,7 @@ public class MinecraftClientContentCreator extends MinecraftServerContentCreator
     }
 
     @Override
-    public <T> SearchTree<T> searchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
+    public <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
         return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> MinecraftClientAdapter.adapt(text).getString())).search(query);
     }
 

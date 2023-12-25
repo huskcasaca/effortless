@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.content;
+package dev.huskuraft.effortless.platform;
 
 public enum SearchBy {
     NAME,

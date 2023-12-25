@@ -61,7 +61,7 @@ final class ActualClientConfigManager extends ClientConfigManager {
             var configFile = new File(dataDir, CONFIG_NAME);
 
 
-            var tag = getEntrance().getContentCreator().tagRecord();
+            var tag = getEntrance().getGamePlatform().newTagRecord();
             config.validate();
             new BaseConfigurationSerializer().write(tag, config);
             getEntrance().getConfigWriter().write(new FileOutputStream(configFile), tag);
@@ -104,9 +104,9 @@ final class ActualClientConfigManager extends ClientConfigManager {
                         List.of(),
                         List.of(),
                         List.of(),
-                        getEntrance().getContentCreator().getDefaultRandomizers()),
+                        getEntrance().getGamePlatform().getDefaultRandomizers()),
                 new PatternConfiguration(
-                        getEntrance().getContentCreator().getDefaultPatterns())
+                        getEntrance().getGamePlatform().getDefaultPatterns())
         );
     }
 

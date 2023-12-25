@@ -3,9 +3,9 @@ package dev.huskuraft.effortless.forge;
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.config.ConfigReader;
 import dev.huskuraft.effortless.config.ConfigWriter;
-import dev.huskuraft.effortless.content.ContentCreator;
+import dev.huskuraft.effortless.platform.GamePlatform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
-import dev.huskuraft.effortless.vanilla.content.MinecraftServerContentCreator;
+import dev.huskuraft.effortless.vanilla.content.MinecraftCommonGamePlatform;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -77,8 +77,8 @@ public class ForgeEffortless extends Effortless {
     }
 
     @Override
-    public ContentCreator getContentCreator() {
-        return new MinecraftServerContentCreator();
+    public GamePlatform getGamePlatform() {
+        return new MinecraftCommonGamePlatform();
     }
 
     @Override
