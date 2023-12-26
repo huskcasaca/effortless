@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftItemStack;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -40,20 +41,20 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public ItemStack newItemStack() {
-        return MinecraftAdapter.adapt(net.minecraft.world.item.ItemStack.EMPTY);
+        return new MinecraftItemStack(net.minecraft.world.item.ItemStack.EMPTY);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count) {
         var itemStack = new net.minecraft.world.item.ItemStack(MinecraftAdapter.adapt(item), count);
-        return MinecraftAdapter.adapt(itemStack);
+        return new MinecraftItemStack(itemStack);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count, TagRecord tag) {
         var itemStack = new net.minecraft.world.item.ItemStack(MinecraftAdapter.adapt(item), count);
         itemStack.setTag(MinecraftAdapter.adapt(tag));
-        return MinecraftAdapter.adapt(itemStack);
+        return new MinecraftItemStack(itemStack);
     }
 
     @Override

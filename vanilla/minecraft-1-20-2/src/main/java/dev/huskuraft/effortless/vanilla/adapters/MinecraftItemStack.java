@@ -15,7 +15,7 @@ public class MinecraftItemStack extends ItemStack {
 
     private final net.minecraft.world.item.ItemStack itemStack;
 
-    MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
+    public MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
@@ -95,7 +95,7 @@ public class MinecraftItemStack extends ItemStack {
 
     @Override
     public boolean itemEquals(ItemStack itemStack) {
-        return getRef().is(MinecraftAdapter.adapt(itemStack).getItem());
+        return getRef().is(((MinecraftItemStack) itemStack).getRef().getItem());
     }
 
     @Override

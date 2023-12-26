@@ -138,7 +138,7 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderItem(ItemStack stack, int x, int y) {
-        proxy.renderItem(MinecraftClientAdapter.adapt(stack), x, y);
+        proxy.renderItem(((MinecraftItemStack) stack).getRef(), x, y);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderTooltip(Typeface typeface, ItemStack itemStack, int x, int y) {
-        proxy.renderTooltip(MinecraftClientAdapter.adapt(typeface), MinecraftClientAdapter.adapt(itemStack), x, y);
+        proxy.renderTooltip(MinecraftClientAdapter.adapt(typeface), ((MinecraftItemStack) itemStack).getRef(), x, y);
     }
 
     @Override

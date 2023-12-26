@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.platform.SearchTree;
 import dev.huskuraft.effortless.platform.VanillaKeys;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftItemStack;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MinecraftClientPlatform extends MinecraftCommonPlatform implements ClientPlatform {
@@ -31,7 +33,7 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
                     case NAME -> SearchRegistry.CREATIVE_NAMES;
                     case TAG -> SearchRegistry.CREATIVE_TAGS;
                 }
-        ).search(query).stream().map(MinecraftClientAdapter::adapt).toList();
+        ).search(query).stream().map(MinecraftItemStack::new).collect(Collectors.toList());
     }
 
     @Override

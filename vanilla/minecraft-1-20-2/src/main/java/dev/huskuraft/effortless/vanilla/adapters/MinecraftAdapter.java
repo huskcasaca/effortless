@@ -23,20 +23,6 @@ import net.minecraft.world.phys.Vec3;
 
 public class MinecraftAdapter {
 
-    public static ItemStack adapt(net.minecraft.world.item.ItemStack itemStack) {
-        if (itemStack == null) {
-            return null;
-        }
-        return new MinecraftItemStack(itemStack);
-    }
-
-    public static net.minecraft.world.item.ItemStack adapt(ItemStack itemStack) {
-        if (itemStack == null) {
-            return null;
-        }
-        return ((MinecraftItemStack) itemStack).getRef();
-    }
-
     public static Item adapt(net.minecraft.world.item.Item item) {
         if (item == null) {
             return null;

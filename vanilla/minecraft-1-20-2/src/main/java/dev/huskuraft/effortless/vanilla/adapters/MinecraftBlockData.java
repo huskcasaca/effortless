@@ -112,7 +112,7 @@ public class MinecraftBlockData extends BlockData {
         return getRef().canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
                 ((MinecraftPlayer) player).getRef(),
                 MinecraftAdapter.adapt(interaction.getHand()),
-                MinecraftAdapter.adapt(player.getItemStack(interaction.getHand())),
+                ((MinecraftItemStack) player.getItemStack(interaction.getHand())).getRef(),
                 MinecraftAdapter.adapt(interaction)
         ));
     }

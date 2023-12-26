@@ -45,7 +45,7 @@ public class MinecraftPlayer extends Player {
         if (getRef().isCreative()) {
             return Storage.fullStorage();
         }
-        return Storage.create(getRef().getInventory().items.stream().map(MinecraftAdapter::adapt).collect(Collectors.toList()));
+        return Storage.create(getRef().getInventory().items.stream().map(MinecraftItemStack::new).collect(Collectors.toList()));
     }
 
     @Override
@@ -70,12 +70,12 @@ public class MinecraftPlayer extends Player {
 
     @Override
     public ItemStack getItemStack(InteractionHand hand) {
-        return MinecraftAdapter.adapt(getRef().getItemInHand(MinecraftAdapter.adapt(hand)));
+        return new MinecraftItemStack(getRef().getItemInHand(MinecraftAdapter.adapt(hand)));
     }
 
     @Override
     public void setItemStack(InteractionHand hand, ItemStack itemStack) {
-        getRef().setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, MinecraftAdapter.adapt(itemStack));
+        getRef().setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ((MinecraftItemStack) itemStack).getRef());
     }
 
     @Override
@@ -114,7 +114,7 @@ public class MinecraftPlayer extends Player {
 
     @Override
     public boolean tryPlaceBlock(BlockInteraction interaction, BlockData blockData, ItemStack itemStack) {
-        return ((BlockItem) MinecraftAdapter.adapt(blockData).getBlock().asItem()).place(new BlockPlaceContext(getRef(), MinecraftAdapter.adapt(interaction.getHand()), MinecraftAdapter.adapt(itemStack), MinecraftAdapter.adapt(interaction))).consumesAction();
+        return ((BlockItem) MinecraftAdapter.adapt(blockData).getBlock().asItem()).place(new BlockPlaceContext(getRef(), MinecraftAdapter.adapt(interaction.getHand()), ((MinecraftItemStack) itemStack).getRef(), MinecraftAdapter.adapt(interaction))).consumesAction();
     }
 
     @Override

@@ -94,7 +94,7 @@ public class MinecraftBuffer extends Buffer {
 
     @Override
     public ItemStack readItemStack() {
-        return MinecraftAdapter.adapt(getRef().readItem());
+        return new MinecraftItemStack(getRef().readItem());
     }
 
     @Override
@@ -174,7 +174,7 @@ public class MinecraftBuffer extends Buffer {
 
     @Override
     public void writeItemStack(ItemStack value) {
-        getRef().writeItem(MinecraftAdapter.adapt(value));
+        getRef().writeItem(((MinecraftItemStack) value).getRef());
     }
 
     @Override

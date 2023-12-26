@@ -20,7 +20,7 @@ public class MinecraftItem extends Item {
 
     @Override
     public ItemStack getDefaultStack() {
-        return MinecraftAdapter.adapt(getRef().getDefaultInstance());
+        return new MinecraftItemStack(getRef().getDefaultInstance());
     }
 
     @Override
