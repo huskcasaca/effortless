@@ -26,12 +26,27 @@ public class MinecraftClient extends Client {
 
     @Override
     public Screen getPanel() {
-        return MinecraftClientAdapter.adapt(getRef().screen);
+        if (getRef().screen == null) {
+            return null;
+        }
+        if (getRef().screen instanceof MinecraftProxyScreen proxyScreen) {
+            return proxyScreen.getProxy();
+        }
+        return new MinecraftScreen(getRef().screen);
     }
 
     @Override
     public void setPanel(Screen screen) {
-        getRef().setScreen(MinecraftClientAdapter.adapt(screen));
+        if (screen == null) {
+            getRef().setScreen(null);
+            return;
+        }
+        if (screen instanceof MinecraftScreen screen1) {
+            getRef().setScreen(screen1.getRef());
+            return;
+        }
+        getRef().setScreen(new MinecraftProxyScreen(screen));
+
     }
 
     @Override
