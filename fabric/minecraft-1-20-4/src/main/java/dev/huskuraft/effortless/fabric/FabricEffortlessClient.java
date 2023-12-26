@@ -107,7 +107,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
     }
 
     @Override
-    public ClientPlatform getGamePlatform() {
+    public ClientPlatform getPlatform() {
         return new MinecraftClientPlatform();
     }
 

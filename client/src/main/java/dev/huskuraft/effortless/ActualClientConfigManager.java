@@ -41,7 +41,7 @@ final class ActualClientConfigManager extends ClientConfigManager {
             if (!configFile.exists()) {
                 throw new IOException("Could not find config file: " + configFile.getName());
             }
-            var tag = getEntrance().getGamePlatform().getTagIoReader().read(new FileInputStream(configFile));
+            var tag = getEntrance().getPlatform().getTagIoReader().read(new FileInputStream(configFile));
 
             var read = new BaseConfigurationSerializer().read(tag);
             read.validate();
@@ -63,10 +63,10 @@ final class ActualClientConfigManager extends ClientConfigManager {
             var configFile = new File(dataDir, CONFIG_NAME);
 
 
-            var tag = getEntrance().getGamePlatform().newTagRecord();
+            var tag = getEntrance().getPlatform().newTagRecord();
             config.validate();
             new BaseConfigurationSerializer().write(tag, config);
-            getEntrance().getGamePlatform().getTagIoWriter().write(new FileOutputStream(configFile), tag);
+            getEntrance().getPlatform().getTagIoWriter().write(new FileOutputStream(configFile), tag);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.warning("Cannot save config file");

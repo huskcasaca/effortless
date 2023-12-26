@@ -43,7 +43,7 @@ final class ActualClientChannel extends Channel<AllPacketListener> {
 
     @Override
     public Buffer allocateButter() {
-        return getEntrance().getGamePlatform().newBuffer();
+        return getEntrance().getPlatform().newBuffer();
     }
 
     private void onRegisterHandler(NetworkRegistry registry) {

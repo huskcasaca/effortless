@@ -51,7 +51,7 @@ public class FabricEffortless extends Effortless implements ModInitializer {
     }
 
     @Override
-    public Platform getGamePlatform() {
+    public Platform getPlatform() {
         return new MinecraftCommonPlatform();
     }
 

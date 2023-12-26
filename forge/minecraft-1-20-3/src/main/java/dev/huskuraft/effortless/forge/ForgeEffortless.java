@@ -64,7 +64,7 @@ public class ForgeEffortless extends Effortless {
     }
 
     @Override
-    public Platform getGamePlatform() {
+    public Platform getPlatform() {
         return new MinecraftCommonPlatform();
     }
 

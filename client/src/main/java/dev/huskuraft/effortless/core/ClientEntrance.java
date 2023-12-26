@@ -14,7 +14,7 @@ public abstract class ClientEntrance extends Entrance {
 
     public abstract ClientConfigManager getConfigManager();
 
-    public abstract ClientPlatform getGamePlatform();
+    public abstract ClientPlatform getPlatform();
 
     public Client getClient() {
         return getClientManager().getRunningClient();

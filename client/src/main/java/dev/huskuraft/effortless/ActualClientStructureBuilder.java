@@ -208,9 +208,9 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     }
 
     private void tickCooldown() {
-        if (EffortlessClient.getInstance().getGamePlatform().getKeyBinding(KeyBindings.ATTACK).isDown() ||
-                EffortlessClient.getInstance().getGamePlatform().getKeyBinding(KeyBindings.USE).isDown() ||
-                EffortlessClient.getInstance().getGamePlatform().getKeyBinding(KeyBindings.PICK).isDown()) {
+        if (EffortlessClient.getInstance().getPlatform().getKeyBinding(KeyBindings.ATTACK).isDown() ||
+                EffortlessClient.getInstance().getPlatform().getKeyBinding(KeyBindings.USE).isDown() ||
+                EffortlessClient.getInstance().getPlatform().getKeyBinding(KeyBindings.PICK).isDown()) {
             return;
         }
         interactionCooldown = Math.max(0, interactionCooldown - 1);

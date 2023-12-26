@@ -5,23 +5,23 @@ import dev.huskuraft.effortless.Effortless;
 public abstract class Text {
 
     public static Text empty() {
-        return Effortless.getInstance().getGamePlatform().newText();
+        return Effortless.getInstance().getPlatform().newText();
     }
 
     public static Text text(String text) {
-        return Effortless.getInstance().getGamePlatform().newText(text);
+        return Effortless.getInstance().getPlatform().newText(text);
     }
 
     public static Text text(String text, Text... args) {
-        return Effortless.getInstance().getGamePlatform().newText(text, args);
+        return Effortless.getInstance().getPlatform().newText(text, args);
     }
 
     public static Text translate(String text) {
-        return Effortless.getInstance().getGamePlatform().newTranslatableText(text);
+        return Effortless.getInstance().getPlatform().newTranslatableText(text);
     }
 
     public static Text translate(String text, Text... args) {
-        return Effortless.getInstance().getGamePlatform().newTranslatableText(text, args);
+        return Effortless.getInstance().getPlatform().newTranslatableText(text, args);
     }
 
     public abstract Text withStyle(TextStyle... styles);

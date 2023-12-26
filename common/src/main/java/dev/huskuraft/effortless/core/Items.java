@@ -1343,7 +1343,7 @@ public enum Items {
     ;
 
     public Item item() {
-        return Effortless.getInstance().getGamePlatform().getItem(this);
+        return Effortless.getInstance().getPlatform().getItem(this);
     }
 
 }

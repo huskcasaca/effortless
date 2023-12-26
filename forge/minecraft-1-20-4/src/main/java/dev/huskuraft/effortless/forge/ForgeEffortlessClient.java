@@ -16,7 +16,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -63,7 +62,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
     }
 
     @Override
-    public ClientPlatform getGamePlatform() {
+    public ClientPlatform getPlatform() {
         return new MinecraftClientPlatform();
     }
 
@@ -142,7 +141,6 @@ public class ForgeEffortlessClient extends EffortlessClient {
     public void onInteractionInput(InputEvent.InteractionKeyMappingTriggered event) {
         if (onClientPlayerInteract(MinecraftClientAdapter.adapt(Minecraft.getInstance().player), event.isAttack() ? InteractionType.HIT : event.isUseItem() ? InteractionType.USE : InteractionType.UNKNOWN, MinecraftClientAdapter.adapt(event.getHand())).interruptsFurtherEvaluation()) {
             event.setCanceled(true);
-            event.setResult(Event.Result.DENY);
             event.setSwingHand(false);
         }
     }

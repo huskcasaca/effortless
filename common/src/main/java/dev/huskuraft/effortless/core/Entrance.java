@@ -33,7 +33,7 @@ public abstract class Entrance {
 
     public abstract Path getConfigDir();
 
-    public abstract Platform getGamePlatform();
+    public abstract Platform getPlatform();
 
     public abstract Environment getEnvironment();
 
