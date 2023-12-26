@@ -29,7 +29,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
 
     @Override
     public void onInitializeClient() {
-        onClientStart(MinecraftClientAdapter.adapt(Minecraft.getInstance()));
+        onClientStart(new MinecraftClient(Minecraft.getInstance()));
         onRegisterNetwork(receiver -> {
             var channelId = MinecraftAdapter.adapt(Effortless.CHANNEL_ID);
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
@@ -47,11 +47,11 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
-            onClientTick(MinecraftClientAdapter.adapt(minecraft), TickPhase.START);
+            onClientTick(new MinecraftClient(minecraft), TickPhase.START);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            onClientTick(MinecraftClientAdapter.adapt(minecraft), TickPhase.END);
+            onClientTick(new MinecraftClient(minecraft), TickPhase.END);
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {

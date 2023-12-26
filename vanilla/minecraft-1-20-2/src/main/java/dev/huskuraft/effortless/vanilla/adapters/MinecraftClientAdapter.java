@@ -1,39 +1,15 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.gui.Screen;
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.input.KeyBinding;
-import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.renderer.RenderType;
 import dev.huskuraft.effortless.renderer.Renderer;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class MinecraftClientAdapter extends MinecraftAdapter {
-
-    public static Player adapt(net.minecraft.world.entity.player.Player player) {
-        if (player == null) {
-            return null;
-        }
-        return new MinecraftClientPlayer(player);
-    }
-
-    public static net.minecraft.world.entity.player.Player adapt(Player player) {
-        if (player == null) {
-            return null;
-        }
-        return ((MinecraftClientPlayer) player).getRef();
-    }
-
-    public static Client adapt(Minecraft client) {
-        if (client == null) {
-            return null;
-        }
-        return new MinecraftClient(client);
-    }
 
     public static Screen adapt(net.minecraft.client.gui.screens.Screen screen) {
         if (screen == null) {

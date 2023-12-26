@@ -16,7 +16,7 @@ public class MinecraftClient extends Client {
 
     private final Minecraft minecraft;
 
-    MinecraftClient(Minecraft minecraft) {
+    public MinecraftClient(Minecraft minecraft) {
         this.minecraft = minecraft;
     }
 
@@ -36,7 +36,7 @@ public class MinecraftClient extends Client {
 
     @Override
     public Player getPlayer() {
-        return MinecraftClientAdapter.adapt(getRef().player);
+        return new MinecraftClientPlayer(getRef().player);
     }
 
     @Override

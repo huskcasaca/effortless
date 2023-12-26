@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientPlayer;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
@@ -82,7 +83,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
-        onClientStart(MinecraftClientAdapter.adapt(Minecraft.getInstance()));
+        onClientStart(new MinecraftClient(Minecraft.getInstance()));
         onRegisterNetwork(receiver -> {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
@@ -113,7 +114,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        onClientTick(MinecraftClientAdapter.adapt(Minecraft.getInstance()), switch (event.phase) {
+        onClientTick(new MinecraftClient(Minecraft.getInstance()), switch (event.phase) {
             case START -> TickPhase.START;
             case END -> TickPhase.END;
         });
