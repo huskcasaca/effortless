@@ -6,7 +6,9 @@ import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientPlayer;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import net.minecraft.client.Minecraft;
@@ -85,14 +87,14 @@ public class ForgeEffortlessClient extends EffortlessClient {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
                     try {
-                        receiver.receiveBuffer(MinecraftClientAdapter.adapt(event1.getPayload()), MinecraftClientAdapter.adapt(Minecraft.getInstance().player));
+                        receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftClientPlayer(Minecraft.getInstance().player));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
             return (buffer, player) -> {
-                Minecraft.getInstance().getConnection().send(NetworkDirection.PLAY_TO_SERVER.buildPacket(MinecraftClientAdapter.adapt(buffer), ForgeEffortless.CHANNEL.getName()).getThis());
+                Minecraft.getInstance().getConnection().send(NetworkDirection.PLAY_TO_SERVER.buildPacket(((MinecraftBuffer) buffer).getRef(), ForgeEffortless.CHANNEL.getName()).getThis());
             };
         });
     }

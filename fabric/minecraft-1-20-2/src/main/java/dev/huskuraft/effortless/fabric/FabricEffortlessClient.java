@@ -10,8 +10,7 @@ import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
 import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
 import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
+import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import net.fabricmc.api.ClientModInitializer;
@@ -34,13 +33,13 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         onRegisterNetwork(receiver -> {
             var channelId = MinecraftAdapter.adapt(Effortless.CHANNEL_ID);
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
-                receiver.receiveBuffer(MinecraftClientAdapter.adapt(buf), MinecraftClientAdapter.adapt(client.player));
+                receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(client.player));
             });
-            return (buffer, player) -> ClientPlayNetworking.send(channelId, MinecraftClientAdapter.adapt(buffer));
+            return (buffer, player) -> ClientPlayNetworking.send(channelId, ((MinecraftBuffer) buffer).getRef());
         });
 
         onRegisterKeys(key -> {
-            KeyBindingHelper.registerKeyBinding(MinecraftClientAdapter.adapt(key.getBinding()));
+            KeyBindingHelper.registerKeyBinding(((MinecraftKeyBinding) key.getBinding()).getRef());
         });
 
         RegisterShadersEvents.REGISTER_SHADERS.register((provider, sink) -> {

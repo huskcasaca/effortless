@@ -17,7 +17,7 @@ public class MinecraftPlayer extends Player {
 
     private final net.minecraft.world.entity.player.Player player;
 
-    MinecraftPlayer(net.minecraft.world.entity.player.Player player) {
+    public MinecraftPlayer(net.minecraft.world.entity.player.Player player) {
         this.player = player;
     }
 

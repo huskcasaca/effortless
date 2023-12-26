@@ -3,6 +3,8 @@ package dev.huskuraft.effortless.fabric;
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.platform.Platform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -19,9 +21,9 @@ public class FabricEffortless extends Effortless implements ModInitializer {
         onRegisterNetwork(receiver -> {
             var channelId = MinecraftAdapter.adapt(Effortless.CHANNEL_ID);
             ServerPlayNetworking.registerGlobalReceiver(channelId, (server, player, handler, buf, responseSender) -> {
-                receiver.receiveBuffer(MinecraftAdapter.adapt(buf), MinecraftAdapter.adapt(player));
+                receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(player));
             });
-            return (buffer, player) -> ServerPlayNetworking.send((ServerPlayer) MinecraftAdapter.adapt(player), channelId, MinecraftAdapter.adapt(buffer));
+            return (buffer, player) -> ServerPlayNetworking.send((ServerPlayer) ((MinecraftPlayer) player).getRef(), channelId, ((MinecraftBuffer) buffer).getRef());
         });
     }
 

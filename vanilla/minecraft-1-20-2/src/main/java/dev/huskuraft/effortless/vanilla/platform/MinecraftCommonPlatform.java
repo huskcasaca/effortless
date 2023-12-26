@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.tag.TagIoWriter;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +25,7 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public Buffer newBuffer() {
-        return MinecraftAdapter.adapt(new FriendlyByteBuf(Unpooled.buffer()));
+        return new MinecraftBuffer(new FriendlyByteBuf(Unpooled.buffer()));
     }
 
     @Override

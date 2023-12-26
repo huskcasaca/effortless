@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.math.Vector3i;
-import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.platform.Server;
 import dev.huskuraft.effortless.tag.TagElement;
 import dev.huskuraft.effortless.tag.TagRecord;
@@ -13,7 +12,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.GameType;
@@ -302,21 +300,6 @@ public class MinecraftAdapter {
             case ADVENTURE -> GameType.ADVENTURE;
             case SPECTATOR -> GameType.SPECTATOR;
         };
-    }
-
-
-    public static Buffer adapt(FriendlyByteBuf buffer) {
-        if (buffer == null) {
-            return null;
-        }
-        return new MinecraftBuffer(buffer);
-    }
-
-    public static FriendlyByteBuf adapt(Buffer buffer) {
-        if (buffer == null) {
-            return null;
-        }
-        return ((MinecraftBuffer) buffer).getRef();
     }
 
     public static Text adapt(Component component) {

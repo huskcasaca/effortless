@@ -14,7 +14,7 @@ public class MinecraftBuffer extends Buffer {
 
     private final FriendlyByteBuf buffer;
 
-    MinecraftBuffer(FriendlyByteBuf buffer) {
+    public MinecraftBuffer(FriendlyByteBuf buffer) {
         this.buffer = buffer;
     }
 
