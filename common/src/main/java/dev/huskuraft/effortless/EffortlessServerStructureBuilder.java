@@ -11,11 +11,11 @@ import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
 import javax.annotation.Nullable;
 import java.util.function.UnaryOperator;
 
-final class ActualServerStructureBuilder extends StructureBuilder {
+final class EffortlessServerStructureBuilder extends StructureBuilder {
 
     private final Entrance entrance;
 
-    public ActualServerStructureBuilder(Entrance entrance) {
+    public EffortlessServerStructureBuilder(Entrance entrance) {
         this.entrance = entrance;
     }
 

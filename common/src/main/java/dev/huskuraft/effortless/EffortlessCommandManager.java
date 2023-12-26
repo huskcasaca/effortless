@@ -3,11 +3,11 @@ package dev.huskuraft.effortless;
 import dev.huskuraft.effortless.command.CommandManager;
 import dev.huskuraft.effortless.core.Entrance;
 
-final class ActualCommandManager extends CommandManager {
+final class EffortlessCommandManager extends CommandManager {
 
     private final Entrance entrance;
 
-    public ActualCommandManager(Entrance entrance) {
+    public EffortlessCommandManager(Entrance entrance) {
         this.entrance = entrance;
     }
 

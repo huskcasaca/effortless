@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless;
 
-final class ActualBuildCommands {
+final class EffortlessBuildCommands {
 
 //    private static final DynamicCommandExceptionType ERROR_NO_SUCH_BUILD_MODE = new DynamicCommandExceptionType(object -> {
 //        return FabricAdapter.adapt(Component.translatable("commands.attribute.failed.build_mode", object));

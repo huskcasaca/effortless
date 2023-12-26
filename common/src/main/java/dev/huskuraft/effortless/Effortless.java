@@ -16,8 +16,8 @@ public abstract class Effortless extends Entrance {
     public static final int COMPATIBILITY_VERSION = 1;
     private static Effortless instance;
     private final EventsRegistry registry = new EventsRegistry();
-    private final Channel<AllPacketListener> channel = new ActualServerChannel(this, Effortless.CHANNEL_ID);
-    private final StructureBuilder structureBuilder = new ActualServerStructureBuilder(this);
+    private final Channel<AllPacketListener> channel = new EffortlessServerChannel(this, Effortless.CHANNEL_ID);
+    private final StructureBuilder structureBuilder = new EffortlessServerStructureBuilder(this);
 
     protected Effortless() {
         instance = this;
@@ -55,6 +55,5 @@ public abstract class Effortless extends Entrance {
     protected void onRegisterNetwork(NetworkRegistry registry) {
         getEventRegistry().onRegisterNetwork().invoker().onRegisterNetwork(registry);
     }
-
 
 }

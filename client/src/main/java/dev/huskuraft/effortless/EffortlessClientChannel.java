@@ -14,12 +14,12 @@ import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.packets.player.PlayerSettingsPacket;
 
-final class ActualClientChannel extends Channel<AllPacketListener> {
+final class EffortlessClientChannel extends Channel<AllPacketListener> {
 
     private final ClientEntrance entrance;
     private final AllPacketListener listener;
 
-    public ActualClientChannel(Entrance entrance, Resource channelId) {
+    public EffortlessClientChannel(Entrance entrance, Resource channelId) {
         super(channelId);
         this.entrance = (ClientEntrance) entrance;
         this.listener = new ClientPacketListener();

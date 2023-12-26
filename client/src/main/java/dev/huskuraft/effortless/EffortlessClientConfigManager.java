@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-final class ActualClientConfigManager extends ClientConfigManager {
+final class EffortlessClientConfigManager extends ClientConfigManager {
 
     private static final Logger LOGGER = Logger.getLogger("Effortless");
     private static final String CONFIG_NAME = "effortless.dat";
     private final ClientEntrance entrance;
     private BaseConfiguration config;
 
-    public ActualClientConfigManager(Entrance entrance) {
+    public EffortlessClientConfigManager(Entrance entrance) {
         this.entrance = (ClientEntrance) entrance;
     }
 

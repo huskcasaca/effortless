@@ -21,7 +21,7 @@ import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerSettingsS
 
 import java.util.Stack;
 
-final class ActualClientManager extends ClientManager {
+final class EffortlessClientManager extends ClientManager {
 
     private final Stack<Screen> screenStack = new Stack<>();
 
@@ -36,7 +36,7 @@ final class ActualClientManager extends ClientManager {
 
     private int interactionCooldown = 0;
 
-    public ActualClientManager(Entrance entrance) {
+    public EffortlessClientManager(Entrance entrance) {
         this.entrance = (ClientEntrance) entrance;
         this.subtitleManager = new SubtitleManager(entrance);
 
@@ -133,13 +133,13 @@ final class ActualClientManager extends ClientManager {
 
     private void openModeRadialScreen() {
         if (!(getRunningClient().getPanel() instanceof EffortlessModeRadialScreen)) {
-            new EffortlessModeRadialScreen(getEntrance(), ActualKeys.BUILD_MODE_RADIAL).attach();
+            new EffortlessModeRadialScreen(getEntrance(), EffortlessKeys.BUILD_MODE_RADIAL).attach();
         }
     }
 
     private void openPatternRadialScreen() {
         if (!(getRunningClient().getPanel() instanceof EffortlessPatternRadialScreen)) {
-            new EffortlessPatternRadialScreen(getEntrance(), ActualKeys.PATTERN_RADIAL).attach();
+            new EffortlessPatternRadialScreen(getEntrance(), EffortlessKeys.PATTERN_RADIAL).attach();
         }
     }
 
@@ -173,7 +173,7 @@ final class ActualClientManager extends ClientManager {
     }
 
     public void onRegisterKeys(KeyRegistry keyRegistry) {
-        for (var key : ActualKeys.values()) {
+        for (var key : EffortlessKeys.values()) {
             keyRegistry.register(key);
         }
     }
@@ -182,28 +182,28 @@ final class ActualClientManager extends ClientManager {
 
         if (getRunningClient().getPlayer() == null)
             return;
-        if (ActualKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
+        if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
             openModeRadialScreen();
         }
-        if (ActualKeys.PATTERN_RADIAL.getBinding().isDown()) {
+        if (EffortlessKeys.PATTERN_RADIAL.getBinding().isDown()) {
             openPatternRadialScreen();
         }
-        if (ActualKeys.BUILD_MODE_SETTINGS.getBinding().consumeClick()) {
+        if (EffortlessKeys.BUILD_MODE_SETTINGS.getBinding().consumeClick()) {
 //            openModeSettings(client);
         }
-        if (ActualKeys.PATTERN_SETTINGS.getBinding().consumeClick()) {
+        if (EffortlessKeys.PATTERN_SETTINGS.getBinding().consumeClick()) {
             openPatternSettingsScreen();
         }
-        if (ActualKeys.UNDO.getBinding().consumeClick()) {
+        if (EffortlessKeys.UNDO.getBinding().consumeClick()) {
 
         }
-        if (ActualKeys.REDO.getBinding().consumeClick()) {
+        if (EffortlessKeys.REDO.getBinding().consumeClick()) {
 
         }
-        if (ActualKeys.SETTINGS.getBinding().consumeClick()) {
+        if (EffortlessKeys.SETTINGS.getBinding().consumeClick()) {
             openSettingsScreen();
         }
-        if (ActualKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
+        if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
 //            cycleReplaceMode(player);
         }
     }

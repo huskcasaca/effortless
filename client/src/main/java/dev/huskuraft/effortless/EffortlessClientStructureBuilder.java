@@ -21,12 +21,12 @@ import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-final class ActualClientStructureBuilder extends StructureBuilder {
+final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final ClientEntrance entrance;
 
-    public ActualClientStructureBuilder(Entrance entrance) {
+    public EffortlessClientStructureBuilder(Entrance entrance) {
         this.entrance = (ClientEntrance) entrance;
 
         getEntrance().getEventRegistry().onClientTick().register(this::onClientTick);
