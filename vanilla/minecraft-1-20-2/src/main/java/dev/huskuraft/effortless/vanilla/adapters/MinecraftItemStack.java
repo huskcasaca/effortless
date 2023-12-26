@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.TooltipFlag;
@@ -17,6 +18,15 @@ public class MinecraftItemStack extends ItemStack {
 
     public MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
         this.itemStack = itemStack;
+    }
+
+    public MinecraftItemStack(net.minecraft.world.item.Item item, int count) {
+        this.itemStack = new net.minecraft.world.item.ItemStack(item, count);
+    }
+
+    public MinecraftItemStack(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
+        this.itemStack = new net.minecraft.world.item.ItemStack(item, count);
+        this.itemStack.setTag(tag);
     }
 
     public net.minecraft.world.item.ItemStack getRef() {
@@ -40,7 +50,7 @@ public class MinecraftItemStack extends ItemStack {
 
     @Override
     public Item getItem() {
-        return MinecraftAdapter.adapt(getRef().getItem());
+        return new MinecraftItem(getRef().getItem());
     }
 
     @Override
@@ -90,7 +100,7 @@ public class MinecraftItemStack extends ItemStack {
 
     @Override
     public boolean isItem(Item item) {
-        return getRef().is(MinecraftAdapter.adapt(item));
+        return getRef().is(((MinecraftItem) item).getRef());
     }
 
     @Override

@@ -85,7 +85,7 @@ public class MinecraftBlockData extends BlockData {
 
     @Override
     public Item getItem() {
-        return MinecraftAdapter.adapt(blockState.getBlock().asItem());
+        return new MinecraftItem(blockState.getBlock().asItem());
     }
 
     @Override

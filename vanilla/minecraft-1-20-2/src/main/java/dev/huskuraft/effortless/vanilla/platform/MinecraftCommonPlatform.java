@@ -9,9 +9,7 @@ import dev.huskuraft.effortless.tag.TagIoReader;
 import dev.huskuraft.effortless.tag.TagIoWriter;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftItemStack;
+import dev.huskuraft.effortless.vanilla.adapters.*;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -36,7 +34,7 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public Optional<Item> newOptionalItem(Resource resource) {
-        return BuiltInRegistries.ITEM.getOptional(MinecraftAdapter.adapt(resource)).map(MinecraftAdapter::adapt);
+        return BuiltInRegistries.ITEM.getOptional(MinecraftAdapter.adapt(resource)).map(MinecraftItem::new);
     }
 
     @Override
@@ -46,15 +44,12 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public ItemStack newItemStack(Item item, int count) {
-        var itemStack = new net.minecraft.world.item.ItemStack(MinecraftAdapter.adapt(item), count);
-        return new MinecraftItemStack(itemStack);
+        return new MinecraftItemStack(((MinecraftItem) item).getRef(), count);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count, TagRecord tag) {
-        var itemStack = new net.minecraft.world.item.ItemStack(MinecraftAdapter.adapt(item), count);
-        itemStack.setTag(MinecraftAdapter.adapt(tag));
-        return new MinecraftItemStack(itemStack);
+        return new MinecraftItemStack(((MinecraftItem) item).getRef(), ((MinecraftTagRecord) tag).getRef(), count);
     }
 
     @Override

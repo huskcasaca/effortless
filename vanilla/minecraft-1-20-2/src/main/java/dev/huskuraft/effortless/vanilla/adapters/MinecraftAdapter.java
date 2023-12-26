@@ -23,20 +23,6 @@ import net.minecraft.world.phys.Vec3;
 
 public class MinecraftAdapter {
 
-    public static Item adapt(net.minecraft.world.item.Item item) {
-        if (item == null) {
-            return null;
-        }
-        return new MinecraftItem(item);
-    }
-
-    public static net.minecraft.world.item.Item adapt(Item item) {
-        if (item == null) {
-            return null;
-        }
-        return ((MinecraftItem) item).getRef();
-    }
-
     public static Vector3d adapt(Vec3 vec3) {
         if (vec3 == null) {
             return null;

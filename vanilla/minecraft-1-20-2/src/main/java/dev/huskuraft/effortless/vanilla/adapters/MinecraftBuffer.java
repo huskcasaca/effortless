@@ -89,7 +89,7 @@ public class MinecraftBuffer extends Buffer {
 
     @Override
     public Item readItem() {
-        return MinecraftAdapter.adapt(getRef().readById(BuiltInRegistries.ITEM));
+        return new MinecraftItem(getRef().readById(BuiltInRegistries.ITEM));
     }
 
     @Override
@@ -169,7 +169,7 @@ public class MinecraftBuffer extends Buffer {
 
     @Override
     public void writeItem(Item value) {
-        getRef().writeId(BuiltInRegistries.ITEM, MinecraftAdapter.adapt(value));
+        getRef().writeId(BuiltInRegistries.ITEM, ((MinecraftItem) value).getRef());
     }
 
     @Override

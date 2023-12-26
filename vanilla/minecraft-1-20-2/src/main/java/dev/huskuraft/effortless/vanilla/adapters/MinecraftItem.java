@@ -10,7 +10,7 @@ public class MinecraftItem extends Item {
 
     private final net.minecraft.world.item.Item item;
 
-    MinecraftItem(net.minecraft.world.item.Item item) {
+    public MinecraftItem(net.minecraft.world.item.Item item) {
         this.item = item;
     }
 
