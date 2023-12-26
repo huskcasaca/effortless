@@ -112,7 +112,7 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public VertexBuffer vertexBuffer(RenderType renderType) {
-        return new MinecraftVertexBuffer(proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderType)));
+        return new MinecraftVertexBuffer(proxy.bufferSource().getBuffer(((MinecraftRenderType) renderType).getRef()));
     }
 
     @Override
@@ -158,31 +158,22 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void renderBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color) {
-        var scale = 129 / 128f;
-        var camera = camera().position();
-        var dispatcher = Minecraft.getInstance().getBlockRenderer();
-        var buffer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderTypes().solid(color)));
-        var worldRef = ((MinecraftWorld) world).getRef();
+    public void renderBlockInWorld(RenderType renderType, World world, BlockPosition blockPosition, BlockData blockData) {
         var blockStateRef = MinecraftClientAdapter.adapt(blockData);
         var blockPosRef = MinecraftClientAdapter.adapt(blockPosition);
 
-        pushPose();
-        translate(blockPosRef.getX() - camera.x(), blockPosRef.getY() - camera.y(), blockPosRef.getZ() - camera.z());
-        translate((scale - 1) / -2, (scale - 1) / -2, (scale - 1) / -2);
-        scale(scale, scale, scale);
-        dispatcher.getModelRenderer().tesselateBlock(
-                worldRef,
-                dispatcher.getBlockModel(blockStateRef),
+        Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateBlock(
+                ((MinecraftWorld) world).getRef(),
+                Minecraft.getInstance().getBlockRenderer().getBlockModel(blockStateRef),
                 blockStateRef,
                 blockPosRef,
                 proxy.pose(),
-                buffer,
+                proxy.bufferSource().getBuffer(((MinecraftRenderType) renderType).getRef()),
                 false,
                 RAND,
                 blockStateRef.getSeed(blockPosRef),
                 OverlayTexture.NO_OVERLAY);
-        popPose();
+
     }
 
     @Override

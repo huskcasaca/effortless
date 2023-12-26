@@ -2,25 +2,10 @@ package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.input.KeyBinding;
-import dev.huskuraft.effortless.renderer.RenderType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.Font;
 
 public class MinecraftClientAdapter extends MinecraftAdapter {
-
-    public static RenderType adapt(net.minecraft.client.renderer.RenderType renderType) {
-        if (renderType == null) {
-            return null;
-        }
-        return new MinecraftRenderType(renderType);
-    }
-
-    public static net.minecraft.client.renderer.RenderType adapt(RenderType renderType) {
-        if (renderType == null) {
-            return null;
-        }
-        return ((MinecraftRenderType) renderType).getRef();
-    }
 
     public static Typeface adapt(Font font) {
         if (font == null) {

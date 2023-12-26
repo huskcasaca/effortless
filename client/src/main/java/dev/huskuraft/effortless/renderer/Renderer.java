@@ -305,7 +305,7 @@ public abstract class Renderer {
     public abstract void renderTooltip(Typeface typeface, ItemStack itemStack, int x, int y);
 
 
-    public abstract void renderBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color);
+    public abstract void renderBlockInWorld(RenderType renderType, World world, BlockPosition blockPosition, BlockData blockData);
 
     public abstract RenderTypes renderTypes();
 

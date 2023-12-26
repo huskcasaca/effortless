@@ -10,46 +10,46 @@ public class MinecraftRenderTypes extends RenderTypes {
 
     @Override
     public RenderType gui() {
-        return MinecraftClientAdapter.adapt(net.minecraft.client.renderer.RenderType.gui());
+        return new MinecraftRenderType(net.minecraft.client.renderer.RenderType.gui());
     }
 
     @Override
     public RenderType guiOverlay() {
-        return MinecraftClientAdapter.adapt(net.minecraft.client.renderer.RenderType.guiOverlay());
+        return new MinecraftRenderType(net.minecraft.client.renderer.RenderType.guiOverlay());
     }
 
     @Override
     public RenderType guiTextHighlight() {
-        return MinecraftClientAdapter.adapt(net.minecraft.client.renderer.RenderType.guiTextHighlight());
+        return new MinecraftRenderType(net.minecraft.client.renderer.RenderType.guiTextHighlight());
     }
 
     @Override
     public RenderType lines() {
-        return MinecraftClientAdapter.adapt(BlockRenderType.EF_LINES);
+        return new MinecraftRenderType(BlockRenderType.EF_LINES);
     }
 
     @Override
     public RenderType planes() {
-        return MinecraftClientAdapter.adapt(BlockRenderType.EF_PLANES);
+        return new MinecraftRenderType(BlockRenderType.EF_PLANES);
     }
 
     @Override
     public RenderType solid(int color) {
-        return MinecraftClientAdapter.adapt(BlockRenderType.blockPreview(color));
+        return new MinecraftRenderType(BlockRenderType.blockPreview(color));
     }
 
     @Override
     public RenderType outlineSolid() {
-        return MinecraftClientAdapter.adapt(OutlineRenderType.outlineSolid());
+        return new MinecraftRenderType(OutlineRenderType.outlineSolid());
     }
 
     @Override
     public RenderType outlineSolid(boolean overlap) {
-        return MinecraftClientAdapter.adapt(OutlineRenderType.outlineSolid(overlap));
+        return new MinecraftRenderType(OutlineRenderType.outlineSolid(overlap));
     }
 
     @Override
     public RenderType outlineTranslucent(Resource texture, boolean cull) {
-        return MinecraftClientAdapter.adapt(OutlineRenderType.outlineTranslucent(MinecraftClientAdapter.adapt(texture), cull));
+        return new MinecraftRenderType(OutlineRenderType.outlineTranslucent(MinecraftClientAdapter.adapt(texture), cull));
     }
 }

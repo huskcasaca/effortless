@@ -26,7 +26,15 @@ public class BlockOperationPreview implements OperationPreview {
         var color = result.getColor();
         if (color == null) return;
 
-        renderer.renderBlockInWorld(world, blockPosition, blockData, color.getRGB());
+        var scale = 129 / 128f;
+        var camera = renderer.camera().position();
+
+        renderer.pushPose();
+        renderer.translate(blockPosition.x() - camera.x(), blockPosition.y() - camera.y(), blockPosition.z() - camera.z());
+        renderer.translate((scale - 1) / -2, (scale - 1) / -2, (scale - 1) / -2);
+        renderer.scale(scale, scale, scale);
+        renderer.renderBlockInWorld(renderer.renderTypes().solid(color.getRGB()), world, blockPosition, blockData);
+        renderer.popPose();
     }
 
 }
