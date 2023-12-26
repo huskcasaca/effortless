@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
-import dev.huskuraft.effortless.platform.GamePlatform;
+import dev.huskuraft.effortless.platform.Platform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonGamePlatform;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -64,8 +64,8 @@ public class ForgeEffortless extends Effortless {
     }
 
     @Override
-    public GamePlatform getGamePlatform() {
-        return new MinecraftCommonGamePlatform();
+    public Platform getGamePlatform() {
+        return new MinecraftCommonPlatform();
     }
 
     @Override

@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.fabric;
 
 import dev.huskuraft.effortless.Effortless;
-import dev.huskuraft.effortless.platform.GamePlatform;
+import dev.huskuraft.effortless.platform.Platform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonGamePlatform;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
@@ -51,8 +51,8 @@ public class FabricEffortless extends Effortless implements ModInitializer {
     }
 
     @Override
-    public GamePlatform getGamePlatform() {
-        return new MinecraftCommonGamePlatform();
+    public Platform getGamePlatform() {
+        return new MinecraftCommonPlatform();
     }
 
     @Override

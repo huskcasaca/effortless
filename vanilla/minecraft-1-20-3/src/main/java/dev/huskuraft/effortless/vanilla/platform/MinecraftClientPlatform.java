@@ -1,6 +1,9 @@
 package dev.huskuraft.effortless.vanilla.platform;
 
 import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.input.KeyBinding;
+import dev.huskuraft.effortless.input.KeyBindings;
+import dev.huskuraft.effortless.platform.ClientPlatform;
 import dev.huskuraft.effortless.platform.SearchBy;
 import dev.huskuraft.effortless.platform.SearchTree;
 import dev.huskuraft.effortless.text.Text;
@@ -14,7 +17,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class MinecraftClientGamePlatform extends MinecraftCommonGamePlatform {
+public class MinecraftClientPlatform extends MinecraftCommonPlatform implements ClientPlatform {
 
     @Override
     public SearchTree<ItemStack> newItemStackSearchTree(SearchBy searchBy) {
@@ -34,4 +37,12 @@ public class MinecraftClientGamePlatform extends MinecraftCommonGamePlatform {
         return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> MinecraftClientAdapter.adapt(text).getString())).search(query);
     }
 
+    @Override
+    public KeyBinding getKeyBinding(KeyBindings keyBindings) {
+        return MinecraftClientAdapter.adapt(switch (keyBindings) {
+            case ATTACK -> Minecraft.getInstance().options.keyAttack;
+            case USE -> Minecraft.getInstance().options.keyUse;
+            case PICK -> Minecraft.getInstance().options.keyPickItem;
+        });
+    }
 }

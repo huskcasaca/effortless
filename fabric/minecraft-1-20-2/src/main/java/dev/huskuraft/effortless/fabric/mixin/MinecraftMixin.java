@@ -25,7 +25,13 @@ public abstract class MinecraftMixin {
     private void onPlayerStartAttack(CallbackInfoReturnable<Boolean> cir) {
         if (InteractionInputEvents.ATTACK.invoker().onAttack(player, InteractionHand.MAIN_HAND)) {
             cir.setReturnValue(false);
-            player.swing(InteractionHand.MAIN_HAND);
+        }
+    }
+
+    @Inject(method = "continueAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;isAir()Z"), cancellable = true)
+    private void onPlayerContinueAttack(boolean bl, CallbackInfo ci) {
+        if (InteractionInputEvents.ATTACK.invoker().onAttack(player, InteractionHand.MAIN_HAND)) {
+            ci.cancel();
         }
     }
 
@@ -33,7 +39,6 @@ public abstract class MinecraftMixin {
     private void onPlayerStartUseItem(CallbackInfo ci, InteractionHand[] var1, int var2, int var3, InteractionHand interactionHand) {
         if (InteractionInputEvents.USE_ITEM.invoker().onUseItem(player, interactionHand)) {
             ci.cancel();
-            player.swing(interactionHand);
         }
     }
 

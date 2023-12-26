@@ -9,10 +9,11 @@ import dev.huskuraft.effortless.fabric.events.GuiRenderEvents;
 import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
 import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
-import dev.huskuraft.effortless.platform.GamePlatform;
+import dev.huskuraft.effortless.platform.ClientPlatform;
+import dev.huskuraft.effortless.platform.Platform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftClientGamePlatform;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -106,8 +107,8 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
     }
 
     @Override
-    public GamePlatform getGamePlatform() {
-        return new MinecraftClientGamePlatform();
+    public ClientPlatform getGamePlatform() {
+        return new MinecraftClientPlatform();
     }
 
     @Override

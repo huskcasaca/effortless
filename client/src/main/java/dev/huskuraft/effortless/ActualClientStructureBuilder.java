@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.events.api.EventResult;
+import dev.huskuraft.effortless.input.KeyBindings;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.renderer.LightTexture;
@@ -206,10 +207,29 @@ final class ActualClientStructureBuilder extends StructureBuilder {
 //        getEntrance().getClient().setRightClickDelay(delay); // for single build speed
     }
 
+    private void tickCooldown() {
+        if (EffortlessClient.getInstance().getGamePlatform().getKeyBinding(KeyBindings.ATTACK).isDown() ||
+                EffortlessClient.getInstance().getGamePlatform().getKeyBinding(KeyBindings.USE).isDown() ||
+                EffortlessClient.getInstance().getGamePlatform().getKeyBinding(KeyBindings.PICK).isDown()) {
+            return;
+        }
+        interactionCooldown = Math.max(0, interactionCooldown - 1);
+    }
+
+    private boolean canInteract() {
+        return interactionCooldown == 0;
+    }
+
+    private void resetCooldown() {
+        interactionCooldown = 1;
+    }
+
     public void onClientTick(Client client, TickPhase phase) {
         if (phase == TickPhase.END) {
             return;
         }
+        tickCooldown();
+
         var player = getEntrance().getClient().getPlayer();
         if (player == null || getContext(player).isDisabled()) {
             return;
@@ -235,14 +255,20 @@ final class ActualClientStructureBuilder extends StructureBuilder {
         showSummaryOverlay(context.uuid(), result, 1);
     }
 
+    private int interactionCooldown = 0;
+
     private EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
         if (getContext(player).isDisabled()) {
             return EventResult.pass();
         }
+        if (!canInteract()) {
+            return EventResult.interruptFalse();
+        }
+        resetCooldown();
 
         var result = getEntrance().getClient().getLastInteraction();
         if (result != null && result.getTarget() == Interaction.Target.ENTITY) {
-            return EventResult.pass();
+            return EventResult.interruptFalse();
         }
 
         switch (type) {

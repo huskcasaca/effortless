@@ -4,9 +4,7 @@ import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.networking.Buffer;
-import dev.huskuraft.effortless.platform.GamePlatform;
-import dev.huskuraft.effortless.platform.SearchBy;
-import dev.huskuraft.effortless.platform.SearchTree;
+import dev.huskuraft.effortless.platform.Platform;
 import dev.huskuraft.effortless.tag.TagIoReader;
 import dev.huskuraft.effortless.tag.TagIoWriter;
 import dev.huskuraft.effortless.tag.TagRecord;
@@ -20,12 +18,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
-public class MinecraftCommonGamePlatform extends GamePlatform {
+public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public Buffer newBuffer() {
@@ -83,16 +78,6 @@ public class MinecraftCommonGamePlatform extends GamePlatform {
     @Override
     public Text newTranslatableText(String text, Text... args) {
         return MinecraftAdapter.adapt(Component.translatable(text, Arrays.stream(args).map(MinecraftAdapter::adapt).toArray(Object[]::new)));
-    }
-
-    @Override
-    public SearchTree<ItemStack> newItemStackSearchTree(SearchBy searchBy) {
-        return SearchTree.empty();
-    }
-
-    @Override
-    public <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
-        return SearchTree.empty();
     }
 
     @Override
