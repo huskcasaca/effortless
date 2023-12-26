@@ -8,8 +8,6 @@ import dev.huskuraft.effortless.platform.Server;
 import dev.huskuraft.effortless.tag.TagElement;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.text.TextStyle;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -343,100 +341,11 @@ public class MinecraftAdapter {
         return new MinecraftText(component);
     }
 
-//    public static Component extract(Object textLike) {
-//        if (textLike instanceof Text text) {
-//            var component = (Component) null;
-//            if (textLike instanceof EmptyText) {
-//                component = Component.empty();
-//            } else if (textLike instanceof PlainText plainText) {
-//                component = Component.literal(plainText.getText());
-//            } else if (textLike instanceof TranslatableText translatableText) {
-//                if (translatableText.getArgs().length == 0) {
-//                    component = Component.translatable(translatableText.getKey());
-//                } else {
-//                    component = Component.translatable(translatableText.getKey(), Arrays.stream(translatableText.getArgs()).map(MinecraftAdapter::extract).toArray());
-//                }
-//            } else if (textLike instanceof MinecraftText minecraftText) {
-//                component = minecraftText.getRef();
-//            }
-//            if (component instanceof MutableComponent mutableComponent) {
-//                for (var style : text.getStyles()) {
-//                    mutableComponent = mutableComponent.withStyle(adapt(style));
-//                }
-//                for (var sibling : text.getSiblings()) {
-//                    mutableComponent = mutableComponent.append(extract(sibling));
-//                }
-//                return mutableComponent;
-//            }
-//        }
-//        return Component.literal(textLike.toString());
-//    }
-
     public static Component adapt(Text text) {
         if (text == null) {
             return null;
         }
         return ((MinecraftText) text).getRef();
-    }
-
-    public static TextStyle adapt(ChatFormatting chatFormatting) {
-        if (chatFormatting == null) {
-            return null;
-        }
-        return switch (chatFormatting) {
-            case BLACK -> TextStyle.BLACK;
-            case DARK_BLUE -> TextStyle.DARK_BLUE;
-            case DARK_GREEN -> TextStyle.DARK_GREEN;
-            case DARK_AQUA -> TextStyle.DARK_AQUA;
-            case DARK_RED -> TextStyle.DARK_RED;
-            case DARK_PURPLE -> TextStyle.DARK_PURPLE;
-            case GOLD -> TextStyle.GOLD;
-            case GRAY -> TextStyle.GRAY;
-            case DARK_GRAY -> TextStyle.DARK_GRAY;
-            case BLUE -> TextStyle.BLUE;
-            case GREEN -> TextStyle.GREEN;
-            case AQUA -> TextStyle.AQUA;
-            case RED -> TextStyle.RED;
-            case LIGHT_PURPLE -> TextStyle.LIGHT_PURPLE;
-            case YELLOW -> TextStyle.YELLOW;
-            case WHITE -> TextStyle.WHITE;
-            case OBFUSCATED -> TextStyle.OBFUSCATED;
-            case BOLD -> TextStyle.BOLD;
-            case STRIKETHROUGH -> TextStyle.STRIKETHROUGH;
-            case UNDERLINE -> TextStyle.UNDERLINE;
-            case ITALIC -> TextStyle.ITALIC;
-            case RESET -> TextStyle.RESET;
-        };
-    }
-
-    public static ChatFormatting adapt(TextStyle textStyle) {
-        if (textStyle == null) {
-            return null;
-        }
-        return switch (textStyle) {
-            case BLACK -> ChatFormatting.BLACK;
-            case DARK_BLUE -> ChatFormatting.DARK_BLUE;
-            case DARK_GREEN -> ChatFormatting.DARK_GREEN;
-            case DARK_AQUA -> ChatFormatting.DARK_AQUA;
-            case DARK_RED -> ChatFormatting.DARK_RED;
-            case DARK_PURPLE -> ChatFormatting.DARK_PURPLE;
-            case GOLD -> ChatFormatting.GOLD;
-            case GRAY -> ChatFormatting.GRAY;
-            case DARK_GRAY -> ChatFormatting.DARK_GRAY;
-            case BLUE -> ChatFormatting.BLUE;
-            case GREEN -> ChatFormatting.GREEN;
-            case AQUA -> ChatFormatting.AQUA;
-            case RED -> ChatFormatting.RED;
-            case LIGHT_PURPLE -> ChatFormatting.LIGHT_PURPLE;
-            case YELLOW -> ChatFormatting.YELLOW;
-            case WHITE -> ChatFormatting.WHITE;
-            case OBFUSCATED -> ChatFormatting.OBFUSCATED;
-            case BOLD -> ChatFormatting.BOLD;
-            case STRIKETHROUGH -> ChatFormatting.STRIKETHROUGH;
-            case UNDERLINE -> ChatFormatting.UNDERLINE;
-            case ITALIC -> ChatFormatting.ITALIC;
-            case RESET -> ChatFormatting.RESET;
-        };
     }
 
     public static InteractionHand adapt(net.minecraft.world.InteractionHand interactionHand) {
@@ -474,32 +383,6 @@ public class MinecraftAdapter {
             return minecraftResource.getRef();
         }
         return new ResourceLocation(resource.getNamespace(), resource.getPath());
-    }
-
-    public static PerformResult adapt(net.minecraft.world.InteractionResult interactionResult) {
-        if (interactionResult == null) {
-            return null;
-        }
-        return switch (interactionResult) {
-            case SUCCESS -> PerformResult.SUCCESS;
-            case CONSUME -> PerformResult.CONSUME;
-            case CONSUME_PARTIAL -> PerformResult.CONSUME_PARTIAL;
-            case PASS -> PerformResult.PASS;
-            case FAIL -> PerformResult.FAIL;
-        };
-    }
-
-    public static net.minecraft.world.InteractionResult adapt(PerformResult performResult) {
-        if (performResult == null) {
-            return null;
-        }
-        return switch (performResult) {
-            case SUCCESS -> net.minecraft.world.InteractionResult.SUCCESS;
-            case CONSUME -> net.minecraft.world.InteractionResult.CONSUME;
-            case CONSUME_PARTIAL -> net.minecraft.world.InteractionResult.CONSUME_PARTIAL;
-            case PASS -> net.minecraft.world.InteractionResult.PASS;
-            case FAIL -> net.minecraft.world.InteractionResult.FAIL;
-        };
     }
 
 }
