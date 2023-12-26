@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.math.Vector3i;
-import dev.huskuraft.effortless.platform.Server;
 import dev.huskuraft.effortless.tag.TagElement;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
@@ -23,34 +22,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class MinecraftAdapter {
-
-    public static Player adapt(net.minecraft.world.entity.player.Player player) {
-        if (player == null) {
-            return null;
-        }
-        return new MinecraftPlayer(player);
-    }
-
-    public static net.minecraft.world.entity.player.Player adapt(Player player) {
-        if (player == null) {
-            return null;
-        }
-        return ((MinecraftPlayer) player).getRef();
-    }
-
-    public static Server adapt(net.minecraft.server.MinecraftServer server) {
-        if (server == null) {
-            return null;
-        }
-        return new MinecraftServer(server);
-    }
-
-    public static net.minecraft.server.MinecraftServer adapt(Server server) {
-        if (server == null) {
-            return null;
-        }
-        return ((MinecraftServer) server).getRef();
-    }
 
     public static ItemStack adapt(net.minecraft.world.item.ItemStack itemStack) {
         if (itemStack == null) {

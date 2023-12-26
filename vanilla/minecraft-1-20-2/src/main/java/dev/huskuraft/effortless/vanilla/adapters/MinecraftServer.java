@@ -4,6 +4,7 @@ import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.platform.Server;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MinecraftServer extends Server {
 
@@ -19,7 +20,7 @@ public class MinecraftServer extends Server {
 
     @Override
     public List<Player> getPlayers() {
-        return getRef().getPlayerList().getPlayers().stream().map(MinecraftAdapter::adapt).toList();
+        return getRef().getPlayerList().getPlayers().stream().map(MinecraftPlayer::new).collect(Collectors.toList());
     }
 
     @Override

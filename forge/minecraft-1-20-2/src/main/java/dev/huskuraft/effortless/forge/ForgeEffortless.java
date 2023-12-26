@@ -97,7 +97,7 @@ public class ForgeEffortless extends Effortless {
                 }
             });
             return (buffer, player) -> {
-                ((ServerPlayer) MinecraftAdapter.adapt(player)).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(((MinecraftBuffer) buffer).getRef(), ForgeEffortless.CHANNEL.getName()).getThis());
+                ((ServerPlayer) ((MinecraftPlayer) player).getRef()).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(((MinecraftBuffer) buffer).getRef(), ForgeEffortless.CHANNEL.getName()).getThis());
             };
         });
     }

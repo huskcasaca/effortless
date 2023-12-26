@@ -110,7 +110,7 @@ public class MinecraftBlockData extends BlockData {
     @Override
     public boolean isReplaceable(Player player, BlockInteraction interaction) {
         return getRef().canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
-                MinecraftAdapter.adapt(player),
+                ((MinecraftPlayer) player).getRef(),
                 MinecraftAdapter.adapt(interaction.getHand()),
                 MinecraftAdapter.adapt(player.getItemStack(interaction.getHand())),
                 MinecraftAdapter.adapt(interaction)

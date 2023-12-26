@@ -65,7 +65,7 @@ public class MinecraftItemStack extends ItemStack {
 
     @Override
     public List<Text> getDescription(Player player, TooltipType flag) {
-        return getRef().getTooltipLines(MinecraftAdapter.adapt(player), switch (flag) {
+        return getRef().getTooltipLines(((MinecraftPlayer) player).getRef(), switch (flag) {
             case NORMAL -> TooltipFlag.NORMAL;
             case NORMAL_CREATIVE -> TooltipFlag.NORMAL.asCreative();
             case ADVANCED -> TooltipFlag.ADVANCED;
@@ -115,7 +115,7 @@ public class MinecraftItemStack extends ItemStack {
 
     @Override
     public BlockData getBlockData(Player player, BlockInteraction interaction) {
-        var playerRef = MinecraftAdapter.adapt(player);
+        var playerRef = ((MinecraftPlayer) player).getRef();
         var hitResultRef = MinecraftAdapter.adapt(interaction);
         var handRef = MinecraftAdapter.adapt(interaction.getHand());
 

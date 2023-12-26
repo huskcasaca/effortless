@@ -32,7 +32,7 @@ public class MinecraftPlayer extends Player {
 
     @Override
     public Server getServer() {
-        return MinecraftAdapter.adapt(getRef().getServer());
+        return new MinecraftServer(getRef().getServer());
     }
 
     @Override
