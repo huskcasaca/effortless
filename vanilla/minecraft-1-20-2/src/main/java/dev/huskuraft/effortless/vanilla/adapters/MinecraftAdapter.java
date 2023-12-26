@@ -15,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -101,20 +100,6 @@ public class MinecraftAdapter {
         }
         // FIXME: 15/10/23 miss
         return new BlockHitResult(MinecraftAdapter.adapt(blockHitResult.getPosition()), MinecraftAdapter.adapt(blockHitResult.getDirection()), MinecraftAdapter.adapt(blockHitResult.getBlockPosition()), blockHitResult.isInside());
-    }
-
-    public static BlockData adapt(BlockState blockState) {
-        if (blockState == null) {
-            return null;
-        }
-        return new MinecraftBlockData(blockState);
-    }
-
-    public static BlockState adapt(BlockData blockData) {
-        if (blockData == null) {
-            return null;
-        }
-        return ((MinecraftBlockData) blockData).getRef();
     }
 
     public static TagElement adapt(Tag tag) {

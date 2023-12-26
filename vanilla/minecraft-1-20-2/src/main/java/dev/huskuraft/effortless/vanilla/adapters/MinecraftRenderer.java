@@ -159,19 +159,18 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderBlockInWorld(RenderType renderType, World world, BlockPosition blockPosition, BlockData blockData) {
-        var blockStateRef = MinecraftClientAdapter.adapt(blockData);
         var blockPosRef = MinecraftClientAdapter.adapt(blockPosition);
 
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateBlock(
                 ((MinecraftWorld) world).getRef(),
-                Minecraft.getInstance().getBlockRenderer().getBlockModel(blockStateRef),
-                blockStateRef,
+                Minecraft.getInstance().getBlockRenderer().getBlockModel(((MinecraftBlockData) blockData).getRef()),
+                ((MinecraftBlockData) blockData).getRef(),
                 blockPosRef,
                 proxy.pose(),
                 proxy.bufferSource().getBuffer(((MinecraftRenderType) renderType).getRef()),
                 false,
                 RAND,
-                blockStateRef.getSeed(blockPosRef),
+                ((MinecraftBlockData) blockData).getRef().getSeed(blockPosRef),
                 OverlayTexture.NO_OVERLAY);
 
     }

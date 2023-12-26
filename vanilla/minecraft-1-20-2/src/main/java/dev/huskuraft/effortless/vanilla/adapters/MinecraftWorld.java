@@ -27,7 +27,7 @@ public class MinecraftWorld extends World {
 
     @Override
     public BlockData getBlockData(BlockPosition blockPosition) {
-        return MinecraftAdapter.adapt(getRef().getBlockState(MinecraftAdapter.adapt(blockPosition)));
+        return new MinecraftBlockData(getRef().getBlockState(MinecraftAdapter.adapt(blockPosition)));
     }
 
     @Override

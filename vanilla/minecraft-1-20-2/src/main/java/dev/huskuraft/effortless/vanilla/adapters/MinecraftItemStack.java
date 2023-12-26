@@ -131,6 +131,6 @@ public class MinecraftItemStack extends ItemStack {
 
         var blockPlaceContextRef = new BlockPlaceContext(playerRef, handRef, getRef(), hitResultRef);
 
-        return MinecraftAdapter.adapt(Block.byItem(getRef().getItem()).getStateForPlacement(blockPlaceContextRef));
+        return new MinecraftBlockData(Block.byItem(getRef().getItem()).getStateForPlacement(blockPlaceContextRef));
     }
 }

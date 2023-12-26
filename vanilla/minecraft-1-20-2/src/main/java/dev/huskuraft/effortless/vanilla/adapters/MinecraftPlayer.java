@@ -114,7 +114,7 @@ public class MinecraftPlayer extends Player {
 
     @Override
     public boolean tryPlaceBlock(BlockInteraction interaction, BlockData blockData, ItemStack itemStack) {
-        return ((BlockItem) MinecraftAdapter.adapt(blockData).getBlock().asItem()).place(new BlockPlaceContext(getRef(), MinecraftAdapter.adapt(interaction.getHand()), ((MinecraftItemStack) itemStack).getRef(), MinecraftAdapter.adapt(interaction))).consumesAction();
+        return ((BlockItem) ((MinecraftBlockData) blockData).getRef().getBlock().asItem()).place(new BlockPlaceContext(getRef(), MinecraftAdapter.adapt(interaction.getHand()), ((MinecraftItemStack) itemStack).getRef(), MinecraftAdapter.adapt(interaction))).consumesAction();
     }
 
     @Override
