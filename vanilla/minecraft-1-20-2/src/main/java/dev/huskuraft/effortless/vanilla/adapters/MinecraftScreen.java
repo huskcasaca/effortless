@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.gui.AbstractScreen;
 import dev.huskuraft.effortless.text.Text;
 import net.minecraft.client.gui.screens.Screen;
 
-class MinecraftScreen extends AbstractScreen {
+public class MinecraftScreen extends AbstractScreen {
 
     private final Screen screen;
 

@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 
-class MinecraftText extends Text {
+public class MinecraftText extends Text {
 
     private final Component component;
 

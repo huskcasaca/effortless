@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.core.Resource;
 import net.minecraft.resources.ResourceLocation;
 
-class MinecraftResource extends Resource {
+public class MinecraftResource extends Resource {
 
     private final ResourceLocation resourceLocation;
 

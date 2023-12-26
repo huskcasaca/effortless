@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 
 import java.util.UUID;
 
-class MinecraftWorld extends World {
+public class MinecraftWorld extends World {
 
     private final Level level;
 

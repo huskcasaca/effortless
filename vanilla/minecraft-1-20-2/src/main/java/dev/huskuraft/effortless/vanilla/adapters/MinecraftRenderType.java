@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.renderer.RenderType;
 
-class MinecraftRenderType extends RenderType {
+public class MinecraftRenderType extends RenderType {
 
     private final net.minecraft.client.renderer.RenderType renderType;
 

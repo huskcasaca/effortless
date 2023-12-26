@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-class MinecraftBlockData extends BlockData {
+public class MinecraftBlockData extends BlockData {
 
     private final BlockState blockState;
 

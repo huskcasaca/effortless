@@ -12,7 +12,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import org.lwjgl.glfw.GLFW;
 
-class MinecraftClient extends Client {
+public class MinecraftClient extends Client {
 
     private final Minecraft minecraft;
 

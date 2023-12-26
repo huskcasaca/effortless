@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.core.GameMode;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.player.Player;
 
-class MinecraftClientPlayer extends MinecraftPlayer {
+public class MinecraftClientPlayer extends MinecraftPlayer {
 
     MinecraftClientPlayer(Player player) {
         super(player);

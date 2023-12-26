@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-class MinecraftTagRecord extends TagRecord {
+public class MinecraftTagRecord extends TagRecord {
 
     private final MinecraftTagElement proxy;
 

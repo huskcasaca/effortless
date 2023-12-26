@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
-class MinecraftItemStack extends ItemStack {
+public class MinecraftItemStack extends ItemStack {
 
     private final net.minecraft.world.item.ItemStack itemStack;
 

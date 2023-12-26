@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.gui.Screen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
-class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
+public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
 
     private final Screen screen;
 

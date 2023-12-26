@@ -13,7 +13,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-class MinecraftPlayer extends Player {
+public class MinecraftPlayer extends Player {
 
     private final net.minecraft.world.entity.player.Player player;
 

@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.text.Text;
 import net.minecraft.client.gui.Font;
 
-class MinecraftTypeface extends Typeface {
+public class MinecraftTypeface extends Typeface {
 
     private final Font font;
 

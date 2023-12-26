@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.platform.Server;
 
 import java.util.List;
 
-class MinecraftServer extends Server {
+public class MinecraftServer extends Server {
 
     private final net.minecraft.server.MinecraftServer minecraftServer;
 

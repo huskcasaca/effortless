@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.input.KeyBinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 
-class MinecraftKeyBinding extends KeyBinding {
+public class MinecraftKeyBinding extends KeyBinding {
 
     private final KeyMapping keyMapping;
 

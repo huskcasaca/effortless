@@ -19,7 +19,7 @@ import org.joml.Quaternionf;
 import java.util.List;
 import java.util.Optional;
 
-class MinecraftRenderer extends Renderer {
+public class MinecraftRenderer extends Renderer {
 
     @Deprecated
     private static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation("textures/gui/options_background.png");

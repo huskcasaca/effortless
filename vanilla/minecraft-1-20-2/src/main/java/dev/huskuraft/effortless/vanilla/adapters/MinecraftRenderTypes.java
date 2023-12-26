@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.renderer.RenderTypes;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import dev.huskuraft.effortless.vanilla.renderer.OutlineRenderType;
 
-class MinecraftRenderTypes extends RenderTypes {
+public class MinecraftRenderTypes extends RenderTypes {
 
     @Override
     public RenderType gui() {
