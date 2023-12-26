@@ -6,14 +6,10 @@ import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftClient;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientPlayer;
+import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -123,13 +119,13 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onRenderLevelStage(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_ENTITIES) {
-            onRenderWorld(MinecraftClientAdapter.adapt(new GuiGraphics(Minecraft.getInstance(), event.getPoseStack(), Minecraft.getInstance().renderBuffers().bufferSource())), event.getPartialTick());
+            onRenderWorld(new MinecraftRenderer(event.getPoseStack(), Minecraft.getInstance().renderBuffers().bufferSource()), event.getPartialTick());
         }
     }
 
     @SubscribeEvent
     public void onRenderGui(RenderGuiEvent event) {
-        onRenderGui(MinecraftClientAdapter.adapt(event.getGuiGraphics()), event.getPartialTick());
+        onRenderGui(new MinecraftRenderer(event.getGuiGraphics()), event.getPartialTick());
     }
 
     @SubscribeEvent

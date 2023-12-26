@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.math.Vector3d;
@@ -9,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -30,8 +32,12 @@ public class MinecraftRenderer extends Renderer {
     private static final RandomSource RAND = RandomSource.create();
     private final GuiGraphics proxy;
 
-    MinecraftRenderer(GuiGraphics proxy) {
+    public MinecraftRenderer(GuiGraphics proxy) {
         this.proxy = proxy;
+    }
+
+    public MinecraftRenderer(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource) {
+        this.proxy = new GuiGraphics(Minecraft.getInstance(), poseStack, bufferSource);
     }
 
     @Override

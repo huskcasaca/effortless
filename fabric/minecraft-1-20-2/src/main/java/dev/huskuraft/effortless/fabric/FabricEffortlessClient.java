@@ -21,7 +21,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 
 import java.nio.file.Path;
 
@@ -55,11 +54,11 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            onRenderWorld(MinecraftClientAdapter.adapt(new GuiGraphics(Minecraft.getInstance(), context.matrixStack(), Minecraft.getInstance().renderBuffers().bufferSource())), context.tickDelta());
+            onRenderWorld(new MinecraftRenderer(context.matrixStack(), Minecraft.getInstance().renderBuffers().bufferSource()), context.tickDelta());
         });
 
         GuiRenderEvents.RENDER_GUI.register((guiGraphics, f) -> {
-            onRenderGui(MinecraftClientAdapter.adapt(guiGraphics), f);
+            onRenderGui(new MinecraftRenderer(guiGraphics), f);
         });
 
         KeyboardInputEvents.KEY_INPUT.register((key, scanCode, action, modifiers) -> {

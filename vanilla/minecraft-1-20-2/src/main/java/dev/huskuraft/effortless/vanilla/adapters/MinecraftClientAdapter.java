@@ -3,19 +3,10 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.input.KeyBinding;
 import dev.huskuraft.effortless.renderer.RenderType;
-import dev.huskuraft.effortless.renderer.Renderer;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 
 public class MinecraftClientAdapter extends MinecraftAdapter {
-
-    public static Renderer adapt(GuiGraphics guiGraphics) {
-        if (guiGraphics == null) {
-            return null;
-        }
-        return new MinecraftRenderer(guiGraphics);
-    }
 
     public static RenderType adapt(net.minecraft.client.renderer.RenderType renderType) {
         if (renderType == null) {
