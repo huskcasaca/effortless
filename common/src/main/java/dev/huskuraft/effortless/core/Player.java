@@ -45,8 +45,4 @@ public abstract class Player {
 
     public abstract boolean tryBreakBlock(BlockInteraction interaction);
 
-    public abstract boolean tryPlaceBlockNoCheck(BlockInteraction interaction, BlockData blockData, ItemStack itemStack);
-
-    public abstract boolean tryBreakBlockNoCheck(BlockInteraction interaction);
-
 }
