@@ -1,14 +1,15 @@
 package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.core.ClientEntrance;
-import dev.huskuraft.effortless.core.Entrance;
-import dev.huskuraft.effortless.core.TickPhase;
+import dev.huskuraft.effortless.core.*;
+import dev.huskuraft.effortless.events.api.EventResult;
+import dev.huskuraft.effortless.events.input.KeyRegistry;
 import dev.huskuraft.effortless.gui.Screen;
-import dev.huskuraft.effortless.input.KeyRegistry;
+import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.platform.ClientManager;
 import dev.huskuraft.effortless.platform.SubtitleManager;
+import dev.huskuraft.effortless.platform.VanillaKeys;
 import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
@@ -33,6 +34,8 @@ final class ActualClientManager extends ClientManager {
 
     private Client client;
 
+    private int interactionCooldown = 0;
+
     public ActualClientManager(Entrance entrance) {
         this.entrance = (ClientEntrance) entrance;
         this.subtitleManager = new SubtitleManager(entrance);
@@ -42,7 +45,8 @@ final class ActualClientManager extends ClientManager {
         this.patternRenderer = new PatternRenderer();
 
         getEntrance().getEventRegistry().onRegisterKeys().register(this::onRegisterKeys);
-        getEntrance().getEventRegistry().onKeyPress().register(this::onKeyPress);
+        getEntrance().getEventRegistry().onKeyInput().register(this::onKeyInput);
+        getEntrance().getEventRegistry().onInteractionInput().register(this::onInteractionInput);
 
         getEntrance().getEventRegistry().onClientStart().register(this::onClientStart);
         getEntrance().getEventRegistry().onClientTick().register(this::onClientTick);
@@ -107,6 +111,26 @@ final class ActualClientManager extends ClientManager {
         return subtitleManager;
     }
 
+
+    private void tickCooldown() {
+        if (VanillaKeys.KEY_ATTACK.getBinding().isDown() || VanillaKeys.KEY_USE.getBinding().isDown() || VanillaKeys.KEY_PICK_ITEM.getBinding().isDown()) {
+            return;
+        }
+        this.interactionCooldown = Math.max(0, this.interactionCooldown - 1);
+    }
+
+    private void setInteractionCooldown(int tick) {
+        this.interactionCooldown = tick; // for single build speed
+    }
+
+    private boolean isInteractionCooldown() {
+        return this.interactionCooldown == 0;
+    }
+
+    private void resetInteractionCooldown() {
+        setInteractionCooldown(1);
+    }
+
     private void openModeRadialScreen() {
         if (!(getRunningClient().getPanel() instanceof EffortlessModeRadialScreen)) {
             new EffortlessModeRadialScreen(getEntrance(), ActualKeys.BUILD_MODE_RADIAL).attach();
@@ -154,34 +178,61 @@ final class ActualClientManager extends ClientManager {
         }
     }
 
-    public void onKeyPress(int key, int scanCode, int action, int modifiers) {
+    public void onKeyInput(InputKey key) {
 
         if (getRunningClient().getPlayer() == null)
             return;
-        if (ActualKeys.BUILD_MODE_RADIAL.isDown()) {
+        if (ActualKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
             openModeRadialScreen();
         }
-        if (ActualKeys.PATTERN_RADIAL.isDown()) {
+        if (ActualKeys.PATTERN_RADIAL.getBinding().isDown()) {
             openPatternRadialScreen();
         }
-        if (ActualKeys.BUILD_MODE_SETTINGS.consumeClick()) {
+        if (ActualKeys.BUILD_MODE_SETTINGS.getBinding().consumeClick()) {
 //            openModeSettings(client);
         }
-        if (ActualKeys.PATTERN_SETTINGS.consumeClick()) {
+        if (ActualKeys.PATTERN_SETTINGS.getBinding().consumeClick()) {
             openPatternSettingsScreen();
         }
-        if (ActualKeys.UNDO.consumeClick()) {
+        if (ActualKeys.UNDO.getBinding().consumeClick()) {
 
         }
-        if (ActualKeys.REDO.consumeClick()) {
+        if (ActualKeys.REDO.getBinding().consumeClick()) {
 
         }
-        if (ActualKeys.SETTINGS.consumeClick()) {
+        if (ActualKeys.SETTINGS.getBinding().consumeClick()) {
             openSettingsScreen();
         }
-        if (ActualKeys.TOGGLE_REPLACE.consumeClick()) {
+        if (ActualKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
 //            cycleReplaceMode(player);
         }
+    }
+
+    public EventResult onInteractionInput(InteractionType type, InteractionHand hand) {
+
+        if (getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).isDisabled()) {
+            return EventResult.pass();
+        }
+        if (!isInteractionCooldown()) {
+            return EventResult.interruptFalse();
+        }
+        resetInteractionCooldown();
+
+        var result = getEntrance().getClient().getLastInteraction();
+        if (result != null && result.getTarget() == Interaction.Target.ENTITY) {
+            return EventResult.interruptFalse();
+        }
+
+        switch (type) {
+            case ATTACK -> getEntrance().getStructureBuilder().onPlayerBreak(getRunningClient().getPlayer());
+            case USE_ITEM -> getEntrance().getStructureBuilder().onPlayerBreak(getRunningClient().getPlayer());
+            case UNKNOWN -> {
+                return EventResult.pass();
+            }
+        }
+
+        return EventResult.interruptTrue();
+
     }
 
     public synchronized void onClientStart(Client client) {
@@ -195,6 +246,8 @@ final class ActualClientManager extends ClientManager {
     public void onClientTick(Client client, TickPhase phase) {
         switch (phase) {
             case START -> {
+                tickCooldown();
+
                 subtitleManager.tick();
 
                 operationsRenderer.tick();

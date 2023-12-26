@@ -10,11 +10,11 @@ enum ActualKeys implements Key {
     BUILD_MODE_SETTINGS("build_mode_settings", KeyCodes.KEY_UNKNOWN),
     PATTERN_SETTINGS("pattern_settings", KeyCodes.KEY_UNKNOWN),
 
-    BUILD_MODE_RADIAL("build_mode_radial", KeyCodes.KEY_LALT),
-    PATTERN_RADIAL("pattern_radial", KeyCodes.KEY_LWIN),
+    BUILD_MODE_RADIAL("build_mode_radial", KeyCodes.KEY_LEFT_ALT),
+    PATTERN_RADIAL("pattern_radial", KeyCodes.KEY_LEFT_SUPER),
 
-    UNDO("undo", KeyCodes.KEY_LBRACKET),
-    REDO("redo", KeyCodes.KEY_RBRACKET),
+    UNDO("undo", KeyCodes.KEY_LEFT_BRACKET),
+    REDO("redo", KeyCodes.KEY_RIGHT_BRACKET),
     //    CYCLE_REPLACE_MODE("cycle_replace", InputConstants.UNKNOWN.getValue()),
     TOGGLE_REPLACE("toggle_replace", KeyCodes.KEY_UNKNOWN),
 
@@ -25,56 +25,17 @@ enum ActualKeys implements Key {
     private final String description;
     private final KeyCodes key;
     private final boolean modifiable;
-    private KeyBinding keyBinding;
+    private final KeyBinding keyBinding;
 
     ActualKeys(String description, KeyCodes defaultKey) {
         this.description = "key.effortless.%s.desc".formatted(description);
         this.key = defaultKey;
         this.modifiable = !description.isEmpty();
-    }
-
-    public String getName() {
-        return description;
+        this.keyBinding = EffortlessClient.getInstance().getPlatform().newKeyBinding(description, "key.effortless.category", key);
     }
 
     @Override
-    public String getCategory() {
-        return "key.effortless.category";
+    public KeyBinding getBinding() {
+        return keyBinding;
     }
-
-    @Override
-    public boolean consumeClick() {
-        return keyBinding.consumeClick();
-    }
-
-    @Override
-    public void bindKeyMapping(KeyBinding keyBinding) {
-        this.keyBinding = keyBinding;
-    }
-
-    @Override
-    public KeyCodes getDefaultKey() {
-        return key;
-    }
-
-    @Override
-    public boolean isDown() {
-        return keyBinding.isDown();
-    }
-
-    @Override
-    public boolean isKeyDown() {
-        return keyBinding.isKeyDown();
-    }
-
-    @Override
-    public String getBoundKey() {
-        return keyBinding.getBoundKey();
-    }
-
-    @Override
-    public int getBoundCode() {
-        return keyBinding.getBoundCode();
-    }
-
 }

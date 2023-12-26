@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.platform;
 
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.input.KeyBinding;
-import dev.huskuraft.effortless.input.KeyBindings;
+import dev.huskuraft.effortless.input.KeyCodes;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.List;
@@ -15,7 +15,8 @@ public interface ClientPlatform extends Platform {
 
     <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor);
 
-    KeyBinding getKeyBinding(KeyBindings keyBindings);
+    KeyBinding getKeyBinding(VanillaKeys key);
 
+    KeyBinding newKeyBinding(String name, String category, KeyCodes key);
 
 }

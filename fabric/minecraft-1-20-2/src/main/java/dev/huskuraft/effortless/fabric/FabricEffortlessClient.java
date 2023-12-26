@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.fabric;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.core.InteractionType;
@@ -9,8 +8,8 @@ import dev.huskuraft.effortless.fabric.events.GuiRenderEvents;
 import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
 import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
+import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
-import dev.huskuraft.effortless.platform.Platform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
@@ -22,7 +21,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -42,9 +40,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         onRegisterKeys(key -> {
-            var keyMapping = new KeyMapping(key.getName(), InputConstants.Type.KEYSYM, MinecraftClientAdapter.adapt(key.getDefaultKey()), key.getCategory());
-            key.bindKeyMapping(MinecraftClientAdapter.adapt(keyMapping));
-            KeyBindingHelper.registerKeyBinding(keyMapping);
+            KeyBindingHelper.registerKeyBinding(MinecraftClientAdapter.adapt(key.getBinding()));
         });
 
         RegisterShadersEvents.REGISTER_SHADERS.register((provider, sink) -> {
@@ -67,16 +63,16 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
             onRenderGui(MinecraftClientAdapter.adapt(guiGraphics), f);
         });
 
-        KeyboardInputEvents.KEY_PRESS.register((key, scanCode, action, modifiers) -> {
-            onKeyPress(key, scanCode, action, modifiers);
+        KeyboardInputEvents.KEY_INPUT.register((key, scanCode, action, modifiers) -> {
+            onKeyInput(new InputKey(key, scanCode, action, modifiers));
         });
 
         InteractionInputEvents.ATTACK.register((player, hand) -> {
-            return onClientPlayerInteract(MinecraftClientAdapter.adapt(player), InteractionType.HIT, MinecraftClientAdapter.adapt(hand)).interruptsFurtherEvaluation();
+            return onInteractionInput(InteractionType.ATTACK, MinecraftClientAdapter.adapt(hand)).interruptsFurtherEvaluation();
         });
 
         InteractionInputEvents.USE_ITEM.register((player, hand) -> {
-            return onClientPlayerInteract(MinecraftClientAdapter.adapt(player), InteractionType.USE, MinecraftClientAdapter.adapt(hand)).interruptsFurtherEvaluation();
+            return onInteractionInput(InteractionType.USE_ITEM, MinecraftClientAdapter.adapt(hand)).interruptsFurtherEvaluation();
         });
 
     }

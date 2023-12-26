@@ -44,7 +44,8 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
     @Override
     public void tick() {
         super.tick();
-        if (!getAssignedKey().isKeyDown()) {
+        Key key = getAssignedKey();
+        if (!key.getBinding().isKeyDown()) {
             detach();
         }
     }

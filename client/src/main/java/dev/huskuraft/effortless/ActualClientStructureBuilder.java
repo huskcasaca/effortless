@@ -7,8 +7,6 @@ import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.core.*;
-import dev.huskuraft.effortless.events.api.EventResult;
-import dev.huskuraft.effortless.input.KeyBindings;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.renderer.LightTexture;
@@ -32,8 +30,6 @@ final class ActualClientStructureBuilder extends StructureBuilder {
         this.entrance = (ClientEntrance) entrance;
 
         getEntrance().getEventRegistry().onClientTick().register(this::onClientTick);
-        getEntrance().getEventRegistry().onClientPlayerInteract().register(this::onPlayerInteract);
-
     }
 
     private static Text getStateComponent(BuildState state) {
@@ -164,7 +160,6 @@ final class ActualClientStructureBuilder extends StructureBuilder {
     @Override
     public void onPlayerPlace(Player player) {
         var context = getContext(player);
-        setRightClickDelay(4); // for single build speed
 
         if (player.getItemStack(InteractionHand.MAIN).isEmpty()) {
             return;
@@ -203,32 +198,10 @@ final class ActualClientStructureBuilder extends StructureBuilder {
         }
     }
 
-    private void setRightClickDelay(int delay) {
-//        getEntrance().getClient().setRightClickDelay(delay); // for single build speed
-    }
-
-    private void tickCooldown() {
-        if (EffortlessClient.getInstance().getPlatform().getKeyBinding(KeyBindings.ATTACK).isDown() ||
-                EffortlessClient.getInstance().getPlatform().getKeyBinding(KeyBindings.USE).isDown() ||
-                EffortlessClient.getInstance().getPlatform().getKeyBinding(KeyBindings.PICK).isDown()) {
-            return;
-        }
-        interactionCooldown = Math.max(0, interactionCooldown - 1);
-    }
-
-    private boolean canInteract() {
-        return interactionCooldown == 0;
-    }
-
-    private void resetCooldown() {
-        interactionCooldown = 1;
-    }
-
     public void onClientTick(Client client, TickPhase phase) {
         if (phase == TickPhase.END) {
             return;
         }
-        tickCooldown();
 
         var player = getEntrance().getClient().getPlayer();
         if (player == null || getContext(player).isDisabled()) {
@@ -253,32 +226,6 @@ final class ActualClientStructureBuilder extends StructureBuilder {
         var result = context.createSession(player.getWorld(), player).build().commit();
 
         showSummaryOverlay(context.uuid(), result, 1);
-    }
-
-    private int interactionCooldown = 0;
-
-    private EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
-        if (getContext(player).isDisabled()) {
-            return EventResult.pass();
-        }
-        if (!canInteract()) {
-            return EventResult.interruptFalse();
-        }
-        resetCooldown();
-
-        var result = getEntrance().getClient().getLastInteraction();
-        if (result != null && result.getTarget() == Interaction.Target.ENTITY) {
-            return EventResult.interruptFalse();
-        }
-
-        switch (type) {
-            case HIT -> onPlayerBreak(player);
-            case USE -> onPlayerPlace(player);
-            case UNKNOWN -> {
-                return EventResult.pass();
-            }
-        }
-        return EventResult.interruptTrue();
     }
 
     private UUID nextUUIDByTag(UUID uuid, String tag) {

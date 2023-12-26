@@ -1,15 +1,14 @@
 package dev.huskuraft.effortless.forge;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
+import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
-import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.api.distmarker.Dist;
@@ -101,9 +100,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         onRegisterKeys(key -> {
-            var keyMapping = new KeyMapping(key.getName(), InputConstants.Type.KEYSYM, MinecraftClientAdapter.adapt(key.getDefaultKey()), key.getCategory());
-            key.bindKeyMapping(MinecraftClientAdapter.adapt(keyMapping));
-            event.register(keyMapping);
+            event.register(MinecraftClientAdapter.adapt(key.getBinding()));
         });
     }
 
@@ -134,12 +131,12 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.Key event) {
-        onKeyPress(event.getKey(), event.getScanCode(), event.getAction(), event.getModifiers());
+        onKeyInput(new InputKey(event.getKey(), event.getScanCode(), event.getAction(), event.getModifiers()));
     }
 
     @SubscribeEvent
     public void onInteractionInput(InputEvent.InteractionKeyMappingTriggered event) {
-        if (onClientPlayerInteract(MinecraftClientAdapter.adapt(Minecraft.getInstance().player), event.isAttack() ? InteractionType.HIT : event.isUseItem() ? InteractionType.USE : InteractionType.UNKNOWN, MinecraftClientAdapter.adapt(event.getHand())).interruptsFurtherEvaluation()) {
+        if (onInteractionInput(event.isAttack() ? InteractionType.ATTACK : event.isUseItem() ? InteractionType.USE_ITEM : InteractionType.UNKNOWN, MinecraftClientAdapter.adapt(event.getHand())).interruptsFurtherEvaluation()) {
             event.setCanceled(true);
             event.setSwingHand(false);
         }

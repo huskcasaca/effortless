@@ -80,7 +80,8 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
     @Override
     public void tick() {
         super.tick();
-        if (!getAssignedKey().isKeyDown()) {
+        Key key = getAssignedKey();
+        if (!key.getBinding().isKeyDown()) {
             detach();
         }
     }

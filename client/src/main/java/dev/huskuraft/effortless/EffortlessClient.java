@@ -2,10 +2,14 @@ package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.config.ClientConfigManager;
-import dev.huskuraft.effortless.core.*;
+import dev.huskuraft.effortless.core.ClientEntrance;
+import dev.huskuraft.effortless.core.InteractionHand;
+import dev.huskuraft.effortless.core.InteractionType;
+import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.events.ClientEventsRegistry;
 import dev.huskuraft.effortless.events.api.EventResult;
-import dev.huskuraft.effortless.input.KeyRegistry;
+import dev.huskuraft.effortless.events.input.KeyRegistry;
+import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.networking.Channel;
 import dev.huskuraft.effortless.networking.NetworkRegistry;
 import dev.huskuraft.effortless.packets.AllPacketListener;
@@ -85,12 +89,12 @@ public abstract class EffortlessClient extends ClientEntrance {
         getEventRegistry().onRenderWorld().invoker().onRenderWorld(renderer, deltaTick);
     }
 
-    protected void onKeyPress(int key, int scanCode, int action, int modifiers) {
-        getEventRegistry().onKeyPress().invoker().onKeyPress(key, scanCode, action, modifiers);
+    protected void onKeyInput(InputKey key) {
+        getEventRegistry().onKeyInput().invoker().onKeyInput(key);
     }
 
-    protected EventResult onClientPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
-        return getEventRegistry().onClientPlayerInteract().invoker().onClientPlayerInteract(player, type, hand);
+    protected EventResult onInteractionInput(InteractionType type, InteractionHand hand) {
+        return getEventRegistry().onInteractionInput().invoker().onInteractionInput(type, hand);
     }
 
 }

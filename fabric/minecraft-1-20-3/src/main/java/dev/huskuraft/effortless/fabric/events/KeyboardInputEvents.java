@@ -5,15 +5,15 @@ import net.fabricmc.fabric.api.event.EventFactory;
 
 public class KeyboardInputEvents {
 
-    public static final Event<KeyPress> KEY_PRESS = EventFactory.createArrayBacked(KeyPress.class, callbacks -> (key, scanCode, action, modifiers) -> {
-        for (KeyPress callback : callbacks) {
-            callback.onKeyPress(key, scanCode, action, modifiers);
+    public static final Event<KeyInput> KEY_INPUT = EventFactory.createArrayBacked(KeyInput.class, callbacks -> (key, scanCode, action, modifiers) -> {
+        for (KeyInput callback : callbacks) {
+            callback.onKeyInput(key, scanCode, action, modifiers);
         }
     });
 
     @FunctionalInterface
-    public interface KeyPress {
-        void onKeyPress(int key, int scanCode, int action, int modifiers);
+    public interface KeyInput {
+        void onKeyInput(int key, int scanCode, int action, int modifiers);
     }
 
 }

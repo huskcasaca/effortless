@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.core;
 
 public enum InteractionType {
-    HIT,
-    USE,
+    ATTACK,
+    USE_ITEM,
     UNKNOWN
 }

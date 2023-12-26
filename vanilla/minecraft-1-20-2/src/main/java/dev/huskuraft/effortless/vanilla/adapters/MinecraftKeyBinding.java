@@ -13,12 +13,23 @@ class MinecraftKeyBinding extends KeyBinding {
         this.keyMapping = keyMapping;
     }
 
-    public static boolean isKeyDown(int key) {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), key);
-    }
-
     public KeyMapping getRef() {
         return keyMapping;
+    }
+
+    @Override
+    public String getName() {
+        return getRef().getName();
+    }
+
+    @Override
+    public String getCategory() {
+        return getRef().getCategory();
+    }
+
+    @Override
+    public int getDefaultKey() {
+        return getRef().getDefaultKey().getValue();
     }
 
     @Override
@@ -33,7 +44,7 @@ class MinecraftKeyBinding extends KeyBinding {
 
     @Override
     public boolean isKeyDown() {
-        return isKeyDown(getRef().key.getValue());
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), getRef().key.getValue());
     }
 
     @Override

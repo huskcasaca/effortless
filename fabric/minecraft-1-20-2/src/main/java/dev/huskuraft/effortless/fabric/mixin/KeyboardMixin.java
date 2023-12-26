@@ -20,7 +20,7 @@ public abstract class KeyboardMixin {
     @Inject(method = "keyPress", at = @At(value = "RETURN"))
     private void onKeyPress(long l, int i, int j, int k, int m, CallbackInfo ci) {
         if (l == minecraft.getWindow().getWindow()) {
-            KeyboardInputEvents.KEY_PRESS.invoker().onKeyPress(i, j, k, m);
+            KeyboardInputEvents.KEY_INPUT.invoker().onKeyInput(i, j, k, m);
         }
     }
 
