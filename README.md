@@ -128,7 +128,10 @@ Hold ALT key to switch build modes in the radial panel. There are buttons for un
 * Initial release
 
 ## Credits
-* **[Requioss](https://www.curseforge.com/members/requioss)**, the author of [Effortless Building](https://www.curseforge.com/minecraft/mc-mods/effortless-building) 
+
+* **[Requioss](https://www.curseforge.com/members/requioss)**, the author
+  of [Effortless Building](https://www.curseforge.com/minecraft/mc-mods/effortless-building)
+* **[loehnertj](https://github.com/loehnertj)**, for porting to 1.20.2
 
 ## License
 
