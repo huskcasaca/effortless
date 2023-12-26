@@ -157,7 +157,7 @@ class MinecraftRenderer extends Renderer {
         var camera = camera().position();
         var dispatcher = Minecraft.getInstance().getBlockRenderer();
         var buffer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderTypes().solid(color)));
-        var worldRef = MinecraftClientAdapter.adapt(world);
+        var worldRef = ((MinecraftWorld) world).getRef();
         var blockStateRef = MinecraftClientAdapter.adapt(blockData);
         var blockPosRef = MinecraftClientAdapter.adapt(blockPosition);
 

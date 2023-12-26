@@ -5,10 +5,8 @@ import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.platform.Server;
 import dev.huskuraft.effortless.text.Text;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 
@@ -39,7 +37,7 @@ class MinecraftPlayer extends Player {
 
     @Override
     public World getWorld() {
-        return MinecraftAdapter.adapt(getRef().level());
+        return new MinecraftWorld(getRef().level());
     }
 
     @Override

@@ -17,7 +17,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -26,20 +25,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class MinecraftAdapter {
-
-    public static World adapt(Level world) {
-        if (world == null) {
-            return null;
-        }
-        return new MinecraftWorld(world);
-    }
-
-    public static Level adapt(World world) {
-        if (world == null) {
-            return null;
-        }
-        return ((MinecraftWorld) world).getRef();
-    }
 
     public static Player adapt(net.minecraft.world.entity.player.Player player) {
         if (player == null) {

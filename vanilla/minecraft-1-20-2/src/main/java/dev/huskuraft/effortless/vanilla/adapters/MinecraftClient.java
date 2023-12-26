@@ -46,7 +46,7 @@ class MinecraftClient extends Client {
 
     @Override
     public World getWorld() {
-        return MinecraftClientAdapter.adapt(getRef().level);
+        return new MinecraftWorld(getRef().level);
     }
 
     @Override
