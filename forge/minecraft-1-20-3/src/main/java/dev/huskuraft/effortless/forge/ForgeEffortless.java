@@ -2,7 +2,9 @@ package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.platform.Platform;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,17 +25,24 @@ import java.nio.file.Path;
 @Mod.EventBusSubscriber(modid = Effortless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeEffortless extends Effortless {
 
-    public static final EventNetworkChannel CHANNEL =
-            ChannelBuilder.named(MinecraftAdapter.adapt(Effortless.CHANNEL_ID))
-                    .acceptedVersions((status, version) -> true)
-                    .optional()
-                    .networkProtocolVersion(Effortless.COMPATIBILITY_VERSION)
-                    .eventNetworkChannel();
+    public static EventNetworkChannel CHANNEL;
+
+//    public static EventNetworkChannel networkChannel;
+//
+//    public static EventNetworkChannel getNetworkChannel() {
+//        return networkChannel;
+//    }
 
     public ForgeEffortless() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
+
+        CHANNEL = ChannelBuilder.named(MinecraftResource.toMinecraftResource(getChannel().getChannelId()))
+                .acceptedVersions((status, version) -> true)
+                .optional()
+                .networkProtocolVersion(getChannel().getCompatibilityVersion())
+                .eventNetworkChannel();
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ForgeEffortlessClient::new);
     }
@@ -88,14 +97,14 @@ public class ForgeEffortless extends Effortless {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
                     try {
-                        receiver.receiveBuffer(MinecraftAdapter.adapt(event1.getPayload()), MinecraftAdapter.adapt(event1.getSource().getSender()));
+                        receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(event1.getPayload()), MinecraftPlayer.fromMinecraftPlayer(event1.getSource().getSender()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
             return (buffer, player) -> {
-                ((ServerPlayer) MinecraftAdapter.adapt(player)).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(MinecraftAdapter.adapt(buffer), ForgeEffortless.CHANNEL.getName()).getThis());
+                ((ServerPlayer) MinecraftPlayer.toMinecraftPlayer(player)).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(MinecraftBuffer.toMinecraftBuffer(buffer), ForgeEffortless.CHANNEL.getName()).getThis());
             };
         });
     }

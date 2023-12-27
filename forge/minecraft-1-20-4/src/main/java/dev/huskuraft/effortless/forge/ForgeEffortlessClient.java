@@ -6,11 +6,10 @@ import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
+import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -80,19 +79,19 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
-        onClientStart(MinecraftClientAdapter.adapt(Minecraft.getInstance()));
+        onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
         onRegisterNetwork(receiver -> {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
                     try {
-                        receiver.receiveBuffer(MinecraftClientAdapter.adapt(event1.getPayload()), MinecraftClientAdapter.adapt(Minecraft.getInstance().player));
+                        receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(event1.getPayload()), MinecraftClientPlayer.fromMinecraftPlayer(Minecraft.getInstance().player));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
             return (buffer, player) -> {
-                Minecraft.getInstance().getConnection().send(NetworkDirection.PLAY_TO_SERVER.buildPacket(MinecraftClientAdapter.adapt(buffer), ForgeEffortless.CHANNEL.getName()).getThis());
+                Minecraft.getInstance().getConnection().send(NetworkDirection.PLAY_TO_SERVER.buildPacket(MinecraftBuffer.toMinecraftBuffer(buffer), ForgeEffortless.CHANNEL.getName()).getThis());
             };
         });
     }
@@ -100,7 +99,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         onRegisterKeys(key -> {
-            event.register(MinecraftClientAdapter.adapt(key.getBinding()));
+            event.register(MinecraftKeyBinding.toMinecraft(key.getBinding()));
         });
     }
 
@@ -111,7 +110,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        onClientTick(MinecraftClientAdapter.adapt(Minecraft.getInstance()), switch (event.phase) {
+        onClientTick(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()), switch (event.phase) {
             case START -> TickPhase.START;
             case END -> TickPhase.END;
         });
@@ -120,13 +119,13 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onRenderLevelStage(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_ENTITIES) {
-            onRenderWorld(MinecraftClientAdapter.adapt(new GuiGraphics(Minecraft.getInstance(), event.getPoseStack(), Minecraft.getInstance().renderBuffers().bufferSource())), event.getPartialTick());
+            onRenderWorld(new MinecraftRenderer(event.getPoseStack(), Minecraft.getInstance().renderBuffers().bufferSource()), event.getPartialTick());
         }
     }
 
     @SubscribeEvent
     public void onRenderGui(RenderGuiEvent event) {
-        onRenderGui(MinecraftClientAdapter.adapt(event.getGuiGraphics()), event.getPartialTick());
+        onRenderGui(new MinecraftRenderer(event.getGuiGraphics()), event.getPartialTick());
     }
 
     @SubscribeEvent
@@ -136,7 +135,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onInteractionInput(InputEvent.InteractionKeyMappingTriggered event) {
-        if (onInteractionInput(event.isAttack() ? InteractionType.ATTACK : event.isUseItem() ? InteractionType.USE_ITEM : InteractionType.UNKNOWN, MinecraftClientAdapter.adapt(event.getHand())).interruptsFurtherEvaluation()) {
+        if (onInteractionInput(event.isAttack() ? InteractionType.ATTACK : event.isUseItem() ? InteractionType.USE_ITEM : InteractionType.UNKNOWN, MinecraftPlayer.fromMinecraftInteractionHand(event.getHand())).interruptsFurtherEvaluation()) {
             event.setCanceled(true);
             event.setSwingHand(false);
         }

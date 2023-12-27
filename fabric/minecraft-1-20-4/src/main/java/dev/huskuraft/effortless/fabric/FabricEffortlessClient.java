@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.fabric;
 
-import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
@@ -10,8 +9,7 @@ import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
 import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
 import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
+import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import net.fabricmc.api.ClientModInitializer;
@@ -22,7 +20,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 
 import java.nio.file.Path;
 
@@ -30,17 +27,17 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
 
     @Override
     public void onInitializeClient() {
-        onClientStart(MinecraftClientAdapter.adapt(Minecraft.getInstance()));
+        onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
         onRegisterNetwork(receiver -> {
-            var channelId = MinecraftAdapter.adapt(Effortless.CHANNEL_ID);
+            var channelId = MinecraftResource.toMinecraftResource(getChannel().getChannelId());
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
-                receiver.receiveBuffer(MinecraftClientAdapter.adapt(buf), MinecraftClientAdapter.adapt(client.player));
+                receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(buf), MinecraftPlayer.fromMinecraftPlayer(client.player));
             });
-            return (buffer, player) -> ClientPlayNetworking.send(channelId, MinecraftClientAdapter.adapt(buffer));
+            return (buffer, player) -> ClientPlayNetworking.send(channelId, MinecraftBuffer.toMinecraftBuffer(buffer));
         });
 
         onRegisterKeys(key -> {
-            KeyBindingHelper.registerKeyBinding(MinecraftClientAdapter.adapt(key.getBinding()));
+            KeyBindingHelper.registerKeyBinding(MinecraftKeyBinding.toMinecraft(key.getBinding()));
         });
 
         RegisterShadersEvents.REGISTER_SHADERS.register((provider, sink) -> {
@@ -48,19 +45,19 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
-            onClientTick(MinecraftClientAdapter.adapt(minecraft), TickPhase.START);
+            onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.START);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            onClientTick(MinecraftClientAdapter.adapt(minecraft), TickPhase.END);
+            onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.END);
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            onRenderWorld(MinecraftClientAdapter.adapt(new GuiGraphics(Minecraft.getInstance(), context.matrixStack(), Minecraft.getInstance().renderBuffers().bufferSource())), context.tickDelta());
+            onRenderWorld(new MinecraftRenderer(context.matrixStack(), Minecraft.getInstance().renderBuffers().bufferSource()), context.tickDelta());
         });
 
         GuiRenderEvents.RENDER_GUI.register((guiGraphics, f) -> {
-            onRenderGui(MinecraftClientAdapter.adapt(guiGraphics), f);
+            onRenderGui(new MinecraftRenderer(guiGraphics), f);
         });
 
         KeyboardInputEvents.KEY_INPUT.register((key, scanCode, action, modifiers) -> {
@@ -68,11 +65,11 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         InteractionInputEvents.ATTACK.register((player, hand) -> {
-            return onInteractionInput(InteractionType.ATTACK, MinecraftClientAdapter.adapt(hand)).interruptsFurtherEvaluation();
+            return onInteractionInput(InteractionType.ATTACK, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
         InteractionInputEvents.USE_ITEM.register((player, hand) -> {
-            return onInteractionInput(InteractionType.USE_ITEM, MinecraftClientAdapter.adapt(hand)).interruptsFurtherEvaluation();
+            return onInteractionInput(InteractionType.USE_ITEM, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
     }

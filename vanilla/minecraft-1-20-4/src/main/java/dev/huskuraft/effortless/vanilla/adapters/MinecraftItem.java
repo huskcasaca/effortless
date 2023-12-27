@@ -6,31 +6,35 @@ import dev.huskuraft.effortless.core.Resource;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 
-class MinecraftItem extends Item {
+public class MinecraftItem extends Item {
 
-    private final net.minecraft.world.item.Item item;
+    private final net.minecraft.world.item.Item reference;
 
-    MinecraftItem(net.minecraft.world.item.Item item) {
-        this.item = item;
+    MinecraftItem(net.minecraft.world.item.Item reference) {
+        this.reference = reference;
     }
 
-    public net.minecraft.world.item.Item getRef() {
-        return item;
+    public static Item fromMinecraft(net.minecraft.world.item.Item item) {
+        return new MinecraftItem(item);
+    }
+
+    public static net.minecraft.world.item.Item toMinecraft(Item item) {
+        return ((MinecraftItem) item).reference;
     }
 
     @Override
     public ItemStack getDefaultStack() {
-        return MinecraftAdapter.adapt(getRef().getDefaultInstance());
+        return MinecraftItemStack.fromMinecraft(reference.getDefaultInstance());
     }
 
     @Override
     public boolean isBlockItem() {
-        return getRef() instanceof BlockItem;
+        return reference instanceof BlockItem;
     }
 
     @Override
     public Resource getId() {
-        return MinecraftAdapter.adapt(BuiltInRegistries.ITEM.getKey(getRef()));
+        return MinecraftResource.fromMinecraftResource(BuiltInRegistries.ITEM.getKey(reference));
     }
 
     @Override
@@ -40,11 +44,11 @@ class MinecraftItem extends Item {
 
         var that = (MinecraftItem) o;
 
-        return item.equals(that.item);
+        return reference.equals(that.reference);
     }
 
     @Override
     public int hashCode() {
-        return item.hashCode();
+        return reference.hashCode();
     }
 }

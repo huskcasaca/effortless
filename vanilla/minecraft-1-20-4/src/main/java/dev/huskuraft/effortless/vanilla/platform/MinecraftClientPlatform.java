@@ -8,7 +8,9 @@ import dev.huskuraft.effortless.platform.SearchBy;
 import dev.huskuraft.effortless.platform.SearchTree;
 import dev.huskuraft.effortless.platform.VanillaKeys;
 import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftClientAdapter;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftItemStack;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftKeyBinding;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftText;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;
@@ -31,17 +33,17 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
                     case NAME -> SearchRegistry.CREATIVE_NAMES;
                     case TAG -> SearchRegistry.CREATIVE_TAGS;
                 }
-        ).search(query).stream().map(MinecraftClientAdapter::adapt).toList();
+        ).search(query).stream().map(MinecraftItemStack::fromMinecraft).toList();
     }
 
     @Override
     public <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
-        return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> MinecraftClientAdapter.adapt(text).getString())).search(query);
+        return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> MinecraftText.toMinecraftText(text).getString())).search(query);
     }
 
     @Override
     public KeyBinding getKeyBinding(VanillaKeys key) {
-        return MinecraftClientAdapter.adapt(switch (key) {
+        return MinecraftKeyBinding.fromMinecraft(switch (key) {
             case KEY_UP -> Minecraft.getInstance().options.keyUp;
             case KEY_LEFT -> Minecraft.getInstance().options.keyLeft;
             case KEY_DOWN -> Minecraft.getInstance().options.keyDown;
@@ -81,6 +83,6 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
 
     @Override
     public KeyBinding newKeyBinding(String name, String category, KeyCodes key) {
-        return MinecraftClientAdapter.adapt(new KeyMapping(name, key.value(), category));
+        return MinecraftKeyBinding.fromMinecraft(new KeyMapping(name, key.value(), category));
     }
 }

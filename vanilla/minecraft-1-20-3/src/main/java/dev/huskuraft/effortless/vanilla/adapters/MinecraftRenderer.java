@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.math.Vector3d;
@@ -9,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -19,7 +21,7 @@ import org.joml.Quaternionf;
 import java.util.List;
 import java.util.Optional;
 
-class MinecraftRenderer extends Renderer {
+public class MinecraftRenderer extends Renderer {
 
     @Deprecated
     private static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation("textures/gui/options_background.png");
@@ -28,20 +30,24 @@ class MinecraftRenderer extends Renderer {
 
     private static final RenderTypes RENDER_STYLE_PROVIDER = new MinecraftRenderTypes();
     private static final RandomSource RAND = RandomSource.create();
-    private final GuiGraphics proxy;
+    private final GuiGraphics reference;
 
-    MinecraftRenderer(GuiGraphics proxy) {
-        this.proxy = proxy;
+    public MinecraftRenderer(GuiGraphics reference) {
+        this.reference = reference;
+    }
+
+    public MinecraftRenderer(PoseStack poseStack, MultiBufferSource.BufferSource bufferSource) {
+        this.reference = new GuiGraphics(Minecraft.getInstance(), poseStack, bufferSource);
     }
 
     @Override
     public int windowWidth() {
-        return proxy.guiWidth();
+        return reference.guiWidth();
     }
 
     @Override
     public int windowHeight() {
-        return proxy.guiHeight();
+        return reference.guiHeight();
     }
 
     @Override
@@ -54,7 +60,7 @@ class MinecraftRenderer extends Renderer {
         return new Camera() {
             @Override
             public Vector3d position() {
-                return MinecraftClientAdapter.adapt(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
+                return MinecraftPlayer.fromMinecraftVector3d(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
             }
 
             @Override
@@ -71,59 +77,59 @@ class MinecraftRenderer extends Renderer {
 
     @Override
     public void pushPose() {
-        proxy.pose().pushPose();
+        reference.pose().pushPose();
     }
 
     @Override
     public void popPose() {
-        proxy.pose().popPose();
+        reference.pose().popPose();
     }
 
     @Override
     public Matrix4f lastPose() {
-        return proxy.pose().last().pose();
+        return reference.pose().last().pose();
     }
 
     @Override
     public Matrix3f lastPoseNormal() {
-        return proxy.pose().last().normal();
+        return reference.pose().last().normal();
     }
 
     @Override
     public void enableScissor(int x1, int y1, int x2, int y2) {
-        proxy.enableScissor(x1, y1, x2, y2);
+        reference.enableScissor(x1, y1, x2, y2);
     }
 
     @Override
     public void disableScissor() {
-        proxy.disableScissor();
+        reference.disableScissor();
     }
 
     @Override
     public void setShaderColor(float red, float green, float blue, float alpha) {
-        proxy.setColor(red, green, blue, alpha);
+        reference.setColor(red, green, blue, alpha);
     }
 
     @Override
     public VertexBuffer vertexBuffer(RenderType renderType) {
-        return new MinecraftVertexBuffer(proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderType)));
+        return new MinecraftVertexBuffer(reference.bufferSource().getBuffer(MinecraftRenderType.toMinecraftRenderType(renderType)));
     }
 
     @Override
     public void flush() {
-        proxy.flush();
+        reference.flush();
     }
 
     @Override
     public int renderText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, FontDisplay mode, int lightMap) {
-        var width = MinecraftClientAdapter.adapt(typeface).drawInBatch(MinecraftClientAdapter.adapt(text), x, y, color, shadow, lastPose(), proxy.bufferSource(), Font.DisplayMode.values()[mode.ordinal()], backgroundColor, lightMap);
+        var width = MinecraftTypeface.toMinecraftTypeface(typeface).drawInBatch(MinecraftText.toMinecraftText(text), x, y, color, shadow, lastPose(), reference.bufferSource(), Font.DisplayMode.values()[mode.ordinal()], backgroundColor, lightMap);
         flush();
         return width;
     }
 
     @Override
     public void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-        proxy.innerBlit(MinecraftClientAdapter.adapt(resource), x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
+        reference.innerBlit(MinecraftResource.toMinecraftResource(resource), x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
     }
 
     @Override
@@ -133,50 +139,44 @@ class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderButtonTexture(int x, int y, int width, int height, boolean active, boolean focused) {
-        proxy.blitSprite(BUTTON_SPRITES.get(active, focused), x, y, width, height);
+        reference.blitSprite(BUTTON_SPRITES.get(active, focused), x, y, width, height);
     }
 
     @Override
     public void renderItem(ItemStack stack, int x, int y) {
-        proxy.renderItem(MinecraftClientAdapter.adapt(stack), x, y);
+        reference.renderItem(MinecraftItemStack.toMinecraftItemStack(stack), x, y);
     }
 
     @Override
     public void renderTooltip(Typeface typeface, List<Text> list, int x, int y) {
-        proxy.renderTooltip(MinecraftClientAdapter.adapt(typeface), list.stream().map(MinecraftAdapter::adapt).toList(), Optional.empty(), x, y);
+        reference.renderTooltip(MinecraftTypeface.toMinecraftTypeface(typeface), list.stream().map(MinecraftText::toMinecraftText).toList(), Optional.empty(), x, y);
     }
 
     @Override
     public void renderTooltip(Typeface typeface, ItemStack itemStack, int x, int y) {
-        proxy.renderTooltip(MinecraftClientAdapter.adapt(typeface), MinecraftClientAdapter.adapt(itemStack), x, y);
+        reference.renderTooltip(MinecraftTypeface.toMinecraftTypeface(typeface), MinecraftItemStack.toMinecraftItemStack(itemStack), x, y);
     }
 
     @Override
-    public void renderBlockInWorld(World world, BlockPosition blockPosition, BlockData blockData, int color) {
-        var scale = 129 / 128f;
-        var camera = camera().position();
-        var dispatcher = Minecraft.getInstance().getBlockRenderer();
-        var buffer = proxy.bufferSource().getBuffer(MinecraftClientAdapter.adapt(renderTypes().solid(color)));
-        var worldRef = MinecraftClientAdapter.adapt(world);
-        var blockStateRef = MinecraftClientAdapter.adapt(blockData);
-        var blockPosRef = MinecraftClientAdapter.adapt(blockPosition);
+    public void renderBlockInWorld(RenderType renderType, World world, BlockPosition blockPosition, BlockData blockData) {
+        var minecraftBlockRenderer = Minecraft.getInstance().getBlockRenderer();
+        var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
+        var minecraftRenderType = MinecraftRenderType.toMinecraftRenderType(renderType);
+        var minecraftBlockData = MinecraftBlockData.toMinecraftBlockData(blockData);
+        var minecraftBlockPosition = MinecraftPlayer.toMinecraftBlockPosition(blockPosition);
 
-        pushPose();
-        translate(blockPosRef.getX() - camera.x(), blockPosRef.getY() - camera.y(), blockPosRef.getZ() - camera.z());
-        translate((scale - 1) / -2, (scale - 1) / -2, (scale - 1) / -2);
-        scale(scale, scale, scale);
-        dispatcher.getModelRenderer().tesselateBlock(
-                worldRef,
-                dispatcher.getBlockModel(blockStateRef),
-                blockStateRef,
-                blockPosRef,
-                proxy.pose(),
-                buffer,
+        minecraftBlockRenderer.getModelRenderer().tesselateBlock(
+                minecraftWorld,
+                minecraftBlockRenderer.getBlockModel(minecraftBlockData),
+                minecraftBlockData,
+                minecraftBlockPosition,
+                reference.pose(),
+                reference.bufferSource().getBuffer(minecraftRenderType),
                 false,
                 RAND,
-                blockStateRef.getSeed(blockPosRef),
+                minecraftBlockData.getSeed(minecraftBlockPosition),
                 OverlayTexture.NO_OVERLAY);
-        popPose();
+
     }
 
     @Override

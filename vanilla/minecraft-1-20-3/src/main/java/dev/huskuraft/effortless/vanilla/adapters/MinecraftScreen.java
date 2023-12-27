@@ -4,22 +4,22 @@ import dev.huskuraft.effortless.gui.AbstractScreen;
 import dev.huskuraft.effortless.text.Text;
 import net.minecraft.client.gui.screens.Screen;
 
-class MinecraftScreen extends AbstractScreen {
+public class MinecraftScreen extends AbstractScreen {
 
-    private final Screen screen;
+    private final Screen reference;
 
-    MinecraftScreen(Screen screen) {
+    MinecraftScreen(Screen reference) {
         super(null, Text.empty());
-        this.screen = screen;
+        this.reference = reference;
     }
 
-    public Screen getRef() {
-        return screen;
+    public Screen getReference() {
+        return reference;
     }
 
     @Override
     public Text getScreenTitle() {
-        return MinecraftClientAdapter.adapt(getRef().getTitle());
+        return MinecraftText.fromMinecraftText(reference.getTitle());
     }
 
     @Override

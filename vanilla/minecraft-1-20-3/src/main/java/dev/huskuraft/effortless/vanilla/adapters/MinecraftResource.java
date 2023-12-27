@@ -3,25 +3,35 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.core.Resource;
 import net.minecraft.resources.ResourceLocation;
 
-class MinecraftResource extends Resource {
+public class MinecraftResource extends Resource {
 
-    private final ResourceLocation resourceLocation;
+    private final ResourceLocation reference;
 
-    MinecraftResource(ResourceLocation resourceLocation) {
-        this.resourceLocation = resourceLocation;
+    MinecraftResource(ResourceLocation reference) {
+        this.reference = reference;
     }
 
-    public ResourceLocation getRef() {
-        return resourceLocation;
+    public static Resource fromMinecraftResource(ResourceLocation resourceLocation) {
+        if (resourceLocation == null) {
+            return null;
+        }
+        return new MinecraftResource(resourceLocation);
+    }
+
+    public static ResourceLocation toMinecraftResource(Resource resource) {
+        if (resource == null) {
+            return null;
+        }
+        return ((MinecraftResource) resource).reference;
     }
 
     @Override
     public String getNamespace() {
-        return getRef().getNamespace();
+        return reference.getNamespace();
     }
 
     @Override
     public String getPath() {
-        return getRef().getPath();
+        return reference.getPath();
     }
 }

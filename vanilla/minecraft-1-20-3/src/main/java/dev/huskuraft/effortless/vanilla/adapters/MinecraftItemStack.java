@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.TooltipFlag;
@@ -11,116 +12,139 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
-class MinecraftItemStack extends ItemStack {
+public class MinecraftItemStack extends ItemStack {
 
-    private final net.minecraft.world.item.ItemStack itemStack;
+    private final net.minecraft.world.item.ItemStack reference;
 
-    MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
-        this.itemStack = itemStack;
+    public MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
+        this.reference = itemStack;
     }
 
-    public net.minecraft.world.item.ItemStack getRef() {
-        return itemStack;
+    public MinecraftItemStack(net.minecraft.world.item.Item item, int count) {
+        this.reference = new net.minecraft.world.item.ItemStack(item, count);
+    }
+
+    public MinecraftItemStack(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
+        this.reference = new net.minecraft.world.item.ItemStack(item, count);
+        this.reference.setTag(tag);
+    }
+
+    public static ItemStack fromMinecraft(net.minecraft.world.item.ItemStack itemStack) {
+        return new MinecraftItemStack(itemStack);
+    }
+
+    public static ItemStack fromMinecraft(net.minecraft.world.item.Item item, int count) {
+        return new MinecraftItemStack(item, count);
+    }
+
+    public static ItemStack fromMinecraft(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
+        return new MinecraftItemStack(item, tag, count);
+    }
+
+    public static net.minecraft.world.item.ItemStack toMinecraftItemStack(ItemStack itemStack) {
+        return ((MinecraftItemStack) itemStack).reference;
     }
 
     @Override
     public boolean isEmpty() {
-        return getRef().isEmpty();
+        return reference.isEmpty();
     }
 
     @Override
     public boolean isAir() {
-        return getRef().getItem() instanceof AirItem;
+        return reference.getItem() instanceof AirItem;
     }
 
     @Override
     public boolean isBlock() {
-        return getRef().getItem() instanceof BlockItem;
+        return reference.getItem() instanceof BlockItem;
     }
 
     @Override
     public Item getItem() {
-        return MinecraftAdapter.adapt(getRef().getItem());
+        return MinecraftItem.fromMinecraft(reference.getItem());
     }
 
     @Override
     public int getStackSize() {
-        return getRef().getCount();
+        return reference.getCount();
     }
 
     @Override
     public void setStackSize(int count) {
-        getRef().setCount(count);
+        reference.setCount(count);
     }
 
     @Override
     public int getMaxStackSize() {
-        return getRef().getMaxStackSize();
+        return reference.getMaxStackSize();
     }
 
     @Override
     public Text getHoverName() {
-        return MinecraftAdapter.adapt(getRef().getHoverName());
+        return MinecraftText.fromMinecraftText(reference.getHoverName());
     }
 
     @Override
     public List<Text> getDescription(Player player, TooltipType flag) {
-        return getRef().getTooltipLines(MinecraftAdapter.adapt(player), switch (flag) {
+        return reference.getTooltipLines(MinecraftPlayer.toMinecraftPlayer(player), switch (flag) {
             case NORMAL -> TooltipFlag.NORMAL;
             case NORMAL_CREATIVE -> TooltipFlag.NORMAL.asCreative();
             case ADVANCED -> TooltipFlag.ADVANCED;
             case ADVANCED_CREATIVE -> TooltipFlag.ADVANCED.asCreative();
-        }).stream().map(MinecraftAdapter::adapt).toList();
+        }).stream().map(MinecraftText::fromMinecraftText).toList();
     }
 
     @Override
     public void increase(int count) {
-        getRef().grow(count);
+        reference.grow(count);
     }
 
     @Override
     public void decrease(int count) {
-        getRef().shrink(count);
+        reference.shrink(count);
     }
 
     @Override
     public ItemStack copy() {
-        return new MinecraftItemStack(getRef().copy());
+        return MinecraftItemStack.fromMinecraft(reference.copy());
     }
 
     @Override
     public boolean isItem(Item item) {
-        return getRef().is(MinecraftAdapter.adapt(item));
+        return reference.is(MinecraftItem.toMinecraft(item));
     }
 
     @Override
     public boolean itemEquals(ItemStack itemStack) {
-        return getRef().is(MinecraftAdapter.adapt(itemStack).getItem());
+        return reference.is(((MinecraftItemStack) itemStack).reference.getItem());
     }
 
     @Override
     public boolean tagEquals(ItemStack itemStack) {
-        return net.minecraft.world.item.ItemStack.isSameItemSameTags(getRef(), ((MinecraftItemStack) itemStack).getRef());
+        return net.minecraft.world.item.ItemStack.isSameItemSameTags(reference, ((MinecraftItemStack) itemStack).reference);
     }
 
     @Override
     public TagRecord getTag() {
-        return MinecraftAdapter.adapt(getRef().getOrCreateTag());
+        return MinecraftTagRecord.fromMinecraft(reference.getOrCreateTag());
     }
 
     @Override
     public void setTag(TagRecord tagRecord) {
-        getRef().setTag(MinecraftAdapter.adapt(tagRecord));
+        reference.setTag(MinecraftTagRecord.toMinecraft(tagRecord));
     }
 
     @Override
     public BlockData getBlockData(Player player, BlockInteraction interaction) {
-        var playerRef = MinecraftAdapter.adapt(player);
-        var hitResultRef = MinecraftAdapter.adapt(interaction);
-        var handRef = MinecraftAdapter.adapt(interaction.getHand());
 
-        var blockPlaceContextRef = new BlockPlaceContext(playerRef, handRef, getRef(), hitResultRef);
+        var blockPlaceContext = new BlockPlaceContext(
+                MinecraftPlayer.toMinecraftPlayer(player),
+                MinecraftPlayer.toMinecraftInteractionHand(interaction.getHand()),
+                MinecraftItemStack.toMinecraftItemStack(this),
+                MinecraftPlayer.toMinecraftBlockInteraction(interaction)
+        );
 
-        return MinecraftAdapter.adapt(Block.byItem(getRef().getItem()).getStateForPlacement(blockPlaceContextRef));
+        return MinecraftBlockData.fromMinecraftBlockData(Block.byItem(reference.getItem()).getStateForPlacement(blockPlaceContext));
     }
 }

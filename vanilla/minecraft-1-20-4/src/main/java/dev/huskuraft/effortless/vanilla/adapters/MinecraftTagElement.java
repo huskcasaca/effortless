@@ -8,26 +8,40 @@ import net.minecraft.nbt.Tag;
 
 import java.util.Objects;
 
-class MinecraftTagElement extends TagElement {
+public class MinecraftTagElement extends TagElement {
 
-    private Tag tag;
+    protected Tag reference;
 
-    MinecraftTagElement(Tag tag) {
-        this.tag = tag;
+    MinecraftTagElement(Tag reference) {
+        this.reference = reference;
     }
 
-    public Tag getRef() {
-        return Objects.requireNonNull(tag);
+    public static TagElement toTagElement(Tag tag) {
+        if (tag == null) {
+            return null;
+        }
+        return new MinecraftTagElement(tag);
     }
 
-    public void setRef(Tag tag) {
-        this.tag = tag;
+    public static Tag toMinecraft(TagElement tag) {
+        if (tag == null) {
+            return null;
+        }
+        return ((MinecraftTagElement) tag).getReference();
+    }
+
+    public Tag getReference() {
+        return Objects.requireNonNull(reference);
+    }
+
+    public void setReference(Tag tag) {
+        this.reference = tag;
     }
 
     @Override
     public TagRecord asRecord() {
-        if (tag == null) {
-            this.tag = new CompoundTag();
+        if (reference == null) {
+            this.reference = new CompoundTag();
         }
         return new MinecraftTagRecord(this);
     }
@@ -42,11 +56,11 @@ class MinecraftTagElement extends TagElement {
         if (this == o) return true;
         if (!(o instanceof MinecraftTagElement that)) return false;
 
-        return getRef().equals(that.getRef());
+        return getReference().equals(that.getReference());
     }
 
     @Override
     public int hashCode() {
-        return getRef().hashCode();
+        return getReference().hashCode();
     }
 }

@@ -1,46 +1,42 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.core.*;
-import dev.huskuraft.effortless.platform.Server;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.context.BlockPlaceContext;
+import dev.huskuraft.effortless.core.BlockData;
+import dev.huskuraft.effortless.core.BlockPosition;
+import dev.huskuraft.effortless.core.Player;
+import dev.huskuraft.effortless.core.World;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 
 import java.util.UUID;
 
-class MinecraftWorld extends World {
+public class MinecraftWorld extends World {
 
-    private final Level level;
+    private final Level reference;
 
-    MinecraftWorld(Level level) {
-        this.level = level;
+    MinecraftWorld(Level reference) {
+        this.reference = reference;
     }
 
-    public Level getRef() {
-        return level;
+    public static World fromMinecraftWorld(Level level) {
+        return new MinecraftWorld(level);
+    }
+
+    public static Level toMinecraftWorld(World world) {
+        return ((MinecraftWorld) world).reference;
     }
 
     @Override
     public Player getPlayer(UUID uuid) {
-        return MinecraftAdapter.adapt(getRef().getPlayerByUUID(uuid));
+        return MinecraftPlayer.fromMinecraftPlayer(reference.getPlayerByUUID(uuid));
     }
 
     @Override
     public BlockData getBlockData(BlockPosition blockPosition) {
-        return MinecraftAdapter.adapt(getRef().getBlockState(MinecraftAdapter.adapt(blockPosition)));
+        return MinecraftBlockData.fromMinecraftBlockData(reference.getBlockState(MinecraftPlayer.toMinecraftBlockPosition(blockPosition)));
     }
 
     @Override
     public boolean isClient() {
-        return getRef().isClientSide();
+        return reference.isClientSide();
     }
 
 }

@@ -10,176 +10,180 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.UUID;
 
-class MinecraftBuffer extends Buffer {
+public class MinecraftBuffer extends Buffer {
 
-    private final FriendlyByteBuf buffer;
+    private final FriendlyByteBuf reference;
 
-    MinecraftBuffer(FriendlyByteBuf buffer) {
-        this.buffer = buffer;
+    MinecraftBuffer(FriendlyByteBuf reference) {
+        this.reference = reference;
     }
 
-    public FriendlyByteBuf getRef() {
-        return buffer;
+    public static Buffer fromMinecraftBuffer(FriendlyByteBuf buffer) {
+        return new MinecraftBuffer(buffer);
+    }
+
+    public static FriendlyByteBuf toMinecraftBuffer(Buffer buffer) {
+        return ((MinecraftBuffer) buffer).reference;
     }
 
     @Override
     public UUID readUUID() {
-        return getRef().readUUID();
+        return reference.readUUID();
     }
 
     @Override
     public <T extends Enum<T>> T readEnum(Class<T> clazz) {
-        return getRef().readEnum(clazz);
+        return reference.readEnum(clazz);
     }
 
     @Override
     public String readString() {
-        return getRef().readUtf();
+        return reference.readUtf();
     }
 
     @Override
     public Text readText() {
-        return MinecraftAdapter.adapt(getRef().readComponent());
+        return MinecraftText.fromMinecraftText(reference.readComponent());
     }
 
     @Override
     public boolean readBoolean() {
-        return getRef().readBoolean();
+        return reference.readBoolean();
     }
 
     @Override
     public byte readByte() {
-        return getRef().readByte();
+        return reference.readByte();
     }
 
     @Override
     public short readShort() {
-        return getRef().readShort();
+        return reference.readShort();
     }
 
     @Override
     public int readInt() {
-        return getRef().readInt();
+        return reference.readInt();
     }
 
     @Override
     public int readVarInt() {
-        return getRef().readVarInt();
+        return reference.readVarInt();
     }
 
     @Override
     public long readLong() {
-        return getRef().readLong();
+        return reference.readLong();
     }
 
     @Override
     public long readVarLong() {
-        return getRef().readVarLong();
+        return reference.readVarLong();
     }
 
     @Override
     public float readFloat() {
-        return getRef().readFloat();
+        return reference.readFloat();
     }
 
     @Override
     public double readDouble() {
-        return getRef().readDouble();
+        return reference.readDouble();
     }
 
     @Override
     public Item readItem() {
-        return MinecraftAdapter.adapt(getRef().readById(BuiltInRegistries.ITEM));
+        return MinecraftItem.fromMinecraft(reference.readById(BuiltInRegistries.ITEM));
     }
 
     @Override
     public ItemStack readItemStack() {
-        return MinecraftAdapter.adapt(getRef().readItem());
+        return MinecraftItemStack.fromMinecraft(reference.readItem());
     }
 
     @Override
     public TagRecord readTagRecord() {
-        return MinecraftAdapter.adapt(getRef().readNbt());
+        return MinecraftTagRecord.fromMinecraft(reference.readNbt());
     }
 
     @Override
     public void writeUUID(UUID uuid) {
-        getRef().writeUUID(uuid);
+        reference.writeUUID(uuid);
     }
 
     @Override
     public <T extends Enum<T>> void writeEnum(Enum<T> value) {
-        getRef().writeEnum(value);
+        reference.writeEnum(value);
     }
 
     @Override
     public void writeString(String value) {
-        getRef().writeUtf(value);
+        reference.writeUtf(value);
     }
 
     @Override
     public void writeText(Text value) {
-        getRef().writeComponent(MinecraftAdapter.adapt(value));
+        reference.writeComponent(MinecraftText.toMinecraftText(value));
     }
 
     @Override
     public void writeBoolean(boolean value) {
-        getRef().writeBoolean(value);
+        reference.writeBoolean(value);
     }
 
     @Override
     public void writeByte(byte value) {
-        getRef().writeByte(value);
+        reference.writeByte(value);
     }
 
     @Override
     public void writeShort(short value) {
-        getRef().writeShort(value);
+        reference.writeShort(value);
     }
 
     @Override
     public void writeInt(int value) {
-        getRef().writeInt(value);
+        reference.writeInt(value);
     }
 
     @Override
     public void writeVarInt(int value) {
-        getRef().writeVarInt(value);
+        reference.writeVarInt(value);
     }
 
     @Override
     public void writeLong(long value) {
-        getRef().writeLong(value);
+        reference.writeLong(value);
     }
 
     @Override
     public void writeVarLong(long value) {
-        getRef().writeVarLong(value);
+        reference.writeVarLong(value);
     }
 
     @Override
     public void writeFloat(float value) {
-        getRef().writeFloat(value);
+        reference.writeFloat(value);
     }
 
     @Override
     public void writeDouble(double value) {
-        getRef().writeDouble(value);
+        reference.writeDouble(value);
     }
 
     @Override
     public void writeItem(Item value) {
-        getRef().writeId(BuiltInRegistries.ITEM, MinecraftAdapter.adapt(value));
+        reference.writeId(BuiltInRegistries.ITEM, MinecraftItem.toMinecraft(value));
     }
 
     @Override
     public void writeItemStack(ItemStack value) {
-        getRef().writeItem(MinecraftAdapter.adapt(value));
+        reference.writeItem(MinecraftItemStack.toMinecraftItemStack(value));
     }
 
     @Override
     public void writeTagRecord(TagRecord value) {
-        getRef().writeNbt(MinecraftAdapter.adapt(value));
+        reference.writeNbt(MinecraftTagRecord.toMinecraft(value));
 
     }
 

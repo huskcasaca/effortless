@@ -3,196 +3,255 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.math.Vector3d;
+import dev.huskuraft.effortless.math.Vector3i;
 import dev.huskuraft.effortless.platform.Server;
 import dev.huskuraft.effortless.text.Text;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-class MinecraftPlayer extends Player {
+public class MinecraftPlayer extends Player {
 
-    private final net.minecraft.world.entity.player.Player player;
+    protected final net.minecraft.world.entity.player.Player reference;
 
-    MinecraftPlayer(net.minecraft.world.entity.player.Player player) {
-        this.player = player;
+    MinecraftPlayer(net.minecraft.world.entity.player.Player reference) {
+        this.reference = reference;
     }
 
-    public net.minecraft.world.entity.player.Player getRef() {
-        return player;
+    public static Player fromMinecraftPlayer(net.minecraft.world.entity.player.Player player) {
+        return new MinecraftPlayer(player);
+    }
+
+    public static net.minecraft.world.entity.player.Player toMinecraftPlayer(Player player) {
+        return ((MinecraftPlayer) player).reference;
+    }
+
+    public static BlockPos toMinecraftBlockPosition(BlockPosition value) {
+        return new BlockPos(value.x(), value.y(), value.z());
+    }
+
+    public static BlockPos toMinecraftBlockPosition(Vector3i value) {
+        return new BlockPos(value.x(), value.y(), value.z());
+    }
+
+    public static Vec3i toMinecraftVector3i(Vector3i value) {
+        return new Vec3i(value.x(), value.y(), value.z());
+    }
+
+    public static Vec3 toMinecraftVector3d(Vector3d value) {
+        return new Vec3(value.x(), value.y(), value.z());
+    }
+
+    public static BlockPosition toBlockPosition(BlockPos value) {
+        return new BlockPosition(value.getX(), value.getY(), value.getZ());
+    }
+
+    public static Vector3d fromMinecraftVector3d(Vec3 value) {
+        return new Vector3d(value.x(), value.y(), value.z());
+    }
+
+    public static Vector3i fromMinecraftVector3i(Vec3i value) {
+        return new Vector3i(value.getX(), value.getY(), value.getZ());
+    }
+
+    public static Interaction fromMinecraftInteraction(HitResult value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof BlockHitResult blockHitResult) {
+            return fromMinecraftBlockInteraction(blockHitResult);
+        }
+        if (value instanceof EntityHitResult entityHitResult) {
+            return fromMinecraftEntityInteraction(entityHitResult);
+        }
+        throw new IllegalArgumentException("Unknown Interaction: " + value);
+    }
+
+    public static EntityInteraction fromMinecraftEntityInteraction(EntityHitResult value) {
+        if (value == null) {
+            return null;
+        }
+        return new EntityInteraction(fromMinecraftVector3d(value.getLocation()), null);
+    }
+
+    public static BlockInteraction fromMinecraftBlockInteraction(BlockHitResult value) {
+        if (value == null) {
+            return null;
+        }
+        return new BlockInteraction(fromMinecraftVector3d(value.getLocation()), fromMinecraftOrientation(value.getDirection()), toBlockPosition(value.getBlockPos()), value.isInside());
+    }
+
+    public static BlockHitResult toMinecraftBlockInteraction(BlockInteraction value) {
+        if (value == null) {
+            return null;
+        }
+        return new BlockHitResult(
+                toMinecraftVector3d(value.getPosition()),
+                toMinecraftOrientation(value.getDirection()),
+                toMinecraftBlockPosition(value.getBlockPosition()),
+                value.isInside());
+    }
+
+    public static InteractionHand fromMinecraftInteractionHand(net.minecraft.world.InteractionHand value) {
+        return switch (value) {
+            case MAIN_HAND -> InteractionHand.MAIN;
+            case OFF_HAND -> InteractionHand.OFF;
+        };
+    }
+
+    public static net.minecraft.world.InteractionHand toMinecraftInteractionHand() {
+        return net.minecraft.world.InteractionHand.MAIN_HAND;
+    }
+
+    public static net.minecraft.world.InteractionHand toMinecraftInteractionHand(InteractionHand value) {
+        return switch (value) {
+            case MAIN -> net.minecraft.world.InteractionHand.MAIN_HAND;
+            case OFF -> net.minecraft.world.InteractionHand.OFF_HAND;
+        };
+    }
+
+    public static Orientation fromMinecraftOrientation(Direction value) {
+        return switch (value) {
+            case DOWN -> Orientation.DOWN;
+            case UP -> Orientation.UP;
+            case NORTH -> Orientation.NORTH;
+            case SOUTH -> Orientation.SOUTH;
+            case WEST -> Orientation.WEST;
+            case EAST -> Orientation.EAST;
+        };
+    }
+
+    public static Direction toMinecraftOrientation(Orientation value) {
+        return switch (value) {
+            case DOWN -> Direction.DOWN;
+            case UP -> Direction.UP;
+            case NORTH -> Direction.NORTH;
+            case SOUTH -> Direction.SOUTH;
+            case WEST -> Direction.WEST;
+            case EAST -> Direction.EAST;
+        };
     }
 
     @Override
     public UUID getId() {
-        return getRef().getUUID();
+        return reference.getUUID();
     }
 
     @Override
     public Server getServer() {
-        return MinecraftAdapter.adapt(getRef().getServer());
+        return new MinecraftServer(reference.getServer());
     }
 
     @Override
     public World getWorld() {
-        return MinecraftAdapter.adapt(getRef().level());
+        return new MinecraftWorld(reference.level());
     }
 
     @Override
     public Storage getStorage() {
-        if (getRef().isCreative()) {
+        if (reference.isCreative()) {
             return Storage.fullStorage();
         }
-        return Storage.create(getRef().getInventory().items.stream().map(MinecraftAdapter::adapt).collect(Collectors.toList()));
+        return Storage.create(reference.getInventory().items.stream().map(MinecraftItemStack::fromMinecraft).collect(Collectors.toList()));
     }
 
     @Override
     public Text getDisplayName() {
-        return MinecraftAdapter.adapt(getRef().getDisplayName());
+        return MinecraftText.fromMinecraftText(reference.getDisplayName());
     }
 
     @Override
     public Vector3d getPosition() {
-        return MinecraftAdapter.adapt(getRef().position());
+        return fromMinecraftVector3d(reference.position());
     }
 
     @Override
     public Vector3d getEyePosition() {
-        return MinecraftAdapter.adapt(getRef().getEyePosition());
+        return fromMinecraftVector3d(reference.getEyePosition());
     }
 
     @Override
     public Vector3d getEyeDirection() {
-        return MinecraftAdapter.adapt(getRef().getLookAngle());
+        return fromMinecraftVector3d(reference.getLookAngle());
     }
 
     @Override
     public ItemStack getItemStack(InteractionHand hand) {
-        return MinecraftAdapter.adapt(getRef().getItemInHand(MinecraftAdapter.adapt(hand)));
+        return MinecraftItemStack.fromMinecraft(reference.getItemInHand(toMinecraftInteractionHand(hand)));
     }
 
     @Override
     public void setItemStack(InteractionHand hand, ItemStack itemStack) {
-        getRef().setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, MinecraftAdapter.adapt(itemStack));
+        reference.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, MinecraftItemStack.toMinecraftItemStack(itemStack));
     }
 
     @Override
     public void sendMessage(Text message) {
-        getRef().sendSystemMessage(MinecraftAdapter.adapt(message));
+        reference.sendSystemMessage(MinecraftText.toMinecraftText(message));
 //        getRef().displayClientMessage(message, true);
     }
 
     @Override
     public void swing(InteractionHand hand) {
-        getRef().swing(MinecraftAdapter.adapt(hand));
+        reference.swing(toMinecraftInteractionHand(hand));
     }
 
     @Override
-    public boolean canInteractBlock(BlockInteraction interaction) {
-        return !getRef().blockActionRestricted(getRef().level(), MinecraftAdapter.adapt(interaction.getBlockPosition()), MinecraftAdapter.adapt(getGameType()));
+    public boolean canInteractBlock(BlockPosition blockPosition) {
+        return !reference.blockActionRestricted(reference.level(), toMinecraftBlockPosition(blockPosition), switch (getGameType()) {
+            case SURVIVAL -> GameType.SURVIVAL;
+            case CREATIVE -> GameType.CREATIVE;
+            case ADVENTURE -> GameType.ADVENTURE;
+            case SPECTATOR -> GameType.SPECTATOR;
+        });
     }
 
     @Override
     public boolean canAttackBlock(BlockPosition blockPosition) {
-        return getRef().getMainHandItem().getItem().canAttackBlock(getRef().level().getBlockState(MinecraftAdapter.adapt(blockPosition)), getRef().level(), MinecraftAdapter.adapt(blockPosition), getRef());
+        return reference.getMainHandItem().getItem().canAttackBlock(reference.level().getBlockState(toMinecraftBlockPosition(blockPosition)), reference.level(), toMinecraftBlockPosition(blockPosition), reference);
     }
 
     @Override
     public GameMode getGameType() {
-        if (getRef() instanceof ServerPlayer serverPlayer) {
-            return MinecraftAdapter.adapt(serverPlayer.gameMode.getGameModeForPlayer());
+        if (reference instanceof ServerPlayer serverPlayer) {
+            return switch (serverPlayer.gameMode.getGameModeForPlayer()) {
+                case SURVIVAL -> GameMode.SURVIVAL;
+                case CREATIVE -> GameMode.CREATIVE;
+                case ADVENTURE -> GameMode.ADVENTURE;
+                case SPECTATOR -> GameMode.SPECTATOR;
+            };
         }
         return null;
     }
 
     @Override
     public BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids) {
-        return (BlockInteraction) MinecraftAdapter.adapt(getRef().pick(maxDistance, deltaTick, includeFluids));
+        return (BlockInteraction) fromMinecraftInteraction(reference.pick(maxDistance, deltaTick, includeFluids));
     }
 
     @Override
     public boolean tryPlaceBlock(BlockInteraction interaction, BlockData blockData, ItemStack itemStack) {
-        return ((BlockItem) MinecraftAdapter.adapt(blockData).getBlock().asItem()).place(new BlockPlaceContext(getRef(), MinecraftAdapter.adapt(interaction.getHand()), MinecraftAdapter.adapt(itemStack), MinecraftAdapter.adapt(interaction))).consumesAction();
+        return ((BlockItem) MinecraftBlockData.toMinecraftBlockData(blockData).getBlock().asItem()).place(new BlockPlaceContext(reference, toMinecraftInteractionHand(interaction.getHand()), MinecraftItemStack.toMinecraftItemStack(itemStack), toMinecraftBlockInteraction(interaction))).consumesAction();
     }
 
     @Override
     public boolean tryBreakBlock(BlockInteraction interaction) {
-        var blockPosRef = MinecraftAdapter.adapt(interaction.getBlockPosition());
-        if (getRef() instanceof ServerPlayer serverPlayer) {
-            return serverPlayer.gameMode.destroyBlock(blockPosRef);
+        if (reference instanceof ServerPlayer serverPlayer) {
+            return serverPlayer.gameMode.destroyBlock(toMinecraftBlockPosition(interaction.getBlockPosition()));
         }
-        return Minecraft.getInstance().gameMode.destroyBlock(blockPosRef);
+        return Minecraft.getInstance().gameMode.destroyBlock(toMinecraftBlockPosition(interaction.getBlockPosition()));
     }
 
-    @Override
-    public boolean tryPlaceBlockNoCheck(BlockInteraction interaction, BlockData blockData, ItemStack itemStack) {
-
-        var playerRef = getRef();
-        var levelRef = MinecraftAdapter.adapt(getWorld());
-        var itemStackRef = MinecraftAdapter.adapt(itemStack);
-        var blockStateRef = MinecraftAdapter.adapt(blockData);
-        var blockItemRef = (BlockItem) blockStateRef.getBlock().asItem();
-        var blockHitResultRef = MinecraftAdapter.adapt(interaction);
-        var handRef = MinecraftAdapter.adapt(interaction.getHand());
-        var blockPosRef = blockHitResultRef.getBlockPos();
-
-        var innerContext = new BlockPlaceContext(playerRef, handRef, itemStackRef, blockHitResultRef);
-        var isRemoved = levelRef.setBlock(innerContext.getClickedPos(), blockStateRef, 11);
-        if (!isRemoved) {
-            return false;
-        }
-        var blockStateRef2 = levelRef.getBlockState(blockPosRef);
-        if (blockStateRef2.is(blockStateRef.getBlock())) {
-//            blockStateRef2 = blockItemRef.updateBlockStateFromTag(blockPosRef, levelRef, itemStack, blockStateRef2);
-//            blockItemRef.updateCustomBlockEntityTag(blockPosRef, levelRef, player, itemStack, blockStateRef2);
-            blockStateRef2.getBlock().setPlacedBy(levelRef, blockPosRef, blockStateRef2, playerRef, itemStackRef);
-            if (playerRef instanceof ServerPlayer) {
-                CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer) player, blockPosRef, itemStackRef);
-            }
-        }
-        if (!playerRef.getAbilities().instabuild) {
-            playerRef.getMainHandItem().shrink(1);
-        }
-
-        if (playerRef instanceof ServerPlayer serverPlayer) {
-            CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, blockPosRef, itemStackRef);
-        }
-        playerRef.awardStat(Stats.ITEM_USED.get(blockItemRef));
-        return true;
-
-    }
-
-    @Override
-    public boolean tryBreakBlockNoCheck(BlockInteraction interaction) {
-        var playerRef = getRef();
-        var levelRef = MinecraftAdapter.adapt(getWorld());
-        var blockPosRef = MinecraftAdapter.adapt(interaction.getBlockPosition());
-        var blockStateRef = levelRef.getBlockState(blockPosRef);
-        var blockRef = blockStateRef.getBlock();
-        var blockEntityRef = levelRef.getBlockEntity(blockPosRef);
-        var fluidStateRef = levelRef.getFluidState(blockPosRef);
-
-        blockRef.playerWillDestroy(levelRef, blockPosRef, blockStateRef, playerRef);
-        var isRemoved = levelRef.setBlock(blockPosRef, fluidStateRef.createLegacyBlock(), 11);
-        if (isRemoved) {
-            blockRef.destroy(levelRef, blockPosRef, blockStateRef);
-        }
-        // server
-        if (playerRef.isCreative()) {
-            return true;
-        }
-        var itemStackRef = playerRef.getMainHandItem();
-        var itemStackRef2 = itemStackRef.copy();
-        var isCorrectTool = playerRef.hasCorrectToolForDrops(blockStateRef);
-        itemStackRef.mineBlock(levelRef, blockStateRef, blockPosRef, playerRef);
-        if (isRemoved && isCorrectTool) {
-            blockRef.playerDestroy(levelRef, playerRef, blockPosRef, blockStateRef, blockEntityRef, itemStackRef2);
-            return true;
-        }
-        return false;
-    }
 }

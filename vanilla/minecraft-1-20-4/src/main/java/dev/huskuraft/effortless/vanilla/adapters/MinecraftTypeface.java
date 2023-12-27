@@ -4,46 +4,56 @@ import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.text.Text;
 import net.minecraft.client.gui.Font;
 
-class MinecraftTypeface extends Typeface {
+public class MinecraftTypeface extends Typeface {
 
-    private final Font font;
+    private final Font reference;
 
-    MinecraftTypeface(Font font) {
-        this.font = font;
+    MinecraftTypeface(Font reference) {
+        this.reference = reference;
     }
 
-    public Font getRef() {
-        return font;
+    public static Typeface fromMinecraftTypeface(Font value) {
+        if (value == null) {
+            return null;
+        }
+        return new MinecraftTypeface(value);
+    }
+
+    public static Font toMinecraftTypeface(Typeface value) {
+        if (value == null) {
+            return null;
+        }
+        return ((MinecraftTypeface) value).reference;
     }
 
     @Override
     public int measureHeight(Text text) {
-        return getRef().lineHeight;
+        return reference.lineHeight;
     }
 
     @Override
     public int measureWidth(Text text) {
-        return getRef().width(MinecraftClientAdapter.adapt(text));
+        return reference.width(MinecraftText.toMinecraftText(text));
     }
 
     @Override
     public int measureHeight(String text) {
-        return getRef().lineHeight;
+        return reference.lineHeight;
     }
 
     @Override
     public int measureWidth(String text) {
-        return getRef().width(text);
+        return reference.width(text);
     }
 
     @Override
     public int getLineHeight() {
-        return getRef().lineHeight;
+        return reference.lineHeight;
     }
 
     @Override
     public String subtractByWidth(String text, int width, boolean tail) {
-        return getRef().plainSubstrByWidth(text, width, tail);
+        return reference.plainSubstrByWidth(text, width, tail);
     }
 
 }
