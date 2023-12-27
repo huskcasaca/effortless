@@ -114,6 +114,6 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
 
     @Override
     public Component getTitle() {
-        return MinecraftClientAdapter.adapt(getProxy().getScreenTitle());
+        return MinecraftText.toMinecraftText(getProxy().getScreenTitle());
     }
 }

@@ -99,7 +99,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         onRegisterKeys(key -> {
-            event.register(MinecraftClientAdapter.adapt(key.getBinding()));
+            event.register(MinecraftKeyBinding.toMinecraft(key.getBinding()));
         });
     }
 
@@ -135,7 +135,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onInteractionInput(InputEvent.InteractionKeyMappingTriggered event) {
-        if (onInteractionInput(event.isAttack() ? InteractionType.ATTACK : event.isUseItem() ? InteractionType.USE_ITEM : InteractionType.UNKNOWN, MinecraftClientAdapter.adapt(event.getHand())).interruptsFurtherEvaluation()) {
+        if (onInteractionInput(event.isAttack() ? InteractionType.ATTACK : event.isUseItem() ? InteractionType.USE_ITEM : InteractionType.UNKNOWN, MinecraftBasicTypes.fromMinecraftInteractionHand(event.getHand())).interruptsFurtherEvaluation()) {
             event.setCanceled(true);
             event.setSwingHand(false);
         }

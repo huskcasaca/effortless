@@ -59,7 +59,7 @@ public class MinecraftClient extends Client {
 
     @Override
     public Typeface getTypeface() {
-        return MinecraftClientAdapter.adapt(getRef().font);
+        return MinecraftTypeface.fromMinecraftTypeface(getRef().font);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class MinecraftClient extends Client {
 
     @Override
     public Interaction getLastInteraction() {
-        return MinecraftClientAdapter.adapt(getRef().hitResult);
+        return MinecraftBasicTypes.fromMinecraftInteraction(getRef().hitResult);
     }
 
     @Override

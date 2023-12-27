@@ -30,7 +30,7 @@ public class MinecraftItem extends Item {
 
     @Override
     public Resource getId() {
-        return MinecraftAdapter.adapt(BuiltInRegistries.ITEM.getKey(getRef()));
+        return MinecraftResource.fromMinecraftResource(BuiltInRegistries.ITEM.getKey(getRef()));
     }
 
     @Override

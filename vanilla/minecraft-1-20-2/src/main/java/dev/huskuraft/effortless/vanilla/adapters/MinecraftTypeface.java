@@ -12,6 +12,20 @@ public class MinecraftTypeface extends Typeface {
         this.font = font;
     }
 
+    public static Typeface fromMinecraftTypeface(Font font) {
+        if (font == null) {
+            return null;
+        }
+        return new MinecraftTypeface(font);
+    }
+
+    public static Font toMinecraftTypeface(Typeface typeface) {
+        if (typeface == null) {
+            return null;
+        }
+        return ((MinecraftTypeface) typeface).getRef();
+    }
+
     public Font getRef() {
         return font;
     }
@@ -23,7 +37,7 @@ public class MinecraftTypeface extends Typeface {
 
     @Override
     public int measureWidth(Text text) {
-        return getRef().width(MinecraftClientAdapter.adapt(text));
+        return getRef().width(MinecraftText.toMinecraftText(text));
     }
 
     @Override

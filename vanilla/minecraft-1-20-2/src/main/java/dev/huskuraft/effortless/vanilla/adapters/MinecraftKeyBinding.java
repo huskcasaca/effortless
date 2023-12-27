@@ -13,6 +13,20 @@ public class MinecraftKeyBinding extends KeyBinding {
         this.keyMapping = keyMapping;
     }
 
+    public static KeyBinding fromMinecraft(KeyMapping keyMapping) {
+        if (keyMapping == null) {
+            return null;
+        }
+        return new MinecraftKeyBinding(keyMapping);
+    }
+
+    public static KeyMapping toMinecraft(KeyBinding keyBinding) {
+        if (keyBinding == null) {
+            return null;
+        }
+        return ((MinecraftKeyBinding) keyBinding).getRef();
+    }
+
     public KeyMapping getRef() {
         return keyMapping;
     }

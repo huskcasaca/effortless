@@ -18,6 +18,20 @@ public class MinecraftTagRecord extends TagRecord {
         this.proxy = tag;
     }
 
+    public static TagRecord toTagRecord(CompoundTag tag) {
+        if (tag == null) {
+            return null;
+        }
+        return new MinecraftTagElement(tag).asRecord();
+    }
+
+    public static CompoundTag toMinecraft(TagRecord tag) {
+        if (tag == null) {
+            return null;
+        }
+        return ((MinecraftTagRecord) tag).getRef();
+    }
+
     public CompoundTag getRef() {
         return (CompoundTag) proxy.getRef();
     }
@@ -44,12 +58,12 @@ public class MinecraftTagRecord extends TagRecord {
 
     @Override
     public Text getText(String key) {
-        return MinecraftAdapter.adapt(Component.Serializer.fromJson(getRef().getString(key)));
+        return MinecraftText.fromMinecraftText(Component.Serializer.fromJson(getRef().getString(key)));
     }
 
     @Override
     public void putText(String key, Text value) {
-        getRef().putString(key, Component.Serializer.toJson(MinecraftAdapter.adapt(value)));
+        getRef().putString(key, Component.Serializer.toJson(MinecraftText.toMinecraftText(value)));
     }
 
     @Override
@@ -194,12 +208,12 @@ public class MinecraftTagRecord extends TagRecord {
 
     @Override
     public TagElement getElement(String key) {
-        return MinecraftAdapter.adapt(getRef().get(key));
+        return MinecraftTagElement.toTagElement(getRef().get(key));
     }
 
     @Override
     public void putElement(String key, TagElement value) {
-        getRef().put(key, MinecraftAdapter.adapt(value));
+        getRef().put(key, MinecraftTagElement.toMinecraft(value));
     }
 
     @Override

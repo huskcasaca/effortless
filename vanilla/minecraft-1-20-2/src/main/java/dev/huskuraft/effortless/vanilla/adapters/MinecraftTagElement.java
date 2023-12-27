@@ -16,6 +16,20 @@ public class MinecraftTagElement extends TagElement {
         this.tag = tag;
     }
 
+    public static TagElement toTagElement(Tag tag) {
+        if (tag == null) {
+            return null;
+        }
+        return new MinecraftTagElement(tag);
+    }
+
+    public static Tag toMinecraft(TagElement tag) {
+        if (tag == null) {
+            return null;
+        }
+        return ((MinecraftTagElement) tag).getRef();
+    }
+
     public Tag getRef() {
         return Objects.requireNonNull(tag);
     }

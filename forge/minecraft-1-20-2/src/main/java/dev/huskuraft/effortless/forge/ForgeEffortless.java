@@ -2,9 +2,9 @@ package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.platform.Platform;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftAdapter;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -26,7 +26,7 @@ import java.nio.file.Path;
 public class ForgeEffortless extends Effortless {
 
     public static final EventNetworkChannel CHANNEL =
-            ChannelBuilder.named(MinecraftAdapter.adapt(Effortless.CHANNEL_ID))
+            ChannelBuilder.named(MinecraftResource.toMinecraftResource(Effortless.CHANNEL_ID))
                     .acceptedVersions((status, version) -> true)
                     .optional()
                     .networkProtocolVersion(Effortless.COMPATIBILITY_VERSION)
@@ -97,7 +97,7 @@ public class ForgeEffortless extends Effortless {
                 }
             });
             return (buffer, player) -> {
-                ((ServerPlayer) ((MinecraftPlayer) player).getRef()).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(((MinecraftBuffer) buffer).getRef(), ForgeEffortless.CHANNEL.getName()).getThis());
+                ((ServerPlayer) MinecraftPlayer.toMinecraftPlayer(player)).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(((MinecraftBuffer) buffer).getRef(), ForgeEffortless.CHANNEL.getName()).getThis());
             };
         });
     }

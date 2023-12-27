@@ -15,23 +15,37 @@ public class MinecraftText extends Text {
         this.component = component;
     }
 
+    public static Text fromMinecraftText(Component component) {
+        if (component == null) {
+            return null;
+        }
+        return new MinecraftText(component);
+    }
+
+    public static Component toMinecraftText(Text text) {
+        if (text == null) {
+            return null;
+        }
+        return ((MinecraftText) text).getRef();
+    }
+
     public Component getRef() {
         return component;
     }
 
     @Override
     public Text withStyle(TextStyle... styles) {
-        return MinecraftAdapter.adapt(component.copy().withStyle(Arrays.stream(styles).map(MinecraftText::adapt).toArray(ChatFormatting[]::new)));
+        return fromMinecraftText(component.copy().withStyle(Arrays.stream(styles).map(MinecraftText::adapt).toArray(ChatFormatting[]::new)));
     }
 
     @Override
     public Text append(Text append) {
-        return MinecraftAdapter.adapt(component.copy().append(MinecraftAdapter.adapt(append)));
+        return fromMinecraftText(component.copy().append(toMinecraftText(append)));
     }
 
     @Override
     public Text copy() {
-        return MinecraftAdapter.adapt(component.copy());
+        return fromMinecraftText(component.copy());
     }
 
     @Override

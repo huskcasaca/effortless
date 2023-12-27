@@ -33,7 +33,7 @@ public abstract class Player {
 
     public abstract void swing(InteractionHand hand);
 
-    public abstract boolean canInteractBlock(BlockInteraction interaction);
+    public abstract boolean canInteractBlock(BlockPosition blockPosition);
 
     public abstract boolean canAttackBlock(BlockPosition blockPosition);
 

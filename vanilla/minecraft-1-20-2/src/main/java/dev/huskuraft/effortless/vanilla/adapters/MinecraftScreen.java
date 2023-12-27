@@ -19,7 +19,7 @@ public class MinecraftScreen extends AbstractScreen {
 
     @Override
     public Text getScreenTitle() {
-        return MinecraftClientAdapter.adapt(getRef().getTitle());
+        return MinecraftText.fromMinecraftText(getRef().getTitle());
     }
 
     @Override

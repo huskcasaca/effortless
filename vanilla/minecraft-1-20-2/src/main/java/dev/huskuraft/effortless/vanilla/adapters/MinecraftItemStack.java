@@ -29,7 +29,11 @@ public class MinecraftItemStack extends ItemStack {
         this.itemStack.setTag(tag);
     }
 
-    public net.minecraft.world.item.ItemStack getRef() {
+    public static net.minecraft.world.item.ItemStack toMinecraftItemStack(ItemStack itemStack) {
+        return ((MinecraftItemStack) itemStack).getRef();
+    }
+
+    private net.minecraft.world.item.ItemStack getRef() {
         return itemStack;
     }
 
@@ -70,17 +74,17 @@ public class MinecraftItemStack extends ItemStack {
 
     @Override
     public Text getHoverName() {
-        return MinecraftAdapter.adapt(getRef().getHoverName());
+        return MinecraftText.fromMinecraftText(getRef().getHoverName());
     }
 
     @Override
     public List<Text> getDescription(Player player, TooltipType flag) {
-        return getRef().getTooltipLines(((MinecraftPlayer) player).getRef(), switch (flag) {
+        return getRef().getTooltipLines(MinecraftPlayer.toMinecraftPlayer(player), switch (flag) {
             case NORMAL -> TooltipFlag.NORMAL;
             case NORMAL_CREATIVE -> TooltipFlag.NORMAL.asCreative();
             case ADVANCED -> TooltipFlag.ADVANCED;
             case ADVANCED_CREATIVE -> TooltipFlag.ADVANCED.asCreative();
-        }).stream().map(MinecraftAdapter::adapt).toList();
+        }).stream().map(MinecraftText::fromMinecraftText).toList();
     }
 
     @Override
@@ -115,22 +119,24 @@ public class MinecraftItemStack extends ItemStack {
 
     @Override
     public TagRecord getTag() {
-        return MinecraftAdapter.adapt(getRef().getOrCreateTag());
+        return MinecraftTagRecord.toTagRecord(getRef().getOrCreateTag());
     }
 
     @Override
     public void setTag(TagRecord tagRecord) {
-        getRef().setTag(MinecraftAdapter.adapt(tagRecord));
+        getRef().setTag(MinecraftTagRecord.toMinecraft(tagRecord));
     }
 
     @Override
     public BlockData getBlockData(Player player, BlockInteraction interaction) {
-        var playerRef = ((MinecraftPlayer) player).getRef();
-        var hitResultRef = MinecraftAdapter.adapt(interaction);
-        var handRef = MinecraftAdapter.adapt(interaction.getHand());
 
-        var blockPlaceContextRef = new BlockPlaceContext(playerRef, handRef, getRef(), hitResultRef);
+        var blockPlaceContext = new BlockPlaceContext(
+                MinecraftPlayer.toMinecraftPlayer(player),
+                MinecraftBasicTypes.toMinecraftInteractionHand(interaction.getHand()),
+                MinecraftItemStack.toMinecraftItemStack(this),
+                MinecraftBasicTypes.toMinecraftBlockInteraction(interaction)
+        );
 
-        return new MinecraftBlockData(Block.byItem(getRef().getItem()).getStateForPlacement(blockPlaceContextRef));
+        return new MinecraftBlockData(Block.byItem(getRef().getItem()).getStateForPlacement(blockPlaceContext));
     }
 }

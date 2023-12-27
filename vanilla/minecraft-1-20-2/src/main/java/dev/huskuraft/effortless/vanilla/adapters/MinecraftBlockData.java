@@ -75,7 +75,7 @@ public class MinecraftBlockData extends BlockData {
 
     @Override
     public BlockData rotate(Revolve revolve) {
-        return new MinecraftBlockData(blockState.rotate(MinecraftAdapter.adapt(revolve)));
+        return new MinecraftBlockData(blockState.rotate(MinecraftBasicTypes.toMinecraftRotation(revolve)));
     }
 
     @Override
@@ -110,10 +110,10 @@ public class MinecraftBlockData extends BlockData {
     @Override
     public boolean isReplaceable(Player player, BlockInteraction interaction) {
         return getRef().canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
-                ((MinecraftPlayer) player).getRef(),
-                MinecraftAdapter.adapt(interaction.getHand()),
-                ((MinecraftItemStack) player.getItemStack(interaction.getHand())).getRef(),
-                MinecraftAdapter.adapt(interaction)
+                MinecraftPlayer.toMinecraftPlayer(player),
+                MinecraftBasicTypes.toMinecraftInteractionHand(interaction.getHand()),
+                MinecraftItemStack.toMinecraftItemStack(player.getItemStack(interaction.getHand())),
+                MinecraftBasicTypes.toMinecraftBlockInteraction(interaction)
         ));
     }
 

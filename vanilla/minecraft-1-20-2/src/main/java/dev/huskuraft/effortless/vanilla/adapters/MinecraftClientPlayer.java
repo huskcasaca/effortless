@@ -14,14 +14,19 @@ public class MinecraftClientPlayer extends MinecraftPlayer {
     @Override
     public GameMode getGameType() {
         if (getRef() instanceof AbstractClientPlayer localPlayer) {
-            return MinecraftClientAdapter.adapt(localPlayer.getPlayerInfo().getGameMode());
+            return switch (localPlayer.getPlayerInfo().getGameMode()) {
+                case SURVIVAL -> GameMode.SURVIVAL;
+                case CREATIVE -> GameMode.CREATIVE;
+                case ADVENTURE -> GameMode.ADVENTURE;
+                case SPECTATOR -> GameMode.SPECTATOR;
+            };
         }
         return null;
     }
 
     @Override
     public BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids) {
-        return (BlockInteraction) MinecraftClientAdapter.adapt(getRef().pick(maxDistance, deltaTick, includeFluids));
+        return (BlockInteraction) MinecraftBasicTypes.fromMinecraftInteraction(getRef().pick(maxDistance, deltaTick, includeFluids));
     }
 
 }

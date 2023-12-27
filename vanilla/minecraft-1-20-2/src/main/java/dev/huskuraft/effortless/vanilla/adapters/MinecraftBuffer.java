@@ -39,7 +39,7 @@ public class MinecraftBuffer extends Buffer {
 
     @Override
     public Text readText() {
-        return MinecraftAdapter.adapt(getRef().readComponent());
+        return MinecraftText.fromMinecraftText(getRef().readComponent());
     }
 
     @Override
@@ -99,7 +99,7 @@ public class MinecraftBuffer extends Buffer {
 
     @Override
     public TagRecord readTagRecord() {
-        return MinecraftAdapter.adapt(getRef().readNbt());
+        return MinecraftTagRecord.toTagRecord(getRef().readNbt());
     }
 
     @Override
@@ -119,7 +119,7 @@ public class MinecraftBuffer extends Buffer {
 
     @Override
     public void writeText(Text value) {
-        getRef().writeComponent(MinecraftAdapter.adapt(value));
+        getRef().writeComponent(MinecraftText.toMinecraftText(value));
     }
 
     @Override
@@ -174,12 +174,12 @@ public class MinecraftBuffer extends Buffer {
 
     @Override
     public void writeItemStack(ItemStack value) {
-        getRef().writeItem(((MinecraftItemStack) value).getRef());
+        getRef().writeItem(MinecraftItemStack.toMinecraftItemStack(value));
     }
 
     @Override
     public void writeTagRecord(TagRecord value) {
-        getRef().writeNbt(MinecraftAdapter.adapt(value));
+        getRef().writeNbt(MinecraftTagRecord.toMinecraft(value));
 
     }
 

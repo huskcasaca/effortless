@@ -30,7 +30,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
     public void onInitializeClient() {
         onClientStart(new MinecraftClient(Minecraft.getInstance()));
         onRegisterNetwork(receiver -> {
-            var channelId = MinecraftAdapter.adapt(Effortless.CHANNEL_ID);
+            var channelId = MinecraftResource.toMinecraftResource(Effortless.CHANNEL_ID);
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
                 receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(client.player));
             });
@@ -66,11 +66,11 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         InteractionInputEvents.ATTACK.register((player, hand) -> {
-            return onInteractionInput(InteractionType.ATTACK, MinecraftClientAdapter.adapt(hand)).interruptsFurtherEvaluation();
+            return onInteractionInput(InteractionType.ATTACK, MinecraftBasicTypes.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
         InteractionInputEvents.USE_ITEM.register((player, hand) -> {
-            return onInteractionInput(InteractionType.USE_ITEM, MinecraftClientAdapter.adapt(hand)).interruptsFurtherEvaluation();
+            return onInteractionInput(InteractionType.USE_ITEM, MinecraftBasicTypes.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
     }

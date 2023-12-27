@@ -50,6 +50,6 @@ public class MinecraftRenderTypes extends RenderTypes {
 
     @Override
     public RenderType outlineTranslucent(Resource texture, boolean cull) {
-        return new MinecraftRenderType(OutlineRenderType.outlineTranslucent(MinecraftClientAdapter.adapt(texture), cull));
+        return new MinecraftRenderType(OutlineRenderType.outlineTranslucent(MinecraftResource.toMinecraftResource(texture), cull));
     }
 }

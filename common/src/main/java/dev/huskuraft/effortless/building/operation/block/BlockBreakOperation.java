@@ -30,7 +30,7 @@ public final class BlockBreakOperation extends BlockOperation {
         }
 
         // action permission
-        if (!player.canInteractBlock(getInteraction())) {
+        if (!player.canInteractBlock(getInteraction().getBlockPosition())) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
         }
 

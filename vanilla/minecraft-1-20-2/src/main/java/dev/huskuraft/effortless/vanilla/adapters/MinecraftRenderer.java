@@ -60,7 +60,7 @@ public class MinecraftRenderer extends Renderer {
         return new Camera() {
             @Override
             public Vector3d position() {
-                return MinecraftClientAdapter.adapt(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
+                return MinecraftBasicTypes.fromMinecraftVector3d(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition());
             }
 
             @Override
@@ -122,14 +122,14 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public int renderText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, FontDisplay mode, int lightMap) {
-        var width = MinecraftClientAdapter.adapt(typeface).drawInBatch(MinecraftClientAdapter.adapt(text), x, y, color, shadow, lastPose(), proxy.bufferSource(), Font.DisplayMode.values()[mode.ordinal()], backgroundColor, lightMap);
+        var width = MinecraftTypeface.toMinecraftTypeface(typeface).drawInBatch(MinecraftText.toMinecraftText(text), x, y, color, shadow, lastPose(), proxy.bufferSource(), Font.DisplayMode.values()[mode.ordinal()], backgroundColor, lightMap);
         flush();
         return width;
     }
 
     @Override
     public void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-        proxy.innerBlit(MinecraftClientAdapter.adapt(resource), x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
+        proxy.innerBlit(MinecraftResource.toMinecraftResource(resource), x1, x2, y1, y2, blitOffset, minU, maxU, minV, maxV);
     }
 
     @Override
@@ -144,33 +144,36 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderItem(ItemStack stack, int x, int y) {
-        proxy.renderItem(((MinecraftItemStack) stack).getRef(), x, y);
+        proxy.renderItem(MinecraftItemStack.toMinecraftItemStack(stack), x, y);
     }
 
     @Override
     public void renderTooltip(Typeface typeface, List<Text> list, int x, int y) {
-        proxy.renderTooltip(MinecraftClientAdapter.adapt(typeface), list.stream().map(MinecraftAdapter::adapt).toList(), Optional.empty(), x, y);
+        proxy.renderTooltip(MinecraftTypeface.toMinecraftTypeface(typeface), list.stream().map(MinecraftText::toMinecraftText).toList(), Optional.empty(), x, y);
     }
 
     @Override
     public void renderTooltip(Typeface typeface, ItemStack itemStack, int x, int y) {
-        proxy.renderTooltip(MinecraftClientAdapter.adapt(typeface), ((MinecraftItemStack) itemStack).getRef(), x, y);
+        proxy.renderTooltip(MinecraftTypeface.toMinecraftTypeface(typeface), MinecraftItemStack.toMinecraftItemStack(itemStack), x, y);
     }
 
     @Override
     public void renderBlockInWorld(RenderType renderType, World world, BlockPosition blockPosition, BlockData blockData) {
-        var blockPosRef = MinecraftClientAdapter.adapt(blockPosition);
+        var renderer = Minecraft.getInstance().getBlockRenderer();
+        var renderType1 = ((MinecraftRenderType) renderType).getRef();
+        var blockState = ((MinecraftBlockData) blockData).getRef();
+        var blockPos = MinecraftBasicTypes.toMinecraftBlockPosition(blockPosition);
 
-        Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateBlock(
+        renderer.getModelRenderer().tesselateBlock(
                 ((MinecraftWorld) world).getRef(),
-                Minecraft.getInstance().getBlockRenderer().getBlockModel(((MinecraftBlockData) blockData).getRef()),
-                ((MinecraftBlockData) blockData).getRef(),
-                blockPosRef,
+                renderer.getBlockModel(blockState),
+                blockState,
+                blockPos,
                 proxy.pose(),
-                proxy.bufferSource().getBuffer(((MinecraftRenderType) renderType).getRef()),
+                proxy.bufferSource().getBuffer(renderType1),
                 false,
                 RAND,
-                ((MinecraftBlockData) blockData).getRef().getSeed(blockPosRef),
+                blockState.getSeed(blockPos),
                 OverlayTexture.NO_OVERLAY);
 
     }

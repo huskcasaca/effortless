@@ -29,12 +29,12 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public TagRecord newTagRecord() {
-        return MinecraftAdapter.adapt(new CompoundTag());
+        return MinecraftTagRecord.toTagRecord(new CompoundTag());
     }
 
     @Override
     public Optional<Item> newOptionalItem(Resource resource) {
-        return BuiltInRegistries.ITEM.getOptional(MinecraftAdapter.adapt(resource)).map(MinecraftItem::new);
+        return BuiltInRegistries.ITEM.getOptional(MinecraftResource.toMinecraftResource(resource)).map(MinecraftItem::new);
     }
 
     @Override
@@ -54,37 +54,37 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public Text newText() {
-        return MinecraftAdapter.adapt(Component.empty());
+        return MinecraftText.fromMinecraftText(Component.empty());
     }
 
     @Override
     public Text newText(String text) {
-        return MinecraftAdapter.adapt(Component.literal(text));
+        return MinecraftText.fromMinecraftText(Component.literal(text));
     }
 
     @Override
     public Text newText(String text, Text... args) {
-        return MinecraftAdapter.adapt(Component.translatable(text, Arrays.stream(args).map(MinecraftAdapter::adapt).toArray(Object[]::new)));
+        return MinecraftText.fromMinecraftText(Component.translatable(text, Arrays.stream(args).map(MinecraftText::toMinecraftText).toArray(Object[]::new)));
     }
 
     @Override
     public Text newTranslatableText(String text) {
-        return MinecraftAdapter.adapt(Component.translatable(text));
+        return MinecraftText.fromMinecraftText(Component.translatable(text));
     }
 
     @Override
     public Text newTranslatableText(String text, Text... args) {
-        return MinecraftAdapter.adapt(Component.translatable(text, Arrays.stream(args).map(MinecraftAdapter::adapt).toArray(Object[]::new)));
+        return MinecraftText.fromMinecraftText(Component.translatable(text, Arrays.stream(args).map(MinecraftText::toMinecraftText).toArray(Object[]::new)));
     }
 
     @Override
     public TagIoReader getTagIoReader() {
-        return input -> MinecraftAdapter.adapt(NbtIo.readCompressed(input));
+        return input -> MinecraftTagRecord.toTagRecord(NbtIo.readCompressed(input));
     }
 
     @Override
     public TagIoWriter getTagIoWriter() {
-        return (output, config) -> NbtIo.writeCompressed(MinecraftAdapter.adapt(config), output);
+        return (output, config) -> NbtIo.writeCompressed(MinecraftTagRecord.toMinecraft(config), output);
     }
 
 }
