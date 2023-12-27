@@ -225,7 +225,7 @@ final class EffortlessClientManager extends ClientManager {
 
         switch (type) {
             case ATTACK -> getEntrance().getStructureBuilder().onPlayerBreak(getRunningClient().getPlayer());
-            case USE_ITEM -> getEntrance().getStructureBuilder().onPlayerBreak(getRunningClient().getPlayer());
+            case USE_ITEM -> getEntrance().getStructureBuilder().onPlayerPlace(getRunningClient().getPlayer());
             case UNKNOWN -> {
                 return EventResult.pass();
             }
