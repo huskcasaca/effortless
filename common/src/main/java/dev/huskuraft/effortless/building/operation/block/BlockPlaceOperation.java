@@ -6,6 +6,7 @@ import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RevolveContext;
+import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.core.*;
 
 import java.util.Collections;
@@ -43,12 +44,12 @@ public final class BlockPlaceOperation extends BlockOperation {
         }
 
         switch (context.replaceMode()) {
-            case DISABLED -> {
+            case DISABLED, NORMAL -> {
                 if (!player.getWorld().getBlockData(getInteraction().getBlockPosition()).isReplaceable(player, getInteraction())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
-            case NORMAL, QUICK -> {
+            case QUICK -> {
                 if (!player.getGameType().isCreative() && !player.getWorld().getBlockData(getInteraction().getBlockPosition()).isDestroyable()) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
@@ -73,14 +74,21 @@ public final class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
+        if (context.replaceMode() == ReplaceMode.QUICK && !player.tryBreakBlock(getInteraction())) {
+            return BlockOperationResult.Type.FAIL_INTERNAL;
+        }
+
         // compatible layer
         var originalItemStack = player.getItemStack(InteractionHand.MAIN);
         player.setItemStack(InteractionHand.MAIN, itemStack);
         var placed = player.tryPlaceBlock(interaction, blockData, itemStack);
         player.setItemStack(InteractionHand.MAIN, originalItemStack);
 
-        return placed ? BlockOperationResult.Type.SUCCESS : BlockOperationResult.Type.FAIL_INTERNAL;
+        if (!placed) {
+            return BlockOperationResult.Type.FAIL_INTERNAL;
+        }
 
+        return BlockOperationResult.Type.SUCCESS;
     }
 
     @Override

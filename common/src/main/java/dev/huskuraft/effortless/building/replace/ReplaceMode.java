@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.building.replace;
 
-import dev.huskuraft.effortless.building.Option;
+import dev.huskuraft.effortless.building.SingleSelectFeature;
 
-public enum ReplaceMode implements Option {
+public enum ReplaceMode implements SingleSelectFeature {
     DISABLED("replace_disabled"),
-    NORMAL("normal_replace"),
-    QUICK("quick_replace");
+    NORMAL("replace_normal"),
+    QUICK("replace_quick");
 
     private final String name;
 
@@ -18,6 +18,14 @@ public enum ReplaceMode implements Option {
             case DISABLED -> "disabled";
             case NORMAL -> "normal";
             case QUICK -> "quick";
+        };
+    }
+
+    public ReplaceMode next() {
+        return switch (this) {
+            case DISABLED -> NORMAL;
+            case NORMAL -> QUICK;
+            case QUICK -> DISABLED;
         };
     }
 

@@ -47,7 +47,7 @@
   "key.effortless.undo.desc": "Build Action Undo",
   "key.effortless.redo.desc": "Build Action Redo",
   "key.effortless.toggle_replace.desc": "Toggle Replace",
-  "key.effortless.toggle_quick_replace.desc": "Toggle Quick Replace",
+  "key.effortless.toggle_replace_quick.desc": "Toggle Quick Replace",
   "key.effortless.cycle_replace.desc": "Cycle Replace",
   "key.effortless.toggle_alt_place.desc": "Toggle Alternative Placement",
   "effortless.mode.disabled": "Disabled",
@@ -103,8 +103,8 @@
   "effortless.action.face_both": "Both",
 
   "effortless.action.replace_disabled": "Off",
-  "effortless.action.normal_replace": "Normal",
-  "effortless.action.quick_replace": "Quick",
+  "effortless.action.replace_normal": "Normal",
+  "effortless.action.replace_quick": "Quick",
   "effortless.action.mode_settings": "Build Mode",
 
   "effortless.position.disabled": "Disabled",

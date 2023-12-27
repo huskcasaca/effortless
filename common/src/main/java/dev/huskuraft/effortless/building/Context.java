@@ -343,6 +343,9 @@ public record Context(
             if (feature instanceof RaisedEdge feature1) {
                 return withRaisedEdge(feature1);
             }
+            if (feature instanceof ReplaceMode replaceMode1) {
+                return withReplaceMode(replaceMode1);
+            }
             return this;
         }
 

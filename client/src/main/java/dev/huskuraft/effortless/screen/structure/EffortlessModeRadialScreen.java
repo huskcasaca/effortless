@@ -19,7 +19,6 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
     private static final Button<Option> SETTING_OPTION = button(Settings.MODE_SETTINGS);
-    private static final Button<Option> REPLACE_OPTION = button(ReplaceMode.DISABLED);
 
     private final Key assignedKey;
 
@@ -54,24 +53,25 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
     public void onCreate() {
         super.onCreate();
 
-        setLeftButtons(
-                buttonSet(REDO_OPTION, UNDO_OPTION),
-                buttonSet(SETTING_OPTION, REPLACE_OPTION)
-        );
         setRadialSlots(
-                Arrays.stream(BuildMode.values()).map(mode -> slot(mode)).toList()
+                Arrays.stream(BuildMode.values()).map(EffortlessModeRadialScreen::slot).toList()
         );
         setRadialSelectResponder(slot -> {
             getEntrance().getStructureBuilder().setBuildMode(getEntrance().getClient().getPlayer(), slot.getContent());
         });
         setRadialOptionSelectResponder(entry -> {
+            if (entry.getContent() instanceof ReplaceMode replaceMode) {
+                getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), replaceMode.next());
+                return;
+            }
             if (entry.getContent() instanceof SingleSelectFeature singleSelectFeature) {
                 getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), singleSelectFeature);
+                return;
             }
             if (entry.getContent() instanceof MultiSelectFeature multiSelectFeature) {
                 getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), multiSelectFeature);
+                return;
             }
-
         });
     }
 
@@ -80,6 +80,10 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
         var context = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer());
 
         setSelectedSlots(slot(context.buildMode()));
+        setLeftButtons(
+                buttonSet(REDO_OPTION, UNDO_OPTION),
+                buttonSet(SETTING_OPTION, button(context.replaceMode()))
+        );
         setRightButtons(
                 Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map(EffortlessModeRadialScreen::<Option>button).toList())).toList()
         );
