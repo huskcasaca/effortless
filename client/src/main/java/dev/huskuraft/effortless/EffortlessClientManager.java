@@ -213,25 +213,31 @@ final class EffortlessClientManager extends ClientManager {
         if (getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).isDisabled()) {
             return EventResult.pass();
         }
+
         if (!isInteractionCooldown()) {
             return EventResult.interruptFalse();
+        } else {
+            resetInteractionCooldown();
         }
-        resetInteractionCooldown();
 
-        var result = getEntrance().getClient().getLastInteraction();
-        if (result != null && result.getTarget() == Interaction.Target.ENTITY) {
+        var interaction = getEntrance().getClient().getLastInteraction();
+        if (interaction != null && interaction.getTarget() == Interaction.Target.ENTITY) {
             return EventResult.interruptFalse();
         }
 
-        switch (type) {
-            case ATTACK -> getEntrance().getStructureBuilder().onPlayerBreak(getRunningClient().getPlayer());
-            case USE_ITEM -> getEntrance().getStructureBuilder().onPlayerPlace(getRunningClient().getPlayer());
-            case UNKNOWN -> {
-                return EventResult.pass();
+        return switch (type) {
+            case ATTACK -> {
+                var result = getEntrance().getStructureBuilder().onPlayerBreak(getRunningClient().getPlayer());
+                yield EventResult.interrupt(result.isSuccess());
             }
-        }
-
-        return EventResult.interruptTrue();
+            case USE_ITEM -> {
+                var result = getEntrance().getStructureBuilder().onPlayerPlace(getRunningClient().getPlayer());
+                yield EventResult.interrupt(result.isSuccess());
+            }
+            case UNKNOWN -> {
+                yield EventResult.pass();
+            }
+        };
 
     }
 

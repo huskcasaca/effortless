@@ -58,12 +58,12 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public BuildResult perform(Player player, BuildState state) {
-        return perform(player, state, null);
+    public BuildResult build(Player player, BuildState state) {
+        return build(player, state, null);
     }
 
     @Override
-    public BuildResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction) {
+    public BuildResult build(Player player, BuildState state, @Nullable BlockInteraction interaction) {
         return updateContext(player, context -> {
             if (interaction == null) {
                 return context.resetBuildState();
@@ -139,38 +139,40 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         });
     }
 
-    public void onPlayerBreak(Player player) {
+    public BuildResult onPlayerBreak(Player player) {
         var context = getContext(player);
-        var result = context.withBreakingState().trace(player);
-        var perform = perform(player, BuildState.BREAK_BLOCK, result);
+        var interaction = context.withBreakingState().trace(player);
+        var result = build(player, BuildState.BREAK_BLOCK, interaction);
 
-        if (perform.isSuccess()) {
+        if (result.isSuccess()) {
             // play sound if further than normal
             // TODO: 22/7/23
             // FIXME: 13/10/23
-//            if (result.getLocation().subtract(player.getEyePosition(1f)).lengthSqr() > 25f) {
-//                var blockPos = result.getBlockPos();
+//            if (interaction.getLocation().subtract(player.getEyePosition(1f)).lengthSqr() > 25f) {
+//                var blockPos = interaction.getBlockPos();
 //                var state = player.getWorld().getBlockData(blockPosition);
 //                var soundtype = state.getBlock().getSoundType(state);
 //                player.getWorld().playSound(player, player.blockPosition(), soundtype.getBreakSound(), SoundSource.BLOCKS, 0.4f, soundtype.getPitch());
 //            }
         }
+        return result;
     }
 
     @Override
-    public void onPlayerPlace(Player player) {
+    public BuildResult onPlayerPlace(Player player) {
         var context = getContext(player);
 
         if (player.getItemStack(InteractionHand.MAIN).isEmpty()) {
-            return;
+            return BuildResult.CANCELED;
         }
 
-        var result = context.withPlacingState().trace(player);
-        var perform = perform(player, BuildState.PLACE_BLOCK, result);
+        var interaction = context.withPlacingState().trace(player);
+        var result = build(player, BuildState.PLACE_BLOCK, interaction);
 
-        if (perform.isSuccess()) {
+        if (result.isSuccess()) {
 //            player.swing(PlayerHand.MAIN);
         }
+        return result;
     }
 
     @Override

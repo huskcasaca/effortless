@@ -24,12 +24,12 @@ final class EffortlessServerStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public BuildResult perform(Player player, BuildState state) {
+    public BuildResult build(Player player, BuildState state) {
         return null;
     }
 
     @Override
-    public BuildResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction) {
+    public BuildResult build(Player player, BuildState state, @Nullable BlockInteraction interaction) {
         return null;
     }
 
@@ -84,13 +84,13 @@ final class EffortlessServerStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public void onPlayerBreak(Player player) {
-
+    public BuildResult onPlayerBreak(Player player) {
+        return BuildResult.CANCELED;
     }
 
     @Override
-    public void onPlayerPlace(Player player) {
-
+    public BuildResult onPlayerPlace(Player player) {
+        return BuildResult.CANCELED;
     }
 
     @Override

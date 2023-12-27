@@ -10,9 +10,9 @@ import java.util.function.UnaryOperator;
 
 public abstract class StructureBuilder {
 
-    public abstract BuildResult perform(Player player, BuildState state);
+    public abstract BuildResult build(Player player, BuildState state);
 
-    public abstract BuildResult perform(Player player, BuildState state, @Nullable BlockInteraction interaction);
+    public abstract BuildResult build(Player player, BuildState state, @Nullable BlockInteraction interaction);
 
     public abstract BuildResult updateContext(Player player, UnaryOperator<Context> updater);
 
@@ -32,9 +32,9 @@ public abstract class StructureBuilder {
 
     public abstract void setPattern(Player player, Pattern pattern);
 
-    public abstract void onPlayerBreak(Player player);
+    public abstract BuildResult onPlayerBreak(Player player);
 
-    public abstract void onPlayerPlace(Player player);
+    public abstract BuildResult onPlayerPlace(Player player);
 
     public abstract void onContextReceived(Player player, Context context);
 
