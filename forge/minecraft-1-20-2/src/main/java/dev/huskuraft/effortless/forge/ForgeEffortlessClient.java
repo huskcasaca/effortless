@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
 import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
-import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderTextures;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
@@ -105,7 +105,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onReloadShader(RegisterShadersEvent event) {
-        BlockRenderType.Shaders.registerShaders(event.getResourceProvider(), event::registerShader);
+        MinecraftBlockRenderTextures.Shaders.registerShaders(event.getResourceProvider(), event::registerShader);
     }
 
     @SubscribeEvent

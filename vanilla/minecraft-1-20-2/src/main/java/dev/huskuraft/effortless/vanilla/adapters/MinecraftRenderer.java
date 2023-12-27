@@ -5,7 +5,13 @@ import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.renderer.*;
+import dev.huskuraft.effortless.renderer.texture.BlockRenderTextures;
+import dev.huskuraft.effortless.renderer.texture.OutlineRenderTextures;
+import dev.huskuraft.effortless.renderer.texture.RenderTextures;
 import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderTextures;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderTextures;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderTextures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -28,7 +34,10 @@ public class MinecraftRenderer extends Renderer {
 
     private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
 
-    private static final RenderTypes RENDER_STYLE_PROVIDER = new MinecraftRenderTypes();
+    private static final RenderTextures RENDER_TEXTURES = new MinecraftRenderTextures();
+    private static final BlockRenderTextures BLOCK_RENDER_TEXTURES = new MinecraftBlockRenderTextures();
+    private static final OutlineRenderTextures OUTLINE_RENDER_TEXTURES = new MinecraftOutlineRenderTextures();
+
     private static final RandomSource RAND = RandomSource.create();
     private final GuiGraphics reference;
 
@@ -111,8 +120,8 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public VertexBuffer vertexBuffer(RenderType renderType) {
-        return new MinecraftVertexBuffer(reference.bufferSource().getBuffer(MinecraftRenderType.toMinecraftRenderType(renderType)));
+    public VertexBuffer vertexBuffer(RenderTexture renderTexture) {
+        return new MinecraftVertexBuffer(reference.bufferSource().getBuffer(dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderTexture.toMinecraftRenderType(renderTexture)));
     }
 
     @Override
@@ -158,10 +167,10 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void renderBlockInWorld(RenderType renderType, World world, BlockPosition blockPosition, BlockData blockData) {
+    public void renderBlockInWorld(RenderTexture renderTexture, World world, BlockPosition blockPosition, BlockData blockData) {
         var minecraftBlockRenderer = Minecraft.getInstance().getBlockRenderer();
         var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
-        var minecraftRenderType = MinecraftRenderType.toMinecraftRenderType(renderType);
+        var minecraftRenderType = dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderTexture.toMinecraftRenderType(renderTexture);
         var minecraftBlockData = MinecraftBlockData.toMinecraftBlockData(blockData);
         var minecraftBlockPosition = MinecraftPlayer.toMinecraftBlockPosition(blockPosition);
 
@@ -180,9 +189,17 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public RenderTypes renderTypes() {
-        return RENDER_STYLE_PROVIDER;
+    public RenderTextures renderTextures() {
+        return RENDER_TEXTURES;
     }
 
+    @Override
+    public BlockRenderTextures blockRenderTextures() {
+        return BLOCK_RENDER_TEXTURES;
+    }
 
+    @Override
+    public OutlineRenderTextures outlineRenderTextures() {
+        return OUTLINE_RENDER_TEXTURES;
+    }
 }

@@ -49,7 +49,7 @@ public abstract class Outline {
         if (lineWidth == 0)
             return;
 
-        var renderStyle = renderer.renderTypes().outlineSolid(true);
+        var renderTexture = renderer.outlineRenderTextures().outlineSolid(true);
 
         var diff = end.sub(start);
         if (diff.x() + diff.y() + diff.z() < 0) {
@@ -82,29 +82,29 @@ public abstract class Outline {
 
         if (getParams().disableNormals) {
             face = Orientation.UP;
-            renderer.renderQuad(renderStyle, b4, b3, b2, b1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
-            renderer.renderQuad(renderStyle, a1, a2, a3, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
-            renderer.renderQuad(renderStyle, a1, b1, b2, a2, getParams().getLightMap(), getParams().getColor().getRGB(), face);
-            renderer.renderQuad(renderStyle, a2, b2, b3, a3, getParams().getLightMap(), getParams().getColor().getRGB(), face);
-            renderer.renderQuad(renderStyle, a3, b3, b4, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
-            renderer.renderQuad(renderStyle, a4, b4, b1, a1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.renderQuad(renderTexture, b4, b3, b2, b1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.renderQuad(renderTexture, a1, a2, a3, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.renderQuad(renderTexture, a1, b1, b2, a2, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.renderQuad(renderTexture, a2, b2, b3, a3, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.renderQuad(renderTexture, a3, b3, b4, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+            renderer.renderQuad(renderTexture, a4, b4, b1, a1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
             return;
         }
 
-        renderer.renderQuad(renderStyle, b4, b3, b2, b1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
-        renderer.renderQuad(renderStyle, a1, a2, a3, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face.getOpposite());
+        renderer.renderQuad(renderTexture, b4, b3, b2, b1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+        renderer.renderQuad(renderTexture, a1, a2, a3, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face.getOpposite());
         var vec = a1.sub(a4);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
-        renderer.renderQuad(renderStyle, a1, b1, b2, a2, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+        renderer.renderQuad(renderTexture, a1, b1, b2, a2, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         vec = RenderUtils.rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
-        renderer.renderQuad(renderStyle, a2, b2, b3, a3, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+        renderer.renderQuad(renderTexture, a2, b2, b3, a3, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         vec = RenderUtils.rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
-        renderer.renderQuad(renderStyle, a3, b3, b4, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+        renderer.renderQuad(renderTexture, a3, b3, b4, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         vec = RenderUtils.rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
-        renderer.renderQuad(renderStyle, a4, b4, b1, a1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
+        renderer.renderQuad(renderTexture, a4, b4, b1, a1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
     }
 
     public static class OutlineParams {

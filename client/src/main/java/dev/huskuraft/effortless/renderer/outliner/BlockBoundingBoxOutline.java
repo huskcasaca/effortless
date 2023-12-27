@@ -74,7 +74,7 @@ public class BlockBoundingBoxOutline extends Outline {
         params.alpha =
                 orientation == params.getHighlightedFace() && params.highlightedFaceTexture.isPresent() ? 1 : 0.5f;
 
-        var renderType = renderer.renderTypes().outlineTranslucent(faceTexture, !noCull);
+        var renderTexture = renderer.outlineRenderTextures().outlineTranslucent(faceTexture, !noCull);
         renderer.pushLayer();
 
         var axis = orientation.getAxis();
@@ -82,7 +82,7 @@ public class BlockBoundingBoxOutline extends Outline {
         var vDiff = p4.sub(p1);
         var maxU = (float) MathUtils.abs(axis == Axis.X ? uDiff.z() : uDiff.x());
         var maxV = (float) MathUtils.abs(axis == Axis.Y ? vDiff.z() : vDiff.y());
-        renderer.drawQuadUV(renderType, p1, p2, p3, p4, 0, 0, maxU, maxV, getParams().getLightMap(), getParams().getColor().getRGB(), Orientation.UP);
+        renderer.drawQuadUV(renderTexture, p1, p2, p3, p4, 0, 0, maxU, maxV, getParams().getLightMap(), getParams().getColor().getRGB(), Orientation.UP);
 
         params.alpha = alphaBefore;
 

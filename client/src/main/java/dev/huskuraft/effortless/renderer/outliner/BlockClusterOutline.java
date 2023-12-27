@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.core.AxisDirection;
 import dev.huskuraft.effortless.core.BlockPosition;
 import dev.huskuraft.effortless.core.Orientation;
 import dev.huskuraft.effortless.math.Vector3d;
-import dev.huskuraft.effortless.renderer.RenderType;
+import dev.huskuraft.effortless.renderer.RenderTexture;
 import dev.huskuraft.effortless.renderer.Renderer;
 
 import java.util.*;
@@ -40,22 +40,21 @@ public class BlockClusterOutline extends Outline {
         if (!faceTexture.isPresent())
             return;
 
-        var translucentType = renderer.renderTypes().outlineTranslucent(faceTexture.get(), true);
-
         renderer.pushLayer();
 
+        var renderTexture = renderer.outlineRenderTextures().outlineTranslucent(faceTexture.get(), true);
         cluster.visibleFaces.forEach((face, axisDirection) -> {
             var direction = Orientation.get(axisDirection, face.axis);
             var pos = face.blockPosition;
             if (axisDirection == AxisDirection.POSITIVE)
                 pos = pos.relative(direction.getOpposite());
-//            var buffer = renderer.buffer().getBuffer(translucentType);
-            renderBlockFace(renderer, translucentType, pos, direction);
+//            var buffer = renderer.buffer().getBuffer(renderTexture);
+            renderBlockFace(renderer, renderTexture, pos, direction);
         });
         renderer.popLayer();
     }
 
-    protected void renderBlockFace(Renderer renderer, RenderType renderType, BlockPosition blockPosition, Orientation face) {
+    protected void renderBlockFace(Renderer renderer, RenderTexture renderTexture, BlockPosition blockPosition, Orientation face) {
         var camera = renderer.camera().position();
         var center = blockPosition.getCenter();
         var offset = face.getNormal().toVector3d();
@@ -67,17 +66,17 @@ public class BlockClusterOutline extends Outline {
 
         switch (face) {
             case DOWN ->
-                    renderer.renderQuad(renderType, xyz, Xyz, XyZ, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderTexture, xyz, Xyz, XyZ, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
             case EAST ->
-                    renderer.renderQuad(renderType, XYz, XYZ, XyZ, Xyz, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderTexture, XYz, XYZ, XyZ, Xyz, params.getLightMap(), params.getColor().getRGB(), face);
             case NORTH ->
-                    renderer.renderQuad(renderType, xYz, XYz, Xyz, xyz, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderTexture, xYz, XYz, Xyz, xyz, params.getLightMap(), params.getColor().getRGB(), face);
             case SOUTH ->
-                    renderer.renderQuad(renderType, XYZ, xYZ, xyZ, XyZ, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderTexture, XYZ, xYZ, xyZ, XyZ, params.getLightMap(), params.getColor().getRGB(), face);
             case UP ->
-                    renderer.renderQuad(renderType, xYZ, XYZ, XYz, xYz, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderTexture, xYZ, XYZ, XYz, xYz, params.getLightMap(), params.getColor().getRGB(), face);
             case WEST ->
-                    renderer.renderQuad(renderType, xYZ, xYz, xyz, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
+                    renderer.renderQuad(renderTexture, xYZ, xYz, xyz, xyZ, params.getLightMap(), params.getColor().getRGB(), face);
         }
 
         renderer.popPose();

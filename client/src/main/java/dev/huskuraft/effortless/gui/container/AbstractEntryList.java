@@ -390,8 +390,8 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         renderer.popPose();
 
         if (this.renderShadow) {
-            renderer.renderGradientRect(renderer.renderTypes().guiOverlay(), this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0, 0);
-            renderer.renderGradientRect(renderer.renderTypes().guiOverlay(), this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216, 0);
+            renderer.renderGradientRect(renderer.renderTextures().guiOverlay(), this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0, 0);
+            renderer.renderGradientRect(renderer.renderTextures().guiOverlay(), this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216, 0);
         }
 
         var renderScrollBar = this.getMaxScroll();

@@ -1,8 +1,9 @@
-package dev.huskuraft.effortless.renderer;
+package dev.huskuraft.effortless.renderer.texture;
 
 import dev.huskuraft.effortless.core.Resource;
+import dev.huskuraft.effortless.renderer.RenderTexture;
 
-public abstract class RenderTypes {
+public abstract class RenderTextures {
 
     public static final Resource BLANK_TEXTURE_LOCATION = Resource.of("textures/misc/blank.png");
     public static final Resource CHECKERED_TEXTURE_LOCATION = Resource.of("textures/misc/checkerboard.png");
@@ -12,22 +13,10 @@ public abstract class RenderTypes {
     public static final Resource CHECKERED_CUTOUT_TEXTURE_LOCATION = Resource.of("textures/misc/checkerboard_cutout.png");
     public static final Resource SELECTION_TEXTURE_LOCATION = Resource.of("textures/misc/selection_64.png");
 
-    public abstract RenderType gui();
+    public abstract RenderTexture gui();
 
-    public abstract RenderType guiTextHighlight();
+    public abstract RenderTexture guiTextHighlight();
 
-    public abstract RenderType guiOverlay();
-
-    public abstract RenderType lines();
-
-    public abstract RenderType planes();
-
-    public abstract RenderType solid(int color);
-
-    public abstract RenderType outlineSolid();
-
-    public abstract RenderType outlineSolid(boolean overlap);
-
-    public abstract RenderType outlineTranslucent(Resource texture, boolean cull);
+    public abstract RenderTexture guiOverlay();
 
 }

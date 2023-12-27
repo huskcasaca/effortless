@@ -401,7 +401,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                     hoveredButton = button;
                 }
 
-                renderer.renderRect(renderer.renderTypes().gui(), (int) (middleX + x1), (int) (middleY + y1), (int) (middleX + x2), (int) (middleY + y2), color.getRGB(), 0);
+                renderer.renderRect(renderer.renderTextures().gui(), (int) (middleX + x1), (int) (middleY + y1), (int) (middleX + x2), (int) (middleY + y2), color.getRGB(), 0);
                 renderer.flush();
                 // icon
                 if (button.getIcon() != null) {
