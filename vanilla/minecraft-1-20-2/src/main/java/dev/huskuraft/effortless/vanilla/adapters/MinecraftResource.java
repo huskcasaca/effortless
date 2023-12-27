@@ -5,10 +5,10 @@ import net.minecraft.resources.ResourceLocation;
 
 public class MinecraftResource extends Resource {
 
-    private final ResourceLocation resourceLocation;
+    private final ResourceLocation reference;
 
-    MinecraftResource(ResourceLocation resourceLocation) {
-        this.resourceLocation = resourceLocation;
+    MinecraftResource(ResourceLocation reference) {
+        this.reference = reference;
     }
 
     public static Resource fromMinecraftResource(ResourceLocation resourceLocation) {
@@ -22,23 +22,16 @@ public class MinecraftResource extends Resource {
         if (resource == null) {
             return null;
         }
-        if (resource instanceof MinecraftResource minecraftResource) {
-            return minecraftResource.getRef();
-        }
-        return new ResourceLocation(resource.getNamespace(), resource.getPath());
-    }
-
-    public ResourceLocation getRef() {
-        return resourceLocation;
+        return ((MinecraftResource) resource).reference;
     }
 
     @Override
     public String getNamespace() {
-        return getRef().getNamespace();
+        return reference.getNamespace();
     }
 
     @Override
     public String getPath() {
-        return getRef().getPath();
+        return reference.getPath();
     }
 }

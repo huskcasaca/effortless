@@ -10,29 +10,33 @@ import java.util.UUID;
 
 public class MinecraftWorld extends World {
 
-    private final Level level;
+    private final Level reference;
 
-    MinecraftWorld(Level level) {
-        this.level = level;
+    MinecraftWorld(Level reference) {
+        this.reference = reference;
     }
 
-    public Level getRef() {
-        return level;
+    public static World fromMinecraftWorld(Level level) {
+        return new MinecraftWorld(level);
+    }
+
+    public static Level toMinecraftWorld(World world) {
+        return ((MinecraftWorld) world).reference;
     }
 
     @Override
     public Player getPlayer(UUID uuid) {
-        return new MinecraftPlayer(getRef().getPlayerByUUID(uuid));
+        return MinecraftPlayer.fromMinecraftPlayer(reference.getPlayerByUUID(uuid));
     }
 
     @Override
     public BlockData getBlockData(BlockPosition blockPosition) {
-        return new MinecraftBlockData(getRef().getBlockState(MinecraftBasicTypes.toMinecraftBlockPosition(blockPosition)));
+        return MinecraftBlockData.fromMinecraftBlockData(reference.getBlockState(MinecraftPlayer.toMinecraftBlockPosition(blockPosition)));
     }
 
     @Override
     public boolean isClient() {
-        return getRef().isClientSide();
+        return reference.isClientSide();
     }
 
 }

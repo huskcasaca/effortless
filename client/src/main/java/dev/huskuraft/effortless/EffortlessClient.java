@@ -22,13 +22,18 @@ public abstract class EffortlessClient extends ClientEntrance {
     private static EffortlessClient instance;
     private final ClientEventsRegistry registry = new ClientEventsRegistry();
 
-    private final Channel<AllPacketListener> channel = new EffortlessClientChannel(this, Effortless.CHANNEL_ID);
-    private final ClientConfigManager configManager = new EffortlessClientConfigManager(this);
-    private final StructureBuilder structureBuilder = new EffortlessClientStructureBuilder(this);
-    private final ClientManager clientManager = new EffortlessClientManager(this);
+    private final EffortlessClientChannel channel;
+    private final EffortlessClientConfigManager configManager;
+    private final EffortlessClientStructureBuilder structureBuilder;
+    private final EffortlessClientManager clientManager;
 
     protected EffortlessClient() {
         instance = this;
+
+        this.channel = new EffortlessClientChannel(this);
+        this.configManager = new EffortlessClientConfigManager(this);
+        this.structureBuilder = new EffortlessClientStructureBuilder(this);
+        this.clientManager = new EffortlessClientManager(this);
     }
 
     public static EffortlessClient getInstance() {

@@ -14,72 +14,80 @@ import java.util.List;
 
 public class MinecraftItemStack extends ItemStack {
 
-    private final net.minecraft.world.item.ItemStack itemStack;
+    private final net.minecraft.world.item.ItemStack reference;
 
     public MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
-        this.itemStack = itemStack;
+        this.reference = itemStack;
     }
 
     public MinecraftItemStack(net.minecraft.world.item.Item item, int count) {
-        this.itemStack = new net.minecraft.world.item.ItemStack(item, count);
+        this.reference = new net.minecraft.world.item.ItemStack(item, count);
     }
 
     public MinecraftItemStack(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
-        this.itemStack = new net.minecraft.world.item.ItemStack(item, count);
-        this.itemStack.setTag(tag);
+        this.reference = new net.minecraft.world.item.ItemStack(item, count);
+        this.reference.setTag(tag);
+    }
+
+    public static ItemStack fromMinecraft(net.minecraft.world.item.ItemStack itemStack) {
+        return new MinecraftItemStack(itemStack);
+    }
+
+    public static ItemStack fromMinecraft(net.minecraft.world.item.Item item, int count) {
+        return new MinecraftItemStack(item, count);
+    }
+
+    public static ItemStack fromMinecraft(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
+        return new MinecraftItemStack(item, tag, count);
     }
 
     public static net.minecraft.world.item.ItemStack toMinecraftItemStack(ItemStack itemStack) {
-        return ((MinecraftItemStack) itemStack).getRef();
-    }
-
-    private net.minecraft.world.item.ItemStack getRef() {
-        return itemStack;
+        return ((MinecraftItemStack) itemStack).reference;
     }
 
     @Override
     public boolean isEmpty() {
-        return getRef().isEmpty();
+        return reference.isEmpty();
     }
 
     @Override
     public boolean isAir() {
-        return getRef().getItem() instanceof AirItem;
+        return reference.getItem() instanceof AirItem;
     }
 
     @Override
     public boolean isBlock() {
-        return getRef().getItem() instanceof BlockItem;
+        return reference.getItem() instanceof BlockItem;
     }
 
     @Override
     public Item getItem() {
-        return new MinecraftItem(getRef().getItem());
+        return MinecraftItem.fromMinecraft(reference.getItem());
     }
 
     @Override
     public int getStackSize() {
-        return getRef().getCount();
+        return reference.getCount();
     }
 
     @Override
     public void setStackSize(int count) {
-        getRef().setCount(count);
+        reference.setCount(count);
     }
 
     @Override
     public int getMaxStackSize() {
-        return getRef().getMaxStackSize();
+        return reference.getMaxStackSize();
     }
 
     @Override
     public Text getHoverName() {
-        return MinecraftText.fromMinecraftText(getRef().getHoverName());
+        return MinecraftText.fromMinecraftText(reference.getHoverName());
     }
 
     @Override
     public List<Text> getDescription(Player player, TooltipType flag) {
-        return getRef().getTooltipLines(MinecraftPlayer.toMinecraftPlayer(player), switch (flag) {
+        return reference.getTooltipLines(MinecraftPlayer.toMinecraftPlayer(player), switch (flag) {
             case NORMAL -> TooltipFlag.NORMAL;
             case NORMAL_CREATIVE -> TooltipFlag.NORMAL.asCreative();
             case ADVANCED -> TooltipFlag.ADVANCED;
@@ -89,42 +97,42 @@ public class MinecraftItemStack extends ItemStack {
 
     @Override
     public void increase(int count) {
-        getRef().grow(count);
+        reference.grow(count);
     }
 
     @Override
     public void decrease(int count) {
-        getRef().shrink(count);
+        reference.shrink(count);
     }
 
     @Override
     public ItemStack copy() {
-        return new MinecraftItemStack(getRef().copy());
+        return MinecraftItemStack.fromMinecraft(reference.copy());
     }
 
     @Override
     public boolean isItem(Item item) {
-        return getRef().is(((MinecraftItem) item).getRef());
+        return reference.is(MinecraftItem.toMinecraft(item));
     }
 
     @Override
     public boolean itemEquals(ItemStack itemStack) {
-        return getRef().is(((MinecraftItemStack) itemStack).getRef().getItem());
+        return reference.is(((MinecraftItemStack) itemStack).reference.getItem());
     }
 
     @Override
     public boolean tagEquals(ItemStack itemStack) {
-        return net.minecraft.world.item.ItemStack.isSameItemSameTags(getRef(), ((MinecraftItemStack) itemStack).getRef());
+        return net.minecraft.world.item.ItemStack.isSameItemSameTags(reference, ((MinecraftItemStack) itemStack).reference);
     }
 
     @Override
     public TagRecord getTag() {
-        return MinecraftTagRecord.toTagRecord(getRef().getOrCreateTag());
+        return MinecraftTagRecord.fromMinecraft(reference.getOrCreateTag());
     }
 
     @Override
     public void setTag(TagRecord tagRecord) {
-        getRef().setTag(MinecraftTagRecord.toMinecraft(tagRecord));
+        reference.setTag(MinecraftTagRecord.toMinecraft(tagRecord));
     }
 
     @Override
@@ -132,11 +140,11 @@ public class MinecraftItemStack extends ItemStack {
 
         var blockPlaceContext = new BlockPlaceContext(
                 MinecraftPlayer.toMinecraftPlayer(player),
-                MinecraftBasicTypes.toMinecraftInteractionHand(interaction.getHand()),
+                MinecraftPlayer.toMinecraftInteractionHand(interaction.getHand()),
                 MinecraftItemStack.toMinecraftItemStack(this),
-                MinecraftBasicTypes.toMinecraftBlockInteraction(interaction)
+                MinecraftPlayer.toMinecraftBlockInteraction(interaction)
         );
 
-        return new MinecraftBlockData(Block.byItem(getRef().getItem()).getStateForPlacement(blockPlaceContext));
+        return MinecraftBlockData.fromMinecraftBlockData(Block.byItem(reference.getItem()).getStateForPlacement(blockPlaceContext));
     }
 }

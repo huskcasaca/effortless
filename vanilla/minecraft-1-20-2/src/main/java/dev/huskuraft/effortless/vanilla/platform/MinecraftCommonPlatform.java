@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -23,33 +24,38 @@ import java.util.Optional;
 public class MinecraftCommonPlatform implements Platform {
 
     @Override
+    public Resource newResource(String namespace, String path) {
+        return MinecraftResource.fromMinecraftResource(new ResourceLocation(namespace, path));
+    }
+
+    @Override
     public Buffer newBuffer() {
-        return new MinecraftBuffer(new FriendlyByteBuf(Unpooled.buffer()));
+        return MinecraftBuffer.fromMinecraftBuffer(new FriendlyByteBuf(Unpooled.buffer()));
     }
 
     @Override
     public TagRecord newTagRecord() {
-        return MinecraftTagRecord.toTagRecord(new CompoundTag());
+        return MinecraftTagRecord.fromMinecraft(new CompoundTag());
     }
 
     @Override
     public Optional<Item> newOptionalItem(Resource resource) {
-        return BuiltInRegistries.ITEM.getOptional(MinecraftResource.toMinecraftResource(resource)).map(MinecraftItem::new);
+        return BuiltInRegistries.ITEM.getOptional(MinecraftResource.toMinecraftResource(resource)).map(MinecraftItem::fromMinecraft);
     }
 
     @Override
     public ItemStack newItemStack() {
-        return new MinecraftItemStack(net.minecraft.world.item.ItemStack.EMPTY);
+        return MinecraftItemStack.fromMinecraft(net.minecraft.world.item.ItemStack.EMPTY);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count) {
-        return new MinecraftItemStack(((MinecraftItem) item).getRef(), count);
+        return MinecraftItemStack.fromMinecraft(MinecraftItem.toMinecraft(item), count);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count, TagRecord tag) {
-        return new MinecraftItemStack(((MinecraftItem) item).getRef(), ((MinecraftTagRecord) tag).getRef(), count);
+        return MinecraftItemStack.fromMinecraft(MinecraftItem.toMinecraft(item), MinecraftTagRecord.toMinecraft(tag), count);
     }
 
     @Override
@@ -79,7 +85,7 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public TagIoReader getTagIoReader() {
-        return input -> MinecraftTagRecord.toTagRecord(NbtIo.readCompressed(input));
+        return input -> MinecraftTagRecord.fromMinecraft(NbtIo.readCompressed(input));
     }
 
     @Override

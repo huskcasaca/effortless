@@ -14,57 +14,61 @@ import org.lwjgl.glfw.GLFW;
 
 public class MinecraftClient extends Client {
 
-    private final Minecraft minecraft;
+    private final Minecraft reference;
 
-    public MinecraftClient(Minecraft minecraft) {
-        this.minecraft = minecraft;
+    MinecraftClient(Minecraft reference) {
+        this.reference = reference;
     }
 
-    public Minecraft getRef() {
-        return minecraft;
+    public static Client fromMinecraftClient(Minecraft minecraft) {
+        return new MinecraftClient(minecraft);
+    }
+
+    public static Minecraft toMinecraftClient(Client client) {
+        return ((MinecraftClient) client).reference;
     }
 
     @Override
     public Screen getPanel() {
-        if (getRef().screen == null) {
+        if (reference.screen == null) {
             return null;
         }
-        if (getRef().screen instanceof MinecraftProxyScreen proxyScreen) {
+        if (reference.screen instanceof MinecraftProxyScreen proxyScreen) {
             return proxyScreen.getProxy();
         }
-        return new MinecraftScreen(getRef().screen);
+        return new MinecraftScreen(reference.screen);
     }
 
     @Override
     public void setPanel(Screen screen) {
         if (screen == null) {
-            getRef().setScreen(null);
+            reference.setScreen(null);
             return;
         }
-        if (screen instanceof MinecraftScreen screen1) {
-            getRef().setScreen(screen1.getRef());
+        if (screen instanceof MinecraftScreen minecraftScreen) {
+            reference.setScreen(minecraftScreen.getReference());
             return;
         }
-        getRef().setScreen(new MinecraftProxyScreen(screen));
+        reference.setScreen(new MinecraftProxyScreen(screen));
 
     }
 
     @Override
     public Player getPlayer() {
-        if (getRef().player == null) {
+        if (reference.player == null) {
             return null;
         }
-        return new MinecraftClientPlayer(getRef().player);
+        return MinecraftClientPlayer.fromMinecraftPlayer(reference.player);
     }
 
     @Override
     public Typeface getTypeface() {
-        return MinecraftTypeface.fromMinecraftTypeface(getRef().font);
+        return MinecraftTypeface.fromMinecraftTypeface(reference.font);
     }
 
     @Override
     public World getWorld() {
-        return new MinecraftWorld(getRef().level);
+        return new MinecraftWorld(reference.level);
     }
 
     @Override
@@ -74,7 +78,7 @@ public class MinecraftClient extends Client {
 
     @Override
     public Interaction getLastInteraction() {
-        return MinecraftBasicTypes.fromMinecraftInteraction(getRef().hitResult);
+        return MinecraftPlayer.fromMinecraftInteraction(reference.hitResult);
     }
 
     @Override
@@ -114,30 +118,30 @@ public class MinecraftClient extends Client {
 
     @Override
     public boolean isKeyDown(int key) {
-        return InputConstants.isKeyDown(getRef()
+        return InputConstants.isKeyDown(reference
                 .getWindow()
                 .getWindow(), key);
     }
 
     @Override
     public boolean isMouseButtonDown(int button) {
-        return GLFW.glfwGetMouseButton(getRef()
+        return GLFW.glfwGetMouseButton(reference
                 .getWindow()
                 .getWindow(), button) == 1;
     }
 
     @Override
     public String getClipboard() {
-        return getRef().keyboardHandler.getClipboard();
+        return reference.keyboardHandler.getClipboard();
     }
 
     @Override
     public void setClipboard(String content) {
-        getRef().keyboardHandler.setClipboard(content);
+        reference.keyboardHandler.setClipboard(content);
     }
 
     @Override
     public void playButtonClickSound() {
-        getRef().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        reference.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
     }
 }

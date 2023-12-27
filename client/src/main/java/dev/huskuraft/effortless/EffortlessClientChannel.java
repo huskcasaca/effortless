@@ -19,6 +19,13 @@ final class EffortlessClientChannel extends Channel<AllPacketListener> {
     private final ClientEntrance entrance;
     private final AllPacketListener listener;
 
+    private static final Resource DEFAULT_CHANNEL = Resource.of("default_channel");
+    private static final int COMPATIBILITY_VERSION = Effortless.VERSION_NUMBER;
+
+    public EffortlessClientChannel(Entrance entrance) {
+        this(entrance, DEFAULT_CHANNEL);
+    }
+
     public EffortlessClientChannel(Entrance entrance, Resource channelId) {
         super(channelId);
         this.entrance = (ClientEntrance) entrance;
@@ -44,6 +51,11 @@ final class EffortlessClientChannel extends Channel<AllPacketListener> {
     @Override
     public Buffer allocateButter() {
         return getEntrance().getPlatform().newBuffer();
+    }
+
+    @Override
+    public int getCompatibilityVersion() {
+        return COMPATIBILITY_VERSION;
     }
 
     private void onRegisterHandler(NetworkRegistry registry) {

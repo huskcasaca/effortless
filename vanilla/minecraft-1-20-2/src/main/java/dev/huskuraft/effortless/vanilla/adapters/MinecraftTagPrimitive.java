@@ -11,16 +11,16 @@ public class MinecraftTagPrimitive extends TagPrimitive {
 
     private final MinecraftTagElement proxy;
 
-    MinecraftTagPrimitive(MinecraftTagElement proxy) {
-        this.proxy = proxy;
+    MinecraftTagPrimitive(MinecraftTagElement tag) {
+        this.proxy = tag;
     }
 
-    public Tag getRef() {
-        return proxy.getRef();
+    private Tag getReference() {
+        return proxy.getReference();
     }
 
-    public void setRef(Tag tag) {
-        proxy.setRef(tag);
+    private void setReference(Tag tag) {
+        proxy.setReference(tag);
     }
 
     @Override
@@ -35,32 +35,32 @@ public class MinecraftTagPrimitive extends TagPrimitive {
 
     @Override
     public String getString() {
-        return getRef().getAsString();
+        return getReference().getAsString();
     }
 
     @Override
     public void putString(String value) {
-        setRef(StringTag.valueOf(value));
+        setReference(StringTag.valueOf(value));
     }
 
     @Override
     public int getInt() {
-        return ((IntTag) getRef()).getAsInt();
+        return ((IntTag) getReference()).getAsInt();
     }
 
     @Override
     public void putInt(int value) {
-        setRef(IntTag.valueOf(value));
+        setReference(IntTag.valueOf(value));
     }
 
     @Override
     public double getDouble() {
-        return ((DoubleTag) getRef()).getAsDouble();
+        return ((DoubleTag) getReference()).getAsDouble();
     }
 
     @Override
     public void putDouble(double value) {
-        setRef(DoubleTag.valueOf(value));
+        setReference(DoubleTag.valueOf(value));
     }
 
     @Override
@@ -68,12 +68,12 @@ public class MinecraftTagPrimitive extends TagPrimitive {
         if (this == o) return true;
         if (!(o instanceof MinecraftTagPrimitive that)) return false;
 
-        return getRef().equals(that.getRef());
+        return getReference().equals(that.getReference());
     }
 
     @Override
     public int hashCode() {
-        return getRef().hashCode();
+        return getReference().hashCode();
     }
 
     static class NotImplementedException extends RuntimeException {

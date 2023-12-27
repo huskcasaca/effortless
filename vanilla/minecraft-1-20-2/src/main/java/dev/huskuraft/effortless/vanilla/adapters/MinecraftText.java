@@ -9,58 +9,54 @@ import java.util.Arrays;
 
 public class MinecraftText extends Text {
 
-    private final Component component;
+    private final Component reference;
 
-    MinecraftText(Component component) {
-        this.component = component;
+    MinecraftText(Component reference) {
+        this.reference = reference;
     }
 
-    public static Text fromMinecraftText(Component component) {
-        if (component == null) {
+    public static Text fromMinecraftText(Component value) {
+        if (value == null) {
             return null;
         }
-        return new MinecraftText(component);
+        return new MinecraftText(value);
     }
 
-    public static Component toMinecraftText(Text text) {
-        if (text == null) {
+    public static Component toMinecraftText(Text value) {
+        if (value == null) {
             return null;
         }
-        return ((MinecraftText) text).getRef();
-    }
-
-    public Component getRef() {
-        return component;
+        return ((MinecraftText) value).reference;
     }
 
     @Override
     public Text withStyle(TextStyle... styles) {
-        return fromMinecraftText(component.copy().withStyle(Arrays.stream(styles).map(MinecraftText::adapt).toArray(ChatFormatting[]::new)));
+        return fromMinecraftText(reference.copy().withStyle(Arrays.stream(styles).map(MinecraftText::adapt).toArray(ChatFormatting[]::new)));
     }
 
     @Override
     public Text append(Text append) {
-        return fromMinecraftText(component.copy().append(toMinecraftText(append)));
+        return fromMinecraftText(reference.copy().append(toMinecraftText(append)));
     }
 
     @Override
     public Text copy() {
-        return fromMinecraftText(component.copy());
+        return fromMinecraftText(reference.copy());
     }
 
     @Override
     public String getString() {
-        return getRef().getString();
+        return reference.getString();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MinecraftText fabricText && getRef().equals(fabricText.getRef());
+        return obj instanceof MinecraftText fabricText && reference.equals(fabricText.reference);
     }
 
     @Override
     public int hashCode() {
-        return getRef().hashCode();
+        return reference.hashCode();
     }
 
     private static ChatFormatting adapt(TextStyle textStyle) {

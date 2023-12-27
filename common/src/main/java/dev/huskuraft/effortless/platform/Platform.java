@@ -15,6 +15,8 @@ import java.util.Optional;
 
 public interface Platform {
 
+    Resource newResource(String namespace, String path);
+
     Buffer newBuffer();
 
     TagRecord newTagRecord();

@@ -4,27 +4,22 @@ import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.platform.Server;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MinecraftServer extends Server {
 
-    private final net.minecraft.server.MinecraftServer minecraftServer;
+    private final net.minecraft.server.MinecraftServer reference;
 
-    MinecraftServer(net.minecraft.server.MinecraftServer minecraftServer) {
-        this.minecraftServer = minecraftServer;
-    }
-
-    public net.minecraft.server.MinecraftServer getRef() {
-        return minecraftServer;
+    MinecraftServer(net.minecraft.server.MinecraftServer reference) {
+        this.reference = reference;
     }
 
     @Override
     public List<Player> getPlayers() {
-        return getRef().getPlayerList().getPlayers().stream().map(MinecraftPlayer::new).collect(Collectors.toList());
+        return reference.getPlayerList().getPlayers().stream().map(MinecraftPlayer::fromMinecraftPlayer).toList();
     }
 
     @Override
     public void execute(Runnable runnable) {
-        getRef().executeIfPossible(runnable);
+        reference.executeIfPossible(runnable);
     }
 }

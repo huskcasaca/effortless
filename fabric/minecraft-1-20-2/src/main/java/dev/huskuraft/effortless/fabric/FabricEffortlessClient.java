@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.fabric;
 
-import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
@@ -28,17 +27,17 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
 
     @Override
     public void onInitializeClient() {
-        onClientStart(new MinecraftClient(Minecraft.getInstance()));
+        onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
         onRegisterNetwork(receiver -> {
-            var channelId = MinecraftResource.toMinecraftResource(Effortless.CHANNEL_ID);
+            var channelId = MinecraftResource.toMinecraftResource(getChannel().getChannelId());
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
-                receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(client.player));
+                receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(buf), MinecraftPlayer.fromMinecraftPlayer(client.player));
             });
-            return (buffer, player) -> ClientPlayNetworking.send(channelId, ((MinecraftBuffer) buffer).getRef());
+            return (buffer, player) -> ClientPlayNetworking.send(channelId, MinecraftBuffer.toMinecraftBuffer(buffer));
         });
 
         onRegisterKeys(key -> {
-            KeyBindingHelper.registerKeyBinding(((MinecraftKeyBinding) key.getBinding()).getRef());
+            KeyBindingHelper.registerKeyBinding(MinecraftKeyBinding.toMinecraft(key.getBinding()));
         });
 
         RegisterShadersEvents.REGISTER_SHADERS.register((provider, sink) -> {
@@ -46,11 +45,11 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
-            onClientTick(new MinecraftClient(minecraft), TickPhase.START);
+            onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.START);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            onClientTick(new MinecraftClient(minecraft), TickPhase.END);
+            onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.END);
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
@@ -66,11 +65,11 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         InteractionInputEvents.ATTACK.register((player, hand) -> {
-            return onInteractionInput(InteractionType.ATTACK, MinecraftBasicTypes.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return onInteractionInput(InteractionType.ATTACK, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
         InteractionInputEvents.USE_ITEM.register((player, hand) -> {
-            return onInteractionInput(InteractionType.USE_ITEM, MinecraftBasicTypes.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return onInteractionInput(InteractionType.USE_ITEM, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
     }

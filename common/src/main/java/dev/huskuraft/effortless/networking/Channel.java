@@ -71,8 +71,14 @@ public abstract class Channel<P extends PacketListener> implements PacketSender,
 
     public abstract Buffer allocateButter();
 
+    public abstract int getCompatibilityVersion();
+
     public void setPlatformSender(BufferSender platformSender) {
         this.platformSender = platformSender;
+    }
+
+    public final Resource getChannelId() {
+        return channelId;
     }
 
     private class PacketSet<T extends PacketListener> {

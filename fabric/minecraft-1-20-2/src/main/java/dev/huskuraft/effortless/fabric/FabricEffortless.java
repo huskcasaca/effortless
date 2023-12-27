@@ -19,11 +19,11 @@ public class FabricEffortless extends Effortless implements ModInitializer {
     @Override
     public void onInitialize() {
         onRegisterNetwork(receiver -> {
-            var channelId = MinecraftResource.toMinecraftResource(Effortless.CHANNEL_ID);
+            var channelId = MinecraftResource.toMinecraftResource(getChannel().getChannelId());
             ServerPlayNetworking.registerGlobalReceiver(channelId, (server, player, handler, buf, responseSender) -> {
-                receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(player));
+                receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(buf), MinecraftPlayer.fromMinecraftPlayer(player));
             });
-            return (buffer, player) -> ServerPlayNetworking.send((ServerPlayer) MinecraftPlayer.toMinecraftPlayer(player), channelId, ((MinecraftBuffer) buffer).getRef());
+            return (buffer, player) -> ServerPlayNetworking.send((ServerPlayer) MinecraftPlayer.toMinecraftPlayer(player), channelId, MinecraftBuffer.toMinecraftBuffer(buffer));
         });
     }
 

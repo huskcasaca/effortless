@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.core;
 
+import dev.huskuraft.effortless.Effortless;
+
 public abstract class Resource {
 
     public static Resource decompose(String value, String separator) {
@@ -19,17 +21,7 @@ public abstract class Resource {
     }
 
     public static Resource of(String namespace, String path) {
-        return new Resource() {
-            @Override
-            public String getNamespace() {
-                return namespace;
-            }
-
-            @Override
-            public String getPath() {
-                return path;
-            }
-        };
+        return Effortless.getInstance().getPlatform().newResource(namespace, path);
     }
 
     public abstract String getNamespace();

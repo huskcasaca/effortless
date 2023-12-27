@@ -8,29 +8,33 @@ import net.minecraft.world.item.BlockItem;
 
 public class MinecraftItem extends Item {
 
-    private final net.minecraft.world.item.Item item;
+    private final net.minecraft.world.item.Item reference;
 
-    public MinecraftItem(net.minecraft.world.item.Item item) {
-        this.item = item;
+    MinecraftItem(net.minecraft.world.item.Item reference) {
+        this.reference = reference;
     }
 
-    public net.minecraft.world.item.Item getRef() {
-        return item;
+    public static Item fromMinecraft(net.minecraft.world.item.Item item) {
+        return new MinecraftItem(item);
+    }
+
+    public static net.minecraft.world.item.Item toMinecraft(Item item) {
+        return ((MinecraftItem) item).reference;
     }
 
     @Override
     public ItemStack getDefaultStack() {
-        return new MinecraftItemStack(getRef().getDefaultInstance());
+        return MinecraftItemStack.fromMinecraft(reference.getDefaultInstance());
     }
 
     @Override
     public boolean isBlockItem() {
-        return getRef() instanceof BlockItem;
+        return reference instanceof BlockItem;
     }
 
     @Override
     public Resource getId() {
-        return MinecraftResource.fromMinecraftResource(BuiltInRegistries.ITEM.getKey(getRef()));
+        return MinecraftResource.fromMinecraftResource(BuiltInRegistries.ITEM.getKey(reference));
     }
 
     @Override
@@ -40,11 +44,11 @@ public class MinecraftItem extends Item {
 
         var that = (MinecraftItem) o;
 
-        return item.equals(that.item);
+        return reference.equals(that.reference);
     }
 
     @Override
     public int hashCode() {
-        return item.hashCode();
+        return reference.hashCode();
     }
 }

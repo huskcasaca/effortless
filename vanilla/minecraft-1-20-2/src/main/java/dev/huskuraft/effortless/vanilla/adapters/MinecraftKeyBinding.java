@@ -7,68 +7,64 @@ import net.minecraft.client.Minecraft;
 
 public class MinecraftKeyBinding extends KeyBinding {
 
-    private final KeyMapping keyMapping;
+    private final KeyMapping reference;
 
-    MinecraftKeyBinding(KeyMapping keyMapping) {
-        this.keyMapping = keyMapping;
+    MinecraftKeyBinding(KeyMapping reference) {
+        this.reference = reference;
     }
 
-    public static KeyBinding fromMinecraft(KeyMapping keyMapping) {
-        if (keyMapping == null) {
+    public static KeyBinding fromMinecraft(KeyMapping value) {
+        if (value == null) {
             return null;
         }
-        return new MinecraftKeyBinding(keyMapping);
+        return new MinecraftKeyBinding(value);
     }
 
-    public static KeyMapping toMinecraft(KeyBinding keyBinding) {
-        if (keyBinding == null) {
+    public static KeyMapping toMinecraft(KeyBinding value) {
+        if (value == null) {
             return null;
         }
-        return ((MinecraftKeyBinding) keyBinding).getRef();
-    }
-
-    public KeyMapping getRef() {
-        return keyMapping;
+        return ((MinecraftKeyBinding) value).reference;
     }
 
     @Override
     public String getName() {
-        return getRef().getName();
+        return reference.getName();
     }
 
     @Override
     public String getCategory() {
-        return getRef().getCategory();
+        return reference.getCategory();
     }
 
     @Override
     public int getDefaultKey() {
-        return getRef().getDefaultKey().getValue();
+        return reference.getDefaultKey().getValue();
     }
 
     @Override
     public boolean consumeClick() {
-        return getRef().consumeClick();
+        return reference.consumeClick();
     }
 
     @Override
     public boolean isDown() {
-        return getRef().isDown();
+        return reference.isDown();
     }
 
     @Override
     public boolean isKeyDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), getRef().key.getValue());
+        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), reference.key.getValue());
     }
 
     @Override
     public String getBoundKey() {
-        return getRef().getTranslatedKeyMessage().getString().toUpperCase();
+        return reference.getTranslatedKeyMessage().getString().toUpperCase();
     }
 
     @Override
     public int getBoundCode() {
-        return getRef().key.getValue();
+        return reference.key.getValue();
     }
 
 }

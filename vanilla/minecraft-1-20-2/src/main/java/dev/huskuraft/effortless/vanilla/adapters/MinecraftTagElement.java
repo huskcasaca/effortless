@@ -10,10 +10,10 @@ import java.util.Objects;
 
 public class MinecraftTagElement extends TagElement {
 
-    private Tag tag;
+    protected Tag reference;
 
-    MinecraftTagElement(Tag tag) {
-        this.tag = tag;
+    MinecraftTagElement(Tag reference) {
+        this.reference = reference;
     }
 
     public static TagElement toTagElement(Tag tag) {
@@ -27,21 +27,21 @@ public class MinecraftTagElement extends TagElement {
         if (tag == null) {
             return null;
         }
-        return ((MinecraftTagElement) tag).getRef();
+        return ((MinecraftTagElement) tag).getReference();
     }
 
-    public Tag getRef() {
-        return Objects.requireNonNull(tag);
+    public Tag getReference() {
+        return Objects.requireNonNull(reference);
     }
 
-    public void setRef(Tag tag) {
-        this.tag = tag;
+    public void setReference(Tag tag) {
+        this.reference = tag;
     }
 
     @Override
     public TagRecord asRecord() {
-        if (tag == null) {
-            this.tag = new CompoundTag();
+        if (reference == null) {
+            this.reference = new CompoundTag();
         }
         return new MinecraftTagRecord(this);
     }
@@ -56,11 +56,11 @@ public class MinecraftTagElement extends TagElement {
         if (this == o) return true;
         if (!(o instanceof MinecraftTagElement that)) return false;
 
-        return getRef().equals(that.getRef());
+        return getReference().equals(that.getReference());
     }
 
     @Override
     public int hashCode() {
-        return getRef().hashCode();
+        return getReference().hashCode();
     }
 }

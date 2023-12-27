@@ -6,20 +6,20 @@ import net.minecraft.client.gui.screens.Screen;
 
 public class MinecraftScreen extends AbstractScreen {
 
-    private final Screen screen;
+    private final Screen reference;
 
-    MinecraftScreen(Screen screen) {
+    MinecraftScreen(Screen reference) {
         super(null, Text.empty());
-        this.screen = screen;
+        this.reference = reference;
     }
 
-    public Screen getRef() {
-        return screen;
+    public Screen getReference() {
+        return reference;
     }
 
     @Override
     public Text getScreenTitle() {
-        return MinecraftText.fromMinecraftText(getRef().getTitle());
+        return MinecraftText.fromMinecraftText(reference.getTitle());
     }
 
     @Override

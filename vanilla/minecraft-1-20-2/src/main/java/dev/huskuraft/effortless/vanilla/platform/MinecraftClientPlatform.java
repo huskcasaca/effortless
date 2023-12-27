@@ -19,7 +19,6 @@ import net.minecraft.world.item.CreativeModeTabs;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MinecraftClientPlatform extends MinecraftCommonPlatform implements ClientPlatform {
@@ -34,7 +33,7 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
                     case NAME -> SearchRegistry.CREATIVE_NAMES;
                     case TAG -> SearchRegistry.CREATIVE_TAGS;
                 }
-        ).search(query).stream().map(MinecraftItemStack::new).collect(Collectors.toList());
+        ).search(query).stream().map(MinecraftItemStack::fromMinecraft).toList();
     }
 
     @Override
