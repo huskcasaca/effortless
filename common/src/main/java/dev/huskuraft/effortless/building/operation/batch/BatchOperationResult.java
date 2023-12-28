@@ -21,7 +21,6 @@ public class BatchOperationResult extends OperationResult {
         this.result = result;
     }
 
-
     @Override
     public BatchOperation getOperation() {
         return operation;
@@ -29,12 +28,15 @@ public class BatchOperationResult extends OperationResult {
 
     @Override
     public BatchOperation getReverseOperation() {
-        return null;
+        return new DeferredBatchOperation(
+                operation.getContext(),
+                () -> result.stream().map(OperationResult::getReverseOperation)
+        );
     }
 
     @Override
-    public Collection<ItemStack> get(ItemType type) {
-        return ItemStackUtils.reduceStack(result.stream().map(result -> result.get(type)).flatMap(Collection::stream).toList());
+    public Collection<ItemStack> getProducts(ItemType type) {
+        return ItemStackUtils.reduceStack(result.stream().map(result -> result.getProducts(type)).flatMap(Collection::stream).toList());
     }
 
     public Collection<? extends OperationResult> getResult() {

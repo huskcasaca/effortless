@@ -74,6 +74,12 @@ final class EffortlessServerChannel extends Channel<AllPacketListener> {
 
         @Override
         public void handle(PlayerActionPacket packet, Player player) {
+//            player.getServer().execute(() -> {
+                switch (packet.action()) {
+                    case REDO -> getEntrance().getStructureBuilder().redo(player);
+                    case UNDO -> getEntrance().getStructureBuilder().undo(player);
+                }
+//            });
         }
 
         @Override

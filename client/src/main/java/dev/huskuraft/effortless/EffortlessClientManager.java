@@ -195,10 +195,10 @@ final class EffortlessClientManager extends ClientManager {
             openPatternSettingsScreen();
         }
         if (EffortlessKeys.UNDO.getBinding().consumeClick()) {
-
+            getEntrance().getStructureBuilder().undo(getRunningClient().getPlayer());
         }
         if (EffortlessKeys.REDO.getBinding().consumeClick()) {
-
+            getEntrance().getStructureBuilder().redo(getRunningClient().getPlayer());
         }
         if (EffortlessKeys.SETTINGS.getBinding().consumeClick()) {
             openSettingsScreen();

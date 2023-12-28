@@ -1,14 +1,21 @@
 package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.building.*;
+import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.SingleAction;
 import dev.huskuraft.effortless.core.BlockInteraction;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.Player;
+import dev.huskuraft.effortless.packets.player.PlayerActionPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
 
 import javax.annotation.Nullable;
+import java.util.EmptyStackException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.UnaryOperator;
 
 final class EffortlessServerStructureBuilder extends StructureBuilder {
@@ -106,7 +113,34 @@ final class EffortlessServerStructureBuilder extends StructureBuilder {
             }
         } else {
             // FIXME: 13/10/23 getCommandSenderWorld
-            context.createSession(player.getWorld(), player).build().commit();
+            getOperationResultStack(player).push(context.createSession(player.getWorld(), player).build().commit());
+        }
+    }
+
+    private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
+
+    @Override
+    public OperationResultStack getOperationResultStack(Player player) {
+        return undoRedoStacks.computeIfAbsent(player.getId(), uuid -> new OperationResultStack());
+    }
+
+    @Override
+    public void undo(Player player) {
+        try {
+            getOperationResultStack(player).undo();
+            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.UNDO), player);
+        } catch (EmptyStackException e) {
+//            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.NOTHING_TO_UNDO), player);
+        }
+    }
+
+    @Override
+    public void redo(Player player) {
+        try {
+            getOperationResultStack(player).redo();
+            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.REDO), player);
+//            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.NOTHING_TO_REDO), player);
+        } catch (EmptyStackException e) {
         }
     }
 

@@ -8,9 +8,11 @@ public abstract class OperationResult {
 
     public abstract Operation getOperation();
 
-    public abstract Operation getReverseOperation();
+    // FIXME: 27/12/23 type
+    public abstract TransformableOperation getReverseOperation();
 
 //    public abstract boolean isSuccess();
 
-    public abstract Collection<ItemStack> get(ItemType type);
+    public abstract Collection<ItemStack> getProducts(ItemType type);
+
 }

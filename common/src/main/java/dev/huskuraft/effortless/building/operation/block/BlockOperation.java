@@ -12,19 +12,22 @@ public abstract class BlockOperation extends TransformableOperation {
     protected final Context context;
     protected final Storage storage;
     protected final BlockInteraction interaction;
+    protected final BlockData blockData;
 
     protected BlockOperation(
             World world,
             Player player,
             Context context,
             Storage storage, // for preview
-            BlockInteraction interaction
+            BlockInteraction interaction,
+            BlockData blockData
     ) {
         this.world = world;
         this.player = player;
         this.context = context;
         this.storage = storage;
         this.interaction = interaction;
+        this.blockData = blockData;
     }
 
     @Override
@@ -49,7 +52,7 @@ public abstract class BlockOperation extends TransformableOperation {
     }
 
     public BlockData getBlockData() {
-        return null;
+        return blockData;
     }
 
     public BlockInteraction getInteraction() {

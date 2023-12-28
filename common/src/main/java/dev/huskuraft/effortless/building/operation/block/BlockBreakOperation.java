@@ -6,7 +6,10 @@ import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RevolveContext;
-import dev.huskuraft.effortless.core.*;
+import dev.huskuraft.effortless.core.BlockInteraction;
+import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.core.Player;
+import dev.huskuraft.effortless.core.World;
 
 import java.util.Collections;
 
@@ -19,7 +22,7 @@ public final class BlockBreakOperation extends BlockOperation {
             Storage storage, // for preview
             BlockInteraction interaction
     ) {
-        super(world, player, context, storage, interaction);
+        super(world, player, context, storage, interaction, world.getBlockData(interaction.getBlockPosition()));
     }
 
     private BlockOperationResult.Type breakBlock() {
@@ -91,8 +94,4 @@ public final class BlockBreakOperation extends BlockOperation {
         return this;
     }
 
-    @Override
-    public BlockData getBlockData() {
-        return world.getBlockData(interaction.getBlockPosition());
-    }
 }

@@ -2,6 +2,8 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.ItemType;
+import dev.huskuraft.effortless.building.operation.TransformableOperation;
+import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 import dev.huskuraft.effortless.core.ItemStack;
 
 import java.awt.*;
@@ -21,12 +23,23 @@ public class BlockBreakOperationResult extends BlockOperationResult {
     }
 
     @Override
-    public BlockPlaceOperation getReverseOperation() {
-        return null;
+    public TransformableOperation getReverseOperation() {
+        if (result().fail()) {
+            return new EmptyOperation();
+        }
+
+        return new BlockPlaceOperation(
+                operation.getWorld(),
+                operation.getPlayer(),
+                operation.getContext(),
+                operation.getStorage(),
+                operation.getInteraction(),
+                operation.getBlockData()
+        );
     }
 
     @Override
-    public Collection<ItemStack> get(ItemType type) {
+    public Collection<ItemStack> getProducts(ItemType type) {
         return switch (type) {
             case PLAYER_USED -> {
                 yield Collections.emptyList();
@@ -45,7 +58,7 @@ public class BlockBreakOperationResult extends BlockOperationResult {
 
     public Color getColor() {
         return switch (result) {
-            case SUCCESS, CONSUME -> new Color(235, 235, 235);
+            case SUCCESS, CONSUME -> new Color(1f, 0, 0, 0.5f);
             default -> null;
         };
     }

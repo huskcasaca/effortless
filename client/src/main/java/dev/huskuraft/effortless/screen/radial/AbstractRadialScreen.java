@@ -166,11 +166,6 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     }
 
     @Override
-    public boolean isPauseGame() {
-        return true;
-    }
-
-    @Override
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
 

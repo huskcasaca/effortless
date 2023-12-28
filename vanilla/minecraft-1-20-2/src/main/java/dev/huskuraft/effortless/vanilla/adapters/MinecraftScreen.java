@@ -34,7 +34,7 @@ public class MinecraftScreen extends AbstractScreen {
 
     @Override
     public boolean isPauseGame() {
-        return false;
+        return reference.isPauseScreen();
     }
 
     @Override

@@ -13,8 +13,6 @@ import java.util.Collections;
 
 public final class BlockPlaceOperation extends BlockOperation {
 
-    private final BlockData blockData;
-
     public BlockPlaceOperation(
             World world,
             Player player,
@@ -23,8 +21,7 @@ public final class BlockPlaceOperation extends BlockOperation {
             BlockInteraction interaction,
             BlockData blockData
     ) {
-        super(world, player, context, storage, interaction);
-        this.blockData = blockData;
+        super(world, player, context, storage, interaction, blockData);
     }
 
     private BlockOperationResult.Type placeBlock() {
@@ -119,11 +116,6 @@ public final class BlockPlaceOperation extends BlockOperation {
     @Override
     public BlockPlaceOperation refactor(RefactorContext refactorContext) {
         return new BlockPlaceOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()));
-    }
-
-    @Override
-    public BlockData getBlockData() {
-        return blockData;
     }
 
 }

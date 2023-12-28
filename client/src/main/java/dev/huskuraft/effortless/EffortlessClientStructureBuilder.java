@@ -1,12 +1,15 @@
 package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.building.*;
+import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.ItemType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.SingleAction;
 import dev.huskuraft.effortless.core.*;
+import dev.huskuraft.effortless.packets.player.PlayerActionPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.renderer.LightTexture;
@@ -79,6 +82,31 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
+    public BuildResult updateContext(Player player, UnaryOperator<Context> updater) {
+        var context = updater.apply(getContext(player));
+        if (context.isFulfilled()) {
+
+            var finalized = context.finalize(player, BuildStage.INTERACT);
+            var result = finalized.withPreviewOnceType().createSession(player.getWorld(), player).build().commit();
+
+            showOperationResult(context.uuid(), result);
+            showSummaryOverlay(context.uuid(), result, 1000);
+
+            getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalized));
+            setContext(player, context.resetBuildState());
+
+            return BuildResult.COMPLETED;
+        } else {
+            setContext(player, context);
+            if (context.isIdle()) {
+                return BuildResult.CANCELED;
+            } else {
+                return BuildResult.PARTIAL;
+            }
+        }
+    }
+
+    @Override
     public Context getDefaultContext() {
         return Context.defaultSet();
     }
@@ -139,6 +167,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         });
     }
 
+    @Override
     public BuildResult onPlayerBreak(Player player) {
         var context = getContext(player);
         var interaction = context.withBreakingState().trace(player);
@@ -176,28 +205,25 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public BuildResult updateContext(Player player, UnaryOperator<Context> updater) {
-        var context = updater.apply(getContext(player));
-        if (context.isFulfilled()) {
+    public void onContextReceived(Player player, Context context) {
+        var result = context.createSession(player.getWorld(), player).build().commit();
 
-            var finalized = context.finalize(player, BuildStage.INTERACT);
-            var result = finalized.withPreviewOnceType().createSession(player.getWorld(), player).build().commit();
+        showSummaryOverlay(context.uuid(), result, 1);
+    }
 
-            showOperationResult(context.uuid(), result);
-            showSummaryOverlay(context.uuid(), result, 1000);
+    @Override
+    public OperationResultStack getOperationResultStack(Player player) {
+        return null;
+    }
 
-            getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalized));
-            setContext(player, context.resetBuildState());
+    @Override
+    public void undo(Player player) {
+        getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.UNDO));
+    }
 
-            return BuildResult.COMPLETED;
-        } else {
-            setContext(player, context);
-            if (context.isIdle()) {
-                return BuildResult.CANCELED;
-            } else {
-                return BuildResult.PARTIAL;
-            }
-        }
+    @Override
+    public void redo(Player player) {
+        getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.REDO));
     }
 
     public void onClientTick(Client client, TickPhase phase) {
@@ -221,13 +247,6 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         showSummaryOverlay(player.getId(), result, 1);
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
-    }
-
-    @Override
-    public void onContextReceived(Player player, Context context) {
-        var result = context.createSession(player.getWorld(), player).build().commit();
-
-        showSummaryOverlay(context.uuid(), result, 1);
     }
 
     private UUID nextUUIDByTag(UUID uuid, String tag) {
@@ -256,8 +275,8 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showSummaryOverlay(UUID uuid, OperationResult result, int priority) {
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE), result.get(ItemType.PLAYER_USED), priority);
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED), result.get(ItemType.WORLD_DROPPED), priority);
+        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
+        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
     }
 
     public void showContextOverlay(UUID uuid, Context context, int priority) {

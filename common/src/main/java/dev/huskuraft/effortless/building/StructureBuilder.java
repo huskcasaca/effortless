@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building;
 
+import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.core.BlockInteraction;
@@ -37,5 +38,11 @@ public abstract class StructureBuilder {
     public abstract BuildResult onPlayerPlace(Player player);
 
     public abstract void onContextReceived(Player player, Context context);
+
+    public abstract OperationResultStack getOperationResultStack(Player player);
+
+    public abstract void undo(Player player);
+
+    public abstract void redo(Player player);
 
 }
