@@ -85,6 +85,10 @@ public final class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_INTERNAL;
         }
 
+        if (!world.getBlockData(getInteraction().getBlockPosition()).equals(blockData) && !world.setBlockData(getInteraction().getBlockPosition(), blockData)) {
+            return BlockOperationResult.Type.FAIL_INTERNAL;
+        }
+
         return BlockOperationResult.Type.SUCCESS;
     }
 

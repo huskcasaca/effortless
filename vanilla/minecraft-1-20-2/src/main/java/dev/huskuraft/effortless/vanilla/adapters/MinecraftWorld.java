@@ -35,6 +35,11 @@ public class MinecraftWorld extends World {
     }
 
     @Override
+    public boolean setBlockData(BlockPosition blockPosition, BlockData blockData) {
+        return reference.setBlockAndUpdate(MinecraftPlayer.toMinecraftBlockPosition(blockPosition), MinecraftBlockData.toMinecraftBlockData(blockData));
+    }
+
+    @Override
     public boolean isClient() {
         return reference.isClientSide();
     }

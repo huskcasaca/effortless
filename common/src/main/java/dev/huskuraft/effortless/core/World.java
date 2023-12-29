@@ -8,6 +8,8 @@ public abstract class World {
 
     public abstract BlockData getBlockData(BlockPosition blockPosition);
 
+    public abstract boolean setBlockData(BlockPosition blockPosition, BlockData blockData);
+
     public abstract boolean isClient();
 
 }
