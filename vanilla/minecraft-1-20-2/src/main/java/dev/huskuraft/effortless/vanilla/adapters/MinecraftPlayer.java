@@ -33,10 +33,16 @@ public class MinecraftPlayer extends Player {
     }
 
     public static Player fromMinecraftPlayer(net.minecraft.world.entity.player.Player player) {
+        if (player == null) {
+            return null;
+        }
         return new MinecraftPlayer(player);
     }
 
     public static net.minecraft.world.entity.player.Player toMinecraftPlayer(Player player) {
+        if (player == null) {
+            return null;
+        }
         return ((MinecraftPlayer) player).reference;
     }
 
