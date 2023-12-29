@@ -58,7 +58,7 @@ public class MinecraftClient extends Client {
         if (reference.player == null) {
             return null;
         }
-        return MinecraftClientPlayer.fromMinecraftPlayer(reference.player);
+        return MinecraftPlayer.fromMinecraftPlayer(reference.player);
     }
 
     @Override

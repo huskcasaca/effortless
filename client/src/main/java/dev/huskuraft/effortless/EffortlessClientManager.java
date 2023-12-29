@@ -204,7 +204,7 @@ final class EffortlessClientManager extends ClientManager {
             openSettingsScreen();
         }
         if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
-//            cycleReplaceMode(player);
+            getEntrance().getStructureBuilder().setBuildFeature(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());
         }
     }
 

@@ -41,7 +41,7 @@ public abstract class Player {
 
     public abstract BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids);
 
-    public abstract boolean tryPlaceBlock(BlockInteraction interaction, BlockData blockData, ItemStack itemStack);
+    public abstract boolean tryPlaceBlock(BlockInteraction interaction);
 
     public abstract boolean tryBreakBlock(BlockInteraction interaction);
 

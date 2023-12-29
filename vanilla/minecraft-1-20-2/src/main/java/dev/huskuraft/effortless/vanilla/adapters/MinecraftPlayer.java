@@ -7,6 +7,8 @@ import dev.huskuraft.effortless.math.Vector3i;
 import dev.huskuraft.effortless.platform.Server;
 import dev.huskuraft.effortless.text.Text;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -233,6 +235,14 @@ public class MinecraftPlayer extends Player {
                 case SPECTATOR -> GameMode.SPECTATOR;
             };
         }
+        if (reference instanceof AbstractClientPlayer localPlayer) {
+            return switch (localPlayer.getPlayerInfo().getGameMode()) {
+                case SURVIVAL -> GameMode.SURVIVAL;
+                case CREATIVE -> GameMode.CREATIVE;
+                case ADVENTURE -> GameMode.ADVENTURE;
+                case SPECTATOR -> GameMode.SPECTATOR;
+            };
+        }
         return null;
     }
 
@@ -242,16 +252,23 @@ public class MinecraftPlayer extends Player {
     }
 
     @Override
-    public boolean tryPlaceBlock(BlockInteraction interaction, BlockData blockData, ItemStack itemStack) {
-        return ((BlockItem) MinecraftBlockData.toMinecraftBlockData(blockData).getBlock().asItem()).place(new BlockPlaceContext(reference, toMinecraftInteractionHand(interaction.getHand()), MinecraftItemStack.toMinecraftItemStack(itemStack), toMinecraftBlockInteraction(interaction))).consumesAction();
+    public boolean tryPlaceBlock(BlockInteraction interaction) {
+        var minecraftInteractionHand = toMinecraftInteractionHand(interaction.getHand());
+        var minecraftItemStack = reference.getItemInHand(minecraftInteractionHand);
+        var minecraftBlockInteraction = toMinecraftBlockInteraction(interaction);
+        return ((BlockItem) minecraftItemStack.getItem()).place(new BlockPlaceContext(reference, minecraftInteractionHand, minecraftItemStack, minecraftBlockInteraction)).consumesAction();
     }
 
     @Override
     public boolean tryBreakBlock(BlockInteraction interaction) {
+        var minecraftBlockPosition = toMinecraftBlockPosition(interaction.getBlockPosition());
         if (reference instanceof ServerPlayer serverPlayer) {
-            return serverPlayer.gameMode.destroyBlock(toMinecraftBlockPosition(interaction.getBlockPosition()));
+            return serverPlayer.gameMode.destroyBlock(minecraftBlockPosition);
         }
-        return Minecraft.getInstance().gameMode.destroyBlock(toMinecraftBlockPosition(interaction.getBlockPosition()));
+        if (reference instanceof LocalPlayer localPlayer) {
+            return Minecraft.getInstance().gameMode != null && Minecraft.getInstance().gameMode.destroyBlock(minecraftBlockPosition);
+        }
+        return false;
     }
 
 }
