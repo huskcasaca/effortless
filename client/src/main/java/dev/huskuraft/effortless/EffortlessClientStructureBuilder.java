@@ -90,7 +90,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
             var result = finalized.withPreviewOnceType().createSession(player.getWorld(), player).build().commit();
 
             showOperationResult(context.uuid(), result);
-            showSummaryOverlay(context.uuid(), result, 1000);
+            showOperationResultTooltip(context.uuid(), result, 1000);
 
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalized));
             setContext(player, context.resetBuildState());
@@ -208,7 +208,10 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void onContextReceived(Player player, Context context) {
         var result = context.createSession(player.getWorld(), player).build().commit();
 
-        showSummaryOverlay(context.uuid(), result, 1);
+//        showPattern(player.getId(), context);
+        showOperationResult(player.getId(), result);
+
+        showOperationResultTooltip(context.uuid(), result, 1);
     }
 
     @Override
@@ -243,8 +246,8 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         showPattern(player.getId(), context);
         showOperationResult(player.getId(), result);
 
-        showContextOverlay(player.getId(), context, 0);
-        showSummaryOverlay(player.getId(), result, 1);
+        showContextTooltip(player.getId(), context, 0);
+        showOperationResultTooltip(player.getId(), result, 1);
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
     }
@@ -274,12 +277,12 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
     }
 
-    public void showSummaryOverlay(UUID uuid, OperationResult result, int priority) {
+    public void showOperationResultTooltip(UUID uuid, OperationResult result, int priority) {
         getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
         getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
     }
 
-    public void showContextOverlay(UUID uuid, Context context, int priority) {
+    public void showContextTooltip(UUID uuid, Context context, int priority) {
         var texts = new ArrayList<Text>();
         texts.add(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
         var replace = AbstractRadialScreen.button(context.replaceMode());

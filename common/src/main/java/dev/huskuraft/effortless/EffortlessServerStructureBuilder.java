@@ -106,10 +106,10 @@ final class EffortlessServerStructureBuilder extends StructureBuilder {
         if (context.isPreview()) {
             // FIXME: 13/10/23 add event for server manager
             for (var serverPlayer : player.getServer().getPlayers()) {
-                if (serverPlayer.getId() == player.getId()) {
+                if (serverPlayer.getId().equals(player.getId())) {
                     continue;
                 }
-                getEntrance().getChannel().sendPacket(new PlayerBuildPreviewPacket(player.getId(), context), player);
+                getEntrance().getChannel().sendPacket(new PlayerBuildPreviewPacket(player.getId(), context), serverPlayer);
             }
         } else {
             // FIXME: 13/10/23 getCommandSenderWorld
