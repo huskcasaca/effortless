@@ -41,11 +41,11 @@ public class MirrorContext {
         return new BlockInteraction(location, direction, blockPosition, blockInteraction.isInside());
     }
 
-    public BlockData mirror(BlockData blockData) {
-        if (blockData == null) {
-            return blockData;
+    public BlockState mirror(BlockState blockState) {
+        if (blockState == null) {
+            return blockState;
         }
-        return blockData.mirror(axis);
+        return blockState.mirror(axis);
     }
 
 }

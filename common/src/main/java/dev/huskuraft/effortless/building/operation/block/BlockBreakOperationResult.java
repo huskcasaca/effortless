@@ -34,7 +34,7 @@ public class BlockBreakOperationResult extends BlockOperationResult {
                 operation.getContext(),
                 operation.getStorage(),
                 operation.getInteraction(),
-                operation.getBlockData()
+                operation.getBlockState()
         );
     }
 

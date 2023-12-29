@@ -24,47 +24,47 @@ public class RevolveContext {
         return new RevolveContext(position, PositionType.ABSOLUTE, angle);
     }
 
-    private static BlockData rotateOriginalBlockState(Player player, BlockPosition startPos, double startAngleToCenter, BlockData blockData) {
-        BlockData newBlockData = blockData;
+    private static BlockState rotateOriginalBlockState(Player player, BlockPosition startPos, double startAngleToCenter, BlockState blockState) {
+        BlockState newBlockState = blockState;
 
         if (startAngleToCenter < -0.751 * MathUtils.PI || startAngleToCenter > 0.749 * MathUtils.PI) {
-            newBlockData = blockData.rotate(Revolve.CLOCKWISE_180);
+            newBlockState = blockState.rotate(Revolve.CLOCKWISE_180);
         } else if (startAngleToCenter < -0.251 * MathUtils.PI) {
-            newBlockData = blockData.rotate(Revolve.COUNTERCLOCKWISE_90);
+            newBlockState = blockState.rotate(Revolve.COUNTERCLOCKWISE_90);
         } else if (startAngleToCenter > 0.249 * MathUtils.PI) {
-            newBlockData = blockData.rotate(Revolve.CLOCKWISE_90);
+            newBlockState = blockState.rotate(Revolve.CLOCKWISE_90);
         }
 
-        return newBlockData;
+        return newBlockState;
     }
 
-    private static BlockData rotateBlockState(Player player, BlockPosition startPos, Vector3d relVec, BlockData blockData, boolean alternate) {
-        BlockData newBlockData;
+    private static BlockState rotateBlockState(Player player, BlockPosition startPos, Vector3d relVec, BlockState blockState, boolean alternate) {
+        BlockState newBlockState;
         double angleToCenter = MathUtils.atan2(relVec.x(), relVec.z()); //between -PI and PI
 
         if (angleToCenter < -0.751 * MathUtils.PI || angleToCenter > 0.749 * MathUtils.PI) {
-            newBlockData = blockData.rotate(Revolve.CLOCKWISE_180);
+            newBlockState = blockState.rotate(Revolve.CLOCKWISE_180);
             if (alternate) {
-                newBlockData = newBlockData.mirror(Axis.X);
+                newBlockState = newBlockState.mirror(Axis.X);
             }
         } else if (angleToCenter < -0.251 * MathUtils.PI) {
-            newBlockData = blockData.rotate(Revolve.CLOCKWISE_90);
+            newBlockState = blockState.rotate(Revolve.CLOCKWISE_90);
             if (alternate) {
-                newBlockData = newBlockData.mirror(Axis.Z);
+                newBlockState = newBlockState.mirror(Axis.Z);
             }
         } else if (angleToCenter > 0.249 * MathUtils.PI) {
-            newBlockData = blockData.rotate(Revolve.COUNTERCLOCKWISE_90);
+            newBlockState = blockState.rotate(Revolve.COUNTERCLOCKWISE_90);
             if (alternate) {
-                newBlockData = newBlockData.mirror(Axis.Z);
+                newBlockState = newBlockState.mirror(Axis.Z);
             }
         } else {
-            newBlockData = blockData;
+            newBlockState = blockState;
             if (alternate) {
-                newBlockData = newBlockData.mirror(Axis.X);
+                newBlockState = newBlockState.mirror(Axis.X);
             }
         }
 
-        return newBlockData;
+        return newBlockState;
     }
 
     public BlockInteraction revolve(BlockInteraction blockInteraction) {

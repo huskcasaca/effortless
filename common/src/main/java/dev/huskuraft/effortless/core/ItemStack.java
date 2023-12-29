@@ -55,7 +55,7 @@ public abstract class ItemStack implements TagSerializable {
 
     public abstract boolean tagEquals(ItemStack itemStack);
 
-    public abstract BlockData getBlockData(Player player, BlockInteraction interaction);
+    public abstract BlockState getBlockState(Player player, BlockInteraction interaction);
 
     public enum TooltipType {
         NORMAL,

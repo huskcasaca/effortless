@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.core.BlockData;
 import dev.huskuraft.effortless.core.BlockPosition;
+import dev.huskuraft.effortless.core.BlockState;
 import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.core.World;
 import net.minecraft.world.level.Level;
@@ -30,13 +30,13 @@ public class MinecraftWorld extends World {
     }
 
     @Override
-    public BlockData getBlockData(BlockPosition blockPosition) {
-        return MinecraftBlockData.fromMinecraftBlockData(reference.getBlockState(MinecraftPlayer.toMinecraftBlockPosition(blockPosition)));
+    public BlockState getBlockState(BlockPosition blockPosition) {
+        return MinecraftBlockState.fromMinecraftBlockState(reference.getBlockState(MinecraftPlayer.toMinecraftBlockPosition(blockPosition)));
     }
 
     @Override
-    public boolean setBlockData(BlockPosition blockPosition, BlockData blockData) {
-        return reference.setBlockAndUpdate(MinecraftPlayer.toMinecraftBlockPosition(blockPosition), MinecraftBlockData.toMinecraftBlockData(blockData));
+    public boolean setBlockState(BlockPosition blockPosition, BlockState blockState) {
+        return reference.setBlockAndUpdate(MinecraftPlayer.toMinecraftBlockPosition(blockPosition), MinecraftBlockState.toMinecraftBlockState(blockState));
     }
 
     @Override

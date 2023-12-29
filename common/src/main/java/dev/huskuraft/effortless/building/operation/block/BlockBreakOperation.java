@@ -22,7 +22,7 @@ public final class BlockBreakOperation extends BlockOperation {
             Storage storage, // for preview
             BlockInteraction interaction
     ) {
-        super(world, player, context, storage, interaction, world.getBlockData(interaction.getBlockPosition()));
+        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
     }
 
     private BlockOperationResult.Type breakBlock() {
@@ -43,7 +43,7 @@ public final class BlockBreakOperation extends BlockOperation {
 //        }
 
         // world permission
-        if (!player.getGameType().isCreative() && !player.getWorld().getBlockData(getInteraction().getBlockPosition()).isDestroyable()) {
+        if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getInteraction().getBlockPosition()).isDestroyable()) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
         }
         // player permission
@@ -51,7 +51,7 @@ public final class BlockBreakOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
         }
 
-        if (world.getBlockData(getInteraction().getBlockPosition()).isAir()) {
+        if (world.getBlockState(getInteraction().getBlockPosition()).isAir()) {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
         if (context.isPreview() && world.isClient()) {
@@ -69,7 +69,7 @@ public final class BlockBreakOperation extends BlockOperation {
     public BlockBreakOperationResult commit() {
         var type = breakBlock();
         var inputs = Collections.<ItemStack>emptyList();
-        var outputs = Collections.singletonList(world.getBlockData(interaction.getBlockPosition()).getItem().getDefaultStack());
+        var outputs = Collections.singletonList(world.getBlockState(interaction.getBlockPosition()).getItem().getDefaultStack());
 
         return new BlockBreakOperationResult(this, type, inputs, outputs);
     }

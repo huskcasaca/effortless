@@ -17,11 +17,11 @@ public class BlockOperationPreview implements OperationPreview {
         var operation = result.getOperation();
         var world = operation.getWorld();
         var blockPosition = operation.getInteraction().getBlockPosition();
-        var blockData = operation.getBlockData();
-        if (blockData == null) return;
+        var blockState = operation.getBlockState();
+        if (blockState == null) return;
 
 //        if (item instanceof BlockItem blockItem && itemStack.is(item)) {
-//            blockData = blockItem.updateBlockStateFromTag(blockPosition, level, itemStack, blockData);
+//            blockState = blockItem.updateBlockStateFromTag(blockPosition, level, itemStack, blockState);
 //        }
         var color = result.getColor();
         if (color == null) return;
@@ -33,7 +33,7 @@ public class BlockOperationPreview implements OperationPreview {
         renderer.translate(blockPosition.x() - camera.x(), blockPosition.y() - camera.y(), blockPosition.z() - camera.z());
         renderer.translate((scale - 1) / -2, (scale - 1) / -2, (scale - 1) / -2);
         renderer.scale(scale, scale, scale);
-        renderer.renderBlockInWorld(renderer.blockRenderTextures().solid(color.getRGB()), world, blockPosition, blockData);
+        renderer.renderBlockInWorld(renderer.blockRenderTextures().solid(color.getRGB()), world, blockPosition, blockState);
         renderer.popPose();
     }
 

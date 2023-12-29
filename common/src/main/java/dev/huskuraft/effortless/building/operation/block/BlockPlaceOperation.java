@@ -19,14 +19,14 @@ public final class BlockPlaceOperation extends BlockOperation {
             Context context,
             Storage storage,
             BlockInteraction interaction,
-            BlockData blockData
+            BlockState blockState
     ) {
-        super(world, player, context, storage, interaction, blockData);
+        super(world, player, context, storage, interaction, blockState);
     }
 
     private BlockOperationResult.Type placeBlock() {
 
-        if (blockData == null) {
+        if (blockState == null) {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
         }
 
@@ -42,12 +42,12 @@ public final class BlockPlaceOperation extends BlockOperation {
 
         switch (context.replaceMode()) {
             case DISABLED, NORMAL -> {
-                if (!player.getWorld().getBlockData(getInteraction().getBlockPosition()).isReplaceable(player, getInteraction())) {
+                if (!player.getWorld().getBlockState(getInteraction().getBlockPosition()).isReplaceable(player, getInteraction())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
             case QUICK -> {
-                if (!player.getGameType().isCreative() && !player.getWorld().getBlockData(getInteraction().getBlockPosition()).isDestroyable()) {
+                if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getInteraction().getBlockPosition()).isDestroyable()) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
                 if (!player.canAttackBlock(getInteraction().getBlockPosition())) {
@@ -56,7 +56,7 @@ public final class BlockPlaceOperation extends BlockOperation {
             }
         }
         // action permission
-        var itemStack = storage.searchByItem(blockData.getItem()).orElse(null);
+        var itemStack = storage.searchByItem(blockState.getItem()).orElse(null);
 
         if (itemStack == null || itemStack.isEmpty()) {
             return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
@@ -85,7 +85,7 @@ public final class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_INTERNAL;
         }
 
-        if (!world.getBlockData(getInteraction().getBlockPosition()).equals(blockData) && !world.setBlockData(getInteraction().getBlockPosition(), blockData)) {
+        if (!world.getBlockState(getInteraction().getBlockPosition()).equals(blockState) && !world.setBlockState(getInteraction().getBlockPosition(), blockState)) {
             return BlockOperationResult.Type.FAIL_INTERNAL;
         }
 
@@ -94,9 +94,9 @@ public final class BlockPlaceOperation extends BlockOperation {
 
     @Override
     public BlockPlaceOperationResult commit() {
-        // FIXME: 9/8/23 blockData NPE
+        // FIXME: 9/8/23 blockState NPE
         var type = placeBlock();
-        var inputs = Collections.singletonList(blockData.getItem().getDefaultStack());
+        var inputs = Collections.singletonList(blockState.getItem().getDefaultStack());
         var outputs = Collections.<ItemStack>emptyList();
 
         return new BlockPlaceOperationResult(this, type, inputs, outputs);
@@ -104,12 +104,12 @@ public final class BlockPlaceOperation extends BlockOperation {
 
     @Override
     public BlockPlaceOperation move(MoveContext moveContext) {
-        return new BlockPlaceOperation(world, player, context, storage, moveContext.move(interaction), blockData);
+        return new BlockPlaceOperation(world, player, context, storage, moveContext.move(interaction), blockState);
     }
 
     @Override
     public BlockPlaceOperation mirror(MirrorContext mirrorContext) {
-        return new BlockPlaceOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(blockData));
+        return new BlockPlaceOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(blockState));
     }
 
     @Override

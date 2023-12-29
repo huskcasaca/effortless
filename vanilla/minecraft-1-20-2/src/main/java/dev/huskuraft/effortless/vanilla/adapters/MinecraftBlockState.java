@@ -4,27 +4,26 @@ import dev.huskuraft.effortless.core.*;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-public class MinecraftBlockData extends BlockData {
+public class MinecraftBlockState extends BlockState {
 
-    private final BlockState reference;
+    private final net.minecraft.world.level.block.state.BlockState reference;
 
-    MinecraftBlockData(BlockState reference) {
+    MinecraftBlockState(net.minecraft.world.level.block.state.BlockState reference) {
         this.reference = reference;
     }
 
-    public static BlockData fromMinecraftBlockData(BlockState value) {
-        return new MinecraftBlockData(value);
+    public static BlockState fromMinecraftBlockState(net.minecraft.world.level.block.state.BlockState value) {
+        return new MinecraftBlockState(value);
     }
 
-    public static BlockState toMinecraftBlockData(BlockData value) {
-        return ((MinecraftBlockData) value).reference;
+    public static net.minecraft.world.level.block.state.BlockState toMinecraftBlockState(BlockState value) {
+        return ((MinecraftBlockState) value).reference;
     }
 
-    public static BlockState mirrorTopBottom(BlockState value) {
+    public static net.minecraft.world.level.block.state.BlockState mirrorTopBottom(net.minecraft.world.level.block.state.BlockState value) {
         // stairs
         if (value.getBlock() instanceof StairBlock) {
             return switch (value.getValue(StairBlock.HALF)) {
@@ -69,17 +68,17 @@ public class MinecraftBlockData extends BlockData {
         return value;
     }
 
-    public static BlockState mirrorLeftRight(BlockState value) {
+    public static net.minecraft.world.level.block.state.BlockState mirrorLeftRight(net.minecraft.world.level.block.state.BlockState value) {
         return value.mirror(Mirror.LEFT_RIGHT);
     }
 
-    public static BlockState mirrorFrontBack(BlockState value) {
+    public static net.minecraft.world.level.block.state.BlockState mirrorFrontBack(net.minecraft.world.level.block.state.BlockState value) {
         return value.mirror(Mirror.FRONT_BACK);
     }
 
     @Override
-    public BlockData rotate(Revolve revolve) {
-        return new MinecraftBlockData(reference.rotate(switch (revolve) {
+    public BlockState rotate(Revolve revolve) {
+        return new MinecraftBlockState(reference.rotate(switch (revolve) {
             case NONE -> Rotation.NONE;
             case CLOCKWISE_90 -> Rotation.CLOCKWISE_90;
             case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
@@ -99,7 +98,7 @@ public class MinecraftBlockData extends BlockData {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MinecraftBlockData fabricBlockState && reference.equals(fabricBlockState.reference);
+        return obj instanceof MinecraftBlockState fabricBlockState && reference.equals(fabricBlockState.reference);
     }
 
     @Override
@@ -108,11 +107,11 @@ public class MinecraftBlockData extends BlockData {
     }
 
     @Override
-    public BlockData mirror(Axis axis) {
+    public BlockState mirror(Axis axis) {
         return switch (axis) {
-            case Y -> new MinecraftBlockData(mirrorTopBottom(reference));
-            case X -> new MinecraftBlockData(mirrorFrontBack(reference));
-            case Z -> new MinecraftBlockData(mirrorLeftRight(reference));
+            case Y -> new MinecraftBlockState(mirrorTopBottom(reference));
+            case X -> new MinecraftBlockState(mirrorFrontBack(reference));
+            case Z -> new MinecraftBlockState(mirrorLeftRight(reference));
         };
     }
 

@@ -136,7 +136,7 @@ public class MinecraftItemStack extends ItemStack {
     }
 
     @Override
-    public BlockData getBlockData(Player player, BlockInteraction interaction) {
+    public BlockState getBlockState(Player player, BlockInteraction interaction) {
 
         var blockPlaceContext = new BlockPlaceContext(
                 MinecraftPlayer.toMinecraftPlayer(player),
@@ -145,6 +145,6 @@ public class MinecraftItemStack extends ItemStack {
                 MinecraftPlayer.toMinecraftBlockInteraction(interaction)
         );
 
-        return MinecraftBlockData.fromMinecraftBlockData(Block.byItem(reference.getItem()).getStateForPlacement(blockPlaceContext));
+        return MinecraftBlockState.fromMinecraftBlockState(Block.byItem(reference.getItem()).getStateForPlacement(blockPlaceContext));
     }
 }

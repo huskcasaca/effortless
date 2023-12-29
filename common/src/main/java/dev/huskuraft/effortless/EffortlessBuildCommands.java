@@ -40,12 +40,12 @@ final class EffortlessBuildCommands {
 //
 //            var firstPos = BlockPosArgument.getLoadedBlockPos(context, "firstPos");
 //
-//            var blockData = BlockStateArgument.getBlock(context, "block").getState();
+//            var blockState = BlockStateArgument.getBlock(context, "block").getState();
 //
 //            var coordinates = ((SingleClickBuildable) buildMode.getInstance()).collectFinalBlocks(context.getSource().getPlayer(), firstPos.getX(), firstPos.getY(), firstPos.getZ());
 //
 //            for (var blockPosition : coordinates) {
-//                // TODO: 23/1/23  SurvivalHelper.useBlock(player.getLevel(), player, blockPosition, blockData);
+//                // TODO: 23/1/23  SurvivalHelper.useBlock(player.getLevel(), player, blockPosition, blockState);
 //            }
 //            return 1;
 //        })));
@@ -61,12 +61,12 @@ final class EffortlessBuildCommands {
 //            var firstPos = BlockPosArgument.getLoadedBlockPos(context, "firstPos");
 //            var secondPos = BlockPosArgument.getLoadedBlockPos(context, "secondPos");
 //
-//            var blockData = BlockStateArgument.getBlock(context, "block").getState();
+//            var blockState = BlockStateArgument.getBlock(context, "block").getState();
 //
 //            var coordinates = ((TwoClickBuildable) buildMode.getInstance()).collectFinalBlocks(context.getSource().getPlayer());
 //
 //            for (var blockPosition : coordinates) {
-//                // TODO: 23/1/23  SurvivalHelper.useBlock(player.getLevel(), player, blockPosition, blockData);
+//                // TODO: 23/1/23  SurvivalHelper.useBlock(player.getLevel(), player, blockPosition, blockState);
 //            }
 //            return 1;
 //        }))));
@@ -83,12 +83,12 @@ final class EffortlessBuildCommands {
 //            var secondPos = BlockPosArgument.getLoadedBlockPos(context, "secondPos");
 //            var thirdPos = BlockPosArgument.getLoadedBlockPos(context, "thirdPos");
 //
-//            var blockData = BlockStateArgument.getBlock(context, "block").getState();
+//            var blockState = BlockStateArgument.getBlock(context, "block").getState();
 //
 //            var coordinates = ((ThreeClickBuildable) buildMode.getInstance()).collectFinalBlocks(context.getSource().getPlayer(), firstPos.getX(), firstPos.getY(), firstPos.getZ(), secondPos.getX(), secondPos.getY(), secondPos.getZ(), thirdPos.getX(), thirdPos.getY(), thirdPos.getZ());
 //
 //            for (var blockPosition : coordinates) {
-//                // TODO: 23/1/23  SurvivalHelper.useBlock(player.getLevel(), player, blockPosition, blockData);
+//                // TODO: 23/1/23  SurvivalHelper.useBlock(player.getLevel(), player, blockPosition, blockState);
 //            }
 //            return 1;
 //        })))));

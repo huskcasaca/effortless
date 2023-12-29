@@ -179,7 +179,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
             // FIXME: 13/10/23
 //            if (interaction.getLocation().subtract(player.getEyePosition(1f)).lengthSqr() > 25f) {
 //                var blockPos = interaction.getBlockPos();
-//                var state = player.getWorld().getBlockData(blockPosition);
+//                var state = player.getWorld().getBlockState(blockPosition);
 //                var soundtype = state.getBlock().getSoundType(state);
 //                player.getWorld().playSound(player, player.blockPosition(), soundtype.getBreakSound(), SoundSource.BLOCKS, 0.4f, soundtype.getPitch());
 //            }

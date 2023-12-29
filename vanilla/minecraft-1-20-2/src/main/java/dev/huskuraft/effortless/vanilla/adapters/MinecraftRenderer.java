@@ -167,23 +167,23 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void renderBlockInWorld(RenderTexture renderTexture, World world, BlockPosition blockPosition, BlockData blockData) {
+    public void renderBlockInWorld(RenderTexture renderTexture, World world, BlockPosition blockPosition, BlockState blockState) {
         var minecraftBlockRenderer = Minecraft.getInstance().getBlockRenderer();
         var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
         var minecraftRenderType = dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderTexture.toMinecraftRenderType(renderTexture);
-        var minecraftBlockData = MinecraftBlockData.toMinecraftBlockData(blockData);
+        var minecraftBlockState = MinecraftBlockState.toMinecraftBlockState(blockState);
         var minecraftBlockPosition = MinecraftPlayer.toMinecraftBlockPosition(blockPosition);
 
         minecraftBlockRenderer.getModelRenderer().tesselateBlock(
                 minecraftWorld,
-                minecraftBlockRenderer.getBlockModel(minecraftBlockData),
-                minecraftBlockData,
+                minecraftBlockRenderer.getBlockModel(minecraftBlockState),
+                minecraftBlockState,
                 minecraftBlockPosition,
                 reference.pose(),
                 reference.bufferSource().getBuffer(minecraftRenderType),
                 false,
                 RAND,
-                minecraftBlockData.getSeed(minecraftBlockPosition),
+                minecraftBlockState.getSeed(minecraftBlockPosition),
                 OverlayTexture.NO_OVERLAY);
 
     }

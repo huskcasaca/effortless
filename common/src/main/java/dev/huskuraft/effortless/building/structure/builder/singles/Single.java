@@ -16,7 +16,7 @@ public class Single extends SingleClickBuilder {
         var startPos = interaction.getBlockPosition();
 
         var tracingAbsolute = context.isBreakingBlock() || context.replaceMode().isQuick();
-        var replaceable = player.getWorld().getBlockData(startPos).isReplaceable(player, interaction);
+        var replaceable = player.getWorld().getBlockState(startPos).isReplaceable(player, interaction);
 
         var tracingRelative = !tracingAbsolute && !replaceable;
 
