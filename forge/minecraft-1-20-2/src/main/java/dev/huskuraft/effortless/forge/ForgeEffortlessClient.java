@@ -88,7 +88,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
                     try {
-                        receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(event1.getPayload()), MinecraftClientPlayer.fromMinecraftPlayer(Minecraft.getInstance().player));
+                        receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(event1.getPayload()), MinecraftPlayer.fromMinecraftPlayer(Minecraft.getInstance().player));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
