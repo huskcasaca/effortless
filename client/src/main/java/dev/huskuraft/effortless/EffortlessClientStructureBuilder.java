@@ -94,7 +94,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             showContext(context.uuid(), context);
             showOperationResult(context.uuid(), result);
-            showOperationResultTooltip(context.uuid(), result, 1000);
+            showOperationResultTooltip(context.uuid(), player, result, 1000);
 
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalized));
             setContext(player, context.resetBuildState());
@@ -215,7 +215,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
 
-        showOperationResultTooltip(context.uuid(), result, 1);
+        showOperationResultTooltip(context.uuid(), player, result, 1);
     }
 
     @Override
@@ -251,7 +251,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         showOperationResult(player.getId(), result);
 
         showContextTooltip(player.getId(), context, 0);
-        showOperationResultTooltip(player.getId(), result, 1);
+        showOperationResultTooltip(player.getId(), player, result, 1);
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
     }
@@ -291,9 +291,9 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
     }
 
-    public void showOperationResultTooltip(UUID uuid, OperationResult result, int priority) {
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextIdByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextIdByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
+    public void showOperationResultTooltip(UUID uuid, Player player, OperationResult result, int priority) {
+        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextIdByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks", player.getDisplayName()).withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
+        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextIdByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks", player.getDisplayName()).withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
     }
 
     public void showContextTooltip(UUID uuid, Context context, int priority) {

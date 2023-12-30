@@ -168,8 +168,6 @@
   "effortless.axis.y_plane": "Top Bottom",
   "effortless.axis.z_plane": "South North",
 
-
-
   "commands.effortless.max_reach_distance.success": "Set maxReachDistance of %s to %s",
   "commands.effortless.max_reach_distance.failure": "Failed to set maxReachDistance of %s",
   "commands.effortless.max_block_place_per_axis.success": "Set maxBlockPlacePerAxis of %s to %s",
@@ -253,8 +251,8 @@
   "effortless.build.summary.structure": "Structure",
   "effortless.build.summary.state": "State",
   "effortless.build.summary.tracing": "Tracing",
-  "effortless.build.summary.placed_blocks": "Placed Blocks",
-  "effortless.build.summary.destroyed_blocks": "Destroyed Blocks",
+  "effortless.build.summary.placed_blocks": "Placed Blocks by %s",
+  "effortless.build.summary.destroyed_blocks": "Destroyed Blocks by %s",
   "effortless.position.move_to_player": "Move To Player",
   "effortless.position": "Position %s",
   "effortless.position.absolute": "Absolute",
