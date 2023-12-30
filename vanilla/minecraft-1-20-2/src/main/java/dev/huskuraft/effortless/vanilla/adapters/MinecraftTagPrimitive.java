@@ -64,24 +64,13 @@ public class MinecraftTagPrimitive extends TagPrimitive {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MinecraftTagPrimitive that)) return false;
-
-        return getReference().equals(that.getReference());
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftTagElement tagElement && getReference().equals(tagElement.reference) || obj instanceof MinecraftTagPrimitive tagPrimitive && getReference().equals(tagPrimitive.getReference());
     }
 
     @Override
     public int hashCode() {
         return getReference().hashCode();
-    }
-
-    static class NotImplementedException extends RuntimeException {
-
-        public NotImplementedException(String message) {
-            super(message);
-        }
-
     }
 
 }

@@ -277,4 +277,14 @@ public class MinecraftPlayer extends Player {
         return false;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftPlayer player && reference.equals(player.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
+
 }

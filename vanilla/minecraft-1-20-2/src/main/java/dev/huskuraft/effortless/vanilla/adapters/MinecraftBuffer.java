@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.text.Text;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class MinecraftBuffer extends Buffer {
@@ -184,7 +185,16 @@ public class MinecraftBuffer extends Buffer {
     @Override
     public void writeTagRecord(TagRecord value) {
         reference.writeNbt(MinecraftTagRecord.toMinecraft(value));
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftBuffer buffer && reference.equals(buffer.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
     }
 
 }

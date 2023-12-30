@@ -19,4 +19,14 @@ public class MinecraftRenderTexture extends RenderTexture {
         return ((MinecraftRenderTexture) renderTexture).reference;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftRenderTexture renderTexture && reference.equals(renderTexture.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
+
 }

@@ -223,37 +223,34 @@ public class MinecraftTagRecord extends TagRecord {
 
     @Override
     public <T> void putElement(String key, T value, TagWriter<T> writer) {
-        var tag = new MinecraftTagElement(null);
-        writer.write(tag, value);
-        getReference().put(key, tag.getReference());
+        var tagElement = new MinecraftTagElement(null);
+        writer.write(tagElement, value);
+        getReference().put(key, tagElement.getReference());
     }
 
     @Override
     public <T> List<T> getList(String key, TagReader<T> writer) {
         var list = new ArrayList<T>();
-        for (var tag : (ListTag) getReference().get(key)) {
-            list.add(writer.read(new MinecraftTagElement(tag)));
+        for (var minecraftListTag : (ListTag) getReference().get(key)) {
+            list.add(writer.read(new MinecraftTagElement(minecraftListTag)));
         }
         return list;
     }
 
     @Override
     public <T> void putList(String key, Collection<T> collection, TagWriter<T> writer) {
-        var listTag = new ListTag();
+        var minecraftListTag = new ListTag();
         for (var value : collection) {
-            var tag = new MinecraftTagElement(null);
-            writer.write(tag, value);
-            listTag.add(tag.getReference());
+            var tagElement = new MinecraftTagElement(null);
+            writer.write(tagElement, value);
+            minecraftListTag.add(tagElement.getReference());
         }
-        getReference().put(key, listTag);
+        getReference().put(key, minecraftListTag);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MinecraftTagRecord that)) return false;
-
-        return getReference().equals(that.getReference());
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftTagElement tagElement && getReference().equals(tagElement.reference) || obj instanceof MinecraftTagRecord tagRecord && getReference().equals(tagRecord.getReference());
     }
 
     @Override
@@ -266,7 +263,6 @@ public class MinecraftTagRecord extends TagRecord {
         public NotImplementedException(String message) {
             super(message);
         }
-
     }
 
 }

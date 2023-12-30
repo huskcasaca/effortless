@@ -38,13 +38,8 @@ public class MinecraftItem extends Item {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        var that = (MinecraftItem) o;
-
-        return reference.equals(that.reference);
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftItem item && reference.equals(item.reference);
     }
 
     @Override

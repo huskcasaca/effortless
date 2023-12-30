@@ -7,6 +7,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
+import java.util.Objects;
+
 public class MinecraftBlockState extends BlockState {
 
     private final net.minecraft.world.level.block.state.BlockState reference;
@@ -97,16 +99,6 @@ public class MinecraftBlockState extends BlockState {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftBlockState fabricBlockState && reference.equals(fabricBlockState.reference);
-    }
-
-    @Override
-    public int hashCode() {
-        return reference.hashCode();
-    }
-
-    @Override
     public BlockState mirror(Axis axis) {
         return switch (axis) {
             case Y -> new MinecraftBlockState(mirrorTopBottom(reference));
@@ -134,4 +126,15 @@ public class MinecraftBlockState extends BlockState {
     public boolean isDestroyable() {
         return !reference.is(BlockTags.FEATURES_CANNOT_REPLACE);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftBlockState blockState && reference.equals(blockState.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
+
 }

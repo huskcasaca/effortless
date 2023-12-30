@@ -34,4 +34,14 @@ public class MinecraftResource extends Resource {
     public String getPath() {
         return reference.getPath();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftResource resource && reference.equals(resource.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
 }

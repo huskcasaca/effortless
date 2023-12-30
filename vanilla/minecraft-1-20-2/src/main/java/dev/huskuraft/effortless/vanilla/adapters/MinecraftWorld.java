@@ -44,4 +44,15 @@ public class MinecraftWorld extends World {
         return reference.isClientSide();
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftWorld world && reference.equals(world.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
+
 }

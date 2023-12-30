@@ -116,4 +116,14 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
     public Component getTitle() {
         return MinecraftText.toMinecraftText(proxy.getScreenTitle());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftProxyScreen keyBinding && proxy.equals(keyBinding.proxy);
+    }
+
+    @Override
+    public int hashCode() {
+        return proxy.hashCode();
+    }
 }

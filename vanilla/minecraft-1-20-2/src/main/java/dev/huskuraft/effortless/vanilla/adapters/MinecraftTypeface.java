@@ -56,4 +56,14 @@ public class MinecraftTypeface extends Typeface {
         return reference.plainSubstrByWidth(text, width, tail);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftTypeface typeface && reference.equals(typeface.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
+
 }

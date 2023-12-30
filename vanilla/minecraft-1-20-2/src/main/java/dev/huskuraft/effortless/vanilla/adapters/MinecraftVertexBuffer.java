@@ -62,4 +62,15 @@ public class MinecraftVertexBuffer implements VertexBuffer {
         reference.unsetDefaultColor();
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftVertexBuffer vertexBuffer && reference.equals(vertexBuffer.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
+
 }

@@ -202,4 +202,14 @@ public class MinecraftRenderer extends Renderer {
     public OutlineRenderTextures outlineRenderTextures() {
         return OUTLINE_RENDER_TEXTURES;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftRenderer renderer && reference.equals(renderer.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
 }

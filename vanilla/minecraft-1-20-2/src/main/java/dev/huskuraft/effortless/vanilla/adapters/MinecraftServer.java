@@ -22,4 +22,14 @@ public class MinecraftServer extends Server {
     public void execute(Runnable runnable) {
         reference.executeIfPossible(runnable);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftServer server && reference.equals(server.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
 }

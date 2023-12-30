@@ -138,13 +138,21 @@ public class MinecraftItemStack extends ItemStack {
     @Override
     public BlockState getBlockState(Player player, BlockInteraction interaction) {
 
-        var blockPlaceContext = new BlockPlaceContext(
+        return MinecraftBlockState.fromMinecraftBlockState(Block.byItem(reference.getItem()).getStateForPlacement(new BlockPlaceContext(
                 MinecraftPlayer.toMinecraftPlayer(player),
                 MinecraftPlayer.toMinecraftInteractionHand(interaction.getHand()),
                 MinecraftItemStack.toMinecraftItemStack(this),
                 MinecraftPlayer.toMinecraftBlockInteraction(interaction)
-        );
+        )));
+    }
 
-        return MinecraftBlockState.fromMinecraftBlockState(Block.byItem(reference.getItem()).getStateForPlacement(blockPlaceContext));
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftItemStack itemStack && reference.equals(itemStack.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
     }
 }

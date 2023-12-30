@@ -52,15 +52,12 @@ public class MinecraftTagElement extends TagElement {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MinecraftTagElement that)) return false;
-
-        return getReference().equals(that.getReference());
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftTagElement tagElement && reference.equals(tagElement.reference);
     }
 
     @Override
     public int hashCode() {
-        return getReference().hashCode();
+        return reference.hashCode();
     }
 }

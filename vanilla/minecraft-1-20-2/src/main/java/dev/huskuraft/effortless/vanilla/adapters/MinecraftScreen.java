@@ -46,4 +46,14 @@ public class MinecraftScreen extends AbstractScreen {
     public void detach() {
 
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftScreen screen && reference.equals(screen.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
 }

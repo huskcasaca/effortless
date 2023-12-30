@@ -67,4 +67,14 @@ public class MinecraftKeyBinding extends KeyBinding {
         return reference.key.getValue();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftKeyBinding keyBinding && reference.equals(keyBinding.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
+    }
+
 }

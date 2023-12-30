@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
+import com.google.common.base.Objects;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.huskuraft.effortless.core.Interaction;
 import dev.huskuraft.effortless.core.Player;
@@ -143,5 +144,15 @@ public class MinecraftClient extends Client {
     @Override
     public void playButtonClickSound() {
         reference.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MinecraftClient client && reference.equals(client.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return reference.hashCode();
     }
 }

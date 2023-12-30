@@ -51,7 +51,7 @@ public class MinecraftText extends Text {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MinecraftText fabricText && reference.equals(fabricText.reference);
+        return obj instanceof MinecraftText text && reference.equals(text.reference);
     }
 
     @Override
