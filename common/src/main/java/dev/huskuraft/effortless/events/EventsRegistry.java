@@ -8,7 +8,7 @@ public class EventsRegistry {
 
     private final Event<RegisterNetwork> registerNetworkEvent = EventFactory.createLoop();
 
-    public Event<RegisterNetwork> onRegisterNetwork() {
+    public Event<RegisterNetwork> getRegisterNetworkEvent() {
         return registerNetworkEvent;
     }
 }

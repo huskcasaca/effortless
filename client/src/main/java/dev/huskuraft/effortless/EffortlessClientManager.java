@@ -44,15 +44,15 @@ final class EffortlessClientManager extends ClientManager {
         this.outlineRenderer = new OutlineRenderer();
         this.patternRenderer = new PatternRenderer();
 
-        getEntrance().getEventRegistry().onRegisterKeys().register(this::onRegisterKeys);
-        getEntrance().getEventRegistry().onKeyInput().register(this::onKeyInput);
-        getEntrance().getEventRegistry().onInteractionInput().register(this::onInteractionInput);
+        getEntrance().getEventRegistry().getRegisterKeysEvent().register(this::onRegisterKeys);
+        getEntrance().getEventRegistry().getKeyInputEvent().register(this::onKeyInput);
+        getEntrance().getEventRegistry().getInteractionInputEvent().register(this::onInteractionInput);
 
-        getEntrance().getEventRegistry().onClientStart().register(this::onClientStart);
-        getEntrance().getEventRegistry().onClientTick().register(this::onClientTick);
+        getEntrance().getEventRegistry().getClientStartEvent().register(this::onClientStart);
+        getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
 
-        getEntrance().getEventRegistry().onRenderGui().register(this::onRenderGui);
-        getEntrance().getEventRegistry().onRenderWorld().register(this::onRenderEnd);
+        getEntrance().getEventRegistry().getRenderGuiEvent().register(this::onRenderGui);
+        getEntrance().getEventRegistry().getRenderWorldEvent().register(this::onRenderEnd);
     }
 
     private ClientEntrance getEntrance() {

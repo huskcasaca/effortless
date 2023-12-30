@@ -35,7 +35,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
     public EffortlessClientStructureBuilder(Entrance entrance) {
         this.entrance = (ClientEntrance) entrance;
 
-        getEntrance().getEventRegistry().onClientTick().register(this::onClientTick);
+        getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
     }
 
     private static Text getStateComponent(BuildState state) {

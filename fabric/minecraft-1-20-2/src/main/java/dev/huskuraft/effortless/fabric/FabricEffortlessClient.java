@@ -8,7 +8,9 @@ import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
 import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
 import dev.huskuraft.effortless.input.InputKey;
+import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.platform.ClientPlatform;
+import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderTextures;
@@ -27,17 +29,18 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
 
     @Override
     public void onInitializeClient() {
-        onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
-        onRegisterNetwork(receiver -> {
+        Client client1 = MinecraftClient.fromMinecraftClient(Minecraft.getInstance());
+        getEventRegistry().getClientStartEvent().invoker().onClientStart(client1);
+        getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             var channelId = MinecraftResource.toMinecraftResource(getChannel().getChannelId());
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
                 receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(buf), MinecraftPlayer.fromMinecraftPlayer(client.player));
             });
-            return (buffer, player) -> ClientPlayNetworking.send(channelId, MinecraftBuffer.toMinecraftBuffer(buffer));
+            return (buffer, player1) -> ClientPlayNetworking.send(channelId, MinecraftBuffer.toMinecraftBuffer(buffer));
         });
 
-        onRegisterKeys(key -> {
-            KeyBindingHelper.registerKeyBinding(MinecraftKeyBinding.toMinecraft(key.getBinding()));
+        getEventRegistry().getRegisterKeysEvent().invoker().onRegisterKeys(key1 -> {
+            KeyBindingHelper.registerKeyBinding(MinecraftKeyBinding.toMinecraft(key1.getBinding()));
         });
 
         RegisterShadersEvents.REGISTER_SHADERS.register((provider, sink) -> {
@@ -45,31 +48,37 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
-            onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.START);
+            Client client = MinecraftClient.fromMinecraftClient(minecraft);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(client, TickPhase.START);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.END);
+            Client client = MinecraftClient.fromMinecraftClient(minecraft);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(client, TickPhase.END);
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            onRenderWorld(new MinecraftRenderer(context.matrixStack(), Minecraft.getInstance().renderBuffers().bufferSource()), context.tickDelta());
+            Renderer renderer = new MinecraftRenderer(context.matrixStack(), Minecraft.getInstance().renderBuffers().bufferSource());
+            float deltaTick = context.tickDelta();
+            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(renderer, deltaTick);
         });
 
         GuiRenderEvents.RENDER_GUI.register((guiGraphics, f) -> {
-            onRenderGui(new MinecraftRenderer(guiGraphics), f);
+            Renderer renderer = new MinecraftRenderer(guiGraphics);
+            getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(renderer, f);
         });
 
         KeyboardInputEvents.KEY_INPUT.register((key, scanCode, action, modifiers) -> {
-            onKeyInput(new InputKey(key, scanCode, action, modifiers));
+            InputKey key1 = new InputKey(key, scanCode, action, modifiers);
+            getEventRegistry().getKeyInputEvent().invoker().onKeyInput(key1);
         });
 
         InteractionInputEvents.ATTACK.register((player, hand) -> {
-            return onInteractionInput(InteractionType.ATTACK, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.ATTACK, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
         InteractionInputEvents.USE_ITEM.register((player, hand) -> {
-            return onInteractionInput(InteractionType.USE_ITEM, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.USE_ITEM, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
     }

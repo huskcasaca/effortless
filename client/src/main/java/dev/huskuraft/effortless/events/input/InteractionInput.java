@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.events.player;
+package dev.huskuraft.effortless.events.input;
 
 import dev.huskuraft.effortless.core.InteractionHand;
 import dev.huskuraft.effortless.core.InteractionType;

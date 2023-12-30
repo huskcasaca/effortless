@@ -35,7 +35,7 @@ final class EffortlessServerChannel extends Channel<AllPacketListener> {
         registerPacket(PlayerBuildPacket.class, new PlayerBuildPacket.Serializer());
         registerPacket(PlayerBuildPreviewPacket.class, new PlayerBuildPreviewPacket.Serializer());
 
-        getEntrance().getEventRegistry().onRegisterNetwork().register(this::onRegisterHandler);
+        getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterHandler);
     }
 
     public Entrance getEntrance() {

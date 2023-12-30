@@ -93,7 +93,7 @@ public class ForgeEffortless extends Effortless {
 
     @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent event) {
-        onRegisterNetwork(receiver -> {
+        getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
                     try {
