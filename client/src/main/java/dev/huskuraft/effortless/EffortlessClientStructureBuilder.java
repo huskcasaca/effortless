@@ -9,6 +9,8 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.SingleAction;
 import dev.huskuraft.effortless.core.*;
+import dev.huskuraft.effortless.math.BoundingBox3d;
+import dev.huskuraft.effortless.math.Vector3i;
 import dev.huskuraft.effortless.packets.player.PlayerActionPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.platform.Client;
@@ -20,6 +22,7 @@ import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -89,6 +92,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
             var finalized = context.finalize(player, BuildStage.INTERACT);
             var result = finalized.withPreviewOnceType().createSession(player.getWorld(), player).build().commit();
 
+            showContext(context.uuid(), context);
             showOperationResult(context.uuid(), result);
             showOperationResultTooltip(context.uuid(), result, 1000);
 
@@ -208,7 +212,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void onContextReceived(Player player, Context context) {
         var result = context.createSession(player.getWorld(), player).build().commit();
 
-//        showPattern(player.getId(), context);
+        showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
 
         showOperationResultTooltip(context.uuid(), result, 1);
@@ -243,7 +247,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         var result = context.withPreviewType().createSession(player.getWorld(), player).build().commit();
 
-        showPattern(player.getId(), context);
+        showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
 
         showContextTooltip(player.getId(), context, 0);
@@ -252,12 +256,22 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
     }
 
-    private UUID nextUUIDByTag(UUID uuid, String tag) {
+    private UUID nextIdByTag(UUID uuid, String tag) {
         return new UUID(uuid.getMostSignificantBits() + tag.hashCode(), uuid.getLeastSignificantBits());
     }
 
-    public void showPattern(UUID uuid, Context context) {
+    public void showContext(UUID uuid, Context context) {
         getEntrance().getClientManager().getPatternRenderer().showPattern(uuid, context);
+        if (!context.isMissingHit() && !context.interactions().isEmpty()) {
+            var box = BoundingBox3d.fromLowerCornersOf(context.interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new));
+            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, "boundingBox"), box)
+                    .texture(RenderTextures.CHECKERED_THIN_TEXTURE_LOCATION)
+                    .lightMap(LightTexture.FULL_BLOCK)
+                    .disableNormals()
+                    .colored(Color.DARK_GRAY)
+                    .stroke(1 / 64f);
+        }
+
     }
 
     public void showOperationResult(UUID uuid, OperationResult result) {
@@ -278,8 +292,8 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showOperationResultTooltip(UUID uuid, OperationResult result, int priority) {
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextUUIDByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
+        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextIdByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
+        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextIdByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
     }
 
     public void showContextTooltip(UUID uuid, Context context, int priority) {
@@ -295,10 +309,10 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
             texts.add(button.getDisplayCategory().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(button.getDisplayName().withStyle(TextStyle.GOLD)));
         }
 
-        texts.add(Text.translate("effortless.build.summary.state").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getStateComponent(context.state()).withStyle(TextStyle.GOLD)));
+//        texts.add(Text.translate("effortless.build.summary.state").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getStateComponent(context.state()).withStyle(TextStyle.GOLD)));
         texts.add(Text.translate("effortless.build.summary.tracing").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getTracingComponent(context.tracingResult()).withStyle(TextStyle.GOLD)));
 
-        getEntrance().getClientManager().getSubtitleManager().showMessages(nextUUIDByTag(uuid, "info"), texts, priority);
+        getEntrance().getClientManager().getSubtitleManager().showMessages(nextIdByTag(uuid, "info"), texts, priority);
     }
 
 }

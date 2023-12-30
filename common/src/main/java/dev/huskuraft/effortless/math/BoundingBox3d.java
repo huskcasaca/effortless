@@ -43,6 +43,42 @@ public class BoundingBox3d {
         return new BoundingBox3d(vector.x() - x / 2.0, vector.y() - y / 2.0, vector.z() - z / 2.0, vector.x() + x / 2.0, vector.y() + y / 2.0, vector.z() + z / 2.0);
     }
 
+    public static BoundingBox3d of(Vector3d... vectors) {
+        var minX = Double.POSITIVE_INFINITY;
+        var minY = Double.POSITIVE_INFINITY;
+        var minZ = Double.POSITIVE_INFINITY;
+        var maxX = Double.NEGATIVE_INFINITY;
+        var maxY = Double.NEGATIVE_INFINITY;
+        var maxZ = Double.NEGATIVE_INFINITY;
+        for (Vector3d vector : vectors) {
+            minX = Math.min(minX, vector.x());
+            minY = Math.min(minY, vector.y());
+            minZ = Math.min(minZ, vector.z());
+            maxX = Math.max(maxX, vector.x());
+            maxY = Math.max(maxY, vector.y());
+            maxZ = Math.max(maxZ, vector.z());
+        }
+        return new BoundingBox3d(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
+    public static BoundingBox3d fromLowerCornersOf(Vector3i... vectors) {
+        var minX = Double.POSITIVE_INFINITY;
+        var minY = Double.POSITIVE_INFINITY;
+        var minZ = Double.POSITIVE_INFINITY;
+        var maxX = Double.NEGATIVE_INFINITY;
+        var maxY = Double.NEGATIVE_INFINITY;
+        var maxZ = Double.NEGATIVE_INFINITY;
+        for (Vector3i vector : vectors) {
+            minX = Math.min(minX, vector.x());
+            minY = Math.min(minY, vector.y());
+            minZ = Math.min(minZ, vector.z());
+            maxX = Math.max(maxX, vector.x() + 1);
+            maxY = Math.max(maxY, vector.y() + 1);
+            maxZ = Math.max(maxZ, vector.z() + 1);
+        }
+        return new BoundingBox3d(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
     public double getMinX() {
         return minX;
     }
