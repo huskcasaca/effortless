@@ -46,10 +46,7 @@ public final class BuildSession implements Session {
     }
 
     private static BatchOperation create(World world, Player player, Context context) {
-        var storage = player.getStorage();
-        if (context.isPreview()) {
-            storage = storage.clone();
-        }
+        var storage = Storage.create(player, context.isPreview());
         var operations = createBaseDeferred(world, player, context, storage);
 
         for (var transformer : context.pattern().transformers()) {

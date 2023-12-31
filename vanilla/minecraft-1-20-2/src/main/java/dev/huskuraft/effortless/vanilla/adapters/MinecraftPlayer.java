@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.math.Vector3i;
@@ -21,8 +20,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class MinecraftPlayer extends Player {
 
@@ -168,14 +167,6 @@ public class MinecraftPlayer extends Player {
     }
 
     @Override
-    public Storage getStorage() {
-        if (reference.isCreative()) {
-            return Storage.fullStorage();
-        }
-        return Storage.create(reference.getInventory().items.stream().map(MinecraftItemStack::fromMinecraft).collect(Collectors.toList()));
-    }
-
-    @Override
     public Text getDisplayName() {
         return MinecraftText.fromMinecraftText(reference.getDisplayName());
     }
@@ -193,6 +184,16 @@ public class MinecraftPlayer extends Player {
     @Override
     public Vector3d getEyeDirection() {
         return fromMinecraftVector3d(reference.getLookAngle());
+    }
+
+    @Override
+    public List<ItemStack> getItemStacks() {
+        return reference.getInventory().items.stream().map(MinecraftItemStack::fromMinecraft).toList();
+    }
+
+    @Override
+    public void setItemStack(int index, ItemStack itemStack) {
+        reference.getInventory().setItem(index, MinecraftItemStack.toMinecraftItemStack(itemStack));
     }
 
     @Override

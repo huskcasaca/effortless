@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.building;
 
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.core.Player;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,33 +11,101 @@ import java.util.Optional;
 
 public interface Storage {
 
-    static Storage fullStorage() {
+    static Storage create(Player player, boolean copy) {
         return new Storage() {
+            private final Storage survivalStorage;
+
+            {
+                if (copy) {
+                    survivalStorage = Storage.create(player.getItemStacks().stream().map(ItemStack::copy).toList());
+                } else {
+                    survivalStorage = Storage.create(player.getItemStacks());
+                }
+            }
+
+            private Storage getStorage() {
+                return switch (player.getGameType()) {
+                    case SURVIVAL, ADVENTURE -> survivalStorage;
+                    case CREATIVE -> full();
+                    case SPECTATOR -> empty();
+                };
+            }
+
             @Override
             public Optional<ItemStack> searchByTag(ItemStack stack) {
-                return Optional.of(stack);
+                return getStorage().searchByTag(stack);
             }
 
             @Override
             public Optional<ItemStack> searchByItem(Item item) {
-                return Optional.of(item.getDefaultStack());
+                return getStorage().searchByItem(item);
             }
 
             @Override
             public boolean consume(ItemStack stack) {
-                return false;
+                return getStorage().consume(stack);
             }
 
             @Override
             public List<ItemStack> contents() {
-                return List.of();
+                return getStorage().contents();
             }
 
-            @Override
-            public Storage clone() {
-                return this;
-            }
         };
+    }
+
+    Storage FULL = new Storage() {
+        @Override
+        public Optional<ItemStack> searchByTag(ItemStack stack) {
+            return Optional.of(stack);
+        }
+
+        @Override
+        public Optional<ItemStack> searchByItem(Item item) {
+            return Optional.of(item.getDefaultStack());
+        }
+
+        @Override
+        public boolean consume(ItemStack stack) {
+            return true;
+        }
+
+        @Override
+        public List<ItemStack> contents() {
+            return List.of();
+        }
+
+    };
+
+    Storage EMPTY = new Storage() {
+        @Override
+        public Optional<ItemStack> searchByTag(ItemStack stack) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<ItemStack> searchByItem(Item item) {
+            return Optional.empty();
+        }
+
+        @Override
+        public boolean consume(ItemStack stack) {
+            return false;
+        }
+
+        @Override
+        public List<ItemStack> contents() {
+            return List.of();
+        }
+
+    };
+
+    static Storage full() {
+        return FULL;
+    }
+
+    static Storage empty() {
+        return EMPTY;
     }
 
     static Storage create(List<ItemStack> itemStacks) {
@@ -89,10 +158,6 @@ public interface Storage {
                 return itemStacks;
             }
 
-            @Override
-            public Storage clone() {
-                return create(itemStacks.stream().map(ItemStack::copy).toList());
-            }
         };
     }
 
@@ -103,7 +168,5 @@ public interface Storage {
     boolean consume(ItemStack stack);
 
     List<ItemStack> contents();
-
-    Storage clone();
 
 }

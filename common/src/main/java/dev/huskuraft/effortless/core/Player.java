@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.core;
 
-import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.platform.Server;
 import dev.huskuraft.effortless.text.Text;
 
+import java.util.List;
 import java.util.UUID;
 
 public abstract class Player {
@@ -15,8 +15,6 @@ public abstract class Player {
 
     public abstract World getWorld();
 
-    public abstract Storage getStorage();
-
     public abstract Text getDisplayName();
 
     public abstract Vector3d getPosition();
@@ -24,6 +22,10 @@ public abstract class Player {
     public abstract Vector3d getEyePosition();
 
     public abstract Vector3d getEyeDirection();
+
+    public abstract List<ItemStack> getItemStacks();
+
+    public abstract void setItemStack(int index, ItemStack itemStack);
 
     public abstract ItemStack getItemStack(InteractionHand hand);
 
