@@ -5,13 +5,13 @@ import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.renderer.*;
-import dev.huskuraft.effortless.renderer.texture.BlockRenderTextures;
-import dev.huskuraft.effortless.renderer.texture.OutlineRenderTextures;
-import dev.huskuraft.effortless.renderer.texture.RenderTextures;
+import dev.huskuraft.effortless.renderer.texture.BlockRenderLayers;
+import dev.huskuraft.effortless.renderer.texture.OutlineRenderLayers;
+import dev.huskuraft.effortless.renderer.texture.RenderLayers;
 import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderTextures;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderTextures;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderTextures;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderLayers;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderLayers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -34,9 +34,9 @@ public class MinecraftRenderer extends Renderer {
 
     private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
 
-    private static final RenderTextures RENDER_TEXTURES = new MinecraftRenderTextures();
-    private static final BlockRenderTextures BLOCK_RENDER_TEXTURES = new MinecraftBlockRenderTextures();
-    private static final OutlineRenderTextures OUTLINE_RENDER_TEXTURES = new MinecraftOutlineRenderTextures();
+    private static final RenderLayers RENDER_TEXTURES = new MinecraftRenderLayers();
+    private static final BlockRenderLayers BLOCK_RENDER_TEXTURES = new MinecraftBlockRenderLayers();
+    private static final OutlineRenderLayers OUTLINE_RENDER_TEXTURES = new MinecraftOutlineRenderLayers();
 
     private static final RandomSource RAND = RandomSource.create();
     private final GuiGraphics reference;
@@ -120,8 +120,8 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public VertexBuffer vertexBuffer(RenderTexture renderTexture) {
-        return new MinecraftVertexBuffer(reference.bufferSource().getBuffer(dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderTexture.toMinecraftRenderType(renderTexture)));
+    public VertexBuffer vertexBuffer(RenderLayer renderLayer) {
+        return new MinecraftVertexBuffer(reference.bufferSource().getBuffer(MinecraftRenderLayer.toMinecraftRenderLayer(renderLayer)));
     }
 
     @Override
@@ -167,10 +167,10 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void renderBlockInWorld(RenderTexture renderTexture, World world, BlockPosition blockPosition, BlockState blockState) {
+    public void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState) {
         var minecraftBlockRenderer = Minecraft.getInstance().getBlockRenderer();
         var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
-        var minecraftRenderTexture = dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderTexture.toMinecraftRenderType(renderTexture);
+        var minecraftRenderLayer = MinecraftRenderLayer.toMinecraftRenderLayer(renderLayer);
         var minecraftBlockState = MinecraftBlockState.toMinecraftBlockState(blockState);
         var minecraftBlockPosition = MinecraftPlayer.toMinecraftBlockPosition(blockPosition);
 
@@ -180,7 +180,7 @@ public class MinecraftRenderer extends Renderer {
                 minecraftBlockState,
                 minecraftBlockPosition,
                 reference.pose(),
-                reference.bufferSource().getBuffer(minecraftRenderTexture),
+                reference.bufferSource().getBuffer(minecraftRenderLayer),
                 false,
                 RAND,
                 minecraftBlockState.getSeed(minecraftBlockPosition),
@@ -189,17 +189,17 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public RenderTextures renderTextures() {
+    public RenderLayers renderLayers() {
         return RENDER_TEXTURES;
     }
 
     @Override
-    public BlockRenderTextures blockRenderTextures() {
+    public BlockRenderLayers blockRenderLayers() {
         return BLOCK_RENDER_TEXTURES;
     }
 
     @Override
-    public OutlineRenderTextures outlineRenderTextures() {
+    public OutlineRenderLayers outlineRenderLayers() {
         return OUTLINE_RENDER_TEXTURES;
     }
 

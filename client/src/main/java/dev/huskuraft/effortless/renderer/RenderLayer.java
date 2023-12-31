@@ -1,5 +1,5 @@
 package dev.huskuraft.effortless.renderer;
 
-public abstract class RenderTexture {
+public abstract class RenderLayer {
 
 }

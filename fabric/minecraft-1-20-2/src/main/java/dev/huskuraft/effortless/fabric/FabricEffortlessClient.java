@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.platform.ClientPlatform;
 import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderTextures;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -44,7 +44,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         RegisterShadersEvents.REGISTER_SHADERS.register((provider, sink) -> {
-            MinecraftBlockRenderTextures.Shaders.registerShaders(provider, sink::register);
+            MinecraftBlockRenderLayers.Shaders.registerShaders(provider, sink::register);
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {

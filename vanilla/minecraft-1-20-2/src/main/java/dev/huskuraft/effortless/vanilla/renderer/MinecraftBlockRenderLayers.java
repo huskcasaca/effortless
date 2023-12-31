@@ -3,9 +3,9 @@ package dev.huskuraft.effortless.vanilla.renderer;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import dev.huskuraft.effortless.renderer.RenderTexture;
-import dev.huskuraft.effortless.renderer.texture.BlockRenderTextures;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderTexture;
+import dev.huskuraft.effortless.renderer.RenderLayer;
+import dev.huskuraft.effortless.renderer.texture.BlockRenderLayers;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderLayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -18,21 +18,21 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-public class MinecraftBlockRenderTextures extends BlockRenderTextures {
+public class MinecraftBlockRenderLayers extends BlockRenderLayers {
 
     @Override
-    public RenderTexture lines() {
-        return MinecraftRenderTexture.fromMinecraftRenderType(BlockRenderType.EF_LINES);
+    public RenderLayer lines() {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(BlockRenderType.EF_LINES);
     }
 
     @Override
-    public RenderTexture planes() {
-        return MinecraftRenderTexture.fromMinecraftRenderType(BlockRenderType.EF_PLANES);
+    public RenderLayer planes() {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(BlockRenderType.EF_PLANES);
     }
 
     @Override
-    public RenderTexture block(int color) {
-        return MinecraftRenderTexture.fromMinecraftRenderType(BlockRenderType.block(color));
+    public RenderLayer block(int color) {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(BlockRenderType.block(color));
     }
 
     public static final class BlockRenderType extends RenderType {

@@ -4,9 +4,9 @@ import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.huskuraft.effortless.core.Resource;
-import dev.huskuraft.effortless.renderer.RenderTexture;
-import dev.huskuraft.effortless.renderer.texture.OutlineRenderTextures;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderTexture;
+import dev.huskuraft.effortless.renderer.RenderLayer;
+import dev.huskuraft.effortless.renderer.texture.OutlineRenderLayers;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderLayer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -16,61 +16,61 @@ import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class MinecraftOutlineRenderTextures extends OutlineRenderTextures {
+public class MinecraftOutlineRenderLayers extends OutlineRenderLayers {
 
     @Override
-    public RenderTexture outlineSolid() {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.outlineSolid());
+    public RenderLayer outlineSolid() {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.outlineSolid());
     }
 
     @Override
-    public RenderTexture outlineSolid(boolean overlap) {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.outlineSolid(overlap));
+    public RenderLayer outlineSolid(boolean overlap) {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.outlineSolid(overlap));
     }
 
     @Override
-    public RenderTexture outlineTranslucent(Resource texture, boolean cull) {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.outlineTranslucent(MinecraftResource.toMinecraftResource(texture), cull));
+    public RenderLayer outlineTranslucent(Resource texture, boolean cull) {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.outlineTranslucent(MinecraftResource.toMinecraftResource(texture), cull));
     }
 
     @Override
-    public RenderTexture glowingSolid(Resource texture) {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.glowingSolid(MinecraftResource.toMinecraftResource(texture)));
+    public RenderLayer glowingSolid(Resource texture) {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.glowingSolid(MinecraftResource.toMinecraftResource(texture)));
     }
 
     @Override
-    public RenderTexture glowingSolid() {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.glowingSolid());
+    public RenderLayer glowingSolid() {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.glowingSolid());
     }
 
     @Override
-    public RenderTexture glowingTranslucent(Resource texture) {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.glowingTranslucent(MinecraftResource.toMinecraftResource(texture)));
+    public RenderLayer glowingTranslucent(Resource texture) {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.glowingTranslucent(MinecraftResource.toMinecraftResource(texture)));
     }
 
     @Override
-    public RenderTexture additive() {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.additive());
+    public RenderLayer additive() {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.additive());
     }
 
     @Override
-    public RenderTexture glowingTranslucent() {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.glowingTranslucent());
+    public RenderLayer glowingTranslucent() {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.glowingTranslucent());
     }
 
     @Override
-    public RenderTexture itemPartialSolid() {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.itemPartialSolid());
+    public RenderLayer itemPartialSolid() {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.itemPartialSolid());
     }
 
     @Override
-    public RenderTexture itemPartialTranslucent() {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.itemPartialTranslucent());
+    public RenderLayer itemPartialTranslucent() {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.itemPartialTranslucent());
     }
 
     @Override
-    public RenderTexture fluid() {
-        return MinecraftRenderTexture.fromMinecraftRenderType(OutlineRenderType.fluid());
+    public RenderLayer fluid() {
+        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.fluid());
     }
 
     public static final class OutlineRenderType extends RenderType {
