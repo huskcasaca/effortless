@@ -96,7 +96,7 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public int renderText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap) {
+    protected int renderTextInternal(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap) {
         var minecraftTypeface = MinecraftTypeface.toMinecraftTypeface(typeface);
         var minecraftText = MinecraftText.toMinecraftText(text);
         return minecraftTypeface.drawInBatch(minecraftText,
@@ -109,7 +109,6 @@ public class MinecraftRenderer extends Renderer {
                 seeThrough,
                 backgroundColor,
                 lightMap);
-//        flush();
     }
 
     @Override

@@ -293,7 +293,13 @@ public abstract class Renderer {
         buffer.vertex(lastMatrixPose(), v4).color(color).uv(minU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
     }
 
-    public abstract int renderText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap);
+    protected abstract int renderTextInternal(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap);
+
+    public int renderText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap) {
+        var width = this.renderTextInternal(typeface, text, x, y, color, backgroundColor, shadow, seeThrough, lightMap);
+        flush();
+        return width;
+    }
 
     public final int renderText(Typeface typeface, String string, int x, int y, int color, boolean shadow) {
         return this.renderText(typeface, Text.text(string), x, y, color, 0, shadow, false, LightTexture.FULL_BRIGHT);
