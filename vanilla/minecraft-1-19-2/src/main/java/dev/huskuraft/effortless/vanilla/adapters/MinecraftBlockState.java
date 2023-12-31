@@ -117,7 +117,7 @@ public class MinecraftBlockState extends BlockState {
 
     @Override
     public boolean isReplaceable() {
-        return reference.canBeReplaced();
+        return false; // reference.canBeReplaced();
     }
 
     @Override

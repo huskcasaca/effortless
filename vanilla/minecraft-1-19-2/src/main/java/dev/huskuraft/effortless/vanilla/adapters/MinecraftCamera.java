@@ -23,7 +23,7 @@ public class MinecraftCamera implements Camera {
 
     @Override
     public Quaternionf rotation() {
-        return reference.rotation();
+        return MinecraftPrimitives.fromMinecraftQuaternion(reference.rotation());
     }
 
     @Override

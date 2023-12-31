@@ -44,12 +44,12 @@ public class MinecraftMatrixStack implements MatrixStack {
         return new Matrix() {
             @Override
             public Matrix4f pose() {
-                return reference.last().pose();
+                return MinecraftPrimitives.fromMinecraftMatrix4f(reference.last().pose());
             }
 
             @Override
             public Matrix3f normal() {
-                return reference.last().normal();
+                return MinecraftPrimitives.fromMinecraftMatrix3f(reference.last().normal());
             }
         };
     }
@@ -66,17 +66,17 @@ public class MinecraftMatrixStack implements MatrixStack {
 
     @Override
     public void rotate(Quaternionf quaternion) {
-        reference.mulPose(quaternion);
+        reference.mulPose(MinecraftPrimitives.toMinecraftQuaternion(quaternion));
     }
 
     @Override
     public void rotate(Quaternionf quaternion, float x, float y, float z) {
-        reference.rotateAround(quaternion, x, y, z);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void multiply(Matrix4f matrix) {
-        reference.mulPoseMatrix(matrix);
+        reference.mulPoseMatrix(MinecraftPrimitives.toMinecraftMatrix4f(matrix));
     }
 
     @Override

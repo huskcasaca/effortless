@@ -163,7 +163,7 @@ public class MinecraftPlayer extends Player {
 
     @Override
     public World getWorld() {
-        return new MinecraftWorld(reference.level());
+        return new MinecraftWorld(reference.getLevel());
     }
 
     @Override
@@ -219,7 +219,7 @@ public class MinecraftPlayer extends Player {
 
     @Override
     public boolean canInteractBlock(BlockPosition blockPosition) {
-        return !reference.blockActionRestricted(reference.level(), toMinecraftBlockPosition(blockPosition), switch (getGameType()) {
+        return !reference.blockActionRestricted(reference.getLevel(), toMinecraftBlockPosition(blockPosition), switch (getGameType()) {
             case SURVIVAL -> GameType.SURVIVAL;
             case CREATIVE -> GameType.CREATIVE;
             case ADVENTURE -> GameType.ADVENTURE;
@@ -229,7 +229,7 @@ public class MinecraftPlayer extends Player {
 
     @Override
     public boolean canAttackBlock(BlockPosition blockPosition) {
-        return reference.getMainHandItem().getItem().canAttackBlock(reference.level().getBlockState(toMinecraftBlockPosition(blockPosition)), reference.level(), toMinecraftBlockPosition(blockPosition), reference);
+        return reference.getMainHandItem().getItem().canAttackBlock(reference.getLevel().getBlockState(toMinecraftBlockPosition(blockPosition)), reference.getLevel(), toMinecraftBlockPosition(blockPosition), reference);
     }
 
     @Override

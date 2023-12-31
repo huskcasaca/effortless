@@ -133,7 +133,7 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderButtonTexture(int x, int y, int width, int height, boolean active, boolean focused) {
-        minecraftRendererProvider.blitSprite(BUTTON_SPRITES.get(active, focused), x, y, width, height);
+//        minecraftRendererProvider.blitSprite(BUTTON_SPRITES.get(active, focused), x, y, width, height);
     }
 
     @Override

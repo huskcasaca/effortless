@@ -9,6 +9,6 @@ repositories {
 dependencies {
     implementation project(':common')
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    compileOnly 'org.joml:joml:1.10.5'
+    api 'org.joml:joml:1.10.5'
     compileOnly 'org.lwjgl:lwjgl-glfw:3.3.1'
 }

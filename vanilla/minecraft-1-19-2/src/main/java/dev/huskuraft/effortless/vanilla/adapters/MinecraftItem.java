@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.core.Resource;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.world.item.BlockItem;
 
 public class MinecraftItem extends Item {
@@ -34,7 +34,7 @@ public class MinecraftItem extends Item {
 
     @Override
     public Resource getId() {
-        return MinecraftResource.fromMinecraftResource(BuiltInRegistries.ITEM.getKey(reference));
+        return MinecraftResource.fromMinecraftResource(DefaultedRegistry.ITEM.getKey(reference));
     }
 
     @Override

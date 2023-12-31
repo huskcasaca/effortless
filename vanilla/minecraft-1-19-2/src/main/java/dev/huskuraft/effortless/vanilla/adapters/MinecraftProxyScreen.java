@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskuraft.effortless.gui.Screen;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
@@ -50,10 +50,10 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
     }
 
     @Override
-    public void render(GuiGraphics minecraftRenderer, int i, int j, float f) {
+    public void render(PoseStack minecraftMatrixStack, int i, int j, float f) {
         proxy.onReload();
-        proxy.render(MinecraftRenderer.fromMinecraft(minecraftRenderer), i, j, f);
-        proxy.renderOverlay(MinecraftRenderer.fromMinecraft(minecraftRenderer), i, j, f);
+        proxy.render(MinecraftRenderer.fromMinecraft(minecraftMatrixStack), i, j, f);
+        proxy.renderOverlay(MinecraftRenderer.fromMinecraft(minecraftMatrixStack), i, j, f);
     }
 
     @Override
@@ -82,8 +82,8 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
     }
 
     @Override
-    public boolean mouseScrolled(double d, double e, double f, double g) {
-        return proxy.onMouseScrolled(d, e, f, g);
+    public boolean mouseScrolled(double d, double e, double f) {
+        return proxy.onMouseScrolled(d, e, f, 0);
     }
 
     @Override
