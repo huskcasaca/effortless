@@ -8,7 +8,6 @@ import dev.huskuraft.effortless.text.Text;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class MinecraftBuffer extends Buffer {

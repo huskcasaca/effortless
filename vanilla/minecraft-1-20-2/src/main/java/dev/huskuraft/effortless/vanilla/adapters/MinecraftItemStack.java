@@ -86,7 +86,7 @@ public class MinecraftItemStack extends ItemStack {
     }
 
     @Override
-    public List<Text> getDescription(Player player, TooltipType flag) {
+    public List<Text> getTooltips(Player player, TooltipType flag) {
         return reference.getTooltipLines(MinecraftPlayer.toMinecraftPlayer(player), switch (flag) {
             case NORMAL -> TooltipFlag.NORMAL;
             case NORMAL_CREATIVE -> TooltipFlag.NORMAL.asCreative();

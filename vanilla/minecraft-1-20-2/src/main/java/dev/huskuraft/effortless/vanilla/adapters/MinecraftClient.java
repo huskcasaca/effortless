@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import com.google.common.base.Objects;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.huskuraft.effortless.core.Interaction;
 import dev.huskuraft.effortless.core.Player;

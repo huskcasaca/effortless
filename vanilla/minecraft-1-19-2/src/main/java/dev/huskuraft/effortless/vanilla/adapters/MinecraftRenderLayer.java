@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.renderer.RenderLayer;
 import net.minecraft.client.renderer.RenderType;
 
-public class MinecraftRenderLayer extends RenderLayer {
+public class MinecraftRenderLayer implements RenderLayer {
 
     private final RenderType reference;
 

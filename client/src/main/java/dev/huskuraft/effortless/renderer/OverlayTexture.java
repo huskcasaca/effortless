@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.renderer;
 
-public final class OverlayTexture {
+public abstract class OverlayTexture {
 
     public static final int NO_WHITE_U = 0;
     public static final int RED_OVERLAY_V = 3;

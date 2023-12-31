@@ -21,7 +21,7 @@ public abstract class ItemStack implements TagSerializable {
         return Effortless.getInstance().getPlatform().newItemStack(item, count, tag);
     }
 
-    public abstract List<Text> getDescription(Player player, TooltipType flag);
+    public abstract List<Text> getTooltips(Player player, TooltipType flag);
 
     public abstract boolean isEmpty();
 
@@ -63,6 +63,5 @@ public abstract class ItemStack implements TagSerializable {
         ADVANCED,
         ADVANCED_CREATIVE
     }
-
 
 }

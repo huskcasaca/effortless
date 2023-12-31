@@ -7,8 +7,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-import java.util.Objects;
-
 public class MinecraftBlockState extends BlockState {
 
     private final net.minecraft.world.level.block.state.BlockState reference;

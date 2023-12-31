@@ -49,7 +49,7 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
         }
 
         public static List<Text> getRandomizerEntryTooltip(Player player, Chance<Item> chance, int totalCount) {
-            var components = new ArrayList<>(chance.content().getDefaultStack().getDescription(player, ItemStack.TooltipType.ADVANCED_CREATIVE));
+            var components = new ArrayList<>(chance.content().getDefaultStack().getTooltips(player, ItemStack.TooltipType.ADVANCED_CREATIVE));
             var percentage = String.format("%.2f%%", 100.0 * chance.chance() / totalCount);
             components.add(
                     Text.empty()

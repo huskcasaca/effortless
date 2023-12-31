@@ -68,7 +68,7 @@ public class SubtitleManager {
         var contentSide = AxisDirection.NEGATIVE;
         renderer.pushPose();
         var x = 0f;
-        var y = renderer.windowHeight() * 1f;
+        var y = renderer.window().getGuiScaledHeight() * 1f;
         renderer.translate(x, y, 0);
         renderer.translate(-1f * contentSide.getStep(), 0, 0);
         renderer.translate(0, -8, 0);

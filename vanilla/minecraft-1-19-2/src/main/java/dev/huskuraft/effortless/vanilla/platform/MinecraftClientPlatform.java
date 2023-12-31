@@ -15,7 +15,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;
 import net.minecraft.client.searchtree.SearchRegistry;
-import net.minecraft.world.item.CreativeModeTabs;
 
 import java.util.List;
 import java.util.function.Function;
@@ -25,9 +24,6 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
 
     @Override
     public SearchTree<ItemStack> newItemStackSearchTree(SearchBy searchBy) {
-        var player = Minecraft.getInstance().player;
-        CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), true, player.clientLevel.registryAccess());
-
         return query -> Minecraft.getInstance().getSearchTree(
                 switch (searchBy) {
                     case NAME -> SearchRegistry.CREATIVE_NAMES;

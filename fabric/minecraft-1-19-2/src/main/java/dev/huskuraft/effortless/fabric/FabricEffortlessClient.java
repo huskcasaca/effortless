@@ -8,9 +8,7 @@ import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
 import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
 import dev.huskuraft.effortless.input.InputKey;
-import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.platform.ClientPlatform;
-import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
@@ -29,8 +27,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
 
     @Override
     public void onInitializeClient() {
-        Client client1 = MinecraftClient.fromMinecraftClient(Minecraft.getInstance());
-        getEventRegistry().getClientStartEvent().invoker().onClientStart(client1);
+        getEventRegistry().getClientStartEvent().invoker().onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             var channelId = MinecraftResource.toMinecraftResource(getChannel().getChannelId());
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
@@ -48,29 +45,23 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
-            Client client = MinecraftClient.fromMinecraftClient(minecraft);
-            getEventRegistry().getClientTickEvent().invoker().onClientTick(client, TickPhase.START);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.START);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            Client client = MinecraftClient.fromMinecraftClient(minecraft);
-            getEventRegistry().getClientTickEvent().invoker().onClientTick(client, TickPhase.END);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.END);
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            Renderer renderer = new MinecraftRenderer(context.matrixStack(), Minecraft.getInstance().renderBuffers().bufferSource());
-            float deltaTick = context.tickDelta();
-            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(renderer, deltaTick);
+            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(context.matrixStack()), context.tickDelta());
         });
 
         GuiRenderEvents.RENDER_GUI.register((guiGraphics, f) -> {
-            Renderer renderer = new MinecraftRenderer(guiGraphics);
-            getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(renderer, f);
+            getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(guiGraphics.pose()), f);
         });
 
         KeyboardInputEvents.KEY_INPUT.register((key, scanCode, action, modifiers) -> {
-            InputKey key1 = new InputKey(key, scanCode, action, modifiers);
-            getEventRegistry().getKeyInputEvent().invoker().onKeyInput(key1);
+            getEventRegistry().getKeyInputEvent().invoker().onKeyInput(new InputKey(key, scanCode, action, modifiers));
         });
 
         InteractionInputEvents.ATTACK.register((player, hand) -> {

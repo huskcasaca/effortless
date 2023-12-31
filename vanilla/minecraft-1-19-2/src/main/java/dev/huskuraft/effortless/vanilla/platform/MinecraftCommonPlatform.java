@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.*;
 import io.netty.buffer.Unpooled;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
@@ -40,7 +40,7 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public Optional<Item> newOptionalItem(Resource resource) {
-        return BuiltInRegistries.ITEM.getOptional(MinecraftResource.toMinecraftResource(resource)).map(MinecraftItem::fromMinecraft);
+        return DefaultedRegistry.ITEM.getOptional(MinecraftResource.toMinecraftResource(resource)).map(MinecraftItem::fromMinecraft);
     }
 
     @Override

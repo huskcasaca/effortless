@@ -13,30 +13,47 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 
 import javax.annotation.Nullable;
+import java.awt.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Renderer {
 
-    public abstract int windowWidth();
+    public int optionColor(float alpha) {
+//        return Minecraft.getInstance().options.getBackgroundColor(alpha);
+        return new Color(0f, 0f, 0f, 0.95f * alpha).getRGB();
+    }
 
-    public abstract int windowHeight();
-
-    public abstract int optionColor(float alpha);
+    public abstract Window window();
 
     public abstract Camera camera();
 
-    public abstract void pushPose();
+    public abstract MatrixStack matrixStack();
 
-    public abstract void popPose();
-
-    public abstract Matrix4f lastPose();
-
-    public abstract Matrix3f lastPoseNormal();
+    public abstract BufferSource bufferSource();
 
     public void pushLayer() {
     }
 
     public void popLayer() {
+    }
+
+    public final void pushPose() {
+        matrixStack().push();
+    }
+
+    public final void popPose() {
+        matrixStack().pop();
+    }
+
+    public final Matrix4f lastMatrixPose() {
+        return matrixStack().last().pose();
+    }
+
+    public final Matrix3f lastMatrixNormal() {
+        return matrixStack().last().normal();
     }
 
     public final void translate(Vector3d vector) {
@@ -48,7 +65,7 @@ public abstract class Renderer {
     }
 
     public final void translate(float x, float y, float z) {
-        this.lastPose().translate(x, y, z);
+        this.matrixStack().translate(x, y, z);
     }
 
     public final void scale(double n) {
@@ -64,41 +81,92 @@ public abstract class Renderer {
     }
 
     public final void scale(float x, float y, float z) {
-        this.lastPose().scale(x, y, z);
-        if (x == y && y == z) {
-            if (x > 0.0F) {
-                return;
-            }
-            this.lastPoseNormal().scale(-1.0F);
-        }
-        var f = 1.0F / x;
-        var g = 1.0F / y;
-        var h = 1.0F / z;
-        var i = RenderUtils.fastInvCubeRoot(f * g * h);
-        this.lastPoseNormal().scale(i * f, i * g, i * h);
+        this.matrixStack().scale(x, y, z);
     }
 
     public final void rotate(Quaternionf quaternion) {
-        this.lastPose().rotate(quaternion);
-        this.lastPoseNormal().rotate(quaternion);
+        this.matrixStack().rotate(quaternion);
     }
 
     public final void rotate(Quaternionf quaternion, float x, float y, float z) {
-        this.lastPose().rotateAround(quaternion, x, y, z);
-        this.lastPoseNormal().rotate(quaternion);
+        this.matrixStack().rotate(quaternion, x, y, z);
     }
 
+
+    //    public final void rotate(Quaternionf quaternion, float x, float y, float z) {
+//        this.lastPose().rotateAround(quaternion, x, y, z);
+//        this.lastPoseNormal().rotate(quaternion);
+//    }
+//
     public final void multiply(Matrix4f matrix) {
-        this.lastPose().mul(matrix);
+        this.matrixStack().multiply(matrix);
     }
 
-    public abstract void enableScissor(int x1, int y1, int x2, int y2);
+    protected abstract void enableScissorInternal(int x1, int y1, int x2, int y2);
 
-    public abstract void disableScissor();
+    protected abstract void disableScissorInternal();
+
+    private final ScissorStack scissorStack = new ScissorStack();
+
+    public final void enableScissor(int x1, int y1, int x2, int y2) {
+        this.applyScissor(this.scissorStack.push(new ScreenRect(x1, y1, x2 - x1, y2 - y1)));
+    }
+
+    public final void enableScissor(ScreenRect rect) {
+        this.applyScissor(this.scissorStack.push(rect));
+    }
+
+    public final void disableScissor() {
+        this.applyScissor(this.scissorStack.pop());
+    }
+
+    private void applyScissor(ScreenRect rect) {
+//        this.flushIfManaged();
+        if (rect == null) {
+            disableScissorInternal();
+        } else {
+            var height = window().getHeight();
+            var scale = window().getGuiScaledFactor();
+            var d1 = rect.left() * scale;
+            var d2 = height - rect.bottom() * scale;
+            var d3 = rect.width() * scale;
+            var d4 = rect.height() * scale;
+            enableScissorInternal((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
+        }
+    }
+
+    private static class ScissorStack {
+
+        private final Deque<ScreenRect> stack = new ArrayDeque<>();
+
+        public ScreenRect push(ScreenRect pScissor) {
+            var rect = this.stack.peekLast();
+            if (rect != null) {
+                var rect1 = Objects.requireNonNullElse(pScissor.intersection(rect), ScreenRect.empty());
+                this.stack.addLast(rect1);
+                return rect1;
+            } else {
+                this.stack.addLast(pScissor);
+                return pScissor;
+            }
+        }
+
+        @Nullable
+        public ScreenRect pop() {
+            if (this.stack.isEmpty()) {
+                throw new IllegalStateException("Scissor stack underflow");
+            } else {
+                this.stack.removeLast();
+                return this.stack.peekLast();
+            }
+        }
+    }
 
     public abstract void setShaderColor(float red, float green, float blue, float alpha);
 
-    public abstract VertexBuffer vertexBuffer(RenderLayer renderLayer);
+    public VertexBuffer vertexBuffer(RenderLayer renderLayer) {
+        return bufferSource().getBuffer(renderLayer);
+    }
 
     public abstract void flush();
 
@@ -130,8 +198,8 @@ public abstract class Renderer {
 
     public final void renderLine(RenderLayer renderLayer, Vector3d v1, Vector3d v2, int uv2, int color) {
         var buffer = this.vertexBuffer(renderLayer);
-        buffer.vertex(lastPose(), v1).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
-        buffer.vertex(lastPose(), v2).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
+        buffer.vertex(lastMatrixPose(), v1).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
+        buffer.vertex(lastMatrixPose(), v2).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
     }
 
 
@@ -170,13 +238,12 @@ public abstract class Renderer {
 
         var buffer = this.vertexBuffer(renderLayer);
 
-        buffer.vertex(lastPose(), x1, y1, z).color(color).endVertex();
-        buffer.vertex(lastPose(), x1, y2, z).color(color).endVertex();
-        buffer.vertex(lastPose(), x2, y2, z).color(color).endVertex();
-        buffer.vertex(lastPose(), x2, y1, z).color(color).endVertex();
+        buffer.vertex(lastMatrixPose(), x1, y1, z).color(color).endVertex();
+        buffer.vertex(lastMatrixPose(), x1, y2, z).color(color).endVertex();
+        buffer.vertex(lastMatrixPose(), x2, y2, z).color(color).endVertex();
+        buffer.vertex(lastMatrixPose(), x2, y1, z).color(color).endVertex();
         this.flush();
     }
-
 
     public final void renderGradientRect(int x1, int y1, int x2, int y2, int color1, int color2) {
         this.renderGradientRect(this.renderLayers().gui(), x1, y1, x2, y2, color1, color2, 0);
@@ -192,10 +259,10 @@ public abstract class Renderer {
 
     public final void renderGradientRect(RenderLayer renderLayer, int x1, int y1, int x2, int y2, int color1, int color2, int z) {
         var buffer = this.vertexBuffer(renderLayer);
-        buffer.vertex(lastPose(), x1, y1, z).color(color1).endVertex();
-        buffer.vertex(lastPose(), x1, y2, z).color(color2).endVertex();
-        buffer.vertex(lastPose(), x2, y2, z).color(color2).endVertex();
-        buffer.vertex(lastPose(), x2, y1, z).color(color1).endVertex();
+        buffer.vertex(lastMatrixPose(), x1, y1, z).color(color1).endVertex();
+        buffer.vertex(lastMatrixPose(), x1, y2, z).color(color2).endVertex();
+        buffer.vertex(lastMatrixPose(), x2, y2, z).color(color2).endVertex();
+        buffer.vertex(lastMatrixPose(), x2, y1, z).color(color1).endVertex();
         flush();
     }
 
@@ -206,10 +273,10 @@ public abstract class Renderer {
     public final void renderQuad(RenderLayer renderLayer, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int offset, int color) {
         var buffer = this.vertexBuffer(renderLayer);
 
-        buffer.vertex(lastPose(), x1, y1, offset).color(color).endVertex();
-        buffer.vertex(lastPose(), x2, y2, offset).color(color).endVertex();
-        buffer.vertex(lastPose(), x3, y3, offset).color(color).endVertex();
-        buffer.vertex(lastPose(), x4, y4, offset).color(color).endVertex();
+        buffer.vertex(lastMatrixPose(), x1, y1, offset).color(color).endVertex();
+        buffer.vertex(lastMatrixPose(), x2, y2, offset).color(color).endVertex();
+        buffer.vertex(lastMatrixPose(), x3, y3, offset).color(color).endVertex();
+        buffer.vertex(lastMatrixPose(), x4, y4, offset).color(color).endVertex();
     }
 
     public final void renderQuad(RenderLayer renderLayer, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Orientation normal) {
@@ -220,20 +287,20 @@ public abstract class Renderer {
                                  float minV, float maxU, float maxV, int uv2, int color, Orientation normal) {
         var buffer = this.vertexBuffer(renderLayer);
 
-        buffer.vertex(lastPose(), v1).color(color).uv(minU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
-        buffer.vertex(lastPose(), v2).color(color).uv(maxU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
-        buffer.vertex(lastPose(), v3).color(color).uv(maxU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
-        buffer.vertex(lastPose(), v4).color(color).uv(minU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastPoseNormal(), normal).endVertex();
+        buffer.vertex(lastMatrixPose(), v1).color(color).uv(minU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(lastMatrixPose(), v2).color(color).uv(maxU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(lastMatrixPose(), v3).color(color).uv(maxU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(lastMatrixPose(), v4).color(color).uv(minU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
     }
 
-    public abstract int renderText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, FontDisplay mode, int lightMap);
+    public abstract int renderText(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap);
 
     public final int renderText(Typeface typeface, String string, int x, int y, int color, boolean shadow) {
-        return this.renderText(typeface, Text.text(string), x, y, color, 0, shadow, FontDisplay.NORMAL, LightTexture.FULL_BRIGHT);
+        return this.renderText(typeface, Text.text(string), x, y, color, 0, shadow, false, LightTexture.FULL_BRIGHT);
     }
 
     public final int renderText(Typeface typeface, Text text, int x, int y, int color, boolean shadow) {
-        return this.renderText(typeface, text, x, y, color, 0, shadow, FontDisplay.NORMAL, LightTexture.FULL_BRIGHT);
+        return this.renderText(typeface, text, x, y, color, 0, shadow, false, LightTexture.FULL_BRIGHT);
     }
 
     public final int renderTextFromStart(Typeface typeface, String string, int x, int y, int color, boolean shadow) {
@@ -293,6 +360,29 @@ public abstract class Renderer {
 
     public abstract void renderButtonTexture(int x, int y, int width, int height, boolean active, boolean focused);
 
+//    @Override
+//    protected void renderItemInternal(ItemStack itemStack, int seed, boolean fake)
+//    {
+//        var minecraftItemStack = MinecraftItemStack.toMinecraftItemStack(itemStack);
+//        var minecraftPlayer = fake ? null : minecraftClient.player;
+//        var minecraftWorld = minecraftClient.level;
+//        var minecraftModel = minecraftClient.getItemRenderer().getModel(minecraftItemStack, minecraftWorld, minecraftPlayer, seed);
+//        if (!minecraftModel.usesBlockLight()) Lighting.setupForFlatItems();
+//        minecraftClient.getItemRenderer().render(minecraftItemStack, ItemDisplayContext.GUI, false, minecraftMatrixStack, minecraftBufferSource, 15728880, OverlayTexture.NO_OVERLAY, minecraftModel);
+//        this.flush();
+//        if (!minecraftModel.usesBlockLight()) Lighting.setupFor3DItems();
+//
+//        minecraftClient.getItemRenderer().renderStatic();
+//    }
+//    {
+//        pushPose();
+//        translate(x + 8, y + 8, 150);
+//        multiply((new Matrix4f()).scaling(1.0F, -1.0F, 1.0F));
+//        scale(16.0F, 16.0F, 16.0F);
+//        renderItemInternal(stack, 0, false);
+//        popPose();
+//    }
+
     public abstract void renderItem(ItemStack stack, int x, int y);
 
     public final void renderItem(Typeface typeface, ItemStack stack, int x, int y, @Nullable Text text) {
@@ -304,9 +394,6 @@ public abstract class Renderer {
     }
 
     public abstract void renderTooltip(Typeface typeface, List<Text> list, int x, int y);
-
-    public abstract void renderTooltip(Typeface typeface, ItemStack itemStack, int x, int y);
-
 
     public abstract void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState);
 
