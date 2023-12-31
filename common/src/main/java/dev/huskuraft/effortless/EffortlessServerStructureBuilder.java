@@ -4,12 +4,12 @@ import dev.huskuraft.effortless.building.*;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.building.structure.SingleAction;
 import dev.huskuraft.effortless.core.BlockInteraction;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.packets.player.PlayerActionPacket;
+import dev.huskuraft.effortless.core.World;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
+import dev.huskuraft.effortless.packets.player.PlayerCommandPacket;
 
 import javax.annotation.Nullable;
 import java.util.EmptyStackException;
@@ -24,6 +24,9 @@ final class EffortlessServerStructureBuilder extends StructureBuilder {
 
     public EffortlessServerStructureBuilder(Entrance entrance) {
         this.entrance = entrance;
+
+        getEntrance().getEventRegistry().getPlayerCloneEvent().register(this::onPlayerClone);
+        getEntrance().getEventRegistry().getPlayerChangeWorldEvent().register(this::onPlayerChangeWorld);
     }
 
     public Entrance getEntrance() {
@@ -128,7 +131,7 @@ final class EffortlessServerStructureBuilder extends StructureBuilder {
     public void undo(Player player) {
         try {
             getOperationResultStack(player).undo();
-            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.UNDO), player);
+            getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.UNDO), player);
         } catch (EmptyStackException e) {
 //            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.NOTHING_TO_UNDO), player);
         }
@@ -138,10 +141,18 @@ final class EffortlessServerStructureBuilder extends StructureBuilder {
     public void redo(Player player) {
         try {
             getOperationResultStack(player).redo();
-            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.REDO), player);
-//            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.NOTHING_TO_REDO), player);
+            getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO), player);
         } catch (EmptyStackException e) {
+//            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.NOTHING_TO_REDO), player);
         }
+    }
+
+    private void onPlayerClone(Player from, Player to, boolean death) {
+        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), to);
+    }
+
+    private void onPlayerChangeWorld(Player player, World origin, World destination) {
+        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), player);
     }
 
 }

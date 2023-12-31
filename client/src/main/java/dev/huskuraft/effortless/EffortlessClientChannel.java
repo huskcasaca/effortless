@@ -9,9 +9,9 @@ import dev.huskuraft.effortless.networking.Channel;
 import dev.huskuraft.effortless.networking.NetworkRegistry;
 import dev.huskuraft.effortless.networking.Packet;
 import dev.huskuraft.effortless.packets.AllPacketListener;
-import dev.huskuraft.effortless.packets.player.PlayerActionPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
+import dev.huskuraft.effortless.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.packets.player.PlayerSettingsPacket;
 
 final class EffortlessClientChannel extends Channel<AllPacketListener> {
@@ -31,7 +31,7 @@ final class EffortlessClientChannel extends Channel<AllPacketListener> {
         this.entrance = (ClientEntrance) entrance;
         this.listener = new ClientPacketListener();
 
-        registerPacket(PlayerActionPacket.class, new PlayerActionPacket.Serializer());
+        registerPacket(PlayerCommandPacket.class, new PlayerCommandPacket.Serializer());
         registerPacket(PlayerSettingsPacket.class, new PlayerSettingsPacket.Serializer());
         registerPacket(PlayerBuildPacket.class, new PlayerBuildPacket.Serializer());
         registerPacket(PlayerBuildPreviewPacket.class, new PlayerBuildPreviewPacket.Serializer());
@@ -65,7 +65,13 @@ final class EffortlessClientChannel extends Channel<AllPacketListener> {
     private class ClientPacketListener implements AllPacketListener {
 
         @Override
-        public void handle(PlayerActionPacket packet, Player player) {
+        public void handle(PlayerCommandPacket packet, Player player) {
+            switch (packet.action()) {
+                case REDO, UNDO -> {
+                    // noop
+                }
+                case RESET_BUILD_STATE -> getEntrance().getStructureBuilder().resetBuildState(player);
+            }
         }
 
         @Override

@@ -1,14 +1,14 @@
 package dev.huskuraft.effortless.packets.player;
 
-import dev.huskuraft.effortless.building.structure.SingleAction;
+import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.networking.BufferSerializer;
 import dev.huskuraft.effortless.networking.Packet;
 import dev.huskuraft.effortless.packets.AllPacketListener;
 
-public record PlayerActionPacket(
-        SingleAction action
+public record PlayerCommandPacket(
+        SingleCommand action
 ) implements Packet<AllPacketListener> {
 
     @Override
@@ -16,15 +16,15 @@ public record PlayerActionPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer extends BufferSerializer<PlayerActionPacket> {
+    public static class Serializer extends BufferSerializer<PlayerCommandPacket> {
 
         @Override
-        public PlayerActionPacket read(Buffer buffer) {
-            return new PlayerActionPacket(buffer.readEnum(SingleAction.class));
+        public PlayerCommandPacket read(Buffer buffer) {
+            return new PlayerCommandPacket(buffer.readEnum(SingleCommand.class));
         }
 
         @Override
-        public void write(Buffer buffer, PlayerActionPacket packet) {
+        public void write(Buffer buffer, PlayerCommandPacket packet) {
             buffer.writeEnum(packet.action);
         }
 

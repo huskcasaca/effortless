@@ -5,8 +5,11 @@ import dev.huskuraft.effortless.platform.Platform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftWorld;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
@@ -24,6 +27,14 @@ public class FabricEffortless extends Effortless implements ModInitializer {
                 receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(buf), MinecraftPlayer.fromMinecraftPlayer(player));
             });
             return (buffer, player) -> ServerPlayNetworking.send((ServerPlayer) MinecraftPlayer.toMinecraftPlayer(player), channelId, MinecraftBuffer.toMinecraftBuffer(buffer));
+        });
+
+        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
+            getEventRegistry().getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(MinecraftPlayer.fromMinecraftPlayer(player), MinecraftWorld.fromMinecraftWorld(origin), MinecraftWorld.fromMinecraftWorld(destination));
+        });
+
+        ServerPlayerEvents.COPY_FROM.register((oldPlayer, newPlayer, alive) -> {
+            getEventRegistry().getPlayerCloneEvent().invoker().onPlayerClone(MinecraftPlayer.fromMinecraftPlayer(oldPlayer), MinecraftPlayer.fromMinecraftPlayer(newPlayer), !alive);
         });
     }
 

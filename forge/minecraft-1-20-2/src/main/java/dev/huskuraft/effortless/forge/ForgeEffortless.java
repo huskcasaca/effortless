@@ -5,10 +5,12 @@ import dev.huskuraft.effortless.platform.Platform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftWorld;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -108,4 +110,15 @@ public class ForgeEffortless extends Effortless {
             };
         });
     }
+
+    @SubscribeEvent
+    public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+        getEventRegistry().getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(MinecraftPlayer.fromMinecraftPlayer(event.getEntity()), MinecraftWorld.fromMinecraftWorld(event.getEntity().getServer().getLevel(event.getFrom())), MinecraftWorld.fromMinecraftWorld(event.getEntity().getServer().getLevel(event.getTo())));
+    }
+
+    @SubscribeEvent
+    public void onPlayerCopy(PlayerEvent.Clone event) {
+        getEventRegistry().getPlayerCloneEvent().invoker().onPlayerClone(MinecraftPlayer.fromMinecraftPlayer(event.getOriginal()), MinecraftPlayer.fromMinecraftPlayer(event.getEntity()), event.isWasDeath());
+    }
+
 }

@@ -7,12 +7,11 @@ import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.building.structure.SingleAction;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.math.BoundingBox3d;
 import dev.huskuraft.effortless.math.Vector3i;
-import dev.huskuraft.effortless.packets.player.PlayerActionPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
+import dev.huskuraft.effortless.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.platform.Client;
 import dev.huskuraft.effortless.renderer.LightTexture;
 import dev.huskuraft.effortless.renderer.opertaion.SurfaceColor;
@@ -225,12 +224,12 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void undo(Player player) {
-        getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.UNDO));
+        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.UNDO));
     }
 
     @Override
     public void redo(Player player) {
-        getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.REDO));
+        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO));
     }
 
     public void onClientTick(Client client, TickPhase phase) {

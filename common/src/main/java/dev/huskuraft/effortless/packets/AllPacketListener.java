@@ -2,14 +2,14 @@ package dev.huskuraft.effortless.packets;
 
 import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.networking.PacketListener;
-import dev.huskuraft.effortless.packets.player.PlayerActionPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
+import dev.huskuraft.effortless.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.packets.player.PlayerSettingsPacket;
 
 public interface AllPacketListener extends PacketListener {
 
-    void handle(PlayerActionPacket packet, Player player);
+    void handle(PlayerCommandPacket packet, Player player);
 
     void handle(PlayerBuildPacket packet, Player player);
 

@@ -33,6 +33,10 @@ public abstract class StructureBuilder {
 
     public abstract void setPattern(Player player, Pattern pattern);
 
+    public void resetBuildState(Player player) {
+        setContext(player, getContext(player).resetBuildState());
+    }
+
     public abstract BuildResult onPlayerBreak(Player player);
 
     public abstract BuildResult onPlayerPlace(Player player);
