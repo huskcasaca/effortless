@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
+import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.huskuraft.effortless.core.Resource;
@@ -10,6 +11,8 @@ import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+
+import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -142,30 +145,47 @@ public class MinecraftOutlineRenderTextures extends OutlineRenderTextures {
             return OUTLINE_SOLID;
         }
 
+        private static final RenderType OUTLINE_SOLID_OVERLAP = create(createLayerName("outline_solid_overlap"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false,
+                false, CompositeState.builder()
+                        .setShaderState(RENDERTYPE_ENTITY_SOLID_SHADER)
+                        .setTransparencyState(NO_TRANSPARENCY)
+                        .setDepthTestState(NOTEQUAL_DEPTH_TEST)
+                        .setTextureState(new TextureStateShard(BLANK_TEXTURE_LOCATION, false, false))
+                        .setCullState(CULL)
+                        .setLightmapState(LIGHTMAP)
+                        .setOverlayState(OVERLAY)
+                        .createCompositeState(true));
+
+        private static final RenderType OUTLINE_SOLID_NO_OVERLAP = create(createLayerName("outline_solid_overlap"), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false,
+                false, CompositeState.builder()
+                        .setShaderState(RENDERTYPE_ENTITY_SOLID_SHADER)
+                        .setTransparencyState(NO_TRANSPARENCY)
+                        .setDepthTestState(NEVER_DEPTH_TEST)
+                        .setTextureState(new TextureStateShard(BLANK_TEXTURE_LOCATION, false, false))
+                        .setCullState(CULL)
+                        .setLightmapState(LIGHTMAP)
+                        .setOverlayState(OVERLAY)
+                        .createCompositeState(true));
+
         public static RenderType outlineSolid(boolean overlap) {
-            return create(createLayerName("outline_solid" + (overlap ? "_overlap" : "")), DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false,
-                    false, CompositeState.builder()
-                            .setShaderState(RENDERTYPE_ENTITY_SOLID_SHADER)
-                            .setTransparencyState(NO_TRANSPARENCY)
-                            .setDepthTestState(overlap ? NOTEQUAL_DEPTH_TEST : NEVER_DEPTH_TEST)
-                            .setTextureState(new TextureStateShard(BLANK_TEXTURE_LOCATION, false, false))
-                            .setCullState(CULL)
-                            .setLightmapState(LIGHTMAP)
-                            .setOverlayState(OVERLAY)
-                            .createCompositeState(true));
+            return overlap ? OUTLINE_SOLID_OVERLAP : OUTLINE_SOLID_NO_OVERLAP;
         }
 
+        public static final Map<String, RenderType> OUTLINE_TRANSLUCENT = Maps.newHashMap();
+
         public static RenderType outlineTranslucent(ResourceLocation texture, boolean cull) {
-            return create(createLayerName("outline_translucent" + (cull ? "_cull" : "")),
-                    DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, CompositeState.builder()
-                            .setShaderState(cull ? RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER : RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
-                            .setTextureState(new TextureStateShard(texture, false, false))
-                            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                            .setCullState(cull ? CULL : NO_CULL)
-                            .setLightmapState(LIGHTMAP)
-                            .setOverlayState(OVERLAY)
-                            .setWriteMaskState(COLOR_WRITE)
-                            .createCompositeState(false));
+            return OUTLINE_TRANSLUCENT.computeIfAbsent("outline_translucent" + (cull ? "_cull" : "") + "_" + texture.getNamespace() + "_" + texture.getPath(), name -> {
+                return create(createLayerName(name),
+                        DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, false, true, CompositeState.builder()
+                                .setShaderState(cull ? RENDERTYPE_ENTITY_TRANSLUCENT_CULL_SHADER : RENDERTYPE_ENTITY_TRANSLUCENT_SHADER)
+                                .setTextureState(new TextureStateShard(texture, false, false))
+                                .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                                .setCullState(cull ? CULL : NO_CULL)
+                                .setLightmapState(LIGHTMAP)
+                                .setOverlayState(OVERLAY)
+                                .setWriteMaskState(COLOR_WRITE)
+                                .createCompositeState(false));
+            });
         }
 
         public static RenderType glowingSolid(ResourceLocation texture) {

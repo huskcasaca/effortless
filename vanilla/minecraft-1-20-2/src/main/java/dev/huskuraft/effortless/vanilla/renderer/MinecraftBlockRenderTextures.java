@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
+import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.huskuraft.effortless.renderer.RenderTexture;
@@ -11,6 +12,7 @@ import net.minecraft.server.packs.resources.ResourceProvider;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -29,8 +31,8 @@ public class MinecraftBlockRenderTextures extends BlockRenderTextures {
     }
 
     @Override
-    public RenderTexture solid(int color) {
-        return MinecraftRenderTexture.fromMinecraftRenderType(BlockRenderType.blockPreview(color));
+    public RenderTexture block(int color) {
+        return MinecraftRenderTexture.fromMinecraftRenderType(BlockRenderType.block(color));
     }
 
     public static final class BlockRenderType extends RenderType {
@@ -68,24 +70,27 @@ public class MinecraftBlockRenderTextures extends BlockRenderTextures {
                         .setCullState(NO_CULL)
                         .createCompositeState(false));
 
-        public static RenderType blockPreview(int color) {
-            var name = Integer.toString(color);
-            var texture = new TexturingStateShard("ef_block_texturing_" + name, () -> {
-                var colorUniform = Shaders.tintedSolidShader().getUniform("TintColor");
-                if (colorUniform != null) {
-                    colorUniform.set((color >> 16 & 255) / 255f, (color >> 8 & 255) / 255f, (color & 255) / 255f, (color >>> 24) / 255f);
-                }
-            }, () -> {
+        private static final Map<String, RenderType> BLOCK_RENDER_TYPES = Maps.newHashMap();
+
+        public static RenderType block(int color) {
+            return BLOCK_RENDER_TYPES.computeIfAbsent(Integer.toString(color), k -> {
+                var texture = new TexturingStateShard("ef_block_texturing_" + k, () -> {
+                    var colorUniform = Shaders.tintedSolidShader().getUniform("TintColor");
+                    if (colorUniform != null) {
+                        colorUniform.set((color >> 16 & 255) / 255f, (color >> 8 & 255) / 255f, (color & 255) / 255f, (color >>> 24) / 255f);
+                    }
+                }, () -> {
+                });
+                var renderState = CompositeState.builder()
+                        .setShaderState(RENDERTYPE_TINTED_SOLID_SHADER)
+                        .setTexturingState(texture)
+                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                        .setTextureState(BLOCK_SHEET_MIPPED)
+                        .setLightmapState(LIGHTMAP)
+                        .setCullState(NO_CULL)
+                        .createCompositeState(false);
+                return create("ef_block_previews_" + k, DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, renderState);
             });
-            var renderState = CompositeState.builder()
-                    .setShaderState(RENDERTYPE_TINTED_SOLID_SHADER)
-                    .setTexturingState(texture)
-                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                    .setTextureState(BLOCK_SHEET_MIPPED)
-                    .setLightmapState(LIGHTMAP)
-                    .setCullState(NO_CULL)
-                    .createCompositeState(false);
-            return create("ef_block_previews_" + name, DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false, renderState);
         }
     }
 

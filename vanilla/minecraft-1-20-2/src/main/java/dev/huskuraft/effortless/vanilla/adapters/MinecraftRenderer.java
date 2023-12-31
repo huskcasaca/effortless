@@ -170,7 +170,7 @@ public class MinecraftRenderer extends Renderer {
     public void renderBlockInWorld(RenderTexture renderTexture, World world, BlockPosition blockPosition, BlockState blockState) {
         var minecraftBlockRenderer = Minecraft.getInstance().getBlockRenderer();
         var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
-        var minecraftRenderType = dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderTexture.toMinecraftRenderType(renderTexture);
+        var minecraftRenderTexture = dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderTexture.toMinecraftRenderType(renderTexture);
         var minecraftBlockState = MinecraftBlockState.toMinecraftBlockState(blockState);
         var minecraftBlockPosition = MinecraftPlayer.toMinecraftBlockPosition(blockPosition);
 
@@ -180,7 +180,7 @@ public class MinecraftRenderer extends Renderer {
                 minecraftBlockState,
                 minecraftBlockPosition,
                 reference.pose(),
-                reference.bufferSource().getBuffer(minecraftRenderType),
+                reference.bufferSource().getBuffer(minecraftRenderTexture),
                 false,
                 RAND,
                 minecraftBlockState.getSeed(minecraftBlockPosition),

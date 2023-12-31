@@ -8,5 +8,5 @@ public abstract class BlockRenderTextures {
 
     public abstract RenderTexture planes();
 
-    public abstract RenderTexture solid(int color);
+    public abstract RenderTexture block(int color);
 }
