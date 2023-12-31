@@ -35,7 +35,7 @@ public abstract class Outline {
 //        var vAngle = MathUtils.deg(MathUtils.atan2(hDistance, diff.getY())) - 90;
         renderer.pushPose();
         // TODO: 27/1/23
-        renderer.translate(start.x(), start.y(), start.z());
+        renderer.translate(start);
 //			.rotateY(hAngle).rotateX(vAngle);
         renderAACuboidLine(renderer, Vector3d.ZERO, new Vector3d(0, 0, diff.length()));
         renderer.popPose();

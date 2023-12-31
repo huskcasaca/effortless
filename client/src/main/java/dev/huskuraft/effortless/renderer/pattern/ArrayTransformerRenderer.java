@@ -41,7 +41,7 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
                 var cam = renderer.camera().position();
                 renderer.pushPose();
                 var mid = v1.add(v2).div(2);
-                renderer.translate(-cam.x() + mid.x(), -cam.y() + mid.y(), -cam.z() + mid.z());
+                renderer.translate(mid.sub(cam));
                 renderer.pushPose();
 
                 renderer.rotate(renderer.camera().rotation());

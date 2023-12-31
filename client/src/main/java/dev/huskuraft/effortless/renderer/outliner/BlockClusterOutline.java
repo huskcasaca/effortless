@@ -62,7 +62,7 @@ public class BlockClusterOutline extends Outline {
         center = center.sub(camera).add(offset);
 
         renderer.pushPose();
-        renderer.translate(center.x(), center.y(), center.z());
+        renderer.translate(center);
 
         switch (face) {
             case DOWN ->

@@ -30,7 +30,7 @@ public class BlockOperationPreview implements OperationPreview {
         var camera = renderer.camera().position();
 
         renderer.pushPose();
-        renderer.translate(blockPosition.x() - camera.x(), blockPosition.y() - camera.y(), blockPosition.z() - camera.z());
+        renderer.translate(blockPosition.toVector3d().sub(camera));
         renderer.translate((scale - 1) / -2, (scale - 1) / -2, (scale - 1) / -2);
         renderer.scale(scale, scale, scale);
         renderer.renderBlockInWorld(renderer.blockRenderLayers().block(color.getRGB()), world, blockPosition, blockState);

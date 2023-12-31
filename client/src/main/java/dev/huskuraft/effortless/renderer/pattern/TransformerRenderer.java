@@ -25,7 +25,7 @@ public abstract class TransformerRenderer {
         var max = new Vector3d(range, range, range);
 
         renderer.pushPose();
-        renderer.translate(-cam.x() + pos.x(), -cam.y() + pos.y(), -cam.z() + pos.z());
+        renderer.translate(pos.sub(cam));
         var cen = Vector3d.ZERO;
 
         var v1 = Vector3d.ZERO;
