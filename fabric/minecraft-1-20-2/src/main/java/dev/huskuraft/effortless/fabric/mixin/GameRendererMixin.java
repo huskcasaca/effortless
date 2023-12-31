@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.fabric.mixin;
 
 import com.mojang.blaze3d.shaders.Program;
 import com.mojang.datafixers.util.Pair;
-import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
+import dev.huskuraft.effortless.fabric.events.ClientShadersEvents;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -21,6 +21,6 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "reloadShaders", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void onRegisterShaders(ResourceProvider resourceProvider, CallbackInfo ci, List<Program> programs, List<Pair<ShaderInstance, Consumer<ShaderInstance>>> shaders) throws IOException {
-        RegisterShadersEvents.REGISTER_SHADERS.invoker().onRegisterShaders(resourceProvider, (shader, callback) -> shaders.add(Pair.of(shader, callback)));
+        ClientShadersEvents.REGISTER.invoker().onRegisterShaders(resourceProvider, (shader, callback) -> shaders.add(Pair.of(shader, callback)));
     }
 }

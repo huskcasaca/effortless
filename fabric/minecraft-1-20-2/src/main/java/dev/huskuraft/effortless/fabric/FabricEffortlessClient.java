@@ -3,10 +3,10 @@ package dev.huskuraft.effortless.fabric;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
-import dev.huskuraft.effortless.fabric.events.GuiRenderEvents;
+import dev.huskuraft.effortless.fabric.events.ClientRenderEvents;
+import dev.huskuraft.effortless.fabric.events.ClientShadersEvents;
 import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
-import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
 import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
 import dev.huskuraft.effortless.vanilla.adapters.*;
@@ -40,7 +40,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
             KeyBindingHelper.registerKeyBinding(MinecraftKeyBinding.toMinecraft(key1.getBinding()));
         });
 
-        RegisterShadersEvents.REGISTER_SHADERS.register((provider, sink) -> {
+        ClientShadersEvents.REGISTER.register((provider, sink) -> {
             MinecraftBlockRenderLayers.Shaders.registerShaders(provider, sink::register);
         });
 
@@ -56,7 +56,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
             getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(context.matrixStack()), context.tickDelta());
         });
 
-        GuiRenderEvents.RENDER_GUI.register((guiGraphics, f) -> {
+        ClientRenderEvents.GUI.register((guiGraphics, f) -> {
             getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(guiGraphics.pose()), f);
         });
 

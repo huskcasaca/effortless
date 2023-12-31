@@ -4,9 +4,9 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class GuiRenderEvents {
+public class ClientRenderEvents {
 
-    public static final Event<RenderGui> RENDER_GUI = EventFactory.createArrayBacked(RenderGui.class, callbacks -> (guiGraphics, deltaTick) -> {
+    public static final Event<RenderGui> GUI = EventFactory.createArrayBacked(RenderGui.class, callbacks -> (guiGraphics, deltaTick) -> {
         for (RenderGui callback : callbacks) {
             callback.onRenderGui(guiGraphics, deltaTick);
         }

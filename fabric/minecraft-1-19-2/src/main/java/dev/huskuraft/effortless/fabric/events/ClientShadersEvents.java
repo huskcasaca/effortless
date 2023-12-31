@@ -8,9 +8,9 @@ import net.minecraft.server.packs.resources.ResourceProvider;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-public class RegisterShadersEvents {
+public class ClientShadersEvents {
 
-    public static final Event<RegisterShaders> REGISTER_SHADERS = EventFactory.createArrayBacked(RegisterShaders.class, callbacks -> (provider, sink) -> {
+    public static final Event<RegisterShaders> REGISTER = EventFactory.createArrayBacked(RegisterShaders.class, callbacks -> (provider, sink) -> {
         for (var callback : callbacks) {
             callback.onRegisterShaders(provider, sink);
         }

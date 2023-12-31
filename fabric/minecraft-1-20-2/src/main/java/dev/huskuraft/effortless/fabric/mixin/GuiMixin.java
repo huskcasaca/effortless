@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.fabric.mixin;
 
-import dev.huskuraft.effortless.fabric.events.GuiRenderEvents;
+import dev.huskuraft.effortless.fabric.events.ClientRenderEvents;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +13,7 @@ public abstract class GuiMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderSavingIndicator(Lnet/minecraft/client/gui/GuiGraphics;)V", shift = At.Shift.AFTER))
     private void onRenderGui(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
-        GuiRenderEvents.RENDER_GUI.invoker().onRenderGui(guiGraphics, f);
+        ClientRenderEvents.GUI.invoker().onRenderGui(guiGraphics, f);
     }
 
 }

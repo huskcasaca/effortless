@@ -4,9 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
-public class GuiRenderEvents {
+public class ClientRenderEvents {
 
-    public static final Event<RenderGui> RENDER_GUI = EventFactory.createArrayBacked(RenderGui.class, callbacks -> (matrixStack, deltaTick) -> {
+    public static final Event<RenderGui> GUI = EventFactory.createArrayBacked(RenderGui.class, callbacks -> (matrixStack, deltaTick) -> {
         for (RenderGui callback : callbacks) {
             callback.onRenderGui(matrixStack, deltaTick);
         }
