@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.huskuraft.effortless.math.Matrix3f;
+import dev.huskuraft.effortless.math.Matrix4f;
+import dev.huskuraft.effortless.math.Quaternionf;
 import dev.huskuraft.effortless.renderer.MatrixStack;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 public class MinecraftMatrixStack implements MatrixStack {
 
@@ -44,12 +44,12 @@ public class MinecraftMatrixStack implements MatrixStack {
         return new Matrix() {
             @Override
             public Matrix4f pose() {
-                return reference.last().pose();
+                return MinecraftPrimitives.fromMinecraftMatrix4f(reference.last().pose());
             }
 
             @Override
             public Matrix3f normal() {
-                return reference.last().normal();
+                return MinecraftPrimitives.fromMinecraftMatrix3f(reference.last().normal());
             }
         };
     }
@@ -66,17 +66,17 @@ public class MinecraftMatrixStack implements MatrixStack {
 
     @Override
     public void rotate(Quaternionf quaternion) {
-        reference.mulPose(quaternion);
+        reference.mulPose(MinecraftPrimitives.toMinecraftQuaternion(quaternion));
     }
 
     @Override
     public void rotate(Quaternionf quaternion, float x, float y, float z) {
-        reference.rotateAround(quaternion, x, y, z);
+        reference.rotateAround(MinecraftPrimitives.toMinecraftQuaternion(quaternion), x, y, z);
     }
 
     @Override
     public void multiply(Matrix4f matrix) {
-        reference.mulPoseMatrix(matrix);
+        reference.mulPoseMatrix(MinecraftPrimitives.toMinecraftMatrix4f(matrix));
     }
 
     @Override

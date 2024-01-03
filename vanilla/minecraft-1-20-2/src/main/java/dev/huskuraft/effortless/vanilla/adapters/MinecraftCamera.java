@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
+import dev.huskuraft.effortless.math.Quaternionf;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.renderer.Camera;
-import org.joml.Quaternionf;
 
 public class MinecraftCamera implements Camera {
 
@@ -23,7 +23,7 @@ public class MinecraftCamera implements Camera {
 
     @Override
     public Quaternionf rotation() {
-        return reference.rotation();
+        return MinecraftPrimitives.fromMinecraftQuaternion(reference.rotation());
     }
 
     @Override

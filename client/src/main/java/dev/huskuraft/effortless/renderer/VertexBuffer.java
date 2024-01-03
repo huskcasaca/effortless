@@ -1,11 +1,7 @@
 package dev.huskuraft.effortless.renderer;
 
 import dev.huskuraft.effortless.core.Orientation;
-import dev.huskuraft.effortless.math.Vector3d;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
+import dev.huskuraft.effortless.math.*;
 
 public interface VertexBuffer {
 
@@ -44,7 +40,7 @@ public interface VertexBuffer {
     }
 
     default VertexBuffer vertex(Matrix4f matrix, float x, float y, float z) {
-        var vector4f = matrix.transform(new Vector4f(x, y, z, 1.0F));
+        var vector4f = matrix.mul(new Vector4f(x, y, z, 1.0F));
         return this.vertex(vector4f.x(), vector4f.y(), vector4f.z());
     }
 
@@ -53,7 +49,7 @@ public interface VertexBuffer {
     }
 
     default VertexBuffer normal(Matrix3f matrix, float x, float y, float z) {
-        var vector3f = matrix.transform(new Vector3f(x, y, z));
+        var vector3f = matrix.mul(new Vector3f(x, y, z));
         return this.normal(vector3f.x(), vector3f.y(), vector3f.z());
     }
 

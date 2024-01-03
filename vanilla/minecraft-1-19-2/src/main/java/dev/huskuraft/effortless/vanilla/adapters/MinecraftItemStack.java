@@ -88,8 +88,10 @@ public class MinecraftItemStack extends ItemStack {
     @Override
     public List<Text> getTooltips(Player player, TooltipType flag) {
         return reference.getTooltipLines(MinecraftPlayer.toMinecraftPlayer(player), switch (flag) {
-            case NORMAL, NORMAL_CREATIVE -> TooltipFlag.Default.NORMAL;
-            case ADVANCED, ADVANCED_CREATIVE -> TooltipFlag.Default.ADVANCED;
+            case NORMAL -> TooltipFlag.Default.NORMAL;
+            case NORMAL_CREATIVE -> TooltipFlag.Default.NORMAL;
+            case ADVANCED -> TooltipFlag.Default.ADVANCED;
+            case ADVANCED_CREATIVE -> TooltipFlag.Default.ADVANCED;
         }).stream().map(MinecraftText::fromMinecraftText).toList();
     }
 

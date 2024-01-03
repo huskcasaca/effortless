@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.math.Quaternion;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
+import dev.huskuraft.effortless.math.Matrix3f;
+import dev.huskuraft.effortless.math.Matrix4f;
+import dev.huskuraft.effortless.math.Quaternionf;
 
 import java.nio.FloatBuffer;
 
@@ -25,7 +25,7 @@ public class MinecraftPrimitives {
 
     public static com.mojang.math.Matrix3f toMinecraftMatrix3f(Matrix3f matrix) {
         var buffer = FloatBuffer.allocate(9);
-        matrix.get(buffer);
+        matrix.write(buffer);
         var minecraftMatrix = new com.mojang.math.Matrix3f();
         minecraftMatrix.load(buffer);
         return minecraftMatrix;
@@ -39,7 +39,7 @@ public class MinecraftPrimitives {
 
     public static com.mojang.math.Matrix4f toMinecraftMatrix4f(Matrix4f matrix) {
         var buffer = FloatBuffer.allocate(16);
-        matrix.get(buffer);
+        matrix.write(buffer);
         var minecraftMatrix = new com.mojang.math.Matrix4f();
         minecraftMatrix.load(buffer);
         return minecraftMatrix;

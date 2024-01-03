@@ -2,15 +2,11 @@ package dev.huskuraft.effortless.renderer;
 
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.gui.Typeface;
-import dev.huskuraft.effortless.math.MathUtils;
-import dev.huskuraft.effortless.math.Vector3d;
+import dev.huskuraft.effortless.math.*;
 import dev.huskuraft.effortless.renderer.texture.BlockRenderLayers;
 import dev.huskuraft.effortless.renderer.texture.OutlineRenderLayers;
 import dev.huskuraft.effortless.renderer.texture.RenderLayers;
 import dev.huskuraft.effortless.text.Text;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 
 import javax.annotation.Nullable;
 import java.awt.*;

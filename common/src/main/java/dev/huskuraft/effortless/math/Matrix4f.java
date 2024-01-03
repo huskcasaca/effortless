@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.math;
 
+import java.nio.FloatBuffer;
+
 public record Matrix4f(
         float m00, float m01, float m02, float m03,
         float m10, float m11, float m12, float m13,
@@ -29,6 +31,15 @@ public record Matrix4f(
      * {@link #PROPERTY_AFFINE} in this implementation.
      */
     public static byte PROPERTY_ORTHONORMAL = 1<<4;
+
+    public Matrix4f(FloatBuffer buffer) {
+        this(
+                buffer.get(0), buffer.get(1), buffer.get(2), buffer.get(3),
+                buffer.get(4), buffer.get(5), buffer.get(6), buffer.get(7),
+                buffer.get(8), buffer.get(9), buffer.get(10), buffer.get(11),
+                buffer.get(12), buffer.get(13), buffer.get(14), buffer.get(15)
+        );
+    }
 
     public int properties() {
         int properties = 0;
@@ -73,6 +84,15 @@ public record Matrix4f(
                 Math.fma(m02(), vector.x(), Math.fma(m12(), vector.y(), Math.fma(m22(), vector.z(), m32() * vector.w()))),
                 Math.fma(m03(), vector.x(), Math.fma(m13(), vector.y(), Math.fma(m23(), vector.z(), m33() * vector.w())))
         );
+    }
+
+    public void write(FloatBuffer buffer) {
+        buffer.put(new float[] {
+                m00(), m01(), m02(), m03(),
+                m10(), m11(), m12(), m13(),
+                m20(), m21(), m22(), m23(),
+                m30(), m31(), m32(), m33()
+        });
     }
 
 
