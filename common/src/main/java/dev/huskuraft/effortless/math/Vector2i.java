@@ -371,29 +371,6 @@ public class Vector2i {
     }
 
     /**
-     * Perform a 2D transformation on this vector and return a new one.
-     *
-     * @param angle      in degrees
-     * @param aboutX     about which X coordinate to rotate
-     * @param aboutY     about which Y coordinate to rotate
-     * @param translateX what to add after rotation
-     * @param translateY what to add after rotation
-     * @return a new vector
-     */
-    public Vector2i transform2D(double angle, double aboutX, double aboutY, double translateX, double translateY) {
-        angle = MathUtils.rad(angle);
-        double x = this.x - aboutX;
-        double y = this.y - aboutY;
-        double cos = MathUtils.cos(angle);
-        double sin = MathUtils.sin(angle);
-        double x2 = x * cos - y * sin;
-        double y2 = x * sin + y * cos;
-        return Vector2i.at(
-                x2 + aboutX + translateX,
-                y2 + aboutY + translateY);
-    }
-
-    /**
      * Gets the minimum components of two vectors.
      *
      * @param v2 the second vector

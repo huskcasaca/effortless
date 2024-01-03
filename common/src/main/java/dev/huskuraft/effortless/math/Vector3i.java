@@ -477,32 +477,6 @@ public class Vector3i {
     }
 
     /**
-     * Perform a 2D transformation on this vector and return a new one.
-     *
-     * @param angle      in degrees
-     * @param aboutX     about which x 3coordinate to rotate
-     * @param aboutZ     about which z coordinate to rotate
-     * @param translateX what to add after rotation
-     * @param translateZ what to add after rotation
-     * @return a new vector
-     */
-    public Vector3i transform2D(double angle, double aboutX, double aboutZ, double translateX, double translateZ) {
-        angle = MathUtils.rad(angle);
-        double x = this.x - aboutX;
-        double z = this.z - aboutZ;
-        double cos = MathUtils.cos(angle);
-        double sin = MathUtils.sin(angle);
-        double x2 = x * cos - z * sin;
-        double z2 = x * sin + z * cos;
-
-        return Vector3i.at(
-                x2 + aboutX + translateX,
-                y,
-                z2 + aboutZ + translateZ
-        );
-    }
-
-    /**
      * Get this vector's pitch as used within the game.
      *
      * @return pitch in radians
