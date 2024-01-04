@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.api.core;
+package dev.huskuraft.effortless.api.lang;
 
 import java.util.Collections;
 import java.util.Iterator;

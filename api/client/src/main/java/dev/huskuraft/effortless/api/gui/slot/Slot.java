@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.api.gui.slot;
 
-import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
+import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 
 public abstract class Slot extends AbstractWidget {

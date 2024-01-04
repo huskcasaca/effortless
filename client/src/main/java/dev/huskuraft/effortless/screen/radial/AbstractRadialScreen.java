@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.screen.radial;
 
 import dev.huskuraft.effortless.api.core.AxisDirection;
-import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.math.MathUtils;
+import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;

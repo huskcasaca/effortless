@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.screen.pattern;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.input.Key;
+import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.Option;

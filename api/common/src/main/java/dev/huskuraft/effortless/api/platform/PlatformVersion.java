@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.platform;
 
-public record GameVersion(
+public record PlatformVersion(
         int major,
         int minor,
         int patch

@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.forge;
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.InteractionType;
-import dev.huskuraft.effortless.api.core.TickPhase;
+import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.vanilla.adapters.*;
@@ -111,8 +111,8 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()), switch (event.phase) {
-            case START -> TickPhase.START;
-            case END -> TickPhase.END;
+            case START -> ClientTick.Phase.START;
+            case END -> ClientTick.Phase.END;
         });
     }
 

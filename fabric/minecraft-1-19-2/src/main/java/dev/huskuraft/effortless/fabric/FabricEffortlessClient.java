@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.fabric;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.InteractionType;
-import dev.huskuraft.effortless.api.core.TickPhase;
+import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.fabric.events.ClientRenderEvents;
@@ -47,11 +47,11 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
-            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.START);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(minecraft), ClientTick.Phase.START);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.END);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(minecraft), ClientTick.Phase.END);
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {

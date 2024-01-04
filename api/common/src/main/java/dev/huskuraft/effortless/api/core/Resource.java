@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.api.core;
 
+import dev.huskuraft.effortless.api.platform.Entrance;
+
 public abstract class Resource {
 
     public static Resource decompose(String value, String separator) {

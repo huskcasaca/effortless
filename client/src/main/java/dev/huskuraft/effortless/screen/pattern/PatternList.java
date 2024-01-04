@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.screen.pattern;
 
-import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.api.gui.icon.RadialTextIcon;
 import dev.huskuraft.effortless.api.gui.slot.SlotContainer;
 import dev.huskuraft.effortless.api.gui.slot.SlotData;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
+import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.pattern.Pattern;

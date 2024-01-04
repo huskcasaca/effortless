@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.events.api.Event;
-import dev.huskuraft.effortless.api.events.api.EventFactory;
+import dev.huskuraft.effortless.api.events.Event;
+import dev.huskuraft.effortless.api.events.EventFactory;
 import dev.huskuraft.effortless.api.events.networking.RegisterNetwork;
 import dev.huskuraft.effortless.api.events.player.PlayerChangeWorld;
 import dev.huskuraft.effortless.api.events.player.PlayerClone;

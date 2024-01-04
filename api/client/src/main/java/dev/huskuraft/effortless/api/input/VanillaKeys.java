@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.input;
 
-import dev.huskuraft.effortless.api.core.ClientEntrance;
+import dev.huskuraft.effortless.api.platform.ClientEntrance;
 
 public enum VanillaKeys implements Key {
     KEY_UP,

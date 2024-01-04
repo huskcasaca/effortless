@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.api.events.api;
+package dev.huskuraft.effortless.api.events;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;

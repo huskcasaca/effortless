@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.core.ClientEntrance;
+import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.config.ClientConfigManager;
 
 public abstract class EffortlessClient extends ClientEntrance {

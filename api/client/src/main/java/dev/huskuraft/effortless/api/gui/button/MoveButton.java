@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.api.gui.button;
 
-import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.gui.AbstractButton;
 import dev.huskuraft.effortless.api.gui.Dimens;
+import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 

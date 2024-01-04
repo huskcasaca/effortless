@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.api.events.api;
+package dev.huskuraft.effortless.api.events;
 
 /**
  * A result from an event, determines if the event should continue to other listeners,

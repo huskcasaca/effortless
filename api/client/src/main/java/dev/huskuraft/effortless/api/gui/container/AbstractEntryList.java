@@ -1,11 +1,10 @@
 package dev.huskuraft.effortless.api.gui.container;
 
-import dev.huskuraft.effortless.api.core.Entrance;
-import dev.huskuraft.effortless.api.core.Tickable;
 import dev.huskuraft.effortless.api.gui.AbstractContainerWidget;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
 import dev.huskuraft.effortless.api.math.MathUtils;
+import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
-public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> extends AbstractContainerWidget implements EntryList, Tickable {
+public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> extends AbstractContainerWidget implements EntryList {
 
     private final boolean backgroundTransparent = true;
     private final boolean renderShadow = true;

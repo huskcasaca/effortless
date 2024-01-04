@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.text;
 
-import dev.huskuraft.effortless.api.core.Entrance;
+import dev.huskuraft.effortless.api.platform.Entrance;
 
 public abstract class Text {
 

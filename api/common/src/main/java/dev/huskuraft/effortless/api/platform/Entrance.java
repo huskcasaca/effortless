@@ -1,6 +1,4 @@
-package dev.huskuraft.effortless.api.core;
-
-import dev.huskuraft.effortless.api.platform.Platform;
+package dev.huskuraft.effortless.api.platform;
 
 import java.nio.file.Path;
 import java.util.logging.Logger;

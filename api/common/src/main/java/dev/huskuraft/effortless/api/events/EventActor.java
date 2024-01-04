@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.api.events.api;
+package dev.huskuraft.effortless.api.events;
 
 @FunctionalInterface
 public interface EventActor<T> {

@@ -3,9 +3,9 @@ package dev.huskuraft.effortless;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.InteractionType;
-import dev.huskuraft.effortless.api.core.TickPhase;
-import dev.huskuraft.effortless.api.events.api.EventResult;
+import dev.huskuraft.effortless.api.events.EventResult;
 import dev.huskuraft.effortless.api.events.input.KeyRegistry;
+import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.input.InputKey;
 import dev.huskuraft.effortless.api.input.VanillaKeys;
@@ -247,7 +247,7 @@ public final class EffortlessClientManager implements ClientManager {
         setRunningClient(null);
     }
 
-    public void onClientTick(Client client, TickPhase phase) {
+    public void onClientTick(Client client, ClientTick.Phase phase) {
         switch (phase) {
             case START -> {
                 tickCooldown();

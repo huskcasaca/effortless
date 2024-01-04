@@ -1,6 +1,10 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.core.*;
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.Interaction;
+import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
@@ -232,8 +236,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO));
     }
 
-    public void onClientTick(Client client, TickPhase phase) {
-        if (phase == TickPhase.END) {
+    public void onClientTick(Client client, ClientTick.Phase phase) {
+        if (phase == ClientTick.Phase.END) {
             return;
         }
 
