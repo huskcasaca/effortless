@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.renderer.pattern;
 
+import dev.huskuraft.effortless.api.renderer.RenderFadeEntry;
+import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
-import dev.huskuraft.effortless.renderer.RenderFadeEntry;
-import dev.huskuraft.effortless.renderer.Renderer;
 
 import java.util.Collections;
 import java.util.HashMap;

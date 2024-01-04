@@ -1,16 +1,17 @@
 package dev.huskuraft.effortless;
 
+import dev.huskuraft.effortless.api.core.ClientEntrance;
+import dev.huskuraft.effortless.api.events.input.KeyRegistry;
+import dev.huskuraft.effortless.api.gui.Screen;
+import dev.huskuraft.effortless.api.input.InputKey;
+import dev.huskuraft.effortless.api.input.VanillaKeys;
+import dev.huskuraft.effortless.api.platform.Client;
+import dev.huskuraft.effortless.api.platform.ClientManager;
+import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.client.SubtitleManager;
 import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.events.api.EventResult;
-import dev.huskuraft.effortless.events.input.KeyRegistry;
-import dev.huskuraft.effortless.gui.Screen;
-import dev.huskuraft.effortless.input.InputKey;
-import dev.huskuraft.effortless.platform.Client;
-import dev.huskuraft.effortless.platform.ClientManager;
-import dev.huskuraft.effortless.platform.SubtitleManager;
-import dev.huskuraft.effortless.platform.VanillaKeys;
-import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
 import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
@@ -21,7 +22,7 @@ import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerSettingsS
 
 import java.util.Stack;
 
-final class EffortlessClientManager extends ClientManager {
+final class EffortlessClientManager implements ClientManager {
 
     private final Stack<Screen> screenStack = new Stack<>();
 

@@ -1,14 +1,14 @@
 package dev.huskuraft.effortless.fabric;
 
 import dev.huskuraft.effortless.EffortlessClient;
+import dev.huskuraft.effortless.api.input.InputKey;
+import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.fabric.events.ClientRenderEvents;
 import dev.huskuraft.effortless.fabric.events.ClientShadersEvents;
 import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
-import dev.huskuraft.effortless.input.InputKey;
-import dev.huskuraft.effortless.platform.ClientPlatform;
 import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;

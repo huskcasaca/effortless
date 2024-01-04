@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.renderer.pattern;
 
 import dev.huskuraft.effortless.EffortlessClient;
+import dev.huskuraft.effortless.api.renderer.LightTexture;
+import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
-import dev.huskuraft.effortless.renderer.LightTexture;
-import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.text.Text;
 
 public class ArrayTransformerRenderer extends TransformerRenderer {

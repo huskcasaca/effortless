@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.screen.item;
 
+import dev.huskuraft.effortless.api.gui.Dimens;
+import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
+import dev.huskuraft.effortless.api.gui.slot.ItemSlot;
+import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.ItemStack;
-import dev.huskuraft.effortless.gui.Dimens;
-import dev.huskuraft.effortless.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.gui.slot.ItemSlot;
-import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 
 public final class ItemStackList extends EditableEntryList<ItemStack> {

@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.renderer.opertaion.children;
 
+import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
-import dev.huskuraft.effortless.renderer.Renderer;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 
 public class BlockOperationPreview implements OperationPreview {

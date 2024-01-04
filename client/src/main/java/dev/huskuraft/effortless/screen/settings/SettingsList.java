@@ -1,18 +1,18 @@
 package dev.huskuraft.effortless.screen.settings;
 
+import dev.huskuraft.effortless.api.gui.AbstractWidget;
+import dev.huskuraft.effortless.api.gui.Dimens;
+import dev.huskuraft.effortless.api.gui.EntryList;
+import dev.huskuraft.effortless.api.gui.button.Button;
+import dev.huskuraft.effortless.api.gui.container.AbstractEntryList;
+import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
+import dev.huskuraft.effortless.api.gui.input.NumberField;
+import dev.huskuraft.effortless.api.gui.slot.TextSlot;
+import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.Tuple2;
-import dev.huskuraft.effortless.gui.AbstractWidget;
-import dev.huskuraft.effortless.gui.Dimens;
-import dev.huskuraft.effortless.gui.EntryList;
-import dev.huskuraft.effortless.gui.button.Button;
-import dev.huskuraft.effortless.gui.container.AbstractEntryList;
-import dev.huskuraft.effortless.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.gui.input.NumberField;
-import dev.huskuraft.effortless.gui.slot.TextSlot;
-import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.List;

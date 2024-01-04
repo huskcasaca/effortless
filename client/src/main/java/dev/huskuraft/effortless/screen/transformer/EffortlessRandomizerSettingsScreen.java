@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.screen.transformer;
 
+import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.button.Button;
+import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.settings.RandomizerSettings;
 import dev.huskuraft.effortless.core.Entrance;
-import dev.huskuraft.effortless.gui.AbstractScreen;
-import dev.huskuraft.effortless.gui.button.Button;
-import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.function.Consumer;

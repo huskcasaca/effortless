@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.renderer.BufferSource;
-import dev.huskuraft.effortless.renderer.RenderLayer;
-import dev.huskuraft.effortless.renderer.VertexBuffer;
+import dev.huskuraft.effortless.api.renderer.BufferSource;
+import dev.huskuraft.effortless.api.renderer.RenderLayer;
+import dev.huskuraft.effortless.api.renderer.VertexBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 
 public class MinecraftBufferSource implements BufferSource {

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.renderer.RenderLayer;
+import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import net.minecraft.client.renderer.RenderType;
 
 public class MinecraftRenderLayer implements RenderLayer {

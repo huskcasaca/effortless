@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
+import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.core.Orientation;
 import dev.huskuraft.effortless.math.BoundingBox3d;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;
-import dev.huskuraft.effortless.renderer.Renderer;
 
 public class BlockBoundingBoxOutline extends Outline {
 

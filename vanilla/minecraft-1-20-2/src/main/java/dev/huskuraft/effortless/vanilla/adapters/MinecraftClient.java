@@ -1,18 +1,18 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import dev.huskuraft.effortless.api.gui.Screen;
+import dev.huskuraft.effortless.api.gui.Typeface;
+import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.core.Interaction;
 import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.core.World;
-import dev.huskuraft.effortless.gui.Screen;
-import dev.huskuraft.effortless.gui.Typeface;
-import dev.huskuraft.effortless.platform.Client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import org.lwjgl.glfw.GLFW;
 
-public class MinecraftClient extends Client {
+public class MinecraftClient implements Client {
 
     private final Minecraft reference;
 

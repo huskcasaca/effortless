@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
+import dev.huskuraft.effortless.api.renderer.Camera;
 import dev.huskuraft.effortless.math.Quaternionf;
 import dev.huskuraft.effortless.math.Vector3d;
-import dev.huskuraft.effortless.renderer.Camera;
 
 public class MinecraftCamera implements Camera {
 

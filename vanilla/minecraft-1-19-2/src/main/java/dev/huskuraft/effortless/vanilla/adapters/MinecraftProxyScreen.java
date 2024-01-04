@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.huskuraft.effortless.gui.Screen;
+import dev.huskuraft.effortless.api.gui.Screen;
 import net.minecraft.network.chat.Component;
 
 public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {

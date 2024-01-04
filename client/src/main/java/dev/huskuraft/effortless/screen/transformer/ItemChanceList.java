@@ -1,15 +1,15 @@
 package dev.huskuraft.effortless.screen.transformer;
 
+import dev.huskuraft.effortless.api.gui.Dimens;
+import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
+import dev.huskuraft.effortless.api.gui.input.NumberField;
+import dev.huskuraft.effortless.api.gui.slot.ItemSlot;
+import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.Item;
 import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.gui.Dimens;
-import dev.huskuraft.effortless.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.gui.input.NumberField;
-import dev.huskuraft.effortless.gui.slot.ItemSlot;
-import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 

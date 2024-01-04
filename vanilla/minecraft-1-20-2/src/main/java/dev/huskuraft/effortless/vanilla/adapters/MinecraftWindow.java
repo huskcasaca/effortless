@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.renderer.Window;
+import dev.huskuraft.effortless.api.renderer.Window;
 
 public class MinecraftWindow implements Window {
 

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.core.ClientEntrance;
+import dev.huskuraft.effortless.api.core.ClientEntrance;
 import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.core.Resource;

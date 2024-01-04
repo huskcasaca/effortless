@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless;
 
+import dev.huskuraft.effortless.api.core.ClientEntrance;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.config.*;
 import dev.huskuraft.effortless.config.serializer.BaseConfigurationSerializer;
-import dev.huskuraft.effortless.core.ClientEntrance;
 import dev.huskuraft.effortless.core.Entrance;
 
 import java.io.File;

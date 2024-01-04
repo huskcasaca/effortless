@@ -2,8 +2,8 @@ package dev.huskuraft.effortless.vanilla.renderer;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import dev.huskuraft.effortless.renderer.RenderLayer;
-import dev.huskuraft.effortless.renderer.texture.RenderLayers;
+import dev.huskuraft.effortless.api.renderer.RenderLayer;
+import dev.huskuraft.effortless.api.renderer.texture.RenderLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;

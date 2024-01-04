@@ -1,15 +1,13 @@
 package dev.huskuraft.effortless.renderer.pattern;
 
+import dev.huskuraft.effortless.api.renderer.LightTexture;
+import dev.huskuraft.effortless.api.renderer.RenderUtils;
+import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.core.Orientation;
 import dev.huskuraft.effortless.math.Vector3d;
-import dev.huskuraft.effortless.renderer.LightTexture;
-import dev.huskuraft.effortless.renderer.Renderer;
 
 import java.awt.*;
-
-import static dev.huskuraft.effortless.renderer.RenderUtils.calculateAxisAlignedPlane;
-import static dev.huskuraft.effortless.renderer.RenderUtils.rotate;
 
 public abstract class TransformerRenderer {
 
@@ -100,7 +98,7 @@ public abstract class TransformerRenderer {
         }
 
         var extension = diff.normalize().mul(width / 2);
-        var plane = calculateAxisAlignedPlane(diff);
+        var plane = RenderUtils.calculateAxisAlignedPlane(diff);
         var face = Orientation.getNearest(diff.x(), diff.y(), diff.z());
         var axis = face.getAxis();
 
@@ -110,13 +108,13 @@ public abstract class TransformerRenderer {
 
         var a1 = plane.add(start);
         var b1 = plane.add(end);
-        plane = rotate(plane, -90, axis);
+        plane = RenderUtils.rotate(plane, -90, axis);
         var a2 = plane.add(start);
         var b2 = plane.add(end);
-        plane = rotate(plane, -90, axis);
+        plane = RenderUtils.rotate(plane, -90, axis);
         var a3 = plane.add(start);
         var b3 = plane.add(end);
-        plane = rotate(plane, -90, axis);
+        plane = RenderUtils.rotate(plane, -90, axis);
         var a4 = plane.add(start);
         var b4 = plane.add(end);
 
@@ -136,13 +134,13 @@ public abstract class TransformerRenderer {
         var vec = a1.sub(a4);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a1, b1, b2, a2, LightTexture.FULL_BLOCK, color, face);
-        vec = rotate(vec, -90, axis);
+        vec = RenderUtils.rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a2, b2, b3, a3, LightTexture.FULL_BLOCK, color, face);
-        vec = rotate(vec, -90, axis);
+        vec = RenderUtils.rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a3, b3, b4, a4, LightTexture.FULL_BLOCK, color, face);
-        vec = rotate(vec, -90, axis);
+        vec = RenderUtils.rotate(vec, -90, axis);
         face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a4, b4, b1, a1, LightTexture.FULL_BLOCK, color, face);
     }

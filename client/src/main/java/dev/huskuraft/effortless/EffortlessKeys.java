@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.input.Key;
-import dev.huskuraft.effortless.input.KeyBinding;
-import dev.huskuraft.effortless.input.KeyCodes;
+import dev.huskuraft.effortless.api.input.Key;
+import dev.huskuraft.effortless.api.input.KeyBinding;
+import dev.huskuraft.effortless.api.input.KeyCodes;
 
 enum EffortlessKeys implements Key {
 

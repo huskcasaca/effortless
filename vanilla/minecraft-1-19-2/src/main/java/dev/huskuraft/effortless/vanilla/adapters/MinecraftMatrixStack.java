@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.huskuraft.effortless.api.renderer.MatrixStack;
 import dev.huskuraft.effortless.math.Matrix3f;
 import dev.huskuraft.effortless.math.Matrix4f;
 import dev.huskuraft.effortless.math.Quaternionf;
-import dev.huskuraft.effortless.renderer.MatrixStack;
 
 public class MinecraftMatrixStack implements MatrixStack {
 

@@ -1,5 +1,13 @@
 package dev.huskuraft.effortless.screen.transformer;
 
+import dev.huskuraft.effortless.api.gui.AbstractWidget;
+import dev.huskuraft.effortless.api.gui.Dimens;
+import dev.huskuraft.effortless.api.gui.EntryList;
+import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
+import dev.huskuraft.effortless.api.gui.slot.SlotContainer;
+import dev.huskuraft.effortless.api.gui.slot.SlotData;
+import dev.huskuraft.effortless.api.gui.slot.TextSlot;
+import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
@@ -7,14 +15,6 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.core.Entrance;
-import dev.huskuraft.effortless.gui.AbstractWidget;
-import dev.huskuraft.effortless.gui.Dimens;
-import dev.huskuraft.effortless.gui.EntryList;
-import dev.huskuraft.effortless.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.gui.slot.SlotContainer;
-import dev.huskuraft.effortless.gui.slot.SlotData;
-import dev.huskuraft.effortless.gui.slot.TextSlot;
-import dev.huskuraft.effortless.gui.text.TextWidget;
 import dev.huskuraft.effortless.text.Text;
 import dev.huskuraft.effortless.text.TextStyle;
 

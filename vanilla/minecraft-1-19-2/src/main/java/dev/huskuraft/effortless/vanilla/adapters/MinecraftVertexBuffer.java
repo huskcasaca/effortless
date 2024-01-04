@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.huskuraft.effortless.renderer.VertexBuffer;
+import dev.huskuraft.effortless.api.renderer.VertexBuffer;
 
 public class MinecraftVertexBuffer implements VertexBuffer {
 
