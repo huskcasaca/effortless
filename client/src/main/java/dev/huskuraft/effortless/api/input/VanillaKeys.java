@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.input;
 
-import dev.huskuraft.effortless.EffortlessClient;
+import dev.huskuraft.effortless.api.core.ClientEntrance;
 
 public enum VanillaKeys implements Key {
     KEY_UP,
@@ -41,6 +41,6 @@ public enum VanillaKeys implements Key {
 
     @Override
     public KeyBinding getBinding() {
-        return EffortlessClient.getInstance().getPlatform().getKeyBinding(this);
+        return ClientEntrance.getInstance().getPlatform().getKeyBinding(this);
     }
 }

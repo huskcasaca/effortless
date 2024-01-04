@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.core.ClientEntrance;
 import dev.huskuraft.effortless.api.events.input.KeyRegistry;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.input.InputKey;
@@ -10,7 +9,10 @@ import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.client.SubtitleManager;
-import dev.huskuraft.effortless.core.*;
+import dev.huskuraft.effortless.core.Interaction;
+import dev.huskuraft.effortless.core.InteractionHand;
+import dev.huskuraft.effortless.core.InteractionType;
+import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.events.api.EventResult;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
@@ -26,7 +28,7 @@ final class EffortlessClientManager implements ClientManager {
 
     private final Stack<Screen> screenStack = new Stack<>();
 
-    private final ClientEntrance entrance;
+    private final EffortlessClient entrance;
     private final SubtitleManager subtitleManager;
 
     private final OperationsRenderer operationsRenderer;
@@ -37,8 +39,8 @@ final class EffortlessClientManager implements ClientManager {
 
     private int interactionCooldown = 0;
 
-    public EffortlessClientManager(Entrance entrance) {
-        this.entrance = (ClientEntrance) entrance;
+    public EffortlessClientManager(EffortlessClient entrance) {
+        this.entrance = entrance;
         this.subtitleManager = new SubtitleManager(entrance);
 
         this.operationsRenderer = new OperationsRenderer();
@@ -56,7 +58,7 @@ final class EffortlessClientManager implements ClientManager {
         getEntrance().getEventRegistry().getRenderWorldEvent().register(this::onRenderEnd);
     }
 
-    private ClientEntrance getEntrance() {
+    private EffortlessClient getEntrance() {
         return entrance;
     }
 

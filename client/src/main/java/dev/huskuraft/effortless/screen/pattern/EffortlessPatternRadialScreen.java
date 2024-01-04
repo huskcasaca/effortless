@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.screen.pattern;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.Option;
@@ -29,6 +30,11 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
     public EffortlessPatternRadialScreen(Entrance entrance, Key assignedKey) {
         super(entrance, Text.translate("effortless.pattern.radial.title"));
         this.assignedKey = assignedKey;
+    }
+
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
     }
 
     public static Slot<Pattern> slot(Pattern pattern) {

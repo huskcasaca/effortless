@@ -11,7 +11,6 @@ public abstract class Effortless extends Entrance {
 
     public static final String MOD_ID = "effortless";
     public static final int VERSION_NUMBER = 1;
-    private static Effortless instance;
 
     private final EventsRegistry registry;
     private final EffortlessServerChannel channel;
@@ -26,25 +25,21 @@ public abstract class Effortless extends Entrance {
     }
 
     public static Effortless getInstance() {
-        return instance;
+        return (Effortless) instance;
     }
 
-    @Override
     public Channel<AllPacketListener> getChannel() {
         return channel;
     }
 
-    @Override
     public EventsRegistry getEventRegistry() {
         return registry;
     }
 
-    @Override
     public StructureBuilder getStructureBuilder() {
         return structureBuilder;
     }
 
-    @Override
     public ConfigManager getConfigManager() {
         return null;
     }

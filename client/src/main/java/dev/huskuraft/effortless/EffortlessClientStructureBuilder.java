@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.core.ClientEntrance;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.renderer.opertaion.SurfaceColor;
@@ -30,10 +29,10 @@ import java.util.stream.Collectors;
 final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private final Map<UUID, Context> contexts = new HashMap<>();
-    private final ClientEntrance entrance;
+    private final EffortlessClient entrance;
 
-    public EffortlessClientStructureBuilder(Entrance entrance) {
-        this.entrance = (ClientEntrance) entrance;
+    public EffortlessClientStructureBuilder(EffortlessClient entrance) {
+        this.entrance = entrance;
 
         getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
     }
@@ -59,7 +58,7 @@ final class EffortlessClientStructureBuilder extends StructureBuilder {
         ));
     }
 
-    private ClientEntrance getEntrance() {
+    private EffortlessClient getEntrance() {
         return entrance;
     }
 

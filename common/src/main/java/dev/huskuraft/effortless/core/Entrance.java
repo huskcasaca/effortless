@@ -1,9 +1,5 @@
 package dev.huskuraft.effortless.core;
 
-import dev.huskuraft.effortless.building.StructureBuilder;
-import dev.huskuraft.effortless.config.ConfigManager;
-import dev.huskuraft.effortless.events.EventsRegistry;
-import dev.huskuraft.effortless.networking.Channel;
 import dev.huskuraft.effortless.platform.Platform;
 
 import java.nio.file.Path;
@@ -12,14 +8,6 @@ import java.util.logging.Logger;
 public abstract class Entrance {
 
     private static final Logger LOGGER = Logger.getLogger("Effortless");
-
-    public abstract Channel getChannel();
-
-    public abstract EventsRegistry getEventRegistry();
-
-    public abstract StructureBuilder getStructureBuilder();
-
-    public abstract ConfigManager getConfigManager();
 
     public abstract String getId();
 
@@ -49,6 +37,8 @@ public abstract class Entrance {
         CLIENT,
         SERVER
     }
+
+    protected static Entrance instance;
 
 }
 

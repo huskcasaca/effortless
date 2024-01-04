@@ -5,7 +5,6 @@ import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.core.BlockInteraction;
-import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.core.World;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
@@ -20,16 +19,16 @@ import java.util.function.UnaryOperator;
 
 final class EffortlessServerStructureBuilder extends StructureBuilder {
 
-    private final Entrance entrance;
+    private final Effortless entrance;
 
-    public EffortlessServerStructureBuilder(Entrance entrance) {
+    public EffortlessServerStructureBuilder(Effortless entrance) {
         this.entrance = entrance;
 
         getEntrance().getEventRegistry().getPlayerCloneEvent().register(this::onPlayerClone);
         getEntrance().getEventRegistry().getPlayerChangeWorldEvent().register(this::onPlayerChangeWorld);
     }
 
-    public Entrance getEntrance() {
+    public Effortless getEntrance() {
         return entrance;
     }
 

@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.core.ClientEntrance;
-import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.networking.Buffer;
@@ -16,19 +14,19 @@ import dev.huskuraft.effortless.packets.player.PlayerSettingsPacket;
 
 final class EffortlessClientChannel extends Channel<AllPacketListener> {
 
-    private final ClientEntrance entrance;
+    private final EffortlessClient entrance;
     private final AllPacketListener listener;
 
     private static final Resource DEFAULT_CHANNEL = Resource.of("default_channel");
     private static final int COMPATIBILITY_VERSION = Effortless.VERSION_NUMBER;
 
-    public EffortlessClientChannel(Entrance entrance) {
+    public EffortlessClientChannel(EffortlessClient entrance) {
         this(entrance, DEFAULT_CHANNEL);
     }
 
-    public EffortlessClientChannel(Entrance entrance, Resource channelId) {
+    public EffortlessClientChannel(EffortlessClient entrance, Resource channelId) {
         super(channelId);
-        this.entrance = (ClientEntrance) entrance;
+        this.entrance = entrance;
         this.listener = new ClientPacketListener();
 
         registerPacket(PlayerCommandPacket.class, new PlayerCommandPacket.Serializer());
@@ -39,7 +37,7 @@ final class EffortlessClientChannel extends Channel<AllPacketListener> {
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterHandler);
     }
 
-    private ClientEntrance getEntrance() {
+    private EffortlessClient getEntrance() {
         return entrance;
     }
 

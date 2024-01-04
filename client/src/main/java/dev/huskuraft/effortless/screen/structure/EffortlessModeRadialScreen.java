@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.screen.structure;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.Option;
@@ -25,6 +26,11 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
     public EffortlessModeRadialScreen(Entrance entrance, Key assignedKey) {
         super(entrance, Text.translate("effortless.building.radial.title"));
         this.assignedKey = assignedKey;
+    }
+
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
     }
 
     public static Slot<BuildMode> slot(BuildMode mode) {

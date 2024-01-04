@@ -3,15 +3,13 @@ package dev.huskuraft.effortless;
 import dev.huskuraft.effortless.api.core.ClientEntrance;
 import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.building.StructureBuilder;
-import dev.huskuraft.effortless.client.ClientEventsRegistry;
 import dev.huskuraft.effortless.config.ClientConfigManager;
 import dev.huskuraft.effortless.networking.Channel;
 import dev.huskuraft.effortless.packets.AllPacketListener;
 
 public abstract class EffortlessClient extends ClientEntrance {
 
-    private static EffortlessClient instance;
-    private final ClientEventsRegistry registry = new ClientEventsRegistry();
+    private final EffortlessClientEventsRegistry registry = new EffortlessClientEventsRegistry();
 
     private final EffortlessClientChannel channel;
     private final EffortlessClientConfigManager configManager;
@@ -28,20 +26,17 @@ public abstract class EffortlessClient extends ClientEntrance {
     }
 
     public static EffortlessClient getInstance() {
-        return instance;
+        return (EffortlessClient) instance;
     }
 
-    @Override
     public Channel<AllPacketListener> getChannel() {
         return channel;
     }
 
-    @Override
-    public ClientEventsRegistry getEventRegistry() {
+    public EffortlessClientEventsRegistry getEventRegistry() {
         return registry;
     }
 
-    @Override
     public StructureBuilder getStructureBuilder() {
         return structureBuilder;
     }
@@ -51,7 +46,6 @@ public abstract class EffortlessClient extends ClientEntrance {
         return clientManager;
     }
 
-    @Override
     public ClientConfigManager getConfigManager() {
         return configManager;
     }

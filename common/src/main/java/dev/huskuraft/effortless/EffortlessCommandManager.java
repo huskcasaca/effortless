@@ -1,17 +1,16 @@
 package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.command.CommandManager;
-import dev.huskuraft.effortless.core.Entrance;
 
 final class EffortlessCommandManager extends CommandManager {
 
-    private final Entrance entrance;
+    private final Effortless entrance;
 
-    public EffortlessCommandManager(Entrance entrance) {
+    public EffortlessCommandManager(Effortless entrance) {
         this.entrance = entrance;
     }
 
-    public Entrance getEntrance() {
+    public Effortless getEntrance() {
         return entrance;
     }
 

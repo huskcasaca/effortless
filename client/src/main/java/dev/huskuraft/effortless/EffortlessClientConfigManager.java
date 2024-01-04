@@ -1,11 +1,9 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.core.ClientEntrance;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.config.*;
 import dev.huskuraft.effortless.config.serializer.BaseConfigurationSerializer;
-import dev.huskuraft.effortless.core.Entrance;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,14 +17,14 @@ final class EffortlessClientConfigManager extends ClientConfigManager {
 
     private static final Logger LOGGER = Logger.getLogger("Effortless");
     private static final String CONFIG_NAME = "effortless.dat";
-    private final ClientEntrance entrance;
+    private final EffortlessClient entrance;
     private BaseConfiguration config;
 
-    public EffortlessClientConfigManager(Entrance entrance) {
-        this.entrance = (ClientEntrance) entrance;
+    public EffortlessClientConfigManager(EffortlessClient entrance) {
+        this.entrance = entrance;
     }
 
-    private ClientEntrance getEntrance() {
+    private EffortlessClient getEntrance() {
         return entrance;
     }
 
