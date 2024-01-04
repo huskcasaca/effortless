@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.platform;
 
-import dev.huskuraft.effortless.core.Item;
-import dev.huskuraft.effortless.core.ItemStack;
-import dev.huskuraft.effortless.core.Items;
-import dev.huskuraft.effortless.core.Resource;
+import dev.huskuraft.effortless.api.core.Item;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Items;
+import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.tag.TagIoReader;
 import dev.huskuraft.effortless.tag.TagIoWriter;

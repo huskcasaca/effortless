@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.building.operation.empty;
 
+import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.building.operation.ItemType;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.core.ItemStack;
 
 import java.util.Collection;
 import java.util.Collections;

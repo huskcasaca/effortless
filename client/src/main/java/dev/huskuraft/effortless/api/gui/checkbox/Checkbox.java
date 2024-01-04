@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.api.gui.checkbox;
 
+import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.text.Text;
 
 public class Checkbox extends Button {

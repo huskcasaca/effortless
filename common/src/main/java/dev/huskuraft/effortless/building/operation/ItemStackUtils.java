@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.building.operation;
 
-import dev.huskuraft.effortless.core.Item;
-import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Item;
+import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.tag.TagRecord;
 

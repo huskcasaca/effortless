@@ -2,10 +2,10 @@ package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
+import dev.huskuraft.effortless.api.core.InteractionType;
+import dev.huskuraft.effortless.api.core.TickPhase;
 import dev.huskuraft.effortless.api.input.InputKey;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
-import dev.huskuraft.effortless.core.InteractionType;
-import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;

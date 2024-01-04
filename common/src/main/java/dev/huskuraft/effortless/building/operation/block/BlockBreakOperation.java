@@ -1,15 +1,15 @@
 package dev.huskuraft.effortless.building.operation.block;
 
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RevolveContext;
-import dev.huskuraft.effortless.core.BlockInteraction;
-import dev.huskuraft.effortless.core.ItemStack;
-import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.core.World;
 
 import java.util.Collections;
 

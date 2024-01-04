@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.core.Resource;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.networking.Channel;
 import dev.huskuraft.effortless.networking.NetworkRegistry;

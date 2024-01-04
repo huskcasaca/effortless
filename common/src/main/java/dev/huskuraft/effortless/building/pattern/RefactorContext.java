@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.building.pattern;
 
-import dev.huskuraft.effortless.core.BlockInteraction;
-import dev.huskuraft.effortless.core.BlockState;
-import dev.huskuraft.effortless.core.Item;
-import dev.huskuraft.effortless.core.Player;
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.Item;
+import dev.huskuraft.effortless.api.core.Player;
 
 import java.util.Objects;
 

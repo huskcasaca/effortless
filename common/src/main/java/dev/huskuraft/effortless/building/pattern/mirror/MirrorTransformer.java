@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.pattern.mirror;
 
+import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.building.BuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.PositionType;
@@ -9,7 +10,6 @@ import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
-import dev.huskuraft.effortless.core.Axis;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.text.Text;
 

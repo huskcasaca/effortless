@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.events.player;
 
-import dev.huskuraft.effortless.core.Player;
+import dev.huskuraft.effortless.api.core.Player;
 
 @FunctionalInterface
 public interface PlayerClone {

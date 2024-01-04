@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building.operation;
 
-import dev.huskuraft.effortless.core.ItemStack;
+import dev.huskuraft.effortless.api.core.ItemStack;
 
 import java.util.Collection;
 

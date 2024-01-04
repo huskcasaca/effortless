@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
+import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.renderer.RenderUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.core.Orientation;
-import dev.huskuraft.effortless.core.Resource;
 import dev.huskuraft.effortless.math.Vector3d;
 
 import javax.annotation.Nullable;

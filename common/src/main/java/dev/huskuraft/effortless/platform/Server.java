@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.platform;
 
-import dev.huskuraft.effortless.core.Player;
+import dev.huskuraft.effortless.api.core.Player;
 
 import java.util.List;
 

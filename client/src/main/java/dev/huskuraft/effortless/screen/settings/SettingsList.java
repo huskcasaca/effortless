@@ -1,5 +1,8 @@
 package dev.huskuraft.effortless.screen.settings;
 
+import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.Entrance;
+import dev.huskuraft.effortless.api.core.Tuple2;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.EntryList;
@@ -10,9 +13,6 @@ import dev.huskuraft.effortless.api.gui.input.NumberField;
 import dev.huskuraft.effortless.api.gui.slot.TextSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.building.PositionType;
-import dev.huskuraft.effortless.core.Axis;
-import dev.huskuraft.effortless.core.Entrance;
-import dev.huskuraft.effortless.core.Tuple2;
 import dev.huskuraft.effortless.text.Text;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.packets;
 
-import dev.huskuraft.effortless.core.Player;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.networking.PacketListener;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;

@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.api.gui.container;
 
+import dev.huskuraft.effortless.api.core.Entrance;
+import dev.huskuraft.effortless.api.core.Tickable;
 import dev.huskuraft.effortless.api.gui.AbstractContainerWidget;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.core.Entrance;
-import dev.huskuraft.effortless.core.Tickable;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.text.Text;
 

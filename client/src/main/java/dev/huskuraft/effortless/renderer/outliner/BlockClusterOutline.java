@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
+import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.AxisDirection;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.core.Axis;
-import dev.huskuraft.effortless.core.AxisDirection;
-import dev.huskuraft.effortless.core.BlockPosition;
-import dev.huskuraft.effortless.core.Orientation;
 import dev.huskuraft.effortless.math.Vector3d;
 
 import java.util.*;

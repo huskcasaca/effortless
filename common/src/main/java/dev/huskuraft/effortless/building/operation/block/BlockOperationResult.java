@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.building.operation.block;
 
+import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.core.ItemStack;
 
 import java.awt.*;
 import java.util.List;

@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.api.gui.container;
 
+import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
-import dev.huskuraft.effortless.core.Entrance;
 
 import java.util.Collection;
 import java.util.List;

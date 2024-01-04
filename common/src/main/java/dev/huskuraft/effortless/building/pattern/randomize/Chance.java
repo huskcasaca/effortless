@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building.pattern.randomize;
 
-import dev.huskuraft.effortless.core.Item;
+import dev.huskuraft.effortless.api.core.Item;
 
 import java.util.Objects;
 

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.core.Axis;
+import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;
 

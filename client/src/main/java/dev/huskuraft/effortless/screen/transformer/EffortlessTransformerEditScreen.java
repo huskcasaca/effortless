@@ -1,5 +1,8 @@
 package dev.huskuraft.effortless.screen.transformer;
 
+import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.Entrance;
+import dev.huskuraft.effortless.api.core.Tuple2;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
@@ -12,9 +15,6 @@ import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.core.Axis;
-import dev.huskuraft.effortless.core.Entrance;
-import dev.huskuraft.effortless.core.Tuple2;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.screen.settings.SettingsList;
 import dev.huskuraft.effortless.text.Text;

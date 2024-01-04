@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.api.platform;
 
+import dev.huskuraft.effortless.api.core.Interaction;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
-import dev.huskuraft.effortless.core.Interaction;
-import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.core.World;
 
 public interface Client {
 

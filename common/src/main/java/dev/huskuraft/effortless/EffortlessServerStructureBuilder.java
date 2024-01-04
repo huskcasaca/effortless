@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless;
 
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.*;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.core.BlockInteraction;
-import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.core.World;
 import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.packets.player.PlayerCommandPacket;
 

@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.building;
 
+import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.structure.*;
-import dev.huskuraft.effortless.core.*;
 
 import javax.annotation.Nullable;
 import java.util.Collections;

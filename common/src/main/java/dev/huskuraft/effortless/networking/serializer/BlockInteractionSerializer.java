@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.networking.serializer;
 
-import dev.huskuraft.effortless.core.BlockInteraction;
-import dev.huskuraft.effortless.core.Orientation;
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.networking.BufferSerializer;
 

@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
+import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.core.BlockPosition;
 import dev.huskuraft.effortless.math.BoundingBox3d;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;

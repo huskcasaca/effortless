@@ -1,5 +1,9 @@
 package dev.huskuraft.effortless;
 
+import dev.huskuraft.effortless.api.core.Interaction;
+import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.InteractionType;
+import dev.huskuraft.effortless.api.core.TickPhase;
 import dev.huskuraft.effortless.api.events.input.KeyRegistry;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.input.InputKey;
@@ -9,10 +13,6 @@ import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.client.SubtitleManager;
-import dev.huskuraft.effortless.core.Interaction;
-import dev.huskuraft.effortless.core.InteractionHand;
-import dev.huskuraft.effortless.core.InteractionType;
-import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.events.api.EventResult;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;

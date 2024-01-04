@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.tag;
 
-import dev.huskuraft.effortless.core.Item;
-import dev.huskuraft.effortless.core.ItemStack;
-import dev.huskuraft.effortless.core.Resource;
+import dev.huskuraft.effortless.api.core.Item;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.math.Vector2d;
 import dev.huskuraft.effortless.math.Vector2i;
 import dev.huskuraft.effortless.math.Vector3d;

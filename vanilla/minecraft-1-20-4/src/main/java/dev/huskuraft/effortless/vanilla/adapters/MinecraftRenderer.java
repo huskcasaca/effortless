@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.huskuraft.effortless.core.*;
 import dev.huskuraft.effortless.gui.Typeface;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.renderer.*;

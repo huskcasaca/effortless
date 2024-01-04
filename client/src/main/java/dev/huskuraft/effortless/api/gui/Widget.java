@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.gui;
 
-import dev.huskuraft.effortless.core.Tickable;
+import dev.huskuraft.effortless.api.core.Tickable;
 
 public interface Widget extends Renderable, Tickable, InputHandler {
 

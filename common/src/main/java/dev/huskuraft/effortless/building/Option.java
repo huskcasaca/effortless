@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building;
 
-import dev.huskuraft.effortless.core.Resource;
+import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.text.Text;
 
 public interface Option {

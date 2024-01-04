@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.tag;
 
-import dev.huskuraft.effortless.core.Resource;
+import dev.huskuraft.effortless.api.core.Resource;
 
 import java.util.Locale;
 

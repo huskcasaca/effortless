@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.core.*;
+import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.math.Vector3i;
 import dev.huskuraft.effortless.platform.Server;

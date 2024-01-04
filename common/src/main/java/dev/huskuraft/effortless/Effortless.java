@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless;
 
+import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.config.ConfigManager;
-import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.events.EventsRegistry;
 import dev.huskuraft.effortless.networking.Channel;
 import dev.huskuraft.effortless.packets.AllPacketListener;

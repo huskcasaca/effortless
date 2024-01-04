@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.events.player;
 
-import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.core.World;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.World;
 
 @FunctionalInterface
 public interface PlayerChangeWorld {

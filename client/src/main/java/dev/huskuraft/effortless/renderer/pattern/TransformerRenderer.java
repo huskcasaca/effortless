@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.renderer.pattern;
 
+import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.renderer.RenderUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.core.Axis;
-import dev.huskuraft.effortless.core.Orientation;
 import dev.huskuraft.effortless.math.Vector3d;
 
 import java.awt.*;

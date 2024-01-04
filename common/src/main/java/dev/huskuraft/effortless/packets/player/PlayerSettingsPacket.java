@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.packets.player;
 
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.settings.DimensionSettings;
-import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.networking.Buffer;
 import dev.huskuraft.effortless.networking.BufferSerializer;
 import dev.huskuraft.effortless.networking.Packet;

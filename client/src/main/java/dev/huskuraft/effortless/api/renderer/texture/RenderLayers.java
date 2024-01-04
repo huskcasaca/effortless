@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.api.renderer.texture;
 
+import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
-import dev.huskuraft.effortless.core.Resource;
 
 public abstract class RenderLayers {
 

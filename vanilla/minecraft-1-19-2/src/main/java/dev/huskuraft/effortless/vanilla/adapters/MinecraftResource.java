@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.core.Resource;
+import dev.huskuraft.effortless.api.core.Resource;
 import net.minecraft.resources.ResourceLocation;
 
 public class MinecraftResource extends Resource {

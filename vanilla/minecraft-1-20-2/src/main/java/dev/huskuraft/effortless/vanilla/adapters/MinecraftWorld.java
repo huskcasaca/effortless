@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.core.BlockPosition;
-import dev.huskuraft.effortless.core.BlockState;
-import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.core.World;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.World;
 import net.minecraft.world.level.Level;
 
 import java.util.UUID;

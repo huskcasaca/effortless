@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.operation.empty;
 
+import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
@@ -7,7 +8,6 @@ import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RevolveContext;
-import dev.huskuraft.effortless.core.BlockPosition;
 
 public final class EmptyOperation extends TransformableOperation {
 

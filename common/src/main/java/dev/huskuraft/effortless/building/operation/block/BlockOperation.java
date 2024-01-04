@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.building.operation.block;
 
+import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
-import dev.huskuraft.effortless.core.*;
 
 public abstract class BlockOperation extends TransformableOperation {
 

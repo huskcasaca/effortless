@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building.structure.builder;
 
-import dev.huskuraft.effortless.core.*;
+import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.math.MathUtils;
 import dev.huskuraft.effortless.math.Vector3d;
 

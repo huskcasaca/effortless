@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.vanilla.platform;
 
+import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
 import dev.huskuraft.effortless.api.input.VanillaKeys;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
-import dev.huskuraft.effortless.core.ItemStack;
 import dev.huskuraft.effortless.platform.SearchBy;
 import dev.huskuraft.effortless.platform.SearchTree;
 import dev.huskuraft.effortless.text.Text;

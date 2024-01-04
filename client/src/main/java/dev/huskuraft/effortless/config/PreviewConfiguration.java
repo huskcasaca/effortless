@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.config;
 
-import dev.huskuraft.effortless.core.Position;
+import dev.huskuraft.effortless.api.core.Position;
 import dev.huskuraft.effortless.math.MathUtils;
 
 public class PreviewConfiguration implements Configuration {

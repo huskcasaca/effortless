@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.building.structure.builder.doubles;
 
+import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.builder.DoubleClickBuilder;
 import dev.huskuraft.effortless.building.structure.builder.singles.Single;
-import dev.huskuraft.effortless.core.Axis;
-import dev.huskuraft.effortless.core.BlockInteraction;
-import dev.huskuraft.effortless.core.BlockPosition;
-import dev.huskuraft.effortless.core.Player;
 import dev.huskuraft.effortless.math.Vector3d;
 
 import java.util.ArrayList;

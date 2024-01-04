@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.api.core;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
-import dev.huskuraft.effortless.core.Entrance;
 
 public abstract class ClientEntrance extends Entrance {
 

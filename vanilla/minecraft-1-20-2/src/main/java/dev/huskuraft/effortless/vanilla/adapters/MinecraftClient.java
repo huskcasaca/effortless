@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import dev.huskuraft.effortless.api.core.Interaction;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.platform.Client;
-import dev.huskuraft.effortless.core.Interaction;
-import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.core.World;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;

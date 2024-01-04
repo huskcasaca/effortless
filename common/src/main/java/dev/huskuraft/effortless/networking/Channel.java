@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.networking;
 
-import dev.huskuraft.effortless.core.Player;
-import dev.huskuraft.effortless.core.Resource;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.Resource;
 
 import javax.annotation.Nullable;
 import java.util.*;

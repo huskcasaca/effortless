@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.building.structure.builder.singles;
 
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.builder.SingleClickBuilder;
-import dev.huskuraft.effortless.core.BlockInteraction;
-import dev.huskuraft.effortless.core.BlockPosition;
-import dev.huskuraft.effortless.core.Player;
 
 import java.util.stream.Stream;
 

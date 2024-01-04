@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.screen.pattern;
 
+import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
@@ -10,7 +11,6 @@ import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.core.Entrance;
 import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;

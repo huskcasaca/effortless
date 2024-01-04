@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.building.operation.batch;
 
+import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
-import dev.huskuraft.effortless.core.BlockPosition;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
