@@ -24,7 +24,7 @@ import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerSettingsS
 
 import java.util.Stack;
 
-final class EffortlessClientManager implements ClientManager {
+public final class EffortlessClientManager implements ClientManager {
 
     private final Stack<Screen> screenStack = new Stack<>();
 
@@ -72,17 +72,14 @@ final class EffortlessClientManager implements ClientManager {
         this.client = client;
     }
 
-    @Override
     public OperationsRenderer getOperationsRenderer() {
         return operationsRenderer;
     }
 
-    @Override
     public OutlineRenderer getOutlineRenderer() {
         return outlineRenderer;
     }
 
-    @Override
     public PatternRenderer getPatternRenderer() {
         return patternRenderer;
     }
@@ -109,7 +106,6 @@ final class EffortlessClientManager implements ClientManager {
         }
     }
 
-    @Override
     public SubtitleManager getSubtitleManager() {
         return subtitleManager;
     }

@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPack
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
 
-final class EffortlessClientChannel extends Channel<AllPacketListener> {
+public final class EffortlessClientChannel extends Channel<AllPacketListener> {
 
     private final EffortlessClient entrance;
     private final AllPacketListener listener;

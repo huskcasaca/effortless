@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-final class EffortlessClientConfigManager extends ClientConfigManager {
+public final class EffortlessClientConfigManager extends ClientConfigManager {
 
     private static final Logger LOGGER = Logger.getLogger("Effortless");
     private static final String CONFIG_NAME = "effortless.dat";

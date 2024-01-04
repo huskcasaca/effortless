@@ -7,6 +7,7 @@ repositories {
 }
 
 dependencies {
-    api project(':api:common')
+    implementation project(':api:common')
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'org.lwjgl:lwjgl-glfw:3.3.1'
 }

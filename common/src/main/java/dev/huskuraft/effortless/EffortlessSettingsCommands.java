@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless;
 
-final class EffortlessSettingsCommands {
+public final class EffortlessSettingsCommands {
 
 //    public static void register(CommandDispatcher<CommandSourceStack> commandDispatcher) {
 

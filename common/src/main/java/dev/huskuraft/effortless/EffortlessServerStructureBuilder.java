@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-final class EffortlessServerStructureBuilder extends StructureBuilder {
+public final class EffortlessServerStructureBuilder extends StructureBuilder {
 
     private final Effortless entrance;
 

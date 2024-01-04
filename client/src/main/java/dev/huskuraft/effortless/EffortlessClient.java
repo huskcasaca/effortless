@@ -1,11 +1,7 @@
 package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.api.core.ClientEntrance;
-import dev.huskuraft.effortless.api.networking.Channel;
-import dev.huskuraft.effortless.api.platform.ClientManager;
-import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.config.ClientConfigManager;
-import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 
 public abstract class EffortlessClient extends ClientEntrance {
 
@@ -29,7 +25,7 @@ public abstract class EffortlessClient extends ClientEntrance {
         return (EffortlessClient) instance;
     }
 
-    public Channel<AllPacketListener> getChannel() {
+    public EffortlessClientChannel getChannel() {
         return channel;
     }
 
@@ -37,12 +33,12 @@ public abstract class EffortlessClient extends ClientEntrance {
         return registry;
     }
 
-    public StructureBuilder getStructureBuilder() {
+    public EffortlessClientStructureBuilder getStructureBuilder() {
         return structureBuilder;
     }
 
     @Override
-    public ClientManager getClientManager() {
+    public EffortlessClientManager getClientManager() {
         return clientManager;
     }
 

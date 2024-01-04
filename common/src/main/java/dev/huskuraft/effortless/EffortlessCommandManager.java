@@ -2,7 +2,7 @@ package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.api.command.CommandManager;
 
-final class EffortlessCommandManager extends CommandManager {
+public final class EffortlessCommandManager extends CommandManager {
 
     private final Effortless entrance;
 

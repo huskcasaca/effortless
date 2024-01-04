@@ -7,6 +7,5 @@ repositories {
 }
 
 dependencies {
-    api project(':api:common')
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }

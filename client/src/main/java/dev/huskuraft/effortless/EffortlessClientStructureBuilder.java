@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-final class EffortlessClientStructureBuilder extends StructureBuilder {
+public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final EffortlessClient entrance;

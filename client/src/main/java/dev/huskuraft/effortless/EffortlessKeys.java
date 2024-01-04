@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
 
-enum EffortlessKeys implements Key {
+public enum EffortlessKeys implements Key {
 
     SETTINGS("settings", KeyCodes.KEY_UNKNOWN),
     BUILD_MODE_SETTINGS("build_mode_settings", KeyCodes.KEY_UNKNOWN),
