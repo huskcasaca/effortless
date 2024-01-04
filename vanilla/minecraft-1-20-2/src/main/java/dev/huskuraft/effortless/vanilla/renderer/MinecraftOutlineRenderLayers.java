@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
-import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.huskuraft.effortless.api.core.Resource;
@@ -12,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -171,7 +171,7 @@ public class MinecraftOutlineRenderLayers extends OutlineRenderLayers {
             return overlap ? OUTLINE_SOLID_OVERLAP : OUTLINE_SOLID_NO_OVERLAP;
         }
 
-        public static final Map<String, RenderType> OUTLINE_TRANSLUCENT = Maps.newHashMap();
+        public static final Map<String, RenderType> OUTLINE_TRANSLUCENT = new HashMap<>();
 
         public static RenderType outlineTranslucent(ResourceLocation texture, boolean cull) {
             return OUTLINE_TRANSLUCENT.computeIfAbsent("outline_translucent" + (cull ? "_cull" : "") + "_" + texture.getNamespace() + "_" + texture.getPath(), name -> {

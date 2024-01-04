@@ -10,15 +10,15 @@ import java.util.function.Consumer;
 
 public class ClientShadersEvents {
 
-    public static final Event<RegisterShaders> REGISTER = EventFactory.createArrayBacked(RegisterShaders.class, callbacks -> (provider, sink) -> {
+    public static final Event<Register> REGISTER = EventFactory.createArrayBacked(Register.class, callbacks -> (provider, sink) -> {
         for (var callback : callbacks) {
-            callback.onRegisterShaders(provider, sink);
+            callback.onRegisterShader(provider, sink);
         }
     });
 
     @FunctionalInterface
-    public interface RegisterShaders {
-        void onRegisterShaders(ResourceProvider provider, ShadersSink sink) throws IOException;
+    public interface Register {
+        void onRegisterShader(ResourceProvider provider, ShadersSink sink) throws IOException;
 
         @FunctionalInterface
         interface ShadersSink {

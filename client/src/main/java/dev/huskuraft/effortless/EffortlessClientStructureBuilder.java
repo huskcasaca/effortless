@@ -32,8 +32,10 @@ import java.util.stream.Collectors;
 
 public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
-    private final Map<UUID, Context> contexts = new HashMap<>();
     private final EffortlessClient entrance;
+
+    private final Map<UUID, Context> contexts = new HashMap<>();
+    private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
 
     public EffortlessClientStructureBuilder(EffortlessClient entrance) {
         this.entrance = entrance;
@@ -172,6 +174,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         updateContext(player, context -> {
             return context.withPattern(pattern).finalize(player, BuildStage.UPDATE_CONTEXT);
         });
+    }
+
+    @Override
+    public void reset() {
+        contexts.clear();
+        undoRedoStacks.clear();
     }
 
     @Override

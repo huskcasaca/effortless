@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
-import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
@@ -12,6 +11,7 @@ import net.minecraft.server.packs.resources.ResourceProvider;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalDouble;
 import java.util.function.BiConsumer;
@@ -70,7 +70,7 @@ public class MinecraftBlockRenderLayers extends BlockRenderLayers {
                         .setCullState(NO_CULL)
                         .createCompositeState(false));
 
-        private static final Map<String, RenderType> BLOCK_RENDER_TYPES = Maps.newHashMap();
+        private static final Map<String, RenderType> BLOCK_RENDER_TYPES = new HashMap<>();
 
         public static RenderType block(int color) {
             return BLOCK_RENDER_TYPES.computeIfAbsent(Integer.toString(color), k -> {

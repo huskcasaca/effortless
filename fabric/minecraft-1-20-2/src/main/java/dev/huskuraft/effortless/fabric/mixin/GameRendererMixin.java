@@ -21,6 +21,6 @@ public abstract class GameRendererMixin {
 
     @Inject(method = "reloadShaders", at = @At(value = "INVOKE", target = "Ljava/util/List;add(Ljava/lang/Object;)Z", ordinal = 0), locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     public void onRegisterShaders(ResourceProvider resourceProvider, CallbackInfo ci, List<Program> programs, List<Pair<ShaderInstance, Consumer<ShaderInstance>>> shaders) throws IOException {
-        ClientShadersEvents.REGISTER.invoker().onRegisterShaders(resourceProvider, (shader, callback) -> shaders.add(Pair.of(shader, callback)));
+        ClientShadersEvents.REGISTER.invoker().onRegisterShader(resourceProvider, (shader, callback) -> shaders.add(Pair.of(shader, callback)));
     }
 }

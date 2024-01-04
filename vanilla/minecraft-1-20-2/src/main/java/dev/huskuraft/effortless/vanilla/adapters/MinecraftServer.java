@@ -13,6 +13,10 @@ public class MinecraftServer extends Server {
         this.reference = reference;
     }
 
+    public static Server fromMinecraftServer(net.minecraft.server.MinecraftServer reference) {
+        return new MinecraftServer(reference);
+    }
+
     @Override
     public List<Player> getPlayers() {
         return reference.getPlayerList().getPlayers().stream().map(MinecraftPlayer::fromMinecraftPlayer).toList();

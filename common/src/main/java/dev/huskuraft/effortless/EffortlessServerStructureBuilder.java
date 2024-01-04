@@ -3,6 +3,7 @@ package dev.huskuraft.effortless;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.building.*;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
@@ -21,11 +22,19 @@ public final class EffortlessServerStructureBuilder extends StructureBuilder {
 
     private final Effortless entrance;
 
+    private final Map<UUID, Context> contexts = new HashMap<>();
+    private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
+
     public EffortlessServerStructureBuilder(Effortless entrance) {
         this.entrance = entrance;
 
-        getEntrance().getEventRegistry().getPlayerCloneEvent().register(this::onPlayerClone);
         getEntrance().getEventRegistry().getPlayerChangeWorldEvent().register(this::onPlayerChangeWorld);
+        getEntrance().getEventRegistry().getPlayerRespawnEvent().register(this::onPlayerRespawn);
+        getEntrance().getEventRegistry().getPlayerLoggedInEvent().register(this::onPlayerLoggedIn);
+        getEntrance().getEventRegistry().getPlayerLoggedOutEvent().register(this::onPlayerLoggedOut);
+
+        getEntrance().getEventRegistry().getServerStartedEvent().register(this::onServerStarted);
+        getEntrance().getEventRegistry().getServerStoppedEvent().register(this::onServerStopped);
     }
 
     public Effortless getEntrance() {
@@ -93,6 +102,12 @@ public final class EffortlessServerStructureBuilder extends StructureBuilder {
     }
 
     @Override
+    public void reset() {
+        contexts.clear();
+        undoRedoStacks.clear();
+    }
+
+    @Override
     public BuildResult onPlayerBreak(Player player) {
         return BuildResult.CANCELED;
     }
@@ -119,8 +134,6 @@ public final class EffortlessServerStructureBuilder extends StructureBuilder {
         }
     }
 
-    private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
-
     @Override
     public OperationResultStack getOperationResultStack(Player player) {
         return undoRedoStacks.computeIfAbsent(player.getId(), uuid -> new OperationResultStack());
@@ -146,12 +159,26 @@ public final class EffortlessServerStructureBuilder extends StructureBuilder {
         }
     }
 
-    private void onPlayerClone(Player from, Player to, boolean death) {
-        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), to);
-    }
-
     private void onPlayerChangeWorld(Player player, World origin, World destination) {
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), player);
+    }
+
+    private void onPlayerRespawn(Player oldPlayer, Player newPlayer, boolean alive) {
+        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), newPlayer);
+    }
+
+    private void onPlayerLoggedIn(Player player) {
+    }
+
+    private void onPlayerLoggedOut(Player player) {
+    }
+
+    private void onServerStarted(Server server) {
+        reset();
+    }
+
+    private void onServerStopped(Server server) {
+        reset();
     }
 
 }

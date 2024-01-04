@@ -241,6 +241,7 @@ public final class EffortlessClientManager implements ClientManager {
 
     public synchronized void onClientStart(Client client) {
         setRunningClient(client);
+        getEntrance().getStructureBuilder();
     }
 
     public synchronized void onClientStopping(Client client) {
