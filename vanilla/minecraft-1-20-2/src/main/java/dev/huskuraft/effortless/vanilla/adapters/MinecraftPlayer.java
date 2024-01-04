@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.api.core.*;
-import dev.huskuraft.effortless.math.Vector3d;
-import dev.huskuraft.effortless.math.Vector3i;
-import dev.huskuraft.effortless.platform.Server;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.api.platform.Server;
+import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;

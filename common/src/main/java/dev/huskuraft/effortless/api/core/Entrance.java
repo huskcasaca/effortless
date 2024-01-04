@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.core;
 
-import dev.huskuraft.effortless.platform.Platform;
+import dev.huskuraft.effortless.api.platform.Platform;
 
 import java.nio.file.Path;
 import java.util.logging.Logger;
@@ -40,5 +40,8 @@ public abstract class Entrance {
 
     protected static Entrance instance;
 
+    public static Entrance getInstance() {
+        return instance;
+    }
 }
 

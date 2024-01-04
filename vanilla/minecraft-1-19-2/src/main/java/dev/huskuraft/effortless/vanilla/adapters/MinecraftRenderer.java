@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.texture.BlockRenderLayers;
 import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
 import dev.huskuraft.effortless.api.renderer.texture.RenderLayers;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderLayers;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderLayers;

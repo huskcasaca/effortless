@@ -1,6 +1,8 @@
 package dev.huskuraft.effortless.config.serializer;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.tag.TagElement;
+import dev.huskuraft.effortless.api.tag.TagSerializer;
 import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
@@ -10,8 +12,6 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
-import dev.huskuraft.effortless.tag.TagElement;
-import dev.huskuraft.effortless.tag.TagSerializer;
 
 import java.util.Arrays;
 

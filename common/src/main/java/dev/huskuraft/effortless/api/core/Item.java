@@ -1,11 +1,9 @@
 package dev.huskuraft.effortless.api.core;
 
-import dev.huskuraft.effortless.Effortless;
-
 public abstract class Item {
 
     public static Item fromId(Resource id) {
-        return Effortless.getInstance().getPlatform().newItem(id);
+        return Entrance.getInstance().getPlatform().newItem(id);
     }
 
     public abstract ItemStack getDefaultStack();

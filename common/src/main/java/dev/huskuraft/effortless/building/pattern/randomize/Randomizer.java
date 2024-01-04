@@ -2,8 +2,8 @@ package dev.huskuraft.effortless.building.pattern.randomize;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
-import dev.huskuraft.effortless.text.Text;
 
 import java.util.Collection;
 import java.util.UUID;

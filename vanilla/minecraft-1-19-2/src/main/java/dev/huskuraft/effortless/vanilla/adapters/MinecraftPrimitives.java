@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.math.Quaternion;
-import dev.huskuraft.effortless.math.Matrix3f;
-import dev.huskuraft.effortless.math.Matrix4f;
-import dev.huskuraft.effortless.math.Quaternionf;
+import dev.huskuraft.effortless.api.math.Matrix3f;
+import dev.huskuraft.effortless.api.math.Matrix4f;
+import dev.huskuraft.effortless.api.math.Quaternionf;
 
 import java.nio.FloatBuffer;
 

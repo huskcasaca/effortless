@@ -10,14 +10,14 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.slot.TextSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
+import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.math.Vector3d;
 import dev.huskuraft.effortless.screen.settings.SettingsList;
-import dev.huskuraft.effortless.text.Text;
 
 import java.util.Arrays;
 import java.util.function.Consumer;

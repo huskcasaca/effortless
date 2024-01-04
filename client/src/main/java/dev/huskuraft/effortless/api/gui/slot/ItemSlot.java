@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 public class ItemSlot extends Slot {
 

@@ -1,24 +1,23 @@
 package dev.huskuraft.effortless.api.core;
 
-import dev.huskuraft.effortless.Effortless;
-import dev.huskuraft.effortless.tag.TagRecord;
-import dev.huskuraft.effortless.tag.TagSerializable;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.TagSerializable;
+import dev.huskuraft.effortless.api.text.Text;
 
 import java.util.List;
 
 public abstract class ItemStack implements TagSerializable {
 
     public static ItemStack empty() {
-        return Effortless.getInstance().getPlatform().newItemStack();
+        return Entrance.getInstance().getPlatform().newItemStack();
     }
 
     public static ItemStack of(Item item, int count) {
-        return Effortless.getInstance().getPlatform().newItemStack(item, count);
+        return Entrance.getInstance().getPlatform().newItemStack(item, count);
     }
 
     public static ItemStack of(Item item, int count, TagRecord tag) {
-        return Effortless.getInstance().getPlatform().newItemStack(item, count, tag);
+        return Entrance.getInstance().getPlatform().newItemStack(item, count, tag);
     }
 
     public abstract List<Text> getTooltips(Player player, TooltipType flag);

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.command.CommandManager;
+import dev.huskuraft.effortless.api.command.CommandManager;
 
 final class EffortlessCommandManager extends CommandManager {
 

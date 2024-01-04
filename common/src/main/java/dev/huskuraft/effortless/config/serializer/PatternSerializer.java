@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.config.serializer;
 
+import dev.huskuraft.effortless.api.tag.TagElement;
+import dev.huskuraft.effortless.api.tag.TagSerializer;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.tag.TagElement;
-import dev.huskuraft.effortless.tag.TagSerializer;
 
 public class PatternSerializer extends TagSerializer<Pattern> {
 

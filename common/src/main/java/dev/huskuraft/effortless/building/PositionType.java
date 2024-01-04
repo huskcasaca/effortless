@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building;
 
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 public enum PositionType implements BuildModifier {
     ABSOLUTE("absolute"),

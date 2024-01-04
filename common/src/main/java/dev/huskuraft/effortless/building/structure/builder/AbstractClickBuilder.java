@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.building.structure.builder;
 
 import dev.huskuraft.effortless.api.core.*;
-import dev.huskuraft.effortless.math.MathUtils;
-import dev.huskuraft.effortless.math.Vector3d;
+import dev.huskuraft.effortless.api.math.MathUtils;
+import dev.huskuraft.effortless.api.math.Vector3d;
 
 public abstract class AbstractClickBuilder implements Builder {
 

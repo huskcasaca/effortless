@@ -2,15 +2,15 @@ package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.Resource;
-import dev.huskuraft.effortless.networking.Buffer;
-import dev.huskuraft.effortless.networking.Channel;
-import dev.huskuraft.effortless.networking.NetworkRegistry;
-import dev.huskuraft.effortless.networking.Packet;
-import dev.huskuraft.effortless.packets.AllPacketListener;
-import dev.huskuraft.effortless.packets.player.PlayerBuildPacket;
-import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
-import dev.huskuraft.effortless.packets.player.PlayerCommandPacket;
-import dev.huskuraft.effortless.packets.player.PlayerSettingsPacket;
+import dev.huskuraft.effortless.api.networking.Buffer;
+import dev.huskuraft.effortless.api.networking.Channel;
+import dev.huskuraft.effortless.api.networking.NetworkRegistry;
+import dev.huskuraft.effortless.api.networking.Packet;
+import dev.huskuraft.effortless.networking.packets.AllPacketListener;
+import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
 
 final class EffortlessClientChannel extends Channel<AllPacketListener> {
 

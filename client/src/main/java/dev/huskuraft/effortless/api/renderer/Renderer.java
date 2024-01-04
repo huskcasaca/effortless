@@ -2,11 +2,11 @@ package dev.huskuraft.effortless.api.renderer;
 
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Typeface;
+import dev.huskuraft.effortless.api.math.*;
 import dev.huskuraft.effortless.api.renderer.texture.BlockRenderLayers;
 import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
 import dev.huskuraft.effortless.api.renderer.texture.RenderLayers;
-import dev.huskuraft.effortless.math.*;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 import javax.annotation.Nullable;
 import java.awt.*;

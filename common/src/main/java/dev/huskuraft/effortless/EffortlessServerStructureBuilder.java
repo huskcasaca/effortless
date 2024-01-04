@@ -7,8 +7,8 @@ import dev.huskuraft.effortless.building.*;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.packets.player.PlayerBuildPreviewPacket;
-import dev.huskuraft.effortless.packets.player.PlayerCommandPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 
 import javax.annotation.Nullable;
 import java.util.EmptyStackException;

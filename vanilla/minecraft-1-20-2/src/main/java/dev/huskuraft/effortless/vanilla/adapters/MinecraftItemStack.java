@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.api.core.*;
-import dev.huskuraft.effortless.tag.TagRecord;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.BlockItem;

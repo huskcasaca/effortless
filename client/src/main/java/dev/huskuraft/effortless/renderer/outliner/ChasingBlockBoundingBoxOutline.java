@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
+import dev.huskuraft.effortless.api.math.BoundingBox3d;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.math.BoundingBox3d;
-import dev.huskuraft.effortless.math.MathUtils;
 
 public class ChasingBlockBoundingBoxOutline extends BlockBoundingBoxOutline {
 

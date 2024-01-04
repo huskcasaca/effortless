@@ -5,11 +5,11 @@ import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.Option;
-import dev.huskuraft.effortless.math.MathUtils;
-import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.text.TextStyle;
 
 import java.awt.*;
 import java.util.List;

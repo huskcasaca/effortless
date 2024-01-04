@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.gui;
 
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 public interface Screen extends ContainerWidget {
 

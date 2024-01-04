@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.building.pattern;
 
+import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.BuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
-import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.text.TextStyle;
 
 import java.util.List;
 import java.util.Objects;

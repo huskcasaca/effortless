@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.client.gui.screens.Screen;
 
 public class MinecraftScreen extends AbstractScreen {

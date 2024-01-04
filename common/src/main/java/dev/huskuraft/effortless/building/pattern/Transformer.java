@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building.pattern;
 
+import dev.huskuraft.effortless.api.math.BoundingBox3d;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
@@ -8,8 +10,6 @@ import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.math.BoundingBox3d;
-import dev.huskuraft.effortless.text.Text;
 
 import java.util.List;
 import java.util.Objects;

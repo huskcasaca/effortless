@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.api.gui;
 import dev.huskuraft.effortless.api.core.ClientEntrance;
 import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;

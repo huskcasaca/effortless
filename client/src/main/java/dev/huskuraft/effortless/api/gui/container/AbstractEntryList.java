@@ -5,9 +5,9 @@ import dev.huskuraft.effortless.api.core.Tickable;
 import dev.huskuraft.effortless.api.gui.AbstractContainerWidget;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.math.MathUtils;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

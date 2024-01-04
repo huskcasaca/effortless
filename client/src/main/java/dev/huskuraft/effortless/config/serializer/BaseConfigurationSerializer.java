@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.config.serializer;
 
+import dev.huskuraft.effortless.api.tag.TagElement;
+import dev.huskuraft.effortless.api.tag.TagSerializer;
 import dev.huskuraft.effortless.config.BaseConfiguration;
 import dev.huskuraft.effortless.config.PatternConfiguration;
 import dev.huskuraft.effortless.config.PreviewConfiguration;
 import dev.huskuraft.effortless.config.TransformerConfiguration;
-import dev.huskuraft.effortless.tag.TagElement;
-import dev.huskuraft.effortless.tag.TagSerializer;
 
 public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration> {
 

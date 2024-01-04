@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.api.core;
 
-import dev.huskuraft.effortless.Effortless;
-
 public enum Items {
     AIR,
 
@@ -1343,7 +1341,7 @@ public enum Items {
     ;
 
     public Item item() {
-        return Effortless.getInstance().getPlatform().getItem(this);
+        return Entrance.getInstance().getPlatform().getItem(this);
     }
 
 }

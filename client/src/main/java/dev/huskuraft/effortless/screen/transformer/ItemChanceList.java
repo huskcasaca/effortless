@@ -9,9 +9,9 @@ import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.api.gui.input.NumberField;
 import dev.huskuraft.effortless.api.gui.slot.ItemSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
+import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
-import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.text.TextStyle;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.api.gui.input;
 import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.gui.AbstractContainerWidget;
 import dev.huskuraft.effortless.api.gui.button.Button;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

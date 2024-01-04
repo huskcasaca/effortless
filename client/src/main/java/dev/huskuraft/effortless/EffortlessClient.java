@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.api.core.ClientEntrance;
+import dev.huskuraft.effortless.api.networking.Channel;
 import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.config.ClientConfigManager;
-import dev.huskuraft.effortless.networking.Channel;
-import dev.huskuraft.effortless.packets.AllPacketListener;
+import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 
 public abstract class EffortlessClient extends ClientEntrance {
 

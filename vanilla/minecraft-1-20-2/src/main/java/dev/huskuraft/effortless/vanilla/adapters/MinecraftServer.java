@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.platform.Server;
+import dev.huskuraft.effortless.api.platform.Server;
 
 import java.util.List;
 

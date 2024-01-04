@@ -4,10 +4,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
 import dev.huskuraft.effortless.api.input.VanillaKeys;
-import dev.huskuraft.effortless.platform.Platform;
-import dev.huskuraft.effortless.platform.SearchBy;
-import dev.huskuraft.effortless.platform.SearchTree;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 import java.util.List;
 import java.util.function.Function;

@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.gui.button;
 
 import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.gui.AbstractButton;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

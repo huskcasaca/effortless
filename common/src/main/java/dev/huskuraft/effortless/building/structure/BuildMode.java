@@ -1,6 +1,8 @@
 package dev.huskuraft.effortless.building.structure;
 
 import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.structure.builder.Builder;
 import dev.huskuraft.effortless.building.structure.builder.doubles.Circle;
 import dev.huskuraft.effortless.building.structure.builder.doubles.Floor;
@@ -9,8 +11,6 @@ import dev.huskuraft.effortless.building.structure.builder.doubles.Wall;
 import dev.huskuraft.effortless.building.structure.builder.singles.Disable;
 import dev.huskuraft.effortless.building.structure.builder.singles.Single;
 import dev.huskuraft.effortless.building.structure.builder.triples.*;
-import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.text.TextStyle;
 
 import java.awt.*;
 

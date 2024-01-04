@@ -1,13 +1,13 @@
 package dev.huskuraft.effortless.networking.serializer;
 
+import dev.huskuraft.effortless.api.networking.Buffer;
+import dev.huskuraft.effortless.api.networking.BufferSerializer;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.structure.*;
-import dev.huskuraft.effortless.networking.Buffer;
-import dev.huskuraft.effortless.networking.BufferSerializer;
 
 public class ContextSerializer extends BufferSerializer<Context> {
 

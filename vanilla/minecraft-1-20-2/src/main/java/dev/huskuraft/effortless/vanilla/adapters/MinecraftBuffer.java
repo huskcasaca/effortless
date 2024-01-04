@@ -2,9 +2,9 @@ package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.networking.Buffer;
-import dev.huskuraft.effortless.tag.TagRecord;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.networking.Buffer;
+import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 

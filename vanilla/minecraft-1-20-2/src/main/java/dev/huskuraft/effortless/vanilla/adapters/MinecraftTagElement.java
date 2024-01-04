@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.tag.TagElement;
-import dev.huskuraft.effortless.tag.TagPrimitive;
-import dev.huskuraft.effortless.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.TagElement;
+import dev.huskuraft.effortless.api.tag.TagPrimitive;
+import dev.huskuraft.effortless.api.tag.TagRecord;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 

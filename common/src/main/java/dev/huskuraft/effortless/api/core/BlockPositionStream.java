@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.core;
 
-import dev.huskuraft.effortless.math.MathUtils;
+import dev.huskuraft.effortless.api.math.MathUtils;
 
 import java.util.Iterator;
 import java.util.stream.BaseStream;

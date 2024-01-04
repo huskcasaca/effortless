@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.core;
 
-import dev.huskuraft.effortless.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector3d;
 
 public class EntityInteraction extends Interaction {
 

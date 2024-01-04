@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.fabric;
 
 import dev.huskuraft.effortless.Effortless;
-import dev.huskuraft.effortless.platform.Platform;
+import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;

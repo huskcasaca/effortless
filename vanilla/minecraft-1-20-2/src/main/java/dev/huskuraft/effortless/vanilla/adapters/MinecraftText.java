@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
-import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.text.TextStyle;
+import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 

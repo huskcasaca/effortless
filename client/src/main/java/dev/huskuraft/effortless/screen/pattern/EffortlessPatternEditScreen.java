@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.api.gui.icon.RadialTextIcon;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
@@ -15,7 +16,6 @@ import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerEditScree
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
-import dev.huskuraft.effortless.text.Text;
 
 import java.util.List;
 import java.util.function.Consumer;

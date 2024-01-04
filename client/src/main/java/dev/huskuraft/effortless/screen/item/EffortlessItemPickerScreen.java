@@ -7,9 +7,9 @@ import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
+import dev.huskuraft.effortless.api.platform.SearchBy;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.platform.SearchBy;
-import dev.huskuraft.effortless.text.Text;
 
 import java.util.ArrayList;
 import java.util.Locale;

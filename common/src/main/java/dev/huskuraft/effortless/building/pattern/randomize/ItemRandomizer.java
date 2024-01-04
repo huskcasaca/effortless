@@ -2,12 +2,12 @@ package dev.huskuraft.effortless.building.pattern.randomize;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.Items;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.Transformers;
-import dev.huskuraft.effortless.text.Text;
 
 import java.util.*;
 import java.util.stream.Collectors;

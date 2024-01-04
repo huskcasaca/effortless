@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.api.gui.text;
 import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.text.Text;
+import dev.huskuraft.effortless.api.text.Text;
 
 public class TextWidget extends AbstractWidget {
 

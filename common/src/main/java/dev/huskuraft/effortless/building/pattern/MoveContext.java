@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.building.pattern;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
-import dev.huskuraft.effortless.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector3d;
 
 public class MoveContext {
 

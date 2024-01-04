@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.networking.serializer;
 
-import dev.huskuraft.effortless.math.Vector3d;
-import dev.huskuraft.effortless.networking.Buffer;
-import dev.huskuraft.effortless.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.networking.Buffer;
+import dev.huskuraft.effortless.api.networking.BufferSerializer;
 
 public class Vector3dSerializer extends BufferSerializer<Vector3d> {
 

@@ -4,10 +4,10 @@ import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
-import dev.huskuraft.effortless.math.MathUtils;
-import dev.huskuraft.effortless.text.Text;
 
 import java.util.*;
 

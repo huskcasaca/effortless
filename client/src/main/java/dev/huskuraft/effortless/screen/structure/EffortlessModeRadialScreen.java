@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.screen.structure;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.Entrance;
 import dev.huskuraft.effortless.api.input.Key;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.Option;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
@@ -11,7 +12,6 @@ import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
-import dev.huskuraft.effortless.text.Text;
 
 import java.util.Arrays;
 

@@ -1,25 +1,24 @@
 package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.api.core.Entrance;
+import dev.huskuraft.effortless.api.networking.Channel;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.config.ConfigManager;
-import dev.huskuraft.effortless.events.EventsRegistry;
-import dev.huskuraft.effortless.networking.Channel;
-import dev.huskuraft.effortless.packets.AllPacketListener;
+import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 
 public abstract class Effortless extends Entrance {
 
     public static final String MOD_ID = "effortless";
     public static final int VERSION_NUMBER = 1;
 
-    private final EventsRegistry registry;
+    private final EffortlessEventsRegistry registry;
     private final EffortlessServerChannel channel;
     private final EffortlessServerStructureBuilder structureBuilder;
 
     protected Effortless() {
         instance = this;
 
-        this.registry = new EventsRegistry();
+        this.registry = new EffortlessEventsRegistry();
         this.channel = new EffortlessServerChannel(this);
         this.structureBuilder = new EffortlessServerStructureBuilder(this);
     }
@@ -32,7 +31,7 @@ public abstract class Effortless extends Entrance {
         return channel;
     }
 
-    public EventsRegistry getEventRegistry() {
+    public EffortlessEventsRegistry getEventRegistry() {
         return registry;
     }
 

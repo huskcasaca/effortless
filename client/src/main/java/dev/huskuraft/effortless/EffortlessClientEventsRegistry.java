@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless;
 
+import dev.huskuraft.effortless.api.events.api.Event;
+import dev.huskuraft.effortless.api.events.api.EventFactory;
 import dev.huskuraft.effortless.api.events.input.InteractionInput;
 import dev.huskuraft.effortless.api.events.input.KeyInput;
 import dev.huskuraft.effortless.api.events.input.RegisterKeys;
@@ -7,11 +9,8 @@ import dev.huskuraft.effortless.api.events.lifecycle.ClientStart;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.events.render.RenderGui;
 import dev.huskuraft.effortless.api.events.render.RenderWorld;
-import dev.huskuraft.effortless.events.EventsRegistry;
-import dev.huskuraft.effortless.events.api.Event;
-import dev.huskuraft.effortless.events.api.EventFactory;
 
-public class EffortlessClientEventsRegistry extends EventsRegistry {
+public class EffortlessClientEventsRegistry extends EffortlessEventsRegistry {
 
     private final Event<RegisterKeys> registerKeysEvent = EventFactory.createLoop();
     private final Event<KeyInput> keyInputEvent = EventFactory.createLoop();
