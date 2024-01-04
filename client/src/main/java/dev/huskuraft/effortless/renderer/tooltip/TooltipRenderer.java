@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.client;
+package dev.huskuraft.effortless.renderer.tooltip;
 
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.Entrance;
@@ -11,12 +11,12 @@ import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 
 import java.util.*;
 
-public class SubtitleManager {
+public class TooltipRenderer {
 
     private final Entrance entrance;
     private final Map<Integer, Map<Object, Entry>> prioritiedMap = new HashMap<>();
 
-    public SubtitleManager(Entrance entrance) {
+    public TooltipRenderer(Entrance entrance) {
         this.entrance = entrance;
     }
 

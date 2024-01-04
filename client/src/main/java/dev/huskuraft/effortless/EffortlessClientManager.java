@@ -13,10 +13,10 @@ import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.client.SubtitleManager;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
 import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
+import dev.huskuraft.effortless.renderer.tooltip.TooltipRenderer;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
@@ -29,7 +29,7 @@ public final class EffortlessClientManager implements ClientManager {
     private final Stack<Screen> screenStack = new Stack<>();
 
     private final EffortlessClient entrance;
-    private final SubtitleManager subtitleManager;
+    private final TooltipRenderer tooltipRenderer;
 
     private final OperationsRenderer operationsRenderer;
     private final OutlineRenderer outlineRenderer;
@@ -41,7 +41,7 @@ public final class EffortlessClientManager implements ClientManager {
 
     public EffortlessClientManager(EffortlessClient entrance) {
         this.entrance = entrance;
-        this.subtitleManager = new SubtitleManager(entrance);
+        this.tooltipRenderer = new TooltipRenderer(entrance);
 
         this.operationsRenderer = new OperationsRenderer();
         this.outlineRenderer = new OutlineRenderer();
@@ -106,10 +106,9 @@ public final class EffortlessClientManager implements ClientManager {
         }
     }
 
-    public SubtitleManager getSubtitleManager() {
-        return subtitleManager;
+    public TooltipRenderer getTooltipRenderer() {
+        return tooltipRenderer;
     }
-
 
     private void tickCooldown() {
         if (VanillaKeys.KEY_ATTACK.getBinding().isDown() || VanillaKeys.KEY_USE.getBinding().isDown() || VanillaKeys.KEY_PICK_ITEM.getBinding().isDown()) {
@@ -253,7 +252,7 @@ public final class EffortlessClientManager implements ClientManager {
             case START -> {
                 tickCooldown();
 
-                subtitleManager.tick();
+                tooltipRenderer.tick();
 
                 operationsRenderer.tick();
                 outlineRenderer.tick();
@@ -265,7 +264,7 @@ public final class EffortlessClientManager implements ClientManager {
     }
 
     public void onRenderGui(Renderer renderer, float deltaTick) {
-        getSubtitleManager().renderGuiOverlay(renderer, deltaTick);
+        getTooltipRenderer().renderGuiOverlay(renderer, deltaTick);
     }
 
     public void onRenderEnd(Renderer renderer, float deltaTick) {

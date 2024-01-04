@@ -291,8 +291,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showOperationResultTooltip(UUID uuid, Player player, OperationResult result, int priority) {
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextIdByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks", player.getDisplayName()).withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
-        getEntrance().getClientManager().getSubtitleManager().showTitledItems(nextIdByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks", player.getDisplayName()).withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
+        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks", player.getDisplayName()).withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
+        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks", player.getDisplayName()).withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
     }
 
     public void showContextTooltip(UUID uuid, Context context, int priority) {
@@ -311,7 +311,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 //        texts.add(Text.translate("effortless.build.summary.state").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getStateComponent(context.state()).withStyle(TextStyle.GOLD)));
         texts.add(Text.translate("effortless.build.summary.tracing").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getTracingComponent(context.tracingResult()).withStyle(TextStyle.GOLD)));
 
-        getEntrance().getClientManager().getSubtitleManager().showMessages(nextIdByTag(uuid, "info"), texts, priority);
+        getEntrance().getClientManager().getTooltipRenderer().showMessages(nextIdByTag(uuid, "info"), texts, priority);
     }
 
 }
