@@ -2,9 +2,9 @@ package dev.huskuraft.effortless.api.core;
 
 import dev.huskuraft.effortless.api.platform.Entrance;
 
-public abstract class Resource {
+public interface Resource {
 
-    public static Resource decompose(String value, String separator) {
+    static Resource decompose(String value, String separator) {
         try {
             return of(value.split(separator)[0], value.split(separator)[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -12,24 +12,23 @@ public abstract class Resource {
         }
     }
 
-    public static Resource decompose(String value) {
+    static Resource decompose(String value) {
         return decompose(value, ":");
     }
 
-    public static Resource of(String path) {
+    static Resource of(String path) {
         return of("effortless", path);
     }
 
-    public static Resource of(String namespace, String path) {
+    static Resource of(String namespace, String path) {
         return Entrance.getInstance().getPlatform().newResource(namespace, path);
     }
 
-    public abstract String getNamespace();
+    String getNamespace();
 
-    public abstract String getPath();
+    String getPath();
 
-    @Override
-    public String toString() {
+    default String getString() {
         return getNamespace() + ":" + getPath();
     }
 

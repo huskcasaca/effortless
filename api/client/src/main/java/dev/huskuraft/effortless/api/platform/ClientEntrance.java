@@ -1,19 +1,29 @@
 package dev.huskuraft.effortless.api.platform;
 
-public abstract class ClientEntrance extends Entrance {
+public interface ClientEntrance extends Entrance {
 
-    public abstract ClientManager getClientManager();
+    ClientManager getClientManager();
 
-    public abstract ClientPlatform getPlatform();
+    ClientPlatform getPlatform();
 
-    public Client getClient() {
+    default Client getClient() {
         return getClientManager().getRunningClient();
     }
 
-    protected static ClientEntrance instance;
+    static ClientEntrance getInstance() {
+        return Instance.get();
+    }
 
-    public static ClientEntrance getInstance() {
-        return instance;
+    class Instance {
+        private Instance() {
+        }
+        private static ClientEntrance instance;
+        public static ClientEntrance get() {
+            return ClientEntrance.Instance.instance;
+        }
+        public static void set(ClientEntrance instance) {
+            ClientEntrance.Instance.instance = instance;
+        }
     }
 
 }

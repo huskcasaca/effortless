@@ -4,10 +4,10 @@ import dev.huskuraft.effortless.api.core.Player;
 
 import java.util.List;
 
-public abstract class Server {
+public interface Server {
 
-    public abstract List<Player> getPlayers();
+    List<Player> getPlayers();
 
-    public abstract void execute(Runnable runnable);
+    void execute(Runnable runnable);
 
 }

@@ -8,7 +8,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
-public class MinecraftWorld extends World {
+public class MinecraftWorld implements World {
 
     private final Level reference;
 

@@ -7,57 +7,57 @@ import dev.huskuraft.effortless.api.text.Text;
 
 import java.util.List;
 
-public abstract class ItemStack implements TagSerializable {
+public interface ItemStack extends TagSerializable {
 
-    public static ItemStack empty() {
+    static ItemStack empty() {
         return Entrance.getInstance().getPlatform().newItemStack();
     }
 
-    public static ItemStack of(Item item, int count) {
+    static ItemStack of(Item item, int count) {
         return Entrance.getInstance().getPlatform().newItemStack(item, count);
     }
 
-    public static ItemStack of(Item item, int count, TagRecord tag) {
+    static ItemStack of(Item item, int count, TagRecord tag) {
         return Entrance.getInstance().getPlatform().newItemStack(item, count, tag);
     }
 
-    public abstract List<Text> getTooltips(Player player, TooltipType flag);
+    List<Text> getTooltips(Player player, TooltipType flag);
 
-    public abstract boolean isEmpty();
+    boolean isEmpty();
 
-    public abstract boolean isAir();
+    boolean isAir();
 
-    public abstract boolean isBlock();
+    boolean isBlock();
 
-    public abstract Item getItem();
+    Item getItem();
 
-    public abstract int getStackSize();
+    int getStackSize();
 
-    public abstract void setStackSize(int count);
+    void setStackSize(int count);
 
-    public abstract int getMaxStackSize();
+    int getMaxStackSize();
 
-    public abstract Text getHoverName();
+    Text getHoverName();
 
-    public abstract void increase(int count);
+    void increase(int count);
 
-    public abstract void decrease(int count);
+    void decrease(int count);
 
-    public abstract ItemStack copy();
+    ItemStack copy();
 
-    public abstract TagRecord getTag();
+    TagRecord getTag();
 
-    public abstract void setTag(TagRecord tagRecord);
+    void setTag(TagRecord tagRecord);
 
-    public abstract boolean isItem(Item item);
+    boolean isItem(Item item);
 
-    public abstract boolean itemEquals(ItemStack itemStack);
+    boolean itemEquals(ItemStack itemStack);
 
-    public abstract boolean tagEquals(ItemStack itemStack);
+    boolean tagEquals(ItemStack itemStack);
 
-    public abstract BlockState getBlockState(Player player, BlockInteraction interaction);
+    BlockState getBlockState(Player player, BlockInteraction interaction);
 
-    public enum TooltipType {
+    enum TooltipType {
         NORMAL,
         NORMAL_CREATIVE,
         ADVANCED,

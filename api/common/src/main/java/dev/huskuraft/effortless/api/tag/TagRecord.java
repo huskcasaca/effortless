@@ -14,128 +14,127 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-public abstract class TagRecord extends TagElement {
+public interface TagRecord extends TagElement {
 
-    public abstract String getString(String key);
+    String getString(String key);
 
-    public abstract void putString(String key, String value);
+    void putString(String key, String value);
 
-    public abstract Text getText(String key);
+    Text getText(String key);
 
-    public abstract void putText(String key, Text value);
+    void putText(String key, Text value);
 
-    public abstract boolean getBoolean(String key);
+    boolean getBoolean(String key);
 
-    public abstract void putBoolean(String key, boolean value);
+    void putBoolean(String key, boolean value);
 
-    public abstract byte getByte(String key);
+    byte getByte(String key);
 
-    public abstract void putByte(String key, byte value);
+    void putByte(String key, byte value);
 
-    public abstract short getShort(String key);
+    short getShort(String key);
 
-    public abstract void putShort(String key, short value);
+    void putShort(String key, short value);
 
-    public abstract int getInt(String key);
+    int getInt(String key);
 
-    public abstract void putInt(String key, int value);
+    void putInt(String key, int value);
 
-    public abstract long getLong(String key);
+    long getLong(String key);
 
-    public abstract void putLong(String key, long value);
+    void putLong(String key, long value);
 
-    public abstract float getFloat(String key);
+    float getFloat(String key);
 
-    public abstract void putFloat(String key, float value);
+    void putFloat(String key, float value);
 
-    public abstract double getDouble(String key);
+    double getDouble(String key);
 
-    public abstract void putDouble(String key, double value);
+    void putDouble(String key, double value);
 
-    public abstract boolean[] getBooleanArray(String key);
+    boolean[] getBooleanArray(String key);
 
-    public abstract void putBooleanArray(String key, boolean[] value);
+    void putBooleanArray(String key, boolean[] value);
 
-    public abstract byte[] getByteArray(String key);
+    byte[] getByteArray(String key);
 
-    public abstract void putByteArray(String key, byte[] value);
+    void putByteArray(String key, byte[] value);
 
-    public abstract short[] getShortArray(String key);
+    short[] getShortArray(String key);
 
-    public abstract void putShortArray(String key, short[] value);
+    void putShortArray(String key, short[] value);
 
-    public abstract int[] getIntArray(String key);
+    int[] getIntArray(String key);
 
-    public abstract void putIntArray(String key, int[] value);
+    void putIntArray(String key, int[] value);
 
-    public abstract long[] getLongArray(String key);
+    long[] getLongArray(String key);
 
-    public abstract void putLongArray(String key, long[] value);
+    void putLongArray(String key, long[] value);
 
-    public abstract float[] getFloatArray(String key);
+    float[] getFloatArray(String key);
 
-    public abstract void putFloatArray(String key, float[] value);
+    void putFloatArray(String key, float[] value);
 
-    public abstract double[] getDoubleArray(String key);
+    double[] getDoubleArray(String key);
 
-    public abstract void putDoubleArray(String key, double[] value);
+    void putDoubleArray(String key, double[] value);
 
-    public abstract TagElement getElement(String key);
+    TagElement getElement(String key);
 
-    public abstract void putElement(String key, TagElement value);
+    void putElement(String key, TagElement value);
 
-    public abstract <T> T getElement(String key, TagReader<T> reader);
+    <T> T getElement(String key, TagReader<T> reader);
 
-    public abstract <T> void putElement(String key, T value, TagWriter<T> writer);
+    <T> void putElement(String key, T value, TagWriter<T> writer);
 
-    public abstract <T> List<T> getList(String key, TagReader<T> writer);
+    <T> List<T> getList(String key, TagReader<T> writer);
 
-    public abstract <T> void putList(String key, Collection<T> collection, TagWriter<T> writer);
+    <T> void putList(String key, Collection<T> collection, TagWriter<T> writer);
 
-
-    public final <T> T get(TagReader<T> writer) {
+    default <T> T get(TagReader<T> writer) {
         return writer.read(this);
     }
 
-    public final <T> void put(T value, TagWriter<T> writer) {
+    default <T> void put(T value, TagWriter<T> writer) {
         writer.write(this, value);
     }
 
-    public final <T extends Enum<T>> T getEnum(String key, Class<T> clazz) {
+    default <T extends Enum<T>> T getEnum(String key, Class<T> clazz) {
         var id = Resource.decompose(getString(key));
         return Enum.valueOf(clazz, id.getPath().toUpperCase(Locale.ROOT));
     }
 
-    public final <T extends Enum<T>> void putEnum(String key, Enum<T> value) {
+    default <T extends Enum<T>> void putEnum(String key, Enum<T> value) {
         var id = Resource.of(value.name().toLowerCase(Locale.ROOT));
         putString(key, id.toString());
     }
 
-    public final Resource getResource(String key) {
+    default Resource getResource(String key) {
         return Resource.decompose(getString(key));
     }
 
-    public final void putResource(String key, Resource value) {
+    default void putResource(String key, Resource value) {
         putString(key, value.toString());
     }
 
-    public final UUID getUUID(String key) {
+    default UUID getUUID(String key) {
         return UUID.fromString(getString(key));
     }
 
-    public final void putUUID(String key, UUID value) {
+    default void putUUID(String key, UUID value) {
         putString(key, value.toString());
     }
 
-    public final Item getItem(String key) {
+    default Item getItem(String key) {
         return Item.fromId(getResource(key));
     }
 
-    public final void putItem(String key, Item value) {
+    default void putItem(String key, Item value) {
         putResource(key, value.getId());
     }
 
-    public final ItemStack getItemStack(String key) {
+    default ItemStack getItemStack(String key) {
         return getElement(key, (tag1) -> ItemStack.of(
                 tag1.asRecord().getItem("Item"),
                 tag1.asRecord().getInt("Count"),
@@ -143,7 +142,7 @@ public abstract class TagRecord extends TagElement {
         ));
     }
 
-    public final void putItemStack(String key, ItemStack value) {
+    default void putItemStack(String key, ItemStack value) {
         putElement(key, value, (tag1, itemStack) -> {
             tag1.asRecord().putItem("Item", itemStack.getItem());
             tag1.asRecord().putInt("Count", itemStack.getStackSize());
@@ -151,45 +150,45 @@ public abstract class TagRecord extends TagElement {
         });
     }
 
-    public final Vector3d getVector3d(String key) {
+    default Vector3d getVector3d(String key) {
         var positions = getList(key, (tag1) -> tag1.asPrimitive().getDouble()).stream().mapToDouble(Double::doubleValue).toArray();
         return new Vector3d(positions[0], positions[1], positions[2]);
     }
 
-    public final void putVector3d(String key, Vector3d value) {
+    default void putVector3d(String key, Vector3d value) {
         putList(key, List.of(value.x(), value.y(), value.z()), (tag1, value1) -> {
             tag1.asPrimitive().putDouble(value1);
         });
     }
 
-    public final Vector3i getVector3i(String key) {
+    default Vector3i getVector3i(String key) {
         var positions = getList(key, (tag1) -> tag1.asPrimitive().getInt()).stream().mapToInt(Integer::intValue).toArray();
         return new Vector3i(positions[0], positions[1], positions[2]);
     }
 
-    public final void putVector3i(String key, Vector3i value) {
+    default void putVector3i(String key, Vector3i value) {
         putList(key, List.of(value.x(), value.y(), value.z()), (tag1, value1) -> {
             tag1.asPrimitive().putInt(value1);
         });
     }
 
-    public final Vector2d getVector2d(String key) {
+    default Vector2d getVector2d(String key) {
         var positions = getList(key, (tag1) -> tag1.asPrimitive().getDouble()).stream().mapToDouble(Double::doubleValue).toArray();
         return new Vector2d(positions[0], positions[1]);
     }
 
-    public final void putVector2d(String key, Vector2d value) {
+    default void putVector2d(String key, Vector2d value) {
         putList(key, List.of(value.x(), value.y()), (tag1, value1) -> {
             tag1.asPrimitive().putDouble(value1);
         });
     }
 
-    public final Vector2i getVector2i(String key) {
+    default Vector2i getVector2i(String key) {
         var positions = getList(key, (tag1) -> tag1.asPrimitive().getInt()).stream().mapToInt(Integer::intValue).toArray();
         return new Vector2i(positions[0], positions[1]);
     }
 
-    public final void putVector2i(String key, Vector2i value) {
+    default void putVector2i(String key, Vector2i value) {
         putList(key, List.of(value.x(), value.y()), (tag1, value1) -> {
             tag1.asPrimitive().putInt(value1);
         });

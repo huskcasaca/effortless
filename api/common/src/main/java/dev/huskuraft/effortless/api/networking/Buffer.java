@@ -14,64 +14,64 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class Buffer {
+public interface Buffer {
 
-    public <T> T readNullable(BufferReader<T> reader) {
+    default <T> T readNullable(BufferReader<T> reader) {
         if (readBoolean()) return read(reader);
         return null;
     }
 
-    public abstract UUID readUUID();
+    UUID readUUID();
 
-    public abstract <T extends Enum<T>> T readEnum(Class<T> clazz);
+    <T extends Enum<T>> T readEnum(Class<T> clazz);
 
-    public abstract String readString();
+    String readString();
 
-    public abstract Text readText();
+    Text readText();
 
-    public abstract boolean readBoolean();
+    boolean readBoolean();
 
-    public abstract byte readByte();
+    byte readByte();
 
-    public abstract short readShort();
+    short readShort();
 
-    public abstract int readInt();
+    int readInt();
 
-    public abstract int readVarInt();
+    int readVarInt();
 
-    public abstract long readLong();
+    long readLong();
 
-    public abstract long readVarLong();
+    long readVarLong();
 
-    public abstract float readFloat();
+    float readFloat();
 
-    public abstract double readDouble();
+    double readDouble();
 
-//    public abstract boolean[] readBooleanArray();
+//    boolean[] readBooleanArray();
 //
-//    public abstract byte[] readByteArray();
+//    byte[] readByteArray();
 //
-//    public abstract short[] readShortArray();
+//    short[] readShortArray();
 //
-//    public abstract int[] readIntArray();
+//    int[] readIntArray();
 //
-//    public abstract long[] readLongArray();
+//    long[] readLongArray();
 //
-//    public abstract float[] readFloatArray();
+//    float[] readFloatArray();
 //
-//    public abstract double[] readDoubleArray();
+//    double[] readDoubleArray();
 
-    public abstract Item readItem();
+    Item readItem();
 
-    public abstract ItemStack readItemStack();
+    ItemStack readItemStack();
 
-    public abstract TagRecord readTagRecord();
+    TagRecord readTagRecord();
 
-    public <T> T read(BufferReader<T> reader) {
+    default <T> T read(BufferReader<T> reader) {
         return reader.read(this);
     }
 
-    public <T> List<T> readList(BufferReader<T> reader) {
+    default <T> List<T> readList(BufferReader<T> reader) {
         var i = readInt();
         var collection = new ArrayList<T>();
 
@@ -81,103 +81,103 @@ public abstract class Buffer {
         return collection;
     }
 
-    public <T> void writeNullable(T value, BufferWriter<T> writer) {
+    default <T> void writeNullable(T value, BufferWriter<T> writer) {
         writeBoolean(value != null);
         if (value != null) write(value, writer);
     }
 
-    public abstract void writeUUID(UUID uuid);
+    void writeUUID(UUID uuid);
 
-    public abstract <T extends Enum<T>> void writeEnum(Enum<T> value);
+    <T extends Enum<T>> void writeEnum(Enum<T> value);
 
-    public abstract void writeString(String value);
+    void writeString(String value);
 
-    public abstract void writeText(Text value);
+    void writeText(Text value);
 
-    public abstract void writeBoolean(boolean value);
+    void writeBoolean(boolean value);
 
-    public abstract void writeByte(byte value);
+    void writeByte(byte value);
 
-    public abstract void writeShort(short value);
+    void writeShort(short value);
 
-    public abstract void writeInt(int value);
+    void writeInt(int value);
 
-    public abstract void writeVarInt(int value);
+    void writeVarInt(int value);
 
-    public abstract void writeLong(long value);
+    void writeLong(long value);
 
-    public abstract void writeVarLong(long value);
+    void writeVarLong(long value);
 
-    public abstract void writeFloat(float value);
+    void writeFloat(float value);
 
-    public abstract void writeDouble(double value);
+    void writeDouble(double value);
 
-//    public abstract void writeBooleanArray(boolean[] value);
+//    void writeBooleanArray(boolean[] value);
 //
-//    public abstract void writeByteArray(byte[] value);
+//    void writeByteArray(byte[] value);
 //
-//    public abstract void writeShortArray(short[] value);
+//    void writeShortArray(short[] value);
 //
-//    public abstract void writeIntArray(int[] value);
+//    void writeIntArray(int[] value);
 //
-//    public abstract void writeLongArray(long[] value);
+//    void writeLongArray(long[] value);
 //
-//    public abstract void writeFloatArray(float[] value);
+//    void writeFloatArray(float[] value);
 //
-//    public abstract void writeDoubleArray(double[] value);
+//    void writeDoubleArray(double[] value);
 
-    public abstract void writeItem(Item value);
+    void writeItem(Item value);
 
     // TODO: 7/12/23 extract
-    public abstract void writeItemStack(ItemStack value);
+    void writeItemStack(ItemStack value);
 
-    public abstract void writeTagRecord(TagRecord value);
+    void writeTagRecord(TagRecord value);
 
-    public <T> void write(T value, BufferWriter<T> writer) {
+    default <T> void write(T value, BufferWriter<T> writer) {
         writer.write(this, value);
     }
 
-    public <T> void writeList(Collection<T> collection, BufferWriter<T> writer) {
+    default <T> void writeList(Collection<T> collection, BufferWriter<T> writer) {
         writeInt(collection.size());
         for (var object : collection) {
             write(object, writer);
         }
     }
 
-    public Vector3d readVector3d() {
+    default Vector3d readVector3d() {
         return new Vector3d(readDouble(), readDouble(), readDouble());
     }
 
-    public void writeVector3d(Vector3d vector) {
+    default void writeVector3d(Vector3d vector) {
         writeDouble(vector.x());
         writeDouble(vector.y());
         writeDouble(vector.z());
     }
 
-    public Vector2d readVector2d() {
+    default Vector2d readVector2d() {
         return new Vector2d(readDouble(), readDouble());
     }
 
-    public void writeVector2d(Vector2d vector) {
+    default void writeVector2d(Vector2d vector) {
         writeDouble(vector.x());
         writeDouble(vector.y());
     }
 
-    public Vector3i readVector3i() {
+    default Vector3i readVector3i() {
         return new Vector3i(readInt(), readInt(), readInt());
     }
 
-    public void writeVector3i(Vector3i vector) {
+    default void writeVector3i(Vector3i vector) {
         writeInt(vector.x());
         writeInt(vector.y());
         writeInt(vector.z());
     }
 
-    public Vector2i readVector2i() {
+    default Vector2i readVector2i() {
         return new Vector2i(readInt(), readInt());
     }
 
-    public void writeVector2i(Vector2i vector) {
+    default void writeVector2i(Vector2i vector) {
         writeInt(vector.x());
         writeInt(vector.y());
     }

@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.config.PatternConfiguration;
 import dev.huskuraft.effortless.config.PreviewConfiguration;
 import dev.huskuraft.effortless.config.TransformerConfiguration;
 
-public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration> {
+public class BaseConfigurationSerializer implements TagSerializer<BaseConfiguration> {
 
     private static final String TAG_PREVIEW_CONFIG = "Previews";
     private static final String TAG_TRANSFORMER_CONFIG = "Transformers";
@@ -29,7 +29,7 @@ public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration
         tag.asRecord().putElement(TAG_PATTERN_CONFIG, config.getPatternConfig(), new PatternConfigurationSerializer());
     }
 
-    public static class PreviewConfigurationSerializer extends TagSerializer<PreviewConfiguration> {
+    public static class PreviewConfigurationSerializer implements TagSerializer<PreviewConfiguration> {
 
         public PreviewConfiguration read(TagElement tag) {
             return new PreviewConfiguration();
@@ -40,7 +40,7 @@ public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration
         }
     }
 
-    public static class TransformerConfigurationSerializer extends TagSerializer<TransformerConfiguration> {
+    public static class TransformerConfigurationSerializer implements TagSerializer<TransformerConfiguration> {
 
         private static final String TAG_ARRAYS = "Arrays";
         private static final String TAG_MIRRORS = "Mirrors";
@@ -66,7 +66,7 @@ public class BaseConfigurationSerializer extends TagSerializer<BaseConfiguration
     }
 
 
-    public static class PatternConfigurationSerializer extends TagSerializer<PatternConfiguration> {
+    public static class PatternConfigurationSerializer implements TagSerializer<PatternConfiguration> {
 
         private static final String TAG_PATTERNS = "Patterns";
 

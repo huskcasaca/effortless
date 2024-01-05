@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.api.tag;
 
-public abstract class TagElement {
+public interface TagElement {
 
-    public abstract TagRecord asRecord();
+    TagRecord asRecord();
 
-    public abstract TagPrimitive asPrimitive();
+    TagPrimitive asPrimitive();
 
 }

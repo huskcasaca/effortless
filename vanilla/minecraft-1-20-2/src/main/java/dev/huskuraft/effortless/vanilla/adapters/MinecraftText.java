@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 
-public class MinecraftText extends Text {
+public class MinecraftText implements Text {
 
     private final Component reference;
 
@@ -57,6 +57,11 @@ public class MinecraftText extends Text {
     @Override
     public int hashCode() {
         return reference.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getString();
     }
 
     private static ChatFormatting adapt(TextStyle textStyle) {

@@ -16,7 +16,7 @@ public record PlayerSettingsPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer extends BufferSerializer<PlayerSettingsPacket> {
+    public static class Serializer implements BufferSerializer<PlayerSettingsPacket> {
 
         @Override
         public PlayerSettingsPacket read(Buffer buffer) {

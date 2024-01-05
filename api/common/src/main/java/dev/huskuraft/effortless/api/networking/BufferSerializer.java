@@ -1,4 +1,4 @@
 package dev.huskuraft.effortless.api.networking;
 
-public abstract class BufferSerializer<T> implements BufferReader<T>, BufferWriter<T> {
+public interface BufferSerializer<T> extends BufferReader<T>, BufferWriter<T> {
 }

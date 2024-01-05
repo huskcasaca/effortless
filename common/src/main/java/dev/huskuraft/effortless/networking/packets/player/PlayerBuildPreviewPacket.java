@@ -20,7 +20,7 @@ public record PlayerBuildPreviewPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer extends BufferSerializer<PlayerBuildPreviewPacket> {
+    public static class Serializer implements BufferSerializer<PlayerBuildPreviewPacket> {
 
         @Override
         public PlayerBuildPreviewPacket read(Buffer buffer) {

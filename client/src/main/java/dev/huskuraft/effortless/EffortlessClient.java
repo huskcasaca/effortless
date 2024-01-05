@@ -3,7 +3,7 @@ package dev.huskuraft.effortless;
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.config.ClientConfigManager;
 
-public abstract class EffortlessClient extends ClientEntrance {
+public abstract class EffortlessClient implements ClientEntrance {
 
     private final EffortlessClientEventsRegistry registry = new EffortlessClientEventsRegistry();
 
@@ -13,7 +13,7 @@ public abstract class EffortlessClient extends ClientEntrance {
     private final EffortlessClientManager clientManager;
 
     protected EffortlessClient() {
-        instance = this;
+        Instance.set(this);
 
         this.channel = new EffortlessClientChannel(this);
         this.configManager = new EffortlessClientConfigManager(this);
@@ -22,7 +22,7 @@ public abstract class EffortlessClient extends ClientEntrance {
     }
 
     public static EffortlessClient getInstance() {
-        return (EffortlessClient) instance;
+        return (EffortlessClient) Instance.get();
     }
 
     public EffortlessClientChannel getChannel() {

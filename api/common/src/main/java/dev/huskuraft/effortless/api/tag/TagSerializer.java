@@ -1,4 +1,4 @@
 package dev.huskuraft.effortless.api.tag;
 
-public abstract class TagSerializer<T> implements TagReader<T>, TagWriter<T> {
+public interface TagSerializer<T> extends TagReader<T>, TagWriter<T> {
 }

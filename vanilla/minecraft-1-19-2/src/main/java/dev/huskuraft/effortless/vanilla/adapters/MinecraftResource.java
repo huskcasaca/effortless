@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.api.core.Resource;
 import net.minecraft.resources.ResourceLocation;
 
-public class MinecraftResource extends Resource {
+public class MinecraftResource implements Resource {
 
     private final ResourceLocation reference;
 
@@ -43,5 +43,10 @@ public class MinecraftResource extends Resource {
     @Override
     public int hashCode() {
         return reference.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getNamespace() + ":" + getPath();
     }
 }

@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.core.Resource;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.world.item.BlockItem;
 
-public class MinecraftItem extends Item {
+public class MinecraftItem implements Item {
 
     private final net.minecraft.world.item.Item reference;
 

@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.structure.*;
 
-public class ContextSerializer extends BufferSerializer<Context> {
+public class ContextSerializer implements BufferSerializer<Context> {
 
     @Override
     public Context read(Buffer buffer) {

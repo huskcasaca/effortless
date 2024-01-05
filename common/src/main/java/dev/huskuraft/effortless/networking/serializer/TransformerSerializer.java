@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 
 import java.util.Arrays;
 
-public class TransformerSerializer extends BufferSerializer<Transformer> {
+public class TransformerSerializer implements BufferSerializer<Transformer> {
 
     @Override
     public Transformer read(Buffer buffer) {
@@ -38,7 +38,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
         }
     }
 
-    static class ArrayTransformerSerializer extends BufferSerializer<ArrayTransformer> {
+    static class ArrayTransformerSerializer implements BufferSerializer<ArrayTransformer> {
 
         @Override
         public ArrayTransformer read(Buffer buffer) {
@@ -60,7 +60,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
 
     }
 
-    static class MirrorTransformerSerializer extends BufferSerializer<MirrorTransformer> {
+    static class MirrorTransformerSerializer implements BufferSerializer<MirrorTransformer> {
 
         @Override
         public MirrorTransformer read(Buffer buffer) {
@@ -84,7 +84,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
 
     }
 
-    static class RadialTransformerSerializer extends BufferSerializer<RadialTransformer> {
+    static class RadialTransformerSerializer implements BufferSerializer<RadialTransformer> {
 
         @Override
         public RadialTransformer read(Buffer buffer) {
@@ -128,7 +128,7 @@ public class TransformerSerializer extends BufferSerializer<Transformer> {
 //        }
 //    }
 
-    static class ItemRandomizerSerializer extends BufferSerializer<ItemRandomizer> {
+    static class ItemRandomizerSerializer implements BufferSerializer<ItemRandomizer> {
 
         @Override
         public ItemRandomizer read(Buffer buffer) {

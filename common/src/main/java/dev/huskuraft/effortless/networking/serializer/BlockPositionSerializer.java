@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.BufferSerializer;
 
-public class BlockPositionSerializer extends BufferSerializer<BlockPosition> {
+public class BlockPositionSerializer implements BufferSerializer<BlockPosition> {
 
     @Override
     public BlockPosition read(Buffer buffer) {

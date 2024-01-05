@@ -7,44 +7,44 @@ import dev.huskuraft.effortless.api.text.Text;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class Player {
+public interface Player {
 
-    public abstract UUID getId();
+    UUID getId();
 
-    public abstract Server getServer();
+    Server getServer();
 
-    public abstract World getWorld();
+    World getWorld();
 
-    public abstract Text getDisplayName();
+    Text getDisplayName();
 
-    public abstract Vector3d getPosition();
+    Vector3d getPosition();
 
-    public abstract Vector3d getEyePosition();
+    Vector3d getEyePosition();
 
-    public abstract Vector3d getEyeDirection();
+    Vector3d getEyeDirection();
 
-    public abstract List<ItemStack> getItemStacks();
+    List<ItemStack> getItemStacks();
 
-    public abstract void setItemStack(int index, ItemStack itemStack);
+    void setItemStack(int index, ItemStack itemStack);
 
-    public abstract ItemStack getItemStack(InteractionHand hand);
+    ItemStack getItemStack(InteractionHand hand);
 
-    public abstract void setItemStack(InteractionHand hand, ItemStack itemStack);
+    void setItemStack(InteractionHand hand, ItemStack itemStack);
 
-    public abstract void sendMessage(Text messages);
+    void sendMessage(Text messages);
 
-    public abstract void swing(InteractionHand hand);
+    void swing(InteractionHand hand);
 
-    public abstract boolean canInteractBlock(BlockPosition blockPosition);
+    boolean canInteractBlock(BlockPosition blockPosition);
 
-    public abstract boolean canAttackBlock(BlockPosition blockPosition);
+    boolean canAttackBlock(BlockPosition blockPosition);
 
-    public abstract GameMode getGameType();
+    GameMode getGameType();
 
-    public abstract BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids);
+    BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids);
 
-    public abstract boolean tryPlaceBlock(BlockInteraction interaction);
+    boolean tryPlaceBlock(BlockInteraction interaction);
 
-    public abstract boolean tryBreakBlock(BlockInteraction interaction);
+    boolean tryBreakBlock(BlockInteraction interaction);
 
 }

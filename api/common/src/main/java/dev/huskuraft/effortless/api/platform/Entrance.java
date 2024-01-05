@@ -1,45 +1,47 @@
 package dev.huskuraft.effortless.api.platform;
 
 import java.nio.file.Path;
-import java.util.logging.Logger;
 
-public abstract class Entrance {
+public interface Entrance {
 
-    private static final Logger LOGGER = Logger.getLogger("Effortless");
+    String getId();
 
-    public abstract String getId();
+    String getLoaderName();
 
-    public abstract String getLoaderName();
+    String getLoaderVersion();
 
-    public abstract String getLoaderVersion();
+    String getGameVersion();
 
-    public abstract String getGameVersion();
+    Path getGameDir();
 
-    public abstract Path getGameDir();
+    Path getConfigDir();
 
-    public abstract Path getConfigDir();
+    Platform getPlatform();
 
-    public abstract Platform getPlatform();
+    Environment getEnvironment();
 
-    public abstract Environment getEnvironment();
+    boolean isDevelopment();
 
-    public abstract boolean isDevelopment();
-
-    public final void info(String msg) {
-        if (isDevelopment()) {
-            LOGGER.info(msg);
-        }
-    }
-
-    public enum Environment {
+    enum Environment {
         CLIENT,
         SERVER
     }
 
-    protected static Entrance instance;
-
-    public static Entrance getInstance() {
-        return instance;
+    static Entrance getInstance() {
+        return Instance.get();
     }
+
+    class Instance {
+        private Instance() {
+        }
+        private static Entrance instance;
+        public static Entrance get() {
+            return Instance.instance;
+        }
+        public static void set(Entrance instance) {
+            Instance.instance = instance;
+        }
+    }
+
 }
 

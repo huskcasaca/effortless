@@ -8,7 +8,7 @@ import net.minecraft.nbt.Tag;
 
 import java.util.Objects;
 
-public class MinecraftTagElement extends TagElement {
+public class MinecraftTagElement implements TagElement {
 
     protected Tag reference;
 

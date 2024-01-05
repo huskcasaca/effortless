@@ -10,7 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.UUID;
 
-public class MinecraftBuffer extends Buffer {
+public class MinecraftBuffer implements Buffer {
 
     private final FriendlyByteBuf reference;
 

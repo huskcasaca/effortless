@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.BufferSerializer;
 
-public class Vector3dSerializer extends BufferSerializer<Vector3d> {
+public class Vector3dSerializer implements BufferSerializer<Vector3d> {
 
     @Override
     public Vector3d read(Buffer buffer) {

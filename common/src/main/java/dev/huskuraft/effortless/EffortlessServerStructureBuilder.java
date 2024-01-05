@@ -171,6 +171,7 @@ public final class EffortlessServerStructureBuilder extends StructureBuilder {
     }
 
     private void onPlayerLoggedOut(Player player) {
+        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), player);
     }
 
     private void onServerStarted(Server server) {

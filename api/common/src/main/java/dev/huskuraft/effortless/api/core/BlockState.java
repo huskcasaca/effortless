@@ -1,18 +1,18 @@
 package dev.huskuraft.effortless.api.core;
 
-public abstract class BlockState {
+public interface BlockState {
 
-    public abstract BlockState mirror(Axis axis);
+    BlockState mirror(Axis axis);
 
-    public abstract BlockState rotate(Revolve revolve);
+    BlockState rotate(Revolve revolve);
 
-    public abstract boolean isAir();
+    boolean isAir();
 
-    public abstract Item getItem();
+    Item getItem();
 
-    public abstract boolean isReplaceable(Player player, BlockInteraction interaction);
+    boolean isReplaceable(Player player, BlockInteraction interaction);
 
-    public abstract boolean isReplaceable();
+    boolean isReplaceable();
 
-    public abstract boolean isDestroyable();
+    boolean isDestroyable();
 }

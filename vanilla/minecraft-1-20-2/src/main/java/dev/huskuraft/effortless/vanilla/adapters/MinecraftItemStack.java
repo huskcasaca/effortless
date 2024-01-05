@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
-public class MinecraftItemStack extends ItemStack {
+public class MinecraftItemStack implements ItemStack {
 
     private final net.minecraft.world.item.ItemStack reference;
 

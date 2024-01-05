@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 
 import java.util.Arrays;
 
-public class TransformerSerializer extends TagSerializer<Transformer> {
+public class TransformerSerializer implements TagSerializer<Transformer> {
 
     private static final String TAG_ID = "id";
     private static final String TAG_NAME = "Name";
@@ -42,7 +42,7 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
         }
     }
 
-    public static class ArrayTransformerSerializer extends TagSerializer<ArrayTransformer> {
+    public static class ArrayTransformerSerializer implements TagSerializer<ArrayTransformer> {
 
         private static final String TAG_OFFSET = "Offset";
         private static final String TAG_COUNT = "Count";
@@ -67,7 +67,7 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
 
     }
 
-    public static class MirrorTransformerSerializer extends TagSerializer<MirrorTransformer> {
+    public static class MirrorTransformerSerializer implements TagSerializer<MirrorTransformer> {
 
         private static final String TAG_POSITION = "Position";
         private static final String TAG_POSITION_TYPE = "PositionType";
@@ -99,7 +99,7 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
 
     }
 
-    public static class RadialTransformerSerializer extends TagSerializer<RadialTransformer> {
+    public static class RadialTransformerSerializer implements TagSerializer<RadialTransformer> {
 
         private static final String TAG_POSITION = "Position";
         private static final String TAG_POSITION_TYPE = "PositionType";
@@ -151,7 +151,7 @@ public class TransformerSerializer extends TagSerializer<Transformer> {
 //        }
 //    }
 
-    public static class ItemRandomizerSerializer extends TagSerializer<ItemRandomizer> {
+    public static class ItemRandomizerSerializer implements TagSerializer<ItemRandomizer> {
 
         private static final String TAG_ID = "id";
         private static final String TAG_NAME = "Name";

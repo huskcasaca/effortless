@@ -2,14 +2,14 @@ package dev.huskuraft.effortless.api.core;
 
 import java.util.UUID;
 
-public abstract class World {
+public interface World {
 
-    public abstract Player getPlayer(UUID uuid);
+    Player getPlayer(UUID uuid);
 
-    public abstract BlockState getBlockState(BlockPosition blockPosition);
+    BlockState getBlockState(BlockPosition blockPosition);
 
-    public abstract boolean setBlockState(BlockPosition blockPosition, BlockState blockState);
+    boolean setBlockState(BlockPosition blockPosition, BlockState blockState);
 
-    public abstract boolean isClient();
+    boolean isClient();
 
 }

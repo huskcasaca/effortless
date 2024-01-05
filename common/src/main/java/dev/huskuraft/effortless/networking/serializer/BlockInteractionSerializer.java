@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.BufferSerializer;
 
-public class BlockInteractionSerializer extends BufferSerializer<BlockInteraction> {
+public class BlockInteractionSerializer implements BufferSerializer<BlockInteraction> {
 
     @Override
     public BlockInteraction read(Buffer buffer) {

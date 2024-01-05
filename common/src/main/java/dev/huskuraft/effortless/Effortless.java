@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.config.ConfigManager;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 
-public abstract class Effortless extends Entrance {
+public abstract class Effortless implements Entrance {
 
     public static final String MOD_ID = "effortless";
     public static final int VERSION_NUMBER = 1;
@@ -16,15 +16,11 @@ public abstract class Effortless extends Entrance {
     private final EffortlessServerStructureBuilder structureBuilder;
 
     protected Effortless() {
-        instance = this;
+        Instance.set(this);
 
         this.registry = new EffortlessEventsRegistry();
         this.channel = new EffortlessServerChannel(this);
         this.structureBuilder = new EffortlessServerStructureBuilder(this);
-    }
-
-    public static Effortless getInstance() {
-        return (Effortless) instance;
     }
 
     public Channel<AllPacketListener> getChannel() {
