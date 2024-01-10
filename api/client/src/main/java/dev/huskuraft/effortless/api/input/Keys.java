@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.input;
 
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
 
-public enum VanillaKeys implements Key {
+public enum Keys implements Key {
     KEY_UP,
     KEY_LEFT,
     KEY_DOWN,

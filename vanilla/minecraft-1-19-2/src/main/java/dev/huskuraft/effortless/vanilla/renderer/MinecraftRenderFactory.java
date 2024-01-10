@@ -2,8 +2,8 @@ package dev.huskuraft.effortless.vanilla.renderer;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import dev.huskuraft.effortless.api.renderer.RenderFactory;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
-import dev.huskuraft.effortless.api.renderer.texture.RenderLayers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -16,20 +16,20 @@ import java.util.logging.Logger;
 
 import static dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderLayer.fromMinecraftRenderLayer;
 
-public class MinecraftRenderLayers extends RenderLayers {
+public class MinecraftRenderFactory implements RenderFactory {
 
     @Override
-    public RenderLayer gui() {
+    public RenderLayer vanillaGui() {
         return fromMinecraftRenderLayer(BuildInRenderType.GUI);
     }
 
     @Override
-    public RenderLayer guiOverlay() {
+    public RenderLayer vanillaGuiOverlay() {
         return fromMinecraftRenderLayer(BuildInRenderType.GUI_OVERLAY);
     }
 
     @Override
-    public RenderLayer guiTextHighlight() {
+    public RenderLayer vanillaGuiTextHighlight() {
         return fromMinecraftRenderLayer(BuildInRenderType.GUI_TEXT_HIGHLIGHT);
     }
 

@@ -9,8 +9,8 @@ import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
+import dev.huskuraft.effortless.api.renderer.RenderFactory;
 import dev.huskuraft.effortless.api.renderer.opertaion.SurfaceColor;
-import dev.huskuraft.effortless.api.renderer.texture.RenderLayers;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.*;
@@ -276,7 +276,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (!context.isMissingHit() && !context.interactions().isEmpty()) {
             var box = BoundingBox3d.fromLowerCornersOf(context.interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new));
             getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, "boundingBox"), box)
-                    .texture(RenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
+                    .texture(RenderFactory.CHECKERED_THIN_TEXTURE_LOCATION)
                     .lightMap(LightTexture.FULL_BLOCK)
                     .disableNormals()
                     .colored(Color.DARK_GRAY)
@@ -289,7 +289,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getClientManager().getOperationsRenderer().showResult(uuid, result);
         if (result instanceof BatchOperationResult result1) {
             var cluster = getEntrance().getClientManager().getOutlineRenderer().showCluster(result1.getOperation().getContext().uuid(), result1.locations())
-                    .texture(RenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
+                    .texture(RenderFactory.CHECKERED_THIN_TEXTURE_LOCATION)
                     .lightMap(LightTexture.FULL_BLOCK)
                     .disableNormals()
                     .stroke(1 / 64f);

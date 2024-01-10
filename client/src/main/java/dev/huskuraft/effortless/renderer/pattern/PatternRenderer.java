@@ -45,6 +45,7 @@ public class PatternRenderer {
                 }
             }
         });
+        renderer.flush();
     }
 
 

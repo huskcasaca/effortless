@@ -3,14 +3,16 @@ package dev.huskuraft.effortless.vanilla.platform;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
-import dev.huskuraft.effortless.api.input.VanillaKeys;
+import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.platform.SearchTree;
+import dev.huskuraft.effortless.api.renderer.RenderFactory;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftKeyBinding;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftText;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderFactory;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;
@@ -42,7 +44,7 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
     }
 
     @Override
-    public KeyBinding getKeyBinding(VanillaKeys key) {
+    public KeyBinding getKeyBinding(Keys key) {
         return MinecraftKeyBinding.fromMinecraft(switch (key) {
             case KEY_UP -> Minecraft.getInstance().options.keyUp;
             case KEY_LEFT -> Minecraft.getInstance().options.keyLeft;
@@ -85,4 +87,10 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
     public KeyBinding newKeyBinding(String name, String category, KeyCodes key) {
         return MinecraftKeyBinding.fromMinecraft(new KeyMapping(name, key.value(), category));
     }
+
+    @Override
+    public RenderFactory getRenderFactory() {
+        return new MinecraftRenderFactory();
+    }
+
 }

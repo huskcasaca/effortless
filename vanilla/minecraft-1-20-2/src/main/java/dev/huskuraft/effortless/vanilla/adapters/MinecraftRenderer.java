@@ -1,24 +1,22 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Typeface;
-import dev.huskuraft.effortless.api.renderer.VertexBuffer;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.texture.BlockRenderLayers;
 import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
-import dev.huskuraft.effortless.api.renderer.texture.RenderLayers;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderLayers;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderLayers;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -30,7 +28,7 @@ public class MinecraftRenderer extends Renderer {
 
     private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
 
-    private static final RenderLayers RENDER_TEXTURES = new MinecraftRenderLayers();
+    private static final RenderFactory RENDER_TEXTURES = new MinecraftRenderFactory();
     private static final BlockRenderLayers BLOCK_RENDER_TEXTURES = new MinecraftBlockRenderLayers();
     private static final OutlineRenderLayers OUTLINE_RENDER_TEXTURES = new MinecraftOutlineRenderLayers();
 
@@ -88,7 +86,7 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public VertexBuffer vertexBuffer(RenderLayer renderLayer) {
-        return new MinecraftVertexBuffer(minecraftBufferSource.getBuffer(MinecraftRenderLayer.toMinecraftRenderLayer(renderLayer)));
+        return new MinecraftVertexBuffer(minecraftBufferSource.getBuffer(renderLayer.reference()));
     }
 
     @Override
@@ -121,16 +119,21 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-        RenderSystem.setShaderTexture(0, MinecraftResource.toMinecraftResource(resource));
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShaderTexture(0, MinecraftResource.toMinecraftResource(resource));
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         var matrix4f = minecraftMatrixStack.last().pose();
-        var bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(matrix4f, x1, y1, blitOffset).uv(minU, minV).endVertex();
-        bufferbuilder.vertex(matrix4f, x1, y2, blitOffset).uv(minU, maxV).endVertex();
-        bufferbuilder.vertex(matrix4f, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
-        bufferbuilder.vertex(matrix4f, x2, y1, blitOffset).uv(maxU, minV).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
+//        var bufferbuilder = Tesselator.getInstance().getBuilder();
+//        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+
+        var buffer = minecraftBufferSource.getBuffer(MinecraftOutlineRenderLayers.OutlineRenderType.textured(MinecraftResource.toMinecraftResource(resource)));
+        buffer.vertex(matrix4f, x1, y1, blitOffset).uv(minU, minV).endVertex();
+        buffer.vertex(matrix4f, x1, y2, blitOffset).uv(minU, maxV).endVertex();
+        buffer.vertex(matrix4f, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
+        buffer.vertex(matrix4f, x2, y1, blitOffset).uv(maxU, minV).endVertex();
+        buffer.endVertex();
+        flush();
+//        buffer.endVertex();
+//        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
     @Override
@@ -157,7 +160,7 @@ public class MinecraftRenderer extends Renderer {
     public void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState) {
         var minecraftBlockRenderer = minecraftClient.getBlockRenderer();
         var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
-        var minecraftRenderLayer = MinecraftRenderLayer.toMinecraftRenderLayer(renderLayer);
+        var minecraftRenderLayer = (RenderType) renderLayer.reference();
         var minecraftBlockState = MinecraftBlockState.toMinecraftBlockState(blockState);
         var minecraftBlockPosition = MinecraftPlayer.toMinecraftBlockPosition(blockPosition);
 
@@ -176,7 +179,7 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public RenderLayers renderLayers() {
+    public RenderFactory renderLayers() {
         return RENDER_TEXTURES;
     }
 

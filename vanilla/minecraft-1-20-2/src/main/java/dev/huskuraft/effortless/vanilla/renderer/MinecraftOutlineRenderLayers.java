@@ -5,8 +5,8 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderLayer;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -20,57 +20,57 @@ public class MinecraftOutlineRenderLayers extends OutlineRenderLayers {
 
     @Override
     public RenderLayer outlineSolid() {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.outlineSolid());
+        return () -> (OutlineRenderType.outlineSolid());
     }
 
     @Override
     public RenderLayer outlineSolid(boolean overlap) {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.outlineSolid(overlap));
+        return () -> (OutlineRenderType.outlineSolid(overlap));
     }
 
     @Override
     public RenderLayer outlineTranslucent(Resource texture, boolean cull) {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.outlineTranslucent(MinecraftResource.toMinecraftResource(texture), cull));
+        return () -> (OutlineRenderType.outlineTranslucent(MinecraftResource.toMinecraftResource(texture), cull));
     }
 
     @Override
     public RenderLayer glowingSolid(Resource texture) {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.glowingSolid(MinecraftResource.toMinecraftResource(texture)));
+        return () -> (OutlineRenderType.glowingSolid(MinecraftResource.toMinecraftResource(texture)));
     }
 
     @Override
     public RenderLayer glowingSolid() {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.glowingSolid());
+        return () -> (OutlineRenderType.glowingSolid());
     }
 
     @Override
     public RenderLayer glowingTranslucent(Resource texture) {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.glowingTranslucent(MinecraftResource.toMinecraftResource(texture)));
+        return () -> (OutlineRenderType.glowingTranslucent(MinecraftResource.toMinecraftResource(texture)));
     }
 
     @Override
     public RenderLayer additive() {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.additive());
+        return () -> (OutlineRenderType.additive());
     }
 
     @Override
     public RenderLayer glowingTranslucent() {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.glowingTranslucent());
+        return () -> (OutlineRenderType.glowingTranslucent());
     }
 
     @Override
     public RenderLayer itemPartialSolid() {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.itemPartialSolid());
+        return () -> (OutlineRenderType.itemPartialSolid());
     }
 
     @Override
     public RenderLayer itemPartialTranslucent() {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.itemPartialTranslucent());
+        return () -> (OutlineRenderType.itemPartialTranslucent());
     }
 
     @Override
     public RenderLayer fluid() {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(OutlineRenderType.fluid());
+        return () -> (OutlineRenderType.fluid());
     }
 
     public static final class OutlineRenderType extends RenderType {
@@ -212,6 +212,18 @@ public class MinecraftOutlineRenderLayers extends OutlineRenderLayers {
                             .setLightmapState(LIGHTMAP)
                             .setOverlayState(OVERLAY)
                             .createCompositeState(true));
+        }
+
+        public static RenderType textured(ResourceLocation texture) {
+            return create("texture",
+                    DefaultVertexFormat.POSITION_TEX,
+                    VertexFormat.Mode.QUADS,
+                    256,
+                    RenderType.CompositeState.builder().setShaderState(POSITION_TEX_SHADER).
+                            setTextureState(new RenderStateShard.TextureStateShard(texture, false, false))
+                            .setWriteMaskState(COLOR_WRITE).setCullState(NO_CULL)
+                            .createCompositeState(false));
+
         }
 
         public static RenderType additive() {

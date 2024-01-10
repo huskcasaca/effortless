@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.api.events.input.KeyInput;
 import dev.huskuraft.effortless.api.events.input.RegisterKeys;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientStart;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
+import dev.huskuraft.effortless.api.events.render.RegisterShader;
 import dev.huskuraft.effortless.api.events.render.RenderGui;
 import dev.huskuraft.effortless.api.events.render.RenderWorld;
 
@@ -21,6 +22,8 @@ public class EffortlessClientEventsRegistry extends EffortlessEventsRegistry {
 
     private final Event<RenderGui> renderGuiEvent = EventFactory.createLoop();
     private final Event<RenderWorld> renderWorldEvent = EventFactory.createLoop();
+
+    private final Event<RegisterShader> registerShaderEvent = EventFactory.createLoop();
 
     public Event<RegisterKeys> getRegisterKeysEvent() {
         return registerKeysEvent;
@@ -50,4 +53,7 @@ public class EffortlessClientEventsRegistry extends EffortlessEventsRegistry {
         return renderWorldEvent;
     }
 
+    public Event<RegisterShader> getRegisterShaderEvent() {
+        return registerShaderEvent;
+    }
 }

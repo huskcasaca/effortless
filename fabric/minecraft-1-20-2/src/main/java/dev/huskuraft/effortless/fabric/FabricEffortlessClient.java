@@ -20,6 +20,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ShaderInstance;
 
 import java.nio.file.Path;
 
@@ -42,6 +43,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
 
         ClientShadersEvents.REGISTER.register((provider, sink) -> {
             MinecraftBlockRenderLayers.Shaders.registerShaders(provider, sink::register);
+            getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((shaderResource, format, consumer) -> sink.register(new ShaderInstance(provider, shaderResource, format.reference()), shaderInstance -> consumer.accept(() -> shaderInstance)));
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {

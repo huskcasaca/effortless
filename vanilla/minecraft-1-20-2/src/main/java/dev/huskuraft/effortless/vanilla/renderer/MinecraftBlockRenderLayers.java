@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.texture.BlockRenderLayers;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderLayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;
@@ -22,17 +21,17 @@ public class MinecraftBlockRenderLayers extends BlockRenderLayers {
 
     @Override
     public RenderLayer lines() {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(BlockRenderType.EF_LINES);
+        return () -> (BlockRenderType.EF_LINES);
     }
 
     @Override
     public RenderLayer planes() {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(BlockRenderType.EF_PLANES);
+        return () -> (BlockRenderType.EF_PLANES);
     }
 
     @Override
     public RenderLayer block(int color) {
-        return MinecraftRenderLayer.fromMinecraftRenderLayer(BlockRenderType.block(color));
+        return () -> (BlockRenderType.block(color));
     }
 
     public static final class BlockRenderType extends RenderType {

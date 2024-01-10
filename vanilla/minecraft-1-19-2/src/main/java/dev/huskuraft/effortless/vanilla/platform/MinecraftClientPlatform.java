@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.vanilla.platform;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
-import dev.huskuraft.effortless.api.input.VanillaKeys;
+import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.platform.SearchTree;
@@ -38,7 +38,7 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
     }
 
     @Override
-    public KeyBinding getKeyBinding(VanillaKeys key) {
+    public KeyBinding getKeyBinding(Keys key) {
         return MinecraftKeyBinding.fromMinecraft(switch (key) {
             case KEY_UP -> Minecraft.getInstance().options.keyUp;
             case KEY_LEFT -> Minecraft.getInstance().options.keyLeft;

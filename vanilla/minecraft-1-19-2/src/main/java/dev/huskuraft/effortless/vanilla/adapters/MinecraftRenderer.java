@@ -1,18 +1,19 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Typeface;
-import dev.huskuraft.effortless.api.renderer.VertexBuffer;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.texture.BlockRenderLayers;
 import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
-import dev.huskuraft.effortless.api.renderer.texture.RenderLayers;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderLayers;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderLayers;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -25,7 +26,7 @@ import java.util.Optional;
 
 public class MinecraftRenderer extends Renderer {
 
-    private static final RenderLayers RENDER_TEXTURES = new MinecraftRenderLayers();
+    private static final RenderFactory RENDER_TEXTURES = new MinecraftRenderFactory();
     private static final BlockRenderLayers BLOCK_RENDER_TEXTURES = new MinecraftBlockRenderLayers();
     private static final OutlineRenderLayers OUTLINE_RENDER_TEXTURES = new MinecraftOutlineRenderLayers();
 
@@ -168,7 +169,7 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public RenderLayers renderLayers() {
+    public RenderFactory renderLayers() {
         return RENDER_TEXTURES;
     }
 

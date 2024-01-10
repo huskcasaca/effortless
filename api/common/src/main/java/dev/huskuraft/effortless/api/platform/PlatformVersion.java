@@ -6,4 +6,5 @@ public record PlatformVersion(
         int patch
 ) {
 
+    public static final PlatformVersion UNAVAILABLE = new PlatformVersion(-1, -1, -1);
 }

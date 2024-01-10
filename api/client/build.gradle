@@ -10,4 +10,5 @@ dependencies {
     implementation project(':api:common')
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     compileOnly 'org.lwjgl:lwjgl-glfw:3.3.1'
+    compileOnly 'org.lwjgl:lwjgl-opengl:3.1.0'
 }

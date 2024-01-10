@@ -3,7 +3,8 @@ package dev.huskuraft.effortless.api.platform;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
-import dev.huskuraft.effortless.api.input.VanillaKeys;
+import dev.huskuraft.effortless.api.input.Keys;
+import dev.huskuraft.effortless.api.renderer.RenderFactory;
 import dev.huskuraft.effortless.api.text.Text;
 
 import java.util.List;
@@ -16,8 +17,14 @@ public interface ClientPlatform extends Platform {
 
     <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor);
 
-    KeyBinding getKeyBinding(VanillaKeys key);
+    KeyBinding getKeyBinding(Keys key);
 
     KeyBinding newKeyBinding(String name, String category, KeyCodes key);
+
+   default RenderFactory getRenderFactory() {
+        return null;
+   }
+
+    ClientPlatform INSTANCE = ClientEntrance.getInstance().getPlatform();
 
 }

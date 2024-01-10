@@ -6,6 +6,7 @@ import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
@@ -396,7 +397,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                     hoveredButton = button;
                 }
 
-                renderer.renderRect(renderer.renderLayers().gui(), (int) (middleX + x1), (int) (middleY + y1), (int) (middleX + x2), (int) (middleY + y2), color.getRGB(), 0);
+                renderer.renderRect(RenderLayer.GUI, (int) (middleX + x1), (int) (middleY + y1), (int) (middleX + x2), (int) (middleY + y2), color.getRGB(), 0);
                 renderer.flush();
                 // icon
                 if (button.getIcon() != null) {
