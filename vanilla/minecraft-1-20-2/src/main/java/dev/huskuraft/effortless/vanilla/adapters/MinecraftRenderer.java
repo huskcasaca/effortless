@@ -125,7 +125,7 @@ public class MinecraftRenderer extends Renderer {
 //        var bufferbuilder = Tesselator.getInstance().getBuilder();
 //        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 
-        var buffer = minecraftBufferSource.getBuffer(MinecraftOutlineRenderLayers.OutlineRenderType.textured(MinecraftResource.toMinecraftResource(resource)));
+        var buffer = minecraftBufferSource.getBuffer(MinecraftOutlineRenderLayers.OutlineRenderType.textured(resource.reference()));
         buffer.vertex(matrix4f, x1, y1, blitOffset).uv(minU, minV).endVertex();
         buffer.vertex(matrix4f, x1, y2, blitOffset).uv(minU, maxV).endVertex();
         buffer.vertex(matrix4f, x2, y2, blitOffset).uv(maxU, maxV).endVertex();

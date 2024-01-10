@@ -21,6 +21,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.resources.ResourceLocation;
 
 import java.nio.file.Path;
 
@@ -30,7 +31,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
     public void onInitializeClient() {
         getEventRegistry().getClientStartEvent().invoker().onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
-            var channelId = MinecraftResource.toMinecraftResource(getChannel().getChannelId());
+            var channelId = getChannel().getChannelId().<ResourceLocation>reference();
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
                 receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(buf), MinecraftPlayer.fromMinecraftPlayer(client.player));
             });

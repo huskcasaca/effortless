@@ -2,8 +2,12 @@ package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.platform.Platform;
-import dev.huskuraft.effortless.vanilla.adapters.*;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftServer;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftWorld;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,7 +45,7 @@ public class ForgeEffortless extends Effortless {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-        CHANNEL = ChannelBuilder.named(MinecraftResource.toMinecraftResource(getChannel().getChannelId()))
+        CHANNEL = ChannelBuilder.named(getChannel().getChannelId().<ResourceLocation>reference())
                 .acceptedVersions((status, version) -> true)
                 .optional()
                 .networkProtocolVersion(getChannel().getCompatibilityVersion())

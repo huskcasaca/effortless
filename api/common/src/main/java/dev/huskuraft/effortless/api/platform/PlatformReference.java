@@ -2,10 +2,10 @@ package dev.huskuraft.effortless.api.platform;
 
 public interface PlatformReference extends PlatformResource {
 
-    Object value();
+    Object referenceValue();
 
     default <T> T reference() {
-        return (T) value();
+        return (T) referenceValue();
     }
 
 }

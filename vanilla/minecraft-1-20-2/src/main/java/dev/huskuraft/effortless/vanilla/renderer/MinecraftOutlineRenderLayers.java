@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
@@ -30,12 +29,12 @@ public class MinecraftOutlineRenderLayers extends OutlineRenderLayers {
 
     @Override
     public RenderLayer outlineTranslucent(Resource texture, boolean cull) {
-        return () -> (OutlineRenderType.outlineTranslucent(MinecraftResource.toMinecraftResource(texture), cull));
+        return () -> (OutlineRenderType.outlineTranslucent(texture.reference(), cull));
     }
 
     @Override
     public RenderLayer glowingSolid(Resource texture) {
-        return () -> (OutlineRenderType.glowingSolid(MinecraftResource.toMinecraftResource(texture)));
+        return () -> (OutlineRenderType.glowingSolid(texture.reference()));
     }
 
     @Override
@@ -45,7 +44,7 @@ public class MinecraftOutlineRenderLayers extends OutlineRenderLayers {
 
     @Override
     public RenderLayer glowingTranslucent(Resource texture) {
-        return () -> (OutlineRenderType.glowingTranslucent(MinecraftResource.toMinecraftResource(texture)));
+        return () -> (OutlineRenderType.glowingTranslucent(texture.reference()));
     }
 
     @Override

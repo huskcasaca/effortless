@@ -25,7 +25,7 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public Resource newResource(String namespace, String path) {
-        return MinecraftResource.fromMinecraftResource(new ResourceLocation(namespace, path));
+        return new MinecraftResource(new ResourceLocation(namespace, path));
     }
 
     @Override
@@ -40,7 +40,7 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public Optional<Item> newOptionalItem(Resource resource) {
-        return BuiltInRegistries.ITEM.getOptional(MinecraftResource.toMinecraftResource(resource)).map(MinecraftItem::fromMinecraft);
+        return BuiltInRegistries.ITEM.getOptional(resource.<ResourceLocation>reference()).map(MinecraftItem::fromMinecraft);
     }
 
     @Override

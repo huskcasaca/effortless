@@ -466,7 +466,7 @@ public class EditBox extends AbstractWidget {
             i = this.getX() + this.getWidth();
         }
 
-        renderer.renderRect(renderer.renderLayers().vanillaGuiTextHighlight(), i, j, k, l, -16776961);
+        renderer.renderRect(renderer.renderLayers().getGuiTextHighlightRenderLayer(), i, j, k, l, -16776961);
     }
 
     private int getMaxLength() {

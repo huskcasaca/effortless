@@ -19,17 +19,17 @@ import static dev.huskuraft.effortless.vanilla.adapters.MinecraftRenderLayer.fro
 public class MinecraftRenderFactory implements RenderFactory {
 
     @Override
-    public RenderLayer vanillaGui() {
+    public RenderLayer getGuiRenderLayer() {
         return fromMinecraftRenderLayer(BuildInRenderType.GUI);
     }
 
     @Override
-    public RenderLayer vanillaGuiOverlay() {
+    public RenderLayer getGuiOverlayRenderLayer() {
         return fromMinecraftRenderLayer(BuildInRenderType.GUI_OVERLAY);
     }
 
     @Override
-    public RenderLayer vanillaGuiTextHighlight() {
+    public RenderLayer getGuiTextHighlightRenderLayer() {
         return fromMinecraftRenderLayer(BuildInRenderType.GUI_TEXT_HIGHLIGHT);
     }
 
