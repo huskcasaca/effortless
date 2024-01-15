@@ -10,7 +10,7 @@ import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderLayers;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderFactory;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderComponentFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -28,7 +28,7 @@ public class MinecraftRenderer extends Renderer {
 
     private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
 
-    private static final RenderFactory RENDER_TEXTURES = new MinecraftRenderFactory();
+    private static final RenderComponentFactory RENDER_TEXTURES = new MinecraftRenderComponentFactory();
     private static final BlockRenderLayers BLOCK_RENDER_TEXTURES = new MinecraftBlockRenderLayers();
     private static final OutlineRenderLayers OUTLINE_RENDER_TEXTURES = new MinecraftOutlineRenderLayers();
 
@@ -179,7 +179,7 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public RenderFactory renderLayers() {
+    public RenderComponentFactory renderLayers() {
         return RENDER_TEXTURES;
     }
 

@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderLayers;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderFactory;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderComponentFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -26,7 +26,7 @@ import java.util.Optional;
 
 public class MinecraftRenderer extends Renderer {
 
-    private static final RenderFactory RENDER_TEXTURES = new MinecraftRenderFactory();
+    private static final RenderComponentFactory RENDER_TEXTURES = new MinecraftRenderComponentFactory();
     private static final BlockRenderLayers BLOCK_RENDER_TEXTURES = new MinecraftBlockRenderLayers();
     private static final OutlineRenderLayers OUTLINE_RENDER_TEXTURES = new MinecraftOutlineRenderLayers();
 
@@ -169,7 +169,7 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public RenderFactory renderLayers() {
+    public RenderComponentFactory renderLayers() {
         return RENDER_TEXTURES;
     }
 

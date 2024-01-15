@@ -7,10 +7,12 @@ import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.platform.SearchTree;
+import dev.huskuraft.effortless.api.renderer.RenderComponentFactory;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftKeyBinding;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftText;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderComponentFactory;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;
@@ -80,5 +82,10 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
     @Override
     public KeyBinding newKeyBinding(String name, String category, KeyCodes key) {
         return MinecraftKeyBinding.fromMinecraft(new KeyMapping(name, key.value(), category));
+    }
+
+    @Override
+    public RenderComponentFactory getRenderFactory() {
+        return new MinecraftRenderComponentFactory();
     }
 }

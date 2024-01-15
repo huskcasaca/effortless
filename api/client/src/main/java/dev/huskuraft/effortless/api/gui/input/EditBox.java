@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.api.gui.input;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 
@@ -466,7 +467,7 @@ public class EditBox extends AbstractWidget {
             i = this.getX() + this.getWidth();
         }
 
-        renderer.renderRect(renderer.renderLayers().getGuiTextHighlightRenderLayer(), i, j, k, l, -16776961);
+        renderer.renderRect(RenderLayer.GUI_TEXT_HIGHLIGHT, i, j, k, l, -16776961);
     }
 
     private int getMaxLength() {

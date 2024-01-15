@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.renderer.programs;
 
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
-import dev.huskuraft.effortless.api.renderer.RenderFactory;
+import dev.huskuraft.effortless.api.renderer.RenderComponentFactory;
 import dev.huskuraft.effortless.api.renderer.Shader;
 import dev.huskuraft.effortless.api.renderer.Shaders;
 import org.lwjgl.opengl.GL11;
@@ -33,19 +33,19 @@ public interface RenderState extends PlatformReference {
 
         private static class Default extends CompositeBuilder {
 
-            private TextureState textureState = TextureState.NO_TEXTURE;
-            private ShaderState shaderState = ShaderState.NO_SHADER;
-            private TransparencyState transparencyState = TransparencyState.NO_TRANSPARENCY;
+            private TextureState textureState = TextureState.NO_TEXTURE; // RenderStateShard.NO_TEXTURE;
+            private ShaderState shaderState = ShaderState.NO_SHADER; // RenderStateShard.NO_SHADER;
+            private TransparencyState transparencyState = TransparencyState.NO_TRANSPARENCY; // RenderStateShard.NO_TRANSPARENCY;
             private DepthTestState depthTestState = DepthTestState.ALWAYS_DEPTH_TEST; // RenderStateShard.LEQUAL_DEPTH_TEST;
             private CullState cullState = CullState.CULL; // RenderStateShard.CULL;
-            private LightmapState lightmapState = LightmapState.NO_LIGHTMAP;
-            private OverlayState overlayState = OverlayState.NO_OVERLAY;
-            private LayeringState layeringState = LayeringState.NO_LAYERING;
-            private OutputState outputState = OutputState.NO_TARGET;
+            private LightmapState lightmapState = LightmapState.NO_LIGHTMAP; // RenderStateShard.NO_LIGHTMAP;
+            private OverlayState overlayState = OverlayState.NO_OVERLAY; // RenderStateShard.NO_OVERLAY;
+            private LayeringState layeringState = LayeringState.NO_LAYERING; // RenderStateShard.NO_LAYERING;
+            private OutputState outputState = OutputState.NO_TARGET; // RenderStateShard.MAIN_TARGET;
             private TexturingState texturingState = TexturingState.NO_TEXTURING; // RenderStateShard.DEFAULT_TEXTURING;
             private WriteMaskState writeMaskState = WriteMaskState.COLOR_DEPTH_WRITE;
             private LineState lineState = LineState.DEFAULT_WIDTH; // RenderStateShard.DEFAULT_LINE;
-            private ColorLogicState colorLogicState = null;
+            private ColorLogicState colorLogicState = ColorLogicState.NO_COLOR_LOGIC;
 
 
 //                this.textureState = RenderStateShard.NO_TEXTURE;
@@ -142,14 +142,14 @@ public interface RenderState extends PlatformReference {
 
             @Override
             public CompositeRenderState create(boolean affectOutline) {
-                return RenderFactory.INSTANCE.createCompositeState(textureState, shaderState, transparencyState, depthTestState, cullState, lightmapState, overlayState, layeringState, outputState, texturingState, writeMaskState, lineState, colorLogicState, affectOutline);
+                return RenderComponentFactory.INSTANCE.createCompositeState(textureState, shaderState, transparencyState, depthTestState, cullState, lightmapState, overlayState, layeringState, outputState, texturingState, writeMaskState, lineState, colorLogicState, affectOutline);
             }
         }
     }
 
     interface TextureState extends RenderState {
 
-        TextureState NO_TEXTURE = create("none");
+        TextureState NO_TEXTURE = create("none", null);
 
         record Texture(
                 Resource resource,
@@ -158,12 +158,8 @@ public interface RenderState extends PlatformReference {
         ) {
         }
 
-        static TextureState create(String name) {
-            return RenderFactory.INSTANCE.createTextureState(name);
-        }
-
         static TextureState create(String name, Texture texture) {
-            return RenderFactory.INSTANCE.createTextureState(name, texture);
+            return RenderComponentFactory.INSTANCE.createTextureState(name, texture);
         }
     }
     interface TransparencyState extends RenderState {
@@ -176,7 +172,7 @@ public interface RenderState extends PlatformReference {
         TransparencyState TRANSLUCENT_TRANSPARENCY = create("translucent", Type.TRANSLUCENT);
 
         static TransparencyState create(String name, Type type) {
-            return RenderFactory.INSTANCE.createTransparencyState(name, type);
+            return RenderComponentFactory.INSTANCE.createTransparencyState(name, type);
         }
 
         enum Type {
@@ -192,9 +188,11 @@ public interface RenderState extends PlatformReference {
 
         ShaderState NO_SHADER = create("none", null);
         ShaderState GUI_SHADER_STATE = create("gui", Shaders.GUI);
+        ShaderState GUI_OVERLAY_SHADER_STATE = create("gui_overlay", Shaders.GUI_OVERLAY);
+        ShaderState GUI_TEXT_HIGHLIGHT_SHADER_STATE = create("gui_text_highlight", Shaders.GUI_TEXT_HIGHLIGHT);
 
         static ShaderState create(String name, Shader shader) {
-            return RenderFactory.INSTANCE.createShaderState(name, shader);
+            return RenderComponentFactory.INSTANCE.createShaderState(name, shader);
         }
 
     }
@@ -210,7 +208,7 @@ public interface RenderState extends PlatformReference {
         DepthTestState ALWAYS_DEPTH_TEST = create("always", GL11.GL_ALWAYS);
 
         static DepthTestState create(String name, int function) {
-            return RenderFactory.INSTANCE.createDepthTestState(name, function);
+            return RenderComponentFactory.INSTANCE.createDepthTestState(name, function);
         }
     }
     interface CullState extends RenderState {
@@ -219,7 +217,7 @@ public interface RenderState extends PlatformReference {
         CullState DISABLE_CULL = create("disable_cull", false);
 
         static CullState create(String name, boolean cull) {
-            return RenderFactory.INSTANCE.createCullState(name, cull);
+            return RenderComponentFactory.INSTANCE.createCullState(name, cull);
         }
     }
     interface LightmapState extends RenderState {
@@ -228,7 +226,7 @@ public interface RenderState extends PlatformReference {
         LightmapState NO_LIGHTMAP = create("no_lightmap", false);
 
         static LightmapState create(String name, boolean lightmap) {
-            return RenderFactory.INSTANCE.createLightmapState(name, lightmap);
+            return RenderComponentFactory.INSTANCE.createLightmapState(name, lightmap);
         }
     }
     interface OverlayState extends RenderState {
@@ -237,7 +235,7 @@ public interface RenderState extends PlatformReference {
         OverlayState NO_OVERLAY = create("no_overlay", false);
 
         static OverlayState create(String name, boolean overlay) {
-            return RenderFactory.INSTANCE.createOverlayState(name, overlay);
+            return RenderComponentFactory.INSTANCE.createOverlayState(name, overlay);
         }
     }
     interface LayeringState extends RenderState {
@@ -252,7 +250,7 @@ public interface RenderState extends PlatformReference {
         LayeringState VIEW_OFFSET_Z_LAYERING = create("view_offset_z", Type.VIEW_OFFSET_Z);
 
         static LayeringState create(String name, Type type) {
-            return RenderFactory.INSTANCE.createLayeringState(name, type);
+            return RenderComponentFactory.INSTANCE.createLayeringState(name, type);
         }
     }
     interface OutputState extends RenderState {
@@ -266,30 +264,30 @@ public interface RenderState extends PlatformReference {
             ITEM_ENTITY,
         }
 
-        OutputState NO_TARGET = create("main", Target.NO);
-        OutputState OUTLINE_TARGET = create("outline", Target.OUTLINE);
-        OutputState TRANSLUCENT_TARGET = create("translucent", Target.TRANSLUCENT);
-        OutputState PARTICLES_TARGET = create("particles", Target.PARTICLES);
-        OutputState WEATHER_TARGET = create("weather", Target.WEATHER);
-        OutputState CLOUDS_TARGET = create("clouds", Target.CLOUDS);
-        OutputState ITEM_ENTITY_TARGET = create("item_entity", Target.ITEM_ENTITY);
+        OutputState NO_TARGET = create("no_target", Target.NO);
+        OutputState OUTLINE_TARGET = create("outline_target", Target.OUTLINE);
+        OutputState TRANSLUCENT_TARGET = create("translucent_target", Target.TRANSLUCENT);
+        OutputState PARTICLES_TARGET = create("particles_target", Target.PARTICLES);
+        OutputState WEATHER_TARGET = create("weather_target", Target.WEATHER);
+        OutputState CLOUDS_TARGET = create("clouds_target", Target.CLOUDS);
+        OutputState ITEM_ENTITY_TARGET = create("item_entity_target", Target.ITEM_ENTITY);
 
         static OutputState create(String name, Target target) {
-            return RenderFactory.INSTANCE.createOutputState(name, target);
+            return RenderComponentFactory.INSTANCE.createOutputState(name, target);
         }
     }
     interface TexturingState extends RenderState {
 
         TexturingState NO_TEXTURING = create("none", () -> {}, () -> {});
         static TexturingState create(String name, Runnable setupState, Runnable clearState) {
-            return RenderFactory.INSTANCE.createTexturingState(name, setupState, clearState);
+            return RenderComponentFactory.INSTANCE.createTexturingState(name, setupState, clearState);
         }
     }
 
     interface OffsetTexturingState extends TexturingState {
 
         static OffsetTexturingState create(String name, float offsetX, float offsetY) {
-            return RenderFactory.INSTANCE.createOffsetTexturingState(name, offsetX, offsetY);
+            return RenderComponentFactory.INSTANCE.createOffsetTexturingState(name, offsetX, offsetY);
         }
     }
     interface WriteMaskState extends RenderState {
@@ -299,19 +297,16 @@ public interface RenderState extends PlatformReference {
         WriteMaskState DEPTH_WRITE = create("depth_write", false, true);
 
         static WriteMaskState create(String name, boolean writeColor, boolean writeDepth) {
-            return RenderFactory.INSTANCE.createWriteMaskState(name, writeColor, writeDepth);
+            return RenderComponentFactory.INSTANCE.createWriteMaskState(name, writeColor, writeDepth);
         }
     }
     interface LineState extends RenderState {
 
-        LineState NO_WIDTH = create("no_width");
-        LineState DEFAULT_WIDTH = create("default_width", 1.0f);
+        LineState NO_WIDTH = create("no_width", null);
+        LineState DEFAULT_WIDTH = create("default_width", 1.0d);
 
-        static LineState create(String name) {
-            return RenderFactory.INSTANCE.createLineState(name);
-        }
-        static LineState create(String name, double width) {
-            return RenderFactory.INSTANCE.createLineState(name, width);
+        static LineState create(String name, Double width) {
+            return RenderComponentFactory.INSTANCE.createLineState(name, width);
         }
     }
     interface ColorLogicState extends RenderState {
@@ -324,7 +319,7 @@ public interface RenderState extends PlatformReference {
         ColorLogicState OR_REVERSE_COLOR_LOGIC = create("or_reverse", Op.OR_REVERSE_LOGIC);
 
         static ColorLogicState create(String name, Op op) {
-            return RenderFactory.INSTANCE.createColorLogicState(name, op);
+            return RenderComponentFactory.INSTANCE.createColorLogicState(name, op);
         }
     }
 

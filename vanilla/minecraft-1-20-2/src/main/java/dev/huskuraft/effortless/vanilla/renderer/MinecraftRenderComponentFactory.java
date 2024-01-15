@@ -5,13 +5,14 @@ import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 
 import java.util.OptionalDouble;
 
-public class MinecraftRenderFactory extends RenderType implements RenderFactory {
+public class MinecraftRenderComponentFactory extends RenderType implements RenderComponentFactory {
 
-    public MinecraftRenderFactory() {
+    public MinecraftRenderComponentFactory() {
         super(null, null, null, 0, false, false, null, null);
 //        super("", new VertexFormat(ImmutableMap.ofEntries()), VertexFormat.Mode.DEBUG_LINE_STRIP, 0, false, false, () -> {}, () -> {});
     }
@@ -68,13 +69,13 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
     }
 
     @Override
-    public RenderState.TextureState createTextureState(String name) {
-        return () -> NO_TEXTURE;
+    public RenderState createRenderState(String name, Runnable setupState, Runnable clearState) {
+        return () -> new RenderStateShard(name, setupState, clearState){};
     }
 
     @Override
     public RenderState.TextureState createTextureState(String name, RenderState.TextureState.Texture texture) {
-        return () -> new TextureStateShard(texture.resource().reference(), texture.blur(), texture.mipmap());
+        return texture == null ? () -> NO_TEXTURE : () -> new TextureStateShard(texture.resource().reference(), texture.blur(), texture.mipmap());
     }
 
     @Override
@@ -155,13 +156,8 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
     }
 
     @Override
-    public RenderState.LineState createLineState(String name) {
-        return () -> new LineStateShard(OptionalDouble.empty());
-    }
-
-    @Override
-    public RenderState.LineState createLineState(String name, double width) {
-        return () -> new LineStateShard(OptionalDouble.of(width));
+    public RenderState.LineState createLineState(String name, Double width) {
+        return () -> new LineStateShard(width == null ? OptionalDouble.empty() : OptionalDouble.of(width));
     }
 
     @Override

@@ -8,4 +8,8 @@ public interface PlatformReference extends PlatformResource {
         return (T) referenceValue();
     }
 
+    @Override
+    default boolean isAvailable() {
+        return referenceValue() != null;
+    }
 }

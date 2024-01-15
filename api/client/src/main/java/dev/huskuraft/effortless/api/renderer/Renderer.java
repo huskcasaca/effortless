@@ -398,7 +398,7 @@ public abstract class Renderer {
 
     public abstract void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState);
 
-    public abstract RenderFactory renderLayers();
+    public abstract RenderComponentFactory renderLayers();
 
     public abstract BlockRenderLayers blockRenderLayers();
 

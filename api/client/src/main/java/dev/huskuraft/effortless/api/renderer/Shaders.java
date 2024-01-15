@@ -61,6 +61,6 @@ public enum Shaders implements Shader {
 
     @Override
     public Object referenceValue() {
-        return RenderFactory.INSTANCE.getShader(this).referenceValue();
+        return RenderComponentFactory.INSTANCE.getShader(this).referenceValue();
     }
 }
