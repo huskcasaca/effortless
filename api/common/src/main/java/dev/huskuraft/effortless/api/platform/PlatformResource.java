@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.api.platform;
 
-import java.util.function.Supplier;
-
 public interface PlatformResource {
 
     default PlatformVersion isAvailableSince() {
@@ -20,8 +18,8 @@ public interface PlatformResource {
         return true;
     }
 
-    static <T> Supplier<T> unavailable() {
-        return () -> null;
+    static <T> T unavailable() {
+        return null;
     }
 
 }

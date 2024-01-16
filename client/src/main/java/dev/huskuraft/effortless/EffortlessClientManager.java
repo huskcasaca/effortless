@@ -13,9 +13,9 @@ import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.api.renderer.Shaders;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.renderer.BlockShaders;
-import dev.huskuraft.effortless.renderer.GuiShaders;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
 import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
@@ -281,9 +281,8 @@ public final class EffortlessClientManager implements ClientManager {
 
     public void onRegisterShader(RegisterShader.ShadersSink sink) {
         BlockShaders.TINTED_OUTLINE.register(sink);
-        GuiShaders.GUI.register(sink);
-        GuiShaders.GUI_OVERLAY.register(sink);
-        GuiShaders.GUI_TEXT_HIGHLIGHT.register(sink);
-
+        for (var value : Shaders.values()) {
+            value.register(sink);
+        }
     }
 }

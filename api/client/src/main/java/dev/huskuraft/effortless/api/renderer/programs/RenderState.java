@@ -12,7 +12,7 @@ public interface RenderState extends PlatformReference {
         return new CompositeBuilder.Default();
     }
 
-    abstract class CompositeBuilder {
+    abstract class CompositeBuilder extends RenderLayers {
 
         public abstract CompositeBuilder setTextureState(TextureState state);
         public abstract CompositeBuilder setShaderState(ShaderState state);

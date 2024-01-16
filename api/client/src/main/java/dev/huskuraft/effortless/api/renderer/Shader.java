@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.api.renderer;
 import dev.huskuraft.effortless.api.events.render.RegisterShader;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 
-import javax.annotation.Nullable;
+import java.io.IOException;
 
 public interface Shader extends PlatformReference {
 
@@ -11,13 +11,18 @@ public interface Shader extends PlatformReference {
         return new LazyShader(shaderResource, format);
     }
 
+    String getResource();
+
+    VertexFormat getVertexFormat();
+
     default void register(RegisterShader.ShadersSink sink) {
-        throw new UnsupportedOperationException();
+        try {
+            sink.register(getResource(), getVertexFormat(), shader -> {});
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @Nullable
-    default Uniform getUniform(String param) {
-        throw new UnsupportedOperationException();
-    }
+    Uniform getUniform(String param);
 
 }

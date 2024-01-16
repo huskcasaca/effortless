@@ -1,5 +1,9 @@
 package dev.huskuraft.effortless.api.renderer;
 
+import dev.huskuraft.effortless.api.events.render.RegisterShader;
+
+import javax.annotation.Nullable;
+
 public enum Shaders implements Shader {
     POSITION_COLOR_LIGHTMAP,
     POSITION,
@@ -52,14 +56,51 @@ public enum Shaders implements Shader {
     END_PORTAL,
     END_GATEWAY,
     LINES,
-    GUI,
-    GUI_OVERLAY,
-    GUI_TEXT_HIGHLIGHT,
+    GUI( "rendertype_gui", VertexFormats.POSITION_COLOR),
+    GUI_OVERLAY( "rendertype_gui_overlay", VertexFormats.POSITION_COLOR),
+    GUI_TEXT_HIGHLIGHT( "rendertype_gui_text_highlight", VertexFormats.POSITION_COLOR),
     GUI_GHOST_RECIPE_OVERLAY,
     ;
 
+    private final Shader shader;
+
+    Shaders() {
+        this.shader = null;
+    }
+
+    Shaders(String resource, VertexFormat vertexFormat) {
+        this.shader = new LazyShader(resource, vertexFormat);
+    }
+
+    @Override
+    public void register(RegisterShader.ShadersSink sink) {
+        if (shader != null) {
+            shader.register(sink);
+        }
+    }
+
+    private Shader getShader() {
+        return RenderFactory.INSTANCE.getShader(this).ifUnavailable(() -> shader);
+    }
+
+    @Override
+    public String getResource() {
+        return getShader().getResource();
+    }
+
+    @Override
+    public VertexFormat getVertexFormat() {
+        return getShader().getVertexFormat();
+    }
+
+    @Nullable
+    @Override
+    public Uniform getUniform(String param) {
+        return getShader().getUniform(param);
+    }
+
     @Override
     public Object referenceValue() {
-        return RenderFactory.INSTANCE.getShader(this).referenceValue();
+        return getShader().referenceValue();
     }
 }

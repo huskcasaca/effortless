@@ -7,12 +7,12 @@ import java.io.IOException;
 class LazyShader implements Shader {
 
     private Shader reference;
-    private final String shaderResource;
-    private final VertexFormat format;
+    private final String resource;
+    private final VertexFormat vertexFormat;
 
-    public LazyShader(String shaderResource, VertexFormat format) {
-        this.shaderResource = shaderResource;
-        this.format = format;
+    public LazyShader(String resource, VertexFormat vertexFormat) {
+        this.resource = resource;
+        this.vertexFormat = vertexFormat;
     }
 
     @Override
@@ -21,9 +21,19 @@ class LazyShader implements Shader {
     }
 
     @Override
+    public String getResource() {
+        return resource;
+    }
+
+    @Override
+    public VertexFormat getVertexFormat() {
+        return vertexFormat;
+    }
+
+    @Override
     public void register(RegisterShader.ShadersSink sink) {
         try {
-            sink.register(shaderResource, format, shader -> this.reference = shader);
+            sink.register(resource, vertexFormat, shader -> this.reference = shader);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

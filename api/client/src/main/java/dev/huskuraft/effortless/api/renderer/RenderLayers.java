@@ -67,10 +67,10 @@ public abstract class RenderLayers {
     protected static final RenderState.ShaderState END_PORTAL_SHADER_STATE = RenderState.ShaderState.create("end_portal", Shaders.END_PORTAL);
     protected static final RenderState.ShaderState END_GATEWAY_SHADER_STATE = RenderState.ShaderState.create("end_gateway", Shaders.END_GATEWAY);
     protected static final RenderState.ShaderState LINES_SHADER_STATE = RenderState.ShaderState.create("lines", Shaders.LINES);
-    protected static final RenderState.ShaderState GUI_SHADER_STATE = RenderState.ShaderState.create("gui", Shaders.GUI);
-    protected static final RenderState.ShaderState GUI_OVERLAY_SHADER_STATE = RenderState.ShaderState.create("gui_overlay", Shaders.GUI_OVERLAY);
-    protected static final RenderState.ShaderState GUI_TEXT_HIGHLIGHT_SHADER_STATE = RenderState.ShaderState.create("gui_text_highlight", Shaders.GUI_TEXT_HIGHLIGHT);
-    protected static final RenderState.ShaderState GUI_GHOST_RECIPE_OVERLAY_SHADER_STATE = RenderState.ShaderState.create("gui_ghost_recipe_overlay", Shaders.GUI_GHOST_RECIPE_OVERLAY);
+   public static final RenderState.ShaderState GUI_SHADER_STATE = RenderState.ShaderState.create("gui", Shaders.GUI);
+   public static final RenderState.ShaderState GUI_OVERLAY_SHADER_STATE = RenderState.ShaderState.create("gui_overlay", Shaders.GUI_OVERLAY);
+   public static final RenderState.ShaderState GUI_TEXT_HIGHLIGHT_SHADER_STATE = RenderState.ShaderState.create("gui_text_highlight", Shaders.GUI_TEXT_HIGHLIGHT);
+   public static final RenderState.ShaderState GUI_GHOST_RECIPE_OVERLAY_SHADER_STATE = RenderState.ShaderState.create("gui_ghost_recipe_overlay", Shaders.GUI_GHOST_RECIPE_OVERLAY);
 
     protected static final RenderState.DepthTestState NEVER_DEPTH_TEST = RenderState.DepthTestState.create("never", GL11.GL_NEVER);
     protected static final RenderState.DepthTestState LESS_DEPTH_TEST = RenderState.DepthTestState.create("less", GL11.GL_LESS);
@@ -114,9 +114,9 @@ public abstract class RenderLayers {
     protected static final RenderState.ColorLogicState NO_COLOR_LOGIC = RenderState.ColorLogicState.create("none", RenderState.ColorLogicState.Op.NO_LOGIC);
     protected static final RenderState.ColorLogicState OR_REVERSE_COLOR_LOGIC = RenderState.ColorLogicState.create("or_reverse", RenderState.ColorLogicState.Op.OR_REVERSE_LOGIC);
 
-    protected static final RenderLayer GUI = RenderLayer.createComposite("gui", VertexFormats.POSITION_COLOR, VertexFormats.Modes.QUADS, 256, RenderState.builder().setShaderState(GUI_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
-    protected static final RenderLayer GUI_OVERLAY = RenderLayer.createComposite("gui_text_highlight", VertexFormats.POSITION_COLOR, VertexFormats.Modes.QUADS, 256, RenderState.builder().setShaderState(GUI_TEXT_HIGHLIGHT_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(NEVER_DEPTH_TEST).setColorLogicState(OR_REVERSE_COLOR_LOGIC).create(false));
-    protected static final RenderLayer GUI_TEXT_HIGHLIGHT = RenderLayer.createComposite("gui_overlay", VertexFormats.POSITION_COLOR, VertexFormats.Modes.QUADS, 256, RenderState.builder().setShaderState(GUI_OVERLAY_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(NEVER_DEPTH_TEST).setWriteMaskState(COLOR_WRITE).create(false));
-    protected static final RenderLayer CUSTOM = RenderLayer.createComposite("custom", VertexFormats.BLOCK, VertexFormats.Modes.TRIANGLES, 0, true, true, RenderState.builder().setDepthTestState(EQUAL_DEPTH_TEST).create(false));
+    public static final RenderLayer GUI = RenderLayer.createComposite("gui", VertexFormats.POSITION_COLOR, VertexFormats.Modes.QUADS, 256, RenderState.builder().setShaderState(GUI_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
+    public static final RenderLayer GUI_OVERLAY = RenderLayer.createComposite("gui_text_highlight", VertexFormats.POSITION_COLOR, VertexFormats.Modes.QUADS, 256, RenderState.builder().setShaderState(GUI_TEXT_HIGHLIGHT_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(NEVER_DEPTH_TEST).setColorLogicState(OR_REVERSE_COLOR_LOGIC).create(false));
+    public static final RenderLayer GUI_TEXT_HIGHLIGHT = RenderLayer.createComposite("gui_overlay", VertexFormats.POSITION_COLOR, VertexFormats.Modes.QUADS, 256, RenderState.builder().setShaderState(GUI_OVERLAY_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(NEVER_DEPTH_TEST).setWriteMaskState(COLOR_WRITE).create(false));
+    public static final RenderLayer CUSTOM = RenderLayer.createComposite("custom", VertexFormats.BLOCK, VertexFormats.Modes.TRIANGLES, 0, true, true, RenderState.builder().setDepthTestState(EQUAL_DEPTH_TEST).create(false));
 
 }
