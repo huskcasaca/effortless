@@ -20,6 +20,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.resources.ResourceLocation;
 
 import java.nio.file.Path;
 
@@ -29,7 +31,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
     public void onInitializeClient() {
         getEventRegistry().getClientStartEvent().invoker().onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
-            var channelId = MinecraftResource.toMinecraftResource(getChannel().getChannelId());
+            var channelId = (ResourceLocation) getChannel().getChannelId().reference();
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
                 receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(buf), MinecraftPlayer.fromMinecraftPlayer(client.player));
             });
@@ -40,9 +42,8 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
             KeyBindingHelper.registerKeyBinding(MinecraftKeyBinding.toMinecraft(key1.getBinding()));
         });
 
-        ClientShadersEvents.REGISTER.register((provider, sink) -> {
-            MinecraftRenderFactory.Shaders.registerShaders(provider, sink::register);
-            MinecraftBlockRenderLayers.Shaders.registerShaders(provider, sink::register);
+        ClientShadersEvents.REGISTER.register((manager, sink) -> {
+            getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((shaderResource, format, consumer) -> sink.register(new ShaderInstance(manager, shaderResource, format.reference()), shaderInstance -> consumer.accept((MinecraftShader) () -> shaderInstance)));
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {

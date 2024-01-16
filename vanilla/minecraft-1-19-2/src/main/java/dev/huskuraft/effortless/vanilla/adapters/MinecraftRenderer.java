@@ -13,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.RandomSource;
 
@@ -72,7 +73,7 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public VertexBuffer vertexBuffer(RenderLayer renderLayer) {
-        return new MinecraftVertexBuffer(minecraftBufferSource.getBuffer(MinecraftRenderLayer.toMinecraftRenderLayer(renderLayer)));
+        return new MinecraftVertexBuffer(minecraftBufferSource.getBuffer(renderLayer.reference()));
     }
 
     @Override
@@ -105,11 +106,11 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-        RenderSystem.setShaderTexture(0, MinecraftResource.toMinecraftResource(resource));
+        RenderSystem.setShaderTexture(0, resource.reference());
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         var matrix4f = minecraftMatrixStack.last().pose();
         var bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferbuilder.vertex(matrix4f, x1, y1, blitOffset).uv(minU, minV).endVertex();
         bufferbuilder.vertex(matrix4f, x1, y2, blitOffset).uv(minU, maxV).endVertex();
         bufferbuilder.vertex(matrix4f, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
@@ -141,7 +142,7 @@ public class MinecraftRenderer extends Renderer {
     public void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState) {
         var minecraftBlockRenderer = minecraftClient.getBlockRenderer();
         var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
-        var minecraftRenderLayer = MinecraftRenderLayer.toMinecraftRenderLayer(renderLayer);
+        var minecraftRenderLayer = (RenderType) renderLayer.reference();
         var minecraftBlockState = MinecraftBlockState.toMinecraftBlockState(blockState);
         var minecraftBlockPosition = MinecraftPlayer.toMinecraftBlockPosition(blockPosition);
 

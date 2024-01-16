@@ -1,7 +1,10 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.renderer.*;
@@ -10,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -125,6 +129,17 @@ public class MinecraftRenderer extends Renderer {
 //        flush();
 ////        buffer.endVertex();
 ////        BufferUploader.drawWithShader(bufferbuilder.end());
+
+        RenderSystem.setShaderTexture(0, resource.reference());
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        var matrix4f = minecraftMatrixStack.last().pose();
+        var bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.vertex(matrix4f, x1, y1, blitOffset).uv(minU, minV).endVertex();
+        bufferbuilder.vertex(matrix4f, x1, y2, blitOffset).uv(minU, maxV).endVertex();
+        bufferbuilder.vertex(matrix4f, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
+        bufferbuilder.vertex(matrix4f, x2, y1, blitOffset).uv(maxU, minV).endVertex();
+        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
     @Override

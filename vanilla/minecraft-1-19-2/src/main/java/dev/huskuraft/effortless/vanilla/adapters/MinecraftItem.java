@@ -34,7 +34,7 @@ public class MinecraftItem implements Item {
 
     @Override
     public Resource getId() {
-        return MinecraftResource.fromMinecraftResource(DefaultedRegistry.ITEM.getKey(reference));
+        return new MinecraftResource(DefaultedRegistry.ITEM.getKey(reference));
     }
 
     @Override

@@ -220,7 +220,7 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
             case TEXT_BACKGROUND ->                 (MinecraftShader) PlatformResource::unavailable;
             case TEXT_INTENSITY ->                  (MinecraftShader) GameRenderer::getRendertypeTextIntensityShader;
             case TEXT_SEE_THROUGH ->                (MinecraftShader) GameRenderer::getRendertypeTextSeeThroughShader;
-            case TEXT_BACKGROUND ->                 (MinecraftShader) PlatformResource::unavailable;
+            case TEXT_BACKGROUND_SEE_THROUGH ->                 (MinecraftShader) PlatformResource::unavailable;
             case TEXT_INTENSITY_SEE_THROUGH ->      (MinecraftShader) GameRenderer::getRendertypeTextIntensitySeeThroughShader;
             case LIGHTNING ->                       (MinecraftShader) GameRenderer::getRendertypeLightningShader;
             case TRIPWIRE ->                        (MinecraftShader) GameRenderer::getRendertypeTripwireShader;
