@@ -42,7 +42,7 @@ public class BlockClusterOutline extends Outline {
 
         renderer.pushLayer();
 
-        var renderLayer = renderer.outlineRenderLayers().outlineTranslucent(faceTexture.get(), true);
+        var renderLayer = OutlineRenderLayers.outlineTranslucent(faceTexture.get(), true);
         cluster.visibleFaces.forEach((face, axisDirection) -> {
             var direction = Orientation.get(axisDirection, face.axis);
             var pos = face.blockPosition;

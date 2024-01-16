@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class LazyShader implements Shader {
 
-    private Object reference;
+    private Shader reference;
     private final String shaderResource;
     private final VertexFormat format;
 
@@ -17,19 +17,21 @@ class LazyShader implements Shader {
 
     @Override
     public Object referenceValue() {
-        return reference;
+        return reference.referenceValue();
     }
 
     @Override
     public void register(RegisterShader.ShadersSink sink) {
         try {
-            sink.register(shaderResource, format, this::setReferenceValue);
+            sink.register(shaderResource, format, shader -> this.reference = shader);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void setReferenceValue(Object value) {
-        this.reference = value;
+    @Override
+    public Uniform getUniform(String param) {
+        return reference.getUniform(param);
     }
+
 }

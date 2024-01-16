@@ -1,20 +1,22 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import dev.huskuraft.effortless.api.platform.PlatformResource;
+import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
-import dev.huskuraft.effortless.renderer.CompatibleRenderComponentFactory;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftShader;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.inventory.InventoryMenu;
 
 import java.util.OptionalDouble;
 
-public class MinecraftRenderComponentFactory extends RenderType implements CompatibleRenderComponentFactory {
+public class MinecraftRenderFactory extends RenderType implements RenderFactory {
 
-    public MinecraftRenderComponentFactory() {
+    public MinecraftRenderFactory() {
         super(null, null, null, 0, false, false, null, null);
 //        super("", new VertexFormat(ImmutableMap.ofEntries()), VertexFormat.Mode.DEBUG_LINE_STRIP, 0, false, false, () -> {}, () -> {});
     }
@@ -66,7 +68,7 @@ public class MinecraftRenderComponentFactory extends RenderType implements Compa
                 .setTexturingState(texturingState.reference())
                 .setWriteMaskState(writeMaskState.reference())
                 .setLineState(lineState.reference())
-//                .setColorLogicState(colorLogicState.reference())
+                .setColorLogicState(colorLogicState.reference())
                 .createCompositeState(affectOutline);
     }
 
@@ -165,13 +167,13 @@ public class MinecraftRenderComponentFactory extends RenderType implements Compa
     @Override
     public RenderState.ColorLogicState createColorLogicState(String name, RenderState.ColorLogicState.Op op) {
         return switch (op) {
-            case NO_LOGIC ->         PlatformResource::unavailable;
-            case OR_REVERSE_LOGIC -> PlatformResource::unavailable;
+            case NO_LOGIC ->         () -> NO_COLOR_LOGIC;
+            case OR_REVERSE_LOGIC -> () -> OR_REVERSE_COLOR_LOGIC;
         };
     }
 
     @Override
-    public Shader getShader(Shaders shaders) {
+    public MinecraftShader getShader(Shaders shaders) {
         return switch (shaders) {
             case POSITION_COLOR_LIGHTMAP ->         GameRenderer::getPositionColorLightmapShader;
             case POSITION ->                        GameRenderer::getPositionShader;
@@ -214,20 +216,20 @@ public class MinecraftRenderComponentFactory extends RenderType implements Compa
             case ENTITY_GLINT_DIRECT ->             GameRenderer::getRendertypeEntityGlintDirectShader;
             case CRUMBLING ->                       GameRenderer::getRendertypeCrumblingShader;
             case TEXT ->                            GameRenderer::getRendertypeTextShader;
-            case TEXT_BACKGROUND ->                 CompatibleRenderComponentFactory.super.getShader(shaders);
+            case TEXT_BACKGROUND ->                 GameRenderer::getRendertypeTextBackgroundShader;
             case TEXT_INTENSITY ->                  GameRenderer::getRendertypeTextIntensityShader;
             case TEXT_SEE_THROUGH ->                GameRenderer::getRendertypeTextSeeThroughShader;
-            case TEXT_BACKGROUND_SEE_THROUGH ->     CompatibleRenderComponentFactory.super.getShader(shaders);
+            case TEXT_BACKGROUND_SEE_THROUGH ->     GameRenderer::getRendertypeTextBackgroundSeeThroughShader;
             case TEXT_INTENSITY_SEE_THROUGH ->      GameRenderer::getRendertypeTextIntensitySeeThroughShader;
             case LIGHTNING ->                       GameRenderer::getRendertypeLightningShader;
             case TRIPWIRE ->                        GameRenderer::getRendertypeTripwireShader;
             case END_PORTAL ->                      GameRenderer::getRendertypeEndPortalShader;
             case END_GATEWAY ->                     GameRenderer::getRendertypeEndGatewayShader;
             case LINES ->                           GameRenderer::getRendertypeLinesShader;
-            case GUI ->                             CompatibleRenderComponentFactory.super.getShader(shaders);
-            case GUI_OVERLAY ->                     CompatibleRenderComponentFactory.super.getShader(shaders);
-            case GUI_TEXT_HIGHLIGHT ->              CompatibleRenderComponentFactory.super.getShader(shaders);
-            case GUI_GHOST_RECIPE_OVERLAY ->        CompatibleRenderComponentFactory.super.getShader(shaders);
+            case GUI ->                             GameRenderer::getRendertypeGuiShader;
+            case GUI_OVERLAY ->                     GameRenderer::getRendertypeGuiOverlayShader;
+            case GUI_TEXT_HIGHLIGHT ->              GameRenderer::getRendertypeGuiTextHighlightShader;
+            case GUI_GHOST_RECIPE_OVERLAY ->        GameRenderer::getRendertypeGuiGhostRecipeOverlayShader;
         };
     }
 
@@ -266,18 +268,23 @@ public class MinecraftRenderComponentFactory extends RenderType implements Compa
     }
 
     @Override
+    public Resource getBlockAtlasResource() {
+        return new MinecraftResource(InventoryMenu.BLOCK_ATLAS);
+    }
+
+    @Override
     public RenderLayer getGuiRenderLayer() {
-        return PlatformResource::unavailable;
+        return RenderType::gui;
     }
 
     @Override
     public RenderLayer getGuiOverlayRenderLayer() {
-        return PlatformResource::unavailable;
+        return RenderType::guiOverlay;
     }
 
     @Override
     public RenderLayer getGuiTextHighlightRenderLayer() {
-        return PlatformResource::unavailable;
+        return RenderType::guiTextHighlight;
     }
 
 }

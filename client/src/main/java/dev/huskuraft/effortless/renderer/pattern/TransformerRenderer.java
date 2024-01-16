@@ -6,6 +6,8 @@ import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.renderer.RenderUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.renderer.opertaion.BlockRenderLayers;
+import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 
 import java.awt.*;
 
@@ -51,7 +53,7 @@ public abstract class TransformerRenderer {
                 v4 = new Vector3d((float) cen.x(), (float) max.y(), (float) min.z());
             }
         }
-        renderer.renderQuad(renderer.blockRenderLayers().planes(), v1, v2, v3, v4, 0, color.getRGB(), null);
+        renderer.renderQuad(BlockRenderLayers.planes(), v1, v2, v3, v4, 0, color.getRGB(), null);
         renderer.popPose();
     }
 
@@ -87,7 +89,7 @@ public abstract class TransformerRenderer {
             return;
         }
 
-        var renderLayer = renderer.outlineRenderLayers().outlineSolid();
+        var renderLayer = OutlineRenderLayers.outlineSolid();
 
         var diff = end.sub(start);
         if (diff.x() + diff.y() + diff.z() < 0) {

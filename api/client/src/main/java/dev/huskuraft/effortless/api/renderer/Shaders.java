@@ -7,7 +7,6 @@ public enum Shaders implements Shader {
     POSITION_TEX,
     POSITION_COLOR_TEX_LIGHTMAP,
     POSITION_COLOR,
-
     SOLID,
     CUTOUT_MIPPED,
     CUTOUT,
@@ -61,6 +60,6 @@ public enum Shaders implements Shader {
 
     @Override
     public Object referenceValue() {
-        return RenderComponentFactory.INSTANCE.getShader(this).referenceValue();
+        return RenderFactory.INSTANCE.getShader(this).referenceValue();
     }
 }

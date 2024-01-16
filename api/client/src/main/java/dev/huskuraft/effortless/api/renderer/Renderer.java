@@ -3,8 +3,6 @@ package dev.huskuraft.effortless.api.renderer;
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.math.*;
-import dev.huskuraft.effortless.api.renderer.texture.BlockRenderLayers;
-import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
 import dev.huskuraft.effortless.api.text.Text;
 
 import javax.annotation.Nullable;
@@ -166,7 +164,7 @@ public abstract class Renderer {
     public abstract void flush();
 
     public final void renderHLine(int x1, int x2, int y, int color) {
-        this.renderHLine(RenderLayer.GUI, x1, x2, y, color);
+        this.renderHLine(RenderLayers.GUI, x1, x2, y, color);
     }
 
     public final void renderHLine(RenderLayer renderLayer, int x1, int x2, int y, int color) {
@@ -179,7 +177,7 @@ public abstract class Renderer {
     }
 
     public final void renderVLine(int x, int y1, int y2, int color) {
-        this.renderVLine(RenderLayer.GUI, x, y1, y2, color);
+        this.renderVLine(RenderLayers.GUI, x, y1, y2, color);
     }
 
     public final void renderVLine(RenderLayer renderLayer, int x, int y1, int y2, int color) {
@@ -206,11 +204,11 @@ public abstract class Renderer {
     }
 
     public final void renderRect(int x1, int y1, int x2, int y2, int color) {
-        this.renderRect(RenderLayer.GUI, x1, y1, x2, y2, color, 0);
+        this.renderRect(RenderLayers.GUI, x1, y1, x2, y2, color, 0);
     }
 
     public final void renderRect(int x1, int y1, int x2, int y2, int color, int z) {
-        this.renderRect(RenderLayer.GUI, x1, y1, x2, y2, color, z);
+        this.renderRect(RenderLayers.GUI, x1, y1, x2, y2, color, z);
     }
 
     public final void renderRect(RenderLayer renderLayer, int x1, int y1, int x2, int y2, int color) {
@@ -241,11 +239,11 @@ public abstract class Renderer {
     }
 
     public final void renderGradientRect(int x1, int y1, int x2, int y2, int color1, int color2) {
-        this.renderGradientRect(RenderLayer.GUI, x1, y1, x2, y2, color1, color2, 0);
+        this.renderGradientRect(RenderLayers.GUI, x1, y1, x2, y2, color1, color2, 0);
     }
 
     public final void renderGradientRect(int x1, int y1, int x2, int y2, int color1, int color2, int z) {
-        this.renderGradientRect(RenderLayer.GUI, x1, y1, x2, y2, color1, color2, z);
+        this.renderGradientRect(RenderLayers.GUI, x1, y1, x2, y2, color1, color2, z);
     }
 
     public final void renderGradientRect(RenderLayer renderLayer, int x1, int y1, int x2, int y2, int color1, int color2) {
@@ -262,7 +260,7 @@ public abstract class Renderer {
     }
 
     public final void renderQuad(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int offset, int color) {
-        this.renderQuad(RenderLayer.GUI, x1, y1, x2, y2, x3, y3, x4, y4, offset, color);
+        this.renderQuad(RenderLayers.GUI, x1, y1, x2, y2, x3, y3, x4, y4, offset, color);
     }
 
     public final void renderQuad(RenderLayer renderLayer, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int offset, int color) {
@@ -397,11 +395,5 @@ public abstract class Renderer {
     public abstract void renderTooltip(Typeface typeface, List<Text> list, int x, int y);
 
     public abstract void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState);
-
-    public abstract RenderComponentFactory renderLayers();
-
-    public abstract BlockRenderLayers blockRenderLayers();
-
-    public abstract OutlineRenderLayers outlineRenderLayers();
 
 }

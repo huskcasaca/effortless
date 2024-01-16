@@ -7,22 +7,8 @@ public class MinecraftResource implements Resource {
 
     private final ResourceLocation reference;
 
-    MinecraftResource(ResourceLocation reference) {
+    public MinecraftResource(ResourceLocation reference) {
         this.reference = reference;
-    }
-
-    public static Resource fromMinecraftResource(ResourceLocation resourceLocation) {
-        if (resourceLocation == null) {
-            return null;
-        }
-        return new MinecraftResource(resourceLocation);
-    }
-
-    public static ResourceLocation toMinecraftResource(Resource resource) {
-        if (resource == null) {
-            return null;
-        }
-        return ((MinecraftResource) resource).reference;
     }
 
     @Override
@@ -48,5 +34,10 @@ public class MinecraftResource implements Resource {
     @Override
     public String toString() {
         return getNamespace() + ":" + getPath();
+    }
+
+    @Override
+    public Object referenceValue() {
+        return reference;
     }
 }

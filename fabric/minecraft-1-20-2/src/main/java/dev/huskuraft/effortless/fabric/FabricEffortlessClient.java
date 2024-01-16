@@ -11,7 +11,6 @@ import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
 import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -43,8 +42,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientShadersEvents.REGISTER.register((provider, sink) -> {
-            MinecraftBlockRenderLayers.Shaders.registerShaders(provider, sink::register);
-            getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((shaderResource, format, consumer) -> sink.register(new ShaderInstance(provider, shaderResource, format.reference()), shaderInstance -> consumer.accept(() -> shaderInstance)));
+            getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((shaderResource, format, consumer) -> sink.register(new ShaderInstance(provider, shaderResource, format.reference()), shaderInstance -> consumer.accept((MinecraftShader) () -> shaderInstance)));
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {

@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
 import dev.huskuraft.effortless.api.input.Keys;
-import dev.huskuraft.effortless.api.renderer.RenderComponentFactory;
+import dev.huskuraft.effortless.api.renderer.RenderFactory;
 import dev.huskuraft.effortless.api.text.Text;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public interface ClientPlatform extends Platform {
 
     KeyBinding newKeyBinding(String name, String category, KeyCodes key);
 
-   RenderComponentFactory getRenderFactory();
+   RenderFactory getRenderFactory();
 
     ClientPlatform INSTANCE = ClientEntrance.getInstance().getPlatform();
 

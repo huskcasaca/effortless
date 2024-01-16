@@ -8,12 +8,7 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.renderer.*;
-import dev.huskuraft.effortless.api.renderer.texture.BlockRenderLayers;
-import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderLayers;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderComponentFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -25,10 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class MinecraftRenderer extends Renderer {
-
-    private static final RenderComponentFactory RENDER_TEXTURES = new MinecraftRenderComponentFactory();
-    private static final BlockRenderLayers BLOCK_RENDER_TEXTURES = new MinecraftBlockRenderLayers();
-    private static final OutlineRenderLayers OUTLINE_RENDER_TEXTURES = new MinecraftOutlineRenderLayers();
 
     private static final RandomSource RAND = RandomSource.create();
     private final Minecraft minecraftClient;
@@ -166,21 +157,6 @@ public class MinecraftRenderer extends Renderer {
                 minecraftBlockState.getSeed(minecraftBlockPosition),
                 OverlayTexture.NO_OVERLAY);
 
-    }
-
-    @Override
-    public RenderComponentFactory renderLayers() {
-        return RENDER_TEXTURES;
-    }
-
-    @Override
-    public BlockRenderLayers blockRenderLayers() {
-        return BLOCK_RENDER_TEXTURES;
-    }
-
-    @Override
-    public OutlineRenderLayers outlineRenderLayers() {
-        return OUTLINE_RENDER_TEXTURES;
     }
 
 }

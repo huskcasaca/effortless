@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
-import dev.huskuraft.effortless.api.renderer.RenderLayer;
+import dev.huskuraft.effortless.api.renderer.RenderLayers;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 
@@ -390,8 +390,8 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         renderer.popPose();
 
         if (this.renderShadow) {
-            renderer.renderGradientRect(RenderLayer.GUI_OVERLAY, this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0, 0);
-            renderer.renderGradientRect(RenderLayer.GUI_OVERLAY, this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216, 0);
+            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0, 0);
+            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216, 0);
         }
 
         var renderScrollBar = this.getMaxScroll();

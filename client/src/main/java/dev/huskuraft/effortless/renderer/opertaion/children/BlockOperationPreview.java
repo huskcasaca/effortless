@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.renderer.opertaion.children;
 
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
+import dev.huskuraft.effortless.renderer.opertaion.BlockRenderLayers;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 
 public class BlockOperationPreview implements OperationPreview {
@@ -33,7 +34,7 @@ public class BlockOperationPreview implements OperationPreview {
         renderer.translate(blockPosition.toVector3d().sub(camera));
         renderer.translate((scale - 1) / -2, (scale - 1) / -2, (scale - 1) / -2);
         renderer.scale(scale, scale, scale);
-        renderer.renderBlockInWorld(renderer.blockRenderLayers().block(color.getRGB()), world, blockPosition, blockState);
+        renderer.renderBlockInWorld(BlockRenderLayers.block(color.getRGB()), world, blockPosition, blockState);
         renderer.popPose();
     }
 

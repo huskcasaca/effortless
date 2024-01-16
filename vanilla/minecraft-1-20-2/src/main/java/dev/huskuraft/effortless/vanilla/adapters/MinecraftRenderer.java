@@ -5,12 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.renderer.*;
-import dev.huskuraft.effortless.api.renderer.texture.BlockRenderLayers;
-import dev.huskuraft.effortless.api.renderer.texture.OutlineRenderLayers;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftBlockRenderLayers;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftOutlineRenderLayers;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderComponentFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,10 +22,6 @@ import java.util.Optional;
 public class MinecraftRenderer extends Renderer {
 
     private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
-
-    private static final RenderComponentFactory RENDER_TEXTURES = new MinecraftRenderComponentFactory();
-    private static final BlockRenderLayers BLOCK_RENDER_TEXTURES = new MinecraftBlockRenderLayers();
-    private static final OutlineRenderLayers OUTLINE_RENDER_TEXTURES = new MinecraftOutlineRenderLayers();
 
     private static final RandomSource RAND = RandomSource.create();
     private final Minecraft minecraftClient;
@@ -119,21 +110,21 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-//        RenderSystem.setShaderTexture(0, MinecraftResource.toMinecraftResource(resource));
-//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        var matrix4f = minecraftMatrixStack.last().pose();
-//        var bufferbuilder = Tesselator.getInstance().getBuilder();
-//        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-
-        var buffer = minecraftBufferSource.getBuffer(MinecraftOutlineRenderLayers.OutlineRenderType.textured(resource.reference()));
-        buffer.vertex(matrix4f, x1, y1, blitOffset).uv(minU, minV).endVertex();
-        buffer.vertex(matrix4f, x1, y2, blitOffset).uv(minU, maxV).endVertex();
-        buffer.vertex(matrix4f, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
-        buffer.vertex(matrix4f, x2, y1, blitOffset).uv(maxU, minV).endVertex();
-        buffer.endVertex();
-        flush();
+////        RenderSystem.setShaderTexture(0, MinecraftResource.toMinecraftResource(resource));
+////        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        var matrix4f = minecraftMatrixStack.last().pose();
+////        var bufferbuilder = Tesselator.getInstance().getBuilder();
+////        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+//
+//        var buffer = minecraftBufferSource.getBuffer(OutlineRenderLayers.textured(resource.reference()));
+//        buffer.vertex(matrix4f, x1, y1, blitOffset).uv(minU, minV).endVertex();
+//        buffer.vertex(matrix4f, x1, y2, blitOffset).uv(minU, maxV).endVertex();
+//        buffer.vertex(matrix4f, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
+//        buffer.vertex(matrix4f, x2, y1, blitOffset).uv(maxU, minV).endVertex();
 //        buffer.endVertex();
-//        BufferUploader.drawWithShader(bufferbuilder.end());
+//        flush();
+////        buffer.endVertex();
+////        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
     @Override
@@ -175,22 +166,6 @@ public class MinecraftRenderer extends Renderer {
                 RAND,
                 minecraftBlockState.getSeed(minecraftBlockPosition),
                 OverlayTexture.NO_OVERLAY);
-
-    }
-
-    @Override
-    public RenderComponentFactory renderLayers() {
-        return RENDER_TEXTURES;
-    }
-
-    @Override
-    public BlockRenderLayers blockRenderLayers() {
-        return BLOCK_RENDER_TEXTURES;
-    }
-
-    @Override
-    public OutlineRenderLayers outlineRenderLayers() {
-        return OUTLINE_RENDER_TEXTURES;
     }
 
 }

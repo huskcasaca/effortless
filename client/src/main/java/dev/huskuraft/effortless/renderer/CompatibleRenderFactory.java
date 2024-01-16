@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.renderer;
 
 import dev.huskuraft.effortless.api.platform.PlatformResource;
-import dev.huskuraft.effortless.api.renderer.RenderComponentFactory;
+import dev.huskuraft.effortless.api.renderer.RenderFactory;
 import dev.huskuraft.effortless.api.renderer.Shader;
 import dev.huskuraft.effortless.api.renderer.Shaders;
 
-public interface CompatibleRenderComponentFactory extends RenderComponentFactory {
+public interface CompatibleRenderFactory extends RenderFactory {
 
     @Override
     default Shader getShader(Shaders shaders) {
