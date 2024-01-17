@@ -123,4 +123,8 @@ public abstract class RenderLayers {
     public static final RenderLayer GUI_TEXT_HIGHLIGHT = RenderLayer.createComposite("gui_overlay", VertexFormats.POSITION_COLOR, VertexFormats.Modes.QUADS, 256, RenderState.builder().setShaderState(GUI_OVERLAY_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(NEVER_DEPTH_TEST).setWriteMaskState(COLOR_WRITE).create(false));
     public static final RenderLayer CUSTOM = RenderLayer.createComposite("custom", VertexFormats.BLOCK, VertexFormats.Modes.TRIANGLES, 0, true, true, RenderState.builder().setDepthTestState(EQUAL_DEPTH_TEST).create(false));
 
+    public static RenderLayer texture(Resource resource, boolean blur, boolean mipmap) {
+        return RenderLayer.createComposite("texture", VertexFormats.POSITION_TEX, VertexFormats.Modes.QUADS, 256, RenderState.builder().setTextureState(RenderState.TextureState.create("texture", new RenderState.TextureState.Texture(resource, blur, mipmap))).setShaderState(POSITION_TEX_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
+    }
+
 }

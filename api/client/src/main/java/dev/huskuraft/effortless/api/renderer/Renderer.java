@@ -349,38 +349,23 @@ public abstract class Renderer {
         this.renderTexture(resource, x, x + width, y, y + height, 0, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
     }
 
-    protected final void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, int uWidth, int vHeight, float uOffset, float vOffset, int textureWidth, int textureHeight) {
+    public final void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, int uWidth, int vHeight, float uOffset, float vOffset, int textureWidth, int textureHeight) {
         this.renderTexture(resource, x1, x2, y1, y2, blitOffset, uOffset / textureWidth, (uOffset + uWidth) / textureWidth, vOffset / textureHeight, (vOffset + vHeight) / textureHeight);
     }
 
-    protected abstract void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV);
+    protected void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
+        var matrix4f = lastMatrixPose();
+        var buffer = vertexBuffer(RenderLayers.texture(resource, false, false));
+        buffer.vertex(matrix4f, x1, y1, blitOffset).uv(minU, minV).endVertex();
+        buffer.vertex(matrix4f, x1, y2, blitOffset).uv(minU, maxV).endVertex();
+        buffer.vertex(matrix4f, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
+        buffer.vertex(matrix4f, x2, y1, blitOffset).uv(maxU, minV).endVertex();
+        buffer.endVertex();
+    }
 
     public abstract void renderPanelBackgroundTexture(int x, int y, float uOffset, float vOffset, int uWidth, int vHeight);
 
     public abstract void renderButtonTexture(int x, int y, int width, int height, boolean active, boolean focused);
-
-//    @Override
-//    protected void renderItemInternal(ItemStack itemStack, int seed, boolean fake)
-//    {
-//        var minecraftItemStack = MinecraftItemStack.toMinecraftItemStack(itemStack);
-//        var minecraftPlayer = fake ? null : minecraftClient.player;
-//        var minecraftWorld = minecraftClient.level;
-//        var minecraftModel = minecraftClient.getItemRenderer().getModel(minecraftItemStack, minecraftWorld, minecraftPlayer, seed);
-//        if (!minecraftModel.usesBlockLight()) Lighting.setupForFlatItems();
-//        minecraftClient.getItemRenderer().render(minecraftItemStack, ItemDisplayContext.GUI, false, minecraftMatrixStack, minecraftBufferSource, 15728880, OverlayTexture.NO_OVERLAY, minecraftModel);
-//        this.flush();
-//        if (!minecraftModel.usesBlockLight()) Lighting.setupFor3DItems();
-//
-//        minecraftClient.getItemRenderer().renderStatic();
-//    }
-//    {
-//        pushPose();
-//        translate(x + 8, y + 8, 150);
-//        multiply((new Matrix4f()).scaling(1.0F, -1.0F, 1.0F));
-//        scale(16.0F, 16.0F, 16.0F);
-//        renderItemInternal(stack, 0, false);
-//        popPose();
-//    }
 
     public abstract void renderItem(ItemStack stack, int x, int y);
 

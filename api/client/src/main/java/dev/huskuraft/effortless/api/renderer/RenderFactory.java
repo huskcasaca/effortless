@@ -49,6 +49,10 @@ public interface RenderFactory {
 
     Resource getBlockAtlasResource();
 
+//    Resource getBackgroundTextureResource();
+
+//    Resource getWidgetsTextureResource();
+
     RenderFactory INSTANCE = ClientPlatform.INSTANCE.getRenderFactory();
 
 }
