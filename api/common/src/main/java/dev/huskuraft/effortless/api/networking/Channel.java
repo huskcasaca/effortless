@@ -73,6 +73,10 @@ public abstract class Channel<P extends PacketListener> implements PacketSender,
 
     public abstract int getCompatibilityVersion();
 
+    public String getCompatibilityVersionStr() {
+        return Integer.toString(getCompatibilityVersion());
+    }
+
     public void setPlatformSender(BufferSender platformSender) {
         this.platformSender = platformSender;
     }

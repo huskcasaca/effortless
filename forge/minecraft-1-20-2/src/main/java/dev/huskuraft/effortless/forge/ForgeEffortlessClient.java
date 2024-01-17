@@ -9,6 +9,8 @@ import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,6 +22,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 @EventBusSubscriber(modid = Effortless.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -90,7 +93,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
                 }
             });
             return (buffer, player) -> {
-                Minecraft.getInstance().getConnection().send(NetworkDirection.PLAY_TO_SERVER.buildPacket(MinecraftBuffer.toMinecraftBuffer(buffer), ForgeEffortless.CHANNEL.getName()).getThis());
+                Minecraft.getInstance().getConnection().send(NetworkDirection.PLAY_TO_SERVER.buildPacket(MinecraftBuffer.toMinecraftBuffer(buffer), getChannel().getChannelId().reference()).getThis());
             };
         });
     }
@@ -104,7 +107,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onReloadShader(RegisterShadersEvent event) {
-        MinecraftBlockRenderLayers.Shaders.registerShaders(event.getResourceProvider(), event::registerShader);
+        getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> event.registerShader(new ShaderInstance(event.getResourceProvider(), resource.getPath(), format.reference()), shaderInstance -> consumer.accept((MinecraftShader) () -> shaderInstance)));
     }
 
     @SubscribeEvent

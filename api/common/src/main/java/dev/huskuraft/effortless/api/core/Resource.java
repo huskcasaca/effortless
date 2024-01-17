@@ -17,8 +17,8 @@ public interface Resource extends PlatformReference {
         return decompose(value, ":");
     }
 
-    static Resource of(String path) {
-        return of("effortless", path);
+    static Resource vanilla(String path) {
+        return of("minecraft", path);
     }
 
     static Resource of(String namespace, String path) {

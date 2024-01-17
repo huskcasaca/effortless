@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building;
 
+import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.text.Text;
 
@@ -18,7 +19,7 @@ public interface Option {
     }
 
     default Resource getIcon() {
-        return Resource.of("textures/option/%s.png".formatted(getName()));
+        return Resource.of(Effortless.MOD_ID, "textures/option/%s.png".formatted(getName()));
     }
 
 }

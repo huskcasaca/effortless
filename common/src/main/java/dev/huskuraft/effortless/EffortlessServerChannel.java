@@ -17,7 +17,7 @@ public final class EffortlessServerChannel extends Channel<AllPacketListener> {
     private final Effortless entrance;
     private final AllPacketListener listener;
 
-    private static final Resource DEFAULT_CHANNEL = Resource.of("default_channel");
+    private static final Resource DEFAULT_CHANNEL = Resource.of(Effortless.MOD_ID, "default_channel");
     private static final int COMPATIBILITY_VERSION = Effortless.VERSION_NUMBER;
 
     public EffortlessServerChannel(Effortless entrance) {

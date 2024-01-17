@@ -34,12 +34,6 @@ public class ForgeEffortless extends Effortless {
 
     public static EventNetworkChannel CHANNEL;
 
-//    public static EventNetworkChannel networkChannel;
-//
-//    public static EventNetworkChannel getNetworkChannel() {
-//        return networkChannel;
-//    }
-
     public ForgeEffortless() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
 
@@ -111,7 +105,7 @@ public class ForgeEffortless extends Effortless {
                 }
             });
             return (buffer, player) -> {
-                ((ServerPlayer) MinecraftPlayer.toMinecraftPlayer(player)).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(MinecraftBuffer.toMinecraftBuffer(buffer), ForgeEffortless.CHANNEL.getName()).getThis());
+                ((ServerPlayer) MinecraftPlayer.toMinecraftPlayer(player)).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(MinecraftBuffer.toMinecraftBuffer(buffer), getChannel().getChannelId().reference()).getThis());
             };
         });
     }

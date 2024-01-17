@@ -19,7 +19,7 @@ public interface TagPrimitive extends TagElement {
     void putDouble(double value);
 
     default  <T extends Enum<T>> void putEnum(Enum<T> value) {
-        var id = Resource.of(value.name().toLowerCase(Locale.ROOT));
+        var id = Resource.of("effortless", value.name().toLowerCase(Locale.ROOT));
         putString(id.toString());
     }
 

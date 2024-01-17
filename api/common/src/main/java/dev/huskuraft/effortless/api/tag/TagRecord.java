@@ -106,7 +106,7 @@ public interface TagRecord extends TagElement {
     }
 
     default <T extends Enum<T>> void putEnum(String key, Enum<T> value) {
-        var id = Resource.of(value.name().toLowerCase(Locale.ROOT));
+        var id = Resource.of("effortless", value.name().toLowerCase(Locale.ROOT));
         putString(key, id.toString());
     }
 

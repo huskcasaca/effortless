@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.structure;
 
+import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
@@ -73,7 +74,7 @@ public enum BuildMode {
     }
 
     public Resource getIcon() {
-        return Resource.of("textures/mode/%s.png".formatted(name));
+        return Resource.of(Effortless.MOD_ID, "textures/mode/%s.png".formatted(name));
     }
 
     public boolean isDisabled() {
