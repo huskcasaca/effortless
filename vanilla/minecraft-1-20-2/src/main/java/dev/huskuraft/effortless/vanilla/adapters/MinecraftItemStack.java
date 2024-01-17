@@ -140,9 +140,9 @@ public class MinecraftItemStack implements ItemStack {
 
         return MinecraftBlockState.fromMinecraftBlockState(Block.byItem(reference.getItem()).getStateForPlacement(new BlockPlaceContext(
                 MinecraftPlayer.toMinecraftPlayer(player),
-                MinecraftPlayer.toMinecraftInteractionHand(interaction.getHand()),
+                MinecraftPrimitives.toMinecraftInteractionHand(interaction.getHand()),
                 MinecraftItemStack.toMinecraftItemStack(this),
-                MinecraftPlayer.toMinecraftBlockInteraction(interaction)
+                MinecraftPrimitives.toMinecraftBlockInteraction(interaction)
         )));
     }
 

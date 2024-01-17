@@ -31,12 +31,12 @@ public class MinecraftWorld implements World {
 
     @Override
     public BlockState getBlockState(BlockPosition blockPosition) {
-        return MinecraftBlockState.fromMinecraftBlockState(reference.getBlockState(MinecraftPlayer.toMinecraftBlockPosition(blockPosition)));
+        return MinecraftBlockState.fromMinecraftBlockState(reference.getBlockState(MinecraftPrimitives.toMinecraftBlockPosition(blockPosition)));
     }
 
     @Override
     public boolean setBlockState(BlockPosition blockPosition, BlockState blockState) {
-        return reference.setBlockAndUpdate(MinecraftPlayer.toMinecraftBlockPosition(blockPosition), MinecraftBlockState.toMinecraftBlockState(blockState));
+        return reference.setBlockAndUpdate(MinecraftPrimitives.toMinecraftBlockPosition(blockPosition), MinecraftBlockState.toMinecraftBlockState(blockState));
     }
 
     @Override

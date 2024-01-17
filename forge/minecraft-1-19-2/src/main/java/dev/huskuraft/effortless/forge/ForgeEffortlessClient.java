@@ -137,7 +137,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onInteractionInput(InputEvent.InteractionKeyMappingTriggered event) {
         var type = event.isAttack() ? InteractionType.ATTACK : event.isUseItem() ? InteractionType.USE_ITEM : InteractionType.UNKNOWN;
-        var hand = MinecraftPlayer.fromMinecraftInteractionHand(event.getHand());
+        var hand = MinecraftPrimitives.fromMinecraftInteractionHand(event.getHand());
         if (getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(type, hand).interruptsFurtherEvaluation()) {
             event.setCanceled(true);
             event.setSwingHand(false);

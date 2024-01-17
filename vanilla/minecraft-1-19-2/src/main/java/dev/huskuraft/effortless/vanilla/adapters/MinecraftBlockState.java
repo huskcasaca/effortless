@@ -109,9 +109,9 @@ public class MinecraftBlockState implements BlockState {
     public boolean isReplaceable(Player player, BlockInteraction interaction) {
         return reference.canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
                 MinecraftPlayer.toMinecraftPlayer(player),
-                MinecraftPlayer.toMinecraftInteractionHand(interaction.getHand()),
+                MinecraftPrimitives.toMinecraftInteractionHand(interaction.getHand()),
                 MinecraftItemStack.toMinecraftItemStack(player.getItemStack(interaction.getHand())),
-                MinecraftPlayer.toMinecraftBlockInteraction(interaction)
+                MinecraftPrimitives.toMinecraftBlockInteraction(interaction)
         ));
     }
 

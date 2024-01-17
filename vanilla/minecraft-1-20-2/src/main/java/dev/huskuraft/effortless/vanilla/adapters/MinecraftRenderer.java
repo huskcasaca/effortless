@@ -168,7 +168,7 @@ public class MinecraftRenderer extends Renderer {
         var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
         var minecraftRenderLayer = (RenderType) renderLayer.reference();
         var minecraftBlockState = MinecraftBlockState.toMinecraftBlockState(blockState);
-        var minecraftBlockPosition = MinecraftPlayer.toMinecraftBlockPosition(blockPosition);
+        var minecraftBlockPosition = MinecraftPrimitives.toMinecraftBlockPosition(blockPosition);
 
         minecraftBlockRenderer.getModelRenderer().tesselateBlock(
                 minecraftWorld,

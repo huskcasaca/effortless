@@ -18,7 +18,7 @@ public class MinecraftCamera implements Camera {
 
     @Override
     public Vector3d position() {
-        return MinecraftPlayer.fromMinecraftVector3d(reference.getPosition());
+        return MinecraftPrimitives.fromMinecraftVector3d(reference.getPosition());
     }
 
     @Override

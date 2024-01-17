@@ -10,7 +10,6 @@ import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,7 +21,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 @EventBusSubscriber(modid = Effortless.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -138,7 +136,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onInteractionInput(InputEvent.InteractionKeyMappingTriggered event) {
         var type = event.isAttack() ? InteractionType.ATTACK : event.isUseItem() ? InteractionType.USE_ITEM : InteractionType.UNKNOWN;
-        var hand = MinecraftPlayer.fromMinecraftInteractionHand(event.getHand());
+        var hand = MinecraftPrimitives.fromMinecraftInteractionHand(event.getHand());
         if (getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(type, hand).interruptsFurtherEvaluation()) {
             event.setCanceled(true);
             event.setSwingHand(false);

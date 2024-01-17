@@ -78,7 +78,7 @@ public class MinecraftClient implements Client {
 
     @Override
     public Interaction getLastInteraction() {
-        return MinecraftPlayer.fromMinecraftInteraction(reference.hitResult);
+        return MinecraftPrimitives.fromMinecraftInteraction(reference.hitResult);
     }
 
     @Override

@@ -66,11 +66,11 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         InteractionInputEvents.ATTACK.register((player, hand) -> {
-            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.ATTACK, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.ATTACK, MinecraftPrimitives.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
         InteractionInputEvents.USE_ITEM.register((player, hand) -> {
-            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.USE_ITEM, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.USE_ITEM, MinecraftPrimitives.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
     }
