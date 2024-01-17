@@ -73,7 +73,7 @@ class MinecraftRenderer extends Renderer {
 
     @Override
     public VertexBuffer vertexBuffer(RenderLayer renderLayer) {
-        return MinecraftConvertor.fromPlatformVertexBuffer(minecraftBufferSource.getBuffer(renderLayer.reference()));
+        return MinecraftConvertor.fromPlatformVertexBuffer(minecraftBufferSource.getBuffer(MinecraftConvertor.toPlatformRenderLayer(renderLayer)));
     }
 
     @Override

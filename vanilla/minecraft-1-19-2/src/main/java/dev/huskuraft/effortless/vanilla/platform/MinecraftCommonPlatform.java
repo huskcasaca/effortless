@@ -40,7 +40,7 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public Optional<Item> newOptionalItem(Resource resource) {
-        return DefaultedRegistry.ITEM.getOptional(resource.<ResourceLocation>reference()).map(MinecraftConvertor::fromPlatformItem);
+        return DefaultedRegistry.ITEM.getOptional(MinecraftConvertor.toPlatformResource(resource)).map(MinecraftConvertor::fromPlatformItem);
     }
 
     @Override

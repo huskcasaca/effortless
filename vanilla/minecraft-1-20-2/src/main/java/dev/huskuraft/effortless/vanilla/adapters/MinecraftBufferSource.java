@@ -20,7 +20,7 @@ class MinecraftBufferSource implements BufferSource {
 
     @Override
     public VertexBuffer getBuffer(RenderLayer renderLayer) {
-        return MinecraftConvertor.fromPlatformVertexBuffer(reference.getBuffer(renderLayer.reference()));
+        return MinecraftConvertor.fromPlatformVertexBuffer(reference.getBuffer(MinecraftConvertor.toPlatformRenderLayer(renderLayer)));
     }
 
     @Override
