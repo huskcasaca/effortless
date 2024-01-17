@@ -6,16 +6,12 @@ import dev.huskuraft.effortless.api.math.Matrix4f;
 import dev.huskuraft.effortless.api.math.Quaternionf;
 import dev.huskuraft.effortless.api.renderer.MatrixStack;
 
-public class MinecraftMatrixStack implements MatrixStack {
+class MinecraftMatrixStack implements MatrixStack {
 
     private final PoseStack reference;
 
     MinecraftMatrixStack(PoseStack reference) {
         this.reference = reference;
-    }
-
-    public static MatrixStack fromMinecraftMatrixStack(PoseStack matrixStack) {
-        return new MinecraftMatrixStack(matrixStack);
     }
 
     @Override
@@ -49,12 +45,12 @@ public class MinecraftMatrixStack implements MatrixStack {
         return new Matrix() {
             @Override
             public Matrix4f pose() {
-                return MinecraftPrimitives.fromMinecraftMatrix4f(reference.last().pose());
+                return MinecraftConvertor.fromPlatformMatrix4f(reference.last().pose());
             }
 
             @Override
             public Matrix3f normal() {
-                return MinecraftPrimitives.fromMinecraftMatrix3f(reference.last().normal());
+                return MinecraftConvertor.fromPlatformMatrix3f(reference.last().normal());
             }
         };
     }
@@ -71,7 +67,7 @@ public class MinecraftMatrixStack implements MatrixStack {
 
     @Override
     public void rotate(Quaternionf quaternion) {
-        reference.mulPose(MinecraftPrimitives.toMinecraftQuaternion(quaternion));
+        reference.mulPose(MinecraftConvertor.toPlatformQuaternion(quaternion));
     }
 
     @Override
@@ -81,7 +77,7 @@ public class MinecraftMatrixStack implements MatrixStack {
 
     @Override
     public void multiply(Matrix4f matrix) {
-        reference.mulPoseMatrix(MinecraftPrimitives.toMinecraftMatrix4f(matrix));
+        reference.mulPoseMatrix(MinecraftConvertor.toPlatformMatrix4f(matrix));
     }
 
     @Override

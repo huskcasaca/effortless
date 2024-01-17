@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.api.renderer.Uniform;
 
-public class MinecraftUniform implements Uniform {
+class MinecraftUniform implements Uniform {
 
     private final com.mojang.blaze3d.shaders.Uniform reference;
 

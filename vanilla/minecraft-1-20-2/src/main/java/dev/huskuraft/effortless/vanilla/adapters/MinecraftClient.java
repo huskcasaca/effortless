@@ -12,20 +12,12 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import org.lwjgl.glfw.GLFW;
 
-public class MinecraftClient implements Client {
+class MinecraftClient implements Client {
 
     private final Minecraft reference;
 
     MinecraftClient(Minecraft reference) {
         this.reference = reference;
-    }
-
-    public static Client fromMinecraftClient(Minecraft minecraft) {
-        return new MinecraftClient(minecraft);
-    }
-
-    public static Minecraft toMinecraftClient(Client client) {
-        return ((MinecraftClient) client).reference;
     }
 
     @Override
@@ -63,17 +55,17 @@ public class MinecraftClient implements Client {
         if (reference.player == null) {
             return null;
         }
-        return MinecraftPlayer.fromMinecraftPlayer(reference.player);
+        return MinecraftConvertor.fromPlatformPlayer(reference.player);
     }
 
     @Override
     public Typeface getTypeface() {
-        return MinecraftTypeface.fromMinecraftTypeface(reference.font);
+        return MinecraftConvertor.fromPlatformTypeface(reference.font);
     }
 
     @Override
     public World getWorld() {
-        return new MinecraftWorld(reference.level);
+        return MinecraftConvertor.fromPlatformWorld(reference.level);
     }
 
     @Override
@@ -83,7 +75,7 @@ public class MinecraftClient implements Client {
 
     @Override
     public Interaction getLastInteraction() {
-        return MinecraftPrimitives.fromMinecraftInteraction(reference.hitResult);
+        return MinecraftConvertor.fromPlatformInteraction(reference.hitResult);
     }
 
     @Override

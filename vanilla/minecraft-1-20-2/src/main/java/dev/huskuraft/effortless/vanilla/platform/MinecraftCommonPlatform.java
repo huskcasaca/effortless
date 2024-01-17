@@ -25,72 +25,72 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public Resource newResource(String namespace, String path) {
-        return new MinecraftResource(new ResourceLocation(namespace, path));
+        return MinecraftConvertor.fromPlatformResource(new ResourceLocation(namespace, path));
     }
 
     @Override
     public Buffer newBuffer() {
-        return MinecraftBuffer.fromMinecraftBuffer(new FriendlyByteBuf(Unpooled.buffer()));
+        return MinecraftConvertor.fromPlatformBuffer(new FriendlyByteBuf(Unpooled.buffer()));
     }
 
     @Override
     public TagRecord newTagRecord() {
-        return MinecraftTagRecord.fromMinecraft(new CompoundTag());
+        return MinecraftConvertor.fromPlatformTagRecord(new CompoundTag());
     }
 
     @Override
     public Optional<Item> newOptionalItem(Resource resource) {
-        return BuiltInRegistries.ITEM.getOptional(resource.<ResourceLocation>reference()).map(MinecraftItem::fromMinecraft);
+        return BuiltInRegistries.ITEM.getOptional(resource.<ResourceLocation>reference()).map(MinecraftConvertor::fromPlatformItem);
     }
 
     @Override
     public ItemStack newItemStack() {
-        return MinecraftItemStack.fromMinecraft(net.minecraft.world.item.ItemStack.EMPTY);
+        return MinecraftConvertor.fromPlatformItemStack(net.minecraft.world.item.ItemStack.EMPTY);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count) {
-        return MinecraftItemStack.fromMinecraft(MinecraftItem.toMinecraft(item), count);
+        return MinecraftConvertor.fromPlatformItemStack(MinecraftConvertor.toPlatformItem(item), count);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count, TagRecord tag) {
-        return MinecraftItemStack.fromMinecraft(MinecraftItem.toMinecraft(item), MinecraftTagRecord.toMinecraft(tag), count);
+        return MinecraftConvertor.fromPlatformItemStack(MinecraftConvertor.toPlatformItem(item), MinecraftConvertor.toPlatformTagRecord(tag), count);
     }
 
     @Override
     public Text newText() {
-        return MinecraftText.fromMinecraftText(Component.empty());
+        return MinecraftConvertor.fromPlatformText(Component.empty());
     }
 
     @Override
     public Text newText(String text) {
-        return MinecraftText.fromMinecraftText(Component.literal(text));
+        return MinecraftConvertor.fromPlatformText(Component.literal(text));
     }
 
     @Override
     public Text newText(String text, Text... args) {
-        return MinecraftText.fromMinecraftText(Component.translatable(text, Arrays.stream(args).map(MinecraftText::toMinecraftText).toArray(Object[]::new)));
+        return MinecraftConvertor.fromPlatformText(Component.translatable(text, Arrays.stream(args).map(MinecraftConvertor::toPlatformText).toArray(Object[]::new)));
     }
 
     @Override
     public Text newTranslatableText(String text) {
-        return MinecraftText.fromMinecraftText(Component.translatable(text));
+        return MinecraftConvertor.fromPlatformText(Component.translatable(text));
     }
 
     @Override
     public Text newTranslatableText(String text, Text... args) {
-        return MinecraftText.fromMinecraftText(Component.translatable(text, Arrays.stream(args).map(MinecraftText::toMinecraftText).toArray(Object[]::new)));
+        return MinecraftConvertor.fromPlatformText(Component.translatable(text, Arrays.stream(args).map(MinecraftConvertor::toPlatformText).toArray(Object[]::new)));
     }
 
     @Override
     public TagIoReader getTagIoReader() {
-        return input -> MinecraftTagRecord.fromMinecraft(NbtIo.readCompressed(input));
+        return input -> MinecraftConvertor.fromPlatformTagRecord(NbtIo.readCompressed(input));
     }
 
     @Override
     public TagIoWriter getTagIoWriter() {
-        return (output, config) -> NbtIo.writeCompressed(MinecraftTagRecord.toMinecraft(config), output);
+        return (output, config) -> NbtIo.writeCompressed(MinecraftConvertor.toPlatformTagRecord(config), output);
     }
 
 }

@@ -10,20 +10,12 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.UUID;
 
-public class MinecraftBuffer implements Buffer {
+class MinecraftBuffer implements Buffer {
 
     private final FriendlyByteBuf reference;
 
     MinecraftBuffer(FriendlyByteBuf reference) {
         this.reference = reference;
-    }
-
-    public static Buffer fromMinecraftBuffer(FriendlyByteBuf buffer) {
-        return new MinecraftBuffer(buffer);
-    }
-
-    public static FriendlyByteBuf toMinecraftBuffer(Buffer buffer) {
-        return ((MinecraftBuffer) buffer).reference;
     }
 
     @Override
@@ -48,7 +40,7 @@ public class MinecraftBuffer implements Buffer {
 
     @Override
     public Text readText() {
-        return MinecraftText.fromMinecraftText(reference.readComponent());
+        return MinecraftConvertor.fromPlatformText(reference.readComponent());
     }
 
     @Override
@@ -98,17 +90,17 @@ public class MinecraftBuffer implements Buffer {
 
     @Override
     public Item readItem() {
-        return MinecraftItem.fromMinecraft(reference.readById(BuiltInRegistries.ITEM));
+        return MinecraftConvertor.fromPlatformItem(reference.readById(BuiltInRegistries.ITEM));
     }
 
     @Override
     public ItemStack readItemStack() {
-        return MinecraftItemStack.fromMinecraft(reference.readItem());
+        return MinecraftConvertor.fromPlatformItemStack(reference.readItem());
     }
 
     @Override
     public TagRecord readTagRecord() {
-        return MinecraftTagRecord.fromMinecraft(reference.readNbt());
+        return MinecraftConvertor.fromPlatformTagRecord(reference.readNbt());
     }
 
     @Override
@@ -128,7 +120,7 @@ public class MinecraftBuffer implements Buffer {
 
     @Override
     public void writeText(Text value) {
-        reference.writeComponent(MinecraftText.toMinecraftText(value));
+        reference.writeComponent(MinecraftConvertor.toPlatformText(value));
     }
 
     @Override
@@ -178,17 +170,17 @@ public class MinecraftBuffer implements Buffer {
 
     @Override
     public void writeItem(Item value) {
-        reference.writeId(BuiltInRegistries.ITEM, MinecraftItem.toMinecraft(value));
+        reference.writeId(BuiltInRegistries.ITEM, MinecraftConvertor.toPlatformItem(value));
     }
 
     @Override
     public void writeItemStack(ItemStack value) {
-        reference.writeItem(MinecraftItemStack.toMinecraftItemStack(value));
+        reference.writeItem(MinecraftConvertor.toPlatformItemStack(value));
     }
 
     @Override
     public void writeTagRecord(TagRecord value) {
-        reference.writeNbt(MinecraftTagRecord.toMinecraft(value));
+        reference.writeNbt(MinecraftConvertor.toPlatformTagRecord(value));
     }
 
     @Override

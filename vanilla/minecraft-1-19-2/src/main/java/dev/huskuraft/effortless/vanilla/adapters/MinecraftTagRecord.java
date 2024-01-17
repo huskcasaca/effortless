@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class MinecraftTagRecord implements TagRecord {
+class MinecraftTagRecord implements TagRecord {
 
     private final MinecraftTagElement proxy;
 
@@ -18,18 +18,8 @@ public class MinecraftTagRecord implements TagRecord {
         this.proxy = tag;
     }
 
-    public static TagRecord fromMinecraft(CompoundTag tag) {
-        if (tag == null) {
-            return null;
-        }
-        return new MinecraftTagElement(tag).asRecord();
-    }
-
-    public static CompoundTag toMinecraft(TagRecord tag) {
-        if (tag == null) {
-            return null;
-        }
-        return ((MinecraftTagRecord) tag).referenceValue();
+    MinecraftTagRecord(CompoundTag tag) {
+        this(new MinecraftTagElement(tag == null ? new CompoundTag() : tag));
     }
 
     @Override
@@ -59,12 +49,12 @@ public class MinecraftTagRecord implements TagRecord {
 
     @Override
     public Text getText(String key) {
-        return MinecraftText.fromMinecraftText(Component.Serializer.fromJson(referenceValue().getString(key)));
+        return MinecraftConvertor.fromPlatformText(Component.Serializer.fromJson(referenceValue().getString(key)));
     }
 
     @Override
     public void putText(String key, Text value) {
-        referenceValue().putString(key, Component.Serializer.toJson(MinecraftText.toMinecraftText(value)));
+        referenceValue().putString(key, Component.Serializer.toJson(MinecraftConvertor.toPlatformText(value)));
     }
 
     @Override
@@ -209,12 +199,12 @@ public class MinecraftTagRecord implements TagRecord {
 
     @Override
     public TagElement getElement(String key) {
-        return MinecraftTagElement.toTagElement(referenceValue().get(key));
+        return MinecraftConvertor.fromPlatformTagElement(referenceValue().get(key));
     }
 
     @Override
     public void putElement(String key, TagElement value) {
-        referenceValue().put(key, MinecraftTagElement.toMinecraft(value));
+        referenceValue().put(key, MinecraftConvertor.toPlatformTagElement(value));
     }
 
     @Override

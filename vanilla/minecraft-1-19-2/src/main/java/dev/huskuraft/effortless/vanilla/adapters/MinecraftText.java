@@ -7,26 +7,12 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 
-public class MinecraftText implements Text {
+class MinecraftText implements Text {
 
     private final Component reference;
 
     MinecraftText(Component reference) {
         this.reference = reference;
-    }
-
-    public static Text fromMinecraftText(Component value) {
-        if (value == null) {
-            return null;
-        }
-        return new MinecraftText(value);
-    }
-
-    public static Component toMinecraftText(Text value) {
-        if (value == null) {
-            return null;
-        }
-        return ((MinecraftText) value).reference;
     }
 
     @Override
@@ -36,17 +22,17 @@ public class MinecraftText implements Text {
 
     @Override
     public Text withStyle(TextStyle... styles) {
-        return fromMinecraftText(reference.copy().withStyle(Arrays.stream(styles).map(MinecraftText::adapt).toArray(ChatFormatting[]::new)));
+        return MinecraftConvertor.fromPlatformText(reference.copy().withStyle(Arrays.stream(styles).map(MinecraftText::adapt).toArray(ChatFormatting[]::new)));
     }
 
     @Override
     public Text append(Text append) {
-        return fromMinecraftText(reference.copy().append(toMinecraftText(append)));
+        return MinecraftConvertor.fromPlatformText(reference.copy().append(MinecraftConvertor.toPlatformText(append)));
     }
 
     @Override
     public Text copy() {
-        return fromMinecraftText(reference.copy());
+        return MinecraftConvertor.fromPlatformText(reference.copy());
     }
 
     @Override

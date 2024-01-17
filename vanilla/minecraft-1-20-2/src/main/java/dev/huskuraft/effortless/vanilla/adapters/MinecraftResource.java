@@ -3,11 +3,11 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.api.core.Resource;
 import net.minecraft.resources.ResourceLocation;
 
-public class MinecraftResource implements Resource {
+class MinecraftResource implements Resource {
 
     private final ResourceLocation reference;
 
-    public MinecraftResource(ResourceLocation reference) {
+    MinecraftResource(ResourceLocation reference) {
         this.reference = reference;
     }
 

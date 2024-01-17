@@ -28,17 +28,17 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
 
     @Override
     public void onInitializeClient() {
-        getEventRegistry().getClientStartEvent().invoker().onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
+        getEventRegistry().getClientStartEvent().invoker().onClientStart(MinecraftConvertor.fromPlatformClient(Minecraft.getInstance()));
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             var channelId = (ResourceLocation) getChannel().getChannelId().reference();
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
-                receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(buf), MinecraftPlayer.fromMinecraftPlayer(client.player));
+                receiver.receiveBuffer(MinecraftConvertor.fromPlatformBuffer(buf), MinecraftConvertor.fromPlatformPlayer(client.player));
             });
-            return (buffer, player1) -> ClientPlayNetworking.send(channelId, MinecraftBuffer.toMinecraftBuffer(buffer));
+            return (buffer, player1) -> ClientPlayNetworking.send(channelId, MinecraftConvertor.toPlatformBuffer(buffer));
         });
 
         getEventRegistry().getRegisterKeysEvent().invoker().onRegisterKeys(key1 -> {
-            KeyBindingHelper.registerKeyBinding(MinecraftKeyBinding.toMinecraft(key1.getBinding()));
+            KeyBindingHelper.registerKeyBinding(MinecraftConvertor.toPlatformKeyBinding(key1.getBinding()));
         });
 
         ClientShadersEvents.REGISTER.register((manager, sink) -> {
@@ -46,19 +46,19 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
-            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(minecraft), ClientTick.Phase.START);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftConvertor.fromPlatformClient(minecraft), ClientTick.Phase.START);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(minecraft), ClientTick.Phase.END);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftConvertor.fromPlatformClient(minecraft), ClientTick.Phase.END);
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(context.matrixStack()), context.tickDelta());
+            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(MinecraftConvertor.fromPlatformRenderer(context.matrixStack()), context.tickDelta());
         });
 
         ClientRenderEvents.GUI.register((matrixStack, f) -> {
-            getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(matrixStack), f);
+            getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(MinecraftConvertor.fromPlatformRenderer(matrixStack), f);
         });
 
         KeyboardInputEvents.KEY_INPUT.register((key, scanCode, action, modifiers) -> {
@@ -66,11 +66,11 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         InteractionInputEvents.ATTACK.register((player, hand) -> {
-            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.ATTACK, MinecraftPrimitives.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.ATTACK, MinecraftConvertor.fromPlatformInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
         InteractionInputEvents.USE_ITEM.register((player, hand) -> {
-            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.USE_ITEM, MinecraftPrimitives.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.USE_ITEM, MinecraftConvertor.fromPlatformInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
     }

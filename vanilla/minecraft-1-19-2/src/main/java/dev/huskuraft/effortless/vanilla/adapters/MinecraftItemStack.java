@@ -12,37 +12,21 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
-public class MinecraftItemStack implements ItemStack {
+class MinecraftItemStack implements ItemStack {
 
     private final net.minecraft.world.item.ItemStack reference;
 
-    public MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
+    MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
         this.reference = itemStack;
     }
 
-    public MinecraftItemStack(net.minecraft.world.item.Item item, int count) {
+    MinecraftItemStack(net.minecraft.world.item.Item item, int count) {
         this.reference = new net.minecraft.world.item.ItemStack(item, count);
     }
 
-    public MinecraftItemStack(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
+    MinecraftItemStack(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
         this.reference = new net.minecraft.world.item.ItemStack(item, count);
         this.reference.setTag(tag);
-    }
-
-    public static ItemStack fromMinecraft(net.minecraft.world.item.ItemStack itemStack) {
-        return new MinecraftItemStack(itemStack);
-    }
-
-    public static ItemStack fromMinecraft(net.minecraft.world.item.Item item, int count) {
-        return new MinecraftItemStack(item, count);
-    }
-
-    public static ItemStack fromMinecraft(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
-        return new MinecraftItemStack(item, tag, count);
-    }
-
-    public static net.minecraft.world.item.ItemStack toMinecraftItemStack(ItemStack itemStack) {
-        return ((MinecraftItemStack) itemStack).reference;
     }
 
     @Override
@@ -67,7 +51,7 @@ public class MinecraftItemStack implements ItemStack {
 
     @Override
     public Item getItem() {
-        return MinecraftItem.fromMinecraft(reference.getItem());
+        return MinecraftConvertor.fromPlatformItem(reference.getItem());
     }
 
     @Override
@@ -87,17 +71,17 @@ public class MinecraftItemStack implements ItemStack {
 
     @Override
     public Text getHoverName() {
-        return MinecraftText.fromMinecraftText(reference.getHoverName());
+        return MinecraftConvertor.fromPlatformText(reference.getHoverName());
     }
 
     @Override
     public List<Text> getTooltips(Player player, TooltipType flag) {
-        return reference.getTooltipLines(MinecraftPlayer.toMinecraftPlayer(player), switch (flag) {
+        return reference.getTooltipLines(MinecraftConvertor.toPlatformPlayer(player), switch (flag) {
             case NORMAL -> TooltipFlag.Default.NORMAL;
             case NORMAL_CREATIVE -> TooltipFlag.Default.NORMAL;
             case ADVANCED -> TooltipFlag.Default.ADVANCED;
             case ADVANCED_CREATIVE -> TooltipFlag.Default.ADVANCED;
-        }).stream().map(MinecraftText::fromMinecraftText).toList();
+        }).stream().map(MinecraftConvertor::fromPlatformText).toList();
     }
 
     @Override
@@ -112,12 +96,12 @@ public class MinecraftItemStack implements ItemStack {
 
     @Override
     public ItemStack copy() {
-        return MinecraftItemStack.fromMinecraft(reference.copy());
+        return MinecraftConvertor.fromPlatformItemStack(reference.copy());
     }
 
     @Override
     public boolean isItem(Item item) {
-        return reference.is(MinecraftItem.toMinecraft(item));
+        return reference.is(MinecraftConvertor.toPlatformItem(item));
     }
 
     @Override
@@ -132,22 +116,22 @@ public class MinecraftItemStack implements ItemStack {
 
     @Override
     public TagRecord getTag() {
-        return MinecraftTagRecord.fromMinecraft(reference.getOrCreateTag());
+        return MinecraftConvertor.fromPlatformTagRecord(reference.getOrCreateTag());
     }
 
     @Override
     public void setTag(TagRecord tagRecord) {
-        reference.setTag(MinecraftTagRecord.toMinecraft(tagRecord));
+        reference.setTag(MinecraftConvertor.toPlatformTagRecord(tagRecord));
     }
 
     @Override
     public BlockState getBlockState(Player player, BlockInteraction interaction) {
 
-        return MinecraftBlockState.fromMinecraftBlockState(Block.byItem(reference.getItem()).getStateForPlacement(new BlockPlaceContext(
-                MinecraftPlayer.toMinecraftPlayer(player),
-                MinecraftPrimitives.toMinecraftInteractionHand(interaction.getHand()),
-                MinecraftItemStack.toMinecraftItemStack(this),
-                MinecraftPrimitives.toMinecraftBlockInteraction(interaction)
+        return MinecraftConvertor.fromPlatformBlockState(Block.byItem(reference.getItem()).getStateForPlacement(new BlockPlaceContext(
+                MinecraftConvertor.toPlatformPlayer(player),
+                MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
+                MinecraftConvertor.toPlatformItemStack(this),
+                MinecraftConvertor.toPlatformBlockInteraction(interaction)
         )));
     }
 

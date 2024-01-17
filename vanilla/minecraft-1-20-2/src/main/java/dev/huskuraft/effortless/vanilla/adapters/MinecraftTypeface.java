@@ -4,26 +4,12 @@ import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.client.gui.Font;
 
-public class MinecraftTypeface implements Typeface {
+class MinecraftTypeface implements Typeface {
 
     private final Font reference;
 
     MinecraftTypeface(Font reference) {
         this.reference = reference;
-    }
-
-    public static Typeface fromMinecraftTypeface(Font value) {
-        if (value == null) {
-            return null;
-        }
-        return new MinecraftTypeface(value);
-    }
-
-    public static Font toMinecraftTypeface(Typeface value) {
-        if (value == null) {
-            return null;
-        }
-        return ((MinecraftTypeface) value).reference;
     }
 
     @Override
@@ -38,7 +24,7 @@ public class MinecraftTypeface implements Typeface {
 
     @Override
     public int measureWidth(Text text) {
-        return reference.width(MinecraftText.toMinecraftText(text));
+        return reference.width(MinecraftConvertor.toPlatformText(text));
     }
 
     @Override

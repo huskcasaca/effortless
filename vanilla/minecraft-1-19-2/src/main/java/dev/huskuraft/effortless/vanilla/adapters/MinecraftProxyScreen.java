@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskuraft.effortless.api.gui.Screen;
 import net.minecraft.network.chat.Component;
 
-public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
+class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
 
     private final Screen proxy;
 
@@ -52,8 +52,8 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
     @Override
     public void render(PoseStack minecraftMatrixStack, int i, int j, float f) {
         proxy.onReload();
-        proxy.render(MinecraftRenderer.fromMinecraft(minecraftMatrixStack), i, j, f);
-        proxy.renderOverlay(MinecraftRenderer.fromMinecraft(minecraftMatrixStack), i, j, f);
+        proxy.render(MinecraftConvertor.fromPlatformRenderer(minecraftMatrixStack), i, j, f);
+        proxy.renderOverlay(MinecraftConvertor.fromPlatformRenderer(minecraftMatrixStack), i, j, f);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
 
     @Override
     public Component getTitle() {
-        return MinecraftText.toMinecraftText(proxy.getScreenTitle());
+        return MinecraftConvertor.toPlatformText(proxy.getScreenTitle());
     }
 
     @Override

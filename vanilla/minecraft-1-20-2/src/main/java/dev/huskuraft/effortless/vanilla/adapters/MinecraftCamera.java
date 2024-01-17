@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.math.Quaternionf;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.renderer.Camera;
 
-public class MinecraftCamera implements Camera {
+class MinecraftCamera implements Camera {
 
     private final net.minecraft.client.Camera reference;
 
@@ -12,18 +12,14 @@ public class MinecraftCamera implements Camera {
         this.reference = reference;
     }
 
-    public static Camera fromMinecraftCamera(net.minecraft.client.Camera camera) {
-        return new MinecraftCamera(camera);
-    }
-
     @Override
     public Vector3d position() {
-        return MinecraftPrimitives.fromMinecraftVector3d(reference.getPosition());
+        return MinecraftConvertor.fromPlatformMinecraftVector3d(reference.getPosition());
     }
 
     @Override
     public Quaternionf rotation() {
-        return MinecraftPrimitives.fromMinecraftQuaternion(reference.rotation());
+        return MinecraftConvertor.fromPlatformQuaternion(reference.rotation());
     }
 
     @Override

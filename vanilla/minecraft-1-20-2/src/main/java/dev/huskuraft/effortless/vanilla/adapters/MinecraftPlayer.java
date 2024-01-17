@@ -15,26 +15,12 @@ import net.minecraft.world.level.GameType;
 import java.util.List;
 import java.util.UUID;
 
-public class MinecraftPlayer implements Player {
+class MinecraftPlayer implements Player {
 
     protected final net.minecraft.world.entity.player.Player reference;
 
     MinecraftPlayer(net.minecraft.world.entity.player.Player reference) {
         this.reference = reference;
-    }
-
-    public static Player fromMinecraftPlayer(net.minecraft.world.entity.player.Player player) {
-        if (player == null) {
-            return null;
-        }
-        return new MinecraftPlayer(player);
-    }
-
-    public static net.minecraft.world.entity.player.Player toMinecraftPlayer(Player player) {
-        if (player == null) {
-            return null;
-        }
-        return player.reference();
     }
 
     @Override
@@ -49,68 +35,68 @@ public class MinecraftPlayer implements Player {
 
     @Override
     public Server getServer() {
-        return new MinecraftServer(reference.getServer());
+        return MinecraftConvertor.fromPlatformServer(reference.getServer());
     }
 
     @Override
     public World getWorld() {
-        return new MinecraftWorld(reference.level());
+        return MinecraftConvertor.fromPlatformWorld(reference.level());
     }
 
     @Override
     public Text getDisplayName() {
-        return MinecraftText.fromMinecraftText(reference.getDisplayName());
+        return MinecraftConvertor.fromPlatformText(reference.getDisplayName());
     }
 
     @Override
     public Vector3d getPosition() {
-        return MinecraftPrimitives.fromMinecraftVector3d(reference.position());
+        return MinecraftConvertor.fromPlatformMinecraftVector3d(reference.position());
     }
 
     @Override
     public Vector3d getEyePosition() {
-        return MinecraftPrimitives.fromMinecraftVector3d(reference.getEyePosition());
+        return MinecraftConvertor.fromPlatformMinecraftVector3d(reference.getEyePosition());
     }
 
     @Override
     public Vector3d getEyeDirection() {
-        return MinecraftPrimitives.fromMinecraftVector3d(reference.getLookAngle());
+        return MinecraftConvertor.fromPlatformMinecraftVector3d(reference.getLookAngle());
     }
 
     @Override
     public List<ItemStack> getItemStacks() {
-        return reference.getInventory().items.stream().map(MinecraftItemStack::fromMinecraft).toList();
+        return reference.getInventory().items.stream().map(MinecraftConvertor::fromPlatformItemStack).toList();
     }
 
     @Override
     public void setItemStack(int index, ItemStack itemStack) {
-        reference.getInventory().setItem(index, MinecraftItemStack.toMinecraftItemStack(itemStack));
+        reference.getInventory().setItem(index, MinecraftConvertor.toPlatformItemStack(itemStack));
     }
 
     @Override
     public ItemStack getItemStack(InteractionHand hand) {
-        return MinecraftItemStack.fromMinecraft(reference.getItemInHand(MinecraftPrimitives.toMinecraftInteractionHand(hand)));
+        return MinecraftConvertor.fromPlatformItemStack(reference.getItemInHand(MinecraftConvertor.toPlatformInteractionHand(hand)));
     }
 
     @Override
     public void setItemStack(InteractionHand hand, ItemStack itemStack) {
-        reference.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, MinecraftItemStack.toMinecraftItemStack(itemStack));
+        reference.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, MinecraftConvertor.toPlatformItemStack(itemStack));
     }
 
     @Override
     public void sendMessage(Text message) {
-        reference.sendSystemMessage(MinecraftText.toMinecraftText(message));
+        reference.sendSystemMessage(MinecraftConvertor.toPlatformText(message));
 //        getRef().displayClientMessage(message, true);
     }
 
     @Override
     public void swing(InteractionHand hand) {
-        reference.swing(MinecraftPrimitives.toMinecraftInteractionHand(hand));
+        reference.swing(MinecraftConvertor.toPlatformInteractionHand(hand));
     }
 
     @Override
     public boolean canInteractBlock(BlockPosition blockPosition) {
-        return !reference.blockActionRestricted(reference.level(), MinecraftPrimitives.toMinecraftBlockPosition(blockPosition), switch (getGameType()) {
+        return !reference.blockActionRestricted(reference.level(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), switch (getGameType()) {
             case SURVIVAL -> GameType.SURVIVAL;
             case CREATIVE -> GameType.CREATIVE;
             case ADVENTURE -> GameType.ADVENTURE;
@@ -120,7 +106,7 @@ public class MinecraftPlayer implements Player {
 
     @Override
     public boolean canAttackBlock(BlockPosition blockPosition) {
-        return reference.getMainHandItem().getItem().canAttackBlock(reference.level().getBlockState(MinecraftPrimitives.toMinecraftBlockPosition(blockPosition)), reference.level(), MinecraftPrimitives.toMinecraftBlockPosition(blockPosition), reference);
+        return reference.getMainHandItem().getItem().canAttackBlock(reference.level().getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)), reference.level(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), reference);
     }
 
     @Override
@@ -146,20 +132,20 @@ public class MinecraftPlayer implements Player {
 
     @Override
     public BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids) {
-        return (BlockInteraction) MinecraftPrimitives.fromMinecraftInteraction(reference.pick(maxDistance, deltaTick, includeFluids));
+        return (BlockInteraction) MinecraftConvertor.fromPlatformInteraction(reference.pick(maxDistance, deltaTick, includeFluids));
     }
 
     @Override
     public boolean tryPlaceBlock(BlockInteraction interaction) {
-        var minecraftInteractionHand = MinecraftPrimitives.toMinecraftInteractionHand(interaction.getHand());
+        var minecraftInteractionHand = MinecraftConvertor.toPlatformInteractionHand(interaction.getHand());
         var minecraftItemStack = reference.getItemInHand(minecraftInteractionHand);
-        var minecraftBlockInteraction = MinecraftPrimitives.toMinecraftBlockInteraction(interaction);
+        var minecraftBlockInteraction = MinecraftConvertor.toPlatformBlockInteraction(interaction);
         return ((BlockItem) minecraftItemStack.getItem()).place(new BlockPlaceContext(reference, minecraftInteractionHand, minecraftItemStack, minecraftBlockInteraction)).consumesAction();
     }
 
     @Override
     public boolean tryBreakBlock(BlockInteraction interaction) {
-        var minecraftBlockPosition = MinecraftPrimitives.toMinecraftBlockPosition(interaction.getBlockPosition());
+        var minecraftBlockPosition = MinecraftConvertor.toPlatformBlockPosition(interaction.getBlockPosition());
         if (reference instanceof ServerPlayer serverPlayer) {
             return serverPlayer.gameMode.destroyBlock(minecraftBlockPosition);
         }

@@ -79,19 +79,19 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
-        getEventRegistry().getClientStartEvent().invoker().onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
+        getEventRegistry().getClientStartEvent().invoker().onClientStart(MinecraftConvertor.fromPlatformClient(Minecraft.getInstance()));
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
                     try {
-                        receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(event1.getPayload()), MinecraftPlayer.fromMinecraftPlayer(Minecraft.getInstance().player));
+                        receiver.receiveBuffer(MinecraftConvertor.fromPlatformBuffer(event1.getPayload()), MinecraftConvertor.fromPlatformPlayer(Minecraft.getInstance().player));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
             return (buffer, player) -> {
-                Minecraft.getInstance().getConnection().send(NetworkDirection.PLAY_TO_SERVER.buildPacket(MinecraftBuffer.toMinecraftBuffer(buffer), getChannel().getChannelId().reference()).getThis());
+                Minecraft.getInstance().getConnection().send(NetworkDirection.PLAY_TO_SERVER.buildPacket(MinecraftConvertor.toPlatformBuffer(buffer), getChannel().getChannelId().reference()).getThis());
             };
         });
     }
@@ -99,7 +99,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         getEventRegistry().getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
-            event.register(MinecraftKeyBinding.toMinecraft(key.getBinding()));
+            event.register(MinecraftConvertor.toPlatformKeyBinding(key.getBinding()));
         });
     }
 
@@ -110,7 +110,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()), switch (event.phase) {
+        getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftConvertor.fromPlatformClient(Minecraft.getInstance()), switch (event.phase) {
             case START -> ClientTick.Phase.START;
             case END -> ClientTick.Phase.END;
         });
@@ -119,13 +119,13 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onRenderLevelStage(RenderLevelStageEvent event) {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_ENTITIES) {
-            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(MinecraftRenderer.fromMinecraft(event.getPoseStack()), event.getPartialTick());
+            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(MinecraftConvertor.fromPlatformRenderer(event.getPoseStack()), event.getPartialTick());
         }
     }
 
     @SubscribeEvent
     public void onRenderGui(RenderGuiEvent event) {
-        getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(MinecraftRenderer.fromMinecraft(event.getGuiGraphics().pose()), event.getPartialTick());
+        getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(MinecraftConvertor.fromPlatformRenderer(event.getGuiGraphics().pose()), event.getPartialTick());
     }
 
     @SubscribeEvent
@@ -136,7 +136,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onInteractionInput(InputEvent.InteractionKeyMappingTriggered event) {
         var type = event.isAttack() ? InteractionType.ATTACK : event.isUseItem() ? InteractionType.USE_ITEM : InteractionType.UNKNOWN;
-        var hand = MinecraftPrimitives.fromMinecraftInteractionHand(event.getHand());
+        var hand = MinecraftConvertor.fromPlatformInteractionHand(event.getHand());
         if (getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(type, hand).interruptsFurtherEvaluation()) {
             event.setCanceled(true);
             event.setSwingHand(false);

@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftShader;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
@@ -270,7 +270,7 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
 
     @Override
     public Resource getBlockAtlasResource() {
-        return new MinecraftResource(InventoryMenu.BLOCK_ATLAS);
+        return MinecraftConvertor.fromPlatformResource(InventoryMenu.BLOCK_ATLAS);
     }
 
 }

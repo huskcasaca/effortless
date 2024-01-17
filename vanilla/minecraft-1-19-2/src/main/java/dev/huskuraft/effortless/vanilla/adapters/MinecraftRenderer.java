@@ -20,7 +20,7 @@ import net.minecraft.util.RandomSource;
 import java.util.List;
 import java.util.Optional;
 
-public class MinecraftRenderer extends Renderer {
+class MinecraftRenderer extends Renderer {
 
     private static final RandomSource RAND = RandomSource.create();
     private final Minecraft minecraftClient;
@@ -28,7 +28,7 @@ public class MinecraftRenderer extends Renderer {
     private final MultiBufferSource.BufferSource minecraftBufferSource;
     private final Screen minecraftRendererProvider;
 
-    public MinecraftRenderer(PoseStack minecraftMatrixStack) {
+    MinecraftRenderer(PoseStack minecraftMatrixStack) {
         this.minecraftClient = Minecraft.getInstance();
         this.minecraftMatrixStack = minecraftMatrixStack;
         this.minecraftBufferSource = minecraftClient.renderBuffers().bufferSource();
@@ -42,17 +42,17 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public Window window() {
-        return MinecraftWindow.fromMinecraftCamera(minecraftClient.getWindow());
+        return MinecraftConvertor.fromPlatformWindow(minecraftClient.getWindow());
     }
 
     @Override
     public Camera camera() {
-        return MinecraftCamera.fromMinecraftCamera(minecraftClient.gameRenderer.getMainCamera());
+        return MinecraftConvertor.fromPlatformCamera(minecraftClient.gameRenderer.getMainCamera());
     }
 
     @Override
     public MatrixStack matrixStack() {
-        return MinecraftMatrixStack.fromMinecraftMatrixStack(minecraftMatrixStack);
+        return MinecraftConvertor.fromPlatformMatrixStack(minecraftMatrixStack);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public VertexBuffer vertexBuffer(RenderLayer renderLayer) {
-        return new MinecraftVertexBuffer(minecraftBufferSource.getBuffer(renderLayer.reference()));
+        return MinecraftConvertor.fromPlatformVertexBuffer(minecraftBufferSource.getBuffer(renderLayer.reference()));
     }
 
     @Override
@@ -90,8 +90,8 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     protected int renderTextInternal(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap) {
-        var minecraftTypeface = MinecraftTypeface.toMinecraftTypeface(typeface);
-        var minecraftText = MinecraftText.toMinecraftText(text);
+        var minecraftTypeface = MinecraftConvertor.toPlatformTypeface(typeface);
+        var minecraftText = MinecraftConvertor.toPlatformText(text);
         return minecraftTypeface.drawInBatch(minecraftText,
                 x,
                 y,
@@ -130,21 +130,21 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderItem(ItemStack stack, int x, int y) {
-        minecraftClient.getItemRenderer().renderGuiItem(MinecraftItemStack.toMinecraftItemStack(stack), x, y);
+        minecraftClient.getItemRenderer().renderGuiItem(MinecraftConvertor.toPlatformItemStack(stack), x, y);
     }
 
     @Override
     public void renderTooltip(Typeface typeface, List<Text> list, int x, int y) {
-        minecraftRendererProvider.renderTooltip(minecraftMatrixStack, list.stream().map(MinecraftText::toMinecraftText).toList(), Optional.empty(), x, y);
+        minecraftRendererProvider.renderTooltip(minecraftMatrixStack, list.stream().map(MinecraftConvertor::toPlatformText).toList(), Optional.empty(), x, y);
     }
 
     @Override
     public void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState) {
         var minecraftBlockRenderer = minecraftClient.getBlockRenderer();
-        var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
-        var minecraftRenderLayer = (RenderType) renderLayer.reference();
-        var minecraftBlockState = MinecraftBlockState.toMinecraftBlockState(blockState);
-        var minecraftBlockPosition = MinecraftPrimitives.toMinecraftBlockPosition(blockPosition);
+        var minecraftWorld = MinecraftConvertor.toPlatformWorld(world);
+        var minecraftRenderLayer = MinecraftConvertor.toPlatformRenderLayer(renderLayer);
+        var minecraftBlockState = MinecraftConvertor.toPlatformBlockState(blockState);
+        var minecraftBlockPosition = MinecraftConvertor.toPlatformBlockPosition(blockPosition);
 
         minecraftBlockRenderer.getModelRenderer().tesselateBlock(
                 minecraftWorld,

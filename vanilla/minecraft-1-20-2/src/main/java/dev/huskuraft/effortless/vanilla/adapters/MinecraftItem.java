@@ -6,20 +6,12 @@ import dev.huskuraft.effortless.api.core.Resource;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 
-public class MinecraftItem implements Item {
+class MinecraftItem implements Item {
 
     private final net.minecraft.world.item.Item reference;
 
     MinecraftItem(net.minecraft.world.item.Item reference) {
         this.reference = reference;
-    }
-
-    public static Item fromMinecraft(net.minecraft.world.item.Item item) {
-        return new MinecraftItem(item);
-    }
-
-    public static net.minecraft.world.item.Item toMinecraft(Item item) {
-        return ((MinecraftItem) item).reference;
     }
 
     @Override
@@ -29,7 +21,7 @@ public class MinecraftItem implements Item {
 
     @Override
     public ItemStack getDefaultStack() {
-        return MinecraftItemStack.fromMinecraft(reference.getDefaultInstance());
+        return MinecraftConvertor.fromPlatformItemStack(reference.getDefaultInstance());
     }
 
     @Override
@@ -39,7 +31,7 @@ public class MinecraftItem implements Item {
 
     @Override
     public Resource getId() {
-        return new MinecraftResource(BuiltInRegistries.ITEM.getKey(reference));
+        return MinecraftConvertor.fromPlatformResource(BuiltInRegistries.ITEM.getKey(reference));
     }
 
     @Override

@@ -5,26 +5,12 @@ import dev.huskuraft.effortless.api.input.KeyBinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 
-public class MinecraftKeyBinding implements KeyBinding {
+class MinecraftKeyBinding implements KeyBinding {
 
     private final KeyMapping reference;
 
     MinecraftKeyBinding(KeyMapping reference) {
         this.reference = reference;
-    }
-
-    public static KeyBinding fromMinecraft(KeyMapping value) {
-        if (value == null) {
-            return null;
-        }
-        return new MinecraftKeyBinding(value);
-    }
-
-    public static KeyMapping toMinecraft(KeyBinding value) {
-        if (value == null) {
-            return null;
-        }
-        return ((MinecraftKeyBinding) value).reference;
     }
 
     @Override

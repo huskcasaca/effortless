@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-public class MinecraftBlockState implements BlockState {
+class MinecraftBlockState implements BlockState {
 
     private final net.minecraft.world.level.block.state.BlockState reference;
 
@@ -18,14 +18,6 @@ public class MinecraftBlockState implements BlockState {
     @Override
     public net.minecraft.world.level.block.state.BlockState referenceValue() {
         return reference;
-    }
-
-    public static BlockState fromMinecraftBlockState(net.minecraft.world.level.block.state.BlockState value) {
-        return new MinecraftBlockState(value);
-    }
-
-    public static net.minecraft.world.level.block.state.BlockState toMinecraftBlockState(BlockState value) {
-        return value.reference();
     }
 
     public static net.minecraft.world.level.block.state.BlockState mirrorTopBottom(net.minecraft.world.level.block.state.BlockState value) {
@@ -83,7 +75,7 @@ public class MinecraftBlockState implements BlockState {
 
     @Override
     public BlockState rotate(Revolve revolve) {
-        return new MinecraftBlockState(reference.rotate(switch (revolve) {
+        return MinecraftConvertor.fromPlatformBlockState(reference.rotate(switch (revolve) {
             case NONE -> Rotation.NONE;
             case CLOCKWISE_90 -> Rotation.CLOCKWISE_90;
             case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
@@ -98,25 +90,25 @@ public class MinecraftBlockState implements BlockState {
 
     @Override
     public Item getItem() {
-        return MinecraftItem.fromMinecraft(reference.getBlock().asItem());
+        return MinecraftConvertor.fromPlatformItem(reference.getBlock().asItem());
     }
 
     @Override
     public BlockState mirror(Axis axis) {
         return switch (axis) {
-            case Y -> new MinecraftBlockState(mirrorTopBottom(reference));
-            case X -> new MinecraftBlockState(mirrorFrontBack(reference));
-            case Z -> new MinecraftBlockState(mirrorLeftRight(reference));
+            case Y -> MinecraftConvertor.fromPlatformBlockState(mirrorTopBottom(reference));
+            case X -> MinecraftConvertor.fromPlatformBlockState(mirrorFrontBack(reference));
+            case Z -> MinecraftConvertor.fromPlatformBlockState(mirrorLeftRight(reference));
         };
     }
 
     @Override
     public boolean isReplaceable(Player player, BlockInteraction interaction) {
         return reference.canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
-                MinecraftPlayer.toMinecraftPlayer(player),
-                MinecraftPrimitives.toMinecraftInteractionHand(interaction.getHand()),
-                MinecraftItemStack.toMinecraftItemStack(player.getItemStack(interaction.getHand())),
-                MinecraftPrimitives.toMinecraftBlockInteraction(interaction)
+                MinecraftConvertor.toPlatformPlayer(player),
+                MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
+                MinecraftConvertor.toPlatformItemStack(player.getItemStack(interaction.getHand())),
+                MinecraftConvertor.toPlatformBlockInteraction(interaction)
         ));
     }
 

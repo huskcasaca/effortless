@@ -5,16 +5,12 @@ import dev.huskuraft.effortless.api.platform.Server;
 
 import java.util.List;
 
-public class MinecraftServer implements Server {
+class MinecraftServer implements Server {
 
     private final net.minecraft.server.MinecraftServer reference;
 
     MinecraftServer(net.minecraft.server.MinecraftServer reference) {
         this.reference = reference;
-    }
-
-    public static Server fromMinecraftServer(net.minecraft.server.MinecraftServer reference) {
-        return new MinecraftServer(reference);
     }
 
     @Override
@@ -24,7 +20,7 @@ public class MinecraftServer implements Server {
 
     @Override
     public List<Player> getPlayers() {
-        return reference.getPlayerList().getPlayers().stream().map(MinecraftPlayer::fromMinecraftPlayer).toList();
+        return reference.getPlayerList().getPlayers().stream().map(MinecraftConvertor::fromPlatformPlayer).toList();
     }
 
     @Override

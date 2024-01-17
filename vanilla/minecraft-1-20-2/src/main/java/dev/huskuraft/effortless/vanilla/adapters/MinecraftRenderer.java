@@ -23,7 +23,7 @@ import net.minecraft.util.RandomSource;
 import java.util.List;
 import java.util.Optional;
 
-public class MinecraftRenderer extends Renderer {
+class MinecraftRenderer extends Renderer {
 
     private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
 
@@ -33,34 +33,26 @@ public class MinecraftRenderer extends Renderer {
     private final MultiBufferSource.BufferSource minecraftBufferSource;
     private final GuiGraphics minecraftRendererProvider;
 
-    public MinecraftRenderer(PoseStack minecraftMatrixStack) {
+    MinecraftRenderer(PoseStack minecraftMatrixStack) {
         this.minecraftClient = Minecraft.getInstance();
         this.minecraftMatrixStack = minecraftMatrixStack;
         this.minecraftBufferSource = minecraftClient.renderBuffers().bufferSource();
         this.minecraftRendererProvider = new GuiGraphics(Minecraft.getInstance(), this.minecraftMatrixStack, minecraftBufferSource);
     }
 
-    public static Renderer fromMinecraft(PoseStack matrixStack) {
-        return new MinecraftRenderer(matrixStack);
-    }
-
-    public static Renderer fromMinecraft(GuiGraphics renderer) {
-        return new MinecraftRenderer(renderer.pose());
-    }
-
     @Override
     public Window window() {
-        return MinecraftWindow.fromMinecraftCamera(minecraftClient.getWindow());
+        return MinecraftConvertor.fromPlatformWindow(minecraftClient.getWindow());
     }
 
     @Override
     public Camera camera() {
-        return MinecraftCamera.fromMinecraftCamera(minecraftClient.gameRenderer.getMainCamera());
+        return MinecraftConvertor.fromPlatformCamera(minecraftClient.gameRenderer.getMainCamera());
     }
 
     @Override
     public MatrixStack matrixStack() {
-        return MinecraftMatrixStack.fromMinecraftMatrixStack(minecraftMatrixStack);
+        return MinecraftConvertor.fromPlatformMatrixStack(minecraftMatrixStack);
     }
 
     @Override
@@ -81,12 +73,12 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public VertexBuffer vertexBuffer(RenderLayer renderLayer) {
-        return new MinecraftVertexBuffer(minecraftBufferSource.getBuffer(renderLayer.reference()));
+        return MinecraftConvertor.fromPlatformVertexBuffer(minecraftBufferSource.getBuffer(renderLayer.reference()));
     }
 
     @Override
     public BufferSource bufferSource() {
-        return new MinecraftBufferSource(minecraftBufferSource);
+        return MinecraftConvertor.fromPlatformBufferSource(minecraftBufferSource);
     }
 
     @Override
@@ -98,8 +90,8 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     protected int renderTextInternal(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap) {
-        var minecraftTypeface = MinecraftTypeface.toMinecraftTypeface(typeface);
-        var minecraftText = MinecraftText.toMinecraftText(text);
+        var minecraftTypeface = MinecraftConvertor.toPlatformTypeface(typeface);
+        var minecraftText = MinecraftConvertor.toPlatformText(text);
         return minecraftTypeface.drawInBatch(minecraftText,
                 x,
                 y,
@@ -154,21 +146,21 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderItem(ItemStack stack, int x, int y) {
-        minecraftRendererProvider.renderItem(MinecraftItemStack.toMinecraftItemStack(stack), x, y);
+        minecraftRendererProvider.renderItem(MinecraftConvertor.toPlatformItemStack(stack), x, y);
     }
 
     @Override
     public void renderTooltip(Typeface typeface, List<Text> list, int x, int y) {
-        minecraftRendererProvider.renderTooltip(MinecraftTypeface.toMinecraftTypeface(typeface), list.stream().map(MinecraftText::toMinecraftText).toList(), Optional.empty(), x, y);
+        minecraftRendererProvider.renderTooltip(MinecraftConvertor.toPlatformTypeface(typeface), list.stream().map(MinecraftConvertor::toPlatformText).toList(), Optional.empty(), x, y);
     }
 
     @Override
     public void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState) {
         var minecraftBlockRenderer = minecraftClient.getBlockRenderer();
-        var minecraftWorld = MinecraftWorld.toMinecraftWorld(world);
-        var minecraftRenderLayer = (RenderType) renderLayer.reference();
-        var minecraftBlockState = MinecraftBlockState.toMinecraftBlockState(blockState);
-        var minecraftBlockPosition = MinecraftPrimitives.toMinecraftBlockPosition(blockPosition);
+        var minecraftWorld = MinecraftConvertor.toPlatformWorld(world);
+        var minecraftRenderLayer = MinecraftConvertor.toPlatformRenderLayer(renderLayer);
+        var minecraftBlockState = MinecraftConvertor.toPlatformBlockState(blockState);
+        var minecraftBlockPosition = MinecraftConvertor.toPlatformBlockPosition(blockPosition);
 
         minecraftBlockRenderer.getModelRenderer().tesselateBlock(
                 minecraftWorld,

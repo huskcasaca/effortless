@@ -2,10 +2,7 @@ package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.platform.Platform;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftServer;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftWorld;
+import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -99,56 +96,56 @@ public class ForgeEffortless extends Effortless {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
                     try {
-                        receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(event1.getPayload()), MinecraftPlayer.fromMinecraftPlayer(event1.getSource().get().getSender()));
+                        receiver.receiveBuffer(MinecraftConvertor.fromPlatformBuffer(event1.getPayload()), MinecraftPlayer.fromMinecraftPlayer(event1.getSource().get().getSender()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
             return (buffer, player) -> {
-                ((ServerPlayer) MinecraftPlayer.toMinecraftPlayer(player)).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(MinecraftBuffer.toMinecraftBuffer(buffer), getChannel().getChannelId().reference()).getThis());
+                ((ServerPlayer) MinecraftConvertor.toPlatformPlayer(player)).connection.send(NetworkDirection.PLAY_TO_CLIENT.buildPacket(MinecraftConvertor.toPlatformBuffer(buffer), getChannel().getChannelId().reference()).getThis());
             };
         });
     }
 
     @SubscribeEvent
     public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        getEventRegistry().getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(MinecraftPlayer.fromMinecraftPlayer(event.getEntity()), MinecraftWorld.fromMinecraftWorld(event.getEntity().getServer().getLevel(event.getFrom())), MinecraftWorld.fromMinecraftWorld(event.getEntity().getServer().getLevel(event.getTo())));
+        getEventRegistry().getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(MinecraftConvertor.fromPlatformPlayer(event.getEntity()), MinecraftConvertor.fromPlatformWorld(event.getEntity().getServer().getLevel(event.getFrom())), MinecraftConvertor.fromPlatformWorld(event.getEntity().getServer().getLevel(event.getTo())));
     }
 
     @SubscribeEvent
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        getEventRegistry().getPlayerRespawnEvent().invoker().onPlayerRespawn(MinecraftPlayer.fromMinecraftPlayer(event.getEntity()), MinecraftPlayer.fromMinecraftPlayer(event.getEntity()), event.isEndConquered());
+        getEventRegistry().getPlayerRespawnEvent().invoker().onPlayerRespawn(MinecraftConvertor.fromPlatformPlayer(event.getEntity()), MinecraftConvertor.fromPlatformPlayer(event.getEntity()), event.isEndConquered());
     }
 
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        getEventRegistry().getPlayerLoggedInEvent().invoker().onPlayerLoggedIn(MinecraftPlayer.fromMinecraftPlayer(event.getEntity()));
+        getEventRegistry().getPlayerLoggedInEvent().invoker().onPlayerLoggedIn(MinecraftConvertor.fromPlatformPlayer(event.getEntity()));
     }
 
     @SubscribeEvent
     public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        getEventRegistry().getPlayerLoggedOutEvent().invoker().onPlayerLoggedOut(MinecraftPlayer.fromMinecraftPlayer(event.getEntity()));
+        getEventRegistry().getPlayerLoggedOutEvent().invoker().onPlayerLoggedOut(MinecraftConvertor.fromPlatformPlayer(event.getEntity()));
     }
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        getEventRegistry().getServerStartingEvent().invoker().onServerStarting(MinecraftServer.fromMinecraftServer(event.getServer()));
+        getEventRegistry().getServerStartingEvent().invoker().onServerStarting(MinecraftConvertor.fromPlatformServer(event.getServer()));
     }
 
     @SubscribeEvent
     public void onSeverrStarted(ServerStartedEvent event) {
-        getEventRegistry().getServerStartedEvent().invoker().onServerStarted(MinecraftServer.fromMinecraftServer(event.getServer()));
+        getEventRegistry().getServerStartedEvent().invoker().onServerStarted(MinecraftConvertor.fromPlatformServer(event.getServer()));
     }
 
     @SubscribeEvent
     public void onServerStopping(ServerStoppingEvent event) {
-        getEventRegistry().getServerStoppingEvent().invoker().onServerStopping(MinecraftServer.fromMinecraftServer(event.getServer()));
+        getEventRegistry().getServerStoppingEvent().invoker().onServerStopping(MinecraftConvertor.fromPlatformServer(event.getServer()));
     }
 
     @SubscribeEvent
     public void onServerStopped(ServerStoppedEvent event) {
-        getEventRegistry().getServerStoppedEvent().invoker().onServerStopped(MinecraftServer.fromMinecraftServer(event.getServer()));
+        getEventRegistry().getServerStoppedEvent().invoker().onServerStopped(MinecraftConvertor.fromPlatformServer(event.getServer()));
     }
 
 }

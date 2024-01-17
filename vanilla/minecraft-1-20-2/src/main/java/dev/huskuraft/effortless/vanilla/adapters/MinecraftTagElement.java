@@ -8,26 +8,12 @@ import net.minecraft.nbt.Tag;
 
 import java.util.Objects;
 
-public class MinecraftTagElement implements TagElement {
+class MinecraftTagElement implements TagElement {
 
     protected Tag reference;
 
     MinecraftTagElement(Tag reference) {
         this.reference = reference;
-    }
-
-    public static TagElement toTagElement(Tag tag) {
-        if (tag == null) {
-            return null;
-        }
-        return new MinecraftTagElement(tag);
-    }
-
-    public static Tag toMinecraft(TagElement tag) {
-        if (tag == null) {
-            return null;
-        }
-        return ((MinecraftTagElement) tag).referenceValue();
     }
 
     @Override

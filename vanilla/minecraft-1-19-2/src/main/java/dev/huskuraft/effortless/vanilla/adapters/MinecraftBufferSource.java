@@ -5,20 +5,12 @@ import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.VertexBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 
-public class MinecraftBufferSource implements BufferSource {
+class MinecraftBufferSource implements BufferSource {
 
     private final MultiBufferSource.BufferSource reference;
 
     MinecraftBufferSource(MultiBufferSource.BufferSource reference) {
         this.reference = reference;
-    }
-
-    public static BufferSource fromMinecraftBufferSource(MultiBufferSource.BufferSource bufferSource) {
-        return new MinecraftBufferSource(bufferSource);
-    }
-
-    public static MultiBufferSource.BufferSource toMinecraftBufferSource(BufferSource bufferSource) {
-        return ((MinecraftBufferSource) bufferSource).reference;
     }
 
     @Override
@@ -28,7 +20,7 @@ public class MinecraftBufferSource implements BufferSource {
 
     @Override
     public VertexBuffer getBuffer(RenderLayer renderLayer) {
-        return new MinecraftVertexBuffer(reference.getBuffer(renderLayer.reference()));
+        return MinecraftConvertor.fromPlatformVertexBuffer(reference.getBuffer(renderLayer.reference()));
     }
 
     @Override
