@@ -19,7 +19,6 @@ public interface MinecraftShader extends Shader {
     }
 
     default MinecraftUniform getUniform(String param) {
-        var uniform = referenceValue().getUniform(param);
-        return uniform == null ? null : () -> uniform;
+        return new MinecraftUniform(referenceValue().getUniform(param));
     }
 }
