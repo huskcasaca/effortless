@@ -15,6 +15,11 @@ public class MinecraftBlockState implements BlockState {
         this.reference = reference;
     }
 
+    @Override
+    public net.minecraft.world.level.block.state.BlockState referenceValue() {
+        return reference;
+    }
+
     public static BlockState fromMinecraftBlockState(net.minecraft.world.level.block.state.BlockState value) {
         return new MinecraftBlockState(value);
     }

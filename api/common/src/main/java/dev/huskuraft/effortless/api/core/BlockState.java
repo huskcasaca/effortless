@@ -1,6 +1,8 @@
 package dev.huskuraft.effortless.api.core;
 
-public interface BlockState {
+import dev.huskuraft.effortless.api.platform.PlatformReference;
+
+public interface BlockState extends PlatformReference {
 
     BlockState mirror(Axis axis);
 
