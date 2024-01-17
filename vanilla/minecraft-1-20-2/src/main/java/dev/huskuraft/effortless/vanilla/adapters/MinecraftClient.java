@@ -29,6 +29,11 @@ public class MinecraftClient implements Client {
     }
 
     @Override
+    public Minecraft referenceValue() {
+        return reference;
+    }
+
+    @Override
     public Screen getPanel() {
         if (reference.screen == null) {
             return null;

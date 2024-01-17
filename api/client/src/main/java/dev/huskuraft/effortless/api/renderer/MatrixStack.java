@@ -3,8 +3,9 @@ package dev.huskuraft.effortless.api.renderer;
 import dev.huskuraft.effortless.api.math.Matrix3f;
 import dev.huskuraft.effortless.api.math.Matrix4f;
 import dev.huskuraft.effortless.api.math.Quaternionf;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 
-public interface MatrixStack {
+public interface MatrixStack extends PlatformReference {
 
     void push();
 

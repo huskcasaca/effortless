@@ -15,8 +15,9 @@ public class MinecraftTagPrimitive implements TagPrimitive {
         this.proxy = tag;
     }
 
-    private Tag getReference() {
-        return proxy.getReference();
+    @Override
+    public Tag referenceValue() {
+        return proxy.referenceValue();
     }
 
     private void setReference(Tag tag) {
@@ -35,7 +36,7 @@ public class MinecraftTagPrimitive implements TagPrimitive {
 
     @Override
     public String getString() {
-        return getReference().getAsString();
+        return referenceValue().getAsString();
     }
 
     @Override
@@ -45,7 +46,7 @@ public class MinecraftTagPrimitive implements TagPrimitive {
 
     @Override
     public int getInt() {
-        return ((IntTag) getReference()).getAsInt();
+        return ((IntTag) referenceValue()).getAsInt();
     }
 
     @Override
@@ -55,7 +56,7 @@ public class MinecraftTagPrimitive implements TagPrimitive {
 
     @Override
     public double getDouble() {
-        return ((DoubleTag) getReference()).getAsDouble();
+        return ((DoubleTag) referenceValue()).getAsDouble();
     }
 
     @Override
@@ -65,12 +66,12 @@ public class MinecraftTagPrimitive implements TagPrimitive {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MinecraftTagElement tagElement && getReference().equals(tagElement.reference) || obj instanceof MinecraftTagPrimitive tagPrimitive && getReference().equals(tagPrimitive.getReference());
+        return obj instanceof MinecraftTagElement tagElement && referenceValue().equals(tagElement.reference) || obj instanceof MinecraftTagPrimitive tagPrimitive && referenceValue().equals(tagPrimitive.referenceValue());
     }
 
     @Override
     public int hashCode() {
-        return getReference().hashCode();
+        return referenceValue().hashCode();
     }
 
 }

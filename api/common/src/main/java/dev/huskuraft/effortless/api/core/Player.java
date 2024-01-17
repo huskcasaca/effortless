@@ -1,13 +1,14 @@
 package dev.huskuraft.effortless.api.core;
 
 import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.api.text.Text;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface Player {
+public interface Player extends PlatformReference {
 
     UUID getId();
 

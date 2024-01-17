@@ -1,21 +1,23 @@
 package dev.huskuraft.effortless.api.input;
 
-public abstract class KeyBinding {
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 
-    public abstract String getName();
+public interface KeyBinding extends PlatformReference {
 
-    public abstract String getCategory();
+    String getName();
 
-    public abstract int getDefaultKey();
+    String getCategory();
 
-    public abstract boolean consumeClick();
+    int getDefaultKey();
 
-    public abstract boolean isDown();
+    boolean consumeClick();
 
-    public abstract boolean isKeyDown();
+    boolean isDown();
 
-    public abstract String getBoundKey();
+    boolean isKeyDown();
 
-    public abstract int getBoundCode();
+    String getBoundKey();
+
+    int getBoundCode();
 
 }

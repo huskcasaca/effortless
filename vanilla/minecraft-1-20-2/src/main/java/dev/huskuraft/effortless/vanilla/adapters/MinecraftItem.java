@@ -23,6 +23,11 @@ public class MinecraftItem implements Item {
     }
 
     @Override
+    public net.minecraft.world.item.Item referenceValue() {
+        return reference;
+    }
+
+    @Override
     public ItemStack getDefaultStack() {
         return MinecraftItemStack.fromMinecraft(reference.getDefaultInstance());
     }

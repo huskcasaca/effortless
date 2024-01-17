@@ -27,10 +27,11 @@ public class MinecraftTagElement implements TagElement {
         if (tag == null) {
             return null;
         }
-        return ((MinecraftTagElement) tag).getReference();
+        return ((MinecraftTagElement) tag).referenceValue();
     }
 
-    public Tag getReference() {
+    @Override
+    public Tag referenceValue() {
         return Objects.requireNonNull(reference);
     }
 

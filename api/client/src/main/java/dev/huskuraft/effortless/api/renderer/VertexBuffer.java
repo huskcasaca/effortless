@@ -2,8 +2,9 @@ package dev.huskuraft.effortless.api.renderer;
 
 import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.math.*;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 
-public interface VertexBuffer {
+public interface VertexBuffer extends PlatformReference {
 
     VertexBuffer vertex(double x, double y, double z);
 

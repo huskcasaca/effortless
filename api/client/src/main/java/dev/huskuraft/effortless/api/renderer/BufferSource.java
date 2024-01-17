@@ -1,6 +1,8 @@
 package dev.huskuraft.effortless.api.renderer;
 
-public interface BufferSource {
+import dev.huskuraft.effortless.api.platform.PlatformReference;
+
+public interface BufferSource extends PlatformReference {
 
     VertexBuffer getBuffer(RenderLayer renderLayer);
 

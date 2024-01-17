@@ -29,11 +29,12 @@ public class MinecraftTagRecord implements TagRecord {
         if (tag == null) {
             return null;
         }
-        return ((MinecraftTagRecord) tag).getReference();
+        return ((MinecraftTagRecord) tag).referenceValue();
     }
 
-    private CompoundTag getReference() {
-        return (CompoundTag) proxy.getReference();
+    @Override
+    public CompoundTag referenceValue() {
+        return (CompoundTag) proxy.referenceValue();
     }
 
     @Override
@@ -48,92 +49,92 @@ public class MinecraftTagRecord implements TagRecord {
 
     @Override
     public String getString(String key) {
-        return getReference().getString(key);
+        return referenceValue().getString(key);
     }
 
     @Override
     public void putString(String key, String value) {
-        getReference().putString(key, value);
+        referenceValue().putString(key, value);
     }
 
     @Override
     public Text getText(String key) {
-        return MinecraftText.fromMinecraftText(Component.Serializer.fromJson(getReference().getString(key)));
+        return MinecraftText.fromMinecraftText(Component.Serializer.fromJson(referenceValue().getString(key)));
     }
 
     @Override
     public void putText(String key, Text value) {
-        getReference().putString(key, Component.Serializer.toJson(MinecraftText.toMinecraftText(value)));
+        referenceValue().putString(key, Component.Serializer.toJson(MinecraftText.toMinecraftText(value)));
     }
 
     @Override
     public boolean getBoolean(String key) {
-        return getReference().getBoolean(key);
+        return referenceValue().getBoolean(key);
     }
 
     @Override
     public void putBoolean(String key, boolean value) {
-        getReference().putBoolean(key, value);
+        referenceValue().putBoolean(key, value);
     }
 
     @Override
     public byte getByte(String key) {
-        return getReference().getByte(key);
+        return referenceValue().getByte(key);
     }
 
     @Override
     public void putByte(String key, byte value) {
-        getReference().putByte(key, value);
+        referenceValue().putByte(key, value);
     }
 
     @Override
     public short getShort(String key) {
-        return getReference().getShort(key);
+        return referenceValue().getShort(key);
     }
 
     @Override
     public void putShort(String key, short value) {
-        getReference().putShort(key, value);
+        referenceValue().putShort(key, value);
     }
 
     @Override
     public int getInt(String key) {
-        return getReference().getInt(key);
+        return referenceValue().getInt(key);
     }
 
     @Override
     public void putInt(String key, int value) {
-        getReference().putInt(key, value);
+        referenceValue().putInt(key, value);
     }
 
     @Override
     public long getLong(String key) {
-        return getReference().getLong(key);
+        return referenceValue().getLong(key);
     }
 
     @Override
     public void putLong(String key, long value) {
-        getReference().putLong(key, value);
+        referenceValue().putLong(key, value);
     }
 
     @Override
     public float getFloat(String key) {
-        return getReference().getFloat(key);
+        return referenceValue().getFloat(key);
     }
 
     @Override
     public void putFloat(String key, float value) {
-        getReference().putFloat(key, value);
+        referenceValue().putFloat(key, value);
     }
 
     @Override
     public double getDouble(String key) {
-        return getReference().getDouble(key);
+        return referenceValue().getDouble(key);
     }
 
     @Override
     public void putDouble(String key, double value) {
-        getReference().putDouble(key, value);
+        referenceValue().putDouble(key, value);
     }
 
     @Override
@@ -148,12 +149,12 @@ public class MinecraftTagRecord implements TagRecord {
 
     @Override
     public byte[] getByteArray(String key) {
-        return getReference().getByteArray(key);
+        return referenceValue().getByteArray(key);
     }
 
     @Override
     public void putByteArray(String key, byte[] value) {
-        getReference().putByteArray(key, value);
+        referenceValue().putByteArray(key, value);
     }
 
     @Override
@@ -168,22 +169,22 @@ public class MinecraftTagRecord implements TagRecord {
 
     @Override
     public int[] getIntArray(String key) {
-        return getReference().getIntArray(key);
+        return referenceValue().getIntArray(key);
     }
 
     @Override
     public void putIntArray(String key, int[] value) {
-        getReference().putIntArray(key, value);
+        referenceValue().putIntArray(key, value);
     }
 
     @Override
     public long[] getLongArray(String key) {
-        return getReference().getLongArray(key);
+        return referenceValue().getLongArray(key);
     }
 
     @Override
     public void putLongArray(String key, long[] value) {
-        getReference().putLongArray(key, value);
+        referenceValue().putLongArray(key, value);
     }
 
     @Override
@@ -208,30 +209,30 @@ public class MinecraftTagRecord implements TagRecord {
 
     @Override
     public TagElement getElement(String key) {
-        return MinecraftTagElement.toTagElement(getReference().get(key));
+        return MinecraftTagElement.toTagElement(referenceValue().get(key));
     }
 
     @Override
     public void putElement(String key, TagElement value) {
-        getReference().put(key, MinecraftTagElement.toMinecraft(value));
+        referenceValue().put(key, MinecraftTagElement.toMinecraft(value));
     }
 
     @Override
     public <T> T getElement(String key, TagReader<T> reader) {
-        return reader.read(new MinecraftTagElement(getReference().get(key)));
+        return reader.read(new MinecraftTagElement(referenceValue().get(key)));
     }
 
     @Override
     public <T> void putElement(String key, T value, TagWriter<T> writer) {
         var tagElement = new MinecraftTagElement(null);
         writer.write(tagElement, value);
-        getReference().put(key, tagElement.getReference());
+        referenceValue().put(key, tagElement.referenceValue());
     }
 
     @Override
     public <T> List<T> getList(String key, TagReader<T> writer) {
         var list = new ArrayList<T>();
-        for (var minecraftListTag : (ListTag) getReference().get(key)) {
+        for (var minecraftListTag : (ListTag) referenceValue().get(key)) {
             list.add(writer.read(new MinecraftTagElement(minecraftListTag)));
         }
         return list;
@@ -243,19 +244,19 @@ public class MinecraftTagRecord implements TagRecord {
         for (var value : collection) {
             var tagElement = new MinecraftTagElement(null);
             writer.write(tagElement, value);
-            minecraftListTag.add(tagElement.getReference());
+            minecraftListTag.add(tagElement.referenceValue());
         }
-        getReference().put(key, minecraftListTag);
+        referenceValue().put(key, minecraftListTag);
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MinecraftTagElement tagElement && getReference().equals(tagElement.reference) || obj instanceof MinecraftTagRecord tagRecord && getReference().equals(tagRecord.getReference());
+        return obj instanceof MinecraftTagElement tagElement && referenceValue().equals(tagElement.reference) || obj instanceof MinecraftTagRecord tagRecord && referenceValue().equals(tagRecord.referenceValue());
     }
 
     @Override
     public int hashCode() {
-        return getReference().hashCode();
+        return referenceValue().hashCode();
     }
 
     static class NotImplementedException extends RuntimeException {

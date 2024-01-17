@@ -18,6 +18,11 @@ public class MinecraftServer implements Server {
     }
 
     @Override
+    public net.minecraft.server.MinecraftServer referenceValue() {
+        return reference;
+    }
+
+    @Override
     public List<Player> getPlayers() {
         return reference.getPlayerList().getPlayers().stream().map(MinecraftPlayer::fromMinecraftPlayer).toList();
     }

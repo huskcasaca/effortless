@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.input.KeyBinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 
-public class MinecraftKeyBinding extends KeyBinding {
+public class MinecraftKeyBinding implements KeyBinding {
 
     private final KeyMapping reference;
 
@@ -25,6 +25,11 @@ public class MinecraftKeyBinding extends KeyBinding {
             return null;
         }
         return ((MinecraftKeyBinding) value).reference;
+    }
+
+    @Override
+    public KeyMapping referenceValue() {
+        return reference;
     }
 
     @Override

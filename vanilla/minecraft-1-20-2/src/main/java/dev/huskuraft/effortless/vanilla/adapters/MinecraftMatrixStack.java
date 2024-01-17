@@ -19,6 +19,11 @@ public class MinecraftMatrixStack implements MatrixStack {
     }
 
     @Override
+    public PoseStack referenceValue() {
+        return reference;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof MinecraftMatrixStack matrixStack && reference.equals(matrixStack.reference);
     }

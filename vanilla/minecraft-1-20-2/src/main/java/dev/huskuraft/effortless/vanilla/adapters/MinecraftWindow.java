@@ -15,6 +15,11 @@ public class MinecraftWindow implements Window {
     }
 
     @Override
+    public com.mojang.blaze3d.platform.Window referenceValue() {
+        return reference;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof MinecraftWindow window && reference.equals(window.reference);
     }

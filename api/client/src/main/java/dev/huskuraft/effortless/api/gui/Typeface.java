@@ -1,8 +1,9 @@
 package dev.huskuraft.effortless.api.gui;
 
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.text.Text;
 
-public interface Typeface {
+public interface Typeface extends PlatformReference {
 
     int measureHeight(Text text);
 

@@ -25,7 +25,7 @@ public class MinecraftBlockState implements BlockState {
     }
 
     public static net.minecraft.world.level.block.state.BlockState toMinecraftBlockState(BlockState value) {
-        return ((MinecraftBlockState) value).reference;
+        return value.reference();
     }
 
     public static net.minecraft.world.level.block.state.BlockState mirrorTopBottom(net.minecraft.world.level.block.state.BlockState value) {

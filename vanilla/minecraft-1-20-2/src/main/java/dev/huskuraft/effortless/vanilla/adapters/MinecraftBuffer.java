@@ -27,6 +27,11 @@ public class MinecraftBuffer implements Buffer {
     }
 
     @Override
+    public FriendlyByteBuf referenceValue() {
+        return reference;
+    }
+
+    @Override
     public UUID readUUID() {
         return reference.readUUID();
     }

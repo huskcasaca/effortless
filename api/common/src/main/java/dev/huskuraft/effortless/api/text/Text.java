@@ -1,8 +1,9 @@
 package dev.huskuraft.effortless.api.text;
 
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 
-public interface Text {
+public interface Text extends PlatformReference {
 
     static Text empty() {
         return Entrance.getInstance().getPlatform().newText();

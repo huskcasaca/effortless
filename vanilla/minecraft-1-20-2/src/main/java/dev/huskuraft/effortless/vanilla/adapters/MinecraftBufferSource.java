@@ -22,6 +22,11 @@ public class MinecraftBufferSource implements BufferSource {
     }
 
     @Override
+    public MultiBufferSource.BufferSource referenceValue() {
+        return reference;
+    }
+
+    @Override
     public VertexBuffer getBuffer(RenderLayer renderLayer) {
         return new MinecraftVertexBuffer(reference.getBuffer(renderLayer.reference()));
     }

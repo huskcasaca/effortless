@@ -30,6 +30,11 @@ public class MinecraftText implements Text {
     }
 
     @Override
+    public Component referenceValue() {
+        return reference;
+    }
+
+    @Override
     public Text withStyle(TextStyle... styles) {
         return fromMinecraftText(reference.copy().withStyle(Arrays.stream(styles).map(MinecraftText::adapt).toArray(ChatFormatting[]::new)));
     }

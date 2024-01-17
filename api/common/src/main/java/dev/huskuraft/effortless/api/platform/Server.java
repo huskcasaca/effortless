@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.core.Player;
 
 import java.util.List;
 
-public interface Server {
+public interface Server extends PlatformReference{
 
     List<Player> getPlayers();
 

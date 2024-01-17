@@ -46,6 +46,11 @@ public class MinecraftItemStack implements ItemStack {
     }
 
     @Override
+    public net.minecraft.world.item.ItemStack referenceValue() {
+        return reference;
+    }
+
+    @Override
     public boolean isEmpty() {
         return reference.isEmpty();
     }

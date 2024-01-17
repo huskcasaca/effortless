@@ -27,6 +27,11 @@ public class MinecraftTypeface implements Typeface {
     }
 
     @Override
+    public Font referenceValue() {
+        return reference;
+    }
+
+    @Override
     public int measureHeight(Text text) {
         return reference.lineHeight;
     }

@@ -34,7 +34,12 @@ public class MinecraftPlayer implements Player {
         if (player == null) {
             return null;
         }
-        return ((MinecraftPlayer) player).reference;
+        return player.reference();
+    }
+
+    @Override
+    public net.minecraft.world.entity.player.Player referenceValue() {
+        return reference;
     }
 
     @Override

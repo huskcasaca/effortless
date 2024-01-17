@@ -1,6 +1,8 @@
 package dev.huskuraft.effortless.api.renderer;
 
-public interface Window {
+import dev.huskuraft.effortless.api.platform.PlatformReference;
+
+public interface Window extends PlatformReference {
 
     int getWidth();
 

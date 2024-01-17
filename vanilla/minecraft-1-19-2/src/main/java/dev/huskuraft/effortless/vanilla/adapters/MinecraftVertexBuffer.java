@@ -12,6 +12,11 @@ public class MinecraftVertexBuffer implements VertexBuffer {
     }
 
     @Override
+    public VertexConsumer referenceValue() {
+        return reference;
+    }
+
+    @Override
     public MinecraftVertexBuffer vertex(double x, double y, double z) {
         reference.vertex(x, y, z);
         return this;

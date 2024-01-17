@@ -16,12 +16,17 @@ public class MinecraftWorld implements World {
         this.reference = reference;
     }
 
+    @Override
+    public Level referenceValue() {
+        return reference;
+    }
+
     public static World fromMinecraftWorld(Level level) {
         return new MinecraftWorld(level);
     }
 
     public static Level toMinecraftWorld(World world) {
-        return ((MinecraftWorld) world).reference;
+        return world.reference();
     }
 
     @Override

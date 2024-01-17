@@ -12,6 +12,11 @@ public class MinecraftResource implements Resource {
     }
 
     @Override
+    public Object referenceValue() {
+        return reference;
+    }
+
+    @Override
     public String getNamespace() {
         return reference.getNamespace();
     }
@@ -34,10 +39,5 @@ public class MinecraftResource implements Resource {
     @Override
     public String toString() {
         return getNamespace() + ":" + getPath();
-    }
-
-    @Override
-    public Object referenceValue() {
-        return reference;
     }
 }

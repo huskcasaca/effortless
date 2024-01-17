@@ -1,13 +1,14 @@
 package dev.huskuraft.effortless.api.core;
 
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.tag.TagSerializable;
 import dev.huskuraft.effortless.api.text.Text;
 
 import java.util.List;
 
-public interface ItemStack extends TagSerializable {
+public interface ItemStack extends TagSerializable, PlatformReference {
 
     static ItemStack empty() {
         return Entrance.getInstance().getPlatform().newItemStack();

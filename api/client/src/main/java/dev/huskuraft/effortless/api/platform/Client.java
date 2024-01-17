@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
 
-public interface Client {
+public interface Client extends PlatformReference {
 
     Screen getPanel();
 
