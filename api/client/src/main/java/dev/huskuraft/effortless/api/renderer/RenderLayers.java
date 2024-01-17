@@ -1,12 +1,16 @@
 package dev.huskuraft.effortless.api.renderer;
 
+import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 import org.lwjgl.opengl.GL11;
 
 public abstract class RenderLayers {
+
+    protected static final Resource BLOCK_ATLAS_LOCATION = RenderFactory.INSTANCE.getBlockAtlasResource();
+
     protected static final RenderState.TextureState NO_TEXTURE = RenderState.TextureState.create("no_texture", null);
-    protected static final RenderState.TextureState BLOCK_SHEET_MIPPED_TEXTURE = RenderState.TextureState.create("block_sheet_mipped", new RenderState.TextureState.Texture(RenderFactory.INSTANCE.getBlockAtlasResource(), false, true));
-    protected static final RenderState.TextureState BLOCK_SHEET_TEXTURE = RenderState.TextureState.create("block_sheet_mipped", new RenderState.TextureState.Texture(RenderFactory.INSTANCE.getBlockAtlasResource(), false, false));
+    protected static final RenderState.TextureState BLOCK_SHEET_MIPPED_TEXTURE = RenderState.TextureState.create("block_sheet_mipped", new RenderState.TextureState.Texture(BLOCK_ATLAS_LOCATION, false, true));
+    protected static final RenderState.TextureState BLOCK_SHEET_TEXTURE = RenderState.TextureState.create("block_sheet_mipped", new RenderState.TextureState.Texture(BLOCK_ATLAS_LOCATION, false, false));
 
     protected static final RenderState.TransparencyState NO_TRANSPARENCY = RenderState.TransparencyState.create("no_transparency", RenderState.TransparencyState.Type.NO);
     protected static final RenderState.TransparencyState ADDITIVE_TRANSPARENCY = RenderState.TransparencyState.create("additive_transparency", RenderState.TransparencyState.Type.ADDITIVE);

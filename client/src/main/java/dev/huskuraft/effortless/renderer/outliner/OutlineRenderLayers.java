@@ -35,7 +35,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                     .setLightmapState(LIGHTMAP)
                     .setOverlayState(OVERLAY)
                     .create(true));
-    protected static final RenderLayer GLOWING_SOLID_DEFAULT = glowingSolid(RenderFactory.INSTANCE.getBlockAtlasResource());
+    protected static final RenderLayer GLOWING_SOLID_DEFAULT = glowingSolid(BLOCK_ATLAS_LOCATION);
     protected static final RenderLayer ADDITIVE = RenderLayer.createComposite("additive",
             VertexFormats.BLOCK,
             VertexFormats.Modes.QUADS,
@@ -50,7 +50,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                     .setLightmapState(LIGHTMAP)
                     .setOverlayState(OVERLAY)
                     .create(true));
-    protected static final RenderLayer GLOWING_TRANSLUCENT_DEFAULT = glowingTranslucent(RenderFactory.INSTANCE.getBlockAtlasResource());
+    protected static final RenderLayer GLOWING_TRANSLUCENT_DEFAULT = glowingTranslucent(BLOCK_ATLAS_LOCATION);
     protected static final RenderLayer ITEM_PARTIAL_SOLID = RenderLayer.createComposite("item_partial_solid",
             VertexFormats.NEW_ENTITY,
             VertexFormats.Modes.QUADS,

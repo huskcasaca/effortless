@@ -49,12 +49,6 @@ public interface RenderFactory {
 
     Resource getBlockAtlasResource();
 
-    RenderLayer getGuiRenderLayer();
-
-    RenderLayer getGuiTextHighlightRenderLayer();
-
-    RenderLayer getGuiOverlayRenderLayer();
-
     RenderFactory INSTANCE = ClientPlatform.INSTANCE.getRenderFactory();
 
 }

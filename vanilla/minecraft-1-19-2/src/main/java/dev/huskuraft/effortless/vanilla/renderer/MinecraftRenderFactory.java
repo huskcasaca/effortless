@@ -273,19 +273,4 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
         return new MinecraftResource(InventoryMenu.BLOCK_ATLAS);
     }
 
-    @Override
-    public RenderLayer getGuiRenderLayer() {
-        return PlatformResource::unavailable;
-    }
-
-    @Override
-    public RenderLayer getGuiOverlayRenderLayer() {
-        return PlatformResource::unavailable;
-    }
-
-    @Override
-    public RenderLayer getGuiTextHighlightRenderLayer() {
-        return PlatformResource::unavailable;
-    }
-
 }
