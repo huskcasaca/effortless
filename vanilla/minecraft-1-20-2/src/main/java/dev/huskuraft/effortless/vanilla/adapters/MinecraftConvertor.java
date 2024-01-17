@@ -69,70 +69,70 @@ public class MinecraftConvertor {
         return new org.joml.Matrix4f(buffer);
     }
 
-    public static BlockPos toPlatformBlockPosition(BlockPosition value) {
-        return new BlockPos(value.x(), value.y(), value.z());
+    public static BlockPos toPlatformBlockPosition(BlockPosition blockPosition) {
+        return new BlockPos(blockPosition.x(), blockPosition.y(), blockPosition.z());
     }
 
-    public static Vec3i toPlatformVector3i(Vector3i value) {
-        return new Vec3i(value.x(), value.y(), value.z());
+    public static Vec3i toPlatformVector3i(Vector3i vector) {
+        return new Vec3i(vector.x(), vector.y(), vector.z());
     }
 
-    public static Vec3 toPlatformVector3d(Vector3d value) {
-        return new Vec3(value.x(), value.y(), value.z());
+    public static Vec3 toPlatformVector3d(Vector3d vector) {
+        return new Vec3(vector.x(), vector.y(), vector.z());
     }
 
-    public static BlockPosition toPlatformBlockPosition(BlockPos value) {
-        return new BlockPosition(value.getX(), value.getY(), value.getZ());
+    public static BlockPosition toPlatformBlockPosition(BlockPos vector) {
+        return new BlockPosition(vector.getX(), vector.getY(), vector.getZ());
     }
 
-    public static Vector3d fromPlatformMinecraftVector3d(Vec3 value) {
-        return new Vector3d(value.x(), value.y(), value.z());
+    public static Vector3d fromPlatformMinecraftVector3d(Vec3 vector) {
+        return new Vector3d(vector.x(), vector.y(), vector.z());
     }
 
-    public static Vector3i fromPlatformVector3i(Vec3i value) {
-        return new Vector3i(value.getX(), value.getY(), value.getZ());
+    public static Vector3i fromPlatformVector3i(Vec3i vector) {
+        return new Vector3i(vector.getX(), vector.getY(), vector.getZ());
     }
 
-    public static Interaction fromPlatformInteraction(HitResult value) {
-        if (value == null) {
+    public static Interaction fromPlatformInteraction(HitResult hitResult) {
+        if (hitResult == null) {
             return null;
         }
-        if (value instanceof BlockHitResult blockHitResult) {
+        if (hitResult instanceof BlockHitResult blockHitResult) {
             return fromPlatformBlockInteraction(blockHitResult);
         }
-        if (value instanceof EntityHitResult entityHitResult) {
+        if (hitResult instanceof EntityHitResult entityHitResult) {
             return fromPlatformEntityInteraction(entityHitResult);
         }
-        throw new IllegalArgumentException("Unknown Interaction: " + value);
+        throw new IllegalArgumentException("Unknown Interaction: " + hitResult);
     }
 
-    public static EntityInteraction fromPlatformEntityInteraction(EntityHitResult value) {
-        if (value == null) {
+    public static EntityInteraction fromPlatformEntityInteraction(EntityHitResult entityHitResult) {
+        if (entityHitResult == null) {
             return null;
         }
-        return new EntityInteraction(fromPlatformMinecraftVector3d(value.getLocation()), null);
+        return new EntityInteraction(fromPlatformMinecraftVector3d(entityHitResult.getLocation()), null);
     }
 
-    public static BlockInteraction fromPlatformBlockInteraction(BlockHitResult value) {
-        if (value == null) {
+    public static BlockInteraction fromPlatformBlockInteraction(BlockHitResult blockHitResult) {
+        if (blockHitResult == null) {
             return null;
         }
-        return new BlockInteraction(fromPlatformMinecraftVector3d(value.getLocation()), fromPlatformOrientation(value.getDirection()), toPlatformBlockPosition(value.getBlockPos()), value.isInside());
+        return new BlockInteraction(fromPlatformMinecraftVector3d(blockHitResult.getLocation()), fromPlatformOrientation(blockHitResult.getDirection()), toPlatformBlockPosition(blockHitResult.getBlockPos()), blockHitResult.isInside());
     }
 
-    public static BlockHitResult toPlatformBlockInteraction(BlockInteraction value) {
-        if (value == null) {
+    public static BlockHitResult toPlatformBlockInteraction(BlockInteraction blockInteraction) {
+        if (blockInteraction == null) {
             return null;
         }
         return new BlockHitResult(
-                toPlatformVector3d(value.getPosition()),
-                toPlatformOrientation(value.getDirection()),
-                toPlatformBlockPosition(value.getBlockPosition()),
-                value.isInside());
+                toPlatformVector3d(blockInteraction.getPosition()),
+                toPlatformOrientation(blockInteraction.getDirection()),
+                toPlatformBlockPosition(blockInteraction.getBlockPosition()),
+                blockInteraction.isInside());
     }
 
-    public static InteractionHand fromPlatformInteractionHand(net.minecraft.world.InteractionHand value) {
-        return switch (value) {
+    public static InteractionHand fromPlatformInteractionHand(net.minecraft.world.InteractionHand interactionHand) {
+        return switch (interactionHand) {
             case MAIN_HAND -> InteractionHand.MAIN;
             case OFF_HAND -> InteractionHand.OFF;
         };
@@ -142,15 +142,15 @@ public class MinecraftConvertor {
         return net.minecraft.world.InteractionHand.MAIN_HAND;
     }
 
-    public static net.minecraft.world.InteractionHand toPlatformInteractionHand(InteractionHand value) {
-        return switch (value) {
+    public static net.minecraft.world.InteractionHand toPlatformInteractionHand(InteractionHand interactionHand) {
+        return switch (interactionHand) {
             case MAIN -> net.minecraft.world.InteractionHand.MAIN_HAND;
             case OFF -> net.minecraft.world.InteractionHand.OFF_HAND;
         };
     }
 
-    public static Orientation fromPlatformOrientation(Direction value) {
-        return switch (value) {
+    public static Orientation fromPlatformOrientation(Direction orientation) {
+        return switch (orientation) {
             case DOWN -> Orientation.DOWN;
             case UP -> Orientation.UP;
             case NORTH -> Orientation.NORTH;
@@ -160,8 +160,8 @@ public class MinecraftConvertor {
         };
     }
 
-    public static Direction toPlatformOrientation(Orientation value) {
-        return switch (value) {
+    public static Direction toPlatformOrientation(Orientation orientation) {
+        return switch (orientation) {
             case DOWN -> Direction.DOWN;
             case UP -> Direction.UP;
             case NORTH -> Direction.NORTH;
@@ -171,12 +171,12 @@ public class MinecraftConvertor {
         };
     }
 
-    public static BlockState fromPlatformBlockState(net.minecraft.world.level.block.state.BlockState value) {
-        return new MinecraftBlockState(value);
+    public static BlockState fromPlatformBlockState(net.minecraft.world.level.block.state.BlockState blockState) {
+        return new MinecraftBlockState(blockState);
     }
 
-    public static net.minecraft.world.level.block.state.BlockState toPlatformBlockState(BlockState value) {
-        return value.reference();
+    public static net.minecraft.world.level.block.state.BlockState toPlatformBlockState(BlockState blockState) {
+        return blockState.reference();
     }
 
     public static Buffer fromPlatformBuffer(FriendlyByteBuf buffer) {
@@ -223,12 +223,12 @@ public class MinecraftConvertor {
         return itemStack.reference();
     }
 
-    public static KeyBinding fromPlatformKeyBinding(KeyMapping value) {
-        return new MinecraftKeyBinding(value);
+    public static KeyBinding fromPlatformKeyBinding(KeyMapping keyBinding) {
+        return new MinecraftKeyBinding(keyBinding);
     }
 
-    public static KeyMapping toPlatformKeyBinding(KeyBinding value) {
-        return value.reference();
+    public static KeyMapping toPlatformKeyBinding(KeyBinding keyBinding) {
+        return keyBinding.reference();
     }
 
     public static MatrixStack fromPlatformMatrixStack(PoseStack matrixStack) {
@@ -269,8 +269,8 @@ public class MinecraftConvertor {
         return renderLayer.reference();
     }
 
-    public static Resource fromPlatformResource(ResourceLocation reference) {
-        return new MinecraftResource(reference);
+    public static Resource fromPlatformResource(ResourceLocation resource) {
+        return new MinecraftResource(resource);
     }
 
     public static ResourceLocation toPlatformResource(Resource resource) {
@@ -303,26 +303,26 @@ public class MinecraftConvertor {
         return ((MinecraftTagElement) tag).referenceValue();
     }
 
-    public static Text fromPlatformText(Component value) {
-        if (value == null) {
+    public static Text fromPlatformText(Component text) {
+        if (text == null) {
             return null;
         }
-        return new MinecraftText(value);
+        return new MinecraftText(text);
     }
 
-    public static Component toPlatformText(Text value) {
-        if (value == null) {
+    public static Component toPlatformText(Text text) {
+        if (text == null) {
             return null;
         }
-        return value.reference();
+        return text.reference();
     }
 
-    public static Typeface fromPlatformTypeface(Font value) {
-        return new MinecraftTypeface(value);
+    public static Typeface fromPlatformTypeface(Font typeface) {
+        return new MinecraftTypeface(typeface);
     }
 
-    public static Font toPlatformTypeface(Typeface value) {
-        return value.reference();
+    public static Font toPlatformTypeface(Typeface typeface) {
+        return typeface.reference();
     }
 
     public static VertexBuffer fromPlatformVertexBuffer(VertexConsumer vertexBuffer) {
