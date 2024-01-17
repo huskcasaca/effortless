@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.vanilla.renderer;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import dev.huskuraft.effortless.api.core.Resource;
-import dev.huskuraft.effortless.api.platform.PlatformResource;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
@@ -168,8 +168,8 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
     @Override
     public RenderState.ColorLogicState createColorLogicState(String name, RenderState.ColorLogicState.Op op) {
         return switch (op) {
-            case NO_LOGIC ->         PlatformResource::unavailable;
-            case OR_REVERSE_LOGIC -> PlatformResource::unavailable;
+            case NO_LOGIC ->         PlatformReference::unavailable;
+            case OR_REVERSE_LOGIC -> PlatformReference::unavailable;
         };
     }
 
@@ -217,20 +217,20 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
             case ENTITY_GLINT_DIRECT ->             (MinecraftShader) GameRenderer::getRendertypeEntityGlintDirectShader;
             case CRUMBLING ->                       (MinecraftShader) GameRenderer::getRendertypeCrumblingShader;
             case TEXT ->                            (MinecraftShader) GameRenderer::getRendertypeTextShader;
-            case TEXT_BACKGROUND ->                 (MinecraftShader) PlatformResource::unavailable;
+            case TEXT_BACKGROUND ->                 (MinecraftShader) PlatformReference::unavailable;
             case TEXT_INTENSITY ->                  (MinecraftShader) GameRenderer::getRendertypeTextIntensityShader;
             case TEXT_SEE_THROUGH ->                (MinecraftShader) GameRenderer::getRendertypeTextSeeThroughShader;
-            case TEXT_BACKGROUND_SEE_THROUGH ->                 (MinecraftShader) PlatformResource::unavailable;
+            case TEXT_BACKGROUND_SEE_THROUGH ->     (MinecraftShader) PlatformReference::unavailable;
             case TEXT_INTENSITY_SEE_THROUGH ->      (MinecraftShader) GameRenderer::getRendertypeTextIntensitySeeThroughShader;
             case LIGHTNING ->                       (MinecraftShader) GameRenderer::getRendertypeLightningShader;
             case TRIPWIRE ->                        (MinecraftShader) GameRenderer::getRendertypeTripwireShader;
             case END_PORTAL ->                      (MinecraftShader) GameRenderer::getRendertypeEndPortalShader;
             case END_GATEWAY ->                     (MinecraftShader) GameRenderer::getRendertypeEndGatewayShader;
             case LINES ->                           (MinecraftShader) GameRenderer::getRendertypeLinesShader;
-            case GUI ->                             (MinecraftShader) PlatformResource::unavailable;
-            case GUI_OVERLAY ->                     (MinecraftShader) PlatformResource::unavailable;
-            case GUI_TEXT_HIGHLIGHT ->              (MinecraftShader) PlatformResource::unavailable;
-            case GUI_GHOST_RECIPE_OVERLAY ->        (MinecraftShader) PlatformResource::unavailable;
+            case GUI ->                             (MinecraftShader) PlatformReference::unavailable;
+            case GUI_OVERLAY ->                     (MinecraftShader) PlatformReference::unavailable;
+            case GUI_TEXT_HIGHLIGHT ->              (MinecraftShader) PlatformReference::unavailable;
+            case GUI_GHOST_RECIPE_OVERLAY ->        (MinecraftShader) PlatformReference::unavailable;
         };
     }
 

@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.platform;
 
 import java.util.function.Supplier;
 
-public interface PlatformReference extends PlatformResource {
+public interface PlatformReference {
 
     Object referenceValue();
 
@@ -10,12 +10,27 @@ public interface PlatformReference extends PlatformResource {
         return (T) referenceValue();
     }
 
-    @Override
+    default PlatformVersion isAvailableSince() {
+        return PlatformVersion.UNAVAILABLE;
+    }
+
+    default PlatformVersion isAvailableUntil() {
+        return PlatformVersion.UNAVAILABLE;
+    }
+
+    default boolean isAvailableOn(PlatformVersion version) {
+        return true;
+    }
+
     default boolean isAvailable() {
         return referenceValue() != null;
     }
 
-    default <T extends PlatformResource> T ifUnavailable(Supplier<T> supplier) {
+    default <T extends PlatformReference> T ifUnavailable(Supplier<T> supplier) {
         return isAvailable() ? (T) this : supplier.get();
+    }
+
+    static <T> T unavailable() {
+        return null;
     }
 }
