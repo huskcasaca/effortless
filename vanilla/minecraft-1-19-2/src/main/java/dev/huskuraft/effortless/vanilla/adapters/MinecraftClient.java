@@ -7,6 +7,8 @@ import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.platform.Client;
+import dev.huskuraft.effortless.api.renderer.Camera;
+import dev.huskuraft.effortless.api.renderer.Window;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
@@ -23,6 +25,16 @@ class MinecraftClient implements Client {
     @Override
     public Minecraft referenceValue() {
         return reference;
+    }
+
+    @Override
+    public Window window() {
+        return MinecraftConvertor.fromPlatformWindow(reference.getWindow());
+    }
+
+    @Override
+    public Camera camera() {
+        return MinecraftConvertor.fromPlatformCamera(reference.gameRenderer.getMainCamera());
     }
 
     @Override

@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class RenderLayers {
 
-    protected static final Resource BLOCK_ATLAS_LOCATION = RenderFactory.INSTANCE.getBlockAtlasResource();
+    protected static final Resource BLOCK_ATLAS_LOCATION = RenderStateFactory.INSTANCE.getBlockAtlasResource();
 
     protected static final RenderState.TextureState NO_TEXTURE = RenderState.TextureState.create("no_texture", null);
     protected static final RenderState.TextureState BLOCK_SHEET_MIPPED_TEXTURE = RenderState.TextureState.create("block_sheet_mipped", new RenderState.TextureState.Texture(BLOCK_ATLAS_LOCATION, false, true));
@@ -125,6 +125,9 @@ public abstract class RenderLayers {
 
     public static RenderLayer texture(Resource resource, boolean blur, boolean mipmap) {
         return RenderLayer.createComposite("texture", VertexFormats.POSITION_TEX, VertexFormats.Modes.QUADS, 256, RenderState.builder().setTextureState(RenderState.TextureState.create("texture", new RenderState.TextureState.Texture(resource, blur, mipmap))).setShaderState(POSITION_TEX_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
+    }
+    public static RenderLayer colorTexture(Resource resource, boolean blur, boolean mipmap) {
+        return RenderLayer.createComposite("color_texture", VertexFormats.POSITION_COLOR_TEX, VertexFormats.Modes.QUADS, 256, RenderState.builder().setTextureState(RenderState.TextureState.create("color_texture", new RenderState.TextureState.Texture(resource, blur, mipmap))).setShaderState(POSITION_COLOR_TEX_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
     }
 
 }

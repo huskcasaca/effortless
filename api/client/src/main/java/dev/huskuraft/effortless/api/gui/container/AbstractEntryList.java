@@ -379,9 +379,9 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         if (isBackgroundTransparent() && getEntrance().getClient().isLoaded()) {
             renderer.renderGradientRect(x0, y0, x1, y1, 0xa1101010, 0x8c101010);
         } else {
-            renderer.setShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
+            renderer.setRsShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
             renderer.renderPanelBackgroundTexture(x0, y0, (float) x1, (float) (y1 + (int) this.getScrollAmount()), x1 - x0, y1 - y0);
-            renderer.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
         renderer.pushPose();
         renderer.enableScissor(this.x0, this.y0, this.x1, this.y1);

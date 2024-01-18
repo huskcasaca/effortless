@@ -7,10 +7,12 @@ import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.platform.SearchTree;
-import dev.huskuraft.effortless.api.renderer.RenderFactory;
+import dev.huskuraft.effortless.api.renderer.RenderStateFactory;
+import dev.huskuraft.effortless.api.texture.TextureFactory;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftConvertor;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderFactory;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderStateFactory;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftTextureFactory;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;
@@ -87,7 +89,12 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
     }
 
     @Override
-    public RenderFactory getRenderFactory() {
-        return new MinecraftRenderFactory();
+    public RenderStateFactory getRenderStateFactory() {
+        return new MinecraftRenderStateFactory();
+    }
+
+    @Override
+    public TextureFactory getTextureFactory() {
+        return new MinecraftTextureFactory();
     }
 }

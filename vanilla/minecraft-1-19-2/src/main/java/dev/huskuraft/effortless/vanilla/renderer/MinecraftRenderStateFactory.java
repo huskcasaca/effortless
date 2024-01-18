@@ -2,11 +2,13 @@ package dev.huskuraft.effortless.vanilla.renderer;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftShader;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -14,9 +16,9 @@ import net.minecraft.world.inventory.InventoryMenu;
 
 import java.util.OptionalDouble;
 
-public class MinecraftRenderFactory extends RenderType implements RenderFactory {
+public class MinecraftRenderStateFactory extends RenderType implements RenderStateFactory {
 
-    public MinecraftRenderFactory() {
+    public MinecraftRenderStateFactory() {
         super(null, null, null, 0, false, false, null, null);
 //        super("", new VertexFormat(ImmutableMap.ofEntries()), VertexFormat.Mode.DEBUG_LINE_STRIP, 0, false, false, () -> {}, () -> {});
     }
@@ -68,7 +70,7 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
                 .setTexturingState(texturingState.reference())
                 .setWriteMaskState(writeMaskState.reference())
                 .setLineState(lineState.reference())
-                .setColorLogicState(colorLogicState.reference())
+//                .setColorLogicState(colorLogicState.reference())
                 .createCompositeState(affectOutline);
     }
 
@@ -167,8 +169,8 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
     @Override
     public RenderState.ColorLogicState createColorLogicState(String name, RenderState.ColorLogicState.Op op) {
         return switch (op) {
-            case NO_LOGIC ->         () -> NO_COLOR_LOGIC;
-            case OR_REVERSE_LOGIC -> () -> OR_REVERSE_COLOR_LOGIC;
+            case NO_LOGIC ->         PlatformReference::unavailable;
+            case OR_REVERSE_LOGIC -> PlatformReference::unavailable;
         };
     }
 
@@ -216,20 +218,20 @@ public class MinecraftRenderFactory extends RenderType implements RenderFactory 
             case ENTITY_GLINT_DIRECT ->             (MinecraftShader) GameRenderer::getRendertypeEntityGlintDirectShader;
             case CRUMBLING ->                       (MinecraftShader) GameRenderer::getRendertypeCrumblingShader;
             case TEXT ->                            (MinecraftShader) GameRenderer::getRendertypeTextShader;
-            case TEXT_BACKGROUND ->                 (MinecraftShader) GameRenderer::getRendertypeTextBackgroundShader;
+            case TEXT_BACKGROUND ->                 (MinecraftShader) PlatformReference::unavailable;
             case TEXT_INTENSITY ->                  (MinecraftShader) GameRenderer::getRendertypeTextIntensityShader;
             case TEXT_SEE_THROUGH ->                (MinecraftShader) GameRenderer::getRendertypeTextSeeThroughShader;
-            case TEXT_BACKGROUND_SEE_THROUGH ->     (MinecraftShader) GameRenderer::getRendertypeTextBackgroundSeeThroughShader;
+            case TEXT_BACKGROUND_SEE_THROUGH ->     (MinecraftShader) PlatformReference::unavailable;
             case TEXT_INTENSITY_SEE_THROUGH ->      (MinecraftShader) GameRenderer::getRendertypeTextIntensitySeeThroughShader;
             case LIGHTNING ->                       (MinecraftShader) GameRenderer::getRendertypeLightningShader;
             case TRIPWIRE ->                        (MinecraftShader) GameRenderer::getRendertypeTripwireShader;
             case END_PORTAL ->                      (MinecraftShader) GameRenderer::getRendertypeEndPortalShader;
             case END_GATEWAY ->                     (MinecraftShader) GameRenderer::getRendertypeEndGatewayShader;
             case LINES ->                           (MinecraftShader) GameRenderer::getRendertypeLinesShader;
-            case GUI ->                             (MinecraftShader) GameRenderer::getRendertypeGuiShader;
-            case GUI_OVERLAY ->                     (MinecraftShader) GameRenderer::getRendertypeGuiOverlayShader;
-            case GUI_TEXT_HIGHLIGHT ->              (MinecraftShader) GameRenderer::getRendertypeGuiTextHighlightShader;
-            case GUI_GHOST_RECIPE_OVERLAY ->        (MinecraftShader) GameRenderer::getRendertypeGuiGhostRecipeOverlayShader;
+            case GUI ->                             (MinecraftShader) PlatformReference::unavailable;
+            case GUI_OVERLAY ->                     (MinecraftShader) PlatformReference::unavailable;
+            case GUI_TEXT_HIGHLIGHT ->              (MinecraftShader) PlatformReference::unavailable;
+            case GUI_GHOST_RECIPE_OVERLAY ->        (MinecraftShader) PlatformReference::unavailable;
         };
     }
 

@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 
-public interface RenderFactory {
+public interface RenderStateFactory {
 
     RenderLayer createCompositeRenderLayer(String name, VertexFormat vertexFormat, VertexFormat.Mode vertexFormatMode, int bufferSize, boolean affectsCrumbling, boolean sortOnUpload, CompositeRenderState state);
 
@@ -53,6 +53,6 @@ public interface RenderFactory {
 
 //    Resource getWidgetsTextureResource();
 
-    RenderFactory INSTANCE = ClientPlatform.INSTANCE.getRenderFactory();
+    RenderStateFactory INSTANCE = ClientPlatform.INSTANCE.getRenderStateFactory();
 
 }

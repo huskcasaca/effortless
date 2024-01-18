@@ -3,7 +3,10 @@ package dev.huskuraft.effortless.api.renderer;
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.math.*;
+import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.texture.SpriteScaling;
+import dev.huskuraft.effortless.api.texture.TextureSprite;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -19,9 +22,15 @@ public abstract class Renderer {
         return new Color(0f, 0f, 0f, 0.95f * alpha).getRGB();
     }
 
-    public abstract Window window();
+    public abstract Client client();
 
-    public abstract Camera camera();
+    public Window window() {
+        return client().window();
+    }
+
+    public Camera camera() {
+        return client().camera();
+    }
 
     public abstract MatrixStack matrixStack();
 
@@ -155,7 +164,7 @@ public abstract class Renderer {
         }
     }
 
-    public abstract void setShaderColor(float red, float green, float blue, float alpha);
+    public abstract void setRsShaderColor(float red, float green, float blue, float alpha);
 
     public VertexBuffer vertexBuffer(RenderLayer renderLayer) {
         return bufferSource().getBuffer(renderLayer);
@@ -353,19 +362,106 @@ public abstract class Renderer {
         this.renderTexture(resource, x1, x2, y1, y2, blitOffset, uOffset / textureWidth, (uOffset + uWidth) / textureWidth, vOffset / textureHeight, (vOffset + vHeight) / textureHeight);
     }
 
-    protected void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-        var matrix4f = lastMatrixPose();
+    private void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
         var buffer = vertexBuffer(RenderLayers.texture(resource, false, false));
-        buffer.vertex(matrix4f, x1, y1, blitOffset).uv(minU, minV).endVertex();
-        buffer.vertex(matrix4f, x1, y2, blitOffset).uv(minU, maxV).endVertex();
-        buffer.vertex(matrix4f, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
-        buffer.vertex(matrix4f, x2, y1, blitOffset).uv(maxU, minV).endVertex();
+        buffer.vertex(lastMatrixPose(), x1, y1, blitOffset).uv(minU, minV).endVertex();
+        buffer.vertex(lastMatrixPose(), x1, y2, blitOffset).uv(minU, maxV).endVertex();
+        buffer.vertex(lastMatrixPose(), x2, y2, blitOffset).uv(maxU, maxV).endVertex();
+        buffer.vertex(lastMatrixPose(), x2, y1, blitOffset).uv(maxU, minV).endVertex();
         buffer.endVertex();
     }
 
-    public abstract void renderPanelBackgroundTexture(int x, int y, float uOffset, float vOffset, int uWidth, int vHeight);
 
-    public abstract void renderButtonTexture(int x, int y, int width, int height, boolean active, boolean focused);
+    private void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV, float red, float green, float blue, float alpha) {
+        var buffer = vertexBuffer(RenderLayers.colorTexture(resource, false, false));
+        buffer.vertex(lastMatrixPose(), x1, y1, blitOffset).color(red, green, blue, alpha).uv(minU, minV).endVertex();
+        buffer.vertex(lastMatrixPose(), x1, y2, blitOffset).color(red, green, blue, alpha).uv(minU, maxV).endVertex();
+        buffer.vertex(lastMatrixPose(), x2, y2, blitOffset).color(red, green, blue, alpha).uv(maxU, maxV).endVertex();
+        buffer.vertex(lastMatrixPose(), x2, y1, blitOffset).color(red, green, blue, alpha).uv(maxU, minV).endVertex();
+        buffer.endVertex();
+    }
+
+    public void renderPanelBackgroundTexture(int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
+
+    }
+
+    public void renderSprite(TextureSprite sprite, int x, int y, int width, int height) {
+        this.renderSprite(sprite, x, y, 0, width, height);
+    }
+
+    public void renderSprite(TextureSprite sprite, int x, int y, int blitOffset, int width, int height) {
+        if (sprite.scaling() instanceof SpriteScaling.Stretch stretch) {
+            renderSpriteInner(sprite, x, y, blitOffset, width, height);
+        } else if (sprite.scaling() instanceof SpriteScaling.Tile tile) {
+            renderTiledSprite(sprite, x, y, blitOffset, width, height, 0, 0, tile.width(), tile.height(), tile.width(), tile.height());
+        } else if (sprite.scaling() instanceof SpriteScaling.NineSlice nineSlice) {
+            renderNineSlicedSprite(sprite, nineSlice, x, y, blitOffset, width, height);
+        }
+    }
+
+    public void renderSprite(TextureSprite sprite, int sliceWidth, int sliceHeight, int i, int j, int x, int y, int width, int height) {
+        this.renderSprite(sprite, sliceWidth, sliceHeight, i, j, x, y, 0, width, height);
+    }
+
+    public void renderSprite(TextureSprite sprite, int sliceWidth, int sliceHeight, int i, int j, int x, int y, int blitOffset, int width, int height) {
+        if (sprite.scaling() instanceof SpriteScaling.Stretch stretch) {
+            this.renderSpriteInner(sprite, sliceWidth, sliceHeight, i, j, x, y, blitOffset, width, height);
+        } else {
+            this.renderSpriteInner(sprite, x, y, blitOffset, width, height);
+        }
+    }
+
+    private void renderSpriteInner(TextureSprite sprite, int sliceWidth, int sliceHeight, int i, int j, int x, int y, int blitOffset, int width, int height) {
+        if (width == 0 || height == 0) return;
+        this.renderTexture(sprite.texture(), x, x + width, y, y + height, blitOffset, sprite.u((float) i / (float) sliceWidth), sprite.u((float) (i + width) / (float) sliceWidth), sprite.v((float) j / (float) sliceHeight), sprite.v((float) (j + height) / (float) sliceHeight));
+    }
+
+    private void renderSpriteInner(TextureSprite sprite, int x, int y, int blitOffset, int width, int height) {
+        if (width == 0 || height == 0) return;
+        this.renderTexture(sprite.texture(), x, x + width, y, y + height, blitOffset, sprite.u0(), sprite.u1(), sprite.v0(), sprite.v1());
+    }
+
+    private void renderNineSlicedSprite(TextureSprite sprite, SpriteScaling.NineSlice nineSlice, int x, int y, int blitOffset, int width, int height) {
+        int i = Math.min(nineSlice.left(), width / 2);
+        int j = Math.min(nineSlice.right(), width / 2);
+        int k = Math.min(nineSlice.top(), height / 2);
+        int l = Math.min(nineSlice.bottom(), height / 2);
+        if (width == nineSlice.width() && height == nineSlice.height()) {
+            this.renderSpriteInner(sprite, nineSlice.width(), nineSlice.height(), 0, 0, x, y, blitOffset, width, height);
+        } else if (height == nineSlice.height()) {
+            this.renderSpriteInner(sprite, nineSlice.width(), nineSlice.height(), 0, 0, x, y, blitOffset, i, height);
+            this.renderTiledSprite(sprite, x + i, y, blitOffset, width - j - i, height, i, 0, nineSlice.width() - j - i, nineSlice.height(), nineSlice.width(), nineSlice.height());
+            this.renderSpriteInner(sprite, nineSlice.width(), nineSlice.height(), nineSlice.width() - j, 0, x + width - j, y, blitOffset, j, height);
+        } else if (width == nineSlice.width()) {
+            this.renderSpriteInner(sprite, nineSlice.width(), nineSlice.height(), 0, 0, x, y, blitOffset, width, k);
+            this.renderTiledSprite(sprite, x, y + k, blitOffset, width, height - l - k, 0, k, nineSlice.width(), nineSlice.height() - l - k, nineSlice.width(), nineSlice.height());
+            this.renderSpriteInner(sprite, nineSlice.width(), nineSlice.height(), 0, nineSlice.height() - l, x, y + height - l, blitOffset, width, l);
+        } else {
+            this.renderSpriteInner(sprite, nineSlice.width(), nineSlice.height(), 0, 0, x, y, blitOffset, i, k);
+            this.renderTiledSprite(sprite, x + i, y, blitOffset, width - j - i, k, i, 0, nineSlice.width() - j - i, k, nineSlice.width(), nineSlice.height());
+            this.renderSpriteInner(sprite, nineSlice.width(), nineSlice.height(), nineSlice.width() - j, 0, x + width - j, y, blitOffset, j, k);
+            this.renderSpriteInner(sprite, nineSlice.width(), nineSlice.height(), 0, nineSlice.height() - l, x, y + height - l, blitOffset, i, l);
+            this.renderTiledSprite(sprite, x + i, y + height - l, blitOffset, width - j - i, l, i, nineSlice.height() - l, nineSlice.width() - j - i, l, nineSlice.width(), nineSlice.height());
+            this.renderSpriteInner(sprite, nineSlice.width(), nineSlice.height(), nineSlice.width() - j, nineSlice.height() - l, x + width - j, y + height - l, blitOffset, j, l);
+            this.renderTiledSprite(sprite, x, y + k, blitOffset, i, height - l - k, 0, k, i, nineSlice.height() - l - k, nineSlice.width(), nineSlice.height());
+            this.renderTiledSprite(sprite, x + i, y + k, blitOffset, width - j - i, height - l - k, i, k, nineSlice.width() - j - i, nineSlice.height() - l - k, nineSlice.width(), nineSlice.height());
+            this.renderTiledSprite(sprite, x + width - j, y + k, blitOffset, i, height - l - k, nineSlice.width() - j, k, j, nineSlice.height() - l - k, nineSlice.width(), nineSlice.height());
+        }
+    }
+
+    private void renderTiledSprite(TextureSprite sprite, int x, int y, int blitOffset, int width, int height, int i, int j, int spriteWidth, int spriteHeight, int nineSliceWidth, int nineSliceHeight) {
+        if (width <= 0 || height <= 0) return;
+        if (spriteWidth <= 0 || spriteHeight <= 0)
+            throw new IllegalArgumentException("Tiled sprite texture size must be positive, got " + spriteWidth + "x" + spriteHeight);
+
+        for (int k = 0; k < width; k += spriteWidth) {
+            int l = Math.min(spriteWidth, width - k);
+            for (int m = 0; m < height; m += spriteHeight) {
+                int n = Math.min(spriteHeight, height - m);
+                this.renderSpriteInner(sprite, nineSliceWidth, nineSliceHeight, i, j, x + k, y + m, blitOffset, l, n);
+            }
+        }
+    }
 
     public abstract void renderItem(ItemStack stack, int x, int y);
 

@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.api.gui;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.api.texture.TextureFactory;
 import dev.huskuraft.effortless.api.text.Text;
 
 public abstract class AbstractButton extends AbstractWidget {
@@ -48,9 +49,9 @@ public abstract class AbstractButton extends AbstractWidget {
     }
 
     public void renderButtonBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-        renderer.setShaderColor(1.0F, 1.0F, 1.0F, this.getAlpha());
-        renderer.renderButtonTexture(getX(), getY(), getWidth(), getHeight(), isActive(), isHoveredOrFocused());
-        renderer.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, this.getAlpha());
+        renderer.renderSprite(getEntrance().getPlatform().getTextureFactory().getButtonTexture(isActive(), isHoveredOrFocused()), getX(), getY(), getWidth(), getHeight());
+        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         renderString(renderer, getTypeface(), (isActive() ? 16777215 : 10526880) | (int) MathUtils.ceil(this.getAlpha() * 255.0F) << 24);
     }
 

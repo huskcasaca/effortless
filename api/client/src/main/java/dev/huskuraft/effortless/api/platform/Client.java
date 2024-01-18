@@ -5,8 +5,14 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
+import dev.huskuraft.effortless.api.renderer.Camera;
+import dev.huskuraft.effortless.api.renderer.Window;
 
 public interface Client extends PlatformReference {
+
+    Window window();
+
+    Camera camera();
 
     Screen getPanel();
 

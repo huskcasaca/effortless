@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
 import dev.huskuraft.effortless.api.core.Resource;
-import dev.huskuraft.effortless.api.renderer.RenderFactory;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
 import dev.huskuraft.effortless.api.renderer.VertexFormats;

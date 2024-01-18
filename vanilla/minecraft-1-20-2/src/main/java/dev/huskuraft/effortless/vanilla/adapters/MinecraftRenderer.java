@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Typeface;
+import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.client.Minecraft;
@@ -25,8 +26,6 @@ import java.util.Optional;
 
 class MinecraftRenderer extends Renderer {
 
-    private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
-
     private static final RandomSource RAND = RandomSource.create();
     private final Minecraft minecraftClient;
     private final PoseStack minecraftMatrixStack;
@@ -41,13 +40,8 @@ class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public Window window() {
-        return MinecraftConvertor.fromPlatformWindow(minecraftClient.getWindow());
-    }
-
-    @Override
-    public Camera camera() {
-        return MinecraftConvertor.fromPlatformCamera(minecraftClient.gameRenderer.getMainCamera());
+    public Client client() {
+        return MinecraftConvertor.fromPlatformClient(minecraftClient);
     }
 
     @Override
@@ -66,7 +60,7 @@ class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void setShaderColor(float red, float green, float blue, float alpha) {
+    public void setRsShaderColor(float red, float green, float blue, float alpha) {
 //        minecraft renderer provider flush if managed();
         RenderSystem.setShaderColor(red, green, blue, alpha);
     }
@@ -102,16 +96,6 @@ class MinecraftRenderer extends Renderer {
                 seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL,
                 backgroundColor,
                 lightMap);
-    }
-
-    @Override
-    public void renderPanelBackgroundTexture(int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
-//        drawTexture(MinecraftClientAdapter.adapt(BACKGROUND_LOCATION), x, y, 0, uOffset, vOffset, uWidth, vHeight, 32, 32);
-    }
-
-    @Override
-    public void renderButtonTexture(int x, int y, int width, int height, boolean active, boolean focused) {
-        minecraftRendererProvider.blitSprite(BUTTON_SPRITES.get(active, focused), x, y, width, height);
     }
 
     @Override
