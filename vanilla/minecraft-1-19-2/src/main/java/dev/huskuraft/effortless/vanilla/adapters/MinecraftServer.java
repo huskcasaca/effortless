@@ -4,12 +4,13 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.platform.Server;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-class MinecraftServer implements Server {
+public class MinecraftServer implements Server {
 
     private final net.minecraft.server.MinecraftServer reference;
 
-    MinecraftServer(net.minecraft.server.MinecraftServer reference) {
+    public MinecraftServer(net.minecraft.server.MinecraftServer reference) {
         this.reference = reference;
     }
 
@@ -20,7 +21,7 @@ class MinecraftServer implements Server {
 
     @Override
     public List<Player> getPlayers() {
-        return reference.getPlayerList().getPlayers().stream().map(MinecraftConvertor::fromPlatformPlayer).toList();
+        return reference.getPlayerList().getPlayers().stream().map(player -> new MinecraftPlayer(player)).collect(Collectors.toList());
     }
 
     @Override

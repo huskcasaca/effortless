@@ -7,11 +7,11 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-class MinecraftBlockState implements BlockState {
+public class MinecraftBlockState implements BlockState {
 
     private final net.minecraft.world.level.block.state.BlockState reference;
 
-    MinecraftBlockState(net.minecraft.world.level.block.state.BlockState reference) {
+    public MinecraftBlockState(net.minecraft.world.level.block.state.BlockState reference) {
         this.reference = reference;
     }
 
@@ -75,7 +75,7 @@ class MinecraftBlockState implements BlockState {
 
     @Override
     public BlockState rotate(Revolve revolve) {
-        return MinecraftConvertor.fromPlatformBlockState(reference.rotate(switch (revolve) {
+        return new MinecraftBlockState(reference.rotate(switch (revolve) {
             case NONE -> Rotation.NONE;
             case CLOCKWISE_90 -> Rotation.CLOCKWISE_90;
             case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
@@ -90,24 +90,25 @@ class MinecraftBlockState implements BlockState {
 
     @Override
     public Item getItem() {
-        return MinecraftConvertor.fromPlatformItem(reference.getBlock().asItem());
+        return new MinecraftItem(reference.getBlock().asItem());
     }
 
     @Override
     public BlockState mirror(Axis axis) {
         return switch (axis) {
-            case Y -> MinecraftConvertor.fromPlatformBlockState(mirrorTopBottom(reference));
-            case X -> MinecraftConvertor.fromPlatformBlockState(mirrorFrontBack(reference));
-            case Z -> MinecraftConvertor.fromPlatformBlockState(mirrorLeftRight(reference));
+            case Y -> new MinecraftBlockState(mirrorTopBottom(reference));
+            case X -> new MinecraftBlockState(mirrorFrontBack(reference));
+            case Z -> new MinecraftBlockState(mirrorLeftRight(reference));
         };
     }
 
     @Override
     public boolean isReplaceable(Player player, BlockInteraction interaction) {
+        ItemStack itemStack = player.getItemStack(interaction.getHand());
         return reference.canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
-                MinecraftConvertor.toPlatformPlayer(player),
+                player.reference(),
                 MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
-                MinecraftConvertor.toPlatformItemStack(player.getItemStack(interaction.getHand())),
+                itemStack.reference(),
                 MinecraftConvertor.toPlatformBlockInteraction(interaction)
         ));
     }

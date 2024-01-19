@@ -11,20 +11,21 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-class MinecraftItemStack implements ItemStack {
+public class MinecraftItemStack implements ItemStack {
 
     private final net.minecraft.world.item.ItemStack reference;
 
-    MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
+    public MinecraftItemStack(net.minecraft.world.item.ItemStack itemStack) {
         this.reference = itemStack;
     }
 
-    MinecraftItemStack(net.minecraft.world.item.Item item, int count) {
+    public MinecraftItemStack(net.minecraft.world.item.Item item, int count) {
         this.reference = new net.minecraft.world.item.ItemStack(item, count);
     }
 
-    MinecraftItemStack(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
+    public MinecraftItemStack(net.minecraft.world.item.Item item, CompoundTag tag, int count) {
         this.reference = new net.minecraft.world.item.ItemStack(item, count);
         this.reference.setTag(tag);
     }
@@ -51,7 +52,7 @@ class MinecraftItemStack implements ItemStack {
 
     @Override
     public Item getItem() {
-        return MinecraftConvertor.fromPlatformItem(reference.getItem());
+        return new MinecraftItem(reference.getItem());
     }
 
     @Override
@@ -71,17 +72,18 @@ class MinecraftItemStack implements ItemStack {
 
     @Override
     public Text getHoverName() {
-        return MinecraftConvertor.fromPlatformText(reference.getHoverName());
+        return new MinecraftText(reference.getHoverName());
     }
 
     @Override
     public List<Text> getTooltips(Player player, TooltipType flag) {
-        return reference.getTooltipLines(MinecraftConvertor.toPlatformPlayer(player), switch (flag) {
+        var minecraftFlag = switch (flag) {
             case NORMAL -> TooltipFlag.NORMAL;
             case NORMAL_CREATIVE -> TooltipFlag.NORMAL.asCreative();
             case ADVANCED -> TooltipFlag.ADVANCED;
             case ADVANCED_CREATIVE -> TooltipFlag.ADVANCED.asCreative();
-        }).stream().map(MinecraftConvertor::fromPlatformText).toList();
+        };
+        return reference.getTooltipLines(player.reference(), minecraftFlag).stream().map(text -> new MinecraftText(text)).collect(Collectors.toList());
     }
 
     @Override
@@ -96,12 +98,12 @@ class MinecraftItemStack implements ItemStack {
 
     @Override
     public ItemStack copy() {
-        return MinecraftConvertor.fromPlatformItemStack(reference.copy());
+        return new MinecraftItemStack(reference.copy());
     }
 
     @Override
     public boolean isItem(Item item) {
-        return reference.is(MinecraftConvertor.toPlatformItem(item));
+        return reference.is(item.<net.minecraft.world.item.Item>reference());
     }
 
     @Override
@@ -116,21 +118,21 @@ class MinecraftItemStack implements ItemStack {
 
     @Override
     public TagRecord getTag() {
-        return MinecraftConvertor.fromPlatformTagRecord(reference.getOrCreateTag());
+        return new MinecraftTagRecord(reference.getOrCreateTag());
     }
 
     @Override
     public void setTag(TagRecord tagRecord) {
-        reference.setTag(MinecraftConvertor.toPlatformTagRecord(tagRecord));
+        reference.setTag(tagRecord.reference());
     }
 
     @Override
     public BlockState getBlockState(Player player, BlockInteraction interaction) {
 
-        return MinecraftConvertor.fromPlatformBlockState(Block.byItem(reference.getItem()).getStateForPlacement(new BlockPlaceContext(
-                MinecraftConvertor.toPlatformPlayer(player),
+        return new MinecraftBlockState(Block.byItem(reference.getItem()).getStateForPlacement(new BlockPlaceContext(
+                player.reference(),
                 MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
-                MinecraftConvertor.toPlatformItemStack(this),
+                reference(),
                 MinecraftConvertor.toPlatformBlockInteraction(interaction)
         )));
     }

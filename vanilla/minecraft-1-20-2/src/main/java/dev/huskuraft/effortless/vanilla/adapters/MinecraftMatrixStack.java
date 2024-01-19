@@ -6,11 +6,11 @@ import dev.huskuraft.effortless.api.math.Matrix4f;
 import dev.huskuraft.effortless.api.math.Quaternionf;
 import dev.huskuraft.effortless.api.renderer.MatrixStack;
 
-class MinecraftMatrixStack implements MatrixStack {
+public class MinecraftMatrixStack implements MatrixStack {
 
     private final PoseStack reference;
 
-    MinecraftMatrixStack(PoseStack reference) {
+    public MinecraftMatrixStack(PoseStack reference) {
         this.reference = reference;
     }
 

@@ -10,42 +10,45 @@ import dev.huskuraft.effortless.api.platform.SearchTree;
 import dev.huskuraft.effortless.api.renderer.RenderStateFactory;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftConvertor;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftItemStack;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftKeyBinding;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderStateFactory;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftTextureFactory;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;
 import net.minecraft.client.searchtree.SearchRegistry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTabs;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MinecraftClientPlatform extends MinecraftCommonPlatform implements ClientPlatform {
 
     @Override
     public SearchTree<ItemStack> newItemStackSearchTree(SearchBy searchBy) {
-        var player = Minecraft.getInstance().player;
-        CreativeModeTabs.tryRebuildTabContents(player.connection.enabledFeatures(), true, player.clientLevel.registryAccess());
+        var minecraftPlayer = Minecraft.getInstance().player;
+        CreativeModeTabs.tryRebuildTabContents(minecraftPlayer.connection.enabledFeatures(), true, minecraftPlayer.clientLevel.registryAccess());
 
         return query -> Minecraft.getInstance().getSearchTree(
                 switch (searchBy) {
                     case NAME -> SearchRegistry.CREATIVE_NAMES;
                     case TAG -> SearchRegistry.CREATIVE_TAGS;
                 }
-        ).search(query).stream().map(MinecraftConvertor::fromPlatformItemStack).toList();
+        ).search(query).stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
     }
 
     @Override
     public <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
-        return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> MinecraftConvertor.toPlatformText(text).getString())).search(query);
+        return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> text.<Component>reference().getString())).search(query);
     }
 
     @Override
     public KeyBinding getKeyBinding(Keys key) {
-        return MinecraftConvertor.fromPlatformKeyBinding(switch (key) {
+        var minecraftKeyBinding = switch (key) {
             case KEY_UP -> Minecraft.getInstance().options.keyUp;
             case KEY_LEFT -> Minecraft.getInstance().options.keyLeft;
             case KEY_DOWN -> Minecraft.getInstance().options.keyDown;
@@ -80,12 +83,14 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
             case KEY_HOTBAR_SLOTS_9 -> Minecraft.getInstance().options.keyHotbarSlots[8];
             case KEY_SAVE_HOTBAR_ACTIVATOR -> Minecraft.getInstance().options.keySaveHotbarActivator;
             case KEY_LOAD_HOTBAR_ACTIVATOR -> Minecraft.getInstance().options.keyLoadHotbarActivator;
-        });
+        };
+        return new MinecraftKeyBinding(minecraftKeyBinding);
     }
 
     @Override
     public KeyBinding newKeyBinding(String name, String category, KeyCodes key) {
-        return MinecraftConvertor.fromPlatformKeyBinding(new KeyMapping(name, key.value(), category));
+        var minecraftKeyMapping = new KeyMapping(name, key.value(), category);
+        return new MinecraftKeyBinding(minecraftKeyMapping);
     }
 
     @Override

@@ -24,72 +24,75 @@ public class MinecraftCommonPlatform implements Platform {
 
     @Override
     public ResourceLocation newResource(String namespace, String path) {
-        return MinecraftConvertor.fromPlatformResource(new net.minecraft.resources.ResourceLocation(namespace, path));
+        return new MinecraftResourceLocation(new net.minecraft.resources.ResourceLocation(namespace, path));
     }
 
     @Override
     public Buffer newBuffer() {
-        return MinecraftConvertor.fromPlatformBuffer(new FriendlyByteBuf(Unpooled.buffer()));
+        return new MinecraftBuffer(new FriendlyByteBuf(Unpooled.buffer()));
     }
 
     @Override
     public TagRecord newTagRecord() {
-        return MinecraftConvertor.fromPlatformTagRecord(new CompoundTag());
+        return new MinecraftTagRecord(new CompoundTag());
     }
 
     @Override
     public Optional<Item> newOptionalItem(ResourceLocation location) {
-        return BuiltInRegistries.ITEM.getOptional(MinecraftConvertor.toPlatformResource(location)).map(MinecraftConvertor::fromPlatformItem);
+        return BuiltInRegistries.ITEM.getOptional(location.<net.minecraft.resources.ResourceLocation>reference()).map(item -> new MinecraftItem(item));
     }
 
     @Override
     public ItemStack newItemStack() {
-        return MinecraftConvertor.fromPlatformItemStack(net.minecraft.world.item.ItemStack.EMPTY);
+        return new MinecraftItemStack(net.minecraft.world.item.ItemStack.EMPTY);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count) {
-        return MinecraftConvertor.fromPlatformItemStack(MinecraftConvertor.toPlatformItem(item), count);
+        net.minecraft.world.item.Item item1 = item.reference();
+        return new MinecraftItemStack(item1, count);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count, TagRecord tag) {
-        return MinecraftConvertor.fromPlatformItemStack(MinecraftConvertor.toPlatformItem(item), MinecraftConvertor.toPlatformTagRecord(tag), count);
+        net.minecraft.world.item.Item item1 = item.reference();
+        CompoundTag tag1 = tag.reference();
+        return new MinecraftItemStack(item1, tag1, count);
     }
 
     @Override
     public Text newText() {
-        return MinecraftConvertor.fromPlatformText(Component.empty());
+        return new MinecraftText((Component) Component.empty());
     }
 
     @Override
     public Text newText(String text) {
-        return MinecraftConvertor.fromPlatformText(Component.literal(text));
+        return new MinecraftText((Component) Component.literal(text));
     }
 
     @Override
     public Text newText(String text, Text... args) {
-        return MinecraftConvertor.fromPlatformText(Component.translatable(text, Arrays.stream(args).map(MinecraftConvertor::toPlatformText).toArray(Object[]::new)));
+        return new MinecraftText((Component) Component.translatable(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
     }
 
     @Override
     public Text newTranslatableText(String text) {
-        return MinecraftConvertor.fromPlatformText(Component.translatable(text));
+        return new MinecraftText((Component) Component.translatable(text));
     }
 
     @Override
     public Text newTranslatableText(String text, Text... args) {
-        return MinecraftConvertor.fromPlatformText(Component.translatable(text, Arrays.stream(args).map(MinecraftConvertor::toPlatformText).toArray(Object[]::new)));
+        return new MinecraftText((Component) Component.translatable(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
     }
 
     @Override
     public TagIoReader getTagIoReader() {
-        return input -> MinecraftConvertor.fromPlatformTagRecord(NbtIo.readCompressed(input));
+        return input -> new MinecraftTagRecord(NbtIo.readCompressed(input));
     }
 
     @Override
     public TagIoWriter getTagIoWriter() {
-        return (output, config) -> NbtIo.writeCompressed(MinecraftConvertor.toPlatformTagRecord(config), output);
+        return (output, config) -> NbtIo.writeCompressed(config.reference(), output);
     }
 
 }

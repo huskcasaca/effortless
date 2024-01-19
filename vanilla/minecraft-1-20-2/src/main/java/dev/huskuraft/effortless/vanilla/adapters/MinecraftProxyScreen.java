@@ -4,11 +4,11 @@ import dev.huskuraft.effortless.api.gui.Screen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
-class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
+public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
 
     private final Screen proxy;
 
-    MinecraftProxyScreen(Screen screen) {
+    public MinecraftProxyScreen(Screen screen) {
         super(Component.empty());
         this.proxy = screen;
     }
@@ -51,9 +51,10 @@ class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
 
     @Override
     public void render(GuiGraphics minecraftRenderer, int i, int j, float f) {
+        var renderer = new MinecraftRenderer(minecraftRenderer.pose());
         proxy.onReload();
-        proxy.render(MinecraftConvertor.fromPlatformRenderer(minecraftRenderer), i, j, f);
-        proxy.renderOverlay(MinecraftConvertor.fromPlatformRenderer(minecraftRenderer), i, j, f);
+        proxy.render(renderer, i, j, f);
+        proxy.renderOverlay(renderer, i, j, f);
     }
 
     @Override
@@ -114,7 +115,7 @@ class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
 
     @Override
     public Component getTitle() {
-        return MinecraftConvertor.toPlatformText(proxy.getScreenTitle());
+        return proxy.getScreenTitle().reference();
     }
 
     @Override

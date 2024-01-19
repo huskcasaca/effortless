@@ -8,11 +8,11 @@ import net.minecraft.nbt.Tag;
 
 import java.util.Objects;
 
-class MinecraftTagElement implements TagElement {
+public class MinecraftTagElement implements TagElement {
 
     protected Tag reference;
 
-    MinecraftTagElement(Tag reference) {
+    public MinecraftTagElement(Tag reference) {
         this.reference = reference;
     }
 

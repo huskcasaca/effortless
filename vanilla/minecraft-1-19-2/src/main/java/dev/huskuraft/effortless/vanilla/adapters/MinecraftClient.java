@@ -12,11 +12,11 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 import org.lwjgl.glfw.GLFW;
 
-class MinecraftClient implements Client {
+public class MinecraftClient implements Client {
 
     private final Minecraft reference;
 
-    MinecraftClient(Minecraft reference) {
+    public MinecraftClient(Minecraft reference) {
         this.reference = reference;
     }
 
@@ -27,12 +27,12 @@ class MinecraftClient implements Client {
 
     @Override
     public Window window() {
-        return MinecraftConvertor.fromPlatformWindow(reference.getWindow());
+        return new MinecraftWindow(reference.getWindow());
     }
 
     @Override
     public Camera camera() {
-        return MinecraftConvertor.fromPlatformCamera(reference.gameRenderer.getMainCamera());
+        return new MinecraftCamera(reference.gameRenderer.getMainCamera());
     }
 
     @Override
@@ -65,17 +65,17 @@ class MinecraftClient implements Client {
         if (reference.player == null) {
             return null;
         }
-        return MinecraftConvertor.fromPlatformPlayer(reference.player);
+        return new MinecraftPlayer(reference.player);
     }
 
     @Override
     public Typeface getTypeface() {
-        return MinecraftConvertor.fromPlatformTypeface(reference.font);
+        return new MinecraftTypeface(reference.font);
     }
 
     @Override
     public World getWorld() {
-        return MinecraftConvertor.fromPlatformWorld(reference.level);
+        return new MinecraftWorld(reference.level);
     }
 
     @Override

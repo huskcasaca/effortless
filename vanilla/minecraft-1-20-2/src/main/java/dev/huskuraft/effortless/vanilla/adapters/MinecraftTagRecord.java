@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-class MinecraftTagRecord implements TagRecord {
+public class MinecraftTagRecord implements TagRecord {
 
     private final MinecraftTagElement proxy;
 
-    MinecraftTagRecord(MinecraftTagElement tag) {
+    public MinecraftTagRecord(MinecraftTagElement tag) {
         this.proxy = tag;
     }
 
-    MinecraftTagRecord(CompoundTag tag) {
+    public MinecraftTagRecord(CompoundTag tag) {
         this(new MinecraftTagElement(tag == null ? new CompoundTag() : tag));
     }
 
@@ -49,12 +49,12 @@ class MinecraftTagRecord implements TagRecord {
 
     @Override
     public Text getText(String key) {
-        return MinecraftConvertor.fromPlatformText(Component.Serializer.fromJson(referenceValue().getString(key)));
+        return new MinecraftText(Component.Serializer.fromJson(referenceValue().getString(key)));
     }
 
     @Override
     public void putText(String key, Text value) {
-        referenceValue().putString(key, Component.Serializer.toJson(MinecraftConvertor.toPlatformText(value)));
+        referenceValue().putString(key, Component.Serializer.toJson(value.reference()));
     }
 
     @Override
@@ -199,12 +199,12 @@ class MinecraftTagRecord implements TagRecord {
 
     @Override
     public TagElement getElement(String key) {
-        return MinecraftConvertor.fromPlatformTagElement(referenceValue().get(key));
+        return new MinecraftTagElement(referenceValue().get(key));
     }
 
     @Override
     public void putElement(String key, TagElement value) {
-        referenceValue().put(key, MinecraftConvertor.toPlatformTagElement(value));
+        referenceValue().put(key, ((MinecraftTagElement) value).referenceValue());
     }
 
     @Override

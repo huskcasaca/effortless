@@ -10,6 +10,8 @@ import dev.huskuraft.effortless.vanilla.adapters.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -79,19 +81,20 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
-        getEventRegistry().getClientStartEvent().invoker().onClientStart(MinecraftConvertor.fromPlatformClient(Minecraft.getInstance()));
+        getEventRegistry().getClientStartEvent().invoker().onClientStart(new MinecraftClient(Minecraft.getInstance()));
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
                     try {
-                        receiver.receiveBuffer(MinecraftConvertor.fromPlatformBuffer(event1.getPayload()), MinecraftConvertor.fromPlatformPlayer(Minecraft.getInstance().player));
+                        receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(Minecraft.getInstance().player));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             });
             return (buffer, player) -> {
-                Minecraft.getInstance().getConnection().send(NetworkDirection.PLAY_TO_SERVER.buildPacket(MinecraftConvertor.toPlatformBuffer(buffer), getChannel().getChannelId().reference()).getThis());
+                var minecraftPacket = NetworkDirection.PLAY_TO_SERVER.buildPacket(buffer.reference(), getChannel().getChannelId().reference()).getThis();
+                Minecraft.getInstance().getConnection().send(minecraftPacket);
             };
         });
     }
@@ -99,18 +102,21 @@ public class ForgeEffortlessClient extends EffortlessClient {
     @SubscribeEvent
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         getEventRegistry().getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
-            event.register(MinecraftConvertor.toPlatformKeyBinding(key.getBinding()));
+            event.register(key.getBinding().reference());
         });
     }
 
     @SubscribeEvent
     public void onReloadShader(RegisterShadersEvent event) {
-        getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> event.registerShader(new ShaderInstance(event.getResourceProvider(), resource.getPath(), format.reference()), shaderInstance -> consumer.accept((MinecraftShader) () -> shaderInstance)));
+        getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> {
+            var minecraftShader = new ShaderInstance(event.getResourceProvider(), resource.getPath(), format.reference());
+            event.registerShader(minecraftShader, shaderInstance -> consumer.accept((MinecraftShader) () -> shaderInstance));
+        });
     }
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftConvertor.fromPlatformClient(Minecraft.getInstance()), switch (event.phase) {
+        getEventRegistry().getClientTickEvent().invoker().onClientTick(new MinecraftClient(Minecraft.getInstance()), switch (event.phase) {
             case START -> ClientTick.Phase.START;
             case END -> ClientTick.Phase.END;
         });
@@ -118,14 +124,17 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @SubscribeEvent
     public void onRenderLevelStage(RenderLevelStageEvent event) {
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_ENTITIES) {
-            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(MinecraftConvertor.fromPlatformRenderer(event.getPoseStack()), event.getPartialTick());
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
+            return;
         }
+        var renderer = new MinecraftRenderer(event.getPoseStack());
+        var partialTick = event.getPartialTick();
+        getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(renderer, partialTick);
     }
 
     @SubscribeEvent
     public void onRenderGui(RenderGuiEvent event) {
-        getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(MinecraftConvertor.fromPlatformRenderer(event.getGuiGraphics().pose()), event.getPartialTick());
+        getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(event.getGuiGraphics().pose()), event.getPartialTick());
     }
 
     @SubscribeEvent

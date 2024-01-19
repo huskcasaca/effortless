@@ -2,11 +2,11 @@ package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.api.renderer.Window;
 
-class MinecraftWindow implements Window {
+public class MinecraftWindow implements Window {
 
     private final com.mojang.blaze3d.platform.Window reference;
 
-    MinecraftWindow(com.mojang.blaze3d.platform.Window reference) {
+    public MinecraftWindow(com.mojang.blaze3d.platform.Window reference) {
         this.reference = reference;
     }
 

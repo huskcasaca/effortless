@@ -6,11 +6,11 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 
-class MinecraftItem implements Item {
+public class MinecraftItem implements Item {
 
     private final net.minecraft.world.item.Item reference;
 
-    MinecraftItem(net.minecraft.world.item.Item reference) {
+    public MinecraftItem(net.minecraft.world.item.Item reference) {
         this.reference = reference;
     }
 
@@ -21,7 +21,7 @@ class MinecraftItem implements Item {
 
     @Override
     public ItemStack getDefaultStack() {
-        return MinecraftConvertor.fromPlatformItemStack(reference.getDefaultInstance());
+        return new MinecraftItemStack(reference.getDefaultInstance());
     }
 
     @Override
@@ -31,7 +31,8 @@ class MinecraftItem implements Item {
 
     @Override
     public ResourceLocation getId() {
-        return MinecraftConvertor.fromPlatformResource(BuiltInRegistries.ITEM.getKey(reference));
+        var minecraftResourceLocation = BuiltInRegistries.ITEM.getKey(reference);
+        return new MinecraftResourceLocation(minecraftResourceLocation);
     }
 
     @Override

@@ -6,12 +6,12 @@ import dev.huskuraft.effortless.api.core.ResourceMetadata;
 
 import java.io.IOException;
 
-class MinecraftResource implements Resource {
+public class MinecraftResource implements Resource {
 
     private final net.minecraft.server.packs.resources.Resource resource;
     private final net.minecraft.resources.ResourceLocation location;
 
-    MinecraftResource(net.minecraft.server.packs.resources.Resource resource, net.minecraft.resources.ResourceLocation location) {
+    public MinecraftResource(net.minecraft.server.packs.resources.Resource resource, net.minecraft.resources.ResourceLocation location) {
         this.resource = resource;
         this.location = location;
     }

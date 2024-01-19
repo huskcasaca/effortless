@@ -28,17 +28,17 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
 
     @Override
     public void onInitializeClient() {
-        getEventRegistry().getClientStartEvent().invoker().onClientStart(MinecraftConvertor.fromPlatformClient(Minecraft.getInstance()));
+        getEventRegistry().getClientStartEvent().invoker().onClientStart(new MinecraftClient(Minecraft.getInstance()));
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             var channelId = (ResourceLocation) getChannel().getChannelId().reference();
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
-                receiver.receiveBuffer(MinecraftConvertor.fromPlatformBuffer(buf), MinecraftConvertor.fromPlatformPlayer(client.player));
+                receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(client.player));
             });
-            return (buffer, player1) -> ClientPlayNetworking.send(channelId, MinecraftConvertor.toPlatformBuffer(buffer));
+            return (buffer, player1) -> ClientPlayNetworking.send(channelId, buffer.reference());
         });
 
         getEventRegistry().getRegisterKeysEvent().invoker().onRegisterKeys(key1 -> {
-            KeyBindingHelper.registerKeyBinding(MinecraftConvertor.toPlatformKeyBinding(key1.getBinding()));
+            KeyBindingHelper.registerKeyBinding(key1.getBinding().reference());
         });
 
         ClientShadersEvents.REGISTER.register((manager, sink) -> {
@@ -46,19 +46,19 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
-            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftConvertor.fromPlatformClient(minecraft), ClientTick.Phase.START);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(new MinecraftClient(minecraft), ClientTick.Phase.START);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            getEventRegistry().getClientTickEvent().invoker().onClientTick(MinecraftConvertor.fromPlatformClient(minecraft), ClientTick.Phase.END);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(new MinecraftClient(minecraft), ClientTick.Phase.END);
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(MinecraftConvertor.fromPlatformRenderer(context.matrixStack()), context.tickDelta());
+            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(context.matrixStack()), context.tickDelta());
         });
 
         ClientRenderEvents.GUI.register((matrixStack, f) -> {
-            getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(MinecraftConvertor.fromPlatformRenderer(matrixStack), f);
+            getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(matrixStack), f);
         });
 
         KeyboardInputEvents.KEY_INPUT.register((key, scanCode, action, modifiers) -> {

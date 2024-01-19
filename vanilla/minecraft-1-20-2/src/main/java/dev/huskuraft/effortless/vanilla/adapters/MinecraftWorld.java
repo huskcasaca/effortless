@@ -8,11 +8,11 @@ import net.minecraft.world.level.Level;
 
 import java.util.UUID;
 
-class MinecraftWorld implements World {
+public class MinecraftWorld implements World {
 
     private final Level reference;
 
-    MinecraftWorld(Level reference) {
+    public MinecraftWorld(Level reference) {
         this.reference = reference;
     }
 
@@ -23,17 +23,17 @@ class MinecraftWorld implements World {
 
     @Override
     public Player getPlayer(UUID uuid) {
-        return MinecraftConvertor.fromPlatformPlayer(reference.getPlayerByUUID(uuid));
+        return new MinecraftPlayer(reference.getPlayerByUUID(uuid));
     }
 
     @Override
     public BlockState getBlockState(BlockPosition blockPosition) {
-        return MinecraftConvertor.fromPlatformBlockState(reference.getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
+        return new MinecraftBlockState(reference.getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
     }
 
     @Override
     public boolean setBlockState(BlockPosition blockPosition, BlockState blockState) {
-        return reference.setBlockAndUpdate(MinecraftConvertor.toPlatformBlockPosition(blockPosition), MinecraftConvertor.toPlatformBlockState(blockState));
+        return reference.setBlockAndUpdate(MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference());
     }
 
     @Override

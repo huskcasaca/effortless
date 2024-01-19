@@ -3,12 +3,13 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
 
-class MinecraftTypeface implements Typeface {
+public class MinecraftTypeface implements Typeface {
 
     private final Font reference;
 
-    MinecraftTypeface(Font reference) {
+    public MinecraftTypeface(Font reference) {
         this.reference = reference;
     }
 
@@ -24,7 +25,7 @@ class MinecraftTypeface implements Typeface {
 
     @Override
     public int measureWidth(Text text) {
-        return reference.width(MinecraftConvertor.toPlatformText(text));
+        return reference.width((Component) text.reference());
     }
 
     @Override

@@ -4,13 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskuraft.effortless.api.math.Matrix3f;
 import dev.huskuraft.effortless.api.math.Matrix4f;
 import dev.huskuraft.effortless.api.math.Quaternionf;
+import dev.huskuraft.effortless.api.platform.PlatformUnsupportedException;
 import dev.huskuraft.effortless.api.renderer.MatrixStack;
 
-class MinecraftMatrixStack implements MatrixStack {
+public class MinecraftMatrixStack implements MatrixStack {
 
     private final PoseStack reference;
 
-    MinecraftMatrixStack(PoseStack reference) {
+    public MinecraftMatrixStack(PoseStack reference) {
         this.reference = reference;
     }
 
@@ -72,7 +73,7 @@ class MinecraftMatrixStack implements MatrixStack {
 
     @Override
     public void rotate(Quaternionf quaternion, float x, float y, float z) {
-        throw new UnsupportedOperationException();
+        throw new PlatformUnsupportedException("rotate(Quaternionf, float, float, float) is not supported");
     }
 
     @Override

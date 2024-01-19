@@ -7,11 +7,11 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 
-class MinecraftTagPrimitive implements TagPrimitive {
+public class MinecraftTagPrimitive implements TagPrimitive {
 
     private final MinecraftTagElement proxy;
 
-    MinecraftTagPrimitive(MinecraftTagElement tag) {
+    public MinecraftTagPrimitive(MinecraftTagElement tag) {
         this.proxy = tag;
     }
 

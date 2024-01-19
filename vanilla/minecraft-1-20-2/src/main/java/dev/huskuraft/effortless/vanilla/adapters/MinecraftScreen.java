@@ -4,11 +4,11 @@ import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.client.gui.screens.Screen;
 
-class MinecraftScreen extends AbstractScreen {
+public class MinecraftScreen extends AbstractScreen {
 
     private final Screen reference;
 
-    MinecraftScreen(Screen reference) {
+    public MinecraftScreen(Screen reference) {
         super(null, Text.empty());
         this.reference = reference;
     }
@@ -19,7 +19,7 @@ class MinecraftScreen extends AbstractScreen {
 
     @Override
     public Text getScreenTitle() {
-        return MinecraftConvertor.fromPlatformText(reference.getTitle());
+        return new MinecraftText(reference.getTitle());
     }
 
     @Override

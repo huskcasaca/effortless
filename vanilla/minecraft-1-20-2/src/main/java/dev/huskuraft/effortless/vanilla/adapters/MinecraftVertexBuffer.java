@@ -3,11 +3,11 @@ package dev.huskuraft.effortless.vanilla.adapters;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.huskuraft.effortless.api.renderer.VertexBuffer;
 
-class MinecraftVertexBuffer implements VertexBuffer {
+public class MinecraftVertexBuffer implements VertexBuffer {
 
     private final VertexConsumer reference;
 
-    MinecraftVertexBuffer(VertexConsumer reference) {
+    public MinecraftVertexBuffer(VertexConsumer reference) {
         this.reference = reference;
     }
 

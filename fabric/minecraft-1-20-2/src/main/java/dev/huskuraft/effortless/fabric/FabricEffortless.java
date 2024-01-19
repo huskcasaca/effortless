@@ -13,6 +13,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 import java.nio.file.Path;
 
@@ -21,36 +22,36 @@ public class FabricEffortless extends Effortless implements ModInitializer {
     @Override
     public void onInitialize() {
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
-            var channelId = getChannel().getChannelId().<ResourceLocation>reference();
+            var channelId = (ResourceLocation) getChannel().getChannelId().reference();
             ServerPlayNetworking.registerGlobalReceiver(channelId, (server, player, handler, buf, responseSender) -> {
-                receiver.receiveBuffer(MinecraftConvertor.fromPlatformBuffer(buf), MinecraftConvertor.fromPlatformPlayer(player));
+                receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(player));
             });
-            return (buffer, player) -> ServerPlayNetworking.send((ServerPlayer) MinecraftConvertor.toPlatformPlayer(player), channelId, MinecraftConvertor.toPlatformBuffer(buffer));
+            return (buffer, player) -> ServerPlayNetworking.send(player.reference(), channelId, buffer.reference());
         });
 
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
-            getEventRegistry().getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(MinecraftConvertor.fromPlatformPlayer(player), MinecraftConvertor.fromPlatformWorld(origin), MinecraftConvertor.fromPlatformWorld(destination));
+            getEventRegistry().getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(new MinecraftPlayer(player), new MinecraftWorld(origin), new MinecraftWorld(destination));
         });
         ServerPlayerEvents.LOGGED_IN.register(player -> {
-            getEventRegistry().getPlayerLoggedInEvent().invoker().onPlayerLoggedIn(MinecraftConvertor.fromPlatformPlayer(player));
+            getEventRegistry().getPlayerLoggedInEvent().invoker().onPlayerLoggedIn(new MinecraftPlayer(player));
         });
         ServerPlayerEvents.LOGGED_OUT.register(player -> {
-            getEventRegistry().getPlayerLoggedOutEvent().invoker().onPlayerLoggedOut(MinecraftConvertor.fromPlatformPlayer(player));
+            getEventRegistry().getPlayerLoggedOutEvent().invoker().onPlayerLoggedOut(new MinecraftPlayer(player));
         });
         ServerPlayerEvents.RESPAWN.register((oldPlayer, newPlayer, alive) -> {
-            getEventRegistry().getPlayerRespawnEvent().invoker().onPlayerRespawn(MinecraftConvertor.fromPlatformPlayer(oldPlayer), MinecraftConvertor.fromPlatformPlayer(newPlayer), alive);
+            getEventRegistry().getPlayerRespawnEvent().invoker().onPlayerRespawn(new MinecraftPlayer(oldPlayer), new MinecraftPlayer(newPlayer), alive);
         });
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
-            getEventRegistry().getServerStartingEvent().invoker().onServerStarting(MinecraftConvertor.fromPlatformServer(server));
+            getEventRegistry().getServerStartingEvent().invoker().onServerStarting(new MinecraftServer(server));
         });
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-            getEventRegistry().getServerStartedEvent().invoker().onServerStarted(MinecraftConvertor.fromPlatformServer(server));
+            getEventRegistry().getServerStartedEvent().invoker().onServerStarted(new MinecraftServer(server));
         });
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            getEventRegistry().getServerStoppingEvent().invoker().onServerStopping(MinecraftConvertor.fromPlatformServer(server));
+            getEventRegistry().getServerStoppingEvent().invoker().onServerStopping(new MinecraftServer(server));
         });
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
-            getEventRegistry().getServerStoppedEvent().invoker().onServerStopped(MinecraftConvertor.fromPlatformServer(server));
+            getEventRegistry().getServerStoppedEvent().invoker().onServerStopped(new MinecraftServer(server));
         });
 
     }

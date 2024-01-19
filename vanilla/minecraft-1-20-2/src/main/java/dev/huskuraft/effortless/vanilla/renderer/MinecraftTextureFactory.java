@@ -1,18 +1,15 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
-import com.google.gson.Gson;
 import dev.huskuraft.effortless.api.texture.SimpleTextureSprite;
 import dev.huskuraft.effortless.api.texture.SpriteScaling;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
 import dev.huskuraft.effortless.api.texture.TextureSprite;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftConvertor;
+import dev.huskuraft.effortless.vanilla.adapters.MinecraftResourceLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.metadata.gui.GuiSpriteScaling;
 import net.minecraft.resources.ResourceLocation;
-
-import java.util.logging.Logger;
 
 public class MinecraftTextureFactory implements TextureFactory {
 
@@ -34,8 +31,8 @@ public class MinecraftTextureFactory implements TextureFactory {
 
     public TextureSprite createSprite(TextureAtlasSprite sprite) {
         return new SimpleTextureSprite(
-                MinecraftConvertor.fromPlatformResource(sprite.contents().name()),
-                MinecraftConvertor.fromPlatformResource(sprite.atlasLocation()),
+                new MinecraftResourceLocation(sprite.contents().name()),
+                new MinecraftResourceLocation(sprite.atlasLocation()),
                 sprite.contents().width(),
                 sprite.contents().height(),
                 sprite.getX(),

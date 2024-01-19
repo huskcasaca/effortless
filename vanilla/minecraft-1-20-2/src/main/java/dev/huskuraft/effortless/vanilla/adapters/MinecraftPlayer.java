@@ -14,12 +14,13 @@ import net.minecraft.world.level.GameType;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
-class MinecraftPlayer implements Player {
+public class MinecraftPlayer implements Player {
 
     protected final net.minecraft.world.entity.player.Player reference;
 
-    MinecraftPlayer(net.minecraft.world.entity.player.Player reference) {
+    public MinecraftPlayer(net.minecraft.world.entity.player.Player reference) {
         this.reference = reference;
     }
 
@@ -35,57 +36,57 @@ class MinecraftPlayer implements Player {
 
     @Override
     public Server getServer() {
-        return MinecraftConvertor.fromPlatformServer(reference.getServer());
+        return new MinecraftServer(reference.getServer());
     }
 
     @Override
     public World getWorld() {
-        return MinecraftConvertor.fromPlatformWorld(reference.level());
+        return new MinecraftWorld(reference.level());
     }
 
     @Override
     public Text getDisplayName() {
-        return MinecraftConvertor.fromPlatformText(reference.getDisplayName());
+        return new MinecraftText(reference.getDisplayName());
     }
 
     @Override
     public Vector3d getPosition() {
-        return MinecraftConvertor.fromPlatformMinecraftVector3d(reference.position());
+        return MinecraftConvertor.fromPlatformVector3d(reference.position());
     }
 
     @Override
     public Vector3d getEyePosition() {
-        return MinecraftConvertor.fromPlatformMinecraftVector3d(reference.getEyePosition());
+        return MinecraftConvertor.fromPlatformVector3d(reference.getEyePosition());
     }
 
     @Override
     public Vector3d getEyeDirection() {
-        return MinecraftConvertor.fromPlatformMinecraftVector3d(reference.getLookAngle());
+        return MinecraftConvertor.fromPlatformVector3d(reference.getLookAngle());
     }
 
     @Override
     public List<ItemStack> getItemStacks() {
-        return reference.getInventory().items.stream().map(MinecraftConvertor::fromPlatformItemStack).toList();
+        return reference.getInventory().items.stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
     }
 
     @Override
     public void setItemStack(int index, ItemStack itemStack) {
-        reference.getInventory().setItem(index, MinecraftConvertor.toPlatformItemStack(itemStack));
+        reference.getInventory().setItem(index, itemStack.reference());
     }
 
     @Override
     public ItemStack getItemStack(InteractionHand hand) {
-        return MinecraftConvertor.fromPlatformItemStack(reference.getItemInHand(MinecraftConvertor.toPlatformInteractionHand(hand)));
+        return new MinecraftItemStack(reference.getItemInHand(MinecraftConvertor.toPlatformInteractionHand(hand)));
     }
 
     @Override
     public void setItemStack(InteractionHand hand, ItemStack itemStack) {
-        reference.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, MinecraftConvertor.toPlatformItemStack(itemStack));
+        reference.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, itemStack.reference());
     }
 
     @Override
     public void sendMessage(Text message) {
-        reference.sendSystemMessage(MinecraftConvertor.toPlatformText(message));
+        reference.sendSystemMessage(message.reference());
 //        getRef().displayClientMessage(message, true);
     }
 

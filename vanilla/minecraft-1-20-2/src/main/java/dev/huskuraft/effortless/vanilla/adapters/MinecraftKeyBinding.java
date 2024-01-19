@@ -5,11 +5,11 @@ import dev.huskuraft.effortless.api.input.KeyBinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 
-class MinecraftKeyBinding implements KeyBinding {
+public class MinecraftKeyBinding implements KeyBinding {
 
     private final KeyMapping reference;
 
-    MinecraftKeyBinding(KeyMapping reference) {
+    public MinecraftKeyBinding(KeyMapping reference) {
         this.reference = reference;
     }
 
