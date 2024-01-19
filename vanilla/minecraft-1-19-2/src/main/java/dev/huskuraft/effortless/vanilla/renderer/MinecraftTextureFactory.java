@@ -34,8 +34,8 @@ public class MinecraftTextureFactory implements TextureFactory {
 
     public TextureSprite createSpriteFromTexture(ResourceLocation name, ResourceLocation texture, int width, int height, int x, int y, int textureWidth, int textureHeight, SpriteScaling scaling) {
         return new SimpleTextureSprite(
-                MinecraftConvertor.fromPlatformResource(name),
-                MinecraftConvertor.fromPlatformResource(texture),
+                MinecraftConvertor.fromPlatformResourceLocation(name),
+                MinecraftConvertor.fromPlatformResourceLocation(texture),
                 width,
                 height,
                 x,
@@ -47,8 +47,8 @@ public class MinecraftTextureFactory implements TextureFactory {
 
     public TextureSprite createSprite(TextureAtlasSprite sprite, SpriteScaling scaling) {
         return new SimpleTextureSprite(
-                MinecraftConvertor.fromPlatformResource(sprite.getName()),
-                MinecraftConvertor.fromPlatformResource(sprite.atlas().location()),
+                MinecraftConvertor.fromPlatformResourceLocation(sprite.getName()),
+                MinecraftConvertor.fromPlatformResourceLocation(sprite.atlas().location()),
                 sprite.getWidth(),
                 sprite.getHeight(),
                 sprite.getX(),

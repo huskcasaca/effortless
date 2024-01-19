@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.Channel;
 import dev.huskuraft.effortless.api.networking.NetworkRegistry;
@@ -17,14 +17,14 @@ public final class EffortlessServerChannel extends Channel<AllPacketListener> {
     private final Effortless entrance;
     private final AllPacketListener listener;
 
-    private static final Resource DEFAULT_CHANNEL = Resource.of(Effortless.MOD_ID, "default_channel");
+    private static final ResourceLocation DEFAULT_CHANNEL = ResourceLocation.of(Effortless.MOD_ID, "default_channel");
     private static final int COMPATIBILITY_VERSION = Effortless.VERSION_NUMBER;
 
     public EffortlessServerChannel(Effortless entrance) {
         this(entrance, DEFAULT_CHANNEL);
     }
 
-    public EffortlessServerChannel(Effortless entrance, Resource channelId) {
+    public EffortlessServerChannel(Effortless entrance, ResourceLocation channelId) {
         super(channelId);
         this.entrance = entrance;
         this.listener = new ServerPacketListener();

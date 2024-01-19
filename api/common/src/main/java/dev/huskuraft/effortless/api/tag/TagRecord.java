@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.tag;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
@@ -101,20 +101,20 @@ public interface TagRecord extends TagElement {
     }
 
     default <T extends Enum<T>> T getEnum(String key, Class<T> clazz) {
-        var id = Resource.decompose(getString(key));
+        var id = ResourceLocation.decompose(getString(key));
         return Enum.valueOf(clazz, id.getPath().toUpperCase(Locale.ROOT));
     }
 
     default <T extends Enum<T>> void putEnum(String key, Enum<T> value) {
-        var id = Resource.of("effortless", value.name().toLowerCase(Locale.ROOT));
+        var id = ResourceLocation.of("effortless", value.name().toLowerCase(Locale.ROOT));
         putString(key, id.toString());
     }
 
-    default Resource getResource(String key) {
-        return Resource.decompose(getString(key));
+    default ResourceLocation getResource(String key) {
+        return ResourceLocation.decompose(getString(key));
     }
 
-    default void putResource(String key, Resource value) {
+    default void putResource(String key, ResourceLocation value) {
         putString(key, value.toString());
     }
 

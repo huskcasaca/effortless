@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 
@@ -30,7 +30,7 @@ class MinecraftItem implements Item {
     }
 
     @Override
-    public Resource getId() {
+    public ResourceLocation getId() {
         return MinecraftConvertor.fromPlatformResource(BuiltInRegistries.ITEM.getKey(reference));
     }
 

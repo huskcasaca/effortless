@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
 import dev.huskuraft.effortless.api.core.Orientation;
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.renderer.RenderUtils;
@@ -108,8 +108,8 @@ public abstract class Outline {
     }
 
     public static class OutlineParams {
-        protected Optional<Resource> faceTexture;
-        protected Optional<Resource> highlightedFaceTexture;
+        protected Optional<ResourceLocation> faceTexture;
+        protected Optional<ResourceLocation> highlightedFaceTexture;
         protected Orientation highlightedFace;
         protected boolean fadeLineWidth;
         protected boolean disableCull;
@@ -160,8 +160,8 @@ public abstract class Outline {
             return this;
         }
 
-        public OutlineParams texture(Resource resource) {
-            this.faceTexture = Optional.ofNullable(resource);
+        public OutlineParams texture(ResourceLocation location) {
+            this.faceTexture = Optional.ofNullable(location);
             return this;
         }
 
@@ -169,7 +169,7 @@ public abstract class Outline {
             return this.textures(null, null);
         }
 
-        public OutlineParams textures(Resource texture, Resource highlightTexture) {
+        public OutlineParams textures(ResourceLocation texture, ResourceLocation highlightTexture) {
             this.faceTexture = Optional.ofNullable(texture);
             this.highlightedFaceTexture = Optional.ofNullable(highlightTexture);
             return this;

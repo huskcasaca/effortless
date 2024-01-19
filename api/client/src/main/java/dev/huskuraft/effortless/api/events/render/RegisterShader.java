@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.api.events.render;
 
 
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.renderer.Shader;
 import dev.huskuraft.effortless.api.renderer.VertexFormat;
 
@@ -14,7 +14,7 @@ public interface RegisterShader {
 
     @FunctionalInterface
     interface ShadersSink {
-        void register(Resource resource, VertexFormat format, Consumer<Shader> consumer) throws IOException;
+        void register(ResourceLocation location, VertexFormat format, Consumer<Shader> consumer) throws IOException;
     }
 
 }

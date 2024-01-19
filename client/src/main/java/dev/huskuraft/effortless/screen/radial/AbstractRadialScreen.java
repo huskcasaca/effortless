@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.screen.radial;
 
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -62,7 +62,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
         super(entrance, text);
     }
 
-    protected static <T> Slot<T> slot(Object id, Text name, Resource icon, Color tintColor, T content) {
+    protected static <T> Slot<T> slot(Object id, Text name, ResourceLocation icon, Color tintColor, T content) {
         return new Slot<>() {
 
             @Override
@@ -81,7 +81,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
             }
 
             @Override
-            public Resource getIcon() {
+            public ResourceLocation getIcon() {
                 return icon;
             }
 
@@ -98,7 +98,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
         };
     }
 
-    protected static <T> Button<T> button(Object id, Text name, Text category, Resource icon, T content) {
+    protected static <T> Button<T> button(Object id, Text name, Text category, ResourceLocation icon, T content) {
         return new Button<>() {
 
             @Override
@@ -117,7 +117,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
             }
 
             @Override
-            public Resource getIcon() {
+            public ResourceLocation getIcon() {
                 return icon;
             }
 
@@ -454,7 +454,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
         Text getDisplayCategory();
 
-        Resource getIcon();
+        ResourceLocation getIcon();
 
         Color getTintColor();
 
@@ -470,7 +470,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
 
         Text getDisplayCategory();
 
-        Resource getIcon();
+        ResourceLocation getIcon();
 
         Color getTintColor();
 

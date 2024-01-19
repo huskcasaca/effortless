@@ -1,9 +1,7 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import dev.huskuraft.effortless.api.core.Interaction;
-import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.platform.Client;
@@ -127,16 +125,12 @@ class MinecraftClient implements Client {
 
     @Override
     public boolean isKeyDown(int key) {
-        return InputConstants.isKeyDown(reference
-                .getWindow()
-                .getWindow(), key);
+        return InputConstants.isKeyDown(reference.getWindow().getWindow(), key);
     }
 
     @Override
     public boolean isMouseButtonDown(int button) {
-        return GLFW.glfwGetMouseButton(reference
-                .getWindow()
-                .getWindow(), button) == 1;
+        return GLFW.glfwGetMouseButton(reference.getWindow().getWindow(), button) == 1;
     }
 
     @Override
@@ -152,6 +146,12 @@ class MinecraftClient implements Client {
     @Override
     public void playButtonClickSound() {
         reference.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    }
+
+    @Override
+    public Resource getResource(ResourceLocation location) {
+        var resource = reference.getResourceManager().getResource(location.reference());
+        return resource.map(value -> new MinecraftResource(value, location.reference())).orElse(null);
     }
 
     @Override

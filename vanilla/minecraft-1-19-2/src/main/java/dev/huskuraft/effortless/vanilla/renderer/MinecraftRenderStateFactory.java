@@ -1,14 +1,13 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftShader;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -81,7 +80,7 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
 
     @Override
     public RenderState.TextureState createTextureState(String name, RenderState.TextureState.Texture texture) {
-        return texture == null ? () -> NO_TEXTURE : () -> new TextureStateShard(texture.resource().reference(), texture.blur(), texture.mipmap());
+        return texture == null ? () -> NO_TEXTURE : () -> new TextureStateShard(texture.location().reference(), texture.blur(), texture.mipmap());
     }
 
     @Override
@@ -270,8 +269,8 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
     }
 
     @Override
-    public Resource getBlockAtlasResource() {
-        return MinecraftConvertor.fromPlatformResource(InventoryMenu.BLOCK_ATLAS);
+    public ResourceLocation getBlockAtlasResource() {
+        return MinecraftConvertor.fromPlatformResourceLocation(InventoryMenu.BLOCK_ATLAS);
     }
 
 }

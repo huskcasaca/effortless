@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.screen.pattern;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
@@ -43,19 +43,19 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
         if (pattern == Pattern.DISABLED) return slot(
                 pattern.id(),
                 pattern.name(),
-                Resource.of(Effortless.MOD_ID, "textures/mode/disabled.png"),
+                ResourceLocation.of(Effortless.MOD_ID, "textures/mode/disabled.png"),
                 new Color(0.25f, 0.25f, 0.25f, 0.5f),
                 pattern);
         if (pattern == Pattern.EMPTY) return slot(
                 pattern.id(),
                 pattern.name(),
-                Resource.of(Effortless.MOD_ID, "textures/mode/empty.png"),
+                ResourceLocation.of(Effortless.MOD_ID, "textures/mode/empty.png"),
                 new Color(0.25f, 0.25f, 0.25f, 0.5f),
                 pattern);
         return slot(
                 pattern.id(),
                 pattern.name(),
-                Resource.of(Effortless.MOD_ID, "textures/mode/sphere.png"),
+                ResourceLocation.of(Effortless.MOD_ID, "textures/mode/sphere.png"),
                 new Color(0.25f, 0.25f, 0.25f, 0.5f),
                 pattern);
     }

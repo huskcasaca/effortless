@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 import org.lwjgl.opengl.GL11;
 
 public abstract class RenderLayers {
 
-    protected static final Resource BLOCK_ATLAS_LOCATION = RenderStateFactory.INSTANCE.getBlockAtlasResource();
+    protected static final ResourceLocation BLOCK_ATLAS_LOCATION = RenderStateFactory.INSTANCE.getBlockAtlasResource();
 
     protected static final RenderState.TextureState NO_TEXTURE = RenderState.TextureState.create("no_texture", null);
     protected static final RenderState.TextureState BLOCK_SHEET_MIPPED_TEXTURE = RenderState.TextureState.create("block_sheet_mipped", new RenderState.TextureState.Texture(BLOCK_ATLAS_LOCATION, false, true));
@@ -123,11 +123,11 @@ public abstract class RenderLayers {
     public static final RenderLayer GUI_TEXT_HIGHLIGHT = RenderLayer.createComposite("gui_overlay", VertexFormats.POSITION_COLOR, VertexFormats.Modes.QUADS, 256, RenderState.builder().setShaderState(GUI_OVERLAY_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(NEVER_DEPTH_TEST).setWriteMaskState(COLOR_WRITE).create(false));
     public static final RenderLayer CUSTOM = RenderLayer.createComposite("custom", VertexFormats.BLOCK, VertexFormats.Modes.TRIANGLES, 0, true, true, RenderState.builder().setDepthTestState(EQUAL_DEPTH_TEST).create(false));
 
-    public static RenderLayer texture(Resource resource, boolean blur, boolean mipmap) {
-        return RenderLayer.createComposite("texture", VertexFormats.POSITION_TEX, VertexFormats.Modes.QUADS, 256, RenderState.builder().setTextureState(RenderState.TextureState.create("texture", new RenderState.TextureState.Texture(resource, blur, mipmap))).setShaderState(POSITION_TEX_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
+    public static RenderLayer texture(ResourceLocation location, boolean blur, boolean mipmap) {
+        return RenderLayer.createComposite("texture", VertexFormats.POSITION_TEX, VertexFormats.Modes.QUADS, 256, RenderState.builder().setTextureState(RenderState.TextureState.create("texture", new RenderState.TextureState.Texture(location, blur, mipmap))).setShaderState(POSITION_TEX_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
     }
-    public static RenderLayer colorTexture(Resource resource, boolean blur, boolean mipmap) {
-        return RenderLayer.createComposite("color_texture", VertexFormats.POSITION_COLOR_TEX, VertexFormats.Modes.QUADS, 256, RenderState.builder().setTextureState(RenderState.TextureState.create("color_texture", new RenderState.TextureState.Texture(resource, blur, mipmap))).setShaderState(POSITION_COLOR_TEX_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
+    public static RenderLayer colorTexture(ResourceLocation location, boolean blur, boolean mipmap) {
+        return RenderLayer.createComposite("color_texture", VertexFormats.POSITION_COLOR_TEX, VertexFormats.Modes.QUADS, 256, RenderState.builder().setTextureState(RenderState.TextureState.create("color_texture", new RenderState.TextureState.Texture(location, blur, mipmap))).setShaderState(POSITION_COLOR_TEX_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
     }
 
 }

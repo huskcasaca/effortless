@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.vanilla.platform;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.tag.TagIoReader;
@@ -16,7 +16,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -24,8 +23,8 @@ import java.util.Optional;
 public class MinecraftCommonPlatform implements Platform {
 
     @Override
-    public Resource newResource(String namespace, String path) {
-        return MinecraftConvertor.fromPlatformResource(new ResourceLocation(namespace, path));
+    public ResourceLocation newResource(String namespace, String path) {
+        return MinecraftConvertor.fromPlatformResourceLocation(new net.minecraft.resources.ResourceLocation(namespace, path));
     }
 
     @Override
@@ -39,8 +38,8 @@ public class MinecraftCommonPlatform implements Platform {
     }
 
     @Override
-    public Optional<Item> newOptionalItem(Resource resource) {
-        return DefaultedRegistry.ITEM.getOptional(MinecraftConvertor.toPlatformResource(resource)).map(MinecraftConvertor::fromPlatformItem);
+    public Optional<Item> newOptionalItem(ResourceLocation location) {
+        return DefaultedRegistry.ITEM.getOptional(MinecraftConvertor.toPlatformResourceLocation(location)).map(MinecraftConvertor::fromPlatformItem);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.renderer.programs;
 
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.renderer.RenderStateFactory;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
@@ -149,7 +149,7 @@ public interface RenderState extends PlatformReference {
     interface TextureState extends RenderState {
 
         record Texture(
-                Resource resource,
+                ResourceLocation location,
                 boolean blur,
                 boolean mipmap
         ) {

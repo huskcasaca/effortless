@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.api.platform;
 
-import dev.huskuraft.effortless.api.core.Interaction;
-import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.renderer.Camera;
@@ -51,5 +49,7 @@ public interface Client extends PlatformReference {
     void setClipboard(String content);
 
     void playButtonClickSound();
+
+    Resource getResource(ResourceLocation location);
 
 }

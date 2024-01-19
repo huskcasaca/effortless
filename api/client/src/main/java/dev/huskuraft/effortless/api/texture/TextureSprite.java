@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.api.texture;
 
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 
 public interface TextureSprite {
 
-    Resource name();
-    Resource texture();
+    ResourceLocation name();
+    ResourceLocation texture();
     int width();
     int height();
 

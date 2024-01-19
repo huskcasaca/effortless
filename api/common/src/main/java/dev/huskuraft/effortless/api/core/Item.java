@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.platform.PlatformReference;
 
 public interface Item extends PlatformReference {
 
-    static Item fromId(Resource id) {
+    static Item fromId(ResourceLocation id) {
         return Entrance.getInstance().getPlatform().newItem(id);
     }
 
@@ -13,6 +13,6 @@ public interface Item extends PlatformReference {
 
     boolean isBlockItem();
 
-    Resource getId();
+    ResourceLocation getId();
 
 }

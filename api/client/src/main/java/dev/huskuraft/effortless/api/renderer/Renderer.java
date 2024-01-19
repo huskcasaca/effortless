@@ -354,16 +354,16 @@ public abstract class Renderer {
         }
     }
 
-    public final void renderTexture(Resource resource, int x, int y, int width, int height, float uOffset, float vOffset, int uWidth, int vHeight, int textureWidth, int textureHeight) {
-        this.renderTexture(resource, x, x + width, y, y + height, 0, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
+    public final void renderTexture(ResourceLocation location, int x, int y, int width, int height, float uOffset, float vOffset, int uWidth, int vHeight, int textureWidth, int textureHeight) {
+        this.renderTexture(location, x, x + width, y, y + height, 0, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
     }
 
-    public final void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, int uWidth, int vHeight, float uOffset, float vOffset, int textureWidth, int textureHeight) {
-        this.renderTexture(resource, x1, x2, y1, y2, blitOffset, uOffset / textureWidth, (uOffset + uWidth) / textureWidth, vOffset / textureHeight, (vOffset + vHeight) / textureHeight);
+    public final void renderTexture(ResourceLocation location, int x1, int x2, int y1, int y2, int blitOffset, int uWidth, int vHeight, float uOffset, float vOffset, int textureWidth, int textureHeight) {
+        this.renderTexture(location, x1, x2, y1, y2, blitOffset, uOffset / textureWidth, (uOffset + uWidth) / textureWidth, vOffset / textureHeight, (vOffset + vHeight) / textureHeight);
     }
 
-    private void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
-        var buffer = vertexBuffer(RenderLayers.texture(resource, false, false));
+    private void renderTexture(ResourceLocation location, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
+        var buffer = vertexBuffer(RenderLayers.texture(location, false, false));
         buffer.vertex(lastMatrixPose(), x1, y1, blitOffset).uv(minU, minV).endVertex();
         buffer.vertex(lastMatrixPose(), x1, y2, blitOffset).uv(minU, maxV).endVertex();
         buffer.vertex(lastMatrixPose(), x2, y2, blitOffset).uv(maxU, maxV).endVertex();
@@ -372,8 +372,8 @@ public abstract class Renderer {
     }
 
 
-    private void renderTexture(Resource resource, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV, float red, float green, float blue, float alpha) {
-        var buffer = vertexBuffer(RenderLayers.colorTexture(resource, false, false));
+    private void renderTexture(ResourceLocation location, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV, float red, float green, float blue, float alpha) {
+        var buffer = vertexBuffer(RenderLayers.colorTexture(location, false, false));
         buffer.vertex(lastMatrixPose(), x1, y1, blitOffset).color(red, green, blue, alpha).uv(minU, minV).endVertex();
         buffer.vertex(lastMatrixPose(), x1, y2, blitOffset).color(red, green, blue, alpha).uv(minU, maxV).endVertex();
         buffer.vertex(lastMatrixPose(), x2, y2, blitOffset).color(red, green, blue, alpha).uv(maxU, maxV).endVertex();

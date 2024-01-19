@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.render.RegisterShader;
 
 import java.io.IOException;
@@ -8,11 +8,11 @@ import java.io.IOException;
 class LazyShader implements Shader {
 
     private Shader reference;
-    private final Resource resource;
+    private final ResourceLocation location;
     private final VertexFormat vertexFormat;
 
-    public LazyShader(Resource resource, VertexFormat vertexFormat) {
-        this.resource = resource;
+    public LazyShader(ResourceLocation location, VertexFormat vertexFormat) {
+        this.location = location;
         this.vertexFormat = vertexFormat;
     }
 
@@ -22,8 +22,8 @@ class LazyShader implements Shader {
     }
 
     @Override
-    public Resource getResource() {
-        return resource;
+    public ResourceLocation getResource() {
+        return location;
     }
 
     @Override
@@ -34,7 +34,7 @@ class LazyShader implements Shader {
     @Override
     public void register(RegisterShader.ShadersSink sink) {
         try {
-            sink.register(resource, vertexFormat, shader -> this.reference = shader);
+            sink.register(location, vertexFormat, shader -> this.reference = shader);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

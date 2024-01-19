@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.api.networking;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -12,11 +12,11 @@ public abstract class Channel<P extends PacketListener> implements PacketSender,
 
     protected static final Logger LOGGER = Logger.getLogger("Effortless");
 
-    protected final Resource channelId;
+    protected final ResourceLocation channelId;
     protected PacketSet<P> packetSet = new PacketSet<>();
     private BufferSender platformSender;
 
-    protected Channel(Resource channelId) {
+    protected Channel(ResourceLocation channelId) {
         this.channelId = channelId;
     }
 
@@ -81,7 +81,7 @@ public abstract class Channel<P extends PacketListener> implements PacketSender,
         this.platformSender = platformSender;
     }
 
-    public final Resource getChannelId() {
+    public final ResourceLocation getChannelId() {
         return channelId;
     }
 

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.tag;
 
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 
 import java.util.Locale;
 
@@ -19,12 +19,12 @@ public interface TagPrimitive extends TagElement {
     void putDouble(double value);
 
     default  <T extends Enum<T>> void putEnum(Enum<T> value) {
-        var id = Resource.of("effortless", value.name().toLowerCase(Locale.ROOT));
+        var id = ResourceLocation.of("effortless", value.name().toLowerCase(Locale.ROOT));
         putString(id.toString());
     }
 
     default <T extends Enum<T>> T getEnum(Class<T> clazz) {
-        var id = Resource.decompose(getString());
+        var id = ResourceLocation.decompose(getString());
         return Enum.valueOf(clazz, id.getPath().toUpperCase(Locale.ROOT));
     }
 

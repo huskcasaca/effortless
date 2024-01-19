@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
 import dev.huskuraft.effortless.api.renderer.VertexFormats;
@@ -11,13 +11,13 @@ import java.util.Map;
 
 public abstract class OutlineRenderLayers extends RenderLayers {
 
-    public static final Resource BLANK_TEXTURE_LOCATION = Resource.of("effortless", "textures/misc/blank.png");
-    public static final Resource CHECKERED_TEXTURE_LOCATION = Resource.of("effortless", "textures/misc/checkerboard.png");
-    public static final Resource CHECKERED_HIGHLIGHT_TEXTURE_LOCATION = Resource.of("effortless", "textures/misc/checkerboard_highlight.png");
+    public static final ResourceLocation BLANK_TEXTURE_LOCATION = ResourceLocation.of("effortless", "textures/misc/blank.png");
+    public static final ResourceLocation CHECKERED_TEXTURE_LOCATION = ResourceLocation.of("effortless", "textures/misc/checkerboard.png");
+    public static final ResourceLocation CHECKERED_HIGHLIGHT_TEXTURE_LOCATION = ResourceLocation.of("effortless", "textures/misc/checkerboard_highlight.png");
 
-    public static final Resource CHECKERED_THIN_TEXTURE_LOCATION = Resource.of("effortless", "textures/misc/checkerboard_thin_64.png");
-    public static final Resource CHECKERED_CUTOUT_TEXTURE_LOCATION = Resource.of("effortless", "textures/misc/checkerboard_cutout.png");
-    public static final Resource SELECTION_TEXTURE_LOCATION = Resource.of("effortless", "textures/misc/selection_64.png");
+    public static final ResourceLocation CHECKERED_THIN_TEXTURE_LOCATION = ResourceLocation.of("effortless", "textures/misc/checkerboard_thin_64.png");
+    public static final ResourceLocation CHECKERED_CUTOUT_TEXTURE_LOCATION = ResourceLocation.of("effortless", "textures/misc/checkerboard_cutout.png");
+    public static final ResourceLocation SELECTION_TEXTURE_LOCATION = ResourceLocation.of("effortless", "textures/misc/selection_64.png");
 
     public static final RenderState.TextureState BLANK_TEXTURE_STATE = RenderState.TextureState.create("blank", new RenderState.TextureState.Texture(BLANK_TEXTURE_LOCATION, false, false));
 
@@ -127,7 +127,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
 
     protected static final Map<String, RenderLayer> OUTLINE_TRANSLUCENT = new HashMap<>();
 
-    public static RenderLayer outlineTranslucent(Resource texture, boolean cull) {
+    public static RenderLayer outlineTranslucent(ResourceLocation texture, boolean cull) {
         return OUTLINE_TRANSLUCENT.computeIfAbsent("outline_translucent" + (cull ? "_cull" : "") + "_" + texture.getNamespace() + "_" + texture.getPath(), name -> {
             return RenderLayer.createComposite(name,
                     VertexFormats.NEW_ENTITY,
@@ -147,7 +147,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
         });
     }
 
-    public static RenderLayer glowingSolid(Resource texture) {
+    public static RenderLayer glowingSolid(ResourceLocation texture) {
         return RenderLayer.createComposite("glowing_solid",
                 VertexFormats.NEW_ENTITY,
                 VertexFormats.Modes.QUADS,
@@ -166,7 +166,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
         return GLOWING_SOLID_DEFAULT;
     }
 
-    public static RenderLayer glowingTranslucent(Resource texture) {
+    public static RenderLayer glowingTranslucent(ResourceLocation texture) {
         return RenderLayer.createComposite("glowing_translucent",
                 VertexFormats.NEW_ENTITY,
                 VertexFormats.Modes.QUADS,

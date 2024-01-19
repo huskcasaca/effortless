@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.render.RegisterShader;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 
@@ -8,11 +8,11 @@ import java.io.IOException;
 
 public interface Shader extends PlatformReference {
 
-    static Shader lazy(Resource resource, VertexFormat format) {
-        return new LazyShader(resource, format);
+    static Shader lazy(ResourceLocation location, VertexFormat format) {
+        return new LazyShader(location, format);
     }
 
-    Resource getResource();
+    ResourceLocation getResource();
 
     VertexFormat getVertexFormat();
 

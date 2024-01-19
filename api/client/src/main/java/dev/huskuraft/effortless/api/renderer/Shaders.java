@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.render.RegisterShader;
 
 import javax.annotation.Nullable;
@@ -70,7 +70,7 @@ public enum Shaders implements Shader {
     }
 
     Shaders(String resource, VertexFormat vertexFormat) {
-        this.shader = new LazyShader(Resource.vanilla(resource), vertexFormat);
+        this.shader = new LazyShader(ResourceLocation.vanilla(resource), vertexFormat);
     }
 
     @Override
@@ -85,7 +85,7 @@ public enum Shaders implements Shader {
     }
 
     @Override
-    public Resource getResource() {
+    public ResourceLocation getResource() {
         return getShader().getResource();
     }
 

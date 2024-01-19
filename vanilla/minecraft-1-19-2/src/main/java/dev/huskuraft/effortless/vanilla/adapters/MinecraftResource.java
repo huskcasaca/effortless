@@ -1,43 +1,44 @@
 package dev.huskuraft.effortless.vanilla.adapters;
 
 import dev.huskuraft.effortless.api.core.Resource;
-import net.minecraft.resources.ResourceLocation;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.core.ResourceMetadata;
+
+import java.io.IOException;
 
 class MinecraftResource implements Resource {
 
-    private final ResourceLocation reference;
+    private final net.minecraft.server.packs.resources.Resource resource;
+    private final net.minecraft.resources.ResourceLocation location;
 
-    MinecraftResource(ResourceLocation reference) {
-        this.reference = reference;
+    MinecraftResource(net.minecraft.server.packs.resources.Resource resource, net.minecraft.resources.ResourceLocation location) {
+        this.resource = resource;
+        this.location = location;
     }
 
     @Override
-    public Object referenceValue() {
-        return reference;
+    public net.minecraft.server.packs.resources.Resource referenceValue() {
+        return resource;
     }
 
     @Override
-    public String getNamespace() {
-        return reference.getNamespace();
+    public ResourceLocation location() {
+        return new MinecraftResourceLocation(location);
     }
 
     @Override
-    public String getPath() {
-        return reference.getPath();
+    public ResourceMetadata metadata() throws IOException {
+        var metadata = resource.metadata();
+        return () -> metadata;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof MinecraftResource resource && reference.equals(resource.reference);
+        return obj instanceof MinecraftResource resource && this.resource.equals(resource.resource);
     }
 
     @Override
     public int hashCode() {
-        return reference.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return getNamespace() + ":" + getPath();
+        return resource.hashCode();
     }
 }

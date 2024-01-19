@@ -26,7 +26,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -269,12 +268,12 @@ public class MinecraftConvertor {
         return renderLayer.reference();
     }
 
-    public static Resource fromPlatformResource(ResourceLocation resource) {
-        return new MinecraftResource(resource);
+    public static ResourceLocation fromPlatformResource(net.minecraft.resources.ResourceLocation location) {
+        return new MinecraftResourceLocation(location);
     }
 
-    public static ResourceLocation toPlatformResource(Resource resource) {
-        return resource.reference();
+    public static net.minecraft.resources.ResourceLocation toPlatformResource(ResourceLocation location) {
+        return location.reference();
     }
 
     public static Server fromPlatformServer(net.minecraft.server.MinecraftServer server) {
