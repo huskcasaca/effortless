@@ -267,9 +267,4 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
         };
     }
 
-    @Override
-    public ResourceLocation getBlockAtlasResource() {
-        return new MinecraftResourceLocation(InventoryMenu.BLOCK_ATLAS);
-    }
-
 }

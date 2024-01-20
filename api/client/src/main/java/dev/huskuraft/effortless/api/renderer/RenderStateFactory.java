@@ -47,12 +47,6 @@ public interface RenderStateFactory {
 
     VertexFormat.Mode getVertexFormatMode(VertexFormats.Modes modes);
 
-    ResourceLocation getBlockAtlasResource();
-
-//    Resource getBackgroundTextureResource();
-
-//    Resource getWidgetsTextureResource();
-
     RenderStateFactory INSTANCE = ClientPlatform.INSTANCE.getRenderStateFactory();
 
 }

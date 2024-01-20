@@ -19,7 +19,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
     public static final ResourceLocation CHECKERED_CUTOUT_TEXTURE_LOCATION = ResourceLocation.of("effortless", "textures/misc/checkerboard_cutout.png");
     public static final ResourceLocation SELECTION_TEXTURE_LOCATION = ResourceLocation.of("effortless", "textures/misc/selection_64.png");
 
-    public static final RenderState.TextureState BLANK_TEXTURE_STATE = RenderState.TextureState.create("blank", new RenderState.TextureState.Texture(BLANK_TEXTURE_LOCATION, false, false));
+    public static final RenderState.TextureState BLANK_TEXTURE_STATE = RenderState.TextureState.create("blank", BLANK_TEXTURE_LOCATION, false, false);
 
     protected static final RenderLayer OUTLINE_SOLID = RenderLayer.createComposite("outline_solid",
             VertexFormats.NEW_ENTITY,
@@ -137,7 +137,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                     true,
                     RenderState.builder()
                             .setShaderState(cull ? ENTITY_TRANSLUCENT_CULL_SHADER_STATE : ENTITY_TRANSLUCENT_SHADER_STATE)
-                            .setTextureState(RenderState.TextureState.create("custom", new RenderState.TextureState.Texture(texture, false, false)))
+                            .setTextureState(RenderState.TextureState.create("custom", texture, false, false))
                             .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                             .setCullState(cull ? CULL : NO_CULL)
                             .setLightmapState(LIGHTMAP)
@@ -155,7 +155,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                 true,
                 false,
                 RenderState.builder()
-                        .setTextureState(RenderState.TextureState.create("custom", new RenderState.TextureState.Texture(texture, false, false)))
+                        .setTextureState(RenderState.TextureState.create("custom", texture, false, false))
                         .setCullState(CULL)
                         .setLightmapState(LIGHTMAP)
                         .setOverlayState(OVERLAY)
@@ -175,7 +175,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                 true,
                 RenderState.builder()
                         //				.setShaderState(GLOWING_SHADER)
-                        .setTextureState(RenderState.TextureState.create("custom", new RenderState.TextureState.Texture(texture, false, false)))
+                        .setTextureState(RenderState.TextureState.create("custom", texture, false, false))
                         .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                         .setLightmapState(LIGHTMAP)
                         .setOverlayState(OVERLAY)

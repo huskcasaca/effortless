@@ -1,28 +1,28 @@
-package dev.huskuraft.effortless.vanilla.renderer;
+package dev.huskuraft.effortless.vanilla.texture;
 
-import dev.huskuraft.effortless.api.texture.SimpleTextureSprite;
-import dev.huskuraft.effortless.api.texture.SpriteScaling;
-import dev.huskuraft.effortless.api.texture.TextureFactory;
-import dev.huskuraft.effortless.api.texture.TextureSprite;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftConvertor;
+import dev.huskuraft.effortless.api.texture.*;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftResourceLocation;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 
 public class MinecraftTextureFactory implements TextureFactory {
 
-    public static final ResourceLocation WIDGETS_LOCATION = new ResourceLocation("textures/gui/widgets.png");
+    @Override
+    public Texture getBlockAtlasTexture() {
+        return new SimpleTexture(new MinecraftResourceLocation(InventoryMenu.BLOCK_ATLAS));
+    }
 
     @Override
-    public TextureSprite getBgTexture() {
+    public TextureSprite getBackgroundTextureSprite() {
         return null;
     }
 
     @Override
-    public TextureSprite getButtonTexture(boolean enabled, boolean focused) {
+    public TextureSprite getButtonTextureSprite(boolean enabled, boolean focused) {
         return createSpriteFromTexture(
-                null,
-                WIDGETS_LOCATION,
+                AbstractWidget.WIDGETS_LOCATION, null,
                 200,
                 20,
                 0,
@@ -33,10 +33,10 @@ public class MinecraftTextureFactory implements TextureFactory {
         );
     }
 
-    public TextureSprite createSpriteFromTexture(ResourceLocation name, ResourceLocation texture, int width, int height, int x, int y, int textureWidth, int textureHeight, SpriteScaling scaling) {
+    public TextureSprite createSpriteFromTexture(ResourceLocation texture, ResourceLocation name, int width, int height, int x, int y, int textureWidth, int textureHeight, SpriteScaling scaling) {
         return new SimpleTextureSprite(
-                new MinecraftResourceLocation(name),
                 new MinecraftResourceLocation(texture),
+                new MinecraftResourceLocation(name),
                 width,
                 height,
                 x,
@@ -48,8 +48,8 @@ public class MinecraftTextureFactory implements TextureFactory {
 
     public TextureSprite createSprite(TextureAtlasSprite sprite, SpriteScaling scaling) {
         return new SimpleTextureSprite(
-                new MinecraftResourceLocation(sprite.getName()),
                 new MinecraftResourceLocation(sprite.atlas().location()),
+                new MinecraftResourceLocation(sprite.getName()),
                 sprite.getWidth(),
                 sprite.getHeight(),
                 sprite.getX(),

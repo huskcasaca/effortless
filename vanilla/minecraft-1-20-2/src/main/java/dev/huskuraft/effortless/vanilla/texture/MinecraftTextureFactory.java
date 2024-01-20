@@ -1,28 +1,36 @@
-package dev.huskuraft.effortless.vanilla.renderer;
+package dev.huskuraft.effortless.vanilla.texture;
 
-import dev.huskuraft.effortless.api.texture.SimpleTextureSprite;
-import dev.huskuraft.effortless.api.texture.SpriteScaling;
-import dev.huskuraft.effortless.api.texture.TextureFactory;
-import dev.huskuraft.effortless.api.texture.TextureSprite;
+import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
+import dev.huskuraft.effortless.api.texture.*;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftResourceLocation;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.metadata.gui.GuiSpriteScaling;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.InventoryMenu;
 
 public class MinecraftTextureFactory implements TextureFactory {
 
     private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
 
     @Override
-    public TextureSprite getBgTexture() {
+    public Texture getBlockAtlasTexture() {
+        return new SimpleTexture(new MinecraftResourceLocation(InventoryMenu.BLOCK_ATLAS));
+    }
+
+    @Override
+    public TextureSprite getBackgroundTextureSprite() {
         return null;
     }
 
     @Override
-    public TextureSprite getButtonTexture(boolean enabled, boolean focused) {
-        return createSprite(BUTTON_SPRITES.get(enabled, focused));
+    public TextureSprite getButtonTextureSprite(boolean enabled, boolean focused) {
+        return createSprite(AbstractButton.SPRITES.get(enabled, focused));
     }
 
     public TextureSprite createSprite(ResourceLocation name) {
@@ -31,8 +39,8 @@ public class MinecraftTextureFactory implements TextureFactory {
 
     public TextureSprite createSprite(TextureAtlasSprite sprite) {
         return new SimpleTextureSprite(
-                new MinecraftResourceLocation(sprite.contents().name()),
                 new MinecraftResourceLocation(sprite.atlasLocation()),
+                new MinecraftResourceLocation(sprite.contents().name()),
                 sprite.contents().width(),
                 sprite.contents().height(),
                 sprite.getX(),

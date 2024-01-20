@@ -4,9 +4,11 @@ import dev.huskuraft.effortless.api.platform.ClientPlatform;
 
 public interface TextureFactory {
 
-    TextureSprite getBgTexture();
+    Texture getBlockAtlasTexture();
 
-    TextureSprite getButtonTexture(boolean enabled, boolean focused);
+    TextureSprite getBackgroundTextureSprite();
+
+    TextureSprite getButtonTextureSprite(boolean enabled, boolean focused);
 
     TextureFactory INSTANCE = ClientPlatform.INSTANCE.getTextureFactory();
 

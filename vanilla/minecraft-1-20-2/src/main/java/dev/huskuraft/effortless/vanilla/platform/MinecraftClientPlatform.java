@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.adapters.MinecraftKeyBinding;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderStateFactory;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftTextureFactory;
+import dev.huskuraft.effortless.vanilla.texture.MinecraftTextureFactory;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;

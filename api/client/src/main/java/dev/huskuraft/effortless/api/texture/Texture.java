@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.platform.PlatformReference;
 
 import java.util.Set;
 
-public interface Texture extends PlatformReference {
+public interface Texture {
 
     ResourceLocation resource();
 

@@ -155,8 +155,8 @@ public interface RenderState extends PlatformReference {
         ) {
         }
 
-        static TextureState create(String name, Texture texture) {
-            return RenderStateFactory.INSTANCE.createTextureState(name, texture);
+        static TextureState create(String name, ResourceLocation location, boolean blur, boolean mipmap) {
+            return RenderStateFactory.INSTANCE.createTextureState(name, location  == null ? null : new Texture(location, blur, mipmap));
         }
     }
     interface TransparencyState extends RenderState {

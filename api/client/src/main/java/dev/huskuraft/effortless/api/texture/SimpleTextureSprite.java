@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.api.texture;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 
 public record SimpleTextureSprite(
-        ResourceLocation name,
         ResourceLocation texture,
+        ResourceLocation name,
         int width,
         int height,
         int x,
@@ -16,10 +16,10 @@ public record SimpleTextureSprite(
         SpriteScaling scaling
 ) implements TextureSprite {
 
-    public SimpleTextureSprite(ResourceLocation name, ResourceLocation texture, int width, int height, int x, int y, int textureWidth, int textureHeight, SpriteScaling scaling) {
+    public SimpleTextureSprite(ResourceLocation texture, ResourceLocation name, int width, int height, int x, int y, int textureWidth, int textureHeight, SpriteScaling scaling) {
         this(
-                name,
                 texture,
+                name,
                 width,
                 height,
                 x,
