@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.vanilla.adapters;
+package dev.huskuraft.effortless.vanilla.core;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.huskuraft.effortless.input.KeyBinding;

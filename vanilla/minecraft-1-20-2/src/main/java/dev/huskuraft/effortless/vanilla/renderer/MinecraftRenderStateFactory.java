@@ -1,16 +1,12 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftResourceLocation;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftShader;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.world.inventory.InventoryMenu;
 
 import java.util.OptionalDouble;
 

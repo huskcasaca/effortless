@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.vanilla.adapters;
+package dev.huskuraft.effortless.vanilla.core;
 
 import dev.huskuraft.effortless.tag.TagPrimitive;
 import dev.huskuraft.effortless.tag.TagRecord;

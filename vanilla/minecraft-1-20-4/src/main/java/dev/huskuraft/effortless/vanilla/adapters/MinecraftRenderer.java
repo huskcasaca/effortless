@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.vanilla.adapters;
+package dev.huskuraft.effortless.vanilla.core;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.huskuraft.effortless.gui.Typeface;

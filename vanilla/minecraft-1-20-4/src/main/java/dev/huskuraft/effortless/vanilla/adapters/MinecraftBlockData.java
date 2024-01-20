@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.vanilla.adapters;
+package dev.huskuraft.effortless.vanilla.core;
 
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;

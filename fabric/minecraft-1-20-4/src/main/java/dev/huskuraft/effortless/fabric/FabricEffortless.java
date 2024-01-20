@@ -2,9 +2,9 @@ package dev.huskuraft.effortless.fabric;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.platform.Platform;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
+import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftResource;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;

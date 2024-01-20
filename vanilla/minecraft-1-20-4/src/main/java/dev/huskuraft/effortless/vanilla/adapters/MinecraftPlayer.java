@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.vanilla.adapters;
+package dev.huskuraft.effortless.vanilla.core;
 
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.math.Vector3d;

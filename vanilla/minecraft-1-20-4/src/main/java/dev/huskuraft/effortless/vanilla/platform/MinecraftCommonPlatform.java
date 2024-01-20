@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.tag.TagIoReader;
 import dev.huskuraft.effortless.tag.TagIoWriter;
 import dev.huskuraft.effortless.tag.TagRecord;
 import dev.huskuraft.effortless.text.Text;
-import dev.huskuraft.effortless.vanilla.adapters.*;
+import dev.huskuraft.effortless.vanilla.core.*;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;

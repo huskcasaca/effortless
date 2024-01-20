@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.core.InteractionType;
 import dev.huskuraft.effortless.core.TickPhase;
 import dev.huskuraft.effortless.input.InputKey;
 import dev.huskuraft.effortless.platform.ClientPlatform;
-import dev.huskuraft.effortless.vanilla.adapters.*;
+import dev.huskuraft.effortless.vanilla.core.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
 import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
 import net.minecraft.client.Minecraft;

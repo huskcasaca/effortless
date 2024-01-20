@@ -1,17 +1,13 @@
 package dev.huskuraft.effortless.vanilla.texture;
 
-import com.mojang.authlib.yggdrasil.response.MinecraftTexturesPayload;
 import dev.huskuraft.effortless.api.texture.*;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftResourceLocation;
+import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.metadata.gui.GuiSpriteScaling;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.InventoryMenu;
 
 public class MinecraftTextureFactory implements TextureFactory {

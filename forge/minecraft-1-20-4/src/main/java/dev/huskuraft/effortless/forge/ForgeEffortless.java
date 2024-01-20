@@ -2,9 +2,9 @@ package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.platform.Platform;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftBuffer;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftPlayer;
-import dev.huskuraft.effortless.vanilla.adapters.MinecraftResource;
+import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftResource;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;

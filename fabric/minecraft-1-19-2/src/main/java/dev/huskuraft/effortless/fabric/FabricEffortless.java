@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.fabric;
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.fabric.events.ServerPlayerEvents;
-import dev.huskuraft.effortless.vanilla.adapters.*;
+import dev.huskuraft.effortless.vanilla.core.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
@@ -12,8 +12,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 
 import java.nio.file.Path;
 
