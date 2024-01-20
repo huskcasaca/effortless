@@ -6,14 +6,11 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PatternRenderer {
 
-    private final Map<UUID, RenderFadeEntry<Context>> entries = Collections.synchronizedMap(new HashMap<>());
+    private final Map<UUID, RenderFadeEntry<Context>> entries = Collections.synchronizedMap(new LinkedHashMap<>());
 
     public PatternRenderer() {
 
@@ -45,7 +42,6 @@ public class PatternRenderer {
                 }
             }
         });
-        renderer.flush();
     }
 
 

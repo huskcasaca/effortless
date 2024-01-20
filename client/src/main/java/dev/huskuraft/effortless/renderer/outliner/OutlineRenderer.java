@@ -6,14 +6,11 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class OutlineRenderer {
 
-    private final Map<Object, OutlineEntry> outlines = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Object, OutlineEntry> outlines = Collections.synchronizedMap(new LinkedHashMap<>());
     private final Map<Object, OutlineEntry> outlinesView = Collections.unmodifiableMap(outlines);
 
     public OutlineRenderer() {

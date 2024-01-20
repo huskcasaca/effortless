@@ -343,7 +343,6 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
             var y2m3 = MathUtils.sin(rRad - innerGap) * categoryOuterEdge;
 
             renderer.renderQuad((int) (middleX + x1m1), (int) (middleY + y1m1), (int) (middleX + x2m1), (int) (middleY + y2m1), (int) (middleX + x2m3), (int) (middleY + y2m3), (int) (middleX + x1m3), (int) (middleY + y1m3), 200, color.getRGB());
-            renderer.flush();
 
             // icon
             if (slot.getIcon() != null) {
@@ -355,7 +354,6 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                 renderer.renderTexture(slot.getIcon(), (int) MathUtils.round(middleX + iconX - 8), (int) MathUtils.round(middleY + iconY - 8), 16, 16, 0f, 0f, 18, 18, 18, 18);
                 renderer.popPose();
             }
-            renderer.flush();
 
         }
 
@@ -398,7 +396,6 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                 }
 
                 renderer.renderRect(RenderLayers.GUI, (int) (middleX + x1), (int) (middleY + y1), (int) (middleX + x2), (int) (middleY + y2), color.getRGB(), 0);
-                renderer.flush();
                 // icon
                 if (button.getIcon() != null) {
                     renderer.pushPose();
@@ -408,7 +405,6 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
                     renderer.renderTexture(button.getIcon(), 0, 0, 16, 16, 0f, 0f, 18, 18, 18, 18);
                     renderer.popPose();
                 }
-                renderer.flush();
 
             }
         }
