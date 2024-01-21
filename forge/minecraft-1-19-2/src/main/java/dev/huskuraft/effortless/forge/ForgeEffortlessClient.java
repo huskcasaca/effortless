@@ -110,7 +110,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
     public void onReloadShader(RegisterShadersEvent event) {
         getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> {
             var minecraftShader = new ShaderInstance(event.getResourceManager(), resource.getPath(), format.reference());
-            event.registerShader(minecraftShader, shaderInstance -> consumer.accept((MinecraftShader) () -> shaderInstance));
+            event.registerShader(minecraftShader, shaderInstance -> consumer.accept(new MinecraftShader(shaderInstance)));
         });
     }
 

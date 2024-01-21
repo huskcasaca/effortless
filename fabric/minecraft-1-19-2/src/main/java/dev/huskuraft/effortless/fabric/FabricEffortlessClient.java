@@ -44,7 +44,7 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         });
 
         ClientShadersEvents.REGISTER.register((manager, sink) -> {
-            getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> sink.register(new ShaderInstance(manager, resource.getPath(), format.reference()), shaderInstance -> consumer.accept((MinecraftShader) () -> shaderInstance)));
+            getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> sink.register(new ShaderInstance(manager, resource.getPath(), format.reference()), shaderInstance -> consumer.accept(new MinecraftShader(shaderInstance))));
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
