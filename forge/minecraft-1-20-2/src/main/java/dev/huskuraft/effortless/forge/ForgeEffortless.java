@@ -94,11 +94,7 @@ public class ForgeEffortless extends Effortless {
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
-                    try {
-                        receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(event1.getSource().getSender()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(event1.getSource().getSender()));
                 }
             });
             return (buffer, player) -> {

@@ -4,6 +4,7 @@ import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.vanilla.core.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,6 +22,8 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.event.EventNetworkChannel;
+import net.minecraftforge.network.simple.SimpleChannel;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.nio.file.Path;
 
@@ -36,8 +39,8 @@ public class ForgeEffortless extends Effortless {
         MinecraftForge.EVENT_BUS.register(this);
 
         CHANNEL = NetworkRegistry.ChannelBuilder.named(getChannel().getChannelId().reference())
-                .clientAcceptedVersions((status) -> true)
-                .serverAcceptedVersions((status) -> true)
+                .clientAcceptedVersions(getChannel().getCompatibilityVersionStr()::equals)
+                .serverAcceptedVersions(getChannel().getCompatibilityVersionStr()::equals)
                 .networkProtocolVersion(getChannel()::getCompatibilityVersionStr)
                 .eventNetworkChannel();
 
@@ -93,15 +96,11 @@ public class ForgeEffortless extends Effortless {
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
-                    try {
-                        receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(event1.getSource().get().getSender()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(event1.getSource().get().getSender()));
                 }
             });
             return (buffer, player) -> {
-                var minecraftPacket = NetworkDirection.PLAY_TO_CLIENT.buildPacket(buffer.reference(), getChannel().getChannelId().reference()).getThis();
+                var minecraftPacket = NetworkDirection.PLAY_TO_CLIENT.buildPacket(Pair.of(buffer.reference(), -1), getChannel().getChannelId().reference()).getThis();
                 ((ServerPlayer) player.reference()).connection.send(minecraftPacket);
             };
         });

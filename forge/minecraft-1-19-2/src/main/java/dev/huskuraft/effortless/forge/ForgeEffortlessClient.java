@@ -22,6 +22,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.nio.file.Path;
 
@@ -85,15 +86,11 @@ public class ForgeEffortlessClient extends EffortlessClient {
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             ForgeEffortless.CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
-                    try {
-                        receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(Minecraft.getInstance().player));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(Minecraft.getInstance().player));
                 }
             });
             return (buffer, player) -> {
-                var minecraftPacket = NetworkDirection.PLAY_TO_SERVER.buildPacket(buffer.reference(), getChannel().getChannelId().reference()).getThis();
+                var minecraftPacket = NetworkDirection.PLAY_TO_SERVER.buildPacket(Pair.of(buffer.reference(), -1), getChannel().getChannelId().reference()).getThis();
                 Minecraft.getInstance().getConnection().send(minecraftPacket);
             };
         });
