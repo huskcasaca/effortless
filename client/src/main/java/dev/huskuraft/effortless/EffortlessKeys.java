@@ -27,7 +27,7 @@ public enum EffortlessKeys implements Key {
 
     EffortlessKeys(String description, KeyCodes defaultKey) {
         this.key = defaultKey;
-        this.keyBinding = EffortlessClient.getInstance().getPlatform().newKeyBinding("key.effortless.%s.desc".formatted(description), "key.effortless.category", key);
+        this.keyBinding = KeyBinding.of("key.effortless.%s.desc".formatted(description), "key.effortless.category", key);
     }
 
     @Override
