@@ -21,8 +21,6 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    repositories {}
-
     minecraft {
         mappings channel: mapping_channel, version: mapping_version
         accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -32,21 +30,31 @@ subprojects {
                 workingDirectory project.file('run')
                 property 'forge.logging.markers', 'REGISTRIES'
                 property 'forge.logging.console.level', 'debug'
-
-                mods {
-                    "${mod_id}" {
-                        source sourceSets.main
-                    }
-                }
             }
 
             client {
                 property 'forge.enabledGameTestNamespaces', mod_id
+                mods {
+                    "${mod_id}" {
+                        source sourceSets.main
+                        source project(":api:common").sourceSets.main
+                        source project(":api:client").sourceSets.main
+                        source project(":common").sourceSets.main
+                        source project(":client").sourceSets.main
+                    }
+                }
             }
 
             server {
                 property 'forge.enabledGameTestNamespaces', mod_id
                 args '--nogui'
+                mods {
+                    "${mod_id}" {
+                        source sourceSets.main
+                        source project(":api:common").sourceSets.main
+                        source project(":common").sourceSets.main
+                    }
+                }
             }
 
             gameTestServer {
@@ -61,9 +69,15 @@ subprojects {
         }
     }
 
-    sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-    repositories {
+    sourceSets {
+        main {
+            java {
+                srcDir project(":vanilla:$project.name").file("src/main")
+            }
+            resources {
+                srcDir project(":vanilla:$project.name").file("src/main/resources")
+            }
+        }
     }
 
     dependencies {
@@ -101,10 +115,6 @@ subprojects {
         filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
             expand replaceProperties + [project: project]
         }
-
-        from project(':common').sourceSets.main.resources
-        from project(':client').sourceSets.main.resources
-        from project(":vanilla:$project.name").file("src/main/resources")
     }
 
     jar {
@@ -122,14 +132,6 @@ subprojects {
         finalizedBy 'reobfJar'
     }
 
-    compileJava {
-        options.encoding = 'UTF-8'
-
-        source project(':common').sourceSets.main.allSource
-        source project(':client').sourceSets.main.allSource
-        source project(":vanilla:$project.name").file("src/main/java")
-    }
-
     shadowJar {
         dependsOn 'reobfJar'
         configurations = [project.configurations.shadow]
@@ -137,6 +139,8 @@ subprojects {
             exclude dependency('com.google.code.findbugs:jsr305')
         }
         relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.forge'
+        exclude 'effortless.accesswidener'
+
         minimize()
         archiveClassifier.set('')
     }

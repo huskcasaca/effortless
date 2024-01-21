@@ -19,9 +19,8 @@ pluginManagement {
 
 rootProject.name = 'effortless'
 
-
-include ':api:client'
 include ':api:common'
+include ':api:client'
 
 include ':common'
 include ':client'
