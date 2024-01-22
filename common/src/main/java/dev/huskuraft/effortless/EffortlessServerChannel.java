@@ -57,7 +57,7 @@ public final class EffortlessServerChannel extends Channel<AllPacketListener> {
 
     @Override
     public Buffer allocateButter() {
-        return getEntrance().getPlatform().newBuffer();
+        return getEntrance().getContentFactory().newBuffer();
     }
 
     @Override

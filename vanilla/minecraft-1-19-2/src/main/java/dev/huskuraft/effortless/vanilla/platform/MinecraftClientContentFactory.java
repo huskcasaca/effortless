@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.vanilla.platform;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
-import dev.huskuraft.effortless.api.input.Keys;
-import dev.huskuraft.effortless.api.platform.ClientPlatform;
+import dev.huskuraft.effortless.api.input.OptionKeys;
+import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.platform.SearchTree;
 import dev.huskuraft.effortless.api.renderer.RenderStateFactory;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MinecraftClientPlatform extends MinecraftCommonPlatform implements ClientPlatform {
+public class MinecraftClientContentFactory extends MinecraftCommonContentFactory implements ClientContentFactory {
 
     @Override
     public SearchTree<ItemStack> newItemStackSearchTree(SearchBy searchBy) {
@@ -43,7 +43,7 @@ public class MinecraftClientPlatform extends MinecraftCommonPlatform implements 
     }
 
     @Override
-    public KeyBinding getKeyBinding(Keys key) {
+    public KeyBinding getOptionKeyBinding(OptionKeys key) {
         var minecraftKeyBinding = switch (key) {
             case KEY_UP -> Minecraft.getInstance().options.keyUp;
             case KEY_LEFT -> Minecraft.getInstance().options.keyLeft;

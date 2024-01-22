@@ -39,7 +39,7 @@ public final class EffortlessClientConfigManager extends ClientConfigManager {
             if (!configFile.exists()) {
                 throw new IOException("Could not find config file: " + configFile.getName());
             }
-            var tag = getEntrance().getPlatform().getTagIoReader().read(new FileInputStream(configFile));
+            var tag = getEntrance().getContentFactory().getTagIoReader().read(new FileInputStream(configFile));
 
             var read = new BaseConfigurationSerializer().read(tag);
             read.validate();
@@ -61,10 +61,10 @@ public final class EffortlessClientConfigManager extends ClientConfigManager {
             var configFile = new File(dataDir, CONFIG_NAME);
 
 
-            var tag = getEntrance().getPlatform().newTagRecord();
+            var tag = getEntrance().getContentFactory().newTagRecord();
             config.validate();
             new BaseConfigurationSerializer().write(tag, config);
-            getEntrance().getPlatform().getTagIoWriter().write(new FileOutputStream(configFile), tag);
+            getEntrance().getContentFactory().getTagIoWriter().write(new FileOutputStream(configFile), tag);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.warning("Cannot save config file");

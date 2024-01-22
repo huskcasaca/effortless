@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.fabric;
 
 import dev.huskuraft.effortless.Effortless;
-import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.fabric.events.ServerPlayerEvents;
 import dev.huskuraft.effortless.vanilla.core.*;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonContentFactory;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -80,8 +80,8 @@ public class FabricEffortless extends Effortless implements ModInitializer {
     }
 
     @Override
-    public Platform getPlatform() {
-        return new MinecraftCommonPlatform();
+    public ContentFactory getContentFactory() {
+        return new MinecraftCommonContentFactory();
     }
 
     @Override

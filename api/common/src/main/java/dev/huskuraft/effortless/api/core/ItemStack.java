@@ -11,15 +11,15 @@ import java.util.List;
 public interface ItemStack extends TagSerializable, PlatformReference {
 
     static ItemStack empty() {
-        return Entrance.getInstance().getPlatform().newItemStack();
+        return Entrance.getInstance().getContentFactory().newItemStack();
     }
 
     static ItemStack of(Item item, int count) {
-        return Entrance.getInstance().getPlatform().newItemStack(item, count);
+        return Entrance.getInstance().getContentFactory().newItemStack(item, count);
     }
 
     static ItemStack of(Item item, int count, TagRecord tag) {
-        return Entrance.getInstance().getPlatform().newItemStack(item, count, tag);
+        return Entrance.getInstance().getContentFactory().newItemStack(item, count, tag);
     }
 
     List<Text> getTooltips(Player player, TooltipType flag);

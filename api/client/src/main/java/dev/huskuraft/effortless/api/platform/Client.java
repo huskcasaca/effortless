@@ -8,9 +8,9 @@ import dev.huskuraft.effortless.api.renderer.Window;
 
 public interface Client extends PlatformReference {
 
-    Window window();
+    Window getWindow();
 
-    Camera camera();
+    Camera getCamera();
 
     Screen getPanel();
 
@@ -26,23 +26,33 @@ public interface Client extends PlatformReference {
 
     Interaction getLastInteraction();
 
-    boolean isControlDown();
+    default boolean isControlDown() {
+        return getWindow().hasControlDown();
+    }
 
-    boolean isShiftDown();
+    default boolean isShiftDown() {
+        return getWindow().hasShiftDown();
+    }
 
-    boolean isAltDown();
+    default boolean isAltDown() {
+        return getWindow().hasAltDown();
+    }
 
-    boolean isCut(int key);
+    default boolean isCut(int key) {
+        return getWindow().isCut(key);
+    }
 
-    boolean isPaste(int key);
+    default boolean isPaste(int key) {
+        return getWindow().isPaste(key);
+    }
 
-    boolean isCopy(int key);
+    default boolean isCopy(int key) {
+        return getWindow().isCopy(key);
+    }
 
-    boolean isSelectAll(int key);
-
-    boolean isKeyDown(int key);
-
-    boolean isMouseButtonDown(int button);
+    default boolean isSelectAll(int key) {
+        return getWindow().isSelectAll(key);
+    }
 
     String getClipboard();
 

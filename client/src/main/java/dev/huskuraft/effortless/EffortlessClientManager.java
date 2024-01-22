@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.events.render.RegisterShader;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.input.InputKey;
-import dev.huskuraft.effortless.api.input.Keys;
+import dev.huskuraft.effortless.api.input.OptionKeys;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.api.renderer.Renderer;
@@ -116,7 +116,7 @@ public final class EffortlessClientManager implements ClientManager {
     }
 
     private void tickCooldown() {
-        if (Keys.KEY_ATTACK.getBinding().isDown() || Keys.KEY_USE.getBinding().isDown() || Keys.KEY_PICK_ITEM.getBinding().isDown()) {
+        if (OptionKeys.KEY_ATTACK.getBinding().isDown() || OptionKeys.KEY_USE.getBinding().isDown() || OptionKeys.KEY_PICK_ITEM.getBinding().isDown()) {
             return;
         }
         this.interactionCooldown = Math.max(0, this.interactionCooldown - 1);
@@ -185,6 +185,7 @@ public final class EffortlessClientManager implements ClientManager {
 
         if (getRunningClient().getPlayer() == null)
             return;
+        if (OptionKeys)
         if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
             openModeRadialScreen();
         }

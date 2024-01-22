@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.tag.TagIoReader;
 import dev.huskuraft.effortless.api.tag.TagIoWriter;
 import dev.huskuraft.effortless.api.tag.TagRecord;
@@ -21,7 +21,7 @@ import net.minecraft.network.chat.Component;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class MinecraftCommonPlatform implements Platform {
+public class MinecraftCommonContentFactory implements ContentFactory {
 
     @Override
     public ResourceLocation newResource(String namespace, String path) {

@@ -1,58 +1,28 @@
 package dev.huskuraft.effortless.api.platform;
 
-import dev.huskuraft.effortless.api.core.Item;
-import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.core.Items;
-import dev.huskuraft.effortless.api.core.ResourceLocation;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.tag.TagIoReader;
-import dev.huskuraft.effortless.api.tag.TagIoWriter;
-import dev.huskuraft.effortless.api.tag.TagRecord;
-import dev.huskuraft.effortless.api.text.Text;
-
-import java.util.Locale;
-import java.util.Optional;
+import java.nio.file.Path;
 
 public interface Platform {
 
-    ResourceLocation newResource(String namespace, String path);
+    String getLoaderName();
 
-    Buffer newBuffer();
+    String getLoaderVersion();
 
-    TagRecord newTagRecord();
+    String getGameVersion();
 
-    Optional<Item> newOptionalItem(ResourceLocation location);
+    Path getGameDir();
 
-    default Item newItem(ResourceLocation location) {
-        return newOptionalItem(location).orElseThrow();
-    }
+    Path getConfigDir();
 
-    ItemStack newItemStack();
+    ContentFactory getContentFactory();
 
-    ItemStack newItemStack(Item item, int count);
+    Entrance.Environment getEnvironment();
 
-    ItemStack newItemStack(Item item, int count, TagRecord tag);
+    boolean isDevelopment();
 
-    Text newText();
-
-    Text newText(String text);
-
-    Text newText(String text, Text... args);
-
-    Text newTranslatableText(String text);
-
-    Text newTranslatableText(String text, Text... args);
-
-    TagIoReader getTagIoReader();
-
-    TagIoWriter getTagIoWriter();
-
-    default Optional<Item> getOptionalItem(Items items) {
-        return newOptionalItem(ResourceLocation.of("minecraft", items.name().toLowerCase(Locale.ROOT)));
-    }
-
-    default Item getItem(Items items) {
-        return getOptionalItem(items).orElseThrow();
+    enum Environment {
+        CLIENT,
+        SERVER
     }
 
 }

@@ -1343,7 +1343,7 @@ public enum Items {
     ;
 
     public Item item() {
-        return Entrance.getInstance().getPlatform().getItem(this);
+        return Entrance.getInstance().getContentFactory().getItem(this);
     }
 
 }

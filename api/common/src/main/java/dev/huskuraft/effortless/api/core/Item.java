@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.platform.PlatformReference;
 public interface Item extends PlatformReference {
 
     static Item fromId(ResourceLocation id) {
-        return Entrance.getInstance().getPlatform().newItem(id);
+        return Entrance.getInstance().getContentFactory().newItem(id);
     }
 
     ItemStack getDefaultStack();

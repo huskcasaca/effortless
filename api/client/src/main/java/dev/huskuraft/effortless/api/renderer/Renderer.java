@@ -25,11 +25,11 @@ public abstract class Renderer {
     public abstract Client client();
 
     public Window window() {
-        return client().window();
+        return client().getWindow();
     }
 
     public Camera camera() {
-        return client().camera();
+        return client().getCamera();
     }
 
     public abstract MatrixStack matrixStack();

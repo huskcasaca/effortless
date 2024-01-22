@@ -28,12 +28,12 @@ public class MinecraftClient implements Client {
     }
 
     @Override
-    public Window window() {
+    public Window getWindow() {
         return new MinecraftWindow(reference.getWindow());
     }
 
     @Override
-    public Camera camera() {
+    public Camera getCamera() {
         return new MinecraftCamera(reference.gameRenderer.getMainCamera());
     }
 
@@ -88,51 +88,6 @@ public class MinecraftClient implements Client {
     @Override
     public Interaction getLastInteraction() {
         return MinecraftConvertor.fromPlatformInteraction(reference.hitResult);
-    }
-
-    @Override
-    public boolean isControlDown() {
-        return net.minecraft.client.gui.screens.Screen.hasControlDown();
-    }
-
-    @Override
-    public boolean isShiftDown() {
-        return net.minecraft.client.gui.screens.Screen.hasShiftDown();
-    }
-
-    @Override
-    public boolean isAltDown() {
-        return net.minecraft.client.gui.screens.Screen.hasAltDown();
-    }
-
-    @Override
-    public boolean isCut(int key) {
-        return net.minecraft.client.gui.screens.Screen.isCut(key);
-    }
-
-    @Override
-    public boolean isPaste(int key) {
-        return net.minecraft.client.gui.screens.Screen.isPaste(key);
-    }
-
-    @Override
-    public boolean isCopy(int key) {
-        return net.minecraft.client.gui.screens.Screen.isCopy(key);
-    }
-
-    @Override
-    public boolean isSelectAll(int key) {
-        return net.minecraft.client.gui.screens.Screen.isSelectAll(key);
-    }
-
-    @Override
-    public boolean isKeyDown(int key) {
-        return InputConstants.isKeyDown(reference.getWindow().getWindow(), key);
-    }
-
-    @Override
-    public boolean isMouseButtonDown(int button) {
-        return GLFW.glfwGetMouseButton(reference.getWindow().getWindow(), button) == 1;
     }
 
     @Override

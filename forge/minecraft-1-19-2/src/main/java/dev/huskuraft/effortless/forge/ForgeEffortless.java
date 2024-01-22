@@ -1,10 +1,9 @@
 package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
-import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.vanilla.core.*;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonPlatform;
-import net.minecraft.resources.ResourceLocation;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonContentFactory;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,7 +21,6 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.event.EventNetworkChannel;
-import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.nio.file.Path;
@@ -73,8 +71,8 @@ public class ForgeEffortless extends Effortless {
     }
 
     @Override
-    public Platform getPlatform() {
-        return new MinecraftCommonPlatform();
+    public ContentFactory getContentFactory() {
+        return new MinecraftCommonContentFactory();
     }
 
     @Override

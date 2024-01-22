@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.api.core.ResourceLocation;
-import dev.huskuraft.effortless.api.platform.ClientPlatform;
+import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 
@@ -47,6 +46,6 @@ public interface RenderStateFactory {
 
     VertexFormat.Mode getVertexFormatMode(VertexFormats.Modes modes);
 
-    RenderStateFactory INSTANCE = ClientPlatform.INSTANCE.getRenderStateFactory();
+    RenderStateFactory INSTANCE = ClientContentFactory.INSTANCE.getRenderStateFactory();
 
 }

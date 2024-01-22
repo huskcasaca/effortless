@@ -5,9 +5,9 @@ import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
-import dev.huskuraft.effortless.api.platform.ClientPlatform;
+import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.vanilla.core.*;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftClientContentFactory;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftShader;
 import net.minecraft.client.Minecraft;
@@ -62,8 +62,8 @@ public class ForgeEffortlessClient extends EffortlessClient {
     }
 
     @Override
-    public ClientPlatform getPlatform() {
-        return new MinecraftClientPlatform();
+    public ClientContentFactory getContentFactory() {
+        return new MinecraftClientContentFactory();
     }
 
     @Override

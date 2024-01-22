@@ -16,7 +16,7 @@ public interface Entrance {
 
     Path getConfigDir();
 
-    Platform getPlatform();
+    ContentFactory getContentFactory();
 
     Environment getEnvironment();
 

@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.input;
 
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
 
-public enum Keys implements Key {
+public enum OptionKeys implements Key {
     KEY_UP,
     KEY_LEFT,
     KEY_DOWN,
@@ -41,6 +41,6 @@ public enum Keys implements Key {
 
     @Override
     public KeyBinding getBinding() {
-        return ClientEntrance.getInstance().getPlatform().getKeyBinding(this);
+        return ClientEntrance.getInstance().getContentFactory().getOptionKeyBinding(this);
     }
 }

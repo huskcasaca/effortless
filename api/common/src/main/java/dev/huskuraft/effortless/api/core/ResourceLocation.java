@@ -22,7 +22,7 @@ public interface ResourceLocation extends PlatformReference {
     }
 
     static ResourceLocation of(String namespace, String path) {
-        return Entrance.getInstance().getPlatform().newResource(namespace, path);
+        return Entrance.getInstance().getContentFactory().newResource(namespace, path);
     }
 
     String getNamespace();
