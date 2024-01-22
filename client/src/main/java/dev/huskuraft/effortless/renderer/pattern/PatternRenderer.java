@@ -6,7 +6,10 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class PatternRenderer {
 

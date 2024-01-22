@@ -8,7 +8,10 @@ import dev.huskuraft.effortless.api.input.InputKey;
 import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.forge.platform.ForgePlatform;
-import dev.huskuraft.effortless.vanilla.core.*;
+import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftClient;
+import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
+import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientContentFactory;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftShader;
@@ -22,10 +25,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
-
-import java.nio.file.Path;
 
 @EventBusSubscriber(modid = Effortless.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ForgeEffortlessClient extends EffortlessClient {

@@ -2,10 +2,8 @@ package dev.huskuraft.effortless.vanilla.texture;
 
 import dev.huskuraft.effortless.api.texture.*;
 import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderStateFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.metadata.gui.GuiSpriteScaling;
 import net.minecraft.resources.ResourceLocation;

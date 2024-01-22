@@ -4,7 +4,10 @@ import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.forge.platform.ForgePlatform;
-import dev.huskuraft.effortless.vanilla.core.*;
+import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonContentFactory;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,14 +22,10 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.event.EventNetworkChannel;
 import org.apache.commons.lang3.tuple.Pair;
-import org.openjdk.nashorn.api.tree.ForOfLoopTree;
-
-import java.nio.file.Path;
 
 @Mod(Effortless.MOD_ID)
 @Mod.EventBusSubscriber(modid = Effortless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)

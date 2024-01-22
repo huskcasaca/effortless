@@ -5,7 +5,6 @@ import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.renderer.*;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftClientContentFactory;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;

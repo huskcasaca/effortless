@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.fabric.platform;
 
-import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.Platform;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonContentFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 

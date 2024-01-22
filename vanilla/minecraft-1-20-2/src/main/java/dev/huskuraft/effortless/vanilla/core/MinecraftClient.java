@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import dev.huskuraft.effortless.api.core.*;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
@@ -12,7 +11,6 @@ import dev.huskuraft.effortless.vanilla.renderer.MinecraftWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
-import org.lwjgl.glfw.GLFW;
 
 public class MinecraftClient implements Client {
 

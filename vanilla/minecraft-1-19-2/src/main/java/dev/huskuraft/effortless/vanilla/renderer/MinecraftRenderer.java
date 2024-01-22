@@ -1,11 +1,17 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import dev.huskuraft.effortless.api.core.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.platform.Client;
-import dev.huskuraft.effortless.api.renderer.*;
+import dev.huskuraft.effortless.api.renderer.BufferSource;
+import dev.huskuraft.effortless.api.renderer.MatrixStack;
+import dev.huskuraft.effortless.api.renderer.RenderLayer;
+import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
