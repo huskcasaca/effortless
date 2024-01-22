@@ -36,15 +36,15 @@ public class NumberField extends AbstractContainerWidget {
         this.textField = addWidget(new EditBox(entrance, x + buttonWidth + 1, y + 2, width - 2 * buttonWidth - 2, height - 4, Text.empty()));
         this.minusButton = addWidget(new Button(entrance, x, y, buttonWidth, height, Text.text("-"), button -> {
             float valueChanged = 1f;
-            if (getEntrance().getClient().hasControlDown()) valueChanged = 5f;
-            if (getEntrance().getClient().hasShiftDown()) valueChanged = 10f;
+            if (getEntrance().getClient().isControlDown()) valueChanged = 5f;
+            if (getEntrance().getClient().isShiftDown()) valueChanged = 10f;
 
             setValue(getNumber().doubleValue() - valueChanged);
         }));
         this.plusButton = addWidget(new Button(entrance, x + width - buttonWidth, y, buttonWidth, height, Text.text("+"), button -> {
             float valueChanged = 1f;
-            if (getEntrance().getClient().hasControlDown()) valueChanged = 5f;
-            if (getEntrance().getClient().hasShiftDown()) valueChanged = 10f;
+            if (getEntrance().getClient().isControlDown()) valueChanged = 5f;
+            if (getEntrance().getClient().isShiftDown()) valueChanged = 10f;
 
             setValue(getNumber().doubleValue() + valueChanged);
         }));

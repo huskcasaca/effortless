@@ -72,7 +72,7 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
             this.detach();
             return true;
         } else if (keyCode == 258) {
-            boolean bl = !getEntrance().getClient().hasShiftDown();
+            boolean bl = !getEntrance().getClient().isShiftDown();
             if (!this.onFocusMove(bl)) {
                 this.onFocusMove(bl);
             }

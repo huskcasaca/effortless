@@ -91,17 +91,17 @@ public class MinecraftClient implements Client {
     }
 
     @Override
-    public boolean hasControlDown() {
+    public boolean isControlDown() {
         return net.minecraft.client.gui.screens.Screen.hasControlDown();
     }
 
     @Override
-    public boolean hasShiftDown() {
+    public boolean isShiftDown() {
         return net.minecraft.client.gui.screens.Screen.hasShiftDown();
     }
 
     @Override
-    public boolean hasAltDown() {
+    public boolean isAltDown() {
         return net.minecraft.client.gui.screens.Screen.hasAltDown();
     }
 

@@ -91,11 +91,11 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
         deleteButton.setActive(entries.hasSelected());
         duplicateButton.setActive(entries.hasSelected());
 
-        editButton.setVisible(!getEntrance().getClient().hasAltDown());
-        deleteButton.setVisible(!getEntrance().getClient().hasAltDown());
-        duplicateButton.setVisible(!getEntrance().getClient().hasAltDown());
-        newButton.setVisible(!getEntrance().getClient().hasAltDown());
-        resetButton.setVisible(getEntrance().getClient().hasAltDown());
+        editButton.setVisible(!getEntrance().getClient().isAltDown());
+        deleteButton.setVisible(!getEntrance().getClient().isAltDown());
+        duplicateButton.setVisible(!getEntrance().getClient().isAltDown());
+        newButton.setVisible(!getEntrance().getClient().isAltDown());
+        resetButton.setVisible(getEntrance().getClient().isAltDown());
 
         lastSettings = new RandomizerSettings(
                 entries.items().stream().map(ItemRandomizer.class::cast).toList()

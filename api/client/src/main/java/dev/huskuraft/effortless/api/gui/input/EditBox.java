@@ -166,7 +166,7 @@ public class EditBox extends AbstractWidget {
     }
 
     private void deleteText(int i) {
-        if (getEntrance().getClient().hasControlDown()) {
+        if (getEntrance().getClient().isControlDown()) {
             this.deleteWords(i);
         } else {
             this.deleteChars(i);
@@ -265,7 +265,7 @@ public class EditBox extends AbstractWidget {
         if (!this.canConsumeInput()) {
             return false;
         } else {
-            this.shiftPressed = getEntrance().getClient().hasShiftDown();
+            this.shiftPressed = getEntrance().getClient().isShiftDown();
             if (getEntrance().getClient().isSelectAll(keyCode)) {
                 this.moveCursorToEnd();
                 this.setHighlightPos(0);
@@ -292,7 +292,7 @@ public class EditBox extends AbstractWidget {
                         if (this.isEditable) {
                             this.shiftPressed = false;
                             this.deleteText(-1);
-                            this.shiftPressed = getEntrance().getClient().hasShiftDown();
+                            this.shiftPressed = getEntrance().getClient().isShiftDown();
                         }
 
                         return true;
@@ -307,12 +307,12 @@ public class EditBox extends AbstractWidget {
                         if (this.isEditable) {
                             this.shiftPressed = false;
                             this.deleteText(1);
-                            this.shiftPressed = getEntrance().getClient().hasShiftDown();
+                            this.shiftPressed = getEntrance().getClient().isShiftDown();
                         }
 
                         return true;
                     case 262:
-                        if (getEntrance().getClient().hasControlDown()) {
+                        if (getEntrance().getClient().isControlDown()) {
                             this.moveCursorTo(this.getWordPosition(1));
                         } else {
                             this.moveCursor(1);
@@ -320,7 +320,7 @@ public class EditBox extends AbstractWidget {
 
                         return true;
                     case 263:
-                        if (getEntrance().getClient().hasControlDown()) {
+                        if (getEntrance().getClient().isControlDown()) {
                             this.moveCursorTo(this.getWordPosition(-1));
                         } else {
                             this.moveCursor(-1);

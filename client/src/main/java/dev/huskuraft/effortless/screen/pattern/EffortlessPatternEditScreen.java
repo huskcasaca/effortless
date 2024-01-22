@@ -148,10 +148,10 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         duplicateButton.setActive(entries.hasSelected());
         saveButton.setActive(isContentValid());
 
-        upButton.setVisible(getEntrance().getClient().hasAltDown());
-        downButton.setVisible(getEntrance().getClient().hasAltDown());
-        editButton.setVisible(!getEntrance().getClient().hasAltDown());
-        deleteButton.setVisible(!getEntrance().getClient().hasAltDown());
+        upButton.setVisible(getEntrance().getClient().isAltDown());
+        downButton.setVisible(getEntrance().getClient().isAltDown());
+        editButton.setVisible(!getEntrance().getClient().isAltDown());
+        deleteButton.setVisible(!getEntrance().getClient().isAltDown());
 
         lastSettings = new Pattern(lastSettings.id(), Text.text(nameEditBox.getValue()), entries.items());
     }

@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.api.input;
 
+import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.api.platform.ClientPlatform;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 

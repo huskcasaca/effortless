@@ -26,11 +26,11 @@ public interface Client extends PlatformReference {
 
     Interaction getLastInteraction();
 
-    boolean hasControlDown();
+    boolean isControlDown();
 
-    boolean hasShiftDown();
+    boolean isShiftDown();
 
-    boolean hasAltDown();
+    boolean isAltDown();
 
     boolean isCut(int key);
 
