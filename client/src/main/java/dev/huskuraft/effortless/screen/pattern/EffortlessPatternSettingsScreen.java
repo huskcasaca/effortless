@@ -109,13 +109,13 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         deleteButton.setActive(entries.hasSelected());
         duplicateButton.setActive(entries.hasSelected());
 
-        upButton.setVisible(getEntrance().getClient().isAltDown());
-        downButton.setVisible(getEntrance().getClient().isAltDown());
-        editButton.setVisible(!getEntrance().getClient().isAltDown());
-        deleteButton.setVisible(!getEntrance().getClient().isAltDown());
-        duplicateButton.setVisible(!getEntrance().getClient().isAltDown());
-        newButton.setVisible(!getEntrance().getClient().isAltDown());
-        resetButton.setVisible(getEntrance().getClient().isAltDown());
+        upButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
+        downButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
+        editButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
+        deleteButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
+        duplicateButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
+        newButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
+        resetButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
 
         lastSettings = new PatternSettings(
                 entries.items()

@@ -166,7 +166,7 @@ public class EditBox extends AbstractWidget {
     }
 
     private void deleteText(int i) {
-        if (getEntrance().getClient().isControlDown()) {
+        if (getEntrance().getClient().getWindow().isControlDown()) {
             this.deleteWords(i);
         } else {
             this.deleteChars(i);
@@ -265,74 +265,80 @@ public class EditBox extends AbstractWidget {
         if (!this.canConsumeInput()) {
             return false;
         } else {
-            this.shiftPressed = getEntrance().getClient().isShiftDown();
-            if (getEntrance().getClient().isSelectAll(keyCode)) {
+            this.shiftPressed = getEntrance().getClient().getWindow().isShiftDown();
+            if (getEntrance().getClient().getWindow().isSelectAll(keyCode)) {
                 this.moveCursorToEnd();
                 this.setHighlightPos(0);
                 return true;
-            } else if (getEntrance().getClient().isCopy(keyCode)) {
-                getEntrance().getClient().setClipboard(getHighlighted());
-                return true;
-            } else if (getEntrance().getClient().isPaste(keyCode)) {
-                if (this.isEditable) {
-                    this.insertText(getEntrance().getClient().getClipboard());
-                }
-
-                return true;
-            } else if (getEntrance().getClient().isCut(keyCode)) {
-                getEntrance().getClient().setClipboard(getHighlighted());
-                if (this.isEditable) {
-                    this.insertText("");
-                }
-
-                return true;
             } else {
-                switch (keyCode) {
-                    case 259:
+                if (getEntrance().getClient().getWindow().isCopy(keyCode)) {
+                    getEntrance().getClient().setClipboard(getHighlighted());
+                    return true;
+                } else {
+                    if (getEntrance().getClient().getWindow().isPaste(keyCode)) {
                         if (this.isEditable) {
-                            this.shiftPressed = false;
-                            this.deleteText(-1);
-                            this.shiftPressed = getEntrance().getClient().isShiftDown();
+                            this.insertText(getEntrance().getClient().getClipboard());
                         }
 
                         return true;
-                    case 260:
-                    case 264:
-                    case 265:
-                    case 266:
-                    case 267:
-                    default:
-                        return false;
-                    case 261:
-                        if (this.isEditable) {
-                            this.shiftPressed = false;
-                            this.deleteText(1);
-                            this.shiftPressed = getEntrance().getClient().isShiftDown();
-                        }
+                    } else {
+                        if (getEntrance().getClient().getWindow().isCut(keyCode)) {
+                            getEntrance().getClient().setClipboard(getHighlighted());
+                            if (this.isEditable) {
+                                this.insertText("");
+                            }
 
-                        return true;
-                    case 262:
-                        if (getEntrance().getClient().isControlDown()) {
-                            this.moveCursorTo(this.getWordPosition(1));
+                            return true;
                         } else {
-                            this.moveCursor(1);
-                        }
+                            switch (keyCode) {
+                                case 259:
+                                    if (this.isEditable) {
+                                        this.shiftPressed = false;
+                                        this.deleteText(-1);
+                                        this.shiftPressed = getEntrance().getClient().getWindow().isShiftDown();
+                                    }
 
-                        return true;
-                    case 263:
-                        if (getEntrance().getClient().isControlDown()) {
-                            this.moveCursorTo(this.getWordPosition(-1));
-                        } else {
-                            this.moveCursor(-1);
-                        }
+                                    return true;
+                                case 260:
+                                case 264:
+                                case 265:
+                                case 266:
+                                case 267:
+                                default:
+                                    return false;
+                                case 261:
+                                    if (this.isEditable) {
+                                        this.shiftPressed = false;
+                                        this.deleteText(1);
+                                        this.shiftPressed = getEntrance().getClient().getWindow().isShiftDown();
+                                    }
 
-                        return true;
-                    case 268:
-                        this.moveCursorToStart();
-                        return true;
-                    case 269:
-                        this.moveCursorToEnd();
-                        return true;
+                                    return true;
+                                case 262:
+                                    if (getEntrance().getClient().getWindow().isControlDown()) {
+                                        this.moveCursorTo(this.getWordPosition(1));
+                                    } else {
+                                        this.moveCursor(1);
+                                    }
+
+                                    return true;
+                                case 263:
+                                    if (getEntrance().getClient().getWindow().isControlDown()) {
+                                        this.moveCursorTo(this.getWordPosition(-1));
+                                    } else {
+                                        this.moveCursor(-1);
+                                    }
+
+                                    return true;
+                                case 268:
+                                    this.moveCursorToStart();
+                                    return true;
+                                case 269:
+                                    this.moveCursorToEnd();
+                                    return true;
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -67,7 +67,7 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
 
         @Override
         public List<Text> getTooltip() {
-            if (getEntrance().getClient().isAltDown()) {
+            if (getEntrance().getClient().getWindow().isAltDown()) {
                 return getRandomizerEntryTooltip(getEntrance().getClient().getPlayer(), getItem(), getEntryList().totalCount());
             } else {
                 return super.getTooltip();
