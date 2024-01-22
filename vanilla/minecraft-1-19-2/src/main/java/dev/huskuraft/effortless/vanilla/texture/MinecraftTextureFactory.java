@@ -23,16 +23,7 @@ public class MinecraftTextureFactory implements TextureFactory {
 
     @Override
     public TextureSprite getButtonTextureSprite(boolean enabled, boolean focused) {
-        return createSpriteFromTexture(
-                AbstractWidget.WIDGETS_LOCATION, null,
-                200,
-                20,
-                0,
-                46 + (enabled ? focused ? 2 : 1 : 0) * 20,
-                256,
-                256,
-                new SpriteScaling.NineSlice(200, 20, enabled ? 3 : 1)
-        );
+        return createSpriteFromTexture(AbstractWidget.WIDGETS_LOCATION, null, 200, 20, 0, 46 + (enabled ? focused ? 2 : 1 : 0) * 20, 256, 256, new SpriteScaling.NineSlice(200, 20, enabled ? 3 : 1));
     }
 
     public TextureSprite createSpriteFromTexture(ResourceLocation texture, ResourceLocation name, int width, int height, int x, int y, int textureWidth, int textureHeight, SpriteScaling scaling) {

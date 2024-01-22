@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.UUID;
@@ -97,7 +98,7 @@ public class MinecraftPlayer implements Player {
 
     @Override
     public boolean canInteractBlock(BlockPosition blockPosition) {
-        return !reference.blockActionRestricted(reference.getLevel(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), switch (getGameType()) {
+        return !reference.blockActionRestricted(getWorld().reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), switch (getGameType()) {
             case SURVIVAL -> GameType.SURVIVAL;
             case CREATIVE -> GameType.CREATIVE;
             case ADVENTURE -> GameType.ADVENTURE;
@@ -107,7 +108,7 @@ public class MinecraftPlayer implements Player {
 
     @Override
     public boolean canAttackBlock(BlockPosition blockPosition) {
-        return reference.getMainHandItem().getItem().canAttackBlock(reference.getLevel().getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)), reference.getLevel(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), reference);
+        return reference.getMainHandItem().getItem().canAttackBlock(((Level) getWorld().reference()).getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)), getWorld().reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), reference);
     }
 
     @Override

@@ -182,7 +182,7 @@ public class MinecraftBuffer implements Buffer {
 
     @Override
     public void writeTagRecord(TagRecord value) {
-        reference.writeNbt((CompoundTag) value.reference());
+        reference.writeNbt(value.reference());
     }
 
     @Override

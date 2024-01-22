@@ -1,120 +1,91 @@
 package dev.huskuraft.effortless.fabric;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.core.InteractionType;
-import dev.huskuraft.effortless.core.TickPhase;
-import dev.huskuraft.effortless.fabric.events.GuiRenderEvents;
+import dev.huskuraft.effortless.api.core.InteractionType;
+import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
+import dev.huskuraft.effortless.api.input.InputKey;
+import dev.huskuraft.effortless.api.platform.ClientContentFactory;
+import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.fabric.events.ClientRenderEvents;
+import dev.huskuraft.effortless.fabric.events.ClientShadersEvents;
 import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
-import dev.huskuraft.effortless.fabric.events.RegisterShadersEvents;
-import dev.huskuraft.effortless.input.InputKey;
-import dev.huskuraft.effortless.platform.ClientPlatform;
-import dev.huskuraft.effortless.vanilla.core.*;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftClientPlatform;
-import dev.huskuraft.effortless.vanilla.renderer.BlockRenderType;
+import dev.huskuraft.effortless.fabric.platform.FabricPlatform;
+import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftClient;
+import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
+import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftClientContentFactory;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftShader;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.impl.FabricLoaderImpl;
 import net.minecraft.client.Minecraft;
-
-import java.nio.file.Path;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.resources.ResourceLocation;
 
 public class FabricEffortlessClient extends EffortlessClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        onClientStart(MinecraftClient.fromMinecraftClient(Minecraft.getInstance()));
-        onRegisterNetwork(receiver -> {
-            var channelId = MinecraftResource.toMinecraftResource(getChannel().getChannelId());
+        getEventRegistry().getClientStartEvent().invoker().onClientStart(new MinecraftClient(Minecraft.getInstance()));
+        getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
+            var channelId = (ResourceLocation) getChannel().getChannelId().reference();
             ClientPlayNetworking.registerGlobalReceiver(channelId, (client, handler, buf, responseSender) -> {
-                receiver.receiveBuffer(MinecraftBuffer.fromMinecraftBuffer(buf), MinecraftPlayer.fromMinecraftPlayer(client.player));
+                receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(client.player));
             });
-            return (buffer, player) -> ClientPlayNetworking.send(channelId, MinecraftBuffer.toMinecraftBuffer(buffer));
+            return (buffer, player1) -> ClientPlayNetworking.send(channelId, buffer.reference());
         });
 
-        onRegisterKeys(key -> {
-            KeyBindingHelper.registerKeyBinding(MinecraftKeyBinding.toMinecraft(key.getBinding()));
+        getEventRegistry().getRegisterKeysEvent().invoker().onRegisterKeys(key1 -> {
+            KeyBindingHelper.registerKeyBinding(key1.getBinding().reference());
         });
 
-        RegisterShadersEvents.REGISTER_SHADERS.register((provider, sink) -> {
-            BlockRenderType.Shaders.registerShaders(provider, sink::register);
+        ClientShadersEvents.REGISTER.register((provider, sink) -> {
+            getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> sink.register(new ShaderInstance(provider, resource.getPath(), format.reference()), shaderInstance -> consumer.accept(new MinecraftShader(shaderInstance))));
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {
-            onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.START);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(new MinecraftClient(minecraft), ClientTick.Phase.START);
         });
 
         ClientTickEvents.END_CLIENT_TICK.register(minecraft -> {
-            onClientTick(MinecraftClient.fromMinecraftClient(minecraft), TickPhase.END);
+            getEventRegistry().getClientTickEvent().invoker().onClientTick(new MinecraftClient(minecraft), ClientTick.Phase.END);
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            onRenderWorld(new MinecraftRenderer(context.matrixStack(), Minecraft.getInstance().renderBuffers().bufferSource()), context.tickDelta());
+            getEventRegistry().getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(context.matrixStack()), context.tickDelta());
         });
 
-        GuiRenderEvents.RENDER_GUI.register((guiGraphics, f) -> {
-            onRenderGui(new MinecraftRenderer(guiGraphics), f);
+        ClientRenderEvents.GUI.register((guiGraphics, f) -> {
+            getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(guiGraphics.pose()), f);
         });
 
         KeyboardInputEvents.KEY_INPUT.register((key, scanCode, action, modifiers) -> {
-            onKeyInput(new InputKey(key, scanCode, action, modifiers));
+            getEventRegistry().getKeyInputEvent().invoker().onKeyInput(new InputKey(key, scanCode, action, modifiers));
         });
 
         InteractionInputEvents.ATTACK.register((player, hand) -> {
-            return onInteractionInput(InteractionType.ATTACK, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.ATTACK, MinecraftConvertor.fromPlatformInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
         InteractionInputEvents.USE_ITEM.register((player, hand) -> {
-            return onInteractionInput(InteractionType.USE_ITEM, MinecraftPlayer.fromMinecraftInteractionHand(hand)).interruptsFurtherEvaluation();
+            return getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(InteractionType.USE_ITEM, MinecraftConvertor.fromPlatformInteractionHand(hand)).interruptsFurtherEvaluation();
         });
 
     }
 
     @Override
-    public String getLoaderName() {
-        return "Fabric-Official";
+    public Platform getPlatform() {
+        return FabricPlatform.INSTANCE;
     }
 
     @Override
-    public String getLoaderVersion() {
-        return FabricLoaderImpl.VERSION;
-    }
-
-    @Override
-    public String getGameVersion() {
-        return FabricLoaderImpl.INSTANCE.getGameProvider().getRawGameVersion();
-    }
-
-    @Override
-    public Path getGameDir() {
-        return FabricLoader.getInstance().getGameDir();
-    }
-
-    @Override
-    public Path getConfigDir() {
-        return FabricLoader.getInstance().getConfigDir();
-    }
-
-    @Override
-    public ClientPlatform getPlatform() {
-        return new MinecraftClientPlatform();
-    }
-
-    @Override
-    public Environment getEnvironment() {
-        return switch (FabricLoader.getInstance().getEnvironmentType()) {
-            case CLIENT -> Environment.CLIENT;
-            case SERVER -> Environment.SERVER;
-        };
-    }
-
-    @Override
-    public boolean isDevelopment() {
-        return FabricLoader.getInstance().isDevelopmentEnvironment();
+    public ClientContentFactory getContentFactory() {
+        return MinecraftClientContentFactory.INSTANCE;
     }
 
 }

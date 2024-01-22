@@ -17,7 +17,7 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -34,13 +34,13 @@ public class MinecraftRenderer extends Renderer {
     private final Minecraft minecraftClient;
     private final PoseStack minecraftMatrixStack;
     private final MultiBufferSource.BufferSource minecraftBufferSource;
-    private final Screen minecraftRendererProvider;
+    private final GuiGraphics minecraftRendererProvider;
 
     public MinecraftRenderer(PoseStack minecraftMatrixStack) {
         this.minecraftClient = Minecraft.getInstance();
         this.minecraftMatrixStack = minecraftMatrixStack;
         this.minecraftBufferSource = minecraftClient.renderBuffers().bufferSource();
-        this.minecraftRendererProvider = new Screen(Component.empty()) {{init(Minecraft.getInstance(), 0, 0);}};
+        this.minecraftRendererProvider = new GuiGraphics(Minecraft.getInstance(), this.minecraftMatrixStack, minecraftBufferSource);
     }
 
     @Override
@@ -65,13 +65,13 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void setRsShaderColor(float red, float green, float blue, float alpha) {
-//        minecraftRendererProvider.flushIfManaged();
+//        minecraft renderer provider flush if managed();
         RenderSystem.setShaderColor(red, green, blue, alpha);
     }
 
     @Override
     public BufferSource bufferSource() {
-        return new MinecraftBufferSource(minecraftClient.renderBuffers().bufferSource());
+        return new MinecraftBufferSource(minecraftBufferSource);
     }
 
     @Override
@@ -92,24 +92,19 @@ public class MinecraftRenderer extends Renderer {
                 shadow,
                 minecraftMatrixStack.last().pose(),
                 minecraftBufferSource,
-                seeThrough,
+                seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL,
                 backgroundColor,
                 lightMap);
     }
 
     @Override
     public void renderItem(ItemStack stack, int x, int y) {
-        RenderSystem.getModelViewStack().pushPose();
-        RenderSystem.getModelViewStack().mulPoseMatrix(minecraftMatrixStack.last().pose());
-        RenderSystem.applyModelViewMatrix();
-        minecraftClient.getItemRenderer().renderGuiItem(stack.reference(), x, y);
-        RenderSystem.getModelViewStack().popPose();
-        RenderSystem.applyModelViewMatrix();
+        minecraftRendererProvider.renderItem(stack.reference(), x, y);
     }
 
     @Override
     public void renderTooltip(Typeface typeface, List<Text> list, int x, int y) {
-        minecraftRendererProvider.renderTooltip(minecraftMatrixStack, list.stream().map(text -> (Component) text.reference()).toList(), Optional.empty(), x, y);
+        minecraftRendererProvider.renderTooltip(typeface.reference(), list.stream().map(text -> (Component) text.reference()).toList(), Optional.empty(), x, y);
     }
 
     @Override
