@@ -59,7 +59,7 @@ public class FabricEffortless extends Effortless implements ModInitializer {
 
     @Override
     public ContentFactory getContentFactory() {
-        return new MinecraftCommonContentFactory();
+        return MinecraftCommonContentFactory.INSTANCE;
     }
 
 }

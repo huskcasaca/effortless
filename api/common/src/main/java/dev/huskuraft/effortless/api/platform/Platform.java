@@ -14,8 +14,6 @@ public interface Platform {
 
     Path getConfigDir();
 
-    ContentFactory getContentFactory();
-
     Environment getEnvironment();
 
     boolean isDevelopment();

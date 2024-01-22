@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.forge.platform;
 
-import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.Platform;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonContentFactory;
 import net.minecraftforge.fml.loading.FMLLoader;
 
 import java.nio.file.Path;
@@ -34,11 +32,6 @@ public class ForgePlatform implements Platform {
     @Override
     public Path getConfigDir() {
         return FMLLoader.getGamePath().resolve("config");
-    }
-
-    @Override
-    public ContentFactory getContentFactory() {
-        return new MinecraftCommonContentFactory();
     }
 
     @Override

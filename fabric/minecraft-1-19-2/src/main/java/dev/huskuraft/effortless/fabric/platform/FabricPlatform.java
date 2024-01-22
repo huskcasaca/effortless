@@ -38,11 +38,6 @@ public class FabricPlatform implements Platform {
     }
 
     @Override
-    public ContentFactory getContentFactory() {
-        return new MinecraftCommonContentFactory();
-    }
-
-    @Override
     public Environment getEnvironment() {
         return switch (FabricLoader.getInstance().getEnvironmentType()) {
             case CLIENT -> Environment.CLIENT;

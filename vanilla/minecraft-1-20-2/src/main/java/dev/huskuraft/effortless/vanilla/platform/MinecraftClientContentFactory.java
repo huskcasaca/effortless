@@ -28,6 +28,8 @@ import java.util.stream.Stream;
 
 public class MinecraftClientContentFactory extends MinecraftCommonContentFactory implements ClientContentFactory {
 
+    public static final MinecraftClientContentFactory INSTANCE = new MinecraftClientContentFactory();
+
     @Override
     public SearchTree<ItemStack> newItemStackSearchTree(SearchBy searchBy) {
         var minecraftPlayer = Minecraft.getInstance().player;
@@ -95,11 +97,11 @@ public class MinecraftClientContentFactory extends MinecraftCommonContentFactory
 
     @Override
     public RenderStateFactory getRenderStateFactory() {
-        return new MinecraftRenderStateFactory();
+        return MinecraftRenderStateFactory.INSTANCE;
     }
 
     @Override
     public TextureFactory getTextureFactory() {
-        return new MinecraftTextureFactory();
+        return MinecraftTextureFactory.INSTANCE;
     }
 }

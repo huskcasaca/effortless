@@ -12,6 +12,8 @@ import java.util.OptionalDouble;
 
 public class MinecraftRenderStateFactory extends RenderType implements RenderStateFactory {
 
+    public static final MinecraftRenderStateFactory INSTANCE = new MinecraftRenderStateFactory();
+
     public MinecraftRenderStateFactory() {
         super(null, null, null, 0, false, false, null, null);
 //        super("", new VertexFormat(ImmutableMap.ofEntries()), VertexFormat.Mode.DEBUG_LINE_STRIP, 0, false, false, () -> {}, () -> {});

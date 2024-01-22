@@ -48,9 +48,7 @@ public abstract class EffortlessClient implements ClientEntrance {
     }
 
     @Override
-    public ClientContentFactory getContentFactory() {
-        return null;
-    }
+    public abstract ClientContentFactory getContentFactory();
 
     @Override
     public String getId() {

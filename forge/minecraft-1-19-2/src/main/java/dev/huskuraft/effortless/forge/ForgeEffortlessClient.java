@@ -46,7 +46,7 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     @Override
     public ClientContentFactory getContentFactory() {
-        return new MinecraftClientContentFactory();
+        return MinecraftClientContentFactory.INSTANCE;
     }
 
     @SubscribeEvent

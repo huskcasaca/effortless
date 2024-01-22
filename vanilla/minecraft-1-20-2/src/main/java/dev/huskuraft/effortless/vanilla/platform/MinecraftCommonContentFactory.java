@@ -23,6 +23,8 @@ import java.util.Optional;
 
 public class MinecraftCommonContentFactory implements ContentFactory {
 
+    public static final MinecraftCommonContentFactory INSTANCE = new MinecraftCommonContentFactory();
+
     @Override
     public ResourceLocation newResource(String namespace, String path) {
         return new MinecraftResourceLocation(new net.minecraft.resources.ResourceLocation(namespace, path));

@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.vanilla.texture;
 
 import dev.huskuraft.effortless.api.texture.*;
 import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
+import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderStateFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -12,7 +13,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 
 public class MinecraftTextureFactory implements TextureFactory {
 
-    private static final WidgetSprites BUTTON_SPRITES = new WidgetSprites(new ResourceLocation("widget/button"), new ResourceLocation("widget/button_disabled"), new ResourceLocation("widget/button_highlighted"));
+    public static final MinecraftTextureFactory INSTANCE = new MinecraftTextureFactory();
 
     @Override
     public Texture getBlockAtlasTexture() {

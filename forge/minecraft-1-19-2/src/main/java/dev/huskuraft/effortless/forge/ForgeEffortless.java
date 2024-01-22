@@ -55,7 +55,7 @@ public class ForgeEffortless extends Effortless {
 
     @Override
     public ContentFactory getContentFactory() {
-        return new MinecraftCommonContentFactory();
+        return MinecraftCommonContentFactory.INSTANCE;
     }
 
     @SubscribeEvent
