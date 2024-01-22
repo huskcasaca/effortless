@@ -47,6 +47,8 @@ public interface ContentFactory {
 
     TagIoWriter getTagIoWriter();
 
+    Platform.OperatingSystem getOperatingSystem();
+
     default Optional<Item> getOptionalItem(Items items) {
         return newOptionalItem(ResourceLocation.of("minecraft", items.name().toLowerCase(Locale.ROOT)));
     }

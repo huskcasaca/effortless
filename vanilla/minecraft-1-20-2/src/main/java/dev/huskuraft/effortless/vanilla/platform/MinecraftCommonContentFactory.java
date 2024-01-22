@@ -5,6 +5,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.platform.ContentFactory;
+import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.tag.TagIoReader;
 import dev.huskuraft.effortless.api.tag.TagIoWriter;
 import dev.huskuraft.effortless.api.tag.TagRecord;
@@ -12,6 +13,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.*;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
 import io.netty.buffer.Unpooled;
+import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
@@ -96,6 +98,17 @@ public class MinecraftCommonContentFactory implements ContentFactory {
     @Override
     public TagIoWriter getTagIoWriter() {
         return (output, config) -> NbtIo.writeCompressed(config.reference(), output);
+    }
+
+    @Override
+    public Platform.OperatingSystem getOperatingSystem() {
+        return switch (Util.getPlatform()) {
+            case LINUX -> Platform.OperatingSystem.LINUX;
+            case SOLARIS -> Platform.OperatingSystem.SOLARIS;
+            case WINDOWS -> Platform.OperatingSystem.WINDOWS;
+            case OSX -> Platform.OperatingSystem.MACOS;
+            case UNKNOWN -> Platform.OperatingSystem.UNKNOWN;
+        };
     }
 
 }

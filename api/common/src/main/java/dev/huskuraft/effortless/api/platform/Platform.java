@@ -18,6 +18,14 @@ public interface Platform {
 
     boolean isDevelopment();
 
+    enum OperatingSystem {
+        LINUX,
+        SOLARIS,
+        WINDOWS,
+        MACOS,
+        UNKNOWN
+    }
+
     enum Environment {
         CLIENT,
         SERVER

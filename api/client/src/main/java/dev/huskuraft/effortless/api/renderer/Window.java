@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.api.renderer;
 
 import dev.huskuraft.effortless.api.platform.PlatformReference;
+import dev.huskuraft.effortless.api.platform.PlatformUtils;
 
 public interface Window extends PlatformReference {
 
@@ -19,11 +20,10 @@ public interface Window extends PlatformReference {
     boolean isMouseButtonDown(int button);
 
     default boolean isControlDown() {
-        if (true) { // ON_OSX
-            return isKeyDown(343) || isKeyDown(347);
-        } else {
-            return isKeyDown(341) || isKeyDown(345);
-        }
+        return switch (PlatformUtils.getOS()) {
+            case MACOS -> isKeyDown(343) || isKeyDown(347);
+            default -> isKeyDown(341) || isKeyDown(345);
+        };
     }
 
     default boolean isShiftDown() {
