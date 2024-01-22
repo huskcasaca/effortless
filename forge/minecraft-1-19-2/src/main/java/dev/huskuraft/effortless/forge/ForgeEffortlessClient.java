@@ -6,6 +6,8 @@ import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
 import dev.huskuraft.effortless.api.platform.ClientContentFactory;
+import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.forge.platform.ForgePlatform;
 import dev.huskuraft.effortless.vanilla.core.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientContentFactory;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
@@ -38,46 +40,13 @@ public class ForgeEffortlessClient extends EffortlessClient {
     }
 
     @Override
-    public String getLoaderName() {
-        return "Forge";
-    }
-
-    @Override
-    public String getLoaderVersion() {
-        return FMLLoader.versionInfo().forgeVersion();
-    }
-
-    @Override
-    public String getGameVersion() {
-        return FMLLoader.versionInfo().mcVersion();
-    }
-
-    @Override
-    public Path getGameDir() {
-        return FMLLoader.getGamePath();
-    }
-
-    @Override
-    public Path getConfigDir() {
-        return FMLLoader.getGamePath().resolve("config");
+    public Platform getPlatform() {
+        return ForgePlatform.INSTANCE;
     }
 
     @Override
     public ClientContentFactory getContentFactory() {
         return new MinecraftClientContentFactory();
-    }
-
-    @Override
-    public Environment getEnvironment() {
-        return switch (FMLLoader.getDist()) {
-            case CLIENT -> Environment.CLIENT;
-            case DEDICATED_SERVER -> Environment.SERVER;
-        };
-    }
-
-    @Override
-    public boolean isDevelopment() {
-        return !FMLLoader.isProduction();
     }
 
     @SubscribeEvent

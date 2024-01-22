@@ -185,7 +185,6 @@ public final class EffortlessClientManager implements ClientManager {
 
         if (getRunningClient().getPlayer() == null)
             return;
-        if (OptionKeys)
         if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
             openModeRadialScreen();
         }

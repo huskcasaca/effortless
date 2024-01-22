@@ -30,7 +30,7 @@ public final class EffortlessClientConfigManager extends ClientConfigManager {
 
     private void readConfig() {
         try {
-            var dataDir = getEntrance().getConfigDir().toFile();
+            var dataDir = getEntrance().getPlatform().getConfigDir().toFile();
             if (!dataDir.exists() && !dataDir.mkdirs()) {
                 throw new IOException("Could not create data directory: " + dataDir.getAbsolutePath());
             }
@@ -54,7 +54,7 @@ public final class EffortlessClientConfigManager extends ClientConfigManager {
 
     private void writeConfig() {
         try {
-            var dataDir = getEntrance().getConfigDir().toFile();
+            var dataDir = getEntrance().getPlatform().getConfigDir().toFile();
             if (!dataDir.exists() && !dataDir.mkdirs()) {
                 throw new IOException("Could not create data directory: " + dataDir.getAbsolutePath());
             }

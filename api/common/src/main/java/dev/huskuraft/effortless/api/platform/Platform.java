@@ -16,7 +16,7 @@ public interface Platform {
 
     ContentFactory getContentFactory();
 
-    Entrance.Environment getEnvironment();
+    Environment getEnvironment();
 
     boolean isDevelopment();
 

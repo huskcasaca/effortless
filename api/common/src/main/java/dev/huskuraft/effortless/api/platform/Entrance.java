@@ -1,31 +1,12 @@
 package dev.huskuraft.effortless.api.platform;
 
-import java.nio.file.Path;
-
 public interface Entrance {
 
     String getId();
 
-    String getLoaderName();
-
-    String getLoaderVersion();
-
-    String getGameVersion();
-
-    Path getGameDir();
-
-    Path getConfigDir();
+    Platform getPlatform();
 
     ContentFactory getContentFactory();
-
-    Environment getEnvironment();
-
-    boolean isDevelopment();
-
-    enum Environment {
-        CLIENT,
-        SERVER
-    }
 
     static Entrance getInstance() {
         return Instance.get();

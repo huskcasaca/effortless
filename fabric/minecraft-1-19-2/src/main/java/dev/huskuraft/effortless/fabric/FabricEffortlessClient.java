@@ -5,10 +5,12 @@ import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
 import dev.huskuraft.effortless.api.platform.ClientContentFactory;
+import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.fabric.events.ClientRenderEvents;
 import dev.huskuraft.effortless.fabric.events.ClientShadersEvents;
 import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
+import dev.huskuraft.effortless.fabric.platform.FabricPlatform;
 import dev.huskuraft.effortless.vanilla.core.*;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClientContentFactory;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
@@ -78,46 +80,13 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
     }
 
     @Override
-    public String getLoaderName() {
-        return "Fabric-Official";
-    }
-
-    @Override
-    public String getLoaderVersion() {
-        return FabricLoaderImpl.VERSION;
-    }
-
-    @Override
-    public String getGameVersion() {
-        return FabricLoaderImpl.INSTANCE.getGameProvider().getRawGameVersion();
-    }
-
-    @Override
-    public Path getGameDir() {
-        return FabricLoader.getInstance().getGameDir();
-    }
-
-    @Override
-    public Path getConfigDir() {
-        return FabricLoader.getInstance().getConfigDir();
+    public Platform getPlatform() {
+        return FabricPlatform.INSTANCE;
     }
 
     @Override
     public ClientContentFactory getContentFactory() {
         return new MinecraftClientContentFactory();
-    }
-
-    @Override
-    public Environment getEnvironment() {
-        return switch (FabricLoader.getInstance().getEnvironmentType()) {
-            case CLIENT -> Environment.CLIENT;
-            case SERVER -> Environment.SERVER;
-        };
-    }
-
-    @Override
-    public boolean isDevelopment() {
-        return FabricLoader.getInstance().isDevelopmentEnvironment();
     }
 
 }
