@@ -194,7 +194,7 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
             case ITEM_ENTITY_TRANSLUCENT_CULL ->    GameRenderer.getRendertypeItemEntityTranslucentCullShader();
             case ENTITY_TRANSLUCENT_CULL ->         GameRenderer.getRendertypeEntityTranslucentCullShader();
             case ENTITY_TRANSLUCENT ->              GameRenderer.getRendertypeEntityTranslucentShader();
-            case ENTITY_TRANSLUCENT_EMISSIVE ->     GameRenderer.getRendertypeEntityTranslucentEmissiveShader();
+            case ENTITY_TRANSLUCENT_EMISSIVE ->     null;
             case ENTITY_SMOOTH_CUTOUT ->            GameRenderer.getRendertypeEntitySmoothCutoutShader();
             case BEACON_BEAM ->                     GameRenderer.getRendertypeBeaconBeamShader();
             case ENTITY_DECAL ->                    GameRenderer.getRendertypeEntityDecalShader();

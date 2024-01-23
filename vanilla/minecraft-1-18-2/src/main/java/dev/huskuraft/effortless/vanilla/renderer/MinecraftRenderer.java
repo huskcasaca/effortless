@@ -22,15 +22,16 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.RandomSource;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class MinecraftRenderer extends Renderer {
 
-    private static final RandomSource RAND = RandomSource.create();
+    private static final Random RAND = new Random();
     private final Minecraft minecraftClient;
     private final PoseStack minecraftMatrixStack;
     private final MultiBufferSource.BufferSource minecraftBufferSource;
@@ -40,7 +41,7 @@ public class MinecraftRenderer extends Renderer {
         this.minecraftClient = Minecraft.getInstance();
         this.minecraftMatrixStack = minecraftMatrixStack;
         this.minecraftBufferSource = minecraftClient.renderBuffers().bufferSource();
-        this.minecraftRendererProvider = new Screen(Component.empty()) {{init(Minecraft.getInstance(), 0, 0);}};
+        this.minecraftRendererProvider = new Screen(Component.nullToEmpty(null)) {{init(Minecraft.getInstance(), 0, 0);}};
     }
 
     @Override

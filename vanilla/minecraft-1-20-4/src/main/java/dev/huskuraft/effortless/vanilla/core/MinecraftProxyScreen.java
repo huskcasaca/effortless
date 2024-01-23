@@ -5,6 +5,7 @@ import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
+@Deprecated // use Events
 public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
 
     private final Screen proxy;

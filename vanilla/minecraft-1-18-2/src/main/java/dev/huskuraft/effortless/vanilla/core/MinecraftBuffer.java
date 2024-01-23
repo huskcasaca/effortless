@@ -92,7 +92,7 @@ public class MinecraftBuffer implements Buffer {
 
     @Override
     public Item readItem() {
-        return new MinecraftItem(reference.readById(DefaultedRegistry.ITEM));
+        return new MinecraftItem(DefaultedRegistry.ITEM.byId(reference.readVarInt()));
     }
 
     @Override
@@ -172,7 +172,9 @@ public class MinecraftBuffer implements Buffer {
 
     @Override
     public void writeItem(Item value) {
-        reference.writeId(DefaultedRegistry.ITEM, value.reference());
+		var id = DefaultedRegistry.ITEM.getId(value.reference());
+		if (id == -1) throw new IllegalArgumentException("Can't find id for '" + value.reference() + "' in map " + DefaultedRegistry.ITEM);
+		reference.writeVarInt(id);
     }
 
     @Override

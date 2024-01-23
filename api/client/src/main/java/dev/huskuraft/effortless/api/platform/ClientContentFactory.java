@@ -14,9 +14,14 @@ import java.util.stream.Stream;
 
 public interface ClientContentFactory extends ContentFactory {
 
-    SearchTree<ItemStack> newItemStackSearchTree(SearchBy searchBy);
+    SearchTree<ItemStack> searchItemStack(SearchBy searchBy);
 
-    <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor);
+	default <T> SearchTree<T> searchByText(List<T> list, Function<T, Stream<Text>> keyExtractor) {
+		return null;
+	}
+
+	@Deprecated
+	<T> SearchTree<T> search(List<T> list, Function<T, Stream<Text>> keyExtractor);
 
     KeyBinding getOptionKeyBinding(OptionKeys key);
 

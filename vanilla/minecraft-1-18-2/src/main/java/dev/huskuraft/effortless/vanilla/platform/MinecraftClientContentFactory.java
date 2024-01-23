@@ -16,7 +16,6 @@ import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderStateFactory;
 import dev.huskuraft.effortless.vanilla.texture.MinecraftTextureFactory;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.searchtree.PlainTextSearchTree;
 import net.minecraft.client.searchtree.SearchRegistry;
 import net.minecraft.network.chat.Component;
 
@@ -30,18 +29,19 @@ public class MinecraftClientContentFactory extends MinecraftCommonContentFactory
     public static final MinecraftClientContentFactory INSTANCE = new MinecraftClientContentFactory();
 
     @Override
-    public SearchTree<ItemStack> newItemStackSearchTree(SearchBy searchBy) {
-        return query -> Minecraft.getInstance().getSearchTree(
-                switch (searchBy) {
-                    case NAME -> SearchRegistry.CREATIVE_NAMES;
-                    case TAG -> SearchRegistry.CREATIVE_TAGS;
-                }
-        ).search(query).stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
+    public SearchTree<ItemStack> searchItemStack(SearchBy searchBy) {
+		var minecraftSearchTree = Minecraft.getInstance().getSearchTree(
+				switch (searchBy) {
+					case NAME -> SearchRegistry.CREATIVE_NAMES;
+					case TAG -> SearchRegistry.CREATIVE_TAGS;
+				}
+		);
+        return query -> minecraftSearchTree.search(query).stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
     }
 
     @Override
-    public <T> SearchTree<T> newSearchTree(List<T> list, Function<T, Stream<Text>> keyExtractor) {
-        return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> ((Component) text.reference()).getString())).search(query);
+    public <T> SearchTree<T> search(List<T> list, Function<T, Stream<Text>> keyExtractor) {
+        return query -> SearchTree.of(list, item -> keyExtractor.apply(item).map(text -> ((Component) text.reference()).getString())).search(query);
     }
 
     @Override
@@ -87,8 +87,7 @@ public class MinecraftClientContentFactory extends MinecraftCommonContentFactory
 
     @Override
     public KeyBinding newKeyBinding(String name, String category, KeyCodes key) {
-        var minecraftKeyMapping = new KeyMapping(name, key.value(), category);
-        return new MinecraftKeyBinding(minecraftKeyMapping);
+        return new MinecraftKeyBinding(new KeyMapping(name, key.value(), category));
     }
 
     @Override

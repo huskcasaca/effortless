@@ -5,12 +5,13 @@ import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
 import net.minecraft.network.chat.Component;
 
+@Deprecated // use Events
 public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Screen {
 
     private final Screen proxy;
 
     public MinecraftProxyScreen(Screen screen) {
-        super(Component.empty());
+        super(Component.nullToEmpty(null));
         this.proxy = screen;
     }
 
@@ -32,14 +33,14 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
         proxy.onLoad();
     }
 
-    @Override
-    protected void rebuildWidgets() {
-        proxy.setWidth(width);
-        proxy.setHeight(height);
-        proxy.onDestroy();
-        proxy.onCreate();
-        proxy.onLoad();
-    }
+//    @Override
+//    protected void rebuildWidgets() {
+//        proxy.setWidth(width);
+//        proxy.setHeight(height);
+//        proxy.onDestroy();
+//        proxy.onCreate();
+//        proxy.onLoad();
+//    }
 
     @Override
     public void removed() {

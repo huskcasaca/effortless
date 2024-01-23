@@ -110,7 +110,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     }
 
     private void setSearchResult(String string) {
-        var searchTree = getEntrance().getContentFactory().newSearchTree(transformers, Transformer::getSearchableTags);
+        var searchTree = getEntrance().getContentFactory().search(transformers, Transformer::getSearchableTags);
         entries.reset(searchTree.search(string.toLowerCase(Locale.ROOT)).stream().filter(transformer -> transformer.getType() == selectedType).toList());
         entries.setSelected(null);
         entries.setScrollAmount(0);

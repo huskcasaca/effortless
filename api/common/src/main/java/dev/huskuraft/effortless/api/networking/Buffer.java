@@ -62,7 +62,8 @@ public interface Buffer extends PlatformReference {
 //
 //    double[] readDoubleArray();
 
-    Item readItem();
+	@Deprecated // use Registries
+	Item readItem();
 
     ItemStack readItemStack();
 
@@ -127,6 +128,7 @@ public interface Buffer extends PlatformReference {
 //
 //    void writeDoubleArray(double[] value);
 
+	@Deprecated // use Registries
     void writeItem(Item value);
 
     // TODO: 7/12/23 extract

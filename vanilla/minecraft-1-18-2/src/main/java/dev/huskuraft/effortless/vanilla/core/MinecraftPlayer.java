@@ -87,7 +87,7 @@ public class MinecraftPlayer implements Player {
 
     @Override
     public void sendMessage(Text message) {
-        reference.sendSystemMessage(message.reference());
+        reference.sendMessage(message.reference(), UUID.randomUUID());
 //        getRef().displayClientMessage(message, true);
     }
 

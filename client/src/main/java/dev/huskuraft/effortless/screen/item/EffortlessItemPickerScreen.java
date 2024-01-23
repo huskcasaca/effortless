@@ -82,10 +82,10 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
 
     private void setSearchResult(String string) {
         if (string.startsWith("#")) {
-            var searchTree = getEntrance().getContentFactory().newItemStackSearchTree(SearchBy.TAG);
+            var searchTree = getEntrance().getContentFactory().searchItemStack(SearchBy.TAG);
             entries.reset(searchTree.search(string.substring(1).toLowerCase(Locale.ROOT)));
         } else {
-            var searchTree = getEntrance().getContentFactory().newItemStackSearchTree(SearchBy.NAME);
+            var searchTree = getEntrance().getContentFactory().searchItemStack(SearchBy.NAME);
             entries.reset(searchTree.search(string.toLowerCase(Locale.ROOT)));
         }
         entries.setSelected(null);

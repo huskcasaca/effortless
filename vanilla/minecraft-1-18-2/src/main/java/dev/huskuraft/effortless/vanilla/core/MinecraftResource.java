@@ -28,7 +28,7 @@ public class MinecraftResource implements Resource {
 
     @Override
     public ResourceMetadata metadata() throws IOException {
-        var metadata = resource.metadata();
+        var metadata = resource.getMetadata(null); // FIXME: 23/1/24
         return () -> metadata;
     }
 

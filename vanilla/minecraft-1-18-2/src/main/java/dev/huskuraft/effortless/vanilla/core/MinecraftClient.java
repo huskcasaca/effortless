@@ -12,6 +12,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
 
+import java.io.IOException;
+
 public class MinecraftClient implements Client {
 
     private final Minecraft reference;
@@ -105,8 +107,12 @@ public class MinecraftClient implements Client {
 
     @Override
     public Resource getResource(ResourceLocation location) {
-        var resource = reference.getResourceManager().getResource(location.reference());
-        return resource.map(value -> new MinecraftResource(value, location.reference())).orElse(null);
+        try {
+			var resource = reference.getResourceManager().getResource(location.reference());
+			return new MinecraftResource(resource, location.reference());
+		} catch (IOException e) {
+			return null;
+		}
     }
 
     @Override

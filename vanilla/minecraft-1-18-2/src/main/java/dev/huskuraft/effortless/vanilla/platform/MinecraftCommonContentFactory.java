@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -54,40 +55,37 @@ public class MinecraftCommonContentFactory implements ContentFactory {
 
     @Override
     public ItemStack newItemStack(Item item, int count) {
-        net.minecraft.world.item.Item item1 = item.reference();
-        return new MinecraftItemStack(item1, count);
+        return new MinecraftItemStack(item.reference(), count);
     }
 
     @Override
     public ItemStack newItemStack(Item item, int count, TagRecord tag) {
-        net.minecraft.world.item.Item item1 = item.reference();
-        CompoundTag tag1 = tag.reference();
-        return new MinecraftItemStack(item1, tag1, count);
+        return new MinecraftItemStack(item.reference(), tag.reference(), count);
     }
 
     @Override
     public Text newText() {
-        return new MinecraftText((Component) Component.empty());
+        return new MinecraftText(Component.nullToEmpty(null));
     }
 
     @Override
     public Text newText(String text) {
-        return new MinecraftText((Component) Component.literal(text));
+        return new MinecraftText(Component.nullToEmpty(text));
     }
 
     @Override
     public Text newText(String text, Text... args) {
-        return new MinecraftText((Component) Component.translatable(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
+        return new MinecraftText(new TranslatableComponent(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
     }
 
     @Override
     public Text newTranslatableText(String text) {
-        return new MinecraftText((Component) Component.translatable(text));
+        return new MinecraftText(new TranslatableComponent(text));
     }
 
     @Override
     public Text newTranslatableText(String text, Text... args) {
-        return new MinecraftText((Component) Component.translatable(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
+        return new MinecraftText(new TranslatableComponent(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
     }
 
     @Override

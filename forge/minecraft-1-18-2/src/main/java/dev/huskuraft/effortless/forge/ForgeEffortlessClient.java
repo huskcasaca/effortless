@@ -18,6 +18,7 @@ import dev.huskuraft.effortless.vanilla.renderer.MinecraftShader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -33,7 +34,6 @@ public class ForgeEffortlessClient extends EffortlessClient {
 
     public ForgeEffortlessClient() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterKeyMappings);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onReloadShader);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -63,13 +63,9 @@ public class ForgeEffortlessClient extends EffortlessClient {
                 Minecraft.getInstance().getConnection().send(minecraftPacket);
             };
         });
-    }
-
-    @SubscribeEvent
-    public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
-        getEventRegistry().getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
-            event.register(key.getBinding().reference());
-        });
+		getEventRegistry().getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
+			ClientRegistry.registerKeyBinding(key.getBinding().reference());
+		});
     }
 
     @SubscribeEvent
@@ -99,17 +95,17 @@ public class ForgeEffortlessClient extends EffortlessClient {
     }
 
     @SubscribeEvent
-    public void onRenderGui(RenderGuiEvent event) {
-        getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(event.getPoseStack()), event.getPartialTick());
+    public void onRenderGameOverlay(RenderGameOverlayEvent event) {
+        getEventRegistry().getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(event.getMatrixStack()), event.getPartialTicks());
     }
 
     @SubscribeEvent
-    public void onKeyInput(InputEvent.Key event) {
+    public void onKeyInput(InputEvent.KeyInputEvent event) {
         getEventRegistry().getKeyInputEvent().invoker().onKeyInput(new InputKey(event.getKey(), event.getScanCode(), event.getAction(), event.getModifiers()));
     }
 
     @SubscribeEvent
-    public void onInteractionInput(InputEvent.InteractionKeyMappingTriggered event) {
+    public void onClickInput(InputEvent.ClickInputEvent event) {
         var type = event.isAttack() ? InteractionType.ATTACK : event.isUseItem() ? InteractionType.USE_ITEM : InteractionType.UNKNOWN;
         var hand = MinecraftConvertor.fromPlatformInteractionHand(event.getHand());
         if (getEventRegistry().getInteractionInputEvent().invoker().onInteractionInput(type, hand).interruptsFurtherEvaluation()) {
