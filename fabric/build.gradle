@@ -80,12 +80,15 @@ subprojects {
         inputFile = shadowJar.archiveFile
     }
 
+    task outputJar (type: Copy) {
+        from ('build/libs')
+        into rootProject.file("output")
+        include remapJar.archiveFile.get().getAsFile().getName()
+    }
+
     assemble {
         dependsOn remapJar
-        doLast {
-            rootProject.file("output").mkdir()
-            remapJar.archiveFile.get().getAsFile().renameTo(rootProject.file("output/${remapJar.archiveFile.get().getAsFile().name}"))
-        }
+        finalizedBy outputJar
     }
 
 }

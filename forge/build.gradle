@@ -150,11 +150,15 @@ subprojects {
     reobf {
         shadowJar {}
     }
+
+    task outputJar (type: Copy) {
+        from ('build/libs')
+        into rootProject.file("output")
+        include shadowJar.archiveFile.get().getAsFile().getName()
+    }
+
     assemble {
-        doLast {
-            rootProject.file("output").mkdir()
-            shadowJar.archiveFile.get().getAsFile().renameTo(rootProject.file("output/${shadowJar.archiveFile.get().getAsFile().name}"))
-        }
+        finalizedBy outputJar
     }
 
 }
