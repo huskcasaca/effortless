@@ -6,6 +6,11 @@ repositories {
     mavenCentral()
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 dependencies {
     implementation project(':api:common')
     implementation 'com.google.code.findbugs:jsr305:3.0.2'

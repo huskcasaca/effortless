@@ -13,7 +13,7 @@ import net.minecraft.client.gui.Gui;
 @Mixin(Gui.class)
 public abstract class GuiMixin {
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderSavingIndicator(Lcom/mojang/blaze3d/vertex/PoseStack;)V", shift = At.Shift.AFTER))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;setVisible(Z)V", shift = At.Shift.AFTER))
     private void onRenderGui(PoseStack matrixStack, float f, CallbackInfo ci) {
         ClientRenderEvents.GUI.invoker().onRenderGui(matrixStack, f);
     }

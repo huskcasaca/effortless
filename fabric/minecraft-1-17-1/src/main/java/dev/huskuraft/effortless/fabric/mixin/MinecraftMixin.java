@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import dev.huskuraft.effortless.fabric.events.InteractionInputEvents;
@@ -23,9 +22,9 @@ public abstract class MinecraftMixin {
     public LocalPlayer player;
 
     @Inject(method = "startAttack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/HitResult;getType()Lnet/minecraft/world/phys/HitResult$Type;"), cancellable = true)
-    private void onPlayerStartAttack(CallbackInfoReturnable<Boolean> cir) {
+    private void onPlayerStartAttack(CallbackInfo ci) {
         if (InteractionInputEvents.ATTACK.invoker().onAttack(player, InteractionHand.MAIN_HAND)) {
-            cir.setReturnValue(false);
+            ci.cancel();
         }
     }
 

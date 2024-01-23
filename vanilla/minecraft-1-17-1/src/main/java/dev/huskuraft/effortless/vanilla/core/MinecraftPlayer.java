@@ -48,7 +48,7 @@ public class MinecraftPlayer implements Player {
 
     @Override
     public World getWorld() {
-        return new MinecraftWorld(reference.getLevel());
+        return new MinecraftWorld(reference.level);
     }
 
     @Override
