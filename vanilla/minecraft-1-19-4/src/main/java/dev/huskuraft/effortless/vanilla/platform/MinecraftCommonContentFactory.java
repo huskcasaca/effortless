@@ -1,5 +1,8 @@
 package dev.huskuraft.effortless.vanilla.platform;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
@@ -10,18 +13,19 @@ import dev.huskuraft.effortless.api.tag.TagIoReader;
 import dev.huskuraft.effortless.api.tag.TagIoWriter;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.vanilla.core.*;
+import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftItem;
+import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
+import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
+import dev.huskuraft.effortless.vanilla.core.MinecraftText;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
 import io.netty.buffer.Unpooled;
 import net.minecraft.Util;
-import net.minecraft.core.DefaultedRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-
-import java.util.Arrays;
-import java.util.Optional;
 
 public class MinecraftCommonContentFactory implements ContentFactory {
 
@@ -44,7 +48,7 @@ public class MinecraftCommonContentFactory implements ContentFactory {
 
     @Override
     public Optional<Item> newOptionalItem(ResourceLocation location) {
-        return DefaultedRegistry.ITEM.getOptional(location.<net.minecraft.resources.ResourceLocation>reference()).map(item -> new MinecraftItem(item));
+        return BuiltInRegistries.ITEM.getOptional(location.<net.minecraft.resources.ResourceLocation>reference()).map(item -> new MinecraftItem(item));
     }
 
     @Override

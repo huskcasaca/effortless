@@ -1,7 +1,11 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
@@ -24,9 +28,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-
-import java.util.List;
-import java.util.Optional;
 
 public class MinecraftRenderer extends Renderer {
 
@@ -71,7 +72,7 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public BufferSource bufferSource() {
-        return new MinecraftBufferSource(minecraftClient.renderBuffers().bufferSource());
+        return new MinecraftBufferSource(minecraftBufferSource);
     }
 
     @Override
@@ -92,19 +93,14 @@ public class MinecraftRenderer extends Renderer {
                 shadow,
                 minecraftMatrixStack.last().pose(),
                 minecraftBufferSource,
-                seeThrough,
+				seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL,
                 backgroundColor,
                 lightMap);
     }
 
     @Override
     public void renderItem(ItemStack stack, int x, int y) {
-        RenderSystem.getModelViewStack().pushPose();
-        RenderSystem.getModelViewStack().mulPoseMatrix(minecraftMatrixStack.last().pose());
-        RenderSystem.applyModelViewMatrix();
-        minecraftClient.getItemRenderer().renderGuiItem(stack.reference(), x, y);
-        RenderSystem.getModelViewStack().popPose();
-        RenderSystem.applyModelViewMatrix();
+        minecraftClient.getItemRenderer().renderGuiItem(minecraftMatrixStack, stack.reference(), x, y);
     }
 
     @Override

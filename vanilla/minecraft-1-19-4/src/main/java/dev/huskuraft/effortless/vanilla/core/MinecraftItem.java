@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.vanilla.core;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
-import net.minecraft.core.DefaultedRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 
 public class MinecraftItem implements Item {
@@ -31,7 +31,7 @@ public class MinecraftItem implements Item {
 
     @Override
     public ResourceLocation getId() {
-        var minecraftResourceLocation = DefaultedRegistry.ITEM.getKey(reference);
+        var minecraftResourceLocation = BuiltInRegistries.ITEM.getKey(reference);
         return new MinecraftResourceLocation(minecraftResourceLocation);
     }
 

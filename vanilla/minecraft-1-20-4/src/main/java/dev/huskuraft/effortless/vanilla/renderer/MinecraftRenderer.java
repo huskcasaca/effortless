@@ -1,7 +1,11 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
@@ -24,9 +28,6 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-
-import java.util.List;
-import java.util.Optional;
 
 public class MinecraftRenderer extends Renderer {
 
@@ -65,7 +66,7 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void setRsShaderColor(float red, float green, float blue, float alpha) {
-//        minecraft renderer provider flush if managed();
+//        minecraftRendererProvider.flushIfManaged();
         RenderSystem.setShaderColor(red, green, blue, alpha);
     }
 

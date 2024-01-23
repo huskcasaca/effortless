@@ -44,8 +44,8 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
             KeyBindingHelper.registerKeyBinding(key1.getBinding().reference());
         });
 
-        ClientShadersEvents.REGISTER.register((manager, sink) -> {
-            getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> sink.register(new ShaderInstance(manager, resource.getPath(), format.reference()), shaderInstance -> consumer.accept(new MinecraftShader(shaderInstance))));
+        ClientShadersEvents.REGISTER.register((provider, sink) -> {
+            getEventRegistry().getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> sink.register(new ShaderInstance(provider, resource.getPath(), format.reference()), shaderInstance -> consumer.accept(new MinecraftShader(shaderInstance))));
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(minecraft -> {

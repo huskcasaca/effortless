@@ -1,8 +1,18 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import com.mojang.math.Quaternion;
-import dev.huskuraft.effortless.api.core.*;
-import dev.huskuraft.effortless.api.math.*;
+import java.nio.FloatBuffer;
+
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.EntityInteraction;
+import dev.huskuraft.effortless.api.core.Interaction;
+import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.math.Matrix3f;
+import dev.huskuraft.effortless.api.math.Matrix4f;
+import dev.huskuraft.effortless.api.math.Quaternionf;
+import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -11,44 +21,38 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.nio.FloatBuffer;
-
 public class MinecraftConvertor {
 
-    public static Quaternionf fromPlatformQuaternion(Quaternion quaternion) {
-        return new Quaternionf(quaternion.i(), quaternion.j(), quaternion.k(), quaternion.r());
+    public static Quaternionf fromPlatformQuaternion(org.joml.Quaternionf quaternion) {
+        return new Quaternionf(quaternion.x(), quaternion.y(), quaternion.z(), quaternion.w());
     }
 
-    public static Quaternion toPlatformQuaternion(Quaternionf quaternion) {
-        return new Quaternion(quaternion.x(), quaternion.y(), quaternion.z(), quaternion.w());
+    public static org.joml.Quaternionf toPlatformQuaternion(Quaternionf quaternion) {
+        return new org.joml.Quaternionf(quaternion.x(), quaternion.y(), quaternion.z(), quaternion.w());
     }
 
-    public static Matrix3f fromPlatformMatrix3f(com.mojang.math.Matrix3f matrix) {
+    public static Matrix3f fromPlatformMatrix3f(org.joml.Matrix3f matrix) {
         var buffer = FloatBuffer.allocate(9);
-        matrix.store(buffer);
+        matrix.get(buffer);
         return new Matrix3f(buffer);
     }
 
-    public static com.mojang.math.Matrix3f toPlatformMatrix3f(Matrix3f matrix) {
+    public static org.joml.Matrix3f toPlatformMatrix3f(Matrix3f matrix) {
         var buffer = FloatBuffer.allocate(9);
         matrix.write(buffer);
-        var minecraftMatrix = new com.mojang.math.Matrix3f();
-        minecraftMatrix.load(buffer);
-        return minecraftMatrix;
+        return new org.joml.Matrix3f(buffer);
     }
 
-    public static Matrix4f fromPlatformMatrix4f(com.mojang.math.Matrix4f matrix) {
+    public static Matrix4f fromPlatformMatrix4f(org.joml.Matrix4f matrix) {
         var buffer = FloatBuffer.allocate(16);
-        matrix.store(buffer);
+        matrix.get(buffer);
         return new Matrix4f(buffer);
     }
 
-    public static com.mojang.math.Matrix4f toPlatformMatrix4f(Matrix4f matrix) {
+    public static org.joml.Matrix4f toPlatformMatrix4f(Matrix4f matrix) {
         var buffer = FloatBuffer.allocate(16);
         matrix.write(buffer);
-        var minecraftMatrix = new com.mojang.math.Matrix4f();
-        minecraftMatrix.load(buffer);
-        return minecraftMatrix;
+        return new org.joml.Matrix4f(buffer);
     }
 
     public static BlockPos toPlatformBlockPosition(BlockPosition blockPosition) {

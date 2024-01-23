@@ -1,9 +1,13 @@
 package dev.huskuraft.effortless.vanilla.texture;
 
-import dev.huskuraft.effortless.api.texture.*;
+import dev.huskuraft.effortless.api.texture.SimpleTexture;
+import dev.huskuraft.effortless.api.texture.SimpleTextureSprite;
+import dev.huskuraft.effortless.api.texture.SpriteScaling;
+import dev.huskuraft.effortless.api.texture.Texture;
+import dev.huskuraft.effortless.api.texture.TextureFactory;
+import dev.huskuraft.effortless.api.texture.TextureSprite;
 import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 
@@ -37,22 +41,6 @@ public class MinecraftTextureFactory implements TextureFactory {
                 textureWidth,
                 textureHeight,
                 scaling);
-    }
-
-    public TextureSprite createSprite(TextureAtlasSprite sprite, SpriteScaling scaling) {
-        return new SimpleTextureSprite(
-                new MinecraftResourceLocation(sprite.atlas().location()),
-                new MinecraftResourceLocation(sprite.getName()),
-                sprite.getWidth(),
-                sprite.getHeight(),
-                sprite.getX(),
-                sprite.getY(),
-                sprite.getU0(),
-                sprite.getU1(),
-                sprite.getV0(),
-                sprite.getV1(),
-                scaling
-        );
     }
 
 }
