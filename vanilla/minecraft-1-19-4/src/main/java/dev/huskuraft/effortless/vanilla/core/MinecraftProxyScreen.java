@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.vanilla.core;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
 import net.minecraft.network.chat.Component;
@@ -86,7 +87,7 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
 
     @Override
     public boolean mouseScrolled(double d, double e, double f) {
-        return proxy.onMouseScrolled(d, e, f, 0);
+        return proxy.onMouseScrolled(d, e, 0, f);
     }
 
     @Override
