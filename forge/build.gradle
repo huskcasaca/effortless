@@ -7,12 +7,15 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'net.minecraftforge.gradle'
     apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'com.modrinth.minotaur'
+
+    apply from: rootProject.file('gradle/publishing/modrinth.gradle')
 
     version = "${mod_version}"
     group = "${mod_group_id}.forge"
 
     base {
-        archivesName = "${mod_id}-forge-${minecraft_version}"
+        archivesName = "${mod_id}-${loader_name}-${minecraft_version}"
     }
 
     java {
