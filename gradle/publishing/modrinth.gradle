@@ -1,0 +1,31 @@
+import java.nio.file.Files
+
+modrinth {
+    token = System.getenv('MODRINTH_TOKEN')
+    projectId = modrinth_id
+    versionNumber = mod_version
+    versionName = "${mod_name} ${mod_version}"
+    versionType = mod_version.contains('-alpha') ? 'alpha' : mod_version.contains('-beta') ? 'beta' : 'release'
+    changelog = extractChangelog(rootProject.file('CHANGELOG.md'), mod_version)
+    uploadFile = file("build/libs/${mod_id}-${loader_name}-${minecraft_version}-${mod_version}.jar")
+    gameVersions = [minecraft_version]
+    if (loader_name == 'forge') {
+        loaders = ['forge']
+    }
+    if (loader_name == 'fabric') {
+        loaders = ['fabric']
+        required.project('fabric-api')
+    }
+}
+
+static def extractChangelog(File changelogFile, String modVersion) {
+    def text = Files.readString(changelogFile.toPath())
+    def split = text.split('----------\n\n')
+    for (final def log in split) {
+        if (log.startsWith("### $modVersion")) {
+            println(log)
+            return log.replaceFirst("### $modVersion", '').trim()
+        }
+    }
+    throw new IllegalStateException("$modVersion not found in changelog")
+}
