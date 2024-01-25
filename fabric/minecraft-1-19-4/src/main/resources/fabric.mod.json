@@ -18,10 +18,17 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.huskuraft.effortless.fabric.FabricEffortlessUniversal"
+      "dev.huskuraft.effortless.fabric.FabricEffortless"
+    ],
+    "client": [
+      "dev.huskuraft.effortless.fabric.FabricEffortlessClient"
     ]
   },
+  "mixins": [
+    "effortless.fabric.mixins.json"
+  ],
+  "accessWidener": "effortless.accesswidener",
   "depends": {
-    "minecraft": "*"
+    "minecraft": "${minecraft_version}"
   }
 }

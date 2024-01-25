@@ -1,6 +1,5 @@
 plugins {
     id 'net.minecraftforge.gradle' version "[${forge_gradle_version},6.2)" apply false
-    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
 
 subprojects {
