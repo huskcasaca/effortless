@@ -2,13 +2,13 @@ plugins {
     id 'net.minecraftforge.gradle' version "[${forge_gradle_version},6.2)" apply false
 }
 
-subprojects {
+apply plugin: 'com.modrinth.minotaur'
+apply from: rootProject.file('gradle/publishing/modrinth.gradle')
+
+allprojects {
     apply plugin: 'java-library'
     apply plugin: 'net.minecraftforge.gradle'
     apply plugin: 'com.github.johnrengelman.shadow'
-    apply plugin: 'com.modrinth.minotaur'
-
-    apply from: rootProject.file('gradle/publishing/modrinth.gradle')
 
     version = "${mod_version}"
     group = "${mod_group_id}.forge"
@@ -22,6 +22,19 @@ subprojects {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+
+    dependencies {
+//        if (pack_type == 'universal') {
+//            minecraft "net.minecraftforge:forge:${subprojects.last().minecraft_version}-${subprojects.last().forge_version}"
+//        } else {
+//            minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+//        }
+        minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+
+    }
+
 
     minecraft {
         mappings channel: mapping_channel, version: mapping_version
@@ -71,27 +84,9 @@ subprojects {
         }
     }
 
-    sourceSets {
-        main {
-            java {
-                srcDir project(":vanilla:$project.name").file("src/main")
-            }
-            resources {
-                srcDir project(":vanilla:$project.name").file("src/main/resources")
-            }
-        }
-    }
 
     dependencies {
         minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
-        implementation project(':common')
-        implementation project(':client')
-        implementation project(":vanilla:$project.name")
-
-        shadow project(':common')
-        shadow project(':client')
-        shadow project(":vanilla:$project.name")
 
     }
 
@@ -118,7 +113,7 @@ subprojects {
             expand replaceProperties + [project: project]
         }
 
-        from "${parent.projectDir}/src/main/resources"
+//        from "${parent.projectDir}/src/main/resources"
     }
 
     jar {
@@ -136,6 +131,38 @@ subprojects {
         finalizedBy 'reobfJar'
     }
 
+
+}
+
+subprojects {
+
+    sourceSets {
+        main {
+            java {
+                srcDir project(":vanilla:$project.name").file("src/main")
+            }
+            resources {
+                srcDir project(":vanilla:$project.name").file("src/main/resources")
+            }
+        }
+    }
+
+
+    dependencies {
+
+        implementation project(':common')
+        implementation project(':client')
+        implementation project(":vanilla:$project.name")
+
+        shadow project(':common')
+        shadow project(':client')
+        shadow project(":vanilla:$project.name")
+
+    }
+
+    reobf {
+        shadowJar {}
+    }
     shadowJar {
         dependsOn 'reobfJar'
         configurations = [project.configurations.shadow]
@@ -147,20 +174,37 @@ subprojects {
 
         minimize()
         archiveClassifier.set('')
+
+        finalizedBy reobfShadowJar
     }
 
-    reobf {
-        shadowJar {}
-    }
+}
 
-    task outputJar (type: Copy) {
-        from ('build/libs')
-        into rootProject.file("output")
-        include shadowJar.archiveFile.get().getAsFile().getName()
-    }
+reobf {
+    shadowJar {}
+}
 
-    assemble {
-        finalizedBy outputJar
+shadowJar {
+    dependsOn 'reobfJar'
+    configurations = [project.configurations.shadow]
+    dependencies {
+        exclude dependency('com.google.code.findbugs:jsr305')
     }
+    relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.forge'
+    exclude 'effortless.accesswidener'
 
+    minimize()
+    archiveClassifier.set('')
+
+    finalizedBy reobfShadowJar
+}
+
+task outputJar (type: Copy) {
+    from ('build/libs')
+    into rootProject.file("output")
+    include shadowJar.archiveFile.get().getAsFile().getName()
+}
+
+assemble {
+    finalizedBy outputJar
 }
