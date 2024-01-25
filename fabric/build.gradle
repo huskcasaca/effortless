@@ -1,16 +1,11 @@
 plugins {
     id 'fabric-loom' version "${loom_version}" apply false
-    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
 
-subprojects {
-
+allprojects {
     apply plugin: 'java-library'
     apply plugin: 'fabric-loom'
     apply plugin: 'com.github.johnrengelman.shadow'
-    apply plugin: 'com.modrinth.minotaur'
-
-    apply from: rootProject.file('gradle/publishing/modrinth.gradle')
 
     version = "${mod_version}"
     group = "${mod_group_id}.fabric"
@@ -25,34 +20,25 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    loom {
-        accessWidenerPath = project(":vanilla:$project.name").file("src/main/resources/effortless.accesswidener")
-        mixin {
-            add(sourceSets.main, 'effortless.fabric.refmap.json')
-        }
-    }
-
     dependencies {
-        minecraft "com.mojang:minecraft:${minecraft_version}"
-        mappings loom.officialMojangMappings()
+
+        if (minecraft_version == 'universal') {
+            minecraft "com.mojang:minecraft:${subprojects.last().minecraft_version}" // reserved for fabric loom
+        } else {
+            minecraft "com.mojang:minecraft:${minecraft_version}"
+        }
+
+        mappings loom.officialMojangMappings() // reserved for fabric loom
 
         modImplementation "net.fabricmc:fabric-loader:${loader_version}"
-        modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
         implementation project(':common')
         implementation project(':client')
-        implementation project(":vanilla:$project.name")
 
         shadow project(':common')
         shadow project(':client')
-        shadow project(":vanilla:$project.name")
 
         implementation 'com.google.code.findbugs:jsr305:3.0.2'
-
-    }
-
-    sourceSets.main.java {
-        srcDir "${buildDir}/generated/java"
     }
 
     processResources {
@@ -60,14 +46,15 @@ subprojects {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         filesMatching('fabric.mod.json') {
-            expand project.properties
+            expand "mod_version": mod_version,
+                    "mod_id": "${mod_id}-port-${minecraft_version.replace(".", "-")}",
+                    "mod_name": mod_name,
+                    "mod_description": mod_description,
+                    "minecraft_version": minecraft_version
         }
 
         from project(':common').sourceSets.main.resources
         from project(':client').sourceSets.main.resources
-        from project(":vanilla:${project.name}").file("src/main/resources")
-
-        from "${parent.projectDir}/src/main/resources"
     }
 
     shadowJar {
@@ -75,7 +62,6 @@ subprojects {
         dependencies {
             exclude dependency('com.google.code.findbugs:jsr305')
         }
-        relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.fabric'
     }
 
     remapJar {
@@ -83,15 +69,56 @@ subprojects {
         inputFile = shadowJar.archiveFile
     }
 
-    task outputJar (type: Copy) {
-        from ('build/libs')
-        into rootProject.file("output")
-        include remapJar.archiveFile.get().getAsFile().getName()
+}
+
+subprojects {
+
+    dependencies {
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+        implementation project(":vanilla:$project.name")
+        shadow project(":vanilla:$project.name")
     }
 
-    assemble {
-        dependsOn remapJar
-        finalizedBy outputJar
+    processResources {
+        from project(":vanilla:${project.name}").file("src/main/resources")
+    }
+
+    loom {
+        accessWidenerPath = project(":vanilla:$project.name").file("src/main/resources/effortless.accesswidener")
+        mixin {
+            add(sourceSets.main, 'effortless.fabric.refmap.json')
+        }
+    }
+
+    shadowJar {
+        dependencies {
+            include project(":vanilla:${project.name}")
+        }
+        relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.fabric'
     }
 
 }
+
+remapJar {
+    afterEvaluate {
+        subprojects.each {
+            nestedJars.from project("${it.path}").tasks.named("remapJar")
+        }
+    }
+}
+
+task outputJar(type: Copy) {
+    from('build/libs')
+    into rootProject.file("output")
+    include remapJar.archiveFile.get().getAsFile().getName()
+}
+
+assemble {
+    dependsOn remapJar
+    finalizedBy outputJar
+}
+
+apply plugin: 'com.modrinth.minotaur'
+apply from: rootProject.file('gradle/publishing/modrinth.gradle')
+
