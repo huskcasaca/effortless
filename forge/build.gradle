@@ -2,10 +2,7 @@ plugins {
     id 'net.minecraftforge.gradle' version "[${forge_gradle_version},6.2)" apply false
 }
 
-apply plugin: 'com.modrinth.minotaur'
-apply from: rootProject.file('gradle/publishing/modrinth.gradle')
-
-allprojects {
+subprojects {
     apply plugin: 'java-library'
     apply plugin: 'net.minecraftforge.gradle'
     apply plugin: 'com.github.johnrengelman.shadow'
@@ -23,18 +20,18 @@ allprojects {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-
     dependencies {
-//        if (pack_type == 'universal') {
-//            minecraft "net.minecraftforge:forge:${subprojects.last().minecraft_version}-${subprojects.last().forge_version}"
-//        } else {
-//            minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-//        }
         minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
+        implementation project(':common')
+        implementation project(':client')
+        implementation project(":vanilla:$project.name")
+
+        shadow project(':common')
+        shadow project(':client')
+        shadow project(":vanilla:$project.name")
 
     }
-
 
     minecraft {
         mappings channel: mapping_channel, version: mapping_version
@@ -131,11 +128,6 @@ allprojects {
         finalizedBy 'reobfJar'
     }
 
-
-}
-
-subprojects {
-
     sourceSets {
         main {
             java {
@@ -147,22 +139,10 @@ subprojects {
         }
     }
 
-
-    dependencies {
-
-        implementation project(':common')
-        implementation project(':client')
-        implementation project(":vanilla:$project.name")
-
-        shadow project(':common')
-        shadow project(':client')
-        shadow project(":vanilla:$project.name")
-
-    }
-
     reobf {
         shadowJar {}
     }
+
     shadowJar {
         dependsOn 'reobfJar'
         configurations = [project.configurations.shadow]
@@ -178,33 +158,4 @@ subprojects {
         finalizedBy reobfShadowJar
     }
 
-}
-
-reobf {
-    shadowJar {}
-}
-
-shadowJar {
-    dependsOn 'reobfJar'
-    configurations = [project.configurations.shadow]
-    dependencies {
-        exclude dependency('com.google.code.findbugs:jsr305')
-    }
-    relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.forge'
-    exclude 'effortless.accesswidener'
-
-    minimize()
-    archiveClassifier.set('')
-
-    finalizedBy reobfShadowJar
-}
-
-task outputJar (type: Copy) {
-    from ('build/libs')
-    into rootProject.file("output")
-    include shadowJar.archiveFile.get().getAsFile().getName()
-}
-
-assemble {
-    finalizedBy outputJar
 }
