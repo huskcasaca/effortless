@@ -9,6 +9,9 @@ modrinth {
     changelog = extractChangelog(rootProject.file('CHANGELOG.md'), mod_version)
     uploadFile = file("build/libs/${mod_id}-${loader_name}-${minecraft_version}-${mod_version}.jar")
     gameVersions = [minecraft_version]
+    if (loader_name == 'multiplatform') {
+        loaders = ['forge', 'fabric']
+    }
     if (loader_name == 'forge') {
         loaders = ['forge']
     }

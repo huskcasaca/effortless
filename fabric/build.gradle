@@ -83,7 +83,4 @@ subprojects {
         }
     }
 
-    shadowJar {
-    }
-
 }
