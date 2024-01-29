@@ -1,5 +1,6 @@
 plugins {
     id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT' apply false
+    id 'dev.huskuraft.fuse' apply false
 }
 
 subprojects {
@@ -8,11 +9,11 @@ subprojects {
 
     def minecraftVersion = project['minecraft_version']
 
-    version = rootProject.version
-    group = "${rootProject.group}.vanilla"
+    version = mod_version
+    group = "${mod_group_id}.vanilla"
 
     base {
-        archivesName = 'effortless-vanilla'
+        archivesName = "${mod_id}-${loader_name}-${minecraft_version}"
     }
 
     java {
@@ -32,5 +33,7 @@ subprojects {
 
         implementation 'com.google.code.findbugs:jsr305:3.0.2'
     }
+
+    apply from: '../../gradle/fuse/fuse.gradle'
 
 }
