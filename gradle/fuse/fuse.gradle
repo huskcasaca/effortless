@@ -4,11 +4,11 @@ apply plugin: 'dev.huskuraft.fuse'
 fuseJar {
 
     includeJar {
-        source project(":fabric:minecraft-${minecraft_version.replace(".", "-")}")
+        source project(":fabric:mc-${minecraft_version.replace(".", "-")}")
         task 'remapJar'
     }
     includeJar {
-        source project(":forge:minecraft-${minecraft_version.replace(".", "-")}")
+        source project(":forge:mc-${minecraft_version.replace(".", "-")}")
         task 'shadowJar'
     }
 
