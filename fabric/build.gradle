@@ -45,11 +45,7 @@ subprojects {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         filesMatching('fabric.mod.json') {
-            expand "mod_version": mod_version,
-                    "mod_id": "${mod_id}-port-${minecraft_version.replace(".", "-")}",
-                    "mod_name": mod_name,
-                    "mod_description": mod_description,
-                    "minecraft_version": minecraft_version
+            expand project.properties
         }
 
         from project(':common').sourceSets.main.resources
@@ -67,9 +63,6 @@ subprojects {
     remapJar {
         dependsOn shadowJar
         inputFile = shadowJar.archiveFile
-    }
-
-    dependencies {
     }
 
     processResources {

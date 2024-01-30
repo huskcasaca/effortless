@@ -30,7 +30,7 @@ include ':api:client'
 include ':common'
 include ':client'
 
-['fabric', 'forge', 'vanilla'].forEach { platform ->
+['fabric', 'forge', 'vanilla', 'multiplatform'].forEach { platform ->
     include "$platform"
     [
 //            '1-16-5',

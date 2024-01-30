@@ -81,12 +81,6 @@ subprojects {
         }
     }
 
-
-    dependencies {
-        minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
-    }
-
     processResources {
 
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
