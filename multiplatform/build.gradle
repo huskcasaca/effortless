@@ -1,0 +1,35 @@
+plugins {
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    apply from: '../../gradle/fuse/fuse.gradle'
+    apply from: '../../gradle/publishing/modrinth.gradle'
+
+    version = mod_version
+    group = "${mod_group_id}"
+
+    base {
+        archivesName = "${mod_id}-${minecraft_version}"
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    assemble {
+        dependsOn fuseJar
+    }
+
+    fuseJar {
+        dependsOn jar
+        archiveClassifier.set('')
+    }
+
+    modrinth {
+        uploadFile = fuseJar.archiveFile
+    }
+
+}

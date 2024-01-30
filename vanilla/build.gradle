@@ -1,6 +1,5 @@
 plugins {
     id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT' apply false
-    id 'dev.huskuraft.fuse' apply false
 }
 
 subprojects {
@@ -33,8 +32,5 @@ subprojects {
 
         implementation 'com.google.code.findbugs:jsr305:3.0.2'
     }
-
-    apply from: '../../gradle/fuse/fuse.gradle'
-    apply from: '../../gradle/publishing/modrinth.gradle'
 
 }
