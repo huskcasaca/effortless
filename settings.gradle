@@ -41,6 +41,6 @@ include ':client'
             '1-20-2',
             '1-20-4',
     ].forEach { port ->
-        include ":${platform}:minecraft-${port}"
+        include ":${platform}:mc-${port}"
     }
 }
