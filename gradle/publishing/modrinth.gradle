@@ -1,3 +1,5 @@
+apply plugin: 'com.modrinth.minotaur'
+
 import java.nio.file.Files
 
 modrinth {

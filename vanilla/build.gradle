@@ -35,5 +35,6 @@ subprojects {
     }
 
     apply from: '../../gradle/fuse/fuse.gradle'
+    apply from: '../../gradle/publishing/modrinth.gradle'
 
 }
