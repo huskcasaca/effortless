@@ -1,0 +1,28 @@
+name: Publish with Gradle
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      - name: Setup JDKs
+        uses: actions/setup-java@v4
+        with:
+          java-version: |
+            16
+            17
+          distribution: 'zulu'
+          cache: 'gradle'
+
+      - name: Release
+        uses: softprops/action-gh-release@v1

@@ -1,0 +1,37 @@
+name: Java CI with Gradle
+
+on:
+  pull_request:
+    branches: ['**']
+  push:
+    branches: ['master']
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+
+      - name: Setup JDKs
+        uses: actions/setup-java@v4
+        with:
+          java-version: |
+            16
+            17
+          distribution: 'zulu'
+          cache: 'gradle'
+
+      - name: Build with Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          arguments: build
+
+      - name: Test with Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          arguments: test
