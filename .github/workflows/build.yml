@@ -1,6 +1,10 @@
 name: Java CI with Gradle
 
-on: [pull_request, workflow_dispatch]
+on:
+  pull_request:
+    branches: ['**']
+  push:
+    branches: ['master']
 
 jobs:
   build:
@@ -9,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: 'true'
 
@@ -17,19 +21,17 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: |
-            8
-            11
             16
             17
           distribution: 'zulu'
           cache: 'gradle'
 
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@v2.3.1
+        uses: gradle/actions/setup-gradle@v3
         with:
           arguments: build
 
       - name: Test with Gradle
-        uses: gradle/gradle-build-action@v2.3.1
+        uses: gradle/actions/setup-gradle@v3
         with:
           arguments: test
