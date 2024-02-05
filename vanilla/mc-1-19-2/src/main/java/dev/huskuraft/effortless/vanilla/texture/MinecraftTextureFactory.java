@@ -31,16 +31,7 @@ public class MinecraftTextureFactory implements TextureFactory {
     }
 
     public TextureSprite createSpriteFromTexture(ResourceLocation texture, ResourceLocation name, int width, int height, int x, int y, int textureWidth, int textureHeight, SpriteScaling scaling) {
-        return new SimpleTextureSprite(
-                new MinecraftResourceLocation(texture),
-                new MinecraftResourceLocation(name),
-                width,
-                height,
-                x,
-                y,
-                textureWidth,
-                textureHeight,
-                scaling);
+        return new SimpleTextureSprite(new MinecraftResourceLocation(texture), new MinecraftResourceLocation(name), width, height, x, y, textureWidth, textureHeight, scaling);
     }
 
 }
