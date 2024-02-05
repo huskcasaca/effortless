@@ -36,7 +36,7 @@ Please note that currently, this mod needs to be installed on both the client si
 | 1.19.3 (Server + Client) | ✅       | ✅      | ✅     |
 | 1.19.2 (Server + Client) | ✅       | ✅      | ✅     |
 | 1.19.1 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.19 (Server + Client)   | ❌       | ❌      | ❌     |
+| 1.19 (Server + Client)   | ✅       | ✅      | ✅     |
 | 1.18.2 (Server + Client) | ✅       | ✅      | ✅     |
 | 1.18.1 (Server + Client) | ❌       | ❌      | ❌     |
 | 1.18 (Server + Client)   | ❌       | ❌      | ❌     |
