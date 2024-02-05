@@ -7,6 +7,14 @@ subprojects {
     apply plugin: 'net.minecraftforge.gradle'
     apply plugin: 'com.github.johnrengelman.shadow'
 
+    ext {
+        minecraft_version_range = "[${project.minecraft_version},)"
+        forge_version_range = "[0,)"
+        loader_version_range = "[0,)"
+        mapping_channel = "official"
+        mapping_version = project.minecraft_version
+    }
+
     version = "${mod_version}"
     group = "${mod_group_id}.forge"
 
