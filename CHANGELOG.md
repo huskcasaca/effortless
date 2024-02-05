@@ -2,6 +2,12 @@
 
 ----------
 
+### 2.0.1
+
+* Fix crash when pressing alt ([#54](https://github.com/huskcasaca/effortless/pull/54))
+
+----------
+
 ### 2.0.0
 
 * Add support for Forge
