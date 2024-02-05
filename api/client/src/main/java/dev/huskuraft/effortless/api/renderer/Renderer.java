@@ -1,19 +1,29 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.api.core.*;
-import dev.huskuraft.effortless.api.gui.Typeface;
-import dev.huskuraft.effortless.api.math.*;
-import dev.huskuraft.effortless.api.platform.Client;
-import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.texture.SpriteScaling;
-import dev.huskuraft.effortless.api.texture.TextureSprite;
-
-import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
+
+import javax.annotation.Nullable;
+
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.gui.Typeface;
+import dev.huskuraft.effortless.api.math.MathUtils;
+import dev.huskuraft.effortless.api.math.Matrix3f;
+import dev.huskuraft.effortless.api.math.Matrix4f;
+import dev.huskuraft.effortless.api.math.Quaternionf;
+import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.platform.Client;
+import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.texture.SpriteScaling;
+import dev.huskuraft.effortless.api.texture.TextureSprite;
 
 public abstract class Renderer {
 
@@ -200,8 +210,9 @@ public abstract class Renderer {
 
     public final void renderLine(RenderLayer renderLayer, Vector3d v1, Vector3d v2, int uv2, int color) {
         var buffer = this.vertexBuffer(renderLayer);
-        buffer.vertex(lastMatrixPose(), v1).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
-        buffer.vertex(lastMatrixPose(), v2).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
+        var pose = lastMatrixPose();
+        buffer.vertex(pose, v1).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
+        buffer.vertex(pose, v2).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
     }
 
 
@@ -239,11 +250,12 @@ public abstract class Renderer {
         }
 
         var buffer = this.vertexBuffer(renderLayer);
+        var pose = lastMatrixPose();
 
-        buffer.vertex(lastMatrixPose(), x1, y1, z).color(color).endVertex();
-        buffer.vertex(lastMatrixPose(), x1, y2, z).color(color).endVertex();
-        buffer.vertex(lastMatrixPose(), x2, y2, z).color(color).endVertex();
-        buffer.vertex(lastMatrixPose(), x2, y1, z).color(color).endVertex();
+        buffer.vertex(pose, x1, y1, z).color(color).endVertex();
+        buffer.vertex(pose, x1, y2, z).color(color).endVertex();
+        buffer.vertex(pose, x2, y2, z).color(color).endVertex();
+        buffer.vertex(pose, x2, y1, z).color(color).endVertex();
         this.flush();
     }
 
@@ -261,10 +273,11 @@ public abstract class Renderer {
 
     public final void renderGradientRect(RenderLayer renderLayer, int x1, int y1, int x2, int y2, int color1, int color2, int z) {
         var buffer = this.vertexBuffer(renderLayer);
-        buffer.vertex(lastMatrixPose(), x1, y1, z).color(color1).endVertex();
-        buffer.vertex(lastMatrixPose(), x1, y2, z).color(color2).endVertex();
-        buffer.vertex(lastMatrixPose(), x2, y2, z).color(color2).endVertex();
-        buffer.vertex(lastMatrixPose(), x2, y1, z).color(color1).endVertex();
+        var pose = lastMatrixPose();
+        buffer.vertex(pose, x1, y1, z).color(color1).endVertex();
+        buffer.vertex(pose, x1, y2, z).color(color2).endVertex();
+        buffer.vertex(pose, x2, y2, z).color(color2).endVertex();
+        buffer.vertex(pose, x2, y1, z).color(color1).endVertex();
         flush();
     }
 
@@ -274,11 +287,11 @@ public abstract class Renderer {
 
     public final void renderQuad(RenderLayer renderLayer, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int offset, int color) {
         var buffer = this.vertexBuffer(renderLayer);
-
-        buffer.vertex(lastMatrixPose(), x1, y1, offset).color(color).endVertex();
-        buffer.vertex(lastMatrixPose(), x2, y2, offset).color(color).endVertex();
-        buffer.vertex(lastMatrixPose(), x3, y3, offset).color(color).endVertex();
-        buffer.vertex(lastMatrixPose(), x4, y4, offset).color(color).endVertex();
+        var pose = lastMatrixPose();
+        buffer.vertex(pose, x1, y1, offset).color(color).endVertex();
+        buffer.vertex(pose, x2, y2, offset).color(color).endVertex();
+        buffer.vertex(pose, x3, y3, offset).color(color).endVertex();
+        buffer.vertex(pose, x4, y4, offset).color(color).endVertex();
     }
 
     public final void renderQuad(RenderLayer renderLayer, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Orientation normal) {
@@ -288,11 +301,11 @@ public abstract class Renderer {
     public final void drawQuadUV(RenderLayer renderLayer, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
                                  float minV, float maxU, float maxV, int uv2, int color, Orientation normal) {
         var buffer = this.vertexBuffer(renderLayer);
-
-        buffer.vertex(lastMatrixPose(), v1).color(color).uv(minU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
-        buffer.vertex(lastMatrixPose(), v2).color(color).uv(maxU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
-        buffer.vertex(lastMatrixPose(), v3).color(color).uv(maxU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
-        buffer.vertex(lastMatrixPose(), v4).color(color).uv(minU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        var pose = lastMatrixPose();
+        buffer.vertex(pose, v1).color(color).uv(minU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(pose, v2).color(color).uv(maxU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(pose, v3).color(color).uv(maxU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(pose, v4).color(color).uv(minU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
     }
 
     protected abstract int renderTextInternal(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap);
@@ -365,20 +378,22 @@ public abstract class Renderer {
 
     private void renderTexture(ResourceLocation location, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV) {
         var buffer = vertexBuffer(RenderLayers.texture(location, false, false));
-        buffer.vertex(lastMatrixPose(), x1, y1, blitOffset).uv(minU, minV).endVertex();
-        buffer.vertex(lastMatrixPose(), x1, y2, blitOffset).uv(minU, maxV).endVertex();
-        buffer.vertex(lastMatrixPose(), x2, y2, blitOffset).uv(maxU, maxV).endVertex();
-        buffer.vertex(lastMatrixPose(), x2, y1, blitOffset).uv(maxU, minV).endVertex();
+        var pose = lastMatrixPose();
+        buffer.vertex(pose, x1, y1, blitOffset).uv(minU, minV).endVertex();
+        buffer.vertex(pose, x1, y2, blitOffset).uv(minU, maxV).endVertex();
+        buffer.vertex(pose, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
+        buffer.vertex(pose, x2, y1, blitOffset).uv(maxU, minV).endVertex();
         buffer.endVertex();
     }
 
 
     private void renderTexture(ResourceLocation location, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV, float red, float green, float blue, float alpha) {
         var buffer = vertexBuffer(RenderLayers.colorTexture(location, false, false));
-        buffer.vertex(lastMatrixPose(), x1, y1, blitOffset).color(red, green, blue, alpha).uv(minU, minV).endVertex();
-        buffer.vertex(lastMatrixPose(), x1, y2, blitOffset).color(red, green, blue, alpha).uv(minU, maxV).endVertex();
-        buffer.vertex(lastMatrixPose(), x2, y2, blitOffset).color(red, green, blue, alpha).uv(maxU, maxV).endVertex();
-        buffer.vertex(lastMatrixPose(), x2, y1, blitOffset).color(red, green, blue, alpha).uv(maxU, minV).endVertex();
+        var pose = lastMatrixPose();
+        buffer.vertex(pose, x1, y1, blitOffset).color(red, green, blue, alpha).uv(minU, minV).endVertex();
+        buffer.vertex(pose, x1, y2, blitOffset).color(red, green, blue, alpha).uv(minU, maxV).endVertex();
+        buffer.vertex(pose, x2, y2, blitOffset).color(red, green, blue, alpha).uv(maxU, maxV).endVertex();
+        buffer.vertex(pose, x2, y1, blitOffset).color(red, green, blue, alpha).uv(maxU, minV).endVertex();
         buffer.endVertex();
     }
 

@@ -1,7 +1,16 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import dev.huskuraft.effortless.api.core.*;
-import dev.huskuraft.effortless.api.math.*;
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.EntityInteraction;
+import dev.huskuraft.effortless.api.core.Interaction;
+import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.math.Matrix3f;
+import dev.huskuraft.effortless.api.math.Matrix4f;
+import dev.huskuraft.effortless.api.math.Quaternionf;
+import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -9,8 +18,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import java.nio.FloatBuffer;
 
 public class MinecraftConvertor {
 
@@ -23,27 +30,37 @@ public class MinecraftConvertor {
     }
 
     public static Matrix3f fromPlatformMatrix3f(org.joml.Matrix3f matrix) {
-        var buffer = FloatBuffer.allocate(9);
-        matrix.get(buffer);
-        return new Matrix3f(buffer);
+        return new Matrix3f(
+                matrix.m00(), matrix.m01(), matrix.m02(),
+                matrix.m10(), matrix.m11(), matrix.m12(),
+                matrix.m20(), matrix.m21(), matrix.m22()
+        );
     }
 
     public static org.joml.Matrix3f toPlatformMatrix3f(Matrix3f matrix) {
-        var buffer = FloatBuffer.allocate(9);
-        matrix.write(buffer);
-        return new org.joml.Matrix3f(buffer);
+        return new org.joml.Matrix3f(
+                matrix.m00(), matrix.m01(), matrix.m02(),
+                matrix.m10(), matrix.m11(), matrix.m12(),
+                matrix.m20(), matrix.m21(), matrix.m22()
+        );
     }
 
     public static Matrix4f fromPlatformMatrix4f(org.joml.Matrix4f matrix) {
-        var buffer = FloatBuffer.allocate(16);
-        matrix.get(buffer);
-        return new Matrix4f(buffer);
+        return new Matrix4f(
+                matrix.m00(), matrix.m01(), matrix.m02(), matrix.m03(),
+                matrix.m10(), matrix.m11(), matrix.m12(), matrix.m13(),
+                matrix.m20(), matrix.m21(), matrix.m22(), matrix.m23(),
+                matrix.m30(), matrix.m31(), matrix.m32(), matrix.m33()
+        );
     }
 
     public static org.joml.Matrix4f toPlatformMatrix4f(Matrix4f matrix) {
-        var buffer = FloatBuffer.allocate(16);
-        matrix.write(buffer);
-        return new org.joml.Matrix4f(buffer);
+        return new org.joml.Matrix4f(
+                matrix.m00(), matrix.m01(), matrix.m02(), matrix.m03(),
+                matrix.m10(), matrix.m11(), matrix.m12(), matrix.m13(),
+                matrix.m20(), matrix.m21(), matrix.m22(), matrix.m23(),
+                matrix.m30(), matrix.m31(), matrix.m32(), matrix.m33()
+        );
     }
 
     public static BlockPos toPlatformBlockPosition(BlockPosition blockPosition) {

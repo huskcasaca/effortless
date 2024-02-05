@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import java.nio.FloatBuffer;
-
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.EntityInteraction;
@@ -32,27 +30,37 @@ public class MinecraftConvertor {
     }
 
     public static Matrix3f fromPlatformMatrix3f(org.joml.Matrix3f matrix) {
-        var buffer = FloatBuffer.allocate(9);
-        matrix.get(buffer);
-        return new Matrix3f(buffer);
+        return new Matrix3f(
+                matrix.m00(), matrix.m01(), matrix.m02(),
+                matrix.m10(), matrix.m11(), matrix.m12(),
+                matrix.m20(), matrix.m21(), matrix.m22()
+        );
     }
 
     public static org.joml.Matrix3f toPlatformMatrix3f(Matrix3f matrix) {
-        var buffer = FloatBuffer.allocate(9);
-        matrix.write(buffer);
-        return new org.joml.Matrix3f(buffer);
+        return new org.joml.Matrix3f(
+                matrix.m00(), matrix.m01(), matrix.m02(),
+                matrix.m10(), matrix.m11(), matrix.m12(),
+                matrix.m20(), matrix.m21(), matrix.m22()
+        );
     }
 
     public static Matrix4f fromPlatformMatrix4f(org.joml.Matrix4f matrix) {
-        var buffer = FloatBuffer.allocate(16);
-        matrix.get(buffer);
-        return new Matrix4f(buffer);
+        return new Matrix4f(
+                matrix.m00(), matrix.m01(), matrix.m02(), matrix.m03(),
+                matrix.m10(), matrix.m11(), matrix.m12(), matrix.m13(),
+                matrix.m20(), matrix.m21(), matrix.m22(), matrix.m23(),
+                matrix.m30(), matrix.m31(), matrix.m32(), matrix.m33()
+        );
     }
 
     public static org.joml.Matrix4f toPlatformMatrix4f(Matrix4f matrix) {
-        var buffer = FloatBuffer.allocate(16);
-        matrix.write(buffer);
-        return new org.joml.Matrix4f(buffer);
+        return new org.joml.Matrix4f(
+                matrix.m00(), matrix.m01(), matrix.m02(), matrix.m03(),
+                matrix.m10(), matrix.m11(), matrix.m12(), matrix.m13(),
+                matrix.m20(), matrix.m21(), matrix.m22(), matrix.m23(),
+                matrix.m30(), matrix.m31(), matrix.m32(), matrix.m33()
+        );
     }
 
     public static BlockPos toPlatformBlockPosition(BlockPosition blockPosition) {
