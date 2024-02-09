@@ -1,22 +1,27 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
+import java.util.OptionalDouble;
+
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import dev.huskuraft.effortless.api.renderer.*;
+
+import dev.huskuraft.effortless.api.renderer.RenderLayer;
+import dev.huskuraft.effortless.api.renderer.RenderStateFactory;
+import dev.huskuraft.effortless.api.renderer.Shader;
+import dev.huskuraft.effortless.api.renderer.Shaders;
+import dev.huskuraft.effortless.api.renderer.VertexFormat;
+import dev.huskuraft.effortless.api.renderer.VertexFormats;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 
-import java.util.OptionalDouble;
-
 public class MinecraftRenderStateFactory extends RenderType implements RenderStateFactory {
 
     public static final MinecraftRenderStateFactory INSTANCE = new MinecraftRenderStateFactory();
 
     public MinecraftRenderStateFactory() {
-        super(null, null, null, 0, false, false, null, null);
-//        super("", new VertexFormat(ImmutableMap.ofEntries()), VertexFormat.Mode.DEBUG_LINE_STRIP, 0, false, false, () -> {}, () -> {});
+        super("", null, null, 0, false, false, () -> {}, () -> {});
     }
 
     @Override
