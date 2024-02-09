@@ -2,6 +2,14 @@
 
 ----------
 
+### 2.0.2
+
+* Port to other versions ([#61](https://github.com/huskcasaca/effortless/pull/61))
+* Fix Crash with Sodium ([#60](https://github.com/huskcasaca/effortless/pull/60))
+* Fix stuck in boot loop ([#62](https://github.com/huskcasaca/effortless/pull/62))
+
+----------
+
 ### 2.0.1
 
 * Fix crash when pressing alt ([#54](https://github.com/huskcasaca/effortless/pull/54))
