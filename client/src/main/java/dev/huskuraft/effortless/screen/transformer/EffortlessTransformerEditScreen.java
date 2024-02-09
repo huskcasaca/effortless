@@ -1,5 +1,8 @@
 package dev.huskuraft.effortless.screen.transformer;
 
+import java.util.Arrays;
+import java.util.function.Consumer;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
@@ -18,9 +21,6 @@ import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.settings.SettingsList;
-
-import java.util.Arrays;
-import java.util.function.Consumer;
 
 public class EffortlessTransformerEditScreen extends AbstractScreen {
 

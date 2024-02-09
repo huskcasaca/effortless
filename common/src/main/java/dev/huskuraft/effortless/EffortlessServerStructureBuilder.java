@@ -1,22 +1,29 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.platform.Server;
-import dev.huskuraft.effortless.building.*;
-import dev.huskuraft.effortless.building.history.OperationResultStack;
-import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
-import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
-
-import javax.annotation.Nullable;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
+
+import javax.annotation.Nullable;
+
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.platform.Server;
+import dev.huskuraft.effortless.building.BuildResult;
+import dev.huskuraft.effortless.building.BuildState;
+import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.MultiSelectFeature;
+import dev.huskuraft.effortless.building.SingleCommand;
+import dev.huskuraft.effortless.building.SingleSelectFeature;
+import dev.huskuraft.effortless.building.StructureBuilder;
+import dev.huskuraft.effortless.building.history.OperationResultStack;
+import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 
 public final class EffortlessServerStructureBuilder extends StructureBuilder {
 

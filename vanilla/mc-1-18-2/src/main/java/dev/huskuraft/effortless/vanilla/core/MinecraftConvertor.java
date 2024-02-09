@@ -1,8 +1,20 @@
 package dev.huskuraft.effortless.vanilla.core;
 
+import java.nio.FloatBuffer;
+
 import com.mojang.math.Quaternion;
-import dev.huskuraft.effortless.api.core.*;
-import dev.huskuraft.effortless.api.math.*;
+
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.EntityInteraction;
+import dev.huskuraft.effortless.api.core.Interaction;
+import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.math.Matrix3f;
+import dev.huskuraft.effortless.api.math.Matrix4f;
+import dev.huskuraft.effortless.api.math.Quaternionf;
+import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -10,8 +22,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import java.nio.FloatBuffer;
 
 public class MinecraftConvertor {
 

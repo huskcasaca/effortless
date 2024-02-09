@@ -1,5 +1,9 @@
 package dev.huskuraft.effortless.screen.pattern;
 
+import java.awt.*;
+import java.util.List;
+import java.util.stream.Stream;
+
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
@@ -14,10 +18,6 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
-
-import java.awt.*;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern, Option> {
 

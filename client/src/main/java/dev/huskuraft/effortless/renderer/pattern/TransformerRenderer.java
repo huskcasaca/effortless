@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.renderer.pattern;
 
+import java.awt.*;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.math.Vector3d;
@@ -8,8 +10,6 @@ import dev.huskuraft.effortless.api.renderer.RenderUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.renderer.opertaion.BlockRenderLayers;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
-
-import java.awt.*;
 
 public abstract class TransformerRenderer {
 

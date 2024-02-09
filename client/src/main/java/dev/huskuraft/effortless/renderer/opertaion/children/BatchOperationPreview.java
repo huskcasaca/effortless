@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.renderer.opertaion.children;
 
+import java.util.List;
+
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
-
-import java.util.List;
 
 public final class BatchOperationPreview implements OperationPreview {
 

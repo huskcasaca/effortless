@@ -1,15 +1,16 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
+import java.awt.*;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.renderer.RenderUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.Optional;
 
 public abstract class Outline {
 

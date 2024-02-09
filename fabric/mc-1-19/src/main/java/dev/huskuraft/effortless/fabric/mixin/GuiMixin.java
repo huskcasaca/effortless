@@ -1,12 +1,14 @@
 package dev.huskuraft.effortless.fabric.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import dev.huskuraft.effortless.fabric.events.ClientRenderEvents;
-import net.minecraft.client.gui.Gui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import dev.huskuraft.effortless.fabric.events.ClientRenderEvents;
+import net.minecraft.client.gui.Gui;
 
 @Mixin(Gui.class)
 public abstract class GuiMixin {

@@ -1,13 +1,14 @@
 package dev.huskuraft.effortless.building;
 
+import java.util.function.UnaryOperator;
+
+import javax.annotation.Nullable;
+
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-
-import javax.annotation.Nullable;
-import java.util.function.UnaryOperator;
 
 public abstract class StructureBuilder {
 

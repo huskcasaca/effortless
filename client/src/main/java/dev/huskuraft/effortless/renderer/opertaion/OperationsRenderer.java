@@ -1,5 +1,11 @@
 package dev.huskuraft.effortless.renderer.opertaion;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.BiFunction;
+
 import dev.huskuraft.effortless.api.renderer.RenderFadeEntry;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.OperationResult;
@@ -9,12 +15,6 @@ import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResu
 import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationPreview;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationPreview;
 import dev.huskuraft.effortless.renderer.opertaion.children.OperationPreview;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiFunction;
 
 public class OperationsRenderer {
 

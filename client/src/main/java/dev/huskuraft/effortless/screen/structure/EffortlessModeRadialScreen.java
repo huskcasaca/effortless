@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.screen.structure;
 
+import java.util.Arrays;
+
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -12,8 +14,6 @@ import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
-
-import java.util.Arrays;
 
 public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, Option> {
 

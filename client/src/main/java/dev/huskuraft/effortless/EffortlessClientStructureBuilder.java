@@ -1,5 +1,16 @@
 package dev.huskuraft.effortless;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
@@ -12,7 +23,15 @@ import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.renderer.opertaion.SurfaceColor;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
-import dev.huskuraft.effortless.building.*;
+import dev.huskuraft.effortless.building.BuildResult;
+import dev.huskuraft.effortless.building.BuildStage;
+import dev.huskuraft.effortless.building.BuildState;
+import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.MultiSelectFeature;
+import dev.huskuraft.effortless.building.SingleCommand;
+import dev.huskuraft.effortless.building.SingleSelectFeature;
+import dev.huskuraft.effortless.building.StructureBuilder;
+import dev.huskuraft.effortless.building.TracingResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.ItemType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
@@ -23,12 +42,6 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
-
-import javax.annotation.Nullable;
-import java.awt.*;
-import java.util.*;
-import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 public final class EffortlessClientStructureBuilder extends StructureBuilder {
 

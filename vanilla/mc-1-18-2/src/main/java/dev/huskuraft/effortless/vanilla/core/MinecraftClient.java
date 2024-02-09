@@ -1,6 +1,12 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import dev.huskuraft.effortless.api.core.*;
+import java.io.IOException;
+
+import dev.huskuraft.effortless.api.core.Interaction;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.Resource;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.platform.Client;
@@ -11,8 +17,6 @@ import dev.huskuraft.effortless.vanilla.renderer.MinecraftWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
-
-import java.io.IOException;
 
 public class MinecraftClient implements Client {
 

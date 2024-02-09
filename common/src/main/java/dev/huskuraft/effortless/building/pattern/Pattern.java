@@ -1,13 +1,13 @@
 package dev.huskuraft.effortless.building.pattern;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.BuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 public final class Pattern {
 

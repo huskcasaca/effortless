@@ -1,5 +1,13 @@
 package dev.huskuraft.effortless.screen.radial;
 
+import java.awt.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Consumer;
+
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
@@ -11,11 +19,6 @@ import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.Option;
-
-import java.awt.*;
-import java.util.List;
-import java.util.*;
-import java.util.function.Consumer;
 
 public class AbstractRadialScreen<S, B> extends AbstractScreen {
 

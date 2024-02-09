@@ -1,15 +1,16 @@
 package dev.huskuraft.effortless.api.gui;
 
-import dev.huskuraft.effortless.api.platform.Entrance;
-import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.api.text.Text;
-
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
+import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.api.text.Text;
 
 public abstract class AbstractContainerWidget extends AbstractWidget implements ContainerWidget {
 

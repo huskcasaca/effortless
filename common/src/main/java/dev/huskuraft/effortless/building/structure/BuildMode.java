@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building.structure;
 
+import java.awt.*;
+
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.text.Text;
@@ -11,9 +13,12 @@ import dev.huskuraft.effortless.building.structure.builder.doubles.Line;
 import dev.huskuraft.effortless.building.structure.builder.doubles.Wall;
 import dev.huskuraft.effortless.building.structure.builder.singles.Disable;
 import dev.huskuraft.effortless.building.structure.builder.singles.Single;
-import dev.huskuraft.effortless.building.structure.builder.triples.*;
-
-import java.awt.*;
+import dev.huskuraft.effortless.building.structure.builder.triples.Cube;
+import dev.huskuraft.effortless.building.structure.builder.triples.Cylinder;
+import dev.huskuraft.effortless.building.structure.builder.triples.DiagonalLine;
+import dev.huskuraft.effortless.building.structure.builder.triples.DiagonalWall;
+import dev.huskuraft.effortless.building.structure.builder.triples.SlopeFloor;
+import dev.huskuraft.effortless.building.structure.builder.triples.Sphere;
 
 public enum BuildMode {
     DISABLED("disabled", new Disable(), Category.BASIC),

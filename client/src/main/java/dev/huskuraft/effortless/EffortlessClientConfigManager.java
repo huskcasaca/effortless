@@ -1,10 +1,5 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.config.*;
-import dev.huskuraft.effortless.config.serializer.BaseConfigurationSerializer;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +7,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
+
+import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
+import dev.huskuraft.effortless.config.BaseConfiguration;
+import dev.huskuraft.effortless.config.ClientConfigManager;
+import dev.huskuraft.effortless.config.PatternConfiguration;
+import dev.huskuraft.effortless.config.PreviewConfiguration;
+import dev.huskuraft.effortless.config.TransformerConfiguration;
+import dev.huskuraft.effortless.config.serializer.BaseConfigurationSerializer;
 
 public final class EffortlessClientConfigManager extends ClientConfigManager {
 

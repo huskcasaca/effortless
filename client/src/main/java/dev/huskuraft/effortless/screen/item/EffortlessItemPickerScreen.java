@@ -1,5 +1,9 @@
 package dev.huskuraft.effortless.screen.item;
 
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.function.Consumer;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
@@ -10,10 +14,6 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.function.Consumer;
 
 public class EffortlessItemPickerScreen extends AbstractScreen {
 

@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.fabric.platform;
 
+import java.nio.file.Path;
+
 import dev.huskuraft.effortless.api.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
-
-import java.nio.file.Path;
 
 public class FabricPlatform implements Platform {
 

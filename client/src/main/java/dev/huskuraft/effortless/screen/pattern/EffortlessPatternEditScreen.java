@@ -1,5 +1,8 @@
 package dev.huskuraft.effortless.screen.pattern;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
@@ -16,9 +19,6 @@ import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerEditScree
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 public class EffortlessPatternEditScreen extends AbstractScreen {
 

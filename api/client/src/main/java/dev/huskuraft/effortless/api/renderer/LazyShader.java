@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.api.renderer;
 
+import java.io.IOException;
+
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.render.RegisterShader;
-
-import java.io.IOException;
 
 class LazyShader implements Shader {
 

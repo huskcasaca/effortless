@@ -1,13 +1,13 @@
 package dev.huskuraft.effortless.building.operation;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.tag.TagRecord;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ItemStackUtils {
 

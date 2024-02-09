@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.forge.platform;
 
+import java.nio.file.Path;
+
 import dev.huskuraft.effortless.api.platform.Platform;
 import net.minecraftforge.fml.loading.FMLLoader;
-
-import java.nio.file.Path;
 
 public class ForgePlatform implements Platform {
 

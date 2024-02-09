@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.api.tag;
 
-import dev.huskuraft.effortless.api.core.ResourceLocation;
-
 import java.util.Locale;
+
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 
 public interface TagPrimitive extends TagElement {
 

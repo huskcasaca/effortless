@@ -1,13 +1,13 @@
 package dev.huskuraft.effortless.building.operation.batch;
 
-import dev.huskuraft.effortless.api.core.BlockPosition;
-import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
-
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
+
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.operation.TransformableOperation;
 
 public abstract class BatchOperation extends TransformableOperation {
 

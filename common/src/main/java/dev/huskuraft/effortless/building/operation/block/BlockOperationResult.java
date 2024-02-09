@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.building.operation.OperationResult;
-
 import java.awt.*;
 import java.util.List;
+
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.building.operation.OperationResult;
 
 public abstract class BlockOperationResult extends OperationResult {
 

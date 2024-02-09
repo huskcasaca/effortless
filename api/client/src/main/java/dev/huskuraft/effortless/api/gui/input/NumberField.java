@@ -1,16 +1,16 @@
 package dev.huskuraft.effortless.api.gui.input;
 
-import dev.huskuraft.effortless.api.gui.AbstractContainerWidget;
-import dev.huskuraft.effortless.api.gui.button.Button;
-import dev.huskuraft.effortless.api.platform.Entrance;
-import dev.huskuraft.effortless.api.text.Text;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.function.Consumer;
+
+import dev.huskuraft.effortless.api.gui.AbstractContainerWidget;
+import dev.huskuraft.effortless.api.gui.button.Button;
+import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.Text;
 
 public class NumberField extends AbstractContainerWidget {
 

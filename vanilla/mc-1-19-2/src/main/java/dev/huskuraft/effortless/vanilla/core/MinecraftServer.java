@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.platform.Server;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.platform.Server;
 
 public class MinecraftServer implements Server {
 

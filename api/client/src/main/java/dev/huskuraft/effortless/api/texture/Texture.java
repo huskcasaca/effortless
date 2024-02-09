@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.api.texture;
 
-import dev.huskuraft.effortless.api.core.ResourceLocation;
-
 import java.util.Set;
+
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 
 public interface Texture {
 

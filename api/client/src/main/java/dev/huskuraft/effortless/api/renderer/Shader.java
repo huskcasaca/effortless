@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.api.renderer;
 
+import java.io.IOException;
+
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.render.RegisterShader;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
-
-import java.io.IOException;
 
 public interface Shader extends PlatformReference {
 

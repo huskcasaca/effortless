@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.forge;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.Platform;
@@ -25,7 +27,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.event.EventNetworkChannel;
-import org.apache.commons.lang3.tuple.Pair;
 
 @Mod(Effortless.MOD_ID)
 @Mod.EventBusSubscriber(modid = Effortless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)

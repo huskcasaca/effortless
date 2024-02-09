@@ -1,12 +1,13 @@
 package dev.huskuraft.effortless.api.gui.button;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import dev.huskuraft.effortless.api.gui.AbstractButton;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Button extends AbstractButton {
     public static final int SMALL_WIDTH = 120;

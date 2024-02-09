@@ -1,15 +1,16 @@
 package dev.huskuraft.effortless.fabric.mixin;
 
-import dev.huskuraft.effortless.fabric.events.ServerPlayerEvents;
-import net.minecraft.network.Connection;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.CommonListenerCookie;
-import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import dev.huskuraft.effortless.fabric.events.ServerPlayerEvents;
+import net.minecraft.network.Connection;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
+import net.minecraft.server.players.PlayerList;
 
 @Mixin(PlayerList.class)
 abstract class PlayerListMixin {

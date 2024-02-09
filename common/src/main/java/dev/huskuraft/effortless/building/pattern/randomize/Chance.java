@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.building.pattern.randomize;
 
-import dev.huskuraft.effortless.api.core.Item;
-
 import java.util.Objects;
+
+import dev.huskuraft.effortless.api.core.Item;
 
 public interface Chance<T> {
 

@@ -1,5 +1,13 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.BlockPosition;
@@ -7,8 +15,6 @@ import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.Renderer;
-
-import java.util.*;
 
 public class BlockClusterOutline extends Outline {
 

@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.api.renderer;
 
+import javax.annotation.Nullable;
+
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.render.RegisterShader;
-
-import javax.annotation.Nullable;
 
 public enum Shaders implements Shader {
     POSITION_COLOR_LIGHTMAP,

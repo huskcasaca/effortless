@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.networking.packets.player;
 
+import java.util.UUID;
+
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.BufferSerializer;
@@ -7,8 +9,6 @@ import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.serializer.ContextSerializer;
-
-import java.util.UUID;
 
 public record PlayerBuildPreviewPacket(
         UUID playerId,

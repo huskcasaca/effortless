@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.building.history;
 
-import dev.huskuraft.effortless.building.operation.OperationResult;
-
 import java.util.Stack;
+
+import dev.huskuraft.effortless.building.operation.OperationResult;
 
 public class OperationResultStack {
 

@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.api.core;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
-
-import java.util.Arrays;
-import java.util.Comparator;
 
 public enum Orientation {
     DOWN(0, 1, -1, "down", AxisDirection.NEGATIVE, Axis.Y, new Vector3i(0, -1, 0)),

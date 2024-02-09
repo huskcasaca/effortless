@@ -1,5 +1,8 @@
 package dev.huskuraft.effortless.screen.transformer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
@@ -12,9 +15,6 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
 

@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.config;
 
+import java.util.List;
+
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.settings.RandomizerSettings;
-
-import java.util.List;
 
 public class TransformerConfiguration implements Configuration {
 

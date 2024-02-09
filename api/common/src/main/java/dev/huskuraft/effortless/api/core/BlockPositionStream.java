@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.api.core;
 
-import dev.huskuraft.effortless.api.math.MathUtils;
-
 import java.util.Iterator;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import dev.huskuraft.effortless.api.math.MathUtils;
 
 public abstract class BlockPositionStream implements BaseStream<BlockPosition, BlockPositionStream> {
 

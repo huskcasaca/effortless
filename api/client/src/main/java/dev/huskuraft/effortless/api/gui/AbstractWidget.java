@@ -1,13 +1,13 @@
 package dev.huskuraft.effortless.api.gui;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public abstract class AbstractWidget implements Widget {
 

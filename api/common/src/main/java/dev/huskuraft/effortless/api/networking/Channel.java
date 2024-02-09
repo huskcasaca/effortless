@@ -1,12 +1,17 @@
 package dev.huskuraft.effortless.api.networking;
 
-import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Logger;
+
+import javax.annotation.Nullable;
+
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 
 public abstract class Channel<P extends PacketListener> implements PacketSender, PacketReceiver {
 

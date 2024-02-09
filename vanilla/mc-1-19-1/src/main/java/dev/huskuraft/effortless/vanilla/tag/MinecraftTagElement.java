@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.vanilla.tag;
 
+import java.util.Objects;
+
 import dev.huskuraft.effortless.api.tag.TagElement;
 import dev.huskuraft.effortless.api.tag.TagPrimitive;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-
-import java.util.Objects;
 
 public class MinecraftTagElement implements TagElement {
 
