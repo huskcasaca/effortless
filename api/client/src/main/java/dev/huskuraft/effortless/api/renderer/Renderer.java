@@ -383,7 +383,6 @@ public abstract class Renderer {
         buffer.vertex(pose, x1, y2, blitOffset).uv(minU, maxV).endVertex();
         buffer.vertex(pose, x2, y2, blitOffset).uv(maxU, maxV).endVertex();
         buffer.vertex(pose, x2, y1, blitOffset).uv(maxU, minV).endVertex();
-        buffer.endVertex();
     }
 
 
@@ -394,7 +393,6 @@ public abstract class Renderer {
         buffer.vertex(pose, x1, y2, blitOffset).color(red, green, blue, alpha).uv(minU, maxV).endVertex();
         buffer.vertex(pose, x2, y2, blitOffset).color(red, green, blue, alpha).uv(maxU, maxV).endVertex();
         buffer.vertex(pose, x2, y1, blitOffset).color(red, green, blue, alpha).uv(maxU, minV).endVertex();
-        buffer.endVertex();
     }
 
     public void renderPanelBackgroundTexture(int x, int y, float uOffset, float vOffset, int uWidth, int vHeight) {
