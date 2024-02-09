@@ -4,7 +4,7 @@ import java.nio.file.Files
 
 modrinth {
     token = System.getenv('MODRINTH_TOKEN')
-    projectId = modrinth_id
+    projectId = mod_modrinth_id
     versionNumber = mod_version
     versionName = "${mod_name} ${mod_version}"
     versionType = mod_version.contains('-alpha') ? 'alpha' : mod_version.contains('-beta') ? 'beta' : 'release'
