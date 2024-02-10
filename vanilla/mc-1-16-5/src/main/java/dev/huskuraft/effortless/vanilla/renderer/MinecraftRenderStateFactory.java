@@ -170,10 +170,11 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
 
     @Override
     public RenderState.ColorLogicState createColorLogicState(String name, RenderState.ColorLogicState.Op op) {
-        return switch (op) {
-            case NO_LOGIC ->         PlatformReference::unavailable;
-            case OR_REVERSE_LOGIC -> PlatformReference::unavailable;
+        var state = switch (op) {
+            case NO_LOGIC ->         PlatformReference.unavailable();
+            case OR_REVERSE_LOGIC -> PlatformReference.unavailable();
         };
+        return state;
     }
 
     @Override
