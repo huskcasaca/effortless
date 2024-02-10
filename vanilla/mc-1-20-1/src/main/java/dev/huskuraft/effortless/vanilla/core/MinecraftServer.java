@@ -26,7 +26,7 @@ public class MinecraftServer implements Server {
 
     @Override
     public void execute(Runnable runnable) {
-        reference.executeIfPossible(runnable);
+        reference.execute(runnable);
     }
 
     @Override
