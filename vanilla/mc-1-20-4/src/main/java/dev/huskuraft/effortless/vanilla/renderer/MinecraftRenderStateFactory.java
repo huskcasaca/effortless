@@ -87,7 +87,7 @@ public class MinecraftRenderStateFactory implements RenderStateFactory {
 
     @Override
     public RenderState.ShaderState createShaderState(String name, Shader shader) {
-        var state = new RenderType.ShaderStateShard(shader::reference);
+        var state = shader == null ? new RenderType.ShaderStateShard() : new RenderType.ShaderStateShard(shader::reference);
         return () -> state;
     }
 
