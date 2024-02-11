@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 public abstract class Effortless implements Entrance {
 
     public static final String MOD_ID = "effortless";
-    public static final int VERSION_NUMBER = 1;
+    public static final int VERSION_NUMBER = 2;
 
     private final EffortlessEventsRegistry registry;
     private final EffortlessServerChannel channel;
