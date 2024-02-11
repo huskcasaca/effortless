@@ -12,12 +12,9 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonContentFactory;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fmllegacy.network.NetworkDirection;
@@ -28,8 +25,6 @@ import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
 import net.minecraftforge.fmlserverevents.FMLServerStoppedEvent;
 import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
 
-@Mod(Effortless.MOD_ID)
-@Mod.EventBusSubscriber(modid = Effortless.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ForgeEffortless extends Effortless {
 
     public static EventNetworkChannel CHANNEL;
@@ -44,8 +39,6 @@ public class ForgeEffortless extends Effortless {
                 .serverAcceptedVersions(getChannel().getCompatibilityVersionStr()::equals)
                 .networkProtocolVersion(getChannel()::getCompatibilityVersionStr)
                 .eventNetworkChannel();
-
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ForgeEffortlessClient::new);
     }
 
     @Override
