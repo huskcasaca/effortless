@@ -19,7 +19,7 @@ import dev.huskuraft.effortless.building.structure.builder.singles.Single;
 
 public class Sphere extends TripleClickBuilder {
 
-    private static boolean isPosInSphere(float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, int x, int y, int z, boolean fill) {
+    public static boolean isPosInSphere(float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, int x, int y, int z, boolean fill) {
 
         radiusX += 0.5f;
         radiusY += 0.5f;

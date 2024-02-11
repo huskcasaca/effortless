@@ -13,10 +13,12 @@ import dev.huskuraft.effortless.building.structure.builder.doubles.Line;
 import dev.huskuraft.effortless.building.structure.builder.doubles.Wall;
 import dev.huskuraft.effortless.building.structure.builder.singles.Disable;
 import dev.huskuraft.effortless.building.structure.builder.singles.Single;
+import dev.huskuraft.effortless.building.structure.builder.triples.Cone;
 import dev.huskuraft.effortless.building.structure.builder.triples.Cube;
 import dev.huskuraft.effortless.building.structure.builder.triples.Cylinder;
 import dev.huskuraft.effortless.building.structure.builder.triples.DiagonalLine;
 import dev.huskuraft.effortless.building.structure.builder.triples.DiagonalWall;
+import dev.huskuraft.effortless.building.structure.builder.triples.Pyramid;
 import dev.huskuraft.effortless.building.structure.builder.triples.SlopeFloor;
 import dev.huskuraft.effortless.building.structure.builder.triples.Sphere;
 
@@ -37,10 +39,11 @@ public enum BuildMode {
     CIRCLE("circle", new Circle(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
     CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
     SPHERE("sphere", new Sphere(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
+
+    PYRAMID("pyramid", new Pyramid(), Category.ROOF),
+    CONE("cone", new Cone(), Category.ROOF),
     ;
 
-//    PYRAMID("pyramid", new Pyramid(), Category.ROOF),
-//    CONE("cone", new Cone(), Category.ROOF),
 //    DOME("dome", new Dome(), Category.ROOF);
 
     private final Builder provider;
