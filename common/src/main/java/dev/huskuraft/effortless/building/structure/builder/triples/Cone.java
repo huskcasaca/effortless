@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.structure.builder.triples;
 
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
@@ -7,6 +8,7 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.builder.TripleClickBuilder;
+import dev.huskuraft.effortless.building.structure.builder.doubles.Circle;
 import dev.huskuraft.effortless.building.structure.builder.doubles.Floor;
 import dev.huskuraft.effortless.building.structure.builder.singles.Single;
 
@@ -34,12 +36,55 @@ public class Cone extends TripleClickBuilder {
 
     @Override
     protected Stream<BlockPosition> collectInterBlocks(Context context) {
-        return Floor.collectFloorBlocks(context);
+        return Circle.collectCircleBlocks(context);
     }
 
     @Override
     protected Stream<BlockPosition> collectFinalBlocks(Context context) {
-        // TODO
-        return SlopeFloor.collectSlopeFloorBlocks(context);
+
+        var list = new ArrayList<BlockPosition>();
+
+        var x1 = context.firstBlockPosition().x();
+        var y1 = context.firstBlockPosition().y();
+        var z1 = context.firstBlockPosition().z();
+
+        var x2 = context.secondBlockPosition().x();
+        var y2 = context.secondBlockPosition().y();
+        var z2 = context.secondBlockPosition().z();
+
+        var x3 = context.thirdBlockPosition().x();
+        var y3 = context.thirdBlockPosition().y();
+        var z3 = context.thirdBlockPosition().z();
+
+        var minX = Math.min(x1, x2);
+        var minZ = Math.min(z1, z2);
+
+        var maxX = Math.max(x1, x2);
+        var maxZ = Math.max(z1, z2);
+
+        var radiusX = maxX - minX;
+        var radiusZ = maxZ - minZ;
+
+        var centerX = (maxX + minX) / 2;
+        var centerZ = (maxZ + minZ) / 2;
+
+        var radiusX1 = radiusX;
+        var radiusZ1 = radiusZ;
+
+        for (int y = y1; y <= y3; ++y) {
+            if (y3 - y1 != 0) {
+                radiusX1 = radiusX * (y3 - y) / (y3 - y1) / 2;
+                radiusZ1 = radiusZ * (y3 - y) / (y3 - y1) / 2;
+            }
+
+            for (int x = minX; x <= maxX; ++x) {
+                for (int z = minZ; z <= maxZ; ++z) {
+                    if (Circle.isPosInCircle(centerX, centerZ, radiusX1, radiusZ1, x, z, true)) {
+                        list.add(new BlockPosition(x, y, z));
+                    }
+                }
+            }
+        }
+        return list.stream();
     }
 }

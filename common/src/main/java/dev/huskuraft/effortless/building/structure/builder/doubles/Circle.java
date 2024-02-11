@@ -16,7 +16,7 @@ import dev.huskuraft.effortless.building.structure.builder.singles.Single;
 
 public class Circle extends DoubleClickBuilder {
 
-    private static boolean isPosInCircle(float centerX, float centerY, float radiusX, float radiusY, int x, int y, boolean fill) {
+    public static boolean isPosInCircle(float centerX, float centerY, float radiusX, float radiusY, int x, int y, boolean fill) {
 
         radiusX += 0.5f;
         radiusY += 0.5f;
@@ -73,6 +73,7 @@ public class Circle extends DoubleClickBuilder {
         var list = new ArrayList<BlockPosition>();
 
         var isCenter = context.circleStart() == CircleStart.CIRCLE_START_CENTER;
+        var isFill = context.planeFilling() == PlaneFilling.PLANE_FULL;
 
         var x1 = context.firstBlockPosition().x();
         var y1 = context.firstBlockPosition().y();
@@ -96,11 +97,11 @@ public class Circle extends DoubleClickBuilder {
         var radiusZ = MathUtils.abs(z2 - centerZ);
 
         if (y1 == y2) {
-            addFullCircleBlocksY(list, x1, y1, z1, x2, y2, z2, centerX, centerZ, radiusX, radiusZ, context.planeFilling() == PlaneFilling.PLANE_FULL);
+            addFullCircleBlocksY(list, x1, y1, z1, x2, y2, z2, centerX, centerZ, radiusX, radiusZ, isFill);
         } else if (x1 == x2) {
-            addFullCircleBlocksX(list, x1, y1, z1, x2, y2, z2, centerY, centerZ, radiusY, radiusZ, context.planeFilling() == PlaneFilling.PLANE_FULL);
+            addFullCircleBlocksX(list, x1, y1, z1, x2, y2, z2, centerY, centerZ, radiusY, radiusZ, isFill);
         } else if (z1 == z2) {
-            addFullCircleBlocksZ(list, x1, y1, z1, x2, y2, z2, centerY, centerX, radiusY, radiusX, context.planeFilling() == PlaneFilling.PLANE_FULL);
+            addFullCircleBlocksZ(list, x1, y1, z1, x2, y2, z2, centerY, centerX, radiusY, radiusX, isFill);
         }
 
         return list.stream();
