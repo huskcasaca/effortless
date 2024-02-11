@@ -10,8 +10,8 @@ public class ForgePlatform implements Platform {
     public static final ForgePlatform INSTANCE = new ForgePlatform();
 
     @Override
-    public String getLoaderName() {
-        return "Forge";
+    public LoaderType getLoaderType() {
+        return LoaderType.FORGE;
     }
 
     @Override
