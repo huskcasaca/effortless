@@ -1,4 +1,12 @@
-# Changelog
+## Changelog
+
+----------
+
+### 2.1.0
+
+* Optimize Minecraft port ([64](https://github.com/huskcasaca/effortless/pull/64))
+* Fix circle build mode tracing ([65](https://github.com/huskcasaca/effortless/pull/65))
+* Add pyramid and cone build mode ([66](https://github.com/huskcasaca/effortless/pull/66))
 
 ----------
 
