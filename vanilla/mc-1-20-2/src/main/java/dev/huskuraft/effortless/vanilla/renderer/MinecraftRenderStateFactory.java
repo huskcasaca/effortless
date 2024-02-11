@@ -16,13 +16,9 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 
-public class MinecraftRenderStateFactory extends RenderType implements RenderStateFactory {
+public class MinecraftRenderStateFactory implements RenderStateFactory {
 
     public static final MinecraftRenderStateFactory INSTANCE = new MinecraftRenderStateFactory();
-
-    public MinecraftRenderStateFactory() {
-        super("", null, null, 0, false, false, () -> {}, () -> {});
-    }
 
     @Override
     public RenderLayer createCompositeRenderLayer(String name,
@@ -32,7 +28,7 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
                                                   boolean affectsCrumbling,
                                                   boolean sortOnUpload,
                                                   CompositeRenderState state) {
-        return () -> RenderType.create(
+        var layer = RenderType.create(
                 name,
                 vertexFormat.reference(),
                 vertexFormatMode.reference(),
@@ -41,6 +37,7 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
                 sortOnUpload,
                 state.reference()
         );
+        return () -> layer;
     }
 
     @Override
@@ -58,7 +55,7 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
                                                      RenderState.LineState lineState,
                                                      RenderState.ColorLogicState colorLogicState,
                                                      boolean affectOutline) {
-        return () -> CompositeState.builder()
+        var state = RenderType.CompositeState.builder()
                 .setTextureState(textureState.reference())
                 .setShaderState(shaderState.reference())
                 .setTransparencyState(transparencyState.reference())
@@ -73,106 +70,119 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
                 .setLineState(lineState.reference())
                 .setColorLogicState(colorLogicState.reference())
                 .createCompositeState(affectOutline);
+        return () -> state;
     }
 
     @Override
     public RenderState createRenderState(String name, Runnable setupState, Runnable clearState) {
-        return () -> new RenderStateShard(name, setupState, clearState){};
+        var state = new RenderStateShard(name, setupState, clearState){};
+        return () -> state;
     }
 
     @Override
     public RenderState.TextureState createTextureState(String name, RenderState.TextureState.Texture texture) {
-        return texture == null ? () -> NO_TEXTURE : () -> new TextureStateShard(texture.location().reference(), texture.blur(), texture.mipmap());
+        var state = texture == null ? RenderType.NO_TEXTURE : new RenderType.TextureStateShard(texture.location().reference(), texture.blur(), texture.mipmap());
+        return () -> state;
     }
 
     @Override
     public RenderState.ShaderState createShaderState(String name, Shader shader) {
-        return () -> new ShaderStateShard(shader::reference);
+        var state = shader == null ? new RenderType.ShaderStateShard() : new RenderType.ShaderStateShard(shader::reference);
+        return () -> state;
     }
 
     @Override
     public RenderState.TransparencyState createTransparencyState(String name, RenderState.TransparencyState.Type type) {
-        return switch (type) {
-            case NO ->          () -> NO_TRANSPARENCY;
-            case ADDITIVE ->    () -> ADDITIVE_TRANSPARENCY;
-            case LIGHTNING ->   () -> LIGHTNING_TRANSPARENCY;
-            case GLINT ->       () -> GLINT_TRANSPARENCY;
-            case CRUMBLING ->   () -> CRUMBLING_TRANSPARENCY;
-            case TRANSLUCENT -> () -> TRANSLUCENT_TRANSPARENCY;
+        var state = switch (type) {
+            case NO ->          RenderType.NO_TRANSPARENCY;
+            case ADDITIVE ->    RenderType.ADDITIVE_TRANSPARENCY;
+            case LIGHTNING ->   RenderType.LIGHTNING_TRANSPARENCY;
+            case GLINT ->       RenderType.GLINT_TRANSPARENCY;
+            case CRUMBLING ->   RenderType.CRUMBLING_TRANSPARENCY;
+            case TRANSLUCENT -> RenderType.TRANSLUCENT_TRANSPARENCY;
         };
+        return () -> state;
     }
 
     @Override
     public RenderState.DepthTestState createDepthTestState(String name, int function) {
-        return () -> new DepthTestStateShard(name, function);
+        var state = new RenderType.DepthTestStateShard(name, function);
+        return () -> state;
     }
 
     @Override
     public RenderState.CullState createCullState(String name, boolean cull) {
-        if (cull) return () -> CULL;
-        return () -> NO_CULL;
+        var state = cull ? RenderType.CULL : RenderType.NO_CULL;
+        return () -> state;
     }
 
     @Override
     public RenderState.LightmapState createLightmapState(String name, boolean lightmap) {
-        if (lightmap) return () -> LIGHTMAP;
-        return () -> NO_LIGHTMAP;
+        var state = lightmap ? RenderType.LIGHTMAP : RenderType.NO_LIGHTMAP;
+        return () -> state;
     }
 
     @Override
     public RenderState.OverlayState createOverlayState(String name, boolean overlay) {
-        if (overlay) return () -> OVERLAY;
-        return () -> NO_OVERLAY;
+        var state = overlay ? RenderType.OVERLAY : RenderType.NO_OVERLAY;
+        return () -> state;
     }
 
     @Override
     public RenderState.LayeringState createLayeringState(String name, RenderState.LayeringState.Type type) {
-        return switch (type) {
-            case NO ->              () -> NO_LAYERING;
-            case POLYGON_OFFSET ->  () -> POLYGON_OFFSET_LAYERING;
-            case VIEW_OFFSET_Z ->   () -> VIEW_OFFSET_Z_LAYERING;
+        var state = switch (type) {
+            case NO ->             RenderType.NO_LAYERING;
+            case POLYGON_OFFSET -> RenderType.POLYGON_OFFSET_LAYERING;
+            case VIEW_OFFSET_Z ->  RenderType.VIEW_OFFSET_Z_LAYERING;
         };
+        return () -> state;
     }
 
     @Override
     public RenderState.OutputState createOutputState(String name, RenderState.OutputState.Target target) {
-        return switch (target) {
-            case NO ->        () -> MAIN_TARGET;
-            case OUTLINE ->     () -> OUTLINE_TARGET;
-            case TRANSLUCENT -> () -> TRANSLUCENT_TARGET;
-            case PARTICLES ->   () -> PARTICLES_TARGET;
-            case WEATHER ->     () -> WEATHER_TARGET;
-            case CLOUDS ->      () -> CLOUDS_TARGET;
-            case ITEM_ENTITY -> () -> ITEM_ENTITY_TARGET;
+        var state = switch (target) {
+            case NO ->          RenderType.MAIN_TARGET;
+            case OUTLINE ->     RenderType.OUTLINE_TARGET;
+            case TRANSLUCENT -> RenderType.TRANSLUCENT_TARGET;
+            case PARTICLES ->   RenderType.PARTICLES_TARGET;
+            case WEATHER ->     RenderType.WEATHER_TARGET;
+            case CLOUDS ->      RenderType.CLOUDS_TARGET;
+            case ITEM_ENTITY -> RenderType.ITEM_ENTITY_TARGET;
         };
+        return () -> state;
     }
 
     @Override
     public RenderState.TexturingState createTexturingState(String name, Runnable setupState, Runnable clearState) {
-        return () -> new TexturingStateShard(name, setupState, clearState);
+        var state = new RenderType.TexturingStateShard(name, setupState, clearState);
+        return () -> state;
     }
 
     @Override
     public RenderState.OffsetTexturingState createOffsetTexturingState(String name, float offsetX, float offsetY) {
-        return () -> new OffsetTexturingStateShard(offsetX, offsetY);
+        var state = new RenderType.OffsetTexturingStateShard(offsetX, offsetY);
+        return () -> state;
     }
 
     @Override
     public RenderState.WriteMaskState createWriteMaskState(String name, boolean writeColor, boolean writeDepth) {
-        return () -> new WriteMaskStateShard(writeColor, writeDepth);
+        var state = new RenderType.WriteMaskStateShard(writeColor, writeDepth);
+        return () -> state;
     }
 
     @Override
     public RenderState.LineState createLineState(String name, Double width) {
-        return () -> new LineStateShard(width == null ? OptionalDouble.empty() : OptionalDouble.of(width));
+        var state = new RenderType.LineStateShard(width == null ? OptionalDouble.empty() : OptionalDouble.of(width));
+        return () -> state;
     }
 
     @Override
     public RenderState.ColorLogicState createColorLogicState(String name, RenderState.ColorLogicState.Op op) {
-        return switch (op) {
-            case NO_LOGIC ->         () -> NO_COLOR_LOGIC;
-            case OR_REVERSE_LOGIC -> () -> OR_REVERSE_COLOR_LOGIC;
+        var state = switch (op) {
+            case NO_LOGIC ->         RenderType.NO_COLOR_LOGIC;
+            case OR_REVERSE_LOGIC -> RenderType.OR_REVERSE_COLOR_LOGIC;
         };
+        return () -> state;
     }
 
     @Override
@@ -189,7 +199,7 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
             case CUTOUT ->                          GameRenderer.getRendertypeCutoutShader();
             case TRANSLUCENT ->                     GameRenderer.getRendertypeTranslucentShader();
             case TRANSLUCENT_MOVING_BLOCK ->        GameRenderer.getRendertypeTranslucentMovingBlockShader();
-            case TRANSLUCENT_NO_CRUMBLING ->        GameRenderer.getRendertypeTranslucentNoCrumblingShader();
+            case TRANSLUCENT_NO_CRUMBLING ->        null;
             case ARMOR_CUTOUT_NO_CULL ->            GameRenderer.getRendertypeArmorCutoutNoCullShader();
             case ENTITY_SOLID ->                    GameRenderer.getRendertypeEntitySolidShader();
             case ENTITY_CUTOUT ->                   GameRenderer.getRendertypeEntityCutoutShader();
@@ -239,36 +249,38 @@ public class MinecraftRenderStateFactory extends RenderType implements RenderSta
 
     @Override
     public VertexFormat getVertexFormat(VertexFormats formats) {
-        return switch (formats) {
-            case BLIT_SCREEN ->                 () -> DefaultVertexFormat.BLIT_SCREEN;
-            case BLOCK ->                       () -> DefaultVertexFormat.BLOCK;
-            case NEW_ENTITY ->                  () -> DefaultVertexFormat.NEW_ENTITY;
-            case PARTICLE ->                    () -> DefaultVertexFormat.PARTICLE;
-            case POSITION ->                    () -> DefaultVertexFormat.POSITION;
-            case POSITION_COLOR ->              () -> DefaultVertexFormat.POSITION_COLOR;
-            case POSITION_COLOR_NORMAL ->       () -> DefaultVertexFormat.POSITION_COLOR_NORMAL;
-            case POSITION_COLOR_LIGHTMAP ->     () -> DefaultVertexFormat.POSITION_COLOR_LIGHTMAP;
-            case POSITION_TEX ->                () -> DefaultVertexFormat.POSITION_TEX;
-            case POSITION_COLOR_TEX ->          () -> DefaultVertexFormat.POSITION_COLOR_TEX;
-            case POSITION_TEX_COLOR ->          () -> DefaultVertexFormat.POSITION_TEX_COLOR;
-            case POSITION_COLOR_TEX_LIGHTMAP -> () -> DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP;
-            case POSITION_TEX_LIGHTMAP_COLOR -> () -> DefaultVertexFormat.POSITION_TEX_LIGHTMAP_COLOR;
-            case POSITION_TEX_COLOR_NORMAL ->   () -> DefaultVertexFormat.POSITION_TEX_COLOR_NORMAL;
+        var format = switch (formats) {
+            case BLIT_SCREEN ->                 DefaultVertexFormat.BLIT_SCREEN;
+            case BLOCK ->                       DefaultVertexFormat.BLOCK;
+            case NEW_ENTITY ->                  DefaultVertexFormat.NEW_ENTITY;
+            case PARTICLE ->                    DefaultVertexFormat.PARTICLE;
+            case POSITION ->                    DefaultVertexFormat.POSITION;
+            case POSITION_COLOR ->              DefaultVertexFormat.POSITION_COLOR;
+            case POSITION_COLOR_NORMAL ->       DefaultVertexFormat.POSITION_COLOR_NORMAL;
+            case POSITION_COLOR_LIGHTMAP ->     DefaultVertexFormat.POSITION_COLOR_LIGHTMAP;
+            case POSITION_TEX ->                DefaultVertexFormat.POSITION_TEX;
+            case POSITION_COLOR_TEX ->          DefaultVertexFormat.POSITION_COLOR_TEX;
+            case POSITION_TEX_COLOR ->          DefaultVertexFormat.POSITION_TEX_COLOR;
+            case POSITION_COLOR_TEX_LIGHTMAP -> DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP;
+            case POSITION_TEX_LIGHTMAP_COLOR -> DefaultVertexFormat.POSITION_TEX_LIGHTMAP_COLOR;
+            case POSITION_TEX_COLOR_NORMAL ->   DefaultVertexFormat.POSITION_TEX_COLOR_NORMAL;
         };
+        return () -> format;
     }
 
     @Override
     public VertexFormat.Mode getVertexFormatMode(VertexFormats.Modes modes) {
-        return switch (modes) {
-            case LINES ->               () -> com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES;
-            case LINE_STRIP ->          () -> com.mojang.blaze3d.vertex.VertexFormat.Mode.LINE_STRIP;
-            case DEBUG_LINES ->         () -> com.mojang.blaze3d.vertex.VertexFormat.Mode.DEBUG_LINES;
-            case DEBUG_LINE_STRIP ->    () -> com.mojang.blaze3d.vertex.VertexFormat.Mode.DEBUG_LINE_STRIP;
-            case TRIANGLES ->           () -> com.mojang.blaze3d.vertex.VertexFormat.Mode.TRIANGLES;
-            case TRIANGLE_STRIP ->      () -> com.mojang.blaze3d.vertex.VertexFormat.Mode.TRIANGLE_STRIP;
-            case TRIANGLE_FAN ->        () -> com.mojang.blaze3d.vertex.VertexFormat.Mode.TRIANGLE_FAN;
-            case QUADS ->               () -> com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS;
+        var mode = switch (modes) {
+            case LINES ->            com.mojang.blaze3d.vertex.VertexFormat.Mode.LINES;
+            case LINE_STRIP ->       com.mojang.blaze3d.vertex.VertexFormat.Mode.LINE_STRIP;
+            case DEBUG_LINES ->      com.mojang.blaze3d.vertex.VertexFormat.Mode.DEBUG_LINES;
+            case DEBUG_LINE_STRIP -> com.mojang.blaze3d.vertex.VertexFormat.Mode.DEBUG_LINE_STRIP;
+            case TRIANGLES ->        com.mojang.blaze3d.vertex.VertexFormat.Mode.TRIANGLES;
+            case TRIANGLE_STRIP ->   com.mojang.blaze3d.vertex.VertexFormat.Mode.TRIANGLE_STRIP;
+            case TRIANGLE_FAN ->     com.mojang.blaze3d.vertex.VertexFormat.Mode.TRIANGLE_FAN;
+            case QUADS ->            com.mojang.blaze3d.vertex.VertexFormat.Mode.QUADS;
         };
+        return () -> mode;
     }
 
 }

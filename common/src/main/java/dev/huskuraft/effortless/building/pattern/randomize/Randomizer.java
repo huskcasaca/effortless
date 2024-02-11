@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.building.pattern.randomize;
 
+import java.util.Collection;
+import java.util.UUID;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
-
-import java.util.Collection;
-import java.util.UUID;
 
 public abstract class Randomizer<T> extends Transformer {
 

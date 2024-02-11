@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.config;
 
+import java.util.List;
+
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.settings.PatternSettings;
-
-import java.util.List;
 
 public class PatternConfiguration implements Configuration {
 

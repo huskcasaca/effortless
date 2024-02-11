@@ -1,15 +1,19 @@
 package dev.huskuraft.effortless.vanilla.tag;
 
-import dev.huskuraft.effortless.api.tag.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import dev.huskuraft.effortless.api.tag.TagElement;
+import dev.huskuraft.effortless.api.tag.TagPrimitive;
+import dev.huskuraft.effortless.api.tag.TagReader;
+import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.TagWriter;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftText;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class MinecraftTagRecord implements TagRecord {
 

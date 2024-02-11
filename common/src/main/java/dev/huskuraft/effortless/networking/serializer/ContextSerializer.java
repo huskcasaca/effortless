@@ -7,7 +7,12 @@ import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
-import dev.huskuraft.effortless.building.structure.*;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.CircleStart;
+import dev.huskuraft.effortless.building.structure.CubeFilling;
+import dev.huskuraft.effortless.building.structure.PlaneFacing;
+import dev.huskuraft.effortless.building.structure.PlaneFilling;
+import dev.huskuraft.effortless.building.structure.RaisedEdge;
 
 public class ContextSerializer implements BufferSerializer<Context> {
 

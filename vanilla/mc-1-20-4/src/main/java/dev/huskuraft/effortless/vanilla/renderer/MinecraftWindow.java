@@ -1,8 +1,10 @@
 package dev.huskuraft.effortless.vanilla.renderer;
 
-import com.mojang.blaze3d.platform.InputConstants;
-import dev.huskuraft.effortless.api.renderer.Window;
 import org.lwjgl.glfw.GLFW;
+
+import com.mojang.blaze3d.platform.InputConstants;
+
+import dev.huskuraft.effortless.api.renderer.Window;
 
 public class MinecraftWindow implements Window {
 

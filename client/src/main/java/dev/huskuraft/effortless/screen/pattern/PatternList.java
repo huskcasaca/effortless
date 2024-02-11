@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.screen.pattern;
 
+import java.util.stream.Collectors;
+
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.api.gui.icon.RadialTextIcon;
@@ -11,8 +13,6 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
-
-import java.util.stream.Collectors;
 
 public final class PatternList extends EditableEntryList<Pattern> {
 

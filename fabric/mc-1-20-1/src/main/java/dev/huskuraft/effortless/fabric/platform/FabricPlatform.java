@@ -11,8 +11,8 @@ public class FabricPlatform implements Platform {
     public static final FabricPlatform INSTANCE = new FabricPlatform();
 
     @Override
-    public String getLoaderName() {
-        return "Fabric-Official";
+    public LoaderType getLoaderType() {
+        return LoaderType.FABRIC;
     }
 
     @Override

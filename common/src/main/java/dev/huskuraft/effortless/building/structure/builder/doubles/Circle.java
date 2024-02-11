@@ -1,5 +1,9 @@
 package dev.huskuraft.effortless.building.structure.builder.doubles;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
@@ -7,10 +11,6 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.builder.DoubleClickBuilder;
 import dev.huskuraft.effortless.building.structure.builder.singles.Single;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class Circle extends DoubleClickBuilder {
 

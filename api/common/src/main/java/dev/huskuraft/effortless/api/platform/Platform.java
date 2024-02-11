@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 public interface Platform {
 
-    String getLoaderName();
+    LoaderType getLoaderType();
 
     String getLoaderVersion();
 
@@ -29,6 +29,11 @@ public interface Platform {
     enum Environment {
         CLIENT,
         SERVER
+    }
+
+    enum LoaderType {
+        FABRIC,
+        FORGE
     }
 
 }

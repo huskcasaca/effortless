@@ -1,13 +1,13 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
 import dev.huskuraft.effortless.api.renderer.VertexFormats;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class OutlineRenderLayers extends RenderLayers {
 

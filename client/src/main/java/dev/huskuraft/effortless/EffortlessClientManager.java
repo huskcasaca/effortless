@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless;
 
+import java.util.Stack;
+
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.InteractionType;
@@ -24,8 +26,6 @@ import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerSettingsScreen;
-
-import java.util.Stack;
 
 public final class EffortlessClientManager implements ClientManager {
 

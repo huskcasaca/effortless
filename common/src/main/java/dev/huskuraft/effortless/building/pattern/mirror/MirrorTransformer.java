@@ -1,5 +1,9 @@
 package dev.huskuraft.effortless.building.pattern.mirror;
 
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Stream;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
@@ -12,10 +16,6 @@ import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
-
-import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Stream;
 
 public class MirrorTransformer extends Transformer {
 

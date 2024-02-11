@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.vanilla.core;
 
+import java.io.IOException;
+
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.ResourceMetadata;
-
-import java.io.IOException;
 
 public class MinecraftResource implements Resource {
 

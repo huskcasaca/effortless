@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.vanilla.core;
 
 import com.mojang.blaze3d.platform.InputConstants;
+
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;

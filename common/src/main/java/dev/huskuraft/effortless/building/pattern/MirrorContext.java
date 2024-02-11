@@ -1,6 +1,10 @@
 package dev.huskuraft.effortless.building.pattern;
 
-import dev.huskuraft.effortless.api.core.*;
+import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.math.Vector3d;
 
 public class MirrorContext {

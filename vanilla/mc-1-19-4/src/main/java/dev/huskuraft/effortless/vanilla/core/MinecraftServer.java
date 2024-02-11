@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.platform.Server;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.platform.Server;
 
 public class MinecraftServer implements Server {
 
@@ -26,7 +26,7 @@ public class MinecraftServer implements Server {
 
     @Override
     public void execute(Runnable runnable) {
-        reference.executeIfPossible(runnable);
+        reference.execute(runnable);
     }
 
     @Override

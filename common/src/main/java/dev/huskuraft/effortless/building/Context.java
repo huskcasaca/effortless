@@ -1,17 +1,27 @@
 package dev.huskuraft.effortless.building;
 
-import dev.huskuraft.effortless.api.core.*;
-import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.replace.ReplaceMode;
-import dev.huskuraft.effortless.building.structure.*;
-
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.Interaction;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.replace.ReplaceMode;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.CircleStart;
+import dev.huskuraft.effortless.building.structure.CubeFilling;
+import dev.huskuraft.effortless.building.structure.PlaneFacing;
+import dev.huskuraft.effortless.building.structure.PlaneFilling;
+import dev.huskuraft.effortless.building.structure.RaisedEdge;
 
 public record Context(
         UUID uuid,

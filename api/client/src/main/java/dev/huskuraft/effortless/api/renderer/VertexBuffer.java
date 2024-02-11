@@ -1,7 +1,11 @@
 package dev.huskuraft.effortless.api.renderer;
 
 import dev.huskuraft.effortless.api.core.Orientation;
-import dev.huskuraft.effortless.api.math.*;
+import dev.huskuraft.effortless.api.math.Matrix3f;
+import dev.huskuraft.effortless.api.math.Matrix4f;
+import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector3f;
+import dev.huskuraft.effortless.api.math.Vector4f;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 
 public interface VertexBuffer extends PlatformReference {

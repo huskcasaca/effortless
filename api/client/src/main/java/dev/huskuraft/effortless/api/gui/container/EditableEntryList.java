@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.api.gui.container;
 
+import java.util.Collection;
+import java.util.List;
+
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
 import dev.huskuraft.effortless.api.platform.Entrance;
-
-import java.util.Collection;
-import java.util.List;
 
 public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEntryList.Entry<T>> {
 

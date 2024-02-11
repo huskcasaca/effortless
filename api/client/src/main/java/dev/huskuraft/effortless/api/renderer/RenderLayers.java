@@ -1,9 +1,10 @@
 package dev.huskuraft.effortless.api.renderer;
 
+import org.lwjgl.opengl.GL11;
+
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
-import org.lwjgl.opengl.GL11;
 
 public abstract class RenderLayers {
 

@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.fabric.events;
 
+import java.io.IOException;
+import java.util.function.Consumer;
+
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;
-
-import java.io.IOException;
-import java.util.function.Consumer;
 
 public class ClientShadersEvents {
 

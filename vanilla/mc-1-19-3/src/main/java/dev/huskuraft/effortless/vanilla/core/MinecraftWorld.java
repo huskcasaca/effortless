@@ -1,12 +1,12 @@
 package dev.huskuraft.effortless.vanilla.core;
 
+import java.util.UUID;
+
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import net.minecraft.world.level.Level;
-
-import java.util.UUID;
 
 public class MinecraftWorld implements World {
 

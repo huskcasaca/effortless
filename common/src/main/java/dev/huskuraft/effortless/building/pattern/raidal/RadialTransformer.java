@@ -1,5 +1,10 @@
 package dev.huskuraft.effortless.building.pattern.raidal;
 
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Range1i;
 import dev.huskuraft.effortless.api.math.Vector3d;
@@ -13,11 +18,6 @@ import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.RevolveContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
-
-import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class RadialTransformer extends Transformer {
 

@@ -1,5 +1,9 @@
 package dev.huskuraft.effortless.screen.transformer;
 
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
@@ -17,10 +21,6 @@ import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public final class TransformerList extends EditableEntryList<Transformer> {
 

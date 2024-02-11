@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.config.serializer;
 
+import java.util.Arrays;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.tag.TagElement;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
@@ -12,8 +14,6 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
-
-import java.util.Arrays;
 
 public class TransformerSerializer implements TagSerializer<Transformer> {
 

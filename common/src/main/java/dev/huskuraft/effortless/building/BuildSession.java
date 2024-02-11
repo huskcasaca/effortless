@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building;
 
+import java.util.stream.Stream;
+
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Player;
@@ -11,8 +13,6 @@ import dev.huskuraft.effortless.building.operation.block.BlockBreakOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperation;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-
-import java.util.stream.Stream;
 
 public final class BuildSession implements Session {
 

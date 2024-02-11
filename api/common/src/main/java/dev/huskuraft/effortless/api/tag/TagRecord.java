@@ -1,5 +1,10 @@
 package dev.huskuraft.effortless.api.tag;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
@@ -8,11 +13,6 @@ import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.text.Text;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
 
 public interface TagRecord extends TagElement {
 

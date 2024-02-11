@@ -1,5 +1,8 @@
 package dev.huskuraft.effortless.screen.settings;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
@@ -14,9 +17,6 @@ import dev.huskuraft.effortless.api.lang.Tuple2;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.PositionType;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 public class SettingsList extends AbstractEntryList<SettingsList.Entry<?>> {
 

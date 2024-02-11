@@ -1,5 +1,12 @@
 package dev.huskuraft.effortless.api.gui.container;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
+
 import dev.huskuraft.effortless.api.gui.AbstractContainerWidget;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
@@ -8,12 +15,6 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
-
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.function.Predicate;
 
 public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> extends AbstractContainerWidget implements EntryList {
 

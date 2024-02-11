@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.vanilla.core;
 
+import java.util.Arrays;
+
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-
-import java.util.Arrays;
 
 public class MinecraftText implements Text {
 

@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.vanilla.core;
 
+import java.util.UUID;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.networking.Buffer;
@@ -7,10 +9,7 @@ import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
 import net.minecraft.core.DefaultedRegistry;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-
-import java.util.UUID;
 
 public class MinecraftBuffer implements Buffer {
 

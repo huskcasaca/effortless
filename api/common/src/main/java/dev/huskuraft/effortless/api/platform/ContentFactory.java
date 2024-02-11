@@ -1,5 +1,8 @@
 package dev.huskuraft.effortless.api.platform;
 
+import java.util.Locale;
+import java.util.Optional;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Items;
@@ -9,9 +12,6 @@ import dev.huskuraft.effortless.api.tag.TagIoReader;
 import dev.huskuraft.effortless.api.tag.TagIoWriter;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
-
-import java.util.Locale;
-import java.util.Optional;
 
 public interface ContentFactory {
 

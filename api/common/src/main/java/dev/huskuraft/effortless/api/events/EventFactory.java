@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.api.events;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -12,6 +10,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
 
 public final class EventFactory {
 

@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.building.settings;
 
-import dev.huskuraft.effortless.building.structure.BuildMode;
-
 import java.util.Collections;
 import java.util.List;
+
+import dev.huskuraft.effortless.building.structure.BuildMode;
 
 public record BasicSettings(
         List<BuildMode> modes

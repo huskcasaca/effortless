@@ -1,11 +1,11 @@
 package dev.huskuraft.effortless.building.pattern;
 
+import java.util.Objects;
+
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.Player;
-
-import java.util.Objects;
 
 public class RefactorContext {
 

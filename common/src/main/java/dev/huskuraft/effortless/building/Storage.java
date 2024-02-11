@@ -1,13 +1,13 @@
 package dev.huskuraft.effortless.building;
 
-import dev.huskuraft.effortless.api.core.Item;
-import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.core.Player;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import dev.huskuraft.effortless.api.core.Item;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Player;
 
 public interface Storage {
 
