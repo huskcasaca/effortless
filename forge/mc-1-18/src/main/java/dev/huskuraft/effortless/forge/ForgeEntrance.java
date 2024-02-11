@@ -12,7 +12,7 @@ public class ForgeEntrance {
     private static final String CLASS_NAME = "ForgeEffortless";
     private static final String CLIENT_CLASS_NAME = "ForgeEffortlessClient";
 
-    static {
+    public ForgeEntrance() {
         var originalClassPath = "dev.huskuraft.effortless.forge.";
         var relocatedClassPath = "dev.huskuraft.effortless.forge.mc_" + FMLLoader.versionInfo().mcVersion().replace(".", "_") + ".";
 
