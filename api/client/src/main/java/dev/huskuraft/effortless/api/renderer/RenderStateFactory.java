@@ -46,6 +46,8 @@ public interface RenderStateFactory {
 
     VertexFormat.Mode getVertexFormatMode(VertexFormats.Modes modes);
 
-    RenderStateFactory INSTANCE = ClientContentFactory.INSTANCE.getRenderStateFactory();
+    static RenderStateFactory getInstance() {
+        return ClientContentFactory.getInstance().getRenderStateFactory();
+    }
 
 }

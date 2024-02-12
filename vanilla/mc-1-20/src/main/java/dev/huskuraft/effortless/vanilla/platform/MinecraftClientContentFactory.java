@@ -13,10 +13,12 @@ import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.platform.SearchTree;
 import dev.huskuraft.effortless.api.renderer.RenderStateFactory;
+import dev.huskuraft.effortless.api.sound.SoundFactory;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.core.MinecraftKeyBinding;
+import dev.huskuraft.effortless.vanilla.core.MinecraftSoundFactory;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderStateFactory;
 import dev.huskuraft.effortless.vanilla.texture.MinecraftTextureFactory;
 import net.minecraft.client.KeyMapping;
@@ -104,4 +106,10 @@ public class MinecraftClientContentFactory extends MinecraftCommonContentFactory
     public TextureFactory getTextureFactory() {
         return MinecraftTextureFactory.INSTANCE;
     }
+
+    @Override
+    public SoundFactory getSoundFactory() {
+        return MinecraftSoundFactory.INSTANCE;
+    }
+
 }

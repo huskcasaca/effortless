@@ -10,6 +10,6 @@ public interface TextureFactory {
 
     TextureSprite getButtonTextureSprite(boolean enabled, boolean focused);
 
-    TextureFactory INSTANCE = ClientContentFactory.INSTANCE.getTextureFactory();
+    TextureFactory INSTANCE = ClientContentFactory.getInstance().getTextureFactory();
 
 }

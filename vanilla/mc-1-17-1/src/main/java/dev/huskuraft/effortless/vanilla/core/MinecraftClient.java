@@ -12,11 +12,10 @@ import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.Camera;
 import dev.huskuraft.effortless.api.renderer.Window;
+import dev.huskuraft.effortless.api.sound.SoundManager;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftCamera;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftWindow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.sounds.SoundEvents;
 
 public class MinecraftClient implements Client {
 
@@ -105,8 +104,8 @@ public class MinecraftClient implements Client {
     }
 
     @Override
-    public void playButtonClickSound() {
-        reference.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    public SoundManager getSoundManager() {
+        return new MinecraftSoundManager(reference.getSoundManager());
     }
 
     @Override

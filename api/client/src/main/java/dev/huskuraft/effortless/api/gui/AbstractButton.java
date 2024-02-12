@@ -100,7 +100,7 @@ public abstract class AbstractButton extends AbstractWidget {
     }
 
     public void playDownSound() {
-        getEntrance().getClient().playButtonClickSound();
+        getEntrance().getClient().getSoundManager().playButtonClickSound();
     }
 
 }
