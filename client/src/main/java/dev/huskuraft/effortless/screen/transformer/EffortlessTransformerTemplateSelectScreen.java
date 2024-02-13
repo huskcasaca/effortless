@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
+import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
@@ -110,7 +111,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     }
 
     private void setSearchResult(String string) {
-        var searchTree = getEntrance().getContentFactory().search(transformers, Transformer::getSearchableTags);
+        var searchTree = ClientContentFactory.getInstance().search(transformers, Transformer::getSearchableTags);
         entries.reset(searchTree.search(string.toLowerCase(Locale.ROOT)).stream().filter(transformer -> transformer.getType() == selectedType).toList());
         entries.setSelected(null);
         entries.setScrollAmount(0);

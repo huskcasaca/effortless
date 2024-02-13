@@ -1,12 +1,11 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.config.ClientConfigManager;
 
 public abstract class EffortlessClient implements ClientEntrance {
 
-    private final EffortlessClientEventsRegistry registry = new EffortlessClientEventsRegistry();
+    private final EffortlessClientEventRegistry registry = new EffortlessClientEventRegistry();
 
     private final EffortlessClientChannel channel;
     private final EffortlessClientConfigManager configManager;
@@ -30,7 +29,7 @@ public abstract class EffortlessClient implements ClientEntrance {
         return channel;
     }
 
-    public EffortlessClientEventsRegistry getEventRegistry() {
+    public EffortlessClientEventRegistry getEventRegistry() {
         return registry;
     }
 
@@ -46,9 +45,6 @@ public abstract class EffortlessClient implements ClientEntrance {
     public ClientConfigManager getConfigManager() {
         return configManager;
     }
-
-    @Override
-    public abstract ClientContentFactory getContentFactory();
 
     @Override
     public String getId() {

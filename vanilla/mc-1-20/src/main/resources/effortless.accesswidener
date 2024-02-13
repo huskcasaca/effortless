@@ -43,6 +43,7 @@ accessible field net/minecraft/client/renderer/RenderStateShard NO_COLOR_LOGIC L
 accessible field net/minecraft/client/renderer/RenderStateShard OR_REVERSE_COLOR_LOGIC Lnet/minecraft/client/renderer/RenderStateShard$ColorLogicStateShard;
 
 accessible class net/minecraft/client/renderer/RenderType$CompositeState
+accessible class net/minecraft/client/renderer/RenderType$CompositeRenderType
 accessible class net/minecraft/client/renderer/RenderStateShard$TransparencyStateShard
 accessible class net/minecraft/client/renderer/RenderStateShard$ShaderStateShard
 accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShard

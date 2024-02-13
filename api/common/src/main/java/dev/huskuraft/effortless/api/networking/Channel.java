@@ -74,8 +74,6 @@ public abstract class Channel<P extends PacketListener> implements PacketSender,
         this.packetSet = new PacketSet<>();
     }
 
-    public abstract Buffer allocateButter();
-
     public abstract int getCompatibilityVersion();
 
     public String getCompatibilityVersionStr() {
@@ -116,7 +114,7 @@ public abstract class Channel<P extends PacketListener> implements PacketSender,
             if (id == null) {
                 throw new IllegalArgumentException("Packet " + packet.getClass() + " is not registered");
             }
-            var buffer = allocateButter();
+            var buffer = Buffer.newBuffer();
             var serializer = (BufferSerializer<Packet<T>>) idToDeserializer.get(getId(packet.getClass()));
             buffer.writeInt(id);
             serializer.write(buffer, packet);

@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.api.sound;
 
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.platform.SafeServiceLoader;
 
 public interface SoundFactory {
 
@@ -28,6 +29,12 @@ public interface SoundFactory {
                                                     double z,
                                                     boolean relative) {
         return createSimpleSoundInstance(sound.getId(), source, volume, pitch, looping, delay, attenuation, x, y, z, relative);
+    }
+
+    SoundFactory INSTANCE = SafeServiceLoader.load(SoundFactory.class).getFirst();
+
+    static SoundFactory getInstance() {
+        return INSTANCE;
     }
 
 }

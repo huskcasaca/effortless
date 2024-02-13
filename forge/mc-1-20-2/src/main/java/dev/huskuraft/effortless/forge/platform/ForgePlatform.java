@@ -2,12 +2,13 @@ package dev.huskuraft.effortless.forge.platform;
 
 import java.nio.file.Path;
 
+import com.google.auto.service.AutoService;
+
 import dev.huskuraft.effortless.api.platform.Platform;
 import net.minecraftforge.fml.loading.FMLLoader;
 
+@AutoService(Platform.class)
 public class ForgePlatform implements Platform {
-
-    public static final ForgePlatform INSTANCE = new ForgePlatform();
 
     @Override
     public LoaderType getLoaderType() {

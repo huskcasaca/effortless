@@ -40,6 +40,7 @@ accessible field net/minecraft/client/renderer/RenderStateShard ITEM_ENTITY_TARG
 accessible field net/minecraft/client/renderer/RenderStateShard DEFAULT_LINE Lnet/minecraft/client/renderer/RenderStateShard$LineStateShard;
 
 accessible class net/minecraft/client/renderer/RenderType$CompositeState
+accessible class net/minecraft/client/renderer/RenderType$CompositeRenderType
 accessible class net/minecraft/client/renderer/RenderStateShard$TransparencyStateShard
 accessible class net/minecraft/client/renderer/RenderStateShard$ShaderStateShard
 accessible class net/minecraft/client/renderer/RenderStateShard$TextureStateShard

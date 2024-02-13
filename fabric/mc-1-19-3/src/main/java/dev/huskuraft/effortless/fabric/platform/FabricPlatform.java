@@ -2,13 +2,14 @@ package dev.huskuraft.effortless.fabric.platform;
 
 import java.nio.file.Path;
 
+import com.google.auto.service.AutoService;
+
 import dev.huskuraft.effortless.api.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 
+@AutoService(Platform.class)
 public class FabricPlatform implements Platform {
-
-    public static final FabricPlatform INSTANCE = new FabricPlatform();
 
     @Override
     public LoaderType getLoaderType() {

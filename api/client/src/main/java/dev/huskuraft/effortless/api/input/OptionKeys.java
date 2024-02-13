@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.input;
 
-import dev.huskuraft.effortless.api.platform.ClientEntrance;
+import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 
 public enum OptionKeys implements Key {
     KEY_UP,
@@ -41,6 +41,6 @@ public enum OptionKeys implements Key {
 
     @Override
     public KeyBinding getBinding() {
-        return ClientEntrance.getInstance().getContentFactory().getOptionKeyBinding(this);
+        return ClientContentFactory.getInstance().getOptionKeyBinding(this);
     }
 }

@@ -5,11 +5,13 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Item;
+import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
+import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.text.Text;
@@ -36,7 +38,7 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
         var itemStacks = new ArrayList<Item>();
         if (player != null) {
 //            CreativeModeTabs.tryRebuildTabContents(((LocalPlayer) player).connection.enabledFeatures(), FabricAdapter.adapt(player).canUseGameMasterBlocks(), FabricAdapter.adapt(player).level().registryAccess());
-            itemStacks.add(getEntrance().getContentFactory().newItemStack().getItem());
+            itemStacks.add(ItemStack.empty().getItem());
 //            itemStack.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
 //            itemStack.add(new ItemStack(Items.AIR));
 //            itemStack.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
@@ -82,10 +84,10 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
 
     private void setSearchResult(String string) {
         if (string.startsWith("#")) {
-            var searchTree = getEntrance().getContentFactory().searchItemStack(SearchBy.TAG);
+            var searchTree = ClientContentFactory.getInstance().searchItemStack(SearchBy.TAG);
             entries.reset(searchTree.search(string.substring(1).toLowerCase(Locale.ROOT)));
         } else {
-            var searchTree = getEntrance().getContentFactory().searchItemStack(SearchBy.NAME);
+            var searchTree = ClientContentFactory.getInstance().searchItemStack(SearchBy.NAME);
             entries.reset(searchTree.search(string.toLowerCase(Locale.ROOT)));
         }
         entries.setSelected(null);

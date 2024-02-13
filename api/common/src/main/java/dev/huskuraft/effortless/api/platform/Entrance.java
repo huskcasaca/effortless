@@ -4,9 +4,9 @@ public interface Entrance {
 
     String getId();
 
-    Platform getPlatform();
-
-    ContentFactory getContentFactory();
+    default Platform getPlatform() {
+        return Platform.INSTANCE;
+    }
 
     static Entrance getInstance() {
         return Instance.get();

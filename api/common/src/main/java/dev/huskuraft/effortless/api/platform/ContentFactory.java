@@ -17,7 +17,7 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public interface ContentFactory {
 
-    ResourceLocation newResource(String namespace, String path);
+    ResourceLocation newResourceLocation(String namespace, String path);
 
     Buffer newBuffer();
 
@@ -61,8 +61,10 @@ public interface ContentFactory {
         return getOptionalItem(items).orElseThrow();
     }
 
+    ContentFactory INSTANCE = SafeServiceLoader.load(ContentFactory.class).getFirst();
+
     static ContentFactory getInstance() {
-        return Entrance.getInstance().getContentFactory();
+        return INSTANCE;
     }
 
 }

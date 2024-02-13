@@ -4,8 +4,6 @@ public interface ClientEntrance extends Entrance {
 
     ClientManager getClientManager();
 
-    ClientContentFactory getContentFactory();
-
     default Client getClient() {
         return getClientManager().getRunningClient();
     }

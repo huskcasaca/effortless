@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.vanilla.texture;
 
+import com.google.auto.service.AutoService;
+
 import dev.huskuraft.effortless.api.texture.SimpleTexture;
 import dev.huskuraft.effortless.api.texture.SimpleTextureSprite;
 import dev.huskuraft.effortless.api.texture.SpriteScaling;
@@ -11,9 +13,8 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 
+@AutoService(TextureFactory.class)
 public class MinecraftTextureFactory implements TextureFactory {
-
-    public static final MinecraftTextureFactory INSTANCE = new MinecraftTextureFactory();
 
     @Override
     public Texture getBlockAtlasTexture() {

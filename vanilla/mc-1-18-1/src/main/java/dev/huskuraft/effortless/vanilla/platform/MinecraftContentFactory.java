@@ -3,6 +3,8 @@ package dev.huskuraft.effortless.vanilla.platform;
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.google.auto.service.AutoService;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
@@ -29,14 +31,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 
-public class MinecraftCommonContentFactory implements ContentFactory {
-
-    public static final MinecraftCommonContentFactory INSTANCE = new MinecraftCommonContentFactory();
+@AutoService(ContentFactory.class)
+public class MinecraftContentFactory implements ContentFactory {
 
     @Override
-    public ResourceLocation newResource(String namespace, String path) {
+    public ResourceLocation newResourceLocation(String namespace, String path) {
         return new MinecraftResourceLocation(new net.minecraft.resources.ResourceLocation(namespace, path));
     }
 
@@ -72,27 +74,27 @@ public class MinecraftCommonContentFactory implements ContentFactory {
 
     @Override
     public Text newText() {
-        return new MinecraftText(Component.empty());
+        return new MinecraftText(Component.nullToEmpty(null));
     }
 
     @Override
     public Text newText(String text) {
-        return new MinecraftText(Component.literal(text));
+        return new MinecraftText(Component.nullToEmpty(text));
     }
 
     @Override
     public Text newText(String text, Text... args) {
-        return new MinecraftText(Component.translatable(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
+        return new MinecraftText(new TranslatableComponent(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
     }
 
     @Override
     public Text newTranslatableText(String text) {
-        return new MinecraftText(Component.translatable(text));
+        return new MinecraftText(new TranslatableComponent(text));
     }
 
     @Override
     public Text newTranslatableText(String text, Text... args) {
-        return new MinecraftText(Component.translatable(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
+        return new MinecraftText(new TranslatableComponent(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
     }
 
     @Override

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.texture;
 
-import dev.huskuraft.effortless.api.platform.ClientContentFactory;
+import dev.huskuraft.effortless.api.platform.SafeServiceLoader;
 
 public interface TextureFactory {
 
@@ -10,6 +10,10 @@ public interface TextureFactory {
 
     TextureSprite getButtonTextureSprite(boolean enabled, boolean focused);
 
-    TextureFactory INSTANCE = ClientContentFactory.getInstance().getTextureFactory();
+    TextureFactory INSTANCE = SafeServiceLoader.load(TextureFactory.class).getFirst();
+
+    static TextureFactory getInstance() {
+        return INSTANCE;
+    }
 
 }

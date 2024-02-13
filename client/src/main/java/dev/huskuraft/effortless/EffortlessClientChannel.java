@@ -2,7 +2,6 @@ package dev.huskuraft.effortless;
 
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
-import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.Channel;
 import dev.huskuraft.effortless.api.networking.NetworkRegistry;
 import dev.huskuraft.effortless.api.networking.Packet;
@@ -44,11 +43,6 @@ public final class EffortlessClientChannel extends Channel<AllPacketListener> {
     @Override
     public void receivePacket(Packet packet, Player player) {
         packet.handle(listener, player);
-    }
-
-    @Override
-    public Buffer allocateButter() {
-        return getEntrance().getContentFactory().newBuffer();
     }
 
     @Override
