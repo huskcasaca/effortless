@@ -22,7 +22,7 @@ public interface KeyBinding extends PlatformReference {
     int getBoundCode();
 
     static KeyBinding of(String name, String category, KeyCodes key) {
-        return ClientContentFactory.INSTANCE.newKeyBinding(name, category, key);
+        return ClientContentFactory.getInstance().newKeyBinding(name, category, key);
     }
 
 }

@@ -442,7 +442,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     }
 
     private void playRadialMenuSound() {
-        getEntrance().getClient().playButtonClickSound();
+        getEntrance().getClient().getSoundManager().playButtonClickSound();
     }
 
     public interface Slot<T> {

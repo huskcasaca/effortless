@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.renderer.Camera;
 import dev.huskuraft.effortless.api.renderer.Window;
+import dev.huskuraft.effortless.api.sound.SoundManager;
 
 public interface Client extends PlatformReference {
 
@@ -34,7 +35,7 @@ public interface Client extends PlatformReference {
 
     void setClipboard(String content);
 
-    void playButtonClickSound();
+    SoundManager getSoundManager();
 
     Resource getResource(ResourceLocation location);
 

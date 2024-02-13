@@ -9,6 +9,8 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.api.sound.Sound;
+import dev.huskuraft.effortless.api.sound.Sounds;
 import dev.huskuraft.effortless.api.tag.TagIoReader;
 import dev.huskuraft.effortless.api.tag.TagIoWriter;
 import dev.huskuraft.effortless.api.tag.TagRecord;
@@ -17,6 +19,7 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItem;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
+import dev.huskuraft.effortless.vanilla.core.MinecraftSound;
 import dev.huskuraft.effortless.vanilla.core.MinecraftText;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
 import io.netty.buffer.Unpooled;
@@ -27,6 +30,7 @@ import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvents;
 
 public class MinecraftCommonContentFactory implements ContentFactory {
 
@@ -111,6 +115,15 @@ public class MinecraftCommonContentFactory implements ContentFactory {
             case OSX -> Platform.OperatingSystem.MACOS;
             case UNKNOWN -> Platform.OperatingSystem.UNKNOWN;
         };
+    }
+
+    public Sound getSound(Sounds sounds) {
+        var sound = switch (sounds) {
+            case UI_BUTTON_CLICK -> SoundEvents.UI_BUTTON_CLICK;
+            case UI_TOAST_IN -> SoundEvents.UI_TOAST_IN;
+            case UI_TOAST_OUT -> SoundEvents.UI_TOAST_OUT;
+        };
+        return new MinecraftSound(sound);
     }
 
 }

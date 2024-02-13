@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
 import dev.huskuraft.effortless.api.input.OptionKeys;
 import dev.huskuraft.effortless.api.renderer.RenderStateFactory;
+import dev.huskuraft.effortless.api.sound.SoundFactory;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
 
@@ -31,6 +32,10 @@ public interface ClientContentFactory extends ContentFactory {
 
     TextureFactory getTextureFactory();
 
-    ClientContentFactory INSTANCE = ClientEntrance.getInstance().getContentFactory();
+    SoundFactory getSoundFactory();
+
+    static ClientContentFactory getInstance() {
+        return ClientEntrance.getInstance().getContentFactory();
+    }
 
 }

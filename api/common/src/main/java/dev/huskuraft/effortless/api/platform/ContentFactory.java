@@ -8,6 +8,8 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.Buffer;
+import dev.huskuraft.effortless.api.sound.Sound;
+import dev.huskuraft.effortless.api.sound.Sounds;
 import dev.huskuraft.effortless.api.tag.TagIoReader;
 import dev.huskuraft.effortless.api.tag.TagIoWriter;
 import dev.huskuraft.effortless.api.tag.TagRecord;
@@ -49,12 +51,18 @@ public interface ContentFactory {
 
     Platform.OperatingSystem getOperatingSystem();
 
+    Sound getSound(Sounds sounds);
+
     default Optional<Item> getOptionalItem(Items items) {
         return newOptionalItem(ResourceLocation.of("minecraft", items.name().toLowerCase(Locale.ROOT)));
     }
 
     default Item getItem(Items items) {
         return getOptionalItem(items).orElseThrow();
+    }
+
+    static ContentFactory getInstance() {
+        return Entrance.getInstance().getContentFactory();
     }
 
 }

@@ -81,7 +81,7 @@ public enum Shaders implements Shader {
     }
 
     private Shader getShader() {
-        return RenderStateFactory.INSTANCE.getShader(this).ifUnavailable(() -> shader);
+        return RenderStateFactory.getInstance().getShader(this).ifUnavailable(() -> shader);
     }
 
     @Override
