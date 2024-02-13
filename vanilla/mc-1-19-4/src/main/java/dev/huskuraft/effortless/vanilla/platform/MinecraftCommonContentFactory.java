@@ -3,6 +3,8 @@ package dev.huskuraft.effortless.vanilla.platform;
 import java.util.Arrays;
 import java.util.Optional;
 
+import com.google.auto.service.AutoService;
+
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
@@ -31,9 +33,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 
+@AutoService(ContentFactory.class)
 public class MinecraftCommonContentFactory implements ContentFactory {
-
-    public static final MinecraftCommonContentFactory INSTANCE = new MinecraftCommonContentFactory();
 
     @Override
     public ResourceLocation newResource(String namespace, String path) {

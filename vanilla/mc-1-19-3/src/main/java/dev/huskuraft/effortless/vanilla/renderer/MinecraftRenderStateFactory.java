@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.vanilla.renderer;
 
 import java.util.OptionalDouble;
 
+import com.google.auto.service.AutoService;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 
 import dev.huskuraft.effortless.api.platform.PlatformReference;
@@ -17,9 +18,8 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 
+@AutoService(RenderStateFactory.class)
 public class MinecraftRenderStateFactory implements RenderStateFactory {
-
-    public static final MinecraftRenderStateFactory INSTANCE = new MinecraftRenderStateFactory();
 
     @Override
     public RenderLayer createCompositeRenderLayer(String name,

@@ -43,11 +43,6 @@ public class ForgeEffortlessClient extends EffortlessClient {
         return ForgePlatform.INSTANCE;
     }
 
-    @Override
-    public ClientContentFactory getContentFactory() {
-        return MinecraftClientContentFactory.INSTANCE;
-    }
-
     @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
         getEventRegistry().getClientStartEvent().invoker().onClientStart(new MinecraftClient(Minecraft.getInstance()));

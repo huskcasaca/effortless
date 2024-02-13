@@ -83,9 +83,4 @@ public class FabricEffortlessClient extends EffortlessClient implements ClientMo
         return FabricPlatform.INSTANCE;
     }
 
-    @Override
-    public ClientContentFactory getContentFactory() {
-        return MinecraftClientContentFactory.INSTANCE;
-    }
-
 }

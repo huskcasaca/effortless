@@ -5,6 +5,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.auto.service.AutoService;
+
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
@@ -27,6 +29,7 @@ import net.minecraft.client.searchtree.PlainTextSearchTree;
 import net.minecraft.client.searchtree.SearchRegistry;
 import net.minecraft.network.chat.Component;
 
+@AutoService(ClientContentFactory.class)
 public class MinecraftClientContentFactory extends MinecraftCommonContentFactory implements ClientContentFactory {
 
     public static final MinecraftClientContentFactory INSTANCE = new MinecraftClientContentFactory();
@@ -91,21 +94,6 @@ public class MinecraftClientContentFactory extends MinecraftCommonContentFactory
     @Override
     public KeyBinding newKeyBinding(String name, String category, KeyCodes key) {
         return new MinecraftKeyBinding(new KeyMapping(name, key.value(), category));
-    }
-
-    @Override
-    public RenderStateFactory getRenderStateFactory() {
-        return MinecraftRenderStateFactory.INSTANCE;
-    }
-
-    @Override
-    public TextureFactory getTextureFactory() {
-        return MinecraftTextureFactory.INSTANCE;
-    }
-
-    @Override
-    public SoundFactory getSoundFactory() {
-        return MinecraftSoundFactory.INSTANCE;
     }
 
 }

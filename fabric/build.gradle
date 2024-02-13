@@ -38,6 +38,9 @@ subprojects {
         shadow project(":vanilla:$project.name")
 
         implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+        annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
+        compileOnly 'com.google.auto.service:auto-service:1.1.1'
     }
 
     processResources {
@@ -54,6 +57,7 @@ subprojects {
 
     shadowJar {
         configurations = [project.configurations.shadow]
+        mergeServiceFiles()
         dependencies {
             exclude dependency('com.google.code.findbugs:jsr305')
         }

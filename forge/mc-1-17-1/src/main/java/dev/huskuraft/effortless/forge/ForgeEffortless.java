@@ -46,11 +46,6 @@ public class ForgeEffortless extends Effortless {
         return ForgePlatform.INSTANCE;
     }
 
-    @Override
-    public ContentFactory getContentFactory() {
-        return MinecraftCommonContentFactory.INSTANCE;
-    }
-
     @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent event) {
         getEventRegistry().getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {

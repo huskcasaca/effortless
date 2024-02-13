@@ -5,6 +5,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.auto.service.AutoService;
+
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
@@ -12,15 +14,9 @@ import dev.huskuraft.effortless.api.input.OptionKeys;
 import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.platform.SearchTree;
-import dev.huskuraft.effortless.api.renderer.RenderStateFactory;
-import dev.huskuraft.effortless.api.sound.SoundFactory;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.texture.TextureFactory;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.core.MinecraftKeyBinding;
-import dev.huskuraft.effortless.vanilla.core.MinecraftSoundFactory;
-import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderStateFactory;
-import dev.huskuraft.effortless.vanilla.texture.MinecraftTextureFactory;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;
@@ -28,9 +24,8 @@ import net.minecraft.client.searchtree.SearchRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTabs;
 
+@AutoService(ClientContentFactory.class)
 public class MinecraftClientContentFactory extends MinecraftCommonContentFactory implements ClientContentFactory {
-
-    public static final MinecraftClientContentFactory INSTANCE = new MinecraftClientContentFactory();
 
     @Override
     public SearchTree<ItemStack> searchItemStack(SearchBy searchBy) {
@@ -95,21 +90,6 @@ public class MinecraftClientContentFactory extends MinecraftCommonContentFactory
     @Override
     public KeyBinding newKeyBinding(String name, String category, KeyCodes key) {
         return new MinecraftKeyBinding(new KeyMapping(name, key.value(), category));
-    }
-
-    @Override
-    public RenderStateFactory getRenderStateFactory() {
-        return MinecraftRenderStateFactory.INSTANCE;
-    }
-
-    @Override
-    public TextureFactory getTextureFactory() {
-        return MinecraftTextureFactory.INSTANCE;
-    }
-
-    @Override
-    public SoundFactory getSoundFactory() {
-        return MinecraftSoundFactory.INSTANCE;
     }
 
 }

@@ -14,15 +14,16 @@ import static net.minecraft.sounds.SoundSource.RECORDS;
 import static net.minecraft.sounds.SoundSource.VOICE;
 import static net.minecraft.sounds.SoundSource.WEATHER;
 
+import com.google.auto.service.AutoService;
+
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.sound.SoundFactory;
 import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.api.sound.SoundSource;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 
+@AutoService(SoundFactory.class)
 public class MinecraftSoundFactory implements SoundFactory {
-
-    public static final MinecraftSoundFactory INSTANCE = new MinecraftSoundFactory();
 
     @Override
     public SoundInstance createSimpleSoundInstance(ResourceLocation location, SoundSource source, float volume, float pitch, boolean looping, int delay, SoundInstance.Attenuation attenuation, double x, double y, double z, boolean relative) {

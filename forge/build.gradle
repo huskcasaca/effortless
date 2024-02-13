@@ -33,11 +33,13 @@ subprojects {
 
         implementation project(':common')
         implementation project(':client')
-        implementation project(":vanilla:$project.name")
+        compileOnly project(":vanilla:$project.name")
 
         shadow project(':common')
         shadow project(':client')
-        shadow project(":vanilla:$project.name")
+
+        annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
+        compileOnly 'com.google.auto.service:auto-service:1.1.1'
 
     }
 
@@ -148,6 +150,7 @@ subprojects {
     shadowJar {
         dependsOn 'reobfJar'
         configurations = [project.configurations.shadow]
+        mergeServiceFiles()
         dependencies {
             exclude dependency('com.google.code.findbugs:jsr305')
         }
