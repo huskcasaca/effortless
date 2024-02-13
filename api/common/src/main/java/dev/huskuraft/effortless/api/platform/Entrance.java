@@ -4,14 +4,12 @@ public interface Entrance {
 
     String getId();
 
-    Platform getPlatform();
+    default Platform getPlatform() {
+        return Platform.INSTANCE;
+    }
 
     static Entrance getInstance() {
         return Instance.get();
-    }
-
-    default ContentFactory getContentFactory() {
-        return ContentFactory.getInstance();
     }
 
     class Instance {

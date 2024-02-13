@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
@@ -183,6 +184,10 @@ public interface Buffer extends PlatformReference {
     default void writeVector2i(Vector2i vector) {
         writeInt(vector.x());
         writeInt(vector.y());
+    }
+
+    static Buffer newBuffer() {
+        return ContentFactory.getInstance().newBuffer();
     }
 
 }

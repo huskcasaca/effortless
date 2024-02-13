@@ -17,7 +17,7 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public interface ContentFactory {
 
-    ResourceLocation newResource(String namespace, String path);
+    ResourceLocation newResourceLocation(String namespace, String path);
 
     Buffer newBuffer();
 

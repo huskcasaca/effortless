@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
+import dev.huskuraft.effortless.api.platform.ContentFactory;
+import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.config.BaseConfiguration;
@@ -43,7 +45,7 @@ public final class EffortlessClientConfigManager extends ClientConfigManager {
             if (!configFile.exists()) {
                 throw new IOException("Could not find config file: " + configFile.getName());
             }
-            var tag = getEntrance().getContentFactory().getTagIoReader().read(new FileInputStream(configFile));
+            var tag = ContentFactory.getInstance().getTagIoReader().read(new FileInputStream(configFile));
 
             var read = new BaseConfigurationSerializer().read(tag);
             read.validate();
@@ -65,10 +67,10 @@ public final class EffortlessClientConfigManager extends ClientConfigManager {
             var configFile = new File(dataDir, CONFIG_NAME);
 
 
-            var tag = getEntrance().getContentFactory().newTagRecord();
+            var tag = TagRecord.newRecord();
             config.validate();
             new BaseConfigurationSerializer().write(tag, config);
-            getEntrance().getContentFactory().getTagIoWriter().write(new FileOutputStream(configFile), tag);
+            ContentFactory.getInstance().getTagIoWriter().write(new FileOutputStream(configFile), tag);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.warning("Cannot save config file");

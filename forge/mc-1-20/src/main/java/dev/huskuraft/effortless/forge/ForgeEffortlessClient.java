@@ -6,14 +6,10 @@ import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
-import dev.huskuraft.effortless.api.platform.ClientContentFactory;
-import dev.huskuraft.effortless.api.platform.Platform;
-import dev.huskuraft.effortless.forge.platform.ForgePlatform;
 import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftClientContentFactory;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftShader;
 import net.minecraft.client.Minecraft;
@@ -38,11 +34,6 @@ public class ForgeEffortlessClient extends EffortlessClient {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onReloadShader);
 
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @Override
-    public Platform getPlatform() {
-        return ForgePlatform.INSTANCE;
     }
 
     @SubscribeEvent

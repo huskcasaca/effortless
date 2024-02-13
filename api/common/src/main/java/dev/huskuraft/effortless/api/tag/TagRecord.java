@@ -12,6 +12,7 @@ import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.text.Text;
 
 public interface TagRecord extends TagElement {
@@ -192,6 +193,10 @@ public interface TagRecord extends TagElement {
         putList(key, List.of(value.x(), value.y()), (tag1, value1) -> {
             tag1.asPrimitive().putInt(value1);
         });
+    }
+
+    static TagRecord newRecord() {
+        return ContentFactory.getInstance().newTagRecord();
     }
 
 }

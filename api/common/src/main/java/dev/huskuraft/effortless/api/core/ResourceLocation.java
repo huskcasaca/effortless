@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.core;
 
-import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 
 public interface ResourceLocation extends PlatformReference {
@@ -22,7 +22,7 @@ public interface ResourceLocation extends PlatformReference {
     }
 
     static ResourceLocation of(String namespace, String path) {
-        return Entrance.getInstance().getContentFactory().newResource(namespace, path);
+        return ContentFactory.getInstance().newResourceLocation(namespace, path);
     }
 
     String getNamespace();

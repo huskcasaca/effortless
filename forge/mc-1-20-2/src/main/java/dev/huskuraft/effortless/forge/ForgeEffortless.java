@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.forge;
 
 import dev.huskuraft.effortless.Effortless;
-import dev.huskuraft.effortless.api.platform.Platform;
-import dev.huskuraft.effortless.forge.platform.ForgePlatform;
 import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
@@ -36,11 +34,6 @@ public class ForgeEffortless extends Effortless {
                 .optional()
                 .networkProtocolVersion(getChannel().getCompatibilityVersion())
                 .eventNetworkChannel();
-    }
-
-    @Override
-    public Platform getPlatform() {
-        return ForgePlatform.INSTANCE;
     }
 
     @SubscribeEvent

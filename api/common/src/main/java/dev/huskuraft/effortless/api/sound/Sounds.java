@@ -20,6 +20,6 @@ public enum Sounds implements Sound {
     }
 
     public Sound getSound(Sounds sounds) {
-        return ContentFactory.getInstance().getSound(this);
+        return ContentFactory.getInstance().getSound(sounds);
     }
 }

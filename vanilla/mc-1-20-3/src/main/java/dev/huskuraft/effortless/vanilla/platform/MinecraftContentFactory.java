@@ -38,7 +38,7 @@ import net.minecraft.sounds.SoundEvents;
 public class MinecraftContentFactory implements ContentFactory {
 
     @Override
-    public ResourceLocation newResource(String namespace, String path) {
+    public ResourceLocation newResourceLocation(String namespace, String path) {
         return new MinecraftResourceLocation(new net.minecraft.resources.ResourceLocation(namespace, path));
     }
 

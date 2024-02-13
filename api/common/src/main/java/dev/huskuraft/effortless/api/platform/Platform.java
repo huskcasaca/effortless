@@ -36,4 +36,6 @@ public interface Platform {
         FORGE
     }
 
+    Platform INSTANCE = SafeServiceLoader.load(Platform.class).getFirst();
+
 }
