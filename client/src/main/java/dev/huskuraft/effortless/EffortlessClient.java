@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.config.ClientConfigManager;
 
 public abstract class EffortlessClient implements ClientEntrance {
 
-    private final EffortlessClientEventsRegistry registry = new EffortlessClientEventsRegistry();
+    private final EffortlessClientEventRegistry registry = new EffortlessClientEventRegistry();
 
     private final EffortlessClientChannel channel;
     private final EffortlessClientConfigManager configManager;
@@ -29,7 +29,7 @@ public abstract class EffortlessClient implements ClientEntrance {
         return channel;
     }
 
-    public EffortlessClientEventsRegistry getEventRegistry() {
+    public EffortlessClientEventRegistry getEventRegistry() {
         return registry;
     }
 
