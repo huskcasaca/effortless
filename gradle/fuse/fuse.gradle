@@ -3,6 +3,7 @@ apply plugin: 'dev.huskuraft.fuse'
 
 fuseJar {
 
+    mergeServiceFiles()
     includeJar {
         source project(":fabric:mc-${minecraft_version.replace(".", "-")}")
         task 'remapJar'

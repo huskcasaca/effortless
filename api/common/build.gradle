@@ -13,4 +13,7 @@ java {
 
 dependencies {
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
+    compileOnly 'com.google.auto.service:auto-service:1.1.1'
 }

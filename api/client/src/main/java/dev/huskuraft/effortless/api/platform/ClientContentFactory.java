@@ -8,10 +8,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
 import dev.huskuraft.effortless.api.input.OptionKeys;
-import dev.huskuraft.effortless.api.renderer.RenderStateFactory;
-import dev.huskuraft.effortless.api.sound.SoundFactory;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.texture.TextureFactory;
 
 public interface ClientContentFactory extends ContentFactory {
 
@@ -28,14 +25,10 @@ public interface ClientContentFactory extends ContentFactory {
 
     KeyBinding newKeyBinding(String name, String category, KeyCodes key);
 
-    RenderStateFactory getRenderStateFactory();
-
-    TextureFactory getTextureFactory();
-
-    SoundFactory getSoundFactory();
+    ClientContentFactory INSTANCE = SafeServiceLoader.load(ClientContentFactory.class).getFirst();
 
     static ClientContentFactory getInstance() {
-        return ClientEntrance.getInstance().getContentFactory();
+        return INSTANCE;
     }
 
 }

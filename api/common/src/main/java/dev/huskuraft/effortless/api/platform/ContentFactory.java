@@ -61,8 +61,10 @@ public interface ContentFactory {
         return getOptionalItem(items).orElseThrow();
     }
 
+    ContentFactory INSTANCE = SafeServiceLoader.load(ContentFactory.class).getFirst();
+
     static ContentFactory getInstance() {
-        return Entrance.getInstance().getContentFactory();
+        return INSTANCE;
     }
 
 }

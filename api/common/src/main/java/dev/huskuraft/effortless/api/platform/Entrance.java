@@ -6,10 +6,12 @@ public interface Entrance {
 
     Platform getPlatform();
 
-    ContentFactory getContentFactory();
-
     static Entrance getInstance() {
         return Instance.get();
+    }
+
+    default ContentFactory getContentFactory() {
+        return ContentFactory.getInstance();
     }
 
     class Instance {
