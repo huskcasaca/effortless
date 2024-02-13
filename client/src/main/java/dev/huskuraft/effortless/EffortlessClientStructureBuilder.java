@@ -26,6 +26,7 @@ import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.BuildState;
+import dev.huskuraft.effortless.building.ClientBuildSession;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.SingleCommand;
@@ -108,7 +109,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (context.isFulfilled()) {
 
             var finalized = context.finalize(player, BuildStage.INTERACT);
-            var result = finalized.withPreviewOnceType().createSession(player.getWorld(), player).build().commit();
+            var result = new ClientBuildSession(player.getWorld(), player, finalized.withPreviewOnceType()).build().commit();
 
             showContext(context.uuid(), context);
             showOperationResult(context.uuid(), result);
@@ -234,7 +235,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void onContextReceived(Player player, Context context) {
-        var result = context.createSession(player.getWorld(), player).build().commit();
+        var result = new ClientBuildSession(player.getWorld(), player, context).build().commit();
 
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
@@ -269,7 +270,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         setContext(player, getContext(player).withRandomPatternSeed());
         var context = getContextTraced(player).withPreviewType();
 
-        var result = context.withPreviewType().createSession(player.getWorld(), player).build().commit();
+        var result = new ClientBuildSession(player.getWorld(), player, context.withPreviewType()).build().commit();
 
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);

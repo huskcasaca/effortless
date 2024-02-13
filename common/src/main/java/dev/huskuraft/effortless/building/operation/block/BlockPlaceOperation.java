@@ -1,6 +1,13 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import dev.huskuraft.effortless.api.core.*;
+import java.util.Collections;
+
+import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -9,9 +16,7 @@ import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RevolveContext;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 
-import java.util.Collections;
-
-public final class BlockPlaceOperation extends BlockOperation {
+public class BlockPlaceOperation extends BlockOperation {
 
     public BlockPlaceOperation(
             World world,
