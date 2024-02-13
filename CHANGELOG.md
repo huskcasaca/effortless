@@ -4,9 +4,12 @@
 
 ### 2.1.0
 
-* Optimize Minecraft port ([64](https://github.com/huskcasaca/effortless/pull/64))
-* Fix circle build mode tracing ([65](https://github.com/huskcasaca/effortless/pull/65))
-* Add pyramid and cone build mode ([66](https://github.com/huskcasaca/effortless/pull/66))
+* Optimize Minecraft port ([#64](https://github.com/huskcasaca/effortless/pull/64))
+* Fix circle build mode tracing ([#65](https://github.com/huskcasaca/effortless/pull/65))
+* Add pyramid and cone build mode ([#66](https://github.com/huskcasaca/effortless/pull/66))
+* Add SoundManager ([#67](https://github.com/huskcasaca/effortless/pull/67))
+* Add ServiceLoader ([#68](https://github.com/huskcasaca/effortless/pull/68))
+* Fix block sound ([#69](https://github.com/huskcasaca/effortless/pull/69))
 
 ----------
 
