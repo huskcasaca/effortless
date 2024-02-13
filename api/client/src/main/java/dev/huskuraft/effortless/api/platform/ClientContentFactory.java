@@ -25,7 +25,7 @@ public interface ClientContentFactory extends ContentFactory {
 
     KeyBinding newKeyBinding(String name, String category, KeyCodes key);
 
-    ClientContentFactory INSTANCE = SafeServiceLoader.load(ClientContentFactory.class).getFirst();
+    ClientContentFactory INSTANCE = PlatformServiceLoader.load(ClientContentFactory.class).get();
 
     static ClientContentFactory getInstance() {
         return INSTANCE;

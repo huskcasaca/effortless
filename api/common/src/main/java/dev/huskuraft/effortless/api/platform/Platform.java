@@ -33,9 +33,10 @@ public interface Platform {
 
     enum LoaderType {
         FABRIC,
-        FORGE
+        FORGE,
+        VANILLA
     }
 
-    Platform INSTANCE = SafeServiceLoader.load(Platform.class).getFirst();
+    Platform INSTANCE = PlatformServiceLoader.load(Platform.class).get();
 
 }

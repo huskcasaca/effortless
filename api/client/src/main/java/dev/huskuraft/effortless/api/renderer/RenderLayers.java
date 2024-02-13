@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.api.texture.TextureFactory;
 
 public abstract class RenderLayers {
 
-    protected static final ResourceLocation BLOCK_ATLAS_LOCATION = TextureFactory.INSTANCE.getBlockAtlasTexture().resource();
+    protected static final ResourceLocation BLOCK_ATLAS_LOCATION = TextureFactory.getInstance().getBlockAtlasTexture().resource();
 
     protected static final RenderState.TextureState NO_TEXTURE = RenderState.TextureState.create("no_texture", null, false, false);
     protected static final RenderState.TextureState BLOCK_SHEET_MIPPED_TEXTURE = RenderState.TextureState.create("block_sheet_mipped", BLOCK_ATLAS_LOCATION, false, true);

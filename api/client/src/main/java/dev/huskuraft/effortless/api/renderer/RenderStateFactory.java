@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.api.platform.SafeServiceLoader;
+import dev.huskuraft.effortless.api.platform.PlatformServiceLoader;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 
@@ -46,7 +46,7 @@ public interface RenderStateFactory {
 
     VertexFormat.Mode getVertexFormatMode(VertexFormats.Modes modes);
 
-    RenderStateFactory INSTANCE = SafeServiceLoader.load(RenderStateFactory.class).getFirst();
+    RenderStateFactory INSTANCE = PlatformServiceLoader.load(RenderStateFactory.class).get();
 
     static RenderStateFactory getInstance() {
         return INSTANCE;

@@ -8,9 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,7 +17,7 @@ import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public final class SafeServiceLoader<S> implements Iterable<Optional<S>> {
+public final class PlatformServiceLoader<S> implements Iterable<Optional<S>> {
 
     private static final String PREFIX = "META-INF/services/";
 
@@ -27,19 +25,9 @@ public final class SafeServiceLoader<S> implements Iterable<Optional<S>> {
 
     private final ClassLoader loader;
 
-    private LinkedHashMap<String, S> providers = new LinkedHashMap<>();
-
-    private LazyIterator lookupIterator;
-
-    public void reload() {
-        providers.clear();
-        lookupIterator = new LazyIterator(service, loader);
-    }
-
-    private SafeServiceLoader(Class<S> svc, ClassLoader cl) {
+    private PlatformServiceLoader(Class<S> svc, ClassLoader cl) {
         service = Objects.requireNonNull(svc, "Service interface cannot be null");
         loader = (cl == null) ? ClassLoader.getSystemClassLoader() : cl;
-        reload();
     }
 
     private static void fail(Class<?> service, String msg, Throwable cause) throws ServiceConfigurationError {
@@ -54,7 +42,7 @@ public final class SafeServiceLoader<S> implements Iterable<Optional<S>> {
         fail(service, u + ":" + line + ": " + msg);
     }
 
-    private int parseLine(Class<?> service, URL u, BufferedReader r, int lc, List<String> names) throws IOException, ServiceConfigurationError {
+    private static int parseLine(Class<?> service, URL u, BufferedReader r, int lc, List<String> names) throws IOException, ServiceConfigurationError {
         String ln = r.readLine();
         if (ln == null) {
             return -1;
@@ -73,26 +61,26 @@ public final class SafeServiceLoader<S> implements Iterable<Optional<S>> {
                 if (!Character.isJavaIdentifierPart(cp) && (cp != '.'))
                     fail(service, u, lc, "Illegal provider-class name: " + ln);
             }
-            if (!providers.containsKey(ln) && !names.contains(ln)) names.add(ln);
+            if (!names.contains(ln)) names.add(ln);
         }
         return lc + 1;
     }
 
-    private Iterator<String> parse(Class<?> service, URL u) throws ServiceConfigurationError {
-        InputStream in = null;
-        BufferedReader r = null;
-        ArrayList<String> names = new ArrayList<>();
+    private static Iterator<String> parse(Class<?> service, URL url) throws ServiceConfigurationError {
+        InputStream inputStream = null;
+        BufferedReader reader = null;
+        var names = new ArrayList<String>();
         try {
-            in = u.openStream();
-            r = new BufferedReader(new InputStreamReader(in, "utf-8"));
+            inputStream = url.openStream();
+            reader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
             int lc = 1;
-            while ((lc = parseLine(service, u, r, lc, names)) >= 0) ;
+            while ((lc = parseLine(service, url, reader, lc, names)) >= 0) ;
         } catch (IOException x) {
             fail(service, "Error reading configuration file", x);
         } finally {
             try {
-                if (r != null) r.close();
-                if (in != null) in.close();
+                if (reader != null) reader.close();
+                if (inputStream != null) inputStream.close();
             } catch (IOException y) {
                 fail(service, "Error closing configuration file", y);
             }
@@ -150,9 +138,7 @@ public final class SafeServiceLoader<S> implements Iterable<Optional<S>> {
                 fail(service, "Provider " + cn + " not a subtype");
             }
             try {
-                S p = service.cast(c.getDeclaredConstructor().newInstance());
-                providers.put(cn, p);
-                return p;
+                return service.cast(c.getDeclaredConstructor().newInstance());
             } catch (Throwable x) {
                 fail(service, "Provider " + cn + " could not be instantiated", x);
             }
@@ -176,18 +162,16 @@ public final class SafeServiceLoader<S> implements Iterable<Optional<S>> {
     public Iterator<Optional<S>> iterator() {
         return new Iterator<>() {
 
-            Iterator<Map.Entry<String, S>> knownProviders = providers.entrySet().iterator();
+            final LazyIterator lookupIterator = new LazyIterator(service, loader);
 
             public boolean hasNext() {
-                if (knownProviders.hasNext()) return true;
                 return lookupIterator.hasNext();
             }
 
             public Optional<S> next() {
-                if (knownProviders.hasNext()) return Optional.ofNullable(knownProviders.next().getValue());
                 try {
                     return Optional.ofNullable(lookupIterator.next());
-                } catch (Exception e) {
+                } catch (ServiceConfigurationError e) {
                     return Optional.empty();
                 }
             }
@@ -199,23 +183,23 @@ public final class SafeServiceLoader<S> implements Iterable<Optional<S>> {
         };
     }
 
-    public static <S> SafeServiceLoader<S> load(Class<S> service, ClassLoader loader) {
-        return new SafeServiceLoader<>(service, loader);
+    public static <S> PlatformServiceLoader<S> load(Class<S> service, ClassLoader loader) {
+        return new PlatformServiceLoader<>(service, loader);
     }
 
-    public static <S> SafeServiceLoader<S> load(Class<S> service) {
+    public static <S> PlatformServiceLoader<S> load(Class<S> service) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        return SafeServiceLoader.load(service, cl);
+        return PlatformServiceLoader.load(service, cl);
     }
 
-    public static <S> SafeServiceLoader<S> loadInstalled(Class<S> service) {
+    public static <S> PlatformServiceLoader<S> loadInstalled(Class<S> service) {
         ClassLoader cl = ClassLoader.getSystemClassLoader();
         ClassLoader prev = null;
         while (cl != null) {
             prev = cl;
             cl = cl.getParent();
         }
-        return SafeServiceLoader.load(service, prev);
+        return PlatformServiceLoader.load(service, prev);
     }
 
     public Stream<Optional<S>> stream() {
@@ -226,12 +210,42 @@ public final class SafeServiceLoader<S> implements Iterable<Optional<S>> {
         return stream().filter(Optional::isPresent).findFirst().orElseThrow();
     }
 
-    public S getFirst() {
-        return findFirst().orElseThrow();
+    public S get() {
+        for (var s : load(service)) {
+            if (s.isPresent()) {
+                if (s.get().getClass().getPackageName().contains("vanilla")) {
+                    return s.get();
+                }
+                if (s.get().getClass().getPackageName().contains("fabric")) {
+                    if (getLoaderTypeByThread() == Platform.LoaderType.FABRIC) {
+                        return s.get();
+                    }
+                }
+                if (s.get().getClass().getPackageName().contains("forge")) {
+                    if (getLoaderTypeByThread() == Platform.LoaderType.FORGE) {
+                        return s.get();
+                    }
+                }
+            }
+        }
+        throw new IllegalStateException("No provider found for " + service.getName());
     }
 
+    private static Platform.LoaderType getLoaderTypeByThread() {
+        var loader = Thread.currentThread().getContextClassLoader();
+        if (loader.getClass().getPackageName().equals("net.fabricmc.loader.impl.launch.knot")) {
+            return Platform.LoaderType.FABRIC;
+        }
+        var p = loader.getClass().getPackageName();
+        if (loader.getClass().getPackageName().equals("cpw.mods.modlauncher")) {
+            return Platform.LoaderType.FORGE;
+        }
+        throw new IllegalStateException("Unknown loader: " + p);
+    }
+
+
     public String toString() {
-        return "SafeServiceLoader[" + service.getName() + "]";
+        return "PlatformServiceLoader[" + service.getName() + "]";
     }
 
 }
