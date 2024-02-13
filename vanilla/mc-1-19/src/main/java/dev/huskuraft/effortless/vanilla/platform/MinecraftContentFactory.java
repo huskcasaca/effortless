@@ -26,7 +26,7 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftText;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
 import io.netty.buffer.Unpooled;
 import net.minecraft.Util;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
@@ -34,7 +34,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 
 @AutoService(ContentFactory.class)
-public class MinecraftCommonContentFactory implements ContentFactory {
+public class MinecraftContentFactory implements ContentFactory {
 
     @Override
     public ResourceLocation newResource(String namespace, String path) {
@@ -53,7 +53,7 @@ public class MinecraftCommonContentFactory implements ContentFactory {
 
     @Override
     public Optional<Item> newOptionalItem(ResourceLocation location) {
-        return BuiltInRegistries.ITEM.getOptional(location.<net.minecraft.resources.ResourceLocation>reference()).map(item -> new MinecraftItem(item));
+        return DefaultedRegistry.ITEM.getOptional(location.<net.minecraft.resources.ResourceLocation>reference()).map(item -> new MinecraftItem(item));
     }
 
     @Override
@@ -119,7 +119,7 @@ public class MinecraftCommonContentFactory implements ContentFactory {
 
     public Sound getSound(Sounds sounds) {
         var sound = switch (sounds) {
-            case UI_BUTTON_CLICK -> SoundEvents.UI_BUTTON_CLICK.value();
+            case UI_BUTTON_CLICK -> SoundEvents.UI_BUTTON_CLICK;
             case UI_TOAST_IN -> SoundEvents.UI_TOAST_IN;
             case UI_TOAST_OUT -> SoundEvents.UI_TOAST_OUT;
         };

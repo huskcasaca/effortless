@@ -10,7 +10,7 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftCommonContentFactory;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftContentFactory;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;

@@ -28,14 +28,13 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 
 @AutoService(ContentFactory.class)
-public class MinecraftCommonContentFactory implements ContentFactory {
+public class MinecraftContentFactory implements ContentFactory {
 
     @Override
     public ResourceLocation newResource(String namespace, String path) {
@@ -99,7 +98,7 @@ public class MinecraftCommonContentFactory implements ContentFactory {
 
     @Override
     public TagIoReader getTagIoReader() {
-        return input -> new MinecraftTagRecord(NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap()));
+        return input -> new MinecraftTagRecord(NbtIo.readCompressed(input));
     }
 
     @Override

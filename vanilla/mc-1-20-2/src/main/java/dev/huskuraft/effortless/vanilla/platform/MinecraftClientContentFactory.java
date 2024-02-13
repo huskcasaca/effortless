@@ -25,7 +25,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTabs;
 
 @AutoService(ClientContentFactory.class)
-public class MinecraftClientContentFactory extends MinecraftCommonContentFactory implements ClientContentFactory {
+public class MinecraftClientContentFactory extends MinecraftContentFactory implements ClientContentFactory {
 
     @Override
     public SearchTree<ItemStack> searchItemStack(SearchBy searchBy) {

@@ -30,7 +30,7 @@ import net.minecraft.client.searchtree.SearchRegistry;
 import net.minecraft.network.chat.Component;
 
 @AutoService(ClientContentFactory.class)
-public class MinecraftClientContentFactory extends MinecraftCommonContentFactory implements ClientContentFactory {
+public class MinecraftClientContentFactory extends MinecraftContentFactory implements ClientContentFactory {
 
     public static final MinecraftClientContentFactory INSTANCE = new MinecraftClientContentFactory();
 

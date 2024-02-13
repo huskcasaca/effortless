@@ -35,7 +35,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 
 @AutoService(ContentFactory.class)
-public class MinecraftCommonContentFactory implements ContentFactory {
+public class MinecraftContentFactory implements ContentFactory {
 
     @Override
     public ResourceLocation newResource(String namespace, String path) {
