@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.api.core;
 
 import dev.huskuraft.effortless.api.platform.PlatformReference;
+import dev.huskuraft.effortless.api.sound.SoundSet;
 
 public interface BlockState extends PlatformReference {
 
@@ -17,4 +18,7 @@ public interface BlockState extends PlatformReference {
     boolean isReplaceable();
 
     boolean isDestroyable();
+
+    SoundSet getSoundSet();
+
 }

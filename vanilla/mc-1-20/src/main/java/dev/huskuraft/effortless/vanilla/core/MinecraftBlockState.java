@@ -7,6 +7,8 @@ import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.Revolve;
+import dev.huskuraft.effortless.api.sound.SoundSet;
+import dev.huskuraft.effortless.vanilla.sound.MinecraftSoundSet;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.DirectionalBlock;
@@ -132,6 +134,11 @@ public class MinecraftBlockState implements BlockState {
     @Override
     public boolean isDestroyable() {
         return !reference.is(BlockTags.FEATURES_CANNOT_REPLACE);
+    }
+
+    @Override
+    public SoundSet getSoundSet() {
+        return new MinecraftSoundSet(reference.getSoundType());
     }
 
     @Override
