@@ -15,6 +15,7 @@ import dev.huskuraft.effortless.api.renderer.Window;
 import dev.huskuraft.effortless.api.sound.SoundManager;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftCamera;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftWindow;
+import dev.huskuraft.effortless.vanilla.sound.MinecraftSoundManager;
 import net.minecraft.client.Minecraft;
 
 public class MinecraftClient implements Client {

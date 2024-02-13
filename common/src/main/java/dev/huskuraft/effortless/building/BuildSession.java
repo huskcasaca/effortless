@@ -14,7 +14,7 @@ import dev.huskuraft.effortless.building.operation.block.BlockOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperation;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
-public final class BuildSession implements Session {
+public class BuildSession implements Session {
 
     private final World world;
     private final Player player;
@@ -26,15 +26,15 @@ public final class BuildSession implements Session {
         this.context = context;
     }
 
-    private static BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
+    protected BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
         return new BlockPlaceOperation(world, player, context, storage, interaction, null);
     }
 
-    private static BlockBreakOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
+    protected BlockBreakOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
         return new BlockBreakOperation(world, player, context, storage, interaction);
     }
 
-    private static BatchOperation createBaseDeferred(World world, Player player, Context context, Storage storage) {
+    protected BatchOperation createBaseDeferred(World world, Player player, Context context, Storage storage) {
         var operations = new DeferredBatchOperation(context, () -> switch (context.state()) {
             case IDLE -> Stream.<BlockOperation>empty();
             case PLACE_BLOCK ->
@@ -45,7 +45,7 @@ public final class BuildSession implements Session {
         return ItemRandomizer.create(null, player.getItemStack(InteractionHand.MAIN).getItem()).transform(operations);
     }
 
-    private static BatchOperation create(World world, Player player, Context context) {
+    protected BatchOperation create(World world, Player player, Context context) {
         var storage = Storage.create(player, context.isPreview());
         var operations = createBaseDeferred(world, player, context, storage);
 
