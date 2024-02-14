@@ -32,11 +32,9 @@ subprojects {
         minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
         implementation project(':common')
-        implementation project(':client')
         compileOnly project(":vanilla:$project.name")
 
         shadow project(':common')
-        shadow project(':client')
 
         annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
         compileOnly 'com.google.auto.service:auto-service:1.1.1'
@@ -59,10 +57,8 @@ subprojects {
                 mods {
                     "${mod_id}" {
                         source sourceSets.main
-                        source project(":api:common").sourceSets.main
-                        source project(":api:client").sourceSets.main
+                        source project(":api").sourceSets.main
                         source project(":common").sourceSets.main
-                        source project(":client").sourceSets.main
                     }
                 }
             }
@@ -73,7 +69,7 @@ subprojects {
                 mods {
                     "${mod_id}" {
                         source sourceSets.main
-                        source project(":api:common").sourceSets.main
+                        source project(":api").sourceSets.main
                         source project(":common").sourceSets.main
                     }
                 }

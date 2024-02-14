@@ -12,6 +12,6 @@ java {
 }
 
 dependencies {
-    api project(':api:common')
+    api project(':api')
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }

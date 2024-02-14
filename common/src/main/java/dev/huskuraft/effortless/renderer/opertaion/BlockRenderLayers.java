@@ -21,13 +21,13 @@ public abstract class BlockRenderLayers extends RenderLayers {
             VertexFormats.Modes.DEBUG_LINES,
             256,
             RenderState.builder()
-                    .setLineState(NO_WIDTH)
-                    .setShaderState(LINES_SHADER_STATE)
-                    .setLayeringState(VIEW_OFFSET_Z_LAYERING)
-                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                    .setOutputState(ITEM_ENTITY_TARGET)
-                    .setWriteMaskState(COLOR_DEPTH_WRITE)
-                    .setCullState(NO_CULL)
+                    .setLineState(RenderLayers.NO_WIDTH)
+                    .setShaderState(RenderLayers.LINES_SHADER_STATE)
+                    .setLayeringState(RenderLayers.VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
+                    .setOutputState(RenderLayers.ITEM_ENTITY_TARGET)
+                    .setWriteMaskState(RenderLayers.COLOR_DEPTH_WRITE)
+                    .setCullState(RenderLayers.NO_CULL)
                     .create(false));
     // TODO: 16/1/24 use func
     public static final RenderLayer EF_PLANES = RenderLayer.createComposite("ef_planes",
@@ -35,12 +35,12 @@ public abstract class BlockRenderLayers extends RenderLayers {
             VertexFormats.Modes.QUADS,
             256,
             RenderState.builder()
-                    .setLineState(NO_WIDTH)
-                    .setShaderState(POSITION_COLOR_SHADER_STATE)
-                    .setLayeringState(VIEW_OFFSET_Z_LAYERING)
-                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                    .setWriteMaskState(COLOR_WRITE)
-                    .setCullState(NO_CULL)
+                    .setLineState(RenderLayers.NO_WIDTH)
+                    .setShaderState(RenderLayers.POSITION_COLOR_SHADER_STATE)
+                    .setLayeringState(RenderLayers.VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
+                    .setWriteMaskState(RenderLayers.COLOR_WRITE)
+                    .setCullState(RenderLayers.NO_CULL)
                     .create(false));
 
     public static RenderLayer lines() {
@@ -65,10 +65,10 @@ public abstract class BlockRenderLayers extends RenderLayers {
             var renderState = RenderState.builder()
                     .setShaderState(TINTED_SOLID_SHADER)
                     .setTexturingState(texture)
-                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                    .setTextureState(BLOCK_SHEET_MIPPED_TEXTURE)
-                    .setLightmapState(LIGHTMAP)
-                    .setCullState(NO_CULL)
+                    .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
+                    .setTextureState(RenderLayers.BLOCK_SHEET_MIPPED_TEXTURE)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setCullState(RenderLayers.NO_CULL)
                     .create(false);
             return RenderLayer.createComposite("ef_block_previews_" + k, VertexFormats.BLOCK, VertexFormats.Modes.QUADS, 2097152, true, false, renderState);
         });

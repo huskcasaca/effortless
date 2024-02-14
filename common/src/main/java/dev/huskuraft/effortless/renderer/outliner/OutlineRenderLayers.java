@@ -28,13 +28,13 @@ public abstract class OutlineRenderLayers extends RenderLayers {
             false,
             false,
             RenderState.builder()
-                    .setShaderState(ENTITY_SOLID_SHADER_STATE)
+                    .setShaderState(RenderLayers.ENTITY_SOLID_SHADER_STATE)
                     .setTextureState(BLANK_TEXTURE_STATE)
-                    .setCullState(CULL)
-                    .setLightmapState(LIGHTMAP)
-                    .setOverlayState(OVERLAY)
+                    .setCullState(RenderLayers.CULL)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setOverlayState(RenderLayers.OVERLAY)
                     .create(true));
-    protected static final RenderLayer GLOWING_SOLID_DEFAULT = glowingSolid(BLOCK_ATLAS_LOCATION);
+    protected static final RenderLayer GLOWING_SOLID_DEFAULT = glowingSolid(RenderLayers.BLOCK_ATLAS_LOCATION);
     protected static final RenderLayer ADDITIVE = RenderLayer.createComposite("additive",
             VertexFormats.BLOCK,
             VertexFormats.Modes.QUADS,
@@ -42,14 +42,14 @@ public abstract class OutlineRenderLayers extends RenderLayers {
             true,
             true,
             RenderState.builder()
-                    .setShaderState(SOLID_SHADER_STATE)
-                    .setTextureState(BLOCK_SHEET_MIPPED_TEXTURE)
-                    .setTransparencyState(ADDITIVE_TRANSPARENCY)
-                    .setCullState(NO_CULL)
-                    .setLightmapState(LIGHTMAP)
-                    .setOverlayState(OVERLAY)
+                    .setShaderState(RenderLayers.SOLID_SHADER_STATE)
+                    .setTextureState(RenderLayers.BLOCK_SHEET_MIPPED_TEXTURE)
+                    .setTransparencyState(RenderLayers.ADDITIVE_TRANSPARENCY)
+                    .setCullState(RenderLayers.NO_CULL)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setOverlayState(RenderLayers.OVERLAY)
                     .create(true));
-    protected static final RenderLayer GLOWING_TRANSLUCENT_DEFAULT = glowingTranslucent(BLOCK_ATLAS_LOCATION);
+    protected static final RenderLayer GLOWING_TRANSLUCENT_DEFAULT = glowingTranslucent(RenderLayers.BLOCK_ATLAS_LOCATION);
     protected static final RenderLayer ITEM_PARTIAL_SOLID = RenderLayer.createComposite("item_partial_solid",
             VertexFormats.NEW_ENTITY,
             VertexFormats.Modes.QUADS,
@@ -57,11 +57,11 @@ public abstract class OutlineRenderLayers extends RenderLayers {
             true,
             false,
             RenderState.builder()
-                    .setShaderState(ENTITY_SOLID_SHADER_STATE)
-                    .setTextureState(BLOCK_SHEET_TEXTURE)
-                    .setCullState(CULL)
-                    .setLightmapState(LIGHTMAP)
-                    .setOverlayState(OVERLAY)
+                    .setShaderState(RenderLayers.ENTITY_SOLID_SHADER_STATE)
+                    .setTextureState(RenderLayers.BLOCK_SHEET_TEXTURE)
+                    .setCullState(RenderLayers.CULL)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setOverlayState(RenderLayers.OVERLAY)
                     .create(true));
     protected static final RenderLayer ITEM_PARTIAL_TRANSLUCENT = RenderLayer.createComposite("item_partial_translucent",
             VertexFormats.NEW_ENTITY,
@@ -70,19 +70,19 @@ public abstract class OutlineRenderLayers extends RenderLayers {
             true,
             true,
             RenderState.builder()
-                    .setShaderState(ENTITY_TRANSLUCENT_CULL_SHADER_STATE)
-                    .setTextureState(BLOCK_SHEET_TEXTURE)
-                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                    .setLightmapState(LIGHTMAP)
-                    .setOverlayState(OVERLAY)
+                    .setShaderState(RenderLayers.ENTITY_TRANSLUCENT_CULL_SHADER_STATE)
+                    .setTextureState(RenderLayers.BLOCK_SHEET_TEXTURE)
+                    .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setOverlayState(RenderLayers.OVERLAY)
                     .create(true));
     protected static final RenderLayer FLUID = RenderLayer.createComposite("fluid",
             VertexFormats.NEW_ENTITY, VertexFormats.Modes.QUADS, 256, false, true, RenderState.builder()
-                    .setShaderState(ENTITY_TRANSLUCENT_CULL_SHADER_STATE)
-                    .setTextureState(BLOCK_SHEET_MIPPED_TEXTURE)
-                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                    .setLightmapState(LIGHTMAP)
-                    .setOverlayState(OVERLAY)
+                    .setShaderState(RenderLayers.ENTITY_TRANSLUCENT_CULL_SHADER_STATE)
+                    .setTextureState(RenderLayers.BLOCK_SHEET_MIPPED_TEXTURE)
+                    .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setOverlayState(RenderLayers.OVERLAY)
                     .create(true));
 
     public static RenderLayer outlineSolid() {
@@ -96,13 +96,13 @@ public abstract class OutlineRenderLayers extends RenderLayers {
             false,
             false,
             RenderState.builder()
-                    .setShaderState(ENTITY_SOLID_SHADER_STATE)
-                    .setTransparencyState(NO_TRANSPARENCY)
-                    .setDepthTestState(NOTEQUAL_DEPTH_TEST)
+                    .setShaderState(RenderLayers.ENTITY_SOLID_SHADER_STATE)
+                    .setTransparencyState(RenderLayers.NO_TRANSPARENCY)
+                    .setDepthTestState(RenderLayers.NOTEQUAL_DEPTH_TEST)
                     .setTextureState(BLANK_TEXTURE_STATE)
-                    .setCullState(CULL)
-                    .setLightmapState(LIGHTMAP)
-                    .setOverlayState(OVERLAY)
+                    .setCullState(RenderLayers.CULL)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setOverlayState(RenderLayers.OVERLAY)
                     .create(true));
 
     protected static final RenderLayer OUTLINE_SOLID_NO_OVERLAP = RenderLayer.createComposite("outline_solid_overlap",
@@ -112,13 +112,13 @@ public abstract class OutlineRenderLayers extends RenderLayers {
             false,
             false,
             RenderState.builder()
-                    .setShaderState(ENTITY_SOLID_SHADER_STATE)
-                    .setTransparencyState(NO_TRANSPARENCY)
-                    .setDepthTestState(NEVER_DEPTH_TEST)
+                    .setShaderState(RenderLayers.ENTITY_SOLID_SHADER_STATE)
+                    .setTransparencyState(RenderLayers.NO_TRANSPARENCY)
+                    .setDepthTestState(RenderLayers.NEVER_DEPTH_TEST)
                     .setTextureState(BLANK_TEXTURE_STATE)
-                    .setCullState(CULL)
-                    .setLightmapState(LIGHTMAP)
-                    .setOverlayState(OVERLAY)
+                    .setCullState(RenderLayers.CULL)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setOverlayState(RenderLayers.OVERLAY)
                     .create(true));
 
     public static RenderLayer outlineSolid(boolean overlap) {
@@ -136,13 +136,13 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                     false,
                     true,
                     RenderState.builder()
-                            .setShaderState(cull ? ENTITY_TRANSLUCENT_CULL_SHADER_STATE : ENTITY_TRANSLUCENT_SHADER_STATE)
+                            .setShaderState(cull ? RenderLayers.ENTITY_TRANSLUCENT_CULL_SHADER_STATE : RenderLayers.ENTITY_TRANSLUCENT_SHADER_STATE)
                             .setTextureState(RenderState.TextureState.create("custom", texture, false, false))
-                            .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                            .setCullState(cull ? CULL : NO_CULL)
-                            .setLightmapState(LIGHTMAP)
-                            .setOverlayState(OVERLAY)
-                            .setWriteMaskState(COLOR_WRITE)
+                            .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
+                            .setCullState(cull ? RenderLayers.CULL : RenderLayers.NO_CULL)
+                            .setLightmapState(RenderLayers.LIGHTMAP)
+                            .setOverlayState(RenderLayers.OVERLAY)
+                            .setWriteMaskState(RenderLayers.COLOR_WRITE)
                             .create(false));
         });
     }
@@ -156,9 +156,9 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                 false,
                 RenderState.builder()
                         .setTextureState(RenderState.TextureState.create("custom", texture, false, false))
-                        .setCullState(CULL)
-                        .setLightmapState(LIGHTMAP)
-                        .setOverlayState(OVERLAY)
+                        .setCullState(RenderLayers.CULL)
+                        .setLightmapState(RenderLayers.LIGHTMAP)
+                        .setOverlayState(RenderLayers.OVERLAY)
                         .create(true));
     }
 
@@ -176,9 +176,9 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                 RenderState.builder()
                         //				.setShaderState(GLOWING_SHADER)
                         .setTextureState(RenderState.TextureState.create("custom", texture, false, false))
-                        .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-                        .setLightmapState(LIGHTMAP)
-                        .setOverlayState(OVERLAY)
+                        .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
+                        .setLightmapState(RenderLayers.LIGHTMAP)
+                        .setOverlayState(RenderLayers.OVERLAY)
                         .create(true));
     }
 

@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.api.renderer.opertaion;
+package dev.huskuraft.effortless.renderer.opertaion;
 
 import java.awt.*;
 

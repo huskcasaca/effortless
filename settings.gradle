@@ -24,11 +24,8 @@ rootProject.name = 'effortless'
 
 includeBuild 'fuse-gradle-plugin'
 
-include ':api:common'
-include ':api:client'
-
+include ':api'
 include ':common'
-include ':client'
 
 ['fabric', 'forge', 'vanilla', 'multiplatform'].forEach { platform ->
     include "$platform"
