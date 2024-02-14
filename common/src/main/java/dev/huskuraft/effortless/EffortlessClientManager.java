@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.events.render.RegisterShader;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.input.InputKey;
+import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.input.OptionKeys;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.ClientManager;
@@ -185,6 +186,11 @@ public final class EffortlessClientManager implements ClientManager {
 
         if (getRunningClient().getPlayer() == null)
             return;
+
+        if (Keys.KEY_ESCAPE.getBinding().isKeyDown()) {
+            getEntrance().getStructureBuilder().resetBuildState(getRunningClient().getPlayer());
+        }
+
         if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
             openModeRadialScreen();
         }

@@ -21,8 +21,12 @@ public interface KeyBinding extends PlatformReference {
 
     int getBoundCode();
 
-    static KeyBinding of(String name, String category, KeyCodes key) {
-        return ClientContentFactory.getInstance().newKeyBinding(name, category, key);
+    static KeyBinding of(String name, String category, int code) {
+        return ClientContentFactory.getInstance().newKeyBinding(name, category, code);
+    }
+
+    static KeyBinding of(int code) {
+        return ClientContentFactory.getInstance().newKeyBinding(code);
     }
 
 }
