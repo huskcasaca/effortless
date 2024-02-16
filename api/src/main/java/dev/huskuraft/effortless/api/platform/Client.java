@@ -39,4 +39,8 @@ public interface Client extends PlatformReference {
 
     Resource getResource(ResourceLocation location);
 
+    void sendChat(String chat);
+
+    void sendCommand(String command);
+
 }

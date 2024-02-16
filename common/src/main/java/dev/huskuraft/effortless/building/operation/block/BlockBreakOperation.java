@@ -25,7 +25,7 @@ public class BlockBreakOperation extends BlockOperation {
         super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
     }
 
-    private BlockOperationResult.Type breakBlock() {
+    private BlockOperationResult.Type tryBreakBlock() {
 
         // spectator
         if (player.getGameType().isSpectator()) { // move
@@ -67,7 +67,7 @@ public class BlockBreakOperation extends BlockOperation {
 
     @Override
     public BlockBreakOperationResult commit() {
-        var type = breakBlock();
+        var type = tryBreakBlock();
         var inputs = Collections.<ItemStack>emptyList();
         var outputs = Collections.singletonList(world.getBlockState(interaction.getBlockPosition()).getItem().getDefaultStack());
 

@@ -6,6 +6,7 @@ public abstract class Effortless implements Entrance {
 
     public static final String MOD_ID = "effortless";
     public static final int VERSION_NUMBER = 2;
+    public static final boolean USE_COMMAND = true;
 
     private final EffortlessEventRegistry registry;
     private final EffortlessServerChannel channel;

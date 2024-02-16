@@ -114,6 +114,16 @@ public class MinecraftClient implements Client {
     }
 
     @Override
+    public void sendChat(String chat) {
+        reference.getConnection().sendChat(chat);
+    }
+
+    @Override
+    public void sendCommand(String command) {
+        reference.getConnection().sendCommand(command);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof MinecraftClient client && reference.equals(client.reference);
     }

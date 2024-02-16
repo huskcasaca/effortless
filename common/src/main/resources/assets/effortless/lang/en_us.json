@@ -257,5 +257,8 @@
   "effortless.position": "Position %s",
   "effortless.position.absolute": "Absolute",
   "effortless.position.relative": "Relative",
-  "effortless.position.relative_once": "Relative Once"
+  "effortless.position.relative_once": "Relative Once",
+
+  "effortless.test.save": "Save",
+  "effortless.test.cancel": "Cancel"
 }
