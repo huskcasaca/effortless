@@ -1,11 +1,16 @@
 package dev.huskuraft.effortless.vanilla.core;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.Property;
+import dev.huskuraft.effortless.api.core.PropertyValue;
 import dev.huskuraft.effortless.api.core.Revolve;
 import dev.huskuraft.effortless.api.sound.SoundSet;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSoundSet;
@@ -139,6 +144,11 @@ public class MinecraftBlockState implements BlockState {
     @Override
     public SoundSet getSoundSet() {
         return new MinecraftSoundSet(reference.getSoundType());
+    }
+
+    @Override
+    public Map<Property, PropertyValue> getPropertiesMap() {
+        return reference.getValues().entrySet().stream().collect(Collectors.toMap(entry -> new MinecraftProperty(entry.getKey()), entry -> new MinecraftPropertyValue(entry.getValue())));
     }
 
     @Override
