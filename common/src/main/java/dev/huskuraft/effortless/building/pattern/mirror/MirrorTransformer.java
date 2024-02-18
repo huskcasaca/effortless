@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.BuildSession;
+import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
@@ -73,7 +73,7 @@ public class MirrorTransformer extends Transformer {
     }
 
     @Override
-    public MirrorTransformer finalize(BuildSession session, BuildStage stage) {
+    public MirrorTransformer finalize(BatchBuildSession session, BuildStage stage) {
         return switch (stage) {
             case NONE -> this;
             case UPDATE_CONTEXT, INTERACT -> new MirrorTransformer(id, name, new Vector3d(

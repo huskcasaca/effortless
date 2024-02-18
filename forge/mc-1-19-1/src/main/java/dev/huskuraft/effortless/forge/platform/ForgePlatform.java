@@ -1,9 +1,14 @@
 package dev.huskuraft.effortless.forge.platform;
 
 import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.auto.service.AutoService;
 
+import dev.huskuraft.effortless.api.platform.Environment;
+import dev.huskuraft.effortless.api.platform.LoaderType;
+import dev.huskuraft.effortless.api.platform.Mod;
 import dev.huskuraft.effortless.api.platform.Platform;
 import net.minecraftforge.fml.loading.FMLLoader;
 
@@ -26,13 +31,13 @@ public class ForgePlatform implements Platform {
     }
 
     @Override
-    public Path getGameDir() {
-        return FMLLoader.getGamePath();
+    public List<Mod> getRunningMods() {
+        return FMLLoader.getLoadingModList().getMods().stream().map(ForgeMod::new).collect(Collectors.toList());
     }
 
     @Override
-    public Path getConfigDir() {
-        return FMLLoader.getGamePath().resolve("config");
+    public Path getGameDir() {
+        return FMLLoader.getGamePath();
     }
 
     @Override

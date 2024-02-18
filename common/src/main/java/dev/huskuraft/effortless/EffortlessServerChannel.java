@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
+import dev.huskuraft.effortless.networking.packets.session.SessionStartPacket;
 
 public final class EffortlessServerChannel extends Channel<AllPacketListener> {
 
@@ -17,7 +18,7 @@ public final class EffortlessServerChannel extends Channel<AllPacketListener> {
     private final AllPacketListener listener;
 
     private static final ResourceLocation DEFAULT_CHANNEL = ResourceLocation.of(Effortless.MOD_ID, "default_channel");
-    private static final int COMPATIBILITY_VERSION = Effortless.VERSION_NUMBER;
+    private static final int COMPATIBILITY_VERSION = Effortless.PROTOCOL_VERSION;
 
     public EffortlessServerChannel(Effortless entrance) {
         this(entrance, DEFAULT_CHANNEL);
@@ -32,6 +33,7 @@ public final class EffortlessServerChannel extends Channel<AllPacketListener> {
         registerPacket(PlayerSettingsPacket.class, new PlayerSettingsPacket.Serializer());
         registerPacket(PlayerBuildPacket.class, new PlayerBuildPacket.Serializer());
         registerPacket(PlayerBuildPreviewPacket.class, new PlayerBuildPreviewPacket.Serializer());
+        registerPacket(SessionStartPacket.class, new SessionStartPacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterHandler);
     }
@@ -85,6 +87,11 @@ public final class EffortlessServerChannel extends Channel<AllPacketListener> {
 
         @Override
         public void handle(PlayerBuildPreviewPacket packet, Player player) {
+
+        }
+
+        @Override
+        public void handle(SessionStartPacket packet, Player player) {
 
         }
     }

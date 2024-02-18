@@ -217,12 +217,12 @@ public final class PlatformServiceLoader<S> implements Iterable<Optional<S>> {
                     return s.get();
                 }
                 if (s.get().getClass().getPackageName().contains("fabric")) {
-                    if (getLoaderTypeByThread() == Platform.LoaderType.FABRIC) {
+                    if (getLoaderTypeByThread() == LoaderType.FABRIC) {
                         return s.get();
                     }
                 }
                 if (s.get().getClass().getPackageName().contains("forge")) {
-                    if (getLoaderTypeByThread() == Platform.LoaderType.FORGE) {
+                    if (getLoaderTypeByThread() == LoaderType.FORGE) {
                         return s.get();
                     }
                 }
@@ -231,14 +231,14 @@ public final class PlatformServiceLoader<S> implements Iterable<Optional<S>> {
         throw new IllegalStateException("No provider found for " + service.getName());
     }
 
-    private static Platform.LoaderType getLoaderTypeByThread() {
+    private static LoaderType getLoaderTypeByThread() {
         var loader = Thread.currentThread().getContextClassLoader();
         if (loader.getClass().getPackageName().equals("net.fabricmc.loader.impl.launch.knot")) {
-            return Platform.LoaderType.FABRIC;
+            return LoaderType.FABRIC;
         }
         var p = loader.getClass().getPackageName();
         if (loader.getClass().getPackageName().equals("cpw.mods.modlauncher")) {
-            return Platform.LoaderType.FORGE;
+            return LoaderType.FORGE;
         }
         throw new IllegalStateException("Unknown loader: " + p);
     }

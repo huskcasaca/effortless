@@ -5,8 +5,7 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 public abstract class Effortless implements Entrance {
 
     public static final String MOD_ID = "effortless";
-    public static final int VERSION_NUMBER = 2;
-    public static final boolean USE_COMMAND = true;
+    public static final int PROTOCOL_VERSION = 3;
 
     private final EffortlessEventRegistry registry;
     private final EffortlessServerChannel channel;

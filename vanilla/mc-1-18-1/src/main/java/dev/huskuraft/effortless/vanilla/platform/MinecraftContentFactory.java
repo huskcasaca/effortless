@@ -10,7 +10,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.platform.ContentFactory;
-import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.api.platform.OperatingSystem;
 import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.api.sound.Sounds;
 import dev.huskuraft.effortless.api.tag.TagIoReader;
@@ -108,13 +108,13 @@ public class MinecraftContentFactory implements ContentFactory {
     }
 
     @Override
-    public Platform.OperatingSystem getOperatingSystem() {
+    public OperatingSystem getOperatingSystem() {
         return switch (Util.getPlatform()) {
-            case LINUX -> Platform.OperatingSystem.LINUX;
-            case SOLARIS -> Platform.OperatingSystem.SOLARIS;
-            case WINDOWS -> Platform.OperatingSystem.WINDOWS;
-            case OSX -> Platform.OperatingSystem.MACOS;
-            case UNKNOWN -> Platform.OperatingSystem.UNKNOWN;
+            case LINUX -> OperatingSystem.LINUX;
+            case SOLARIS -> OperatingSystem.SOLARIS;
+            case WINDOWS -> OperatingSystem.WINDOWS;
+            case OSX -> OperatingSystem.MACOS;
+            case UNKNOWN -> OperatingSystem.UNKNOWN;
         };
     }
 

@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
-import dev.huskuraft.effortless.building.BuildSession;
+import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
 
 public final class Pattern {
@@ -59,7 +59,7 @@ public final class Pattern {
         return new Pattern(id, name, transformers);
     }
 
-    public Pattern finalize(BuildSession session, BuildStage stage) {
+    public Pattern finalize(BatchBuildSession session, BuildStage stage) {
         return withTransformers(
                 transformers().stream().map(transformer -> transformer.finalize(session, stage)).toList()
         );

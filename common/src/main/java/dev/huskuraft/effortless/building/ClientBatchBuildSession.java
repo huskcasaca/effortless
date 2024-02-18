@@ -8,9 +8,9 @@ import dev.huskuraft.effortless.building.operation.block.BlockBreakOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOnClientOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperation;
 
-public class ClientBuildSession extends BuildSession {
+public class ClientBatchBuildSession extends BatchBuildSession {
 
-    public ClientBuildSession(World world, Player player, Context context) {
+    public ClientBatchBuildSession(World world, Player player, Context context) {
         super(world, player, context);
     }
 

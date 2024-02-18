@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -19,13 +20,15 @@ import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
+import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.api.platform.Session;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.BuildState;
-import dev.huskuraft.effortless.building.ClientBuildSession;
+import dev.huskuraft.effortless.building.ClientBatchBuildSession;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.SingleCommand;
@@ -50,11 +53,26 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
+    private final AtomicReference<Session> serverSession = new AtomicReference<>();
+    private final AtomicReference<Session> clientSession = new AtomicReference<>(new Session(Platform.INSTANCE));
 
     public EffortlessClientStructureBuilder(EffortlessClient entrance) {
         this.entrance = entrance;
 
         getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
+        getEntrance().getEventRegistry().getPlayerLoggedInEvent().register(this::onPlayerLoggedIn);
+    }
+
+    public void onPlayerLoggedIn(Player player) {
+        getEntrance().getClient().sendChat("[Effortless] Player logged in" + serverSession.get());
+    }
+
+    public void onServerSession(Session session) {
+        serverSession.set(session);
+    }
+
+    public boolean isServerSessionValid() {
+        return serverSession.get() != null;
     }
 
     private static Text getStateComponent(BuildState state) {
@@ -108,15 +126,19 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var context = updater.apply(getContext(player));
         if (context.isFulfilled()) {
 
-            var finalized = context.finalize(player, BuildStage.INTERACT);
-            var result = new ClientBuildSession(player.getWorld(), player, finalized.withPreviewOnceType()).build().commit();
+            var finalizedContext = context.finalize(player, BuildStage.INTERACT);
+            var previewContext = finalizedContext.withPreviewOnceType();
+            var result = new ClientBatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
+
+            if (isServerSessionValid()) {
+                getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
+            }
 
             showContext(context.uuid(), context);
             showOperationResult(context.uuid(), result);
             showOperationResultTooltip(context.uuid(), player, result, 1000);
-
-            getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalized));
             setContext(player, context.resetBuildState());
+
 
             return BuildResult.COMPLETED;
         } else {
@@ -131,7 +153,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public Context getDefaultContext() {
-        return Context.defaultSet();
+        return Context.defaultSet(!isServerSessionValid());
     }
 
     @Override
@@ -200,20 +222,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public BuildResult onPlayerBreak(Player player) {
         var context = getContext(player);
         var interaction = context.withBreakingState().trace(player);
-        var result = build(player, BuildState.BREAK_BLOCK, interaction);
-
-        if (result.isSuccess()) {
-            // play sound if further than normal
-            // TODO: 22/7/23
-            // FIXME: 13/10/23
-//            if (interaction.getLocation().subtract(player.getEyePosition(1f)).lengthSqr() > 25f) {
-//                var blockPos = interaction.getBlockPos();
-//                var state = player.getWorld().getBlockState(blockPosition);
-//                var soundtype = state.getBlock().getSoundType(state);
-//                player.getWorld().playSound(player, player.blockPosition(), soundtype.getBreakSound(), SoundSource.BLOCKS, 0.4f, soundtype.getPitch());
-//            }
-        }
-        return result;
+        return build(player, BuildState.BREAK_BLOCK, interaction);
     }
 
     @Override
@@ -235,7 +244,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void onContextReceived(Player player, Context context) {
-        var result = new ClientBuildSession(player.getWorld(), player, context).build().commit();
+        var result = new ClientBatchBuildSession(player.getWorld(), player, context).build().commit();
 
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
@@ -270,7 +279,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         setContext(player, getContext(player).withRandomPatternSeed());
         var context = getContextTraced(player).withPreviewType();
 
-        var result = new ClientBuildSession(player.getWorld(), player, context.withPreviewType()).build().commit();
+        var result = new ClientBatchBuildSession(player.getWorld(), player, context.withPreviewType()).build().commit();
 
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
