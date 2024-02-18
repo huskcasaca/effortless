@@ -22,12 +22,10 @@ public enum EffortlessKeys implements Key {
 //	  TOGGLE_ALT_PLACE("toggle_alt_place", KeyCodes.KEY_UNKNOWN),
     ;
 
-    private final KeyCodes key;
     private final KeyBinding keyBinding;
 
     EffortlessKeys(String description, KeyCodes defaultKey) {
-        this.key = defaultKey;
-        this.keyBinding = KeyBinding.of("key.effortless.%s.desc".formatted(description), "key.effortless.category", key);
+        this.keyBinding = KeyBinding.of("key.effortless.%s.desc".formatted(description), "key.effortless.category", defaultKey.value());
     }
 
     @Override

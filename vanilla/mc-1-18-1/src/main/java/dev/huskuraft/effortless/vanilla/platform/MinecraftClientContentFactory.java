@@ -9,7 +9,6 @@ import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
-import dev.huskuraft.effortless.api.input.KeyCodes;
 import dev.huskuraft.effortless.api.input.OptionKeys;
 import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.SearchBy;
@@ -83,8 +82,8 @@ public class MinecraftClientContentFactory extends MinecraftContentFactory imple
     }
 
     @Override
-    public KeyBinding newKeyBinding(String name, String category, KeyCodes key) {
-        return new MinecraftKeyBinding(new KeyMapping(name, key.value(), category));
+    public KeyBinding newKeyBinding(String name, String category, int code) {
+        return new MinecraftKeyBinding(new KeyMapping(name, code, category));
     }
 
 }
