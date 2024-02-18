@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionStartPacket;
 
-public final class EffortlessServerChannel extends Channel<AllPacketListener> {
+public final class EffortlessChannel extends Channel<AllPacketListener> {
 
     private final Effortless entrance;
     private final AllPacketListener listener;
@@ -20,11 +20,11 @@ public final class EffortlessServerChannel extends Channel<AllPacketListener> {
     private static final ResourceLocation DEFAULT_CHANNEL = ResourceLocation.of(Effortless.MOD_ID, "default_channel");
     private static final int COMPATIBILITY_VERSION = Effortless.PROTOCOL_VERSION;
 
-    public EffortlessServerChannel(Effortless entrance) {
+    public EffortlessChannel(Effortless entrance) {
         this(entrance, DEFAULT_CHANNEL);
     }
 
-    public EffortlessServerChannel(Effortless entrance, ResourceLocation channelId) {
+    public EffortlessChannel(Effortless entrance, ResourceLocation channelId) {
         super(channelId);
         this.entrance = entrance;
         this.listener = new ServerPacketListener();

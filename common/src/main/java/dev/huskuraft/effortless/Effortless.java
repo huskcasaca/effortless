@@ -7,27 +7,27 @@ public abstract class Effortless implements Entrance {
     public static final String MOD_ID = "effortless";
     public static final int PROTOCOL_VERSION = 3;
 
-    private final EffortlessEventRegistry registry;
-    private final EffortlessServerChannel channel;
-    private final EffortlessServerStructureBuilder structureBuilder;
+    private final EffortlessEventRegistry eventRegistry;
+    private final EffortlessChannel channel;
+    private final EffortlessStructureBuilder structureBuilder;
 
     protected Effortless() {
         Instance.set(this);
 
-        this.registry = new EffortlessEventRegistry();
-        this.channel = new EffortlessServerChannel(this);
-        this.structureBuilder = new EffortlessServerStructureBuilder(this);
-    }
-
-    public EffortlessServerChannel getChannel() {
-        return channel;
+        this.eventRegistry = new EffortlessEventRegistry();
+        this.channel = new EffortlessChannel(this);
+        this.structureBuilder = new EffortlessStructureBuilder(this);
     }
 
     public EffortlessEventRegistry getEventRegistry() {
-        return registry;
+        return eventRegistry;
     }
 
-    public EffortlessServerStructureBuilder getStructureBuilder() {
+    public EffortlessChannel getChannel() {
+        return channel;
+    }
+
+    public EffortlessStructureBuilder getStructureBuilder() {
         return structureBuilder;
     }
 

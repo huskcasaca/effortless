@@ -28,14 +28,14 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPack
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionStartPacket;
 
-public final class EffortlessServerStructureBuilder extends StructureBuilder {
+public final class EffortlessStructureBuilder extends StructureBuilder {
 
     private final Effortless entrance;
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
 
-    public EffortlessServerStructureBuilder(Effortless entrance) {
+    public EffortlessStructureBuilder(Effortless entrance) {
         this.entrance = entrance;
 
         getEntrance().getEventRegistry().getPlayerChangeWorldEvent().register(this::onPlayerChangeWorld);
