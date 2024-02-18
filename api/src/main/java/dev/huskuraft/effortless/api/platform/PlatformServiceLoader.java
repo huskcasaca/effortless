@@ -226,6 +226,7 @@ public final class PlatformServiceLoader<S> implements Iterable<Optional<S>> {
                         return s.get();
                     }
                 }
+                return s.get();
             }
         }
         throw new IllegalStateException("No provider found for " + service.getName());
