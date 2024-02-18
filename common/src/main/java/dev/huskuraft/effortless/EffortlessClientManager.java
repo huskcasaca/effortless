@@ -15,6 +15,7 @@ import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.input.OptionKeys;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.ClientManager;
+import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.renderer.Shaders;
 import dev.huskuraft.effortless.building.pattern.Pattern;
@@ -26,6 +27,7 @@ import dev.huskuraft.effortless.renderer.tooltip.TooltipRenderer;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
+import dev.huskuraft.effortless.screen.test.EffortlessTestScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerSettingsScreen;
 
 public final class EffortlessClientManager implements ClientManager {
@@ -135,6 +137,10 @@ public final class EffortlessClientManager implements ClientManager {
         setInteractionCooldown(1);
     }
 
+    private void openTestScreen() {
+        new EffortlessTestScreen(getEntrance()).attach();
+    }
+
     private void openModeRadialScreen() {
         if (!(getRunningClient().getPanel() instanceof EffortlessModeRadialScreen)) {
             new EffortlessModeRadialScreen(getEntrance(), EffortlessKeys.BUILD_MODE_RADIAL).attach();
@@ -190,7 +196,6 @@ public final class EffortlessClientManager implements ClientManager {
         if (Keys.KEY_ESCAPE.getBinding().isKeyDown()) {
             getEntrance().getStructureBuilder().resetBuildState(getRunningClient().getPlayer());
         }
-
         if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
             openModeRadialScreen();
         }
@@ -214,6 +219,9 @@ public final class EffortlessClientManager implements ClientManager {
         }
         if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
             getEntrance().getStructureBuilder().setBuildFeature(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());
+        }
+        if (Platform.INSTANCE.isDevelopment() && Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown() && Keys.KEY_ENTER.getBinding().isKeyDown()) {
+            openTestScreen();
         }
     }
 

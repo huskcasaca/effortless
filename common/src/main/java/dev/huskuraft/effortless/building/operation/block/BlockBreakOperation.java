@@ -2,10 +2,14 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import java.util.Collections;
 
+import dev.huskuraft.effortless.api.command.CommandManager;
+import dev.huskuraft.effortless.api.command.SetBlockCommand;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -25,7 +29,7 @@ public class BlockBreakOperation extends BlockOperation {
         super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
     }
 
-    private BlockOperationResult.Type breakBlock() {
+    private BlockOperationResult.Type tryBreakBlock() {
 
         // spectator
         if (player.getGameType().isSpectator()) { // move
@@ -58,6 +62,11 @@ public class BlockBreakOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
+        if (context.type() == BuildType.COMMAND) {
+            CommandManager.dispatch(new SetBlockCommand(Items.AIR.item().getDefaultStack().getBlockState(getPlayer(), getInteraction()), getInteraction().getBlockPosition(), SetBlockCommand.Mode.REPLACE));
+            return BlockOperationResult.Type.SUCCESS;
+        }
+
         if (player.tryBreakBlock(getInteraction())) {
             return BlockOperationResult.Type.SUCCESS;
         } else {
@@ -67,7 +76,7 @@ public class BlockBreakOperation extends BlockOperation {
 
     @Override
     public BlockBreakOperationResult commit() {
-        var type = breakBlock();
+        var type = tryBreakBlock();
         var inputs = Collections.<ItemStack>emptyList();
         var outputs = Collections.singletonList(world.getBlockState(interaction.getBlockPosition()).getItem().getDefaultStack());
 

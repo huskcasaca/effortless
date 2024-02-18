@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Range1i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.BuildSession;
+import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
@@ -121,7 +121,7 @@ public class RadialTransformer extends Transformer {
 
 
     @Override
-    public RadialTransformer finalize(BuildSession session, BuildStage stage) {
+    public RadialTransformer finalize(BatchBuildSession session, BuildStage stage) {
         return switch (stage) {
             case NONE -> this;
             case UPDATE_CONTEXT, INTERACT -> new RadialTransformer(id, name, new Vector3d(

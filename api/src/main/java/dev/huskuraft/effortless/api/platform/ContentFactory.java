@@ -49,7 +49,7 @@ public interface ContentFactory {
 
     TagIoWriter getTagIoWriter();
 
-    Platform.OperatingSystem getOperatingSystem();
+    OperatingSystem getOperatingSystem();
 
     Sound getSound(Sounds sounds);
 

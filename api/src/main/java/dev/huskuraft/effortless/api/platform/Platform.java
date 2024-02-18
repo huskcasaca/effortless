@@ -1,6 +1,8 @@
 package dev.huskuraft.effortless.api.platform;
 
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
 
 public interface Platform {
 
@@ -10,32 +12,21 @@ public interface Platform {
 
     String getGameVersion();
 
+    List<Mod> getRunningMods();
+
+    default Optional<Mod> findMod(String modId) {
+        return getRunningMods().stream().filter(mod -> mod.getId().equals(modId)).findFirst();
+    }
+
     Path getGameDir();
 
-    Path getConfigDir();
+    default Path getConfigDir(){
+        return getGameDir().resolve("config");
+    }
 
     Environment getEnvironment();
 
     boolean isDevelopment();
-
-    enum OperatingSystem {
-        LINUX,
-        SOLARIS,
-        WINDOWS,
-        MACOS,
-        UNKNOWN
-    }
-
-    enum Environment {
-        CLIENT,
-        SERVER
-    }
-
-    enum LoaderType {
-        FABRIC,
-        FORGE,
-        VANILLA
-    }
 
     Platform INSTANCE = PlatformServiceLoader.load(Platform.class).get();
 

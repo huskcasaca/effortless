@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.BuildSession;
+import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
@@ -60,7 +60,7 @@ public abstract class Transformer {
         return withId(UUID.randomUUID());
     }
 
-    public Transformer finalize(BuildSession session, BuildStage stage) {
+    public Transformer finalize(BatchBuildSession session, BuildStage stage) {
         return this;
     }
 

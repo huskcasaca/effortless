@@ -2,12 +2,15 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import java.util.Collections;
 
+import dev.huskuraft.effortless.api.command.CommandManager;
+import dev.huskuraft.effortless.api.command.SetBlockCommand;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -78,6 +81,11 @@ public class BlockPlaceOperation extends BlockOperation {
 
         if (context.replaceMode() == ReplaceMode.QUICK && !player.tryBreakBlock(getInteraction())) {
             return BlockOperationResult.Type.FAIL_INTERNAL;
+        }
+
+        if (context.type() == BuildType.COMMAND) {
+            CommandManager.dispatch(new SetBlockCommand(getBlockState(), getInteraction().getBlockPosition(), SetBlockCommand.Mode.REPLACE));
+            return BlockOperationResult.Type.SUCCESS;
         }
 
         // compatible layer

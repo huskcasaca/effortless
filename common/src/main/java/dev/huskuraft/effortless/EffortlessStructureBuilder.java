@@ -11,7 +11,9 @@ import javax.annotation.Nullable;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.platform.Server;
+import dev.huskuraft.effortless.api.platform.Session;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
@@ -24,15 +26,16 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
+import dev.huskuraft.effortless.networking.packets.session.SessionStartPacket;
 
-public final class EffortlessServerStructureBuilder extends StructureBuilder {
+public final class EffortlessStructureBuilder extends StructureBuilder {
 
     private final Effortless entrance;
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
 
-    public EffortlessServerStructureBuilder(Effortless entrance) {
+    public EffortlessStructureBuilder(Effortless entrance) {
         this.entrance = entrance;
 
         getEntrance().getEventRegistry().getPlayerChangeWorldEvent().register(this::onPlayerChangeWorld);
@@ -175,6 +178,7 @@ public final class EffortlessServerStructureBuilder extends StructureBuilder {
     }
 
     private void onPlayerLoggedIn(Player player) {
+        getEntrance().getChannel().sendPacket(new SessionStartPacket(new Session(Platform.INSTANCE)), player);
     }
 
     private void onPlayerLoggedOut(Player player) {

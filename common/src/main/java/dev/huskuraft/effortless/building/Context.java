@@ -34,11 +34,11 @@ public record Context(
         ReachParams reachParams
 ) {
 
-    public static Context defaultSet() {
+    public static Context defaultSet(boolean command) {
         return new Context(
                 UUID.randomUUID(),
                 BuildState.IDLE,
-                BuildType.BUILD,
+                command ? BuildType.COMMAND : BuildType.BUILD,
                 BuildInteractions.EMPTY,
                 new StructureParams(
                         BuildMode.DISABLED,
@@ -209,10 +209,6 @@ public record Context(
         return new Context(uuid, state, type, interactions, structureParams, patternParams, reachParams);
     }
 
-    public Context withBuildType() {
-        return new Context(uuid, state, BuildType.BUILD, interactions, structureParams, patternParams, reachParams);
-    }
-
     public Context withPreviewType() {
         return new Context(uuid, state, BuildType.PREVIEW, interactions, structureParams, patternParams, reachParams);
     }
@@ -254,7 +250,7 @@ public record Context(
     }
 
     public Context finalize(Player player, BuildStage stage) {
-        return withPattern(pattern().finalize(new BuildSession(player.getWorld(), player, this), stage));
+        return withPattern(pattern().finalize(new BatchBuildSession(player.getWorld(), player, this), stage));
     }
 
     // new context for idle
@@ -270,8 +266,8 @@ public record Context(
         );
     }
 
-    public Session createSession(World world, Player player) {
-        return new BuildSession(world, player, this);
+    public BuildSession createSession(World world, Player player) {
+        return new BatchBuildSession(world, player, this);
     }
 
     // for build mode only
