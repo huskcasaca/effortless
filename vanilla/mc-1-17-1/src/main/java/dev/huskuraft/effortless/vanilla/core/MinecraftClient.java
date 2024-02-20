@@ -112,11 +112,11 @@ public class MinecraftClient implements Client {
     @Override
     public Resource getResource(ResourceLocation location) {
         try {
-			var resource = reference.getResourceManager().getResource(location.reference());
-			return new MinecraftResource(resource, location.reference());
-		} catch (IOException e) {
-			return null;
-		}
+            var resource = reference.getResourceManager().getResource(location.reference());
+            return new MinecraftResource(resource, location.reference());
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     @Override

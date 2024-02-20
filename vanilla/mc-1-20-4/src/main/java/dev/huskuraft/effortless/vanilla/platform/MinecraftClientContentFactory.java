@@ -31,12 +31,12 @@ public class MinecraftClientContentFactory extends MinecraftContentFactory imple
         var minecraftPlayer = Minecraft.getInstance().player;
         CreativeModeTabs.tryRebuildTabContents(minecraftPlayer.connection.enabledFeatures(), true, minecraftPlayer.clientLevel.registryAccess());
 
-		var minecraftSearchTree = Minecraft.getInstance().getSearchTree(
-				switch (searchBy) {
-					case NAME -> SearchRegistry.CREATIVE_NAMES;
-					case TAG -> SearchRegistry.CREATIVE_TAGS;
-				}
-		);
+        var minecraftSearchTree = Minecraft.getInstance().getSearchTree(
+                switch (searchBy) {
+                    case NAME -> SearchRegistry.CREATIVE_NAMES;
+                    case TAG -> SearchRegistry.CREATIVE_TAGS;
+                }
+        );
         return query -> minecraftSearchTree.search(query).stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
     }
 

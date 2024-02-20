@@ -171,7 +171,7 @@ public class MinecraftBuffer implements Buffer {
 
     @Override
     public void writeItem(Item value) {
-		reference.writeId(BuiltInRegistries.ITEM, value.reference());
+        reference.writeId(BuiltInRegistries.ITEM, value.reference());
     }
 
     @Override

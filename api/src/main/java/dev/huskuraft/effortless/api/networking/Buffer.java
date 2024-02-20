@@ -18,6 +18,10 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public interface Buffer extends PlatformReference {
 
+    static Buffer newBuffer() {
+        return ContentFactory.getInstance().newBuffer();
+    }
+
     default <T> T readNullable(BufferReader<T> reader) {
         if (readBoolean()) return read(reader);
         return null;
@@ -47,8 +51,6 @@ public interface Buffer extends PlatformReference {
 
     float readFloat();
 
-    double readDouble();
-
 //    boolean[] readBooleanArray();
 //
 //    byte[] readByteArray();
@@ -63,8 +65,11 @@ public interface Buffer extends PlatformReference {
 //
 //    double[] readDoubleArray();
 
-	@Deprecated // use Registries
-	Item readItem();
+    double readDouble();
+
+    @Deprecated
+        // use Registries
+    Item readItem();
 
     ItemStack readItemStack();
 
@@ -113,8 +118,6 @@ public interface Buffer extends PlatformReference {
 
     void writeFloat(float value);
 
-    void writeDouble(double value);
-
 //    void writeBooleanArray(boolean[] value);
 //
 //    void writeByteArray(byte[] value);
@@ -129,7 +132,10 @@ public interface Buffer extends PlatformReference {
 //
 //    void writeDoubleArray(double[] value);
 
-	@Deprecated // use Registries
+    void writeDouble(double value);
+
+    @Deprecated
+        // use Registries
     void writeItem(Item value);
 
     // TODO: 7/12/23 extract
@@ -184,10 +190,6 @@ public interface Buffer extends PlatformReference {
     default void writeVector2i(Vector2i vector) {
         writeInt(vector.x());
         writeInt(vector.y());
-    }
-
-    static Buffer newBuffer() {
-        return ContentFactory.getInstance().newBuffer();
     }
 
 }

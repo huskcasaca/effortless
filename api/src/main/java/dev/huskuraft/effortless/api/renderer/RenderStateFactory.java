@@ -1,10 +1,14 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.api.platform.PlatformServiceLoader;
+import dev.huskuraft.effortless.api.platform.PlatformLoader;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 
 public interface RenderStateFactory {
+
+    static RenderStateFactory getInstance() {
+        return PlatformLoader.getSingleton();
+    }
 
     RenderLayer createCompositeRenderLayer(String name, VertexFormat vertexFormat, VertexFormat.Mode vertexFormatMode, int bufferSize, boolean affectsCrumbling, boolean sortOnUpload, CompositeRenderState state);
 
@@ -45,11 +49,5 @@ public interface RenderStateFactory {
     VertexFormat getVertexFormat(VertexFormats formats);
 
     VertexFormat.Mode getVertexFormatMode(VertexFormats.Modes modes);
-
-    RenderStateFactory INSTANCE = PlatformServiceLoader.load(RenderStateFactory.class).get();
-
-    static RenderStateFactory getInstance() {
-        return INSTANCE;
-    }
 
 }

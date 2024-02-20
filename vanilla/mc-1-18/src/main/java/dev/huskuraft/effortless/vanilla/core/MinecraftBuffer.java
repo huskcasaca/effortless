@@ -171,9 +171,10 @@ public class MinecraftBuffer implements Buffer {
 
     @Override
     public void writeItem(Item value) {
-		var id = DefaultedRegistry.ITEM.getId(value.reference());
-		if (id == -1) throw new IllegalArgumentException("Can't find id for '" + value.reference() + "' in map " + DefaultedRegistry.ITEM);
-		reference.writeVarInt(id);
+        var id = DefaultedRegistry.ITEM.getId(value.reference());
+        if (id == -1)
+            throw new IllegalArgumentException("Can't find id for '" + value.reference() + "' in map " + DefaultedRegistry.ITEM);
+        reference.writeVarInt(id);
     }
 
     @Override

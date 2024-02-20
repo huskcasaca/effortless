@@ -1,34 +1,38 @@
 package dev.huskuraft.effortless;
 
+import com.google.auto.service.AutoService;
+
+import dev.huskuraft.effortless.api.events.ClientEventRegistry;
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
+import dev.huskuraft.effortless.api.platform.PlatformLoader;
 
-public abstract class EffortlessClient implements ClientEntrance {
+@AutoService(ClientEntrance.class)
+public class EffortlessClient implements ClientEntrance {
 
-    private final EffortlessClientEventRegistry eventRegistry = new EffortlessClientEventRegistry();
-    private final EffortlessClientChannel channel;
+    private final ClientEventRegistry eventRegistry = PlatformLoader.getSingleton();
+
+    private final EffortlessClientNetworkChannel channel;
     private final EffortlessClientStructureBuilder structureBuilder;
     private final EffortlessClientManager clientManager;
     private final EffortlessClientConfigManager configManager;
 
-    protected EffortlessClient() {
-        Instance.set(this);
-
-        this.channel = new EffortlessClientChannel(this);
+    public EffortlessClient() {
+        this.channel = new EffortlessClientNetworkChannel(this);
         this.structureBuilder = new EffortlessClientStructureBuilder(this);
         this.clientManager = new EffortlessClientManager(this);
         this.configManager = new EffortlessClientConfigManager(this);
     }
 
     public static EffortlessClient getInstance() {
-        return (EffortlessClient) Instance.get();
+        return (EffortlessClient) ClientEntrance.getInstance();
     }
 
-    public EffortlessClientChannel getChannel() {
-        return channel;
-    }
-
-    public EffortlessClientEventRegistry getEventRegistry() {
+    public ClientEventRegistry getEventRegistry() {
         return eventRegistry;
+    }
+
+    public EffortlessClientNetworkChannel getChannel() {
+        return channel;
     }
 
     public EffortlessClientStructureBuilder getStructureBuilder() {

@@ -17,6 +17,10 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public interface ContentFactory {
 
+    static ContentFactory getInstance() {
+        return PlatformLoader.getSingleton();
+    }
+
     ResourceLocation newResourceLocation(String namespace, String path);
 
     Buffer newBuffer();
@@ -59,12 +63,6 @@ public interface ContentFactory {
 
     default Item getItem(Items items) {
         return getOptionalItem(items).orElseThrow();
-    }
-
-    ContentFactory INSTANCE = PlatformServiceLoader.load(ContentFactory.class).get();
-
-    static ContentFactory getInstance() {
-        return INSTANCE;
     }
 
 }

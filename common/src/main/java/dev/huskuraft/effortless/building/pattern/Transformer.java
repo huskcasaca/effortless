@@ -34,6 +34,17 @@ public abstract class Transformer {
         this.name = name;
     }
 
+    public static List<Transformer> getDefaultTransformers() {
+        return Stream.of(
+                List.of(ArrayTransformer.ZERO),
+                List.of(MirrorTransformer.ZERO_X),
+                List.of(MirrorTransformer.ZERO_Y),
+                List.of(MirrorTransformer.ZERO_Z),
+                List.of(RadialTransformer.ZERO),
+                ItemRandomizer.getDefaultItemRandomizers()
+        ).flatMap(List::stream).collect(Collectors.toList());
+    }
+
     public abstract BatchOperation transform(TransformableOperation operation);
 
     public final UUID getId() {
@@ -78,17 +89,6 @@ public abstract class Transformer {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
-    }
-
-    public static List<Transformer> getDefaultTransformers() {
-        return Stream.of(
-                List.of(ArrayTransformer.ZERO),
-                List.of(MirrorTransformer.ZERO_X),
-                List.of(MirrorTransformer.ZERO_Y),
-                List.of(MirrorTransformer.ZERO_Z),
-                List.of(RadialTransformer.ZERO),
-                ItemRandomizer.getDefaultItemRandomizers()
-        ).flatMap(List::stream).collect(Collectors.toList());
     }
 
 

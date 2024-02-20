@@ -18,7 +18,8 @@ public interface Shader extends PlatformReference {
 
     default void register(RegisterShader.ShadersSink sink) {
         try {
-            sink.register(getResource(), getVertexFormat(), shader -> {});
+            sink.register(getResource(), getVertexFormat(), shader -> {
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

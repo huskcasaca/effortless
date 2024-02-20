@@ -54,25 +54,13 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
     private final AtomicReference<Session> serverSession = new AtomicReference<>();
-    private final AtomicReference<Session> clientSession = new AtomicReference<>(new Session(Platform.INSTANCE));
+    private final AtomicReference<Session> clientSession = new AtomicReference<>(new Session(Platform.getInstance()));
 
     public EffortlessClientStructureBuilder(EffortlessClient entrance) {
         this.entrance = entrance;
 
         getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
         getEntrance().getEventRegistry().getPlayerLoggedInEvent().register(this::onPlayerLoggedIn);
-    }
-
-    public void onPlayerLoggedIn(Player player) {
-        getEntrance().getClient().sendChat("[Effortless] Player logged in" + serverSession.get());
-    }
-
-    public void onServerSession(Session session) {
-        serverSession.set(session);
-    }
-
-    public boolean isServerSessionValid() {
-        return serverSession.get() != null;
     }
 
     private static Text getStateComponent(BuildState state) {
@@ -94,6 +82,18 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     case FAILED -> "failed";
                 }
         ));
+    }
+
+    public void onPlayerLoggedIn(Player player) {
+        getEntrance().getClient().sendChat("[Effortless] Player logged in" + serverSession.get());
+    }
+
+    public void onServerSession(Session session) {
+        serverSession.set(session);
+    }
+
+    public boolean isServerSessionValid() {
+        return serverSession.get() != null;
     }
 
     private EffortlessClient getEntrance() {
@@ -269,6 +269,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     public void onClientTick(Client client, ClientTick.Phase phase) {
         if (phase == ClientTick.Phase.END) {
+            return;
+        }
+
+        if (getEntrance().getClient() == null) {
             return;
         }
 

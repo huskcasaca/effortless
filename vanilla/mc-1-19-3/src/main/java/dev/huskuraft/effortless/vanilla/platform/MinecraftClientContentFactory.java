@@ -27,16 +27,16 @@ public class MinecraftClientContentFactory extends MinecraftContentFactory imple
 
     public static final MinecraftClientContentFactory INSTANCE = new MinecraftClientContentFactory();
 
-	@Override
-	public SearchTree<ItemStack> searchItemStack(SearchBy searchBy) {
-		var minecraftSearchTree = Minecraft.getInstance().getSearchTree(
-				switch (searchBy) {
-					case NAME -> SearchRegistry.CREATIVE_NAMES;
-					case TAG -> SearchRegistry.CREATIVE_TAGS;
-				}
-		);
-		return query -> minecraftSearchTree.search(query).stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
-	}
+    @Override
+    public SearchTree<ItemStack> searchItemStack(SearchBy searchBy) {
+        var minecraftSearchTree = Minecraft.getInstance().getSearchTree(
+                switch (searchBy) {
+                    case NAME -> SearchRegistry.CREATIVE_NAMES;
+                    case TAG -> SearchRegistry.CREATIVE_TAGS;
+                }
+        );
+        return query -> minecraftSearchTree.search(query).stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
+    }
 
     @Override
     public <T> SearchTree<T> search(List<T> list, Function<T, Stream<Text>> keyExtractor) {

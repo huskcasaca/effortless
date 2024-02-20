@@ -33,11 +33,6 @@ public class MinecraftBlockState implements BlockState {
         this.reference = reference;
     }
 
-    @Override
-    public net.minecraft.world.level.block.state.BlockState referenceValue() {
-        return reference;
-    }
-
     public static net.minecraft.world.level.block.state.BlockState mirrorTopBottom(net.minecraft.world.level.block.state.BlockState value) {
         // stairs
         if (value.getBlock() instanceof StairBlock) {
@@ -89,6 +84,11 @@ public class MinecraftBlockState implements BlockState {
 
     public static net.minecraft.world.level.block.state.BlockState mirrorFrontBack(net.minecraft.world.level.block.state.BlockState value) {
         return value.mirror(Mirror.FRONT_BACK);
+    }
+
+    @Override
+    public net.minecraft.world.level.block.state.BlockState referenceValue() {
+        return reference;
     }
 
     @Override

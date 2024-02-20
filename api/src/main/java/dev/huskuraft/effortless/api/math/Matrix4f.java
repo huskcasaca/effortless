@@ -12,25 +12,25 @@ public record Matrix4f(
     /**
      * Bit returned by {@link #properties()} to indicate that the matrix represents a perspective transformation.
      */
-    public static byte PROPERTY_PERSPECTIVE = 1<<0;
+    public static byte PROPERTY_PERSPECTIVE = 1 << 0;
     /**
      * Bit returned by {@link #properties()} to indicate that the matrix represents an affine transformation.
      */
-    public static byte PROPERTY_AFFINE = 1<<1;
+    public static byte PROPERTY_AFFINE = 1 << 1;
     /**
      * Bit returned by {@link #properties()} to indicate that the matrix represents the identity transformation.
      */
-    public static byte PROPERTY_IDENTITY = 1<<2;
+    public static byte PROPERTY_IDENTITY = 1 << 2;
     /**
      * Bit returned by {@link #properties()} to indicate that the matrix represents a pure translation transformation.
      */
-    public static byte PROPERTY_TRANSLATION = 1<<3;
+    public static byte PROPERTY_TRANSLATION = 1 << 3;
     /**
      * Bit returned by {@link #properties()} to indicate that the upper-left 3x3 submatrix represents an orthogonal
      * matrix (i.e. orthonormal basis). For practical reasons, this property also always implies
      * {@link #PROPERTY_AFFINE} in this implementation.
      */
-    public static byte PROPERTY_ORTHONORMAL = 1<<4;
+    public static byte PROPERTY_ORTHONORMAL = 1 << 4;
 
     public Matrix4f(FloatBuffer buffer) {
         this(
@@ -87,7 +87,7 @@ public record Matrix4f(
     }
 
     public void write(FloatBuffer buffer) {
-        buffer.put(new float[] {
+        buffer.put(new float[]{
                 m00(), m01(), m02(), m03(),
                 m10(), m11(), m12(), m13(),
                 m20(), m21(), m22(), m23(),

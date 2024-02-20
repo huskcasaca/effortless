@@ -41,7 +41,9 @@ public class MinecraftRenderer extends Renderer {
         this.minecraftClient = Minecraft.getInstance();
         this.minecraftMatrixStack = minecraftMatrixStack;
         this.minecraftBufferSource = minecraftClient.renderBuffers().bufferSource();
-        this.minecraftRendererProvider = new Screen(Component.empty()) {{init(Minecraft.getInstance(), 0, 0);}};
+        this.minecraftRendererProvider = new Screen(Component.empty()) {{
+            init(Minecraft.getInstance(), 0, 0);
+        }};
     }
 
     @Override
@@ -93,7 +95,7 @@ public class MinecraftRenderer extends Renderer {
                 shadow,
                 minecraftMatrixStack.last().pose(),
                 minecraftBufferSource,
-				seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL,
+                seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL,
                 backgroundColor,
                 lightMap);
     }

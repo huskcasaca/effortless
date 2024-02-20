@@ -57,9 +57,9 @@ public enum Shaders implements Shader {
     END_PORTAL,
     END_GATEWAY,
     LINES,
-    GUI( "rendertype_gui", VertexFormats.POSITION_COLOR),
-    GUI_OVERLAY( "rendertype_gui_overlay", VertexFormats.POSITION_COLOR),
-    GUI_TEXT_HIGHLIGHT( "rendertype_gui_text_highlight", VertexFormats.POSITION_COLOR),
+    GUI("rendertype_gui", VertexFormats.POSITION_COLOR),
+    GUI_OVERLAY("rendertype_gui_overlay", VertexFormats.POSITION_COLOR),
+    GUI_TEXT_HIGHLIGHT("rendertype_gui_text_highlight", VertexFormats.POSITION_COLOR),
     GUI_GHOST_RECIPE_OVERLAY,
     ;
 

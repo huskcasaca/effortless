@@ -4,6 +4,10 @@ import java.util.function.Supplier;
 
 public interface PlatformReference {
 
+    static <T> T unavailable() {
+        return null;
+    }
+
     Object referenceValue();
 
     default <T> T reference() {
@@ -28,9 +32,5 @@ public interface PlatformReference {
 
     default <T extends PlatformReference> T ifUnavailable(Supplier<T> supplier) {
         return isAvailable() ? (T) this : supplier.get();
-    }
-
-    static <T> T unavailable() {
-        return null;
     }
 }

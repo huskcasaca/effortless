@@ -138,7 +138,7 @@ public class Vector4f {
      * @param w the value to add
      * @return a new vector
      */
-    public Vector4f add(float x, float y, float z, float w)  {
+    public Vector4f add(float x, float y, float z, float w) {
         return Vector4f.at(this.x + x, this.y + y, this.z + z, this.w + w);
     }
 
@@ -186,7 +186,7 @@ public class Vector4f {
      * @param w the value to subtract
      * @return a new vector
      */
-    public Vector4f sub(float x, float y, float z, float w)  {
+    public Vector4f sub(float x, float y, float z, float w) {
         return Vector4f.at(this.x - x, this.y - y, this.z - z, this.w - w);
     }
 
@@ -242,7 +242,7 @@ public class Vector4f {
      * @param w the value to multiply
      * @return a new vector
      */
-    public Vector4f mul(float x, float y, float z, float w)  {
+    public Vector4f mul(float x, float y, float z, float w) {
         return Vector4f.at(this.x * x, this.y * y, this.z * z, this.w * w);
     }
 
@@ -297,7 +297,7 @@ public class Vector4f {
      * @param w the value to divide by
      * @return a new vector
      */
-    public Vector4f div(float x, float y, float z, float w)  {
+    public Vector4f div(float x, float y, float z, float w) {
         return Vector4f.at(this.x / x, this.y / y, this.z / z, this.w / w);
     }
 

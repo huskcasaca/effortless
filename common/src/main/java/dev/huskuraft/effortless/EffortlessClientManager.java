@@ -125,12 +125,12 @@ public final class EffortlessClientManager implements ClientManager {
         this.interactionCooldown = Math.max(0, this.interactionCooldown - 1);
     }
 
-    private void setInteractionCooldown(int tick) {
-        this.interactionCooldown = tick; // for single build speed
-    }
-
     private boolean isInteractionCooldown() {
         return this.interactionCooldown == 0;
+    }
+
+    private void setInteractionCooldown(int tick) {
+        this.interactionCooldown = tick; // for single build speed
     }
 
     private void resetInteractionCooldown() {
@@ -190,8 +190,13 @@ public final class EffortlessClientManager implements ClientManager {
 
     public void onKeyInput(InputKey key) {
 
-        if (getRunningClient().getPlayer() == null)
+        if (getRunningClient() == null) {
             return;
+        }
+
+        if (getRunningClient().getPlayer() == null) {
+            return;
+        }
 
         if (Keys.KEY_ESCAPE.getBinding().isKeyDown()) {
             getEntrance().getStructureBuilder().resetBuildState(getRunningClient().getPlayer());
@@ -220,7 +225,7 @@ public final class EffortlessClientManager implements ClientManager {
         if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
             getEntrance().getStructureBuilder().setBuildFeature(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());
         }
-        if (Platform.INSTANCE.isDevelopment() && Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown() && Keys.KEY_ENTER.getBinding().isKeyDown()) {
+        if (Platform.getInstance().isDevelopment() && Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown() && Keys.KEY_ENTER.getBinding().isKeyDown()) {
             openTestScreen();
         }
     }

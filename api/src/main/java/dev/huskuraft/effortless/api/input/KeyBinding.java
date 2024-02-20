@@ -5,6 +5,14 @@ import dev.huskuraft.effortless.api.platform.PlatformReference;
 
 public interface KeyBinding extends PlatformReference {
 
+    static KeyBinding of(String name, String category, int code) {
+        return ClientContentFactory.getInstance().newKeyBinding(name, category, code);
+    }
+
+    static KeyBinding of(int code) {
+        return ClientContentFactory.getInstance().newKeyBinding(code);
+    }
+
     String getName();
 
     String getCategory();
@@ -20,13 +28,5 @@ public interface KeyBinding extends PlatformReference {
     String getBoundKey();
 
     int getBoundCode();
-
-    static KeyBinding of(String name, String category, int code) {
-        return ClientContentFactory.getInstance().newKeyBinding(name, category, code);
-    }
-
-    static KeyBinding of(int code) {
-        return ClientContentFactory.getInstance().newKeyBinding(code);
-    }
 
 }

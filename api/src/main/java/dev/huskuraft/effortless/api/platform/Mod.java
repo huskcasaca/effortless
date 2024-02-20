@@ -2,14 +2,6 @@ package dev.huskuraft.effortless.api.platform;
 
 public interface Mod {
 
-    String getId();
-
-    String getVersionStr();
-
-    String getDescription();
-
-    String getName();
-
     static Mod create(String id, String version, String description, String name) {
         return new Mod() {
 
@@ -34,5 +26,13 @@ public interface Mod {
             }
         };
     }
+
+    String getId();
+
+    String getVersionStr();
+
+    String getDescription();
+
+    String getName();
 
 }

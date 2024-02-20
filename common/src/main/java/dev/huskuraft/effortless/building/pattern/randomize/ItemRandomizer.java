@@ -50,109 +50,6 @@ public class ItemRandomizer extends Randomizer<Item> {
         return create(name, Order.SEQUENCE, Target.SINGLE, Category.ITEM, List.of(Chance.of(content)));
     }
 
-    @Override
-    public Order getOrder() {
-        return order;
-    }
-
-    @Override
-    public Target getTarget() {
-        return target;
-    }
-
-    @Override
-    public Category getCategory() {
-        return category;
-    }
-
-    @Override
-    public Collection<Chance<Item>> getChances() {
-        return chances;
-    }
-
-    @Override
-    public Source<Item> asSource(long seed) {
-        return switch (order) {
-            case SEQUENCE -> Source.createSequence(this);
-            case RANDOM -> Source.createUnordered(this, seed);
-        };
-    }
-
-    @Override
-    public BatchOperation transform(TransformableOperation operation) {
-        if (!isValid()) {
-            return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation));
-        }
-        var source = asSource(operation.getContext().patternSeed());
-        if (operation instanceof DeferredBatchOperation deferredBatchOperation) {
-            return switch (target) {
-                case SINGLE -> deferredBatchOperation.mapEach(o -> o.refactor(RefactorContext.of(source.next())));
-                case GROUP -> deferredBatchOperation.map(o -> o.refactor(RefactorContext.of(source.next())));
-            };
-        } else {
-            return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation.refactor(RefactorContext.of(source.next()))));
-        }
-    }
-
-    @Override
-    public Transformers getType() {
-        return Transformers.ITEM_RAND;
-    }
-
-    @Override
-    public Stream<Text> getSearchableTags() {
-        return Stream.concat(
-                Stream.of(
-                        getName(),
-                        order.getDisplayName(),
-                        target.getDisplayName(),
-                        category.getDisplayName()),
-                chances.stream().map(Chance::content).map(item -> item.getDefaultStack().getHoverName())
-        );
-    }
-
-    @Override
-    public boolean isValid() {
-        return !getChances().isEmpty();
-    }
-
-    @Override
-    public boolean isIntermediate() {
-        return false;
-    }
-
-    @Override
-    public ItemRandomizer withName(Text name) {
-        return new ItemRandomizer(id, name, order, target, category, chances);
-    }
-
-    @Override
-    public ItemRandomizer withId(UUID id) {
-        return new ItemRandomizer(id, name, order, target, category, chances);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ItemRandomizer that)) return false;
-        if (!super.equals(o)) return false;
-
-        if (order != that.order) return false;
-        if (target != that.target) return false;
-        if (category != that.category) return false;
-        return Objects.equals(chances, that.chances);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (order != null ? order.hashCode() : 0);
-        result = 31 * result + (target != null ? target.hashCode() : 0);
-        result = 31 * result + (category != null ? category.hashCode() : 0);
-        result = 31 * result + (chances != null ? chances.hashCode() : 0);
-        return result;
-    }
-
     private static Text name(String key) {
         return Text.translate("effortless.transformer.randomize.example.%s".formatted(key));
     }
@@ -422,5 +319,108 @@ public class ItemRandomizer extends Randomizer<Item> {
                 colorfulBed,
                 colorfulBanner
         ).collect(Collectors.toList());
+    }
+
+    @Override
+    public Order getOrder() {
+        return order;
+    }
+
+    @Override
+    public Target getTarget() {
+        return target;
+    }
+
+    @Override
+    public Category getCategory() {
+        return category;
+    }
+
+    @Override
+    public Collection<Chance<Item>> getChances() {
+        return chances;
+    }
+
+    @Override
+    public Source<Item> asSource(long seed) {
+        return switch (order) {
+            case SEQUENCE -> Source.createSequence(this);
+            case RANDOM -> Source.createUnordered(this, seed);
+        };
+    }
+
+    @Override
+    public BatchOperation transform(TransformableOperation operation) {
+        if (!isValid()) {
+            return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation));
+        }
+        var source = asSource(operation.getContext().patternSeed());
+        if (operation instanceof DeferredBatchOperation deferredBatchOperation) {
+            return switch (target) {
+                case SINGLE -> deferredBatchOperation.mapEach(o -> o.refactor(RefactorContext.of(source.next())));
+                case GROUP -> deferredBatchOperation.map(o -> o.refactor(RefactorContext.of(source.next())));
+            };
+        } else {
+            return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation.refactor(RefactorContext.of(source.next()))));
+        }
+    }
+
+    @Override
+    public Transformers getType() {
+        return Transformers.ITEM_RAND;
+    }
+
+    @Override
+    public Stream<Text> getSearchableTags() {
+        return Stream.concat(
+                Stream.of(
+                        getName(),
+                        order.getDisplayName(),
+                        target.getDisplayName(),
+                        category.getDisplayName()),
+                chances.stream().map(Chance::content).map(item -> item.getDefaultStack().getHoverName())
+        );
+    }
+
+    @Override
+    public boolean isValid() {
+        return !getChances().isEmpty();
+    }
+
+    @Override
+    public boolean isIntermediate() {
+        return false;
+    }
+
+    @Override
+    public ItemRandomizer withName(Text name) {
+        return new ItemRandomizer(id, name, order, target, category, chances);
+    }
+
+    @Override
+    public ItemRandomizer withId(UUID id) {
+        return new ItemRandomizer(id, name, order, target, category, chances);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ItemRandomizer that)) return false;
+        if (!super.equals(o)) return false;
+
+        if (order != that.order) return false;
+        if (target != that.target) return false;
+        if (category != that.category) return false;
+        return Objects.equals(chances, that.chances);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (order != null ? order.hashCode() : 0);
+        result = 31 * result + (target != null ? target.hashCode() : 0);
+        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (chances != null ? chances.hashCode() : 0);
+        return result;
     }
 }

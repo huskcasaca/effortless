@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import dev.huskuraft.effortless.api.platform.ContentFactory;
+import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
@@ -36,7 +37,7 @@ public final class EffortlessClientConfigManager extends ClientConfigManager {
 
     private void readConfig() {
         try {
-            var dataDir = getEntrance().getPlatform().getConfigDir().toFile();
+            var dataDir = Platform.getInstance().getConfigDir().toFile();
             if (!dataDir.exists() && !dataDir.mkdirs()) {
                 throw new IOException("Could not create data directory: " + dataDir.getAbsolutePath());
             }
@@ -60,7 +61,7 @@ public final class EffortlessClientConfigManager extends ClientConfigManager {
 
     private void writeConfig() {
         try {
-            var dataDir = getEntrance().getPlatform().getConfigDir().toFile();
+            var dataDir = Platform.getInstance().getConfigDir().toFile();
             if (!dataDir.exists() && !dataDir.mkdirs()) {
                 throw new IOException("Could not create data directory: " + dataDir.getAbsolutePath());
             }

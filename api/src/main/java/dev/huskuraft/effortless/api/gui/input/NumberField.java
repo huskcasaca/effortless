@@ -23,6 +23,7 @@ public class NumberField extends AbstractContainerWidget {
     private final NumberFormat format;
     private final int type;
     private Range range;
+
     public NumberField(Entrance entrance, int x, int y, int width, int height, int type) {
         super(entrance, x, y, width, height, Text.empty());
         this.format = new DecimalFormat();
