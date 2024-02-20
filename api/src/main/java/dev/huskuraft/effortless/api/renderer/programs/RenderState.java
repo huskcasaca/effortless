@@ -15,18 +15,31 @@ public interface RenderState extends PlatformReference {
     abstract class CompositeBuilder extends RenderLayers {
 
         public abstract CompositeBuilder setTextureState(TextureState state);
+
         public abstract CompositeBuilder setShaderState(ShaderState state);
+
         public abstract CompositeBuilder setTransparencyState(TransparencyState state);
+
         public abstract CompositeBuilder setDepthTestState(DepthTestState state);
+
         public abstract CompositeBuilder setCullState(CullState state);
+
         public abstract CompositeBuilder setLightmapState(LightmapState state);
+
         public abstract CompositeBuilder setOverlayState(OverlayState state);
+
         public abstract CompositeBuilder setLayeringState(LayeringState state);
+
         public abstract CompositeBuilder setOutputState(OutputState state);
+
         public abstract CompositeBuilder setTexturingState(TexturingState state);
+
         public abstract CompositeBuilder setWriteMaskState(WriteMaskState state);
+
         public abstract CompositeBuilder setLineState(LineState state);
+
         public abstract CompositeBuilder setColorLogicState(ColorLogicState state);
+
         public abstract CompositeRenderState create(boolean affectOutline);
 
 
@@ -156,9 +169,10 @@ public interface RenderState extends PlatformReference {
         }
 
         static TextureState create(String name, ResourceLocation location, boolean blur, boolean mipmap) {
-            return RenderStateFactory.getInstance().createTextureState(name, location  == null ? null : new Texture(location, blur, mipmap));
+            return RenderStateFactory.getInstance().createTextureState(name, location == null ? null : new Texture(location, blur, mipmap));
         }
     }
+
     interface TransparencyState extends RenderState {
 
         static TransparencyState create(String name, Type type) {
@@ -174,6 +188,7 @@ public interface RenderState extends PlatformReference {
             TRANSLUCENT,
         }
     }
+
     interface ShaderState extends RenderState {
 
         static ShaderState create(String name, Shader shader) {
@@ -181,30 +196,35 @@ public interface RenderState extends PlatformReference {
         }
 
     }
+
     interface DepthTestState extends RenderState {
 
         static DepthTestState create(String name, int function) {
             return RenderStateFactory.getInstance().createDepthTestState(name, function);
         }
     }
+
     interface CullState extends RenderState {
 
         static CullState create(String name, boolean cull) {
             return RenderStateFactory.getInstance().createCullState(name, cull);
         }
     }
+
     interface LightmapState extends RenderState {
 
         static LightmapState create(String name, boolean lightmap) {
             return RenderStateFactory.getInstance().createLightmapState(name, lightmap);
         }
     }
+
     interface OverlayState extends RenderState {
 
         static OverlayState create(String name, boolean overlay) {
             return RenderStateFactory.getInstance().createOverlayState(name, overlay);
         }
     }
+
     interface LayeringState extends RenderState {
         enum Type {
             NO,
@@ -216,6 +236,7 @@ public interface RenderState extends PlatformReference {
             return RenderStateFactory.getInstance().createLayeringState(name, type);
         }
     }
+
     interface OutputState extends RenderState {
         enum Target {
             NO,
@@ -231,6 +252,7 @@ public interface RenderState extends PlatformReference {
             return RenderStateFactory.getInstance().createOutputState(name, target);
         }
     }
+
     interface TexturingState extends RenderState {
 
         static TexturingState create(String name, Runnable setupState, Runnable clearState) {
@@ -244,18 +266,21 @@ public interface RenderState extends PlatformReference {
             return RenderStateFactory.getInstance().createOffsetTexturingState(name, offsetX, offsetY);
         }
     }
+
     interface WriteMaskState extends RenderState {
 
         static WriteMaskState create(String name, boolean writeColor, boolean writeDepth) {
             return RenderStateFactory.getInstance().createWriteMaskState(name, writeColor, writeDepth);
         }
     }
+
     interface LineState extends RenderState {
 
         static LineState create(String name, Double width) {
             return RenderStateFactory.getInstance().createLineState(name, width);
         }
     }
+
     interface ColorLogicState extends RenderState {
         enum Op {
             NO_LOGIC,

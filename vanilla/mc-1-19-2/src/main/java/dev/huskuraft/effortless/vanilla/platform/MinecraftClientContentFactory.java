@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.platform.SearchTree;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
-import dev.huskuraft.effortless.vanilla.core.MinecraftKeyBinding;
+import dev.huskuraft.effortless.vanilla.input.MinecraftKeyBinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.PlainTextSearchTree;

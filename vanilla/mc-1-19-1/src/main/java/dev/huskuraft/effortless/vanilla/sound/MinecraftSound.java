@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.vanilla.sound;
 
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.sound.Sound;
-import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 public class MinecraftSound implements Sound {

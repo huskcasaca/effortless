@@ -108,7 +108,9 @@ public abstract class RenderLayers {
     protected static final RenderState.OutputState CLOUDS_TARGET = RenderState.OutputState.create("clouds_target", RenderState.OutputState.Target.CLOUDS);
     protected static final RenderState.OutputState ITEM_ENTITY_TARGET = RenderState.OutputState.create("item_entity_target", RenderState.OutputState.Target.ITEM_ENTITY);
 
-    protected static final RenderState.TexturingState NO_TEXTURING = RenderState.TexturingState.create("none", () -> {}, () -> {});
+    protected static final RenderState.TexturingState NO_TEXTURING = RenderState.TexturingState.create("none", () -> {
+    }, () -> {
+    });
 
     protected static final RenderState.WriteMaskState COLOR_WRITE = RenderState.WriteMaskState.create("color_write", true, false);
     protected static final RenderState.WriteMaskState DEPTH_WRITE = RenderState.WriteMaskState.create("depth_write", false, true);
@@ -128,6 +130,7 @@ public abstract class RenderLayers {
     public static RenderLayer texture(ResourceLocation location, boolean blur, boolean mipmap) {
         return RenderLayer.createComposite("texture", VertexFormats.POSITION_TEX, VertexFormats.Modes.QUADS, 256, RenderState.builder().setTextureState(RenderState.TextureState.create("texture", location, blur, mipmap)).setShaderState(POSITION_TEX_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
     }
+
     public static RenderLayer colorTexture(ResourceLocation location, boolean blur, boolean mipmap) {
         return RenderLayer.createComposite("color_texture", VertexFormats.POSITION_COLOR_TEX, VertexFormats.Modes.QUADS, 256, RenderState.builder().setTextureState(RenderState.TextureState.create("color_texture", location, blur, mipmap)).setShaderState(POSITION_COLOR_TEX_SHADER_STATE).setTransparencyState(TRANSLUCENT_TRANSPARENCY).setDepthTestState(LEQUAL_DEPTH_TEST).create(false));
     }

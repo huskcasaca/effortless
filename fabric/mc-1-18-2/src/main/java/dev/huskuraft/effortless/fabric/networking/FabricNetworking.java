@@ -6,8 +6,8 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.BufferReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
-import dev.huskuraft.effortless.vanilla.core.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.networking.MinecraftBuffer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
