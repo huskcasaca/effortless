@@ -11,10 +11,14 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public interface ClientContentFactory extends ContentFactory {
 
+    static ClientContentFactory getInstance() {
+        return PlatformLoader.getSingleton();
+    }
+
     SearchTree<ItemStack> searchItemStack(SearchBy searchBy);
 
     @Deprecated
-	<T> SearchTree<T> search(List<T> list, Function<T, Stream<Text>> keyExtractor);
+    <T> SearchTree<T> search(List<T> list, Function<T, Stream<Text>> keyExtractor);
 
     KeyBinding getOptionKeyBinding(OptionKeys key);
 
@@ -22,12 +26,6 @@ public interface ClientContentFactory extends ContentFactory {
 
     default KeyBinding newKeyBinding(int code) {
         return newKeyBinding("", "", code);
-    }
-
-    ClientContentFactory INSTANCE = PlatformServiceLoader.load(ClientContentFactory.class).get();
-
-    static ClientContentFactory getInstance() {
-        return INSTANCE;
     }
 
 }

@@ -6,22 +6,17 @@ import dev.huskuraft.effortless.api.platform.PlatformReference;
 
 public interface SoundInstance extends PlatformReference {
 
-   enum Attenuation {
-       NONE,
-       LINEAR;
-   }
-
     static SoundInstance create(Sound sound,
-                                 SoundSource source,
-                                 float volume,
-                                 float pitch,
-                                 boolean looping,
-                                 int delay,
-                                 SoundInstance.Attenuation attenuation,
-                                 double x,
-                                 double y,
-                                 double z,
-                                 boolean relative) {
+                                SoundSource source,
+                                float volume,
+                                float pitch,
+                                boolean looping,
+                                int delay,
+                                SoundInstance.Attenuation attenuation,
+                                double x,
+                                double y,
+                                double z,
+                                boolean relative) {
         return SoundFactory.getInstance().createSimpleSoundInstance(sound.getId(), source, volume, pitch, looping, delay, attenuation, x, y, z, relative);
     }
 
@@ -43,6 +38,11 @@ public interface SoundInstance extends PlatformReference {
 
     static SoundInstance createBlock(Sound sound, float volume, float pitch, Vector3d location) {
         return create(sound, SoundSource.BLOCKS, volume, pitch, false, 0, SoundInstance.Attenuation.LINEAR, location.x(), location.y(), location.z(), false);
+    }
+
+    enum Attenuation {
+        NONE,
+        LINEAR;
     }
 
 }

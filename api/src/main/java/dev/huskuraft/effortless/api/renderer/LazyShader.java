@@ -7,9 +7,9 @@ import dev.huskuraft.effortless.api.events.render.RegisterShader;
 
 class LazyShader implements Shader {
 
-    private Shader reference;
     private final ResourceLocation location;
     private final VertexFormat vertexFormat;
+    private Shader reference;
 
     public LazyShader(ResourceLocation location, VertexFormat vertexFormat) {
         this.location = location;

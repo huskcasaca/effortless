@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.platform.SearchTree;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
-import dev.huskuraft.effortless.vanilla.core.MinecraftKeyBinding;
+import dev.huskuraft.effortless.vanilla.input.MinecraftKeyBinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.searchtree.SearchRegistry;
@@ -26,12 +26,12 @@ public class MinecraftClientContentFactory extends MinecraftContentFactory imple
 
     @Override
     public SearchTree<ItemStack> searchItemStack(SearchBy searchBy) {
-		var minecraftSearchTree = Minecraft.getInstance().getSearchTree(
-				switch (searchBy) {
-					case NAME -> SearchRegistry.CREATIVE_NAMES;
-					case TAG -> SearchRegistry.CREATIVE_TAGS;
-				}
-		);
+        var minecraftSearchTree = Minecraft.getInstance().getSearchTree(
+                switch (searchBy) {
+                    case NAME -> SearchRegistry.CREATIVE_NAMES;
+                    case TAG -> SearchRegistry.CREATIVE_TAGS;
+                }
+        );
         return query -> minecraftSearchTree.search(query).stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
     }
 

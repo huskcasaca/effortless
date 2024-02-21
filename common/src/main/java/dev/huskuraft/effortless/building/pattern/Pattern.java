@@ -31,6 +31,12 @@ public final class Pattern {
         this(UUID.randomUUID(), name, transformers);
     }
 
+    public static List<Pattern> getDefaultPatterns() {
+        return List.of(
+                Pattern.DEFAULT
+        );
+    }
+
     public UUID id() {
         return id;
     }
@@ -86,12 +92,6 @@ public final class Pattern {
                 "id=" + id + ", " +
                 "name=" + name + ", " +
                 "transformers=" + transformers + ']';
-    }
-
-    public static List<Pattern> getDefaultPatterns() {
-        return List.of(
-                Pattern.DEFAULT
-        );
     }
 
 

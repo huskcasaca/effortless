@@ -1,28 +1,19 @@
 package dev.huskuraft.effortless.api.platform;
 
+import dev.huskuraft.effortless.api.events.EventRegistry;
+import dev.huskuraft.effortless.api.networking.NetworkChannel;
+
 public interface Entrance {
+
+    static Entrance getInstance() {
+        return PlatformLoader.getSingleton();
+    }
 
     String getId();
 
-    default Platform getPlatform() {
-        return Platform.INSTANCE;
-    }
+    EventRegistry getEventRegistry();
 
-    static Entrance getInstance() {
-        return Instance.get();
-    }
-
-    class Instance {
-        private Instance() {
-        }
-        private static Entrance instance;
-        public static Entrance get() {
-            return Instance.instance;
-        }
-        public static void set(Entrance instance) {
-            Instance.instance = instance;
-        }
-    }
+    NetworkChannel<?> getChannel();
 
 }
 

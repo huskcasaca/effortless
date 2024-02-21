@@ -18,10 +18,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.huskuraft.effortless.fabric.FabricEffortless"
+      "dev.huskuraft.effortless.fabric.platform.FabricInitializer"
     ],
     "client": [
-      "dev.huskuraft.effortless.fabric.FabricEffortlessClient"
+      "dev.huskuraft.effortless.fabric.platform.FabricClientInitializer"
     ]
   },
   "mixins": [

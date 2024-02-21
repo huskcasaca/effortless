@@ -134,7 +134,7 @@ public class Vector4d {
      * @param w the value to add
      * @return a new vector
      */
-    public Vector4d add(double x, double y, double z, double w)  {
+    public Vector4d add(double x, double y, double z, double w) {
         return Vector4d.at(this.x + x, this.y + y, this.z + z, this.w + w);
     }
 
@@ -182,7 +182,7 @@ public class Vector4d {
      * @param w the value to subtract
      * @return a new vector
      */
-    public Vector4d sub(double x, double y, double z, double w)  {
+    public Vector4d sub(double x, double y, double z, double w) {
         return Vector4d.at(this.x - x, this.y - y, this.z - z, this.w - w);
     }
 
@@ -238,7 +238,7 @@ public class Vector4d {
      * @param w the value to multiply
      * @return a new vector
      */
-    public Vector4d mul(double x, double y, double z, double w)  {
+    public Vector4d mul(double x, double y, double z, double w) {
         return Vector4d.at(this.x * x, this.y * y, this.z * z, this.w * w);
     }
 
@@ -293,7 +293,7 @@ public class Vector4d {
      * @param w the value to divide by
      * @return a new vector
      */
-    public Vector4d div(double x, double y, double z, double w)  {
+    public Vector4d div(double x, double y, double z, double w) {
         return Vector4d.at(this.x / x, this.y / y, this.z / z, this.w / w);
     }
 

@@ -11,6 +11,51 @@ import dev.huskuraft.effortless.api.core.Player;
 
 public interface Storage {
 
+    Storage FULL = new Storage() {
+        @Override
+        public Optional<ItemStack> searchByTag(ItemStack stack) {
+            return Optional.of(stack);
+        }
+
+        @Override
+        public Optional<ItemStack> searchByItem(Item item) {
+            return Optional.of(item.getDefaultStack());
+        }
+
+        @Override
+        public boolean consume(ItemStack stack) {
+            return true;
+        }
+
+        @Override
+        public List<ItemStack> contents() {
+            return List.of();
+        }
+
+    };
+    Storage EMPTY = new Storage() {
+        @Override
+        public Optional<ItemStack> searchByTag(ItemStack stack) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<ItemStack> searchByItem(Item item) {
+            return Optional.empty();
+        }
+
+        @Override
+        public boolean consume(ItemStack stack) {
+            return false;
+        }
+
+        @Override
+        public List<ItemStack> contents() {
+            return List.of();
+        }
+
+    };
+
     static Storage create(Player player, boolean copy) {
         return new Storage() {
             private final Storage survivalStorage;
@@ -53,52 +98,6 @@ public interface Storage {
 
         };
     }
-
-    Storage FULL = new Storage() {
-        @Override
-        public Optional<ItemStack> searchByTag(ItemStack stack) {
-            return Optional.of(stack);
-        }
-
-        @Override
-        public Optional<ItemStack> searchByItem(Item item) {
-            return Optional.of(item.getDefaultStack());
-        }
-
-        @Override
-        public boolean consume(ItemStack stack) {
-            return true;
-        }
-
-        @Override
-        public List<ItemStack> contents() {
-            return List.of();
-        }
-
-    };
-
-    Storage EMPTY = new Storage() {
-        @Override
-        public Optional<ItemStack> searchByTag(ItemStack stack) {
-            return Optional.empty();
-        }
-
-        @Override
-        public Optional<ItemStack> searchByItem(Item item) {
-            return Optional.empty();
-        }
-
-        @Override
-        public boolean consume(ItemStack stack) {
-            return false;
-        }
-
-        @Override
-        public List<ItemStack> contents() {
-            return List.of();
-        }
-
-    };
 
     static Storage full() {
         return FULL;

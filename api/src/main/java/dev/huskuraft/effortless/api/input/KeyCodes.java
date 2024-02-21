@@ -205,6 +205,4 @@ public record KeyCodes(
             GAMEPAD_AXIS_LAST = new KeyCodes(GLFW.GLFW_GAMEPAD_AXIS_LAST);
 
 
-
-
 }

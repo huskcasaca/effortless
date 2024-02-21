@@ -6,6 +6,10 @@ import java.util.Optional;
 
 public interface Platform {
 
+    static Platform getInstance() {
+        return PlatformLoader.getSingleton();
+    }
+
     LoaderType getLoaderType();
 
     String getLoaderVersion();
@@ -20,14 +24,12 @@ public interface Platform {
 
     Path getGameDir();
 
-    default Path getConfigDir(){
+    default Path getConfigDir() {
         return getGameDir().resolve("config");
     }
 
     Environment getEnvironment();
 
     boolean isDevelopment();
-
-    Platform INSTANCE = PlatformServiceLoader.load(Platform.class).get();
 
 }

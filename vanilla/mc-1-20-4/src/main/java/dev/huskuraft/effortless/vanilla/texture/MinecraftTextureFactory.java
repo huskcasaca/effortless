@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.api.texture.SpriteScaling;
 import dev.huskuraft.effortless.api.texture.Texture;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
 import dev.huskuraft.effortless.api.texture.TextureSprite;
-import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftResourceLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

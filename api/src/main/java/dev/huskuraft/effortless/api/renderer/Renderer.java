@@ -27,6 +27,8 @@ import dev.huskuraft.effortless.api.texture.TextureSprite;
 
 public abstract class Renderer {
 
+    private final ScissorStack scissorStack = new ScissorStack();
+
     public int optionColor(float alpha) {
 //        return Minecraft.getInstance().options.getBackgroundColor(alpha);
         return new Color(0f, 0f, 0f, 0.95f * alpha).getRGB();
@@ -104,7 +106,6 @@ public abstract class Renderer {
         this.matrixStack().rotate(quaternion, x, y, z);
     }
 
-
     //    public final void rotate(Quaternionf quaternion, float x, float y, float z) {
 //        this.lastPose().rotateAround(quaternion, x, y, z);
 //        this.lastPoseNormal().rotate(quaternion);
@@ -117,8 +118,6 @@ public abstract class Renderer {
     protected abstract void enableScissorInternal(int x1, int y1, int x2, int y2);
 
     protected abstract void disableScissorInternal();
-
-    private final ScissorStack scissorStack = new ScissorStack();
 
     public final void enableScissor(int x1, int y1, int x2, int y2) {
         this.applyScissor(this.scissorStack.push(new ScreenRect(x1, y1, x2 - x1, y2 - y1)));
@@ -144,33 +143,6 @@ public abstract class Renderer {
             var d3 = rect.width() * scale;
             var d4 = rect.height() * scale;
             enableScissorInternal((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
-        }
-    }
-
-    private static class ScissorStack {
-
-        private final Deque<ScreenRect> stack = new ArrayDeque<>();
-
-        public ScreenRect push(ScreenRect pScissor) {
-            var rect = this.stack.peekLast();
-            if (rect != null) {
-                var rect1 = Objects.requireNonNullElse(pScissor.intersection(rect), ScreenRect.empty());
-                this.stack.addLast(rect1);
-                return rect1;
-            } else {
-                this.stack.addLast(pScissor);
-                return pScissor;
-            }
-        }
-
-        @Nullable
-        public ScreenRect pop() {
-            if (this.stack.isEmpty()) {
-                throw new IllegalStateException("Scissor stack underflow");
-            } else {
-                this.stack.removeLast();
-                return this.stack.peekLast();
-            }
         }
     }
 
@@ -214,7 +186,6 @@ public abstract class Renderer {
         buffer.vertex(pose, v1).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
         buffer.vertex(pose, v2).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
     }
-
 
     public final void renderBorder(int x, int y, int width, int height, int color) {
         this.renderRect(x, y, x + width, y + 1, color);
@@ -385,7 +356,6 @@ public abstract class Renderer {
         buffer.vertex(pose, x2, y1, blitOffset).uv(maxU, minV).endVertex();
     }
 
-
     private void renderTexture(ResourceLocation location, int x1, int x2, int y1, int y2, int blitOffset, float minU, float maxU, float minV, float maxV, float red, float green, float blue, float alpha) {
         var buffer = vertexBuffer(RenderLayers.colorTexture(location, false, false));
         var pose = lastMatrixPose();
@@ -490,5 +460,32 @@ public abstract class Renderer {
     public abstract void renderTooltip(Typeface typeface, List<Text> list, int x, int y);
 
     public abstract void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState);
+
+    private static class ScissorStack {
+
+        private final Deque<ScreenRect> stack = new ArrayDeque<>();
+
+        public ScreenRect push(ScreenRect pScissor) {
+            var rect = this.stack.peekLast();
+            if (rect != null) {
+                var rect1 = Objects.requireNonNullElse(pScissor.intersection(rect), ScreenRect.empty());
+                this.stack.addLast(rect1);
+                return rect1;
+            } else {
+                this.stack.addLast(pScissor);
+                return pScissor;
+            }
+        }
+
+        @Nullable
+        public ScreenRect pop() {
+            if (this.stack.isEmpty()) {
+                throw new IllegalStateException("Scissor stack underflow");
+            } else {
+                this.stack.removeLast();
+                return this.stack.peekLast();
+            }
+        }
+    }
 
 }

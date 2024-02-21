@@ -17,6 +17,10 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public interface TagRecord extends TagElement {
 
+    static TagRecord newRecord() {
+        return ContentFactory.getInstance().newTagRecord();
+    }
+
     String getString(String key);
 
     void putString(String key, String value);
@@ -193,10 +197,6 @@ public interface TagRecord extends TagElement {
         putList(key, List.of(value.x(), value.y()), (tag1, value1) -> {
             tag1.asPrimitive().putInt(value1);
         });
-    }
-
-    static TagRecord newRecord() {
-        return ContentFactory.getInstance().newTagRecord();
     }
 
 }

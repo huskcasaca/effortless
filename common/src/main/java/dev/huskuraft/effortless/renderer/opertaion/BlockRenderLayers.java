@@ -12,23 +12,6 @@ import dev.huskuraft.effortless.renderer.BlockShaders;
 
 public abstract class BlockRenderLayers extends RenderLayers {
 
-    protected static final Map<String, RenderLayer> BLOCK_RENDER_TYPES = new HashMap<>();
-
-    protected static final RenderState.ShaderState TINTED_SOLID_SHADER = RenderState.ShaderState.create("tinted_solid_shader", BlockShaders.TINTED_OUTLINE);
-
-    protected static final RenderLayer EF_LINES = RenderLayer.createComposite("ef_lines",
-            VertexFormats.POSITION_COLOR_NORMAL,
-            VertexFormats.Modes.DEBUG_LINES,
-            256,
-            RenderState.builder()
-                    .setLineState(RenderLayers.NO_WIDTH)
-                    .setShaderState(RenderLayers.LINES_SHADER_STATE)
-                    .setLayeringState(RenderLayers.VIEW_OFFSET_Z_LAYERING)
-                    .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
-                    .setOutputState(RenderLayers.ITEM_ENTITY_TARGET)
-                    .setWriteMaskState(RenderLayers.COLOR_DEPTH_WRITE)
-                    .setCullState(RenderLayers.NO_CULL)
-                    .create(false));
     // TODO: 16/1/24 use func
     public static final RenderLayer EF_PLANES = RenderLayer.createComposite("ef_planes",
             VertexFormats.POSITION_COLOR,
@@ -40,6 +23,21 @@ public abstract class BlockRenderLayers extends RenderLayers {
                     .setLayeringState(RenderLayers.VIEW_OFFSET_Z_LAYERING)
                     .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
                     .setWriteMaskState(RenderLayers.COLOR_WRITE)
+                    .setCullState(RenderLayers.NO_CULL)
+                    .create(false));
+    protected static final Map<String, RenderLayer> BLOCK_RENDER_TYPES = new HashMap<>();
+    protected static final RenderState.ShaderState TINTED_SOLID_SHADER = RenderState.ShaderState.create("tinted_solid_shader", BlockShaders.TINTED_OUTLINE);
+    protected static final RenderLayer EF_LINES = RenderLayer.createComposite("ef_lines",
+            VertexFormats.POSITION_COLOR_NORMAL,
+            VertexFormats.Modes.DEBUG_LINES,
+            256,
+            RenderState.builder()
+                    .setLineState(RenderLayers.NO_WIDTH)
+                    .setShaderState(RenderLayers.LINES_SHADER_STATE)
+                    .setLayeringState(RenderLayers.VIEW_OFFSET_Z_LAYERING)
+                    .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
+                    .setOutputState(RenderLayers.ITEM_ENTITY_TARGET)
+                    .setWriteMaskState(RenderLayers.COLOR_DEPTH_WRITE)
                     .setCullState(RenderLayers.NO_CULL)
                     .create(false));
 

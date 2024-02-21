@@ -68,5 +68,5 @@ public interface Uniform extends PlatformReference {
                 matrix.m10(), matrix.m11(), matrix.m12(),
                 matrix.m20(), matrix.m21(), matrix.m22());
     }
-    
+
 }

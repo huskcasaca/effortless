@@ -21,12 +21,15 @@ public class BoundingBox3d {
         this.maxY = MathUtils.max(y0, y1);
         this.maxZ = MathUtils.max(z0, z1);
     }
+
     public BoundingBox3d(Vector3i vector) {
         this(vector.x(), vector.y(), vector.z(), vector.x() + 1, vector.y() + 1, vector.z() + 1);
     }
+
     public BoundingBox3d(Vector3i start, Vector3i end) {
         this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
     }
+
     public BoundingBox3d(Vector3d start, Vector3d end) {
         this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
     }

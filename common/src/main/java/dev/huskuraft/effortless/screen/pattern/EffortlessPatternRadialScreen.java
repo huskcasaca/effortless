@@ -33,11 +33,6 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
         this.assignedKey = assignedKey;
     }
 
-    @Override
-    protected EffortlessClient getEntrance() {
-        return (EffortlessClient) super.getEntrance();
-    }
-
     public static Slot<Pattern> slot(Pattern pattern) {
 
         if (pattern == Pattern.DISABLED) return slot(
@@ -58,6 +53,11 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
                 ResourceLocation.of(Effortless.MOD_ID, "textures/mode/sphere.png"),
                 new Color(0.25f, 0.25f, 0.25f, 0.5f),
                 pattern);
+    }
+
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
     }
 
     public Key getAssignedKey() {

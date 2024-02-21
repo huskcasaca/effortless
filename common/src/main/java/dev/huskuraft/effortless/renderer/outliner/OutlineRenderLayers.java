@@ -34,6 +34,36 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                     .setLightmapState(RenderLayers.LIGHTMAP)
                     .setOverlayState(RenderLayers.OVERLAY)
                     .create(true));
+    protected static final RenderLayer OUTLINE_SOLID_OVERLAP = RenderLayer.createComposite("outline_solid_overlap",
+            VertexFormats.NEW_ENTITY,
+            VertexFormats.Modes.QUADS,
+            256,
+            false,
+            false,
+            RenderState.builder()
+                    .setShaderState(RenderLayers.ENTITY_SOLID_SHADER_STATE)
+                    .setTransparencyState(RenderLayers.NO_TRANSPARENCY)
+                    .setDepthTestState(RenderLayers.NOTEQUAL_DEPTH_TEST)
+                    .setTextureState(BLANK_TEXTURE_STATE)
+                    .setCullState(RenderLayers.CULL)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setOverlayState(RenderLayers.OVERLAY)
+                    .create(true));
+    protected static final RenderLayer OUTLINE_SOLID_NO_OVERLAP = RenderLayer.createComposite("outline_solid_overlap",
+            VertexFormats.NEW_ENTITY,
+            VertexFormats.Modes.QUADS,
+            256,
+            false,
+            false,
+            RenderState.builder()
+                    .setShaderState(RenderLayers.ENTITY_SOLID_SHADER_STATE)
+                    .setTransparencyState(RenderLayers.NO_TRANSPARENCY)
+                    .setDepthTestState(RenderLayers.NEVER_DEPTH_TEST)
+                    .setTextureState(BLANK_TEXTURE_STATE)
+                    .setCullState(RenderLayers.CULL)
+                    .setLightmapState(RenderLayers.LIGHTMAP)
+                    .setOverlayState(RenderLayers.OVERLAY)
+                    .create(true));
     protected static final RenderLayer GLOWING_SOLID_DEFAULT = glowingSolid(RenderLayers.BLOCK_ATLAS_LOCATION);
     protected static final RenderLayer ADDITIVE = RenderLayer.createComposite("additive",
             VertexFormats.BLOCK,
@@ -84,48 +114,15 @@ public abstract class OutlineRenderLayers extends RenderLayers {
                     .setLightmapState(RenderLayers.LIGHTMAP)
                     .setOverlayState(RenderLayers.OVERLAY)
                     .create(true));
+    protected static final Map<String, RenderLayer> OUTLINE_TRANSLUCENT = new HashMap<>();
 
     public static RenderLayer outlineSolid() {
         return OUTLINE_SOLID;
     }
 
-    protected static final RenderLayer OUTLINE_SOLID_OVERLAP = RenderLayer.createComposite("outline_solid_overlap",
-            VertexFormats.NEW_ENTITY,
-            VertexFormats.Modes.QUADS,
-            256,
-            false,
-            false,
-            RenderState.builder()
-                    .setShaderState(RenderLayers.ENTITY_SOLID_SHADER_STATE)
-                    .setTransparencyState(RenderLayers.NO_TRANSPARENCY)
-                    .setDepthTestState(RenderLayers.NOTEQUAL_DEPTH_TEST)
-                    .setTextureState(BLANK_TEXTURE_STATE)
-                    .setCullState(RenderLayers.CULL)
-                    .setLightmapState(RenderLayers.LIGHTMAP)
-                    .setOverlayState(RenderLayers.OVERLAY)
-                    .create(true));
-
-    protected static final RenderLayer OUTLINE_SOLID_NO_OVERLAP = RenderLayer.createComposite("outline_solid_overlap",
-            VertexFormats.NEW_ENTITY,
-            VertexFormats.Modes.QUADS,
-            256,
-            false,
-            false,
-            RenderState.builder()
-                    .setShaderState(RenderLayers.ENTITY_SOLID_SHADER_STATE)
-                    .setTransparencyState(RenderLayers.NO_TRANSPARENCY)
-                    .setDepthTestState(RenderLayers.NEVER_DEPTH_TEST)
-                    .setTextureState(BLANK_TEXTURE_STATE)
-                    .setCullState(RenderLayers.CULL)
-                    .setLightmapState(RenderLayers.LIGHTMAP)
-                    .setOverlayState(RenderLayers.OVERLAY)
-                    .create(true));
-
     public static RenderLayer outlineSolid(boolean overlap) {
         return overlap ? OUTLINE_SOLID_OVERLAP : OUTLINE_SOLID_NO_OVERLAP;
     }
-
-    protected static final Map<String, RenderLayer> OUTLINE_TRANSLUCENT = new HashMap<>();
 
     public static RenderLayer outlineTranslucent(ResourceLocation texture, boolean cull) {
         return OUTLINE_TRANSLUCENT.computeIfAbsent("outline_translucent" + (cull ? "_cull" : "") + "_" + texture.getNamespace() + "_" + texture.getPath(), name -> {

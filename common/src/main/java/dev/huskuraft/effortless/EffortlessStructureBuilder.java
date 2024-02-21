@@ -178,7 +178,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     private void onPlayerLoggedIn(Player player) {
-        getEntrance().getChannel().sendPacket(new SessionStartPacket(new Session(Platform.INSTANCE)), player);
+        getEntrance().getChannel().sendPacket(new SessionStartPacket(new Session(Platform.getInstance())), player);
     }
 
     private void onPlayerLoggedOut(Player player) {

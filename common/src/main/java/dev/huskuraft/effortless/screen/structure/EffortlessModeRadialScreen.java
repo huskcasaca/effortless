@@ -28,11 +28,6 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
         this.assignedKey = assignedKey;
     }
 
-    @Override
-    protected EffortlessClient getEntrance() {
-        return (EffortlessClient) super.getEntrance();
-    }
-
     public static Slot<BuildMode> slot(BuildMode mode) {
         return slot(
                 mode,
@@ -40,6 +35,11 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
                 mode.getIcon(),
                 mode.getTintColor(),
                 mode);
+    }
+
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
     }
 
     public Key getAssignedKey() {

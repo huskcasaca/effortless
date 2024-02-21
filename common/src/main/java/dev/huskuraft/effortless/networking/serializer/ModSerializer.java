@@ -8,17 +8,18 @@ public class ModSerializer implements BufferSerializer<Mod> {
 
     @Override
     public Mod read(Buffer buffer) {
-        return Mod.create(buffer.readString(),
-                buffer.readString(),
-                buffer.readString(),
-                buffer.readString());
+        return Mod.create(
+                buffer.readNullable(Buffer::readString),
+                buffer.readNullable(Buffer::readString),
+                buffer.readNullable(Buffer::readString),
+                buffer.readNullable(Buffer::readString));
     }
 
     @Override
     public void write(Buffer buffer, Mod mod) {
-        buffer.writeString(mod.getId());
-        buffer.writeString(mod.getVersionStr());
-        buffer.writeString(mod.getDescription());
-        buffer.writeString(mod.getName());
+        buffer.writeNullable(mod.getId(), Buffer::writeString);
+        buffer.writeNullable(mod.getVersionStr(), Buffer::writeString);
+        buffer.writeNullable(mod.getDescription(), Buffer::writeString);
+        buffer.writeNullable(mod.getName(), Buffer::writeString);
     }
 }

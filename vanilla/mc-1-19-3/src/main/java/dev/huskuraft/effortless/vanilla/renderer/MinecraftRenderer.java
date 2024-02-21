@@ -17,8 +17,8 @@ import dev.huskuraft.effortless.api.renderer.MatrixStack;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.vanilla.core.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
@@ -41,7 +41,9 @@ public class MinecraftRenderer extends Renderer {
         this.minecraftClient = Minecraft.getInstance();
         this.minecraftMatrixStack = minecraftMatrixStack;
         this.minecraftBufferSource = minecraftClient.renderBuffers().bufferSource();
-        this.minecraftRendererProvider = new Screen(Component.empty()) {{init(Minecraft.getInstance(), 0, 0);}};
+        this.minecraftRendererProvider = new Screen(Component.empty()) {{
+            init(Minecraft.getInstance(), 0, 0);
+        }};
     }
 
     @Override

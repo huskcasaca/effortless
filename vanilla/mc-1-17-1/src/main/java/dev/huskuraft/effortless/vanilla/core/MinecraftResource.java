@@ -5,6 +5,7 @@ import java.io.IOException;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.ResourceMetadata;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftResourceLocation;
 
 public class MinecraftResource implements Resource {
 

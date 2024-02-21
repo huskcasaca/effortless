@@ -10,20 +10,20 @@ import net.minecraft.server.packs.resources.ResourceProvider;
 
 public class ClientShadersEvents {
 
-	public static final Event<Register> REGISTER = EventFactory.createArrayBacked(Register.class, callbacks -> (provider, sink) -> {
-		for (var callback : callbacks) {
-			callback.onRegisterShader(provider, sink);
-		}
-	});
+    public static final Event<Register> REGISTER = EventFactory.createArrayBacked(Register.class, callbacks -> (provider, sink) -> {
+        for (var callback : callbacks) {
+            callback.onRegisterShader(provider, sink);
+        }
+    });
 
-	@FunctionalInterface
-	public interface Register {
-		void onRegisterShader(ResourceProvider provider, ShadersSink sink) throws IOException;
+    @FunctionalInterface
+    public interface Register {
+        void onRegisterShader(ResourceProvider provider, ShadersSink sink) throws IOException;
 
-		@FunctionalInterface
-		interface ShadersSink {
-			void register(ShaderInstance shader, Consumer<ShaderInstance> callback);
-		}
-	}
+        @FunctionalInterface
+        interface ShadersSink {
+            void register(ShaderInstance shader, Consumer<ShaderInstance> callback);
+        }
+    }
 
 }
