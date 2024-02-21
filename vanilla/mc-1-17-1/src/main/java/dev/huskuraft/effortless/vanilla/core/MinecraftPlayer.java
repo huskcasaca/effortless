@@ -27,9 +27,14 @@ public class MinecraftPlayer implements Player {
 
     protected final net.minecraft.world.entity.player.Player reference;
 
-    public MinecraftPlayer(net.minecraft.world.entity.player.Player reference) {
+    MinecraftPlayer(net.minecraft.world.entity.player.Player reference) {
         this.reference = reference;
     }
+
+    public static Player ofNullable(net.minecraft.world.entity.player.Player reference) {
+        return reference == null ? null : new MinecraftPlayer(reference);
+    }
+
 
     @Override
     public net.minecraft.world.entity.player.Player referenceValue() {
@@ -48,7 +53,7 @@ public class MinecraftPlayer implements Player {
 
     @Override
     public World getWorld() {
-        return new MinecraftWorld(reference.level);
+        return MinecraftWorld.ofNullable(reference.level);
     }
 
     @Override

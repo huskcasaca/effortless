@@ -21,7 +21,7 @@ public class MinecraftServer implements Server {
 
     @Override
     public List<Player> getPlayers() {
-        return reference.getPlayerList().getPlayers().stream().map(player -> new MinecraftPlayer(player)).collect(Collectors.toList());
+        return reference.getPlayerList().getPlayers().stream().map(MinecraftPlayer::ofNullable).collect(Collectors.toList());
     }
 
     @Override

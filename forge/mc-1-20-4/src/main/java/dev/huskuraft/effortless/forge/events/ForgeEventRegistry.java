@@ -34,22 +34,22 @@ public class ForgeEventRegistry extends EventRegistry {
 
     @SubscribeEvent
     public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(new MinecraftPlayer(event.getEntity()), new MinecraftWorld(event.getEntity().getServer().getLevel(event.getFrom())), new MinecraftWorld(event.getEntity().getServer().getLevel(event.getTo())));
+        getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(MinecraftPlayer.ofNullable(event.getEntity()), MinecraftWorld.ofNullable(event.getEntity().getServer().getLevel(event.getFrom())), MinecraftWorld.ofNullable(event.getEntity().getServer().getLevel(event.getTo())));
     }
 
     @SubscribeEvent
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        getPlayerRespawnEvent().invoker().onPlayerRespawn(new MinecraftPlayer(event.getEntity()), new MinecraftPlayer(event.getEntity()), event.isEndConquered());
+        getPlayerRespawnEvent().invoker().onPlayerRespawn(MinecraftPlayer.ofNullable(event.getEntity()), MinecraftPlayer.ofNullable(event.getEntity()), event.isEndConquered());
     }
 
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        getPlayerLoggedInEvent().invoker().onPlayerLoggedIn(new MinecraftPlayer(event.getEntity()));
+        getPlayerLoggedInEvent().invoker().onPlayerLoggedIn(MinecraftPlayer.ofNullable(event.getEntity()));
     }
 
     @SubscribeEvent
     public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        getPlayerLoggedOutEvent().invoker().onPlayerLoggedOut(new MinecraftPlayer(event.getEntity()));
+        getPlayerLoggedOutEvent().invoker().onPlayerLoggedOut(MinecraftPlayer.ofNullable(event.getEntity()));
     }
 
     @SubscribeEvent
