@@ -2,6 +2,15 @@
 
 ----------
 
+### 2.2.0
+
+* Reset build on ESC ([#70](https://github.com/huskcasaca/effortless/pull/70)
+* Add block placing/breaking on client side only ([#71](https://github.com/huskcasaca/effortless/pull/71)
+* Use ServiceLoader ([#73](https://github.com/huskcasaca/effortless/pull/73)
+* Fix Player/World NPE ([#74](https://github.com/huskcasaca/effortless/pull/74)
+
+----------
+
 ### 2.1.0
 
 * Optimize Minecraft port ([#64](https://github.com/huskcasaca/effortless/pull/64))
