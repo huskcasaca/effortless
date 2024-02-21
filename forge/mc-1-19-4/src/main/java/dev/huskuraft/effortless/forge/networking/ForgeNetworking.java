@@ -31,31 +31,53 @@ public class ForgeNetworking implements Networking {
 
     @Override
     public void registerClientReceiver(BufferReceiver receiver) {
-        CHANNEL.addListener(event1 -> {
-            if (event1.getPayload() != null && event1.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
-                receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(Minecraft.getInstance().player));
-            }
-        });
+        ClientNetworking.registerReceiver(receiver);
     }
 
     @Override
-    public void registerServerReceiver(BufferReceiver channel) {
-        CHANNEL.addListener(event1 -> {
-            if (event1.getPayload() != null && event1.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
-                channel.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(event1.getSource().get().getSender()));
-            }
-        });
+    public void registerServerReceiver(BufferReceiver receiver) {
+        ServerNetworking.registerReceiver(receiver);
     }
 
     @Override
     public void sendToClient(Buffer buffer, Player player) {
-        var minecraftPacket = NetworkDirection.PLAY_TO_CLIENT.buildPacket(Pair.of(buffer.reference(), -1), Networking.getChannelId().reference()).getThis();
-        ((ServerPlayer) player.reference()).connection.send(minecraftPacket);
+        ServerNetworking.send(buffer, player);
     }
 
+    @Override
     public void sendToServer(Buffer buffer, Player player) {
-        var minecraftPacket = NetworkDirection.PLAY_TO_SERVER.buildPacket(Pair.of(buffer.reference(), -1), Networking.getChannelId().reference()).getThis();
-        Minecraft.getInstance().getConnection().send(minecraftPacket);
+        ClientNetworking.send(buffer, player);
+    }
+
+    static class ClientNetworking {
+        public static void registerReceiver(BufferReceiver receiver) {
+            CHANNEL.addListener(event1 -> {
+                if (event1.getPayload() != null && event1.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
+                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(Minecraft.getInstance().player));
+                }
+            });
+
+        }
+
+        public static void send(Buffer buffer, Player player) {
+            var minecraftPacket = NetworkDirection.PLAY_TO_SERVER.buildPacket(Pair.of(buffer.reference(), -1), Networking.getChannelId().reference()).getThis();
+            Minecraft.getInstance().getConnection().send(minecraftPacket);
+        }
+    }
+
+    static class ServerNetworking {
+        public static void registerReceiver(BufferReceiver receiver) {
+            CHANNEL.addListener(event1 -> {
+                if (event1.getPayload() != null && event1.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
+                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(event1.getSource().get().getSender()));
+                }
+            });
+        }
+
+        public static void send(Buffer buffer, Player player) {
+            var minecraftPacket = NetworkDirection.PLAY_TO_CLIENT.buildPacket(Pair.of(buffer.reference(), -1), Networking.getChannelId().reference()).getThis();
+            ((ServerPlayer) player.reference()).connection.send(minecraftPacket);
+        }
     }
 
 }

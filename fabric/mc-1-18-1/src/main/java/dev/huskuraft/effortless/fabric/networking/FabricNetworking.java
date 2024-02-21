@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.fabric.networking;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.BufferReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
@@ -16,25 +17,45 @@ public class FabricNetworking implements Networking {
 
     @Override
     public void registerClientReceiver(BufferReceiver receiver) {
-        ClientPlayNetworking.registerGlobalReceiver(Networking.getChannelId().reference(), (client, handler, buf, responseSender) -> {
-            receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(client.player));
-        });
+        ClientNetworking.registerReceiver(receiver, Networking.getChannelId());
     }
 
     @Override
-    public void registerServerReceiver(BufferReceiver channel) {
-        ServerPlayNetworking.registerGlobalReceiver(Networking.getChannelId().reference(), (server, player, handler, buf, responseSender) -> {
-            channel.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(player));
-        });
+    public void registerServerReceiver(BufferReceiver receiver) {
+        ServerNetworking.registerReceiver(receiver, Networking.getChannelId());
     }
 
     @Override
     public void sendToClient(Buffer buffer, Player player) {
-        ServerPlayNetworking.send(player.reference(), Networking.getChannelId().reference(), buffer.reference());
+        ServerNetworking.send(buffer, player, Networking.getChannelId());
     }
 
     public void sendToServer(Buffer buffer, Player player) {
-        ClientPlayNetworking.send(Networking.getChannelId().reference(), buffer.reference());
+        ClientNetworking.send(buffer, Networking.getChannelId());
+    }
+
+    static class ClientNetworking {
+
+        private static void registerReceiver(BufferReceiver receiver, ResourceLocation channelId) {
+            ClientPlayNetworking.registerGlobalReceiver(channelId.reference(), (client, handler, buf, responseSender) -> receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(client.player)));
+        }
+
+        private static void send(Buffer buffer, ResourceLocation channelId) {
+            ClientPlayNetworking.send(channelId.reference(), buffer.reference());
+        }
+
+    }
+
+    static class ServerNetworking {
+
+        private static void registerReceiver(BufferReceiver receiver, ResourceLocation channelId) {
+            ServerPlayNetworking.registerGlobalReceiver(channelId.reference(), (server, player, handler, buf, responseSender) -> receiver.receiveBuffer(new MinecraftBuffer(buf), new MinecraftPlayer(player)));
+        }
+
+        private static void send(Buffer buffer, Player player, ResourceLocation channelId) {
+            ServerPlayNetworking.send(player.reference(), channelId.reference(), buffer.reference());
+        }
+
     }
 
 }

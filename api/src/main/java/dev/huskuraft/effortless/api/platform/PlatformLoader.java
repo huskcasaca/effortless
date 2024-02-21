@@ -121,6 +121,7 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
             try {
                 return create();
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new ServiceConfigurationError(e.getMessage());
             }
         }
