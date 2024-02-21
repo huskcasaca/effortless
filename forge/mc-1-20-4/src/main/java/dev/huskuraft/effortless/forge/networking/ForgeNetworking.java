@@ -55,7 +55,7 @@ public class ForgeNetworking implements Networking {
         public static void registerReceiver(BufferReceiver receiver) {
             CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
-                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(Minecraft.getInstance().player));
+                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
                 }
             });
 
@@ -71,7 +71,7 @@ public class ForgeNetworking implements Networking {
         public static void registerReceiver(BufferReceiver receiver) {
             CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
-                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), new MinecraftPlayer(event1.getSource().getSender()));
+                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), MinecraftPlayer.ofNullable(event1.getSource().getSender()));
                 }
             });
         }

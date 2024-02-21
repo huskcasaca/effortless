@@ -80,14 +80,19 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
         @Override
         public void handle(PlayerBuildPreviewPacket packet, Player player) {
 
+            if (getEntrance().getClient() == null) {
+                return;
+            }
+
             if (getEntrance().getClient().getWorld() == null) {
                 return;
             }
-            var player1 = getEntrance().getClient().getWorld().getPlayer(packet.playerId());
-            if (player1 == null) {
+
+            var owner = getEntrance().getClient().getWorld().getPlayer(packet.playerId());
+            if (owner == null) {
                 return;
             }
-            getEntrance().getStructureBuilder().onContextReceived(player1, packet.context());
+            getEntrance().getStructureBuilder().onContextReceived(owner, packet.context());
         }
 
         @Override

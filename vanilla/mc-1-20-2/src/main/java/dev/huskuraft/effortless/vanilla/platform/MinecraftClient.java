@@ -73,10 +73,7 @@ public class MinecraftClient implements Client {
 
     @Override
     public Player getPlayer() {
-        if (reference.player == null) {
-            return null;
-        }
-        return new MinecraftPlayer(reference.player);
+        return MinecraftPlayer.ofNullable(reference.player);
     }
 
     @Override
@@ -86,7 +83,7 @@ public class MinecraftClient implements Client {
 
     @Override
     public World getWorld() {
-        return new MinecraftWorld(reference.level);
+        return MinecraftWorld.ofNullable(reference.level);
     }
 
     @Override

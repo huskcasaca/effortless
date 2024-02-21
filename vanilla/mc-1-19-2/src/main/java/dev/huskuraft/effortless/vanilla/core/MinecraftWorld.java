@@ -12,8 +12,12 @@ public class MinecraftWorld implements World {
 
     private final Level reference;
 
-    public MinecraftWorld(Level reference) {
+    MinecraftWorld(Level reference) {
         this.reference = reference;
+    }
+
+    public static World ofNullable(Level reference) {
+        return reference == null ? null : MinecraftWorld.ofNullable(reference);
     }
 
     @Override
@@ -23,7 +27,7 @@ public class MinecraftWorld implements World {
 
     @Override
     public Player getPlayer(UUID uuid) {
-        return new MinecraftPlayer(reference.getPlayerByUUID(uuid));
+        return MinecraftPlayer.ofNullable(reference.getPlayerByUUID(uuid));
     }
 
     @Override

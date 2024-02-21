@@ -19,16 +19,16 @@ public class FabricEventRegistry extends EventRegistry {
         });
 
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
-            getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(new MinecraftPlayer(player), new MinecraftWorld(origin), new MinecraftWorld(destination));
+            getPlayerChangeWorldEvent().invoker().onPlayerChangeWorld(MinecraftPlayer.ofNullable(player), MinecraftWorld.ofNullable(origin), MinecraftWorld.ofNullable(destination));
         });
         ServerPlayerEvents.LOGGED_IN.register(player -> {
-            getPlayerLoggedInEvent().invoker().onPlayerLoggedIn(new MinecraftPlayer(player));
+            getPlayerLoggedInEvent().invoker().onPlayerLoggedIn(MinecraftPlayer.ofNullable(player));
         });
         ServerPlayerEvents.LOGGED_OUT.register(player -> {
-            getPlayerLoggedOutEvent().invoker().onPlayerLoggedOut(new MinecraftPlayer(player));
+            getPlayerLoggedOutEvent().invoker().onPlayerLoggedOut(MinecraftPlayer.ofNullable(player));
         });
         ServerPlayerEvents.RESPAWN.register((oldPlayer, newPlayer, alive) -> {
-            getPlayerRespawnEvent().invoker().onPlayerRespawn(new MinecraftPlayer(oldPlayer), new MinecraftPlayer(newPlayer), alive);
+            getPlayerRespawnEvent().invoker().onPlayerRespawn(MinecraftPlayer.ofNullable(oldPlayer), MinecraftPlayer.ofNullable(newPlayer), alive);
         });
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             getServerStartingEvent().invoker().onServerStarting(new MinecraftServer(server));
