@@ -6,7 +6,6 @@
 players to create structures and designs with ease. Additionally, it includes an randomizer that randomly selects items
 from a pre-defined list for random placement.
 
-
 <div style="text-align: center">
     <a href="https://modrinth.com/mod/effortless">Modrinth</a>
     <span> | </span>
@@ -16,7 +15,7 @@ from a pre-defined list for random placement.
     <span> | </span>
     <a href="https://github.com/huskcasaca/effortless/wiki">Documentation</a>
     <span> | </span>
-    <a href="https://discord.com/invite">Discord</a>
+    <a href="https://discord.gg/3xAEjUek">Discord</a>
 </div>
 
 ## Platforms
@@ -25,76 +24,78 @@ Please note that currently, this mod needs to be installed on both the client si
 
 ### Server + Client
 
-| Minecraft                | Vanilla | Fabric | Forge |
-|--------------------------|---------|--------|-------|
-| 1.20.4 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.20.3 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.20.2 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.20.1 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.20 (Server + Client)   | ✅       | ✅      | ✅     |
-| 1.19.4 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.19.3 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.19.2 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.19.1 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.19 (Server + Client)   | ✅       | ✅      | ✅     |
-| 1.18.2 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.18.1 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.18 (Server + Client)   | ✅       | ✅      | ✅     |
-| 1.17.1 (Server + Client) | ✅       | ✅      | ✅     |
-| 1.17 (Server + Client)   | ❌       | ❌      | ❌     |
+| Minecraft                | Fabric | Forge |
+| ------------------------ | ------ | ----- |
+| 1.20.4 (Server + Client) | ✅     | ✅    |
+| 1.20.3 (Server + Client) | ✅     | ✅    |
+| 1.20.2 (Server + Client) | ✅     | ✅    |
+| 1.20.1 (Server + Client) | ✅     | ✅    |
+| 1.20 (Server + Client)   | ✅     | ✅    |
+| 1.19.4 (Server + Client) | ✅     | ✅    |
+| 1.19.3 (Server + Client) | ✅     | ✅    |
+| 1.19.2 (Server + Client) | ✅     | ✅    |
+| 1.19.1 (Server + Client) | ✅     | ✅    |
+| 1.19 (Server + Client)   | ✅     | ✅    |
+| 1.18.2 (Server + Client) | ✅     | ✅    |
+| 1.18.1 (Server + Client) | ✅     | ✅    |
+| 1.18 (Server + Client)   | ✅     | ✅    |
+| 1.17.1 (Server + Client) | ✅     | ✅    |
+| 1.17 (Server + Client)   | ❌     | ❌    |
 
 ### Server Only
 
-| Minecraft            | Vanilla | Fabric | Forge | Sponge | CLI |
-|----------------------|---------|--------|-------|--------|-----|
-| 1.20.4 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.20.3 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.20.2 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.20.1 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.20 (Server Only)   | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.19.4 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.19.3 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.19.2 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.19.1 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.19 (Server Only)   | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.18.2 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.18.1 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.18 (Server Only)   | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.17.1 (Server Only) | ❌       | ❌      | ❌     | ❌      | ❌   |
-| 1.17 (Server Only)   | ❌       | ❌      | ❌     | ❌      | ❌   |
+| Minecraft            | Fabric | Forge | Sponge | CLI |
+|----------------------|--------|-------|--------|-----|
+| 1.20.4 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.20.3 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.20.2 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.20.1 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.20 (Server Only)   | ❌      | ❌     | ❌      | ❌   |
+| 1.19.4 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.19.3 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.19.2 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.19.1 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.19 (Server Only)   | ❌      | ❌     | ❌      | ❌   |
+| 1.18.2 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.18.1 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.18 (Server Only)   | ❌      | ❌     | ❌      | ❌   |
+| 1.17.1 (Server Only) | ❌      | ❌     | ❌      | ❌   |
+| 1.17 (Server Only)   | ❌      | ❌     | ❌      | ❌   |
 
-### Client Only
+### Client Only (Commands)
 
-| Minecraft            | Vanilla | Fabric | Forge | CLI |
-|----------------------|---------|--------|-------|-----|
-| 1.20.4 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.20.3 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.20.2 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.20.1 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.20 (Client Only)   | ❌       | ❌      | ❌     | ❌   |
-| 1.19.4 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.19.3 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.19.2 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.19.1 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.19 (Client Only)   | ❌       | ❌      | ❌     | ❌   |
-| 1.18.2 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.18.1 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.18 (Client Only)   | ❌       | ❌      | ❌     | ❌   |
-| 1.17.1 (Client Only) | ❌       | ❌      | ❌     | ❌   |
-| 1.17 (Client Only)   | ❌       | ❌      | ❌     | ❌   |
+| Minecraft            | Fabric | Forge | CLI |
+| -------------------- | ------ | ----- | --- |
+| 1.20.4 (Client Only) | ✅     | ✅    | ✅  |
+| 1.20.3 (Client Only) | ✅     | ✅    | ✅  |
+| 1.20.2 (Client Only) | ✅     | ✅    | ✅  |
+| 1.20.1 (Client Only) | ✅     | ✅    | ✅  |
+| 1.20 (Client Only)   | ✅     | ✅    | ✅  |
+| 1.19.4 (Client Only) | ✅     | ✅    | ✅  |
+| 1.19.3 (Client Only) | ✅     | ✅    | ✅  |
+| 1.19.2 (Client Only) | ✅     | ✅    | ✅  |
+| 1.19.1 (Client Only) | ✅     | ✅    | ✅  |
+| 1.19 (Client Only)   | ✅     | ✅    | ✅  |
+| 1.18.2 (Client Only) | ✅     | ✅    | ✅  |
+| 1.18.1 (Client Only) | ✅     | ✅    | ✅  |
+| 1.18 (Client Only)   | ✅     | ✅    | ✅  |
+| 1.17.1 (Client Only) | ✅     | ✅    | ✅  |
+| 1.17 (Client Only)   | ❌     | ❌    | ❌  |
 
 ## Dependencies
 
 ## Forge
 
+
 | Dependency   | Download                          |
-|--------------|-----------------------------------|
+| ------------ | --------------------------------- |
 | Forge Loader | https://files.minecraftforge.net/ |
 
 ## Fabric
 
+
 | Dependency    | Download                                                      |
-|---------------|---------------------------------------------------------------|
+| ------------- | ------------------------------------------------------------- |
 | Fabric Loader | https://fabricmc.net/use/installer/                           |
 | Fabric API    | https://www.curseforge.com/minecraft/mc-mods/fabric-api/files |
 
