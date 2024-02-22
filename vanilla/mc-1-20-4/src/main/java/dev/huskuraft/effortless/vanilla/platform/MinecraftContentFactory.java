@@ -97,6 +97,11 @@ public class MinecraftContentFactory implements ContentFactory {
     }
 
     @Override
+    public Text newTranslatableText(String text, Object... args) {
+        return new MinecraftText(Component.translatable(text, args));
+    }
+
+    @Override
     public TagIoReader getTagIoReader() {
         return input -> new MinecraftTagRecord(NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap()));
     }

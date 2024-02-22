@@ -49,6 +49,8 @@ public interface ContentFactory {
 
     Text newTranslatableText(String text, Text... args);
 
+    Text newTranslatableText(String text, Object... args);
+
     TagIoReader getTagIoReader();
 
     TagIoWriter getTagIoWriter();
