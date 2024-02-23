@@ -19,6 +19,7 @@ import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItem;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
+import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
 import dev.huskuraft.effortless.vanilla.core.MinecraftText;
 import dev.huskuraft.effortless.vanilla.networking.MinecraftBuffer;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSound;

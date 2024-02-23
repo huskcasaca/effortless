@@ -47,6 +47,11 @@ public class MinecraftPlayer implements Player {
     }
 
     @Override
+    public boolean isDeadOrDying() {
+        return reference.isDeadOrDying();
+    }
+
+    @Override
     public Server getServer() {
         return new MinecraftServer(reference.getServer());
     }

@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless;
 
+import java.util.logging.Logger;
+
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.NetworkChannel;
@@ -56,7 +58,7 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
                 if (listener.shouldPropagateHandlingExceptions()) {
                     throw exception;
                 }
-                LOGGER.severe("Failed to handle packet " + packet + ", suppressing error" + exception);
+                Logger.getAnonymousLogger().severe("Failed to handle packet " + packet + ", suppressing error" + exception);
             }
         });
     }
@@ -73,7 +75,6 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
             switch (packet.action()) {
                 case REDO -> getEntrance().getStructureBuilder().redo(player);
                 case UNDO -> getEntrance().getStructureBuilder().undo(player);
-                case RESET_BUILD_STATE -> getEntrance().getStructureBuilder().resetBuildState(player);
             }
         }
 

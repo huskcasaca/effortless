@@ -65,7 +65,6 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
                 case REDO, UNDO -> {
                     // noop
                 }
-                case RESET_BUILD_STATE -> getEntrance().getStructureBuilder().resetBuildState(player);
             }
         }
 

@@ -5,6 +5,7 @@ import java.util.UUID;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.ResourceKey;
 import dev.huskuraft.effortless.api.core.World;
 import net.minecraft.world.level.Level;
 
@@ -45,6 +46,10 @@ public class MinecraftWorld implements World {
         return reference.isClientSide();
     }
 
+    @Override
+    public ResourceKey<World> getDimension() {
+        return new MinecraftResourceKey<>(reference.dimension());
+    }
 
     @Override
     public boolean equals(Object obj) {

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 
@@ -15,8 +14,6 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.platform.PlatformLoader;
 
 public abstract class NetworkChannel<P extends PacketListener> implements PacketChannel {
-
-    protected static final Logger LOGGER = Logger.getLogger("Effortless");
 
     private final ResourceLocation channelId;
     private final Side side;

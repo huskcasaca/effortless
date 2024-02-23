@@ -254,7 +254,7 @@ public record Context(
     }
 
     // new context for idle
-    public Context resetBuildState() {
+    public Context newInteraction() {
         return new Context(
                 UUID.randomUUID(),
                 BuildState.IDLE,

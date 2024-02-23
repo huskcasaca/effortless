@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.vanilla.core;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftResourceLocation;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.world.item.BlockItem;
 

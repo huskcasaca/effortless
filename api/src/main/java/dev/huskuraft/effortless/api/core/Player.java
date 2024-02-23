@@ -12,6 +12,8 @@ public interface Player extends PlatformReference {
 
     UUID getId();
 
+    boolean isDeadOrDying();
+
     Server getServer();
 
     World getWorld();
@@ -33,6 +35,10 @@ public interface Player extends PlatformReference {
     void setItemStack(InteractionHand hand, ItemStack itemStack);
 
     void sendMessage(Text messages);
+
+    default void sendMessage(String message) {
+        sendMessage(Text.text(message));
+    }
 
     void swing(InteractionHand hand);
 

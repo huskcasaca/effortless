@@ -199,7 +199,7 @@ public final class EffortlessClientManager implements ClientManager {
         }
 
         if (Keys.KEY_ESCAPE.getBinding().isKeyDown()) {
-            getEntrance().getStructureBuilder().resetBuildState(getRunningClient().getPlayer());
+            getEntrance().getStructureBuilder().resetContextInteractions(getRunningClient().getPlayer());
         }
         if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
             openModeRadialScreen();

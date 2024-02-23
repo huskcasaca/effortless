@@ -34,14 +34,14 @@ public abstract class StructureBuilder {
 
     public abstract void setPattern(Player player, Pattern pattern);
 
-    public abstract void reset();
+    public abstract void resetAll();
 
     public void resetContext(Player player) {
         setContext(player, getDefaultContext());
     }
 
-    public void resetBuildState(Player player) {
-        setContext(player, getContext(player).resetBuildState());
+    public void resetContextInteractions(Player player) {
+        setContext(player, getContext(player).newInteraction());
     }
 
     public abstract BuildResult onPlayerBreak(Player player);

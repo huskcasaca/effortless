@@ -112,7 +112,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public void reset() {
+    public void resetAll() {
         contexts.clear();
         undoRedoStacks.clear();
     }
@@ -170,11 +170,9 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     private void onPlayerChangeWorld(Player player, World origin, World destination) {
-        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), player);
     }
 
     private void onPlayerRespawn(Player oldPlayer, Player newPlayer, boolean alive) {
-        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), newPlayer);
     }
 
     private void onPlayerLoggedIn(Player player) {
@@ -182,15 +180,14 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     private void onPlayerLoggedOut(Player player) {
-        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), player);
     }
 
     private void onServerStarted(Server server) {
-        reset();
+        resetAll();
     }
 
     private void onServerStopped(Server server) {
-        reset();
+        resetAll();
     }
 
 }

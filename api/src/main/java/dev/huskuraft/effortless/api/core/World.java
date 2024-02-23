@@ -14,4 +14,6 @@ public interface World extends PlatformReference {
 
     boolean isClient();
 
+    ResourceKey<World> getDimension();
+
 }
