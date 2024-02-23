@@ -76,6 +76,7 @@ public class TooltipRenderer {
         renderer.pushPose();
         var x = 0f;
         var y = renderer.window().getGuiScaledHeight() * 1f;
+        renderer.translate(0, 0, -200);
         renderer.translate(x, y, 0);
         renderer.translate(-1f * contentSide.getStep(), 0, 0);
         renderer.translate(0, -8, 0);
