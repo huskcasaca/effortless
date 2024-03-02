@@ -54,7 +54,7 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH - 2) / 2, 24, Dimens.RegularEntry.ROW_WIDTH - 2, 20, Text.translate("effortless.item.picker.search"))
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2, 24, Dimens.RegularEntry.ROW_WIDTH, 20, Text.translate("effortless.item.picker.search"))
         );
         this.searchEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
         this.searchEditBox.setHint(Text.translate("effortless.item.picker.search_hint"));

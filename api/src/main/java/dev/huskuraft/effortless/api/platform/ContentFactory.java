@@ -10,8 +10,7 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.api.sound.Sounds;
-import dev.huskuraft.effortless.api.tag.TagIoReader;
-import dev.huskuraft.effortless.api.tag.TagIoWriter;
+import dev.huskuraft.effortless.api.tag.TagIo;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
 
@@ -51,9 +50,9 @@ public interface ContentFactory {
 
     Text newTranslatableText(String text, Object... args);
 
-    TagIoReader getTagIoReader();
+    TagIo.Reader getTagIOReader();
 
-    TagIoWriter getTagIoWriter();
+    TagIo.Writer getTagIOWriter();
 
     OperatingSystem getOperatingSystem();
 

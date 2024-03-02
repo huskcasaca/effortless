@@ -13,8 +13,7 @@ import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.OperatingSystem;
 import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.api.sound.Sounds;
-import dev.huskuraft.effortless.api.tag.TagIoReader;
-import dev.huskuraft.effortless.api.tag.TagIoWriter;
+import dev.huskuraft.effortless.api.tag.TagIo;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItem;
@@ -103,12 +102,12 @@ public class MinecraftContentFactory implements ContentFactory {
     }
 
     @Override
-    public TagIoReader getTagIoReader() {
+    public TagIo.Reader getTagIOReader() {
         return input -> new MinecraftTagRecord(NbtIo.readCompressed(input));
     }
 
     @Override
-    public TagIoWriter getTagIoWriter() {
+    public TagIo.Writer getTagIOWriter() {
         return (output, config) -> NbtIo.writeCompressed(config.reference(), output);
     }
 

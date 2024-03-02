@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.settings.RandomizerSettings;
 
-public class TransformerConfiguration implements Configuration {
+public class TransformerConfig implements ModConfig {
 
     private List<ArrayTransformer> arrayTransformers;
 
@@ -18,7 +18,7 @@ public class TransformerConfiguration implements Configuration {
 
     private List<ItemRandomizer> itemRandomizers;
 
-    public TransformerConfiguration(
+    public TransformerConfig(
             List<ArrayTransformer> arrayTransformers,
             List<MirrorTransformer> mirrorTransformers,
             List<RadialTransformer> radialTransformers,

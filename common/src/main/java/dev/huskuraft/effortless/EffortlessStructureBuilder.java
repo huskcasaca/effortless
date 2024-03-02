@@ -11,9 +11,7 @@ import javax.annotation.Nullable;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.platform.Server;
-import dev.huskuraft.effortless.api.platform.Session;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
@@ -27,6 +25,7 @@ import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionStartPacket;
+import dev.huskuraft.effortless.session.Session;
 
 public final class EffortlessStructureBuilder extends StructureBuilder {
 
@@ -176,7 +175,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     private void onPlayerLoggedIn(Player player) {
-        getEntrance().getChannel().sendPacket(new SessionStartPacket(new Session(Platform.getInstance())), player);
+        getEntrance().getChannel().sendPacket(new SessionStartPacket(Session.current()), player);
     }
 
     private void onPlayerLoggedOut(Player player) {

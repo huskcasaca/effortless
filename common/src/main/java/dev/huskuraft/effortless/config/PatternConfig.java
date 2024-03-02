@@ -5,11 +5,11 @@ import java.util.List;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.settings.PatternSettings;
 
-public class PatternConfiguration implements Configuration {
+public class PatternConfig implements ModConfig {
 
     private List<Pattern> patterns;
 
-    public PatternConfiguration(
+    public PatternConfig(
             List<Pattern> patterns
     ) {
         this.patterns = patterns;

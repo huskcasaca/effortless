@@ -2,20 +2,20 @@ package dev.huskuraft.effortless.config.serializer;
 
 import dev.huskuraft.effortless.api.tag.TagElement;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
-import dev.huskuraft.effortless.config.BaseConfiguration;
-import dev.huskuraft.effortless.config.PatternConfiguration;
-import dev.huskuraft.effortless.config.PreviewConfiguration;
-import dev.huskuraft.effortless.config.TransformerConfiguration;
+import dev.huskuraft.effortless.config.PatternConfig;
+import dev.huskuraft.effortless.config.PreviewConfig;
+import dev.huskuraft.effortless.config.RootConfig;
+import dev.huskuraft.effortless.config.TransformerConfig;
 
-public class BaseConfigurationSerializer implements TagSerializer<BaseConfiguration> {
+public class RootConfigSerializer implements TagSerializer<RootConfig> {
 
     private static final String TAG_PREVIEW_CONFIG = "Previews";
     private static final String TAG_TRANSFORMER_CONFIG = "Transformers";
     private static final String TAG_PATTERN_CONFIG = "Patterns";
 
     @Override
-    public BaseConfiguration read(TagElement tag) {
-        return new BaseConfiguration(
+    public RootConfig read(TagElement tag) {
+        return new RootConfig(
                 tag.asRecord().getElement(TAG_PREVIEW_CONFIG, new PreviewConfigurationSerializer()),
                 tag.asRecord().getElement(TAG_TRANSFORMER_CONFIG, new TransformerConfigurationSerializer()),
                 tag.asRecord().getElement(TAG_PATTERN_CONFIG, new PatternConfigurationSerializer())
@@ -23,24 +23,24 @@ public class BaseConfigurationSerializer implements TagSerializer<BaseConfigurat
     }
 
     @Override
-    public void write(TagElement tag, BaseConfiguration config) {
+    public void write(TagElement tag, RootConfig config) {
         tag.asRecord().putElement(TAG_PREVIEW_CONFIG, config.getPreviewConfig(), new PreviewConfigurationSerializer());
         tag.asRecord().putElement(TAG_TRANSFORMER_CONFIG, config.getTransformerConfig(), new TransformerConfigurationSerializer());
         tag.asRecord().putElement(TAG_PATTERN_CONFIG, config.getPatternConfig(), new PatternConfigurationSerializer());
     }
 
-    public static class PreviewConfigurationSerializer implements TagSerializer<PreviewConfiguration> {
+    public static class PreviewConfigurationSerializer implements TagSerializer<PreviewConfig> {
 
-        public PreviewConfiguration read(TagElement tag) {
-            return new PreviewConfiguration();
+        public PreviewConfig read(TagElement tag) {
+            return new PreviewConfig();
         }
 
-        public void write(TagElement tag, PreviewConfiguration config) {
+        public void write(TagElement tag, PreviewConfig config) {
             tag.asRecord(); // avoid NPE
         }
     }
 
-    public static class TransformerConfigurationSerializer implements TagSerializer<TransformerConfiguration> {
+    public static class TransformerConfigurationSerializer implements TagSerializer<TransformerConfig> {
 
         private static final String TAG_ARRAYS = "Arrays";
         private static final String TAG_MIRRORS = "Mirrors";
@@ -48,8 +48,8 @@ public class BaseConfigurationSerializer implements TagSerializer<BaseConfigurat
         private static final String TAG_ITEM_RANDOMIZERS = "ItemRandomizers";
 
         @Override
-        public TransformerConfiguration read(TagElement tag) {
-            return new TransformerConfiguration(
+        public TransformerConfig read(TagElement tag) {
+            return new TransformerConfig(
                     tag.asRecord().getList(TAG_ARRAYS, new TransformerSerializer.ArrayTransformerSerializer()),
                     tag.asRecord().getList(TAG_MIRRORS, new TransformerSerializer.MirrorTransformerSerializer()),
                     tag.asRecord().getList(TAG_RADIALS, new TransformerSerializer.RadialTransformerSerializer()),
@@ -57,7 +57,7 @@ public class BaseConfigurationSerializer implements TagSerializer<BaseConfigurat
         }
 
         @Override
-        public void write(TagElement tag, TransformerConfiguration config) {
+        public void write(TagElement tag, TransformerConfig config) {
             tag.asRecord().putList(TAG_ARRAYS, config.getArrays(), new TransformerSerializer.ArrayTransformerSerializer());
             tag.asRecord().putList(TAG_MIRRORS, config.getMirrors(), new TransformerSerializer.MirrorTransformerSerializer());
             tag.asRecord().putList(TAG_RADIALS, config.getRadials(), new TransformerSerializer.RadialTransformerSerializer());
@@ -66,19 +66,19 @@ public class BaseConfigurationSerializer implements TagSerializer<BaseConfigurat
     }
 
 
-    public static class PatternConfigurationSerializer implements TagSerializer<PatternConfiguration> {
+    public static class PatternConfigurationSerializer implements TagSerializer<PatternConfig> {
 
         private static final String TAG_PATTERNS = "Patterns";
 
         @Override
-        public PatternConfiguration read(TagElement tag) {
-            return new PatternConfiguration(
+        public PatternConfig read(TagElement tag) {
+            return new PatternConfig(
                     tag.asRecord().getList(TAG_PATTERNS, new PatternSerializer())
             );
         }
 
         @Override
-        public void write(TagElement tag, PatternConfiguration Config) {
+        public void write(TagElement tag, PatternConfig Config) {
             tag.asRecord().putList(TAG_PATTERNS, Config.getPatterns(), new PatternSerializer());
         }
     }

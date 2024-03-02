@@ -21,8 +21,6 @@ import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
-import dev.huskuraft.effortless.api.platform.Platform;
-import dev.huskuraft.effortless.api.platform.Session;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
@@ -47,6 +45,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.renderer.opertaion.SurfaceColor;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
+import dev.huskuraft.effortless.session.Session;
 
 public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
@@ -55,7 +54,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
     private final AtomicReference<Session> serverSession = new AtomicReference<>();
-    private final AtomicReference<Session> clientSession = new AtomicReference<>(new Session(Platform.getInstance()));
+    private final AtomicReference<Session> clientSession = new AtomicReference<>(Session.current());
     private final AtomicReference<Boolean> isPlayerNotified = new AtomicReference<>(false);
 
 
@@ -305,9 +304,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             case CLIENT_NOT_LOADED -> TextStyle.RED + "Mod not found on CLIENT, using commands to build instead.";
             case BOTH_NOT_LOADED -> TextStyle.RED + "Mod not found on SERVER and CLIENT, it cannot happen.";
             case PROTOCOL_VERSION_MISMATCH -> {
-                var serverMod = serverSession.get().mods().stream().filter(mod -> mod.getId().equals(Effortless.MOD_ID)).findFirst().orElseThrow();
-                var clientMod = clientSession.get().mods().stream().filter(mod -> mod.getId().equals(Effortless.MOD_ID)).findFirst().orElseThrow();
-                yield TextStyle.WHITE + "Mod protocol version mismatch! " + TextStyle.GOLD + "Server: [" + serverMod.getVersionStr() + "]" + TextStyle.WHITE + ", " + TextStyle.GOLD + "Client: [" + clientMod.getVersionStr() + "]";
+                yield TextStyle.WHITE + "Mod protocol version mismatch! " + TextStyle.GOLD + "Server: [" + serverSession.get().protocolVersion() + "]" + TextStyle.WHITE + ", " + TextStyle.GOLD + "Client: [" + clientSession.get().protocolVersion() + "]";
             }
             case SUCCESS -> TextStyle.WHITE + "Mod found on SERVER and CLIENT, running with loader type " + TextStyle.GOLD + "[" + serverSession.get().loaderType().name() + "]";
         };

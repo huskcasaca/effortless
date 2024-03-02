@@ -42,6 +42,14 @@ public interface Widget extends Renderable, InputHandler {
 
     int getHeight();
 
+    default int getTop() {
+        return getY();
+    }
+
+    default int getBottom() {
+        return getY() + getHeight();
+    }
+
     void setHeight(int height);
 
 }

@@ -16,6 +16,7 @@ public class Effortless implements Entrance {
     private final EventRegistry eventRegistry = PlatformLoader.getSingleton();
     private final EffortlessNetworkChannel networkChannel = new EffortlessNetworkChannel(this);
     private final EffortlessStructureBuilder structureBuilder = new EffortlessStructureBuilder(this);
+    private final EffortlessSessionConfigStorage sessionConfigStorage = new EffortlessSessionConfigStorage(this);
 
     public Effortless() {
 
@@ -35,6 +36,10 @@ public class Effortless implements Entrance {
 
     public EffortlessStructureBuilder getStructureBuilder() {
         return structureBuilder;
+    }
+
+    public EffortlessSessionConfigStorage getSessionConfigStorage() {
+        return sessionConfigStorage;
     }
 
     @Override

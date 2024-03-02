@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.api.renderer;
 
+import org.lwjgl.glfw.GLFW;
+
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.platform.PlatformUtils;
 
@@ -20,34 +22,35 @@ public interface Window extends PlatformReference {
     boolean isMouseButtonDown(int button);
 
     default boolean isControlDown() {
-        return switch (PlatformUtils.getOS()) {
-            case MACOS -> isKeyDown(343) || isKeyDown(347);
-            default -> isKeyDown(341) || isKeyDown(345);
-        };
+        if (PlatformUtils.isMacOS()) {
+            return isKeyDown(GLFW.GLFW_KEY_LEFT_SUPER) || isKeyDown(GLFW.GLFW_KEY_RIGHT_SUPER);
+        } else {
+            return isKeyDown(GLFW.GLFW_KEY_LEFT_CONTROL) || isKeyDown(GLFW.GLFW_KEY_RIGHT_CONTROL);
+        }
     }
 
     default boolean isShiftDown() {
-        return isKeyDown(340) || isKeyDown(344);
+        return isKeyDown(GLFW.GLFW_KEY_LEFT_SHIFT) || isKeyDown(GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 
     default boolean isAltDown() {
-        return isKeyDown(342) || isKeyDown(346);
+        return isKeyDown(GLFW.GLFW_KEY_LEFT_ALT) || isKeyDown(GLFW.GLFW_KEY_RIGHT_ALT);
     }
 
     default boolean isCut(int key) {
-        return key == 88 && isControlDown() && !isShiftDown() && !isAltDown();
+        return key == GLFW.GLFW_KEY_X && isControlDown() && !isShiftDown() && !isAltDown();
     }
 
     default boolean isPaste(int key) {
-        return key == 86 && isControlDown() && !isShiftDown() && !isAltDown();
+        return key == GLFW.GLFW_KEY_V && isControlDown() && !isShiftDown() && !isAltDown();
     }
 
     default boolean isCopy(int key) {
-        return key == 67 && isControlDown() && !isShiftDown() && !isAltDown();
+        return key == GLFW.GLFW_KEY_C && isControlDown() && !isShiftDown() && !isAltDown();
     }
 
     default boolean isSelectAll(int key) {
-        return key == 65 && isControlDown() && !isShiftDown() && !isAltDown();
+        return key == GLFW.GLFW_KEY_A && isControlDown() && !isShiftDown() && !isAltDown();
     }
 
 }

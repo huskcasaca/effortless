@@ -1,17 +1,17 @@
 package dev.huskuraft.effortless.config;
 
-public class BaseConfiguration implements Configuration {
+public final class RootConfig implements ModConfig {
 
-    private final PreviewConfiguration previewConfig;
+    private final PreviewConfig previewConfig;
 
-    private final TransformerConfiguration transformerConfig;
+    private final TransformerConfig transformerConfig;
 
-    private final PatternConfiguration patternConfig;
+    private final PatternConfig patternConfig;
 
-    public BaseConfiguration(
-            PreviewConfiguration previewConfig,
-            TransformerConfiguration transformerConfig,
-            PatternConfiguration patternConfig
+    public RootConfig(
+            PreviewConfig previewConfig,
+            TransformerConfig transformerConfig,
+            PatternConfig patternConfig
     ) {
         this.previewConfig = previewConfig;
         this.transformerConfig = transformerConfig;
@@ -30,15 +30,15 @@ public class BaseConfiguration implements Configuration {
         patternConfig.validate();
     }
 
-    public PreviewConfiguration getPreviewConfig() {
+    public PreviewConfig getPreviewConfig() {
         return previewConfig;
     }
 
-    public TransformerConfiguration getTransformerConfig() {
+    public TransformerConfig getTransformerConfig() {
         return transformerConfig;
     }
 
-    public PatternConfiguration getPatternConfig() {
+    public PatternConfig getPatternConfig() {
         return patternConfig;
     }
 

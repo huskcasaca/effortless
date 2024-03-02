@@ -4,9 +4,9 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.BufferSerializer;
 import dev.huskuraft.effortless.api.networking.Packet;
-import dev.huskuraft.effortless.api.platform.Session;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.serializer.SessionSerializer;
+import dev.huskuraft.effortless.session.Session;
 
 public record SessionStartPacket(
         Session session

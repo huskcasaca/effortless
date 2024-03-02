@@ -34,7 +34,7 @@ public class NumberField extends AbstractContainerWidget {
         }
         this.type = type;
 
-        this.textField = addWidget(new EditBox(entrance, x + buttonWidth + 1, y + 2, width - 2 * buttonWidth - 2, height - 4, Text.empty()));
+        this.textField = addWidget(new EditBox(entrance, x + buttonWidth, y + 1, width - 2 * buttonWidth, height - 2, Text.empty()));
         this.minusButton = addWidget(new Button(entrance, x, y, buttonWidth, height, Text.text("-"), button -> {
             float valueChanged = 1f;
             if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = 5f;

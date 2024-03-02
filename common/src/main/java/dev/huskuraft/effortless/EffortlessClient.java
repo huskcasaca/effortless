@@ -14,13 +14,13 @@ public class EffortlessClient implements ClientEntrance {
     private final EffortlessClientNetworkChannel channel;
     private final EffortlessClientStructureBuilder structureBuilder;
     private final EffortlessClientManager clientManager;
-    private final EffortlessClientConfigManager configManager;
+    private final EffortlessClientConfigStorage configStorage;
 
     public EffortlessClient() {
         this.channel = new EffortlessClientNetworkChannel(this);
         this.structureBuilder = new EffortlessClientStructureBuilder(this);
         this.clientManager = new EffortlessClientManager(this);
-        this.configManager = new EffortlessClientConfigManager(this);
+        this.configStorage = new EffortlessClientConfigStorage(this);
     }
 
     public static EffortlessClient getInstance() {
@@ -44,8 +44,8 @@ public class EffortlessClient implements ClientEntrance {
         return clientManager;
     }
 
-    public EffortlessClientConfigManager getConfigManager() {
-        return configManager;
+    public EffortlessClientConfigStorage getConfigStorage() {
+        return configStorage;
     }
 
     @Override

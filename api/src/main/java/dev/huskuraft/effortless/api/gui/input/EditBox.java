@@ -7,6 +7,8 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import org.lwjgl.glfw.GLFW;
+
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -56,12 +58,10 @@ public class EditBox extends AbstractWidget {
         this.bordered = true;
         this.canLoseFocus = true;
         this.isEditable = true;
-        this.textColor = 14737632;
+        this.textColor = DEFAULT_TEXT_COLOR;
         this.textColorUneditable = 7368816;
         this.filter = Objects::nonNull;
-        this.formatter = (string, integer) -> {
-            return string;
-        };
+        this.formatter = (string, integer) -> string;
         if (editBox != null) {
             this.setValue(editBox.getValue());
         }
@@ -263,81 +263,78 @@ public class EditBox extends AbstractWidget {
     }
 
     public boolean onKeyPressed(int keyCode, int scanCode, int modifiers) {
+        var client = getEntrance().getClient();
         if (!this.canConsumeInput()) {
             return false;
         } else {
-            this.shiftPressed = getEntrance().getClient().getWindow().isShiftDown();
-            if (getEntrance().getClient().getWindow().isSelectAll(keyCode)) {
+            this.shiftPressed = client.getWindow().isShiftDown();
+            if (client.getWindow().isSelectAll(keyCode)) {
                 this.moveCursorToEnd();
                 this.setHighlightPos(0);
                 return true;
             } else {
-                if (getEntrance().getClient().getWindow().isCopy(keyCode)) {
-                    getEntrance().getClient().setClipboard(getHighlighted());
+                if (client.getWindow().isCopy(keyCode)) {
+                    client.setClipboard(getHighlighted());
                     return true;
                 } else {
-                    if (getEntrance().getClient().getWindow().isPaste(keyCode)) {
+                    if (client.getWindow().isPaste(keyCode)) {
                         if (this.isEditable) {
-                            this.insertText(getEntrance().getClient().getClipboard());
+                            this.insertText(client.getClipboard());
                         }
 
                         return true;
                     } else {
-                        if (getEntrance().getClient().getWindow().isCut(keyCode)) {
-                            getEntrance().getClient().setClipboard(getHighlighted());
+                        if (client.getWindow().isCut(keyCode)) {
+                            client.setClipboard(getHighlighted());
                             if (this.isEditable) {
                                 this.insertText("");
                             }
 
                             return true;
                         } else {
-                            switch (keyCode) {
-                                case 259:
+                            return switch (keyCode) {
+                                case GLFW.GLFW_KEY_BACKSPACE -> {
                                     if (this.isEditable) {
                                         this.shiftPressed = false;
-                                        this.deleteText(-1);
-                                        this.shiftPressed = getEntrance().getClient().getWindow().isShiftDown();
+                                        this.deleteText(BACKWARDS);
+                                        this.shiftPressed = client.getWindow().isShiftDown();
                                     }
-
-                                    return true;
-                                case 260:
-                                case 264:
-                                case 265:
-                                case 266:
-                                case 267:
-                                default:
-                                    return false;
-                                case 261:
+                                    yield true;
+                                }
+                                case GLFW.GLFW_KEY_DELETE -> {
                                     if (this.isEditable) {
                                         this.shiftPressed = false;
-                                        this.deleteText(1);
-                                        this.shiftPressed = getEntrance().getClient().getWindow().isShiftDown();
+                                        this.deleteText(FORWARDS);
+                                        this.shiftPressed = client.getWindow().isShiftDown();
                                     }
-
-                                    return true;
-                                case 262:
-                                    if (getEntrance().getClient().getWindow().isControlDown()) {
-                                        this.moveCursorTo(this.getWordPosition(1));
+                                    yield true;
+                                }
+                                case GLFW.GLFW_KEY_RIGHT -> {
+                                    if (client.getWindow().isControlDown()) {
+                                        this.moveCursorTo(this.getWordPosition(FORWARDS));
                                     } else {
-                                        this.moveCursor(1);
+                                        this.moveCursor(FORWARDS);
                                     }
-
-                                    return true;
-                                case 263:
-                                    if (getEntrance().getClient().getWindow().isControlDown()) {
-                                        this.moveCursorTo(this.getWordPosition(-1));
+                                    yield true;
+                                }
+                                case GLFW.GLFW_KEY_LEFT -> {
+                                    if (client.getWindow().isControlDown()) {
+                                        this.moveCursorTo(this.getWordPosition(BACKWARDS));
                                     } else {
-                                        this.moveCursor(-1);
+                                        this.moveCursor(BACKWARDS);
                                     }
-
-                                    return true;
-                                case 268:
+                                    yield true;
+                                }
+                                case GLFW.GLFW_KEY_HOME -> {
                                     this.moveCursorToStart();
-                                    return true;
-                                case 269:
+                                    yield true;
+                                }
+                                case GLFW.GLFW_KEY_END -> {
                                     this.moveCursorToEnd();
-                                    return true;
-                            }
+                                    yield true;
+                                }
+                                default -> false;
+                            };
                         }
                     }
                 }
@@ -383,9 +380,9 @@ public class EditBox extends AbstractWidget {
 
         int k;
         if (this.isBordered()) {
-            k = this.isFocused() ? -1 : -6250336;
-            renderer.renderRect(this.getX() - 1, this.getY() - 1, this.getX() + this.getWidth() + 1, this.getY() + this.getHeight() + 1, k);
-            renderer.renderRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), -16777216);
+            k = this.isFocused() ? BORDER_COLOR_FOCUSED : BORDER_COLOR;
+            renderer.renderRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), k);
+            renderer.renderRect(this.getX() + 1, this.getY() + 1, this.getX() + this.getWidth() - 1, this.getY() + this.getHeight() - 1, BACKGROUND_COLOR);
         }
 
         k = this.isEditable ? this.textColor : this.textColorUneditable;
@@ -435,9 +432,9 @@ public class EditBox extends AbstractWidget {
                 var10002 = o - 1;
                 var10003 = q + 1;
                 var10004 = o + 1;
-                renderer.renderRect(q, var10002, var10003, var10004 + 9, -3092272);
+                renderer.renderRect(q, var10002, var10003, var10004 + 9, CURSOR_INSERT_COLOR);
             } else {
-                renderer.renderTextFromStart(getTypeface(), "_", q, o, k, true);
+                renderer.renderTextFromStart(getTypeface(), CURSOR_APPEND_CHARACTER, q, o, k, true);
             }
         }
 
@@ -450,6 +447,16 @@ public class EditBox extends AbstractWidget {
             this.renderHighlight(renderer, q, var10002, var10003, var10004 + 9);
         }
 
+    }
+
+    @Override
+    public int getTop() {
+        return super.getTop();
+    }
+
+    @Override
+    public int getBottom() {
+        return super.getBottom();
     }
 
     private void renderHighlight(Renderer renderer, int i, int j, int k, int l) {

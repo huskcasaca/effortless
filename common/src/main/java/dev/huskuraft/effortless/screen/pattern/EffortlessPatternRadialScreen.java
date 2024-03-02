@@ -77,7 +77,7 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
     }
 
     private List<Slot<Pattern>> getSlots() {
-        var settingPatterns = getEntrance().getConfigManager().getConfig().getPatternConfig().getPatterns();
+        var settingPatterns = getEntrance().getConfigStorage().get().getPatternConfig().getPatterns();
         return Stream.concat(
                 Stream.concat(Stream.of(Pattern.DISABLED), settingPatterns.stream()),
                 Stream.generate(() -> Pattern.EMPTY).limit(Math.max(12 - settingPatterns.size() - 1, 0))
@@ -111,11 +111,11 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
                         getEntrance(),
                         pattern -> {
                             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-                            getEntrance().getConfigManager().editConfig(config -> {
+                            getEntrance().getConfigStorage().use(config -> {
                                 config.getPatternConfig().setPatternSettings(pattern);
                             });
                         },
-                        getEntrance().getConfigManager().getConfig().getPatternConfig().getPatternSettings()
+                        getEntrance().getConfigStorage().get().getPatternConfig().getPatternSettings()
                 ).attach();
 
             } else {

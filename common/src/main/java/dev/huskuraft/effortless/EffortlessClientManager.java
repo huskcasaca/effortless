@@ -158,11 +158,11 @@ public final class EffortlessClientManager implements ClientManager {
                 getEntrance(),
                 pattern -> {
                     getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-                    getEntrance().getConfigManager().editConfig(config -> {
+                    getEntrance().getConfigStorage().use(config -> {
                         config.getPatternConfig().setPatternSettings(pattern);
                     });
                 },
-                getEntrance().getConfigManager().getConfig().getPatternConfig().getPatternSettings()
+                getEntrance().getConfigStorage().get().getPatternConfig().getPatternSettings()
         ).attach();
     }
 
@@ -170,11 +170,11 @@ public final class EffortlessClientManager implements ClientManager {
         new EffortlessRandomizerSettingsScreen(
                 getEntrance(),
                 settings -> {
-                    getEntrance().getConfigManager().editConfig(config -> {
+                    getEntrance().getConfigStorage().use(config -> {
                         config.getTransformerConfig().setItemRandomizerSettings(settings);
                     });
                 },
-                getEntrance().getConfigManager().getConfig().getTransformerConfig().getRandomizerSettings()
+                getEntrance().getConfigStorage().get().getTransformerConfig().getRandomizerSettings()
         ).attach();
     }
 
@@ -201,6 +201,7 @@ public final class EffortlessClientManager implements ClientManager {
         if (Keys.KEY_ESCAPE.getBinding().isKeyDown()) {
             getEntrance().getStructureBuilder().resetContextInteractions(getRunningClient().getPlayer());
         }
+
         if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
             openModeRadialScreen();
         }

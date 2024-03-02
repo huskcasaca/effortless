@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.config;
 import dev.huskuraft.effortless.api.core.Position;
 import dev.huskuraft.effortless.api.math.MathUtils;
 
-public class PreviewConfiguration implements Configuration {
+public class PreviewConfig implements ModConfig {
 
     public static final int MIN_SHADER_DISSOLVE_TIME_MULTIPLIER = 1;
     public static final int MAX_SHADER_DISSOLVE_TIME_MULTIPLIER = 40;
@@ -13,7 +13,7 @@ public class PreviewConfiguration implements Configuration {
     private boolean alwaysShowBlockPreview = false;
     private int shaderDissolveTimeMultiplier = 10;
 
-    public PreviewConfiguration() {
+    public PreviewConfig() {
     }
 
     public boolean isShowingBuildInfo() {

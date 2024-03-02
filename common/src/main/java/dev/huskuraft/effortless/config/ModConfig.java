@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.config;
 
-public interface Configuration {
+public interface ModConfig {
 
     boolean isValid();
 
