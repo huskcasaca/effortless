@@ -28,6 +28,7 @@ import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.BuildState;
+import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.SingleCommand;
@@ -127,7 +128,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var previewContext = finalizedContext.withPreviewOnceType();
             var result = new BatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
 
-            if (isServerSessionValid()) {
+            if (finalizedContext.type() != BuildType.COMMAND) {
                 getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
             }
 
