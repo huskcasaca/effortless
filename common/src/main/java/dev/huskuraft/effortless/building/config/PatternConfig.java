@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.config;
+package dev.huskuraft.effortless.building.config;
 
 import java.util.List;
 

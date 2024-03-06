@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.session;
+package dev.huskuraft.effortless.session.config;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +19,7 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
     private static final String KEY_GLOBAL = "global";
     private static final String KEY_PLAYER = "player";
 
+    private static final String KEY_USE_COMMANDS = "useCommands";
     private static final String KEY_ALLOW_USE_MOD = "allowUseMod";
     private static final String KEY_ALLOW_BREAK_BLOCKS = "allowBreakBlocks";
     private static final String KEY_ALLOW_PLACE_BLOCKS = "allowPlaceBlocks";
@@ -40,81 +41,85 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
 
     private static ConfigSpec getGlobalBuilderConfigSpec() {
         var spec = new ConfigSpec();
-        spec.define(KEY_ALLOW_USE_MOD, BuilderConfig.ALLOW_USE_MOD_DEFAULT, Objects::nonNull);
-        spec.define(KEY_ALLOW_BREAK_BLOCKS, BuilderConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Objects::nonNull);
-        spec.define(KEY_ALLOW_PLACE_BLOCKS, BuilderConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Objects::nonNull);
-        spec.defineInRange(KEY_MAX_REACH_DISTANCE, BuilderConfig.MAX_REACH_DISTANCE_DEFAULT, BuilderConfig.MAX_REACH_DISTANCE_RANGE_START, BuilderConfig.MAX_REACH_DISTANCE_RANGE_END);
-        spec.defineInRange(KEY_MAX_DISTANCE_PER_AXIS, BuilderConfig.MAX_DISTANCE_PER_AXIS_DEFAULT, BuilderConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, BuilderConfig.MAX_DISTANCE_PER_AXIS_RANGE_END);
-        spec.defineInRange(KEY_MAX_BREAK_BLOCKS, BuilderConfig.MAX_BREAK_BLOCKS_DEFAULT, BuilderConfig.MAX_BREAK_BLOCKS_RANGE_START, BuilderConfig.MAX_BREAK_BLOCKS_RANGE_END);
-        spec.defineList(KEY_WHITELISTED_ITEMS, BuilderConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
-        spec.defineList(KEY_BLACKLISTED_ITEMS, BuilderConfig.BLACKLISTED_ITEMS_DEFAULT, Objects::nonNull);
+        spec.define(KEY_USE_COMMANDS, BuildingConfig.USE_COMMANDS_DEFAULT, Objects::nonNull);
+        spec.define(KEY_ALLOW_USE_MOD, BuildingConfig.ALLOW_USE_MOD_DEFAULT, Objects::nonNull);
+        spec.define(KEY_ALLOW_BREAK_BLOCKS, BuildingConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Objects::nonNull);
+        spec.define(KEY_ALLOW_PLACE_BLOCKS, BuildingConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Objects::nonNull);
+        spec.defineInRange(KEY_MAX_REACH_DISTANCE, BuildingConfig.MAX_REACH_DISTANCE_DEFAULT, BuildingConfig.MAX_REACH_DISTANCE_RANGE_START, BuildingConfig.MAX_REACH_DISTANCE_RANGE_END);
+        spec.defineInRange(KEY_MAX_DISTANCE_PER_AXIS, BuildingConfig.MAX_DISTANCE_PER_AXIS_DEFAULT, BuildingConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, BuildingConfig.MAX_DISTANCE_PER_AXIS_RANGE_END);
+        spec.defineInRange(KEY_MAX_BREAK_BLOCKS, BuildingConfig.MAX_BREAK_BLOCKS_DEFAULT, BuildingConfig.MAX_BREAK_BLOCKS_RANGE_START, BuildingConfig.MAX_BREAK_BLOCKS_RANGE_END);
+        spec.defineList(KEY_WHITELISTED_ITEMS, BuildingConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
+        spec.defineList(KEY_BLACKLISTED_ITEMS, BuildingConfig.BLACKLISTED_ITEMS_DEFAULT, Objects::nonNull);
         return spec;
     }
 
     private static ConfigSpec getPlayerBuilderConfigSpec(CommentedConfig config) {
         var spec = new ConfigSpec();
+        if (config.contains(KEY_USE_COMMANDS)) {
+            spec.define(KEY_USE_COMMANDS, BuildingConfig.USE_COMMANDS_DEFAULT, Objects::nonNull);
+        }
         if (config.contains(KEY_ALLOW_USE_MOD)) {
-            spec.define(KEY_ALLOW_USE_MOD, BuilderConfig.ALLOW_USE_MOD_DEFAULT, Objects::nonNull);
+            spec.define(KEY_ALLOW_USE_MOD, BuildingConfig.ALLOW_USE_MOD_DEFAULT, Objects::nonNull);
         }
         if (config.contains(KEY_ALLOW_BREAK_BLOCKS)) {
-            spec.define(KEY_ALLOW_BREAK_BLOCKS, BuilderConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Objects::nonNull);
+            spec.define(KEY_ALLOW_BREAK_BLOCKS, BuildingConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Objects::nonNull);
         }
         if (config.contains(KEY_ALLOW_PLACE_BLOCKS)) {
-            spec.define(KEY_ALLOW_PLACE_BLOCKS, BuilderConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Objects::nonNull);
+            spec.define(KEY_ALLOW_PLACE_BLOCKS, BuildingConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Objects::nonNull);
         }
         if (config.contains(KEY_MAX_REACH_DISTANCE)) {
-            spec.defineInRange(KEY_MAX_REACH_DISTANCE, BuilderConfig.MAX_REACH_DISTANCE_DEFAULT, BuilderConfig.MAX_REACH_DISTANCE_RANGE_START, BuilderConfig.MAX_REACH_DISTANCE_RANGE_END);
+            spec.defineInRange(KEY_MAX_REACH_DISTANCE, BuildingConfig.MAX_REACH_DISTANCE_DEFAULT, BuildingConfig.MAX_REACH_DISTANCE_RANGE_START, BuildingConfig.MAX_REACH_DISTANCE_RANGE_END);
         }
         if (config.contains(KEY_MAX_DISTANCE_PER_AXIS)) {
-            spec.defineInRange(KEY_MAX_DISTANCE_PER_AXIS, BuilderConfig.MAX_DISTANCE_PER_AXIS_DEFAULT, BuilderConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, BuilderConfig.MAX_DISTANCE_PER_AXIS_RANGE_END);
+            spec.defineInRange(KEY_MAX_DISTANCE_PER_AXIS, BuildingConfig.MAX_DISTANCE_PER_AXIS_DEFAULT, BuildingConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, BuildingConfig.MAX_DISTANCE_PER_AXIS_RANGE_END);
         }
         if (config.contains(KEY_MAX_BREAK_BLOCKS)) {
-            spec.defineInRange(KEY_MAX_BREAK_BLOCKS, BuilderConfig.MAX_BREAK_BLOCKS_DEFAULT, BuilderConfig.MAX_BREAK_BLOCKS_RANGE_START, BuilderConfig.MAX_BREAK_BLOCKS_RANGE_END);
+            spec.defineInRange(KEY_MAX_BREAK_BLOCKS, BuildingConfig.MAX_BREAK_BLOCKS_DEFAULT, BuildingConfig.MAX_BREAK_BLOCKS_RANGE_START, BuildingConfig.MAX_BREAK_BLOCKS_RANGE_END);
         }
         if (config.contains(KEY_WHITELISTED_ITEMS)) {
-            spec.defineList(KEY_WHITELISTED_ITEMS, BuilderConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
+            spec.defineList(KEY_WHITELISTED_ITEMS, BuildingConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
         }
         if (config.contains(KEY_BLACKLISTED_ITEMS)) {
-            spec.defineList(KEY_BLACKLISTED_ITEMS, BuilderConfig.BLACKLISTED_ITEMS_DEFAULT, Objects::nonNull);
+            spec.defineList(KEY_BLACKLISTED_ITEMS, BuildingConfig.BLACKLISTED_ITEMS_DEFAULT, Objects::nonNull);
         }
         return spec;
     }
 
-    private static CommentedConfig serialize(BuilderConfig builderConfig, boolean global) {
+    private static CommentedConfig serialize(BuildingConfig buildingConfig, boolean global) {
         var config = CommentedConfig.inMemory();
-        setNullable(config, KEY_ALLOW_USE_MOD, builderConfig.allowUseMod());
+        setNullable(config, KEY_ALLOW_USE_MOD, buildingConfig.allowUseMod());
         if (global) {
             config.setComment(KEY_ALLOW_USE_MOD, "Should allow players to use this mod?");
         }
-        setNullable(config, KEY_ALLOW_BREAK_BLOCKS, builderConfig.allowBreakBlocks());
+        setNullable(config, KEY_ALLOW_BREAK_BLOCKS, buildingConfig.allowBreakBlocks());
         if (global) {
             config.setComment(KEY_ALLOW_BREAK_BLOCKS, "Should allow players to break blocks using this mod?");
         }
-        setNullable(config, KEY_ALLOW_PLACE_BLOCKS, builderConfig.allowPlaceBlocks());
+        setNullable(config, KEY_ALLOW_PLACE_BLOCKS, buildingConfig.allowPlaceBlocks());
         if (global) {
             config.setComment(KEY_ALLOW_PLACE_BLOCKS, "Should allow players to place blocks using this mod?");
         }
-        setNullable(config, KEY_MAX_REACH_DISTANCE, builderConfig.maxReachDistance());
+        setNullable(config, KEY_MAX_REACH_DISTANCE, buildingConfig.maxReachDistance());
         if (global) {
-            config.setComment(KEY_MAX_REACH_DISTANCE, "The maximum distance a player can reach when building using this mod. \nRange: " + BuilderConfig.MAX_REACH_DISTANCE_RANGE_START + " ~ " + BuilderConfig.MAX_REACH_DISTANCE_RANGE_END);
+            config.setComment(KEY_MAX_REACH_DISTANCE, "The maximum distance a player can reach when building using this mod. \nRange: " + BuildingConfig.MAX_REACH_DISTANCE_RANGE_START + " ~ " + BuildingConfig.MAX_REACH_DISTANCE_RANGE_END);
         }
-        setNullable(config, KEY_MAX_DISTANCE_PER_AXIS, builderConfig.maxDistancePerAxis());
+        setNullable(config, KEY_MAX_DISTANCE_PER_AXIS, buildingConfig.maxDistancePerAxis());
         if (global) {
-            config.setComment(KEY_MAX_DISTANCE_PER_AXIS, "The maximum size a player can build per axis when building using this mod. \nRange: " + BuilderConfig.MAX_DISTANCE_PER_AXIS_RANGE_START + " ~ " + BuilderConfig.MAX_DISTANCE_PER_AXIS_RANGE_END);
+            config.setComment(KEY_MAX_DISTANCE_PER_AXIS, "The maximum size a player can build per axis when building using this mod. \nRange: " + BuildingConfig.MAX_DISTANCE_PER_AXIS_RANGE_START + " ~ " + BuildingConfig.MAX_DISTANCE_PER_AXIS_RANGE_END);
         }
-        setNullable(config, KEY_MAX_BREAK_BLOCKS, builderConfig.maxBreakBlocks());
+        setNullable(config, KEY_MAX_BREAK_BLOCKS, buildingConfig.maxBreakBlocks());
         if (global) {
-            config.setComment(KEY_MAX_BREAK_BLOCKS, "The maximum number of blocks a player can break when building using this mod. \nRange: " + BuilderConfig.MAX_BREAK_BLOCKS_RANGE_START + " ~ " + BuilderConfig.MAX_BREAK_BLOCKS_RANGE_END);
+            config.setComment(KEY_MAX_BREAK_BLOCKS, "The maximum number of blocks a player can break when building using this mod. \nRange: " + BuildingConfig.MAX_BREAK_BLOCKS_RANGE_START + " ~ " + BuildingConfig.MAX_BREAK_BLOCKS_RANGE_END);
         }
-        setNullable(config, KEY_MAX_PLACE_BLOCKS, builderConfig.maxPlaceBlocks());
+        setNullable(config, KEY_MAX_PLACE_BLOCKS, buildingConfig.maxPlaceBlocks());
         if (global) {
-            config.setComment(KEY_MAX_PLACE_BLOCKS, "The maximum number of blocks a player can break when building using this mod. \nRange: " + BuilderConfig.MAX_PLACE_BLOCKS_RANGE_START + " ~ " + BuilderConfig.MAX_PLACE_BLOCKS_RANGE_END);
+            config.setComment(KEY_MAX_PLACE_BLOCKS, "The maximum number of blocks a player can break when building using this mod. \nRange: " + BuildingConfig.MAX_PLACE_BLOCKS_RANGE_START + " ~ " + BuildingConfig.MAX_PLACE_BLOCKS_RANGE_END);
         }
-        setNullable(config, KEY_WHITELISTED_ITEMS, builderConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
+        setNullable(config, KEY_WHITELISTED_ITEMS, buildingConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
         if (global) {
             config.setComment(KEY_WHITELISTED_ITEMS, "The list of items that players are allowed to use when building using this mod. \nIf the whitelist is empty, all items are allowed. \nIf the whitelist is not empty, only the items in the whitelist are allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
         }
-        setNullable(config, KEY_BLACKLISTED_ITEMS, builderConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
+        setNullable(config, KEY_BLACKLISTED_ITEMS, buildingConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
         if (global) {
             config.setComment(KEY_BLACKLISTED_ITEMS, "The list of items that players are not allowed to use when building using this mod. \nIf the blacklist is empty, no items are not allowed. \nIf an item exists both in the blacklist and the whitelist, it will not be allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
         }
@@ -127,7 +132,7 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
         return config;
     }
 
-    private static BuilderConfig deserializeBuilderConfig(CommentedConfig config, boolean global) {
+    private static BuildingConfig deserializeBuilderConfig(CommentedConfig config, boolean global) {
         if (config == null) {
             config = CommentedConfig.inMemory();
         }
@@ -136,7 +141,8 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
         } else {
             getPlayerBuilderConfigSpec(config).correct(config);
         }
-        return new BuilderConfig(
+        return new BuildingConfig(
+                config.get(KEY_USE_COMMANDS),
                 config.get(KEY_ALLOW_USE_MOD),
                 config.get(KEY_ALLOW_BREAK_BLOCKS),
                 config.get(KEY_ALLOW_PLACE_BLOCKS),
@@ -154,7 +160,7 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
         var globalTomlConfig = (CommentedConfig) config.get(KEY_GLOBAL);
         var globalConfig = deserializeBuilderConfig(globalTomlConfig, true);
 
-        var playerConfigs = new HashMap<UUID, BuilderConfig>();
+        var playerConfigs = new HashMap<UUID, BuildingConfig>();
         var playerTomlConfig = (Config) config.get(KEY_PLAYER);
 
         if (playerTomlConfig == null) {

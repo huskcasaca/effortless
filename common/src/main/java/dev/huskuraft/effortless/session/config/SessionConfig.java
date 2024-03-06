@@ -1,13 +1,13 @@
-package dev.huskuraft.effortless.session;
+package dev.huskuraft.effortless.session.config;
 
 import java.util.Map;
 import java.util.UUID;
 
-import dev.huskuraft.effortless.config.ModConfig;
+import dev.huskuraft.effortless.building.config.ModConfig;
 
 public record SessionConfig(
-        BuilderConfig globalConfig,
-        Map<UUID, BuilderConfig> playerConfigs
+        BuildingConfig globalConfig,
+        Map<UUID, BuildingConfig> playerConfigs
 ) implements ModConfig {
 
     @Override
@@ -21,7 +21,7 @@ public record SessionConfig(
     }
 
     public static SessionConfig defaultConfig() {
-        return new SessionConfig(BuilderConfig.DEFAULT, Map.of());
+        return new SessionConfig(BuildingConfig.DEFAULT, Map.of());
     }
 
 

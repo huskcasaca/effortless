@@ -1,11 +1,11 @@
-package dev.huskuraft.effortless.config.serializer;
+package dev.huskuraft.effortless.building.config.serializer;
 
 import dev.huskuraft.effortless.api.tag.TagElement;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
-import dev.huskuraft.effortless.config.PatternConfig;
-import dev.huskuraft.effortless.config.PreviewConfig;
-import dev.huskuraft.effortless.config.RootConfig;
-import dev.huskuraft.effortless.config.TransformerConfig;
+import dev.huskuraft.effortless.building.config.PatternConfig;
+import dev.huskuraft.effortless.building.config.PreviewConfig;
+import dev.huskuraft.effortless.building.config.RootConfig;
+import dev.huskuraft.effortless.building.config.TransformerConfig;
 
 public class RootConfigSerializer implements TagSerializer<RootConfig> {
 

@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.config;
+package dev.huskuraft.effortless.building.config;
 
 import dev.huskuraft.effortless.api.core.Position;
 import dev.huskuraft.effortless.api.math.MathUtils;

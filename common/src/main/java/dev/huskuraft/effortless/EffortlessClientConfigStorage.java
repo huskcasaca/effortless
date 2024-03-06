@@ -5,13 +5,13 @@ import java.util.List;
 import dev.huskuraft.effortless.api.file.FileType;
 import dev.huskuraft.effortless.api.file.TagElementFileStorage;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
+import dev.huskuraft.effortless.building.config.PatternConfig;
+import dev.huskuraft.effortless.building.config.PreviewConfig;
+import dev.huskuraft.effortless.building.config.RootConfig;
+import dev.huskuraft.effortless.building.config.TransformerConfig;
+import dev.huskuraft.effortless.building.config.serializer.RootConfigSerializer;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.config.PatternConfig;
-import dev.huskuraft.effortless.config.PreviewConfig;
-import dev.huskuraft.effortless.config.RootConfig;
-import dev.huskuraft.effortless.config.TransformerConfig;
-import dev.huskuraft.effortless.config.serializer.RootConfigSerializer;
 
 public final class EffortlessClientConfigStorage extends TagElementFileStorage<RootConfig> {
 

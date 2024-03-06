@@ -7,8 +7,8 @@ import com.electronwill.nightconfig.core.Config;
 import dev.huskuraft.effortless.api.file.CommentedConfigFileStorage;
 import dev.huskuraft.effortless.api.toml.CommentedConfigDeserializer;
 import dev.huskuraft.effortless.api.toml.CommentedConfigSerializer;
-import dev.huskuraft.effortless.session.SessionConfig;
-import dev.huskuraft.effortless.session.SessionConfigSerDes;
+import dev.huskuraft.effortless.session.config.SessionConfig;
+import dev.huskuraft.effortless.session.config.SessionConfigSerDes;
 
 public final class EffortlessSessionConfigStorage extends CommentedConfigFileStorage<SessionConfig> {
 

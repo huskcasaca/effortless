@@ -1,10 +1,11 @@
-package dev.huskuraft.effortless.session;
+package dev.huskuraft.effortless.session.config;
 
 import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 
-public record BuilderConfig(
+public record BuildingConfig(
+        Boolean useCommands,
         Boolean allowUseMod,
         Boolean allowBreakBlocks,
         Boolean allowPlaceBlocks,
@@ -16,6 +17,7 @@ public record BuilderConfig(
         List<ResourceLocation> blacklistedItems
 ) {
 
+    public static final boolean USE_COMMANDS_DEFAULT = false;
     public static final boolean ALLOW_USE_MOD_DEFAULT = true;
     public static final boolean ALLOW_BREAK_BLOCKS_DEFAULT = true;
     public static final boolean ALLOW_PLACE_BLOCKS_DEFAULT = true;
@@ -39,15 +41,16 @@ public record BuilderConfig(
     public static final List<ResourceLocation> WHITELISTED_ITEMS_DEFAULT = List.of();
     public static final List<ResourceLocation> BLACKLISTED_ITEMS_DEFAULT = List.of();
 
-    public static final BuilderConfig DEFAULT = new BuilderConfig(
-            BuilderConfig.ALLOW_USE_MOD_DEFAULT,
-            BuilderConfig.ALLOW_BREAK_BLOCKS_DEFAULT,
-            BuilderConfig.ALLOW_PLACE_BLOCKS_DEFAULT,
-            BuilderConfig.MAX_REACH_DISTANCE_DEFAULT,
-            BuilderConfig.MAX_DISTANCE_PER_AXIS_DEFAULT,
-            BuilderConfig.MAX_BREAK_BLOCKS_DEFAULT,
-            BuilderConfig.MAX_PLACE_BLOCKS_DEFAULT,
-            BuilderConfig.WHITELISTED_ITEMS_DEFAULT,
-            BuilderConfig.BLACKLISTED_ITEMS_DEFAULT
+    public static final BuildingConfig DEFAULT = new BuildingConfig(
+            USE_COMMANDS_DEFAULT,
+            ALLOW_USE_MOD_DEFAULT,
+            ALLOW_BREAK_BLOCKS_DEFAULT,
+            ALLOW_PLACE_BLOCKS_DEFAULT,
+            MAX_REACH_DISTANCE_DEFAULT,
+            MAX_DISTANCE_PER_AXIS_DEFAULT,
+            MAX_BREAK_BLOCKS_DEFAULT,
+            MAX_PLACE_BLOCKS_DEFAULT,
+            WHITELISTED_ITEMS_DEFAULT,
+            BLACKLISTED_ITEMS_DEFAULT
     );
 }
