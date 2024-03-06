@@ -24,10 +24,10 @@ import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
+import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.BuildState;
-import dev.huskuraft.effortless.building.ClientBatchBuildSession;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.SingleCommand;
@@ -125,7 +125,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
             var previewContext = finalizedContext.withPreviewOnceType();
-            var result = new ClientBatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
+            var result = new BatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
 
             if (isServerSessionValid()) {
                 getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
@@ -244,7 +244,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void onContextReceived(Player player, Context context) {
-        var result = new ClientBatchBuildSession(player.getWorld(), player, context).build().commit();
+        var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
 
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
@@ -345,7 +345,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         setContext(player, getContext(player).withRandomPatternSeed());
         var context = getContextTraced(player).withPreviewType();
 
-        var result = new ClientBatchBuildSession(player.getWorld(), player, context.withPreviewType()).build().commit();
+        var result = new BatchBuildSession(player.getWorld(), player, context.withPreviewType()).build().commit();
 
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);

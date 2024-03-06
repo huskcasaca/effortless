@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
@@ -107,12 +108,16 @@ public class BlockPlaceOperation extends BlockOperation {
 
     @Override
     public BlockPlaceOperationResult commit() {
-        // FIXME: 9/8/23 blockState NPE
-        var type = placeBlock();
+        var result = placeBlock();
         var inputs = Collections.singletonList(blockState.getItem().getDefaultStack());
         var outputs = Collections.<ItemStack>emptyList();
 
-        return new BlockPlaceOperationResult(this, type, inputs, outputs);
+        if (getWorld().isClient() && getContext().isPreviewOnce() && result.success()) {
+            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getInteraction().getBlockPosition().getCenter());
+            getPlayer().getClient().getSoundManager().play(sound);
+        }
+
+        return new BlockPlaceOperationResult(this, result, inputs, outputs);
     }
 
     @Override

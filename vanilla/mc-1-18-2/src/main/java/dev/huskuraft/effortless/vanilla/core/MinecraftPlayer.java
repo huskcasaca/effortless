@@ -12,8 +12,10 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
@@ -48,6 +50,11 @@ public class MinecraftPlayer implements Player {
     @Override
     public boolean isDeadOrDying() {
         return reference.isDeadOrDying();
+    }
+
+    @Override
+    public Client getClient() {
+        return new MinecraftClient(Minecraft.getInstance());
     }
 
     @Override

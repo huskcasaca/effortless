@@ -10,9 +10,7 @@ import dev.huskuraft.effortless.api.renderer.RenderFadeEntry;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockBreakOnClientOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockPlaceOnClientOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationPreview;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationPreview;
@@ -43,8 +41,6 @@ public class OperationsRenderer {
     private void registerRenderers() {
         registerRenderer(BlockPlaceOperationResult.class, BlockOperationPreview::new);
         registerRenderer(BlockBreakOperationResult.class, BlockOperationPreview::new);
-        registerRenderer(BlockPlaceOnClientOperationResult.class, BlockOperationPreview::new);
-        registerRenderer(BlockBreakOnClientOperationResult.class, BlockOperationPreview::new);
         registerRenderer(BatchOperationResult.class, BatchOperationPreview::new);
     }
 

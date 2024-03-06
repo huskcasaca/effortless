@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.api.text.Text;
@@ -13,6 +14,8 @@ public interface Player extends PlatformReference {
     UUID getId();
 
     boolean isDeadOrDying();
+
+    Client getClient();
 
     Server getServer();
 

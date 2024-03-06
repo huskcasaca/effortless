@@ -12,7 +12,6 @@ public interface ClientEntrance extends Entrance {
 
     ClientEventRegistry getEventRegistry();
 
-    @Deprecated
     default Client getClient() {
         return getClientManager().getRunningClient();
     }

@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
@@ -29,7 +30,7 @@ public class BlockBreakOperation extends BlockOperation {
         super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
     }
 
-    private BlockOperationResult.Type tryBreakBlock() {
+    private BlockOperationResult.Type breakBlock() {
 
         // spectator
         if (player.getGameType().isSpectator()) { // move
@@ -76,11 +77,21 @@ public class BlockBreakOperation extends BlockOperation {
 
     @Override
     public BlockBreakOperationResult commit() {
-        var type = tryBreakBlock();
+        var result = breakBlock();
         var inputs = Collections.<ItemStack>emptyList();
         var outputs = Collections.singletonList(world.getBlockState(interaction.getBlockPosition()).getItem().getDefaultStack());
 
-        return new BlockBreakOperationResult(this, type, inputs, outputs);
+        if (getWorld().isClient() && getContext().isPreviewOnce()) {
+            if (result.success()) {
+                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getInteraction().getBlockPosition().getCenter());
+                getPlayer().getClient().getSoundManager().play(sound);
+            } else {
+                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 8.0F, getBlockState().getSoundSet().pitch() * 0.5F, getInteraction().getBlockPosition().getCenter());
+                getPlayer().getClient().getSoundManager().play(sound);
+            }
+        }
+
+        return new BlockBreakOperationResult(this, result, inputs, outputs);
     }
 
     @Override
