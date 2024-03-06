@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.api.events.render.RegisterShader;
 import dev.huskuraft.effortless.api.events.render.RenderGui;
 import dev.huskuraft.effortless.api.events.render.RenderWorld;
 
-public class ClientEventRegistry extends EventRegistry {
+public class ClientEventRegistry extends CommonEventRegistry {
 
     public Event<RegisterKeys> getRegisterKeysEvent() {
         return get();

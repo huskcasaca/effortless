@@ -2,25 +2,25 @@ package dev.huskuraft.effortless.forge.events;
 
 import com.google.auto.service.AutoService;
 
-import dev.huskuraft.effortless.api.events.EventRegistry;
+import dev.huskuraft.effortless.api.events.CommonEventRegistry;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStartingEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStoppedEvent;
-import net.minecraftforge.fmlserverevents.FMLServerStoppingEvent;
 
-@AutoService(EventRegistry.class)
-public class ForgeEventRegistry extends EventRegistry {
+@AutoService(CommonEventRegistry.class)
+public class ForgeCommonEventRegistry extends CommonEventRegistry {
 
 
-    public ForgeEventRegistry() {
+    public ForgeCommonEventRegistry() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -53,22 +53,22 @@ public class ForgeEventRegistry extends EventRegistry {
     }
 
     @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event) {
+    public void onServerStarting(ServerStartingEvent event) {
         getServerStartingEvent().invoker().onServerStarting(new MinecraftServer(event.getServer()));
     }
 
     @SubscribeEvent
-    public void onSeverStarted(FMLServerStartedEvent event) {
+    public void onSeverrStarted(ServerStartedEvent event) {
         getServerStartedEvent().invoker().onServerStarted(new MinecraftServer(event.getServer()));
     }
 
     @SubscribeEvent
-    public void onServerStopping(FMLServerStoppingEvent event) {
+    public void onServerStopping(ServerStoppingEvent event) {
         getServerStoppingEvent().invoker().onServerStopping(new MinecraftServer(event.getServer()));
     }
 
     @SubscribeEvent
-    public void onServerStopped(FMLServerStoppedEvent event) {
+    public void onServerStopped(ServerStoppedEvent event) {
         getServerStoppedEvent().invoker().onServerStopped(new MinecraftServer(event.getServer()));
     }
 

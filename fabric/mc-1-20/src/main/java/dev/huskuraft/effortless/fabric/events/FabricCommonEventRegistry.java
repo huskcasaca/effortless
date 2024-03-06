@@ -2,17 +2,17 @@ package dev.huskuraft.effortless.fabric.events;
 
 import com.google.auto.service.AutoService;
 
-import dev.huskuraft.effortless.api.events.EventRegistry;
+import dev.huskuraft.effortless.api.events.CommonEventRegistry;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
-@AutoService(EventRegistry.class)
-public class FabricEventRegistry extends EventRegistry {
+@AutoService(CommonEventRegistry.class)
+public class FabricCommonEventRegistry extends CommonEventRegistry {
 
-    public FabricEventRegistry() {
+    public FabricCommonEventRegistry() {
         PlatformLifecycleEvents.COMMON_START.register(() -> {
             getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
             });

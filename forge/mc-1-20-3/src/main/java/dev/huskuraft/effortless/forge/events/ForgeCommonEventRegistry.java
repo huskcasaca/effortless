@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.forge.events;
 
 import com.google.auto.service.AutoService;
 
-import dev.huskuraft.effortless.api.events.EventRegistry;
+import dev.huskuraft.effortless.api.events.CommonEventRegistry;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
@@ -16,11 +16,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@AutoService(EventRegistry.class)
-public class ForgeEventRegistry extends EventRegistry {
+@AutoService(CommonEventRegistry.class)
+public class ForgeCommonEventRegistry extends CommonEventRegistry {
 
 
-    public ForgeEventRegistry() {
+    public ForgeCommonEventRegistry() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);

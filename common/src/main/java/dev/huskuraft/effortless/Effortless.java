@@ -2,10 +2,9 @@ package dev.huskuraft.effortless;
 
 import com.google.auto.service.AutoService;
 
-import dev.huskuraft.effortless.api.events.EventRegistry;
-import dev.huskuraft.effortless.api.networking.NetworkChannel;
+import dev.huskuraft.effortless.api.events.CommonEventRegistry;
+import dev.huskuraft.effortless.api.events.EventRegister;
 import dev.huskuraft.effortless.api.platform.Entrance;
-import dev.huskuraft.effortless.api.platform.PlatformLoader;
 
 @AutoService(Entrance.class)
 public class Effortless implements Entrance {
@@ -13,24 +12,20 @@ public class Effortless implements Entrance {
     public static final String MOD_ID = "effortless";
     public static final int PROTOCOL_VERSION = 3;
 
-    private final EventRegistry eventRegistry = PlatformLoader.getSingleton();
+    private final CommonEventRegistry commonEventRegistry = (CommonEventRegistry) EventRegister.getCommon();
     private final EffortlessNetworkChannel networkChannel = new EffortlessNetworkChannel(this);
     private final EffortlessStructureBuilder structureBuilder = new EffortlessStructureBuilder(this);
     private final EffortlessSessionConfigStorage sessionConfigStorage = new EffortlessSessionConfigStorage(this);
-
-    public Effortless() {
-
-    }
 
     public static Effortless getInstance() {
         return (Effortless) Entrance.getInstance();
     }
 
-    public EventRegistry getEventRegistry() {
-        return eventRegistry;
+    public CommonEventRegistry getEventRegistry() {
+        return commonEventRegistry;
     }
 
-    public NetworkChannel getChannel() {
+    public EffortlessNetworkChannel getChannel() {
         return networkChannel;
     }
 
