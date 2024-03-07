@@ -87,6 +87,10 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
 
     private static CommentedConfig serialize(BuildingConfig buildingConfig, boolean global) {
         var config = CommentedConfig.inMemory();
+        setNullable(config, KEY_USE_COMMANDS, buildingConfig.useCommands());
+        if (global) {
+            config.setComment(KEY_USE_COMMANDS, "Should use commands to build using this mod? It's available for client side only.");
+        }
         setNullable(config, KEY_ALLOW_USE_MOD, buildingConfig.allowUseMod());
         if (global) {
             config.setComment(KEY_ALLOW_USE_MOD, "Should allow players to use this mod?");
