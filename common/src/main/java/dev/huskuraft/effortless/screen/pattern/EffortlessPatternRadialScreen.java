@@ -18,12 +18,13 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
 public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern, Option> {
 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
-    private static final Button<Option> SETTING_OPTION = button(Settings.MODE_SETTINGS);
+    private static final Button<Option> SETTING_OPTION = button(Settings.GENERAL);
     private static final Button<Option> REPLACE_OPTION = button(ReplaceMode.DISABLED);
 
     private final Key assignedKey;
@@ -105,32 +106,43 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
         setRadialSlots(
                 getSlots()
         );
-        setRadialSelectResponder(slot -> {
-            if (slot.getContent() == Pattern.EMPTY) {
-                new EffortlessPatternSettingsScreen(
-                        getEntrance(),
-                        pattern -> {
-                            getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-                            getEntrance().getConfigStorage().use(config -> {
-                                config.getPatternConfig().setPatternSettings(pattern);
-                            });
-                        },
-                        getEntrance().getConfigStorage().get().getPatternConfig().getPatternSettings()
-                ).attach();
+        setRadialSelectResponder(entry -> {
+            if (entry.getContent() == Pattern.EMPTY) {
+                new EffortlessPatternSettingsScreen(getEntrance()).attach();
 
             } else {
-                selectPattern(slot.getContent());
+                selectPattern(entry.getContent());
             }
         });
-//        setRadialOptionSelectResponder(entry -> {
-//            if (entry.getContent() instanceof SingleSelectFeature) {
-//                selectBuildFeature((SingleSelectFeature) entry.getContent());
-//            }
-//            if (entry.getContent() instanceof MultiSelectFeature) {
-//                selectBuildFeature((MultiSelectFeature) entry.getContent());
-//            }
-//
-//        });
+        setRadialOptionSelectResponder(entry -> {
+            if (entry.getContent() instanceof Settings settings) {
+                switch (settings) {
+                    case GENERAL -> {
+                        new EffortlessSettingsScreen(getEntrance()).attach();
+                    }
+                }
+                return;
+            }
+            if (entry.getContent() instanceof UndoRedo undoRedo) {
+                switch (undoRedo) {
+                    case UNDO -> getEntrance().getStructureBuilder().undo(getEntrance().getClient().getPlayer());
+                    case REDO -> getEntrance().getStructureBuilder().redo(getEntrance().getClient().getPlayer());
+                }
+                return;
+            }
+            if (entry.getContent() instanceof ReplaceMode replaceMode) {
+                getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), replaceMode.next());
+                return;
+            }
+            if (entry.getContent() instanceof SingleSelectFeature singleSelectFeature) {
+                getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), singleSelectFeature);
+                return;
+            }
+            if (entry.getContent() instanceof MultiSelectFeature multiSelectFeature) {
+                getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), multiSelectFeature);
+                return;
+            }
+        });
     }
 
     @Override

@@ -14,12 +14,13 @@ import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
 public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, Option> {
 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
-    private static final Button<Option> SETTING_OPTION = button(Settings.MODE_SETTINGS);
+    private static final Button<Option> SETTING_OPTION = button(Settings.GENERAL);
 
     private final Key assignedKey;
 
@@ -66,6 +67,14 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
             getEntrance().getStructureBuilder().setBuildMode(getEntrance().getClient().getPlayer(), slot.getContent());
         });
         setRadialOptionSelectResponder(entry -> {
+            if (entry.getContent() instanceof Settings settings) {
+                switch (settings) {
+                    case GENERAL -> {
+                        new EffortlessSettingsScreen(getEntrance()).attach();
+                    }
+                }
+                return;
+            }
             if (entry.getContent() instanceof UndoRedo undoRedo) {
                 switch (undoRedo) {
                     case UNDO -> getEntrance().getStructureBuilder().undo(getEntrance().getClient().getPlayer());

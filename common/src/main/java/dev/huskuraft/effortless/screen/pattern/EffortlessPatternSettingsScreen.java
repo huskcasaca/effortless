@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.screen.pattern;
 
 import java.util.function.Consumer;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -26,10 +27,20 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
     private Button doneButton;
     private Button cancelButton;
 
-    public EffortlessPatternSettingsScreen(Entrance entrance, Consumer<PatternSettings> consumer, PatternSettings patternSettings) {
+    public EffortlessPatternSettingsScreen(Entrance entrance) {
         super(entrance, Text.translate("effortless.pattern.settings.title"));
-        this.applySettings = consumer;
-        this.lastSettings = patternSettings;
+        this.applySettings = pattern -> {
+            getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
+            getEntrance().getConfigStorage().use(config -> {
+                config.getPatternConfig().setPatternSettings(pattern);
+            });
+        };
+        this.lastSettings = getEntrance().getConfigStorage().get().getPatternConfig().getPatternSettings();
+    }
+
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
     }
 
     @Override

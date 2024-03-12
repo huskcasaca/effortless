@@ -79,6 +79,14 @@ public class NumberField extends AbstractContainerWidget {
         this.range = Range.UNBOUNDED;
     }
 
+    @Override
+    public void setActive(boolean active) {
+        super.setActive(active);
+        this.textField.setActive(active);
+        this.minusButton.setActive(active);
+        this.plusButton.setActive(active);
+    }
+
     public Number getNumber() {
         if (textField.getValue().isEmpty()) return 0;
         try {
@@ -89,7 +97,7 @@ public class NumberField extends AbstractContainerWidget {
     }
 
     public void setValue(Number number) {
-        textField.setValue(format.format(number.doubleValue()));
+        textField.setValue(number == null ? "" : format.format(number.doubleValue()));
     }
 
     public void setValueChangeListener(Consumer<Number> responder) {

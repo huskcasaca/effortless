@@ -42,6 +42,8 @@ public interface Widget extends Renderable, InputHandler {
 
     int getHeight();
 
+    void setHeight(int height);
+
     default int getTop() {
         return getY();
     }
@@ -50,7 +52,27 @@ public interface Widget extends Renderable, InputHandler {
         return getY() + getHeight();
     }
 
-    void setHeight(int height);
+    default int getLeft() {
+        return getX();
+    }
+
+    default int getRight() {
+        return getX() + getWidth();
+    }
+
+    default int getCenterY() {
+        return getY() + getHeight() / 2;
+    }
+
+    default int getCenterX() {
+        return getX() + getWidth() / 2;
+    }
+
+    default void recreate() {
+        onDestroy();
+        onCreate();
+        onLoad();
+    }
 
 }
 

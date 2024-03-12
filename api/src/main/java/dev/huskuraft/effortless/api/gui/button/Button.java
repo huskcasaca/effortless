@@ -15,12 +15,12 @@ public class Button extends AbstractButton {
     public static final int DEFAULT_HEIGHT = 20;
     private OnPress onPress;
 
-    public Button(Entrance entrance, int i, int j, int k, int l, Text message) {
-        this(entrance, i, j, k, l, message, null);
+    public Button(Entrance entrance, int x, int y, int width, int height, Text message) {
+        this(entrance, x, y, width, height, message, null);
     }
 
-    public Button(Entrance entrance, int i, int j, int k, int l, Text message, OnPress onPress) {
-        super(entrance, i, j, k, l, message);
+    public Button(Entrance entrance, int x, int y, int width, int height, Text message, OnPress onPress) {
+        super(entrance, x, y, width, height, message);
         this.onPress = onPress;
     }
 

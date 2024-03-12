@@ -29,4 +29,11 @@ public class Dimens {
         public static final int MAX_SLOT_COUNT = (ROW_WIDTH - ICON_WIDTH) / SLOT_OFFSET_X;
     }
 
+    public static class Buttons {
+        public static final int QUARTER = 72;
+        public static final int HALF = 150;
+        public static final int FULL = 306;
+        public static final int TAB = 214;
+    }
+
 }

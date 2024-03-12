@@ -24,7 +24,8 @@ public class EditBox extends AbstractWidget {
     private static final int CURSOR_INSERT_COLOR = -3092272;
     private static final String CURSOR_APPEND_CHARACTER = "_";
     private static final int BORDER_COLOR_FOCUSED = -1;
-    private static final int BORDER_COLOR = -6250336;
+    private static final int BORDER_COLOR_INACTIVE = 0xFF4f4f4f;
+    private static final int BORDER_COLOR = 0xFFA0A0A0;
     private static final int BACKGROUND_COLOR = -16777216;
     private String value;
     private int maxLength;
@@ -343,11 +344,12 @@ public class EditBox extends AbstractWidget {
     }
 
     public boolean canConsumeInput() {
-        return this.isVisible() && this.isFocused() && this.isEditable();
+        return this.isVisible() && this.isFocused() && this.isEditable() && this.isActive();
     }
 
     public boolean onMouseClicked(double mouseX, double mouseY, int button) {
-        if (!this.isVisible()) {
+        if (!this.isVisible() || !this.isActive()) {
+            this.setFocus(false);
             return false;
         } else {
             boolean bl = isMouseOver(mouseX, mouseY);
@@ -380,12 +382,12 @@ public class EditBox extends AbstractWidget {
 
         int k;
         if (this.isBordered()) {
-            k = this.isFocused() ? BORDER_COLOR_FOCUSED : BORDER_COLOR;
+            k = this.isActive() ? this.isFocused() ? BORDER_COLOR_FOCUSED : BORDER_COLOR : BORDER_COLOR_INACTIVE;
             renderer.renderRect(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), k);
             renderer.renderRect(this.getX() + 1, this.getY() + 1, this.getX() + this.getWidth() - 1, this.getY() + this.getHeight() - 1, BACKGROUND_COLOR);
         }
 
-        k = this.isEditable ? this.textColor : this.textColorUneditable;
+        k = this.isActive() && this.isEditable ? this.textColor : this.textColorUneditable;
         int l = this.cursorPos - this.displayPos;
         int m = this.highlightPos - this.displayPos;
         String string = getTypeface().subtractByWidth(this.value.substring(this.displayPos), this.getInnerWidth(), false);

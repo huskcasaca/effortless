@@ -18,7 +18,6 @@ import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.renderer.Shaders;
-import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.renderer.BlockShaders;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
@@ -154,16 +153,7 @@ public final class EffortlessClientManager implements ClientManager {
     }
 
     private void openPatternSettingsScreen() {
-        new EffortlessPatternSettingsScreen(
-                getEntrance(),
-                pattern -> {
-                    getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-                    getEntrance().getConfigStorage().use(config -> {
-                        config.getPatternConfig().setPatternSettings(pattern);
-                    });
-                },
-                getEntrance().getConfigStorage().get().getPatternConfig().getPatternSettings()
-        ).attach();
+        new EffortlessPatternSettingsScreen(getEntrance()).attach();
     }
 
     private void openRandomizerSettingsScreen() {

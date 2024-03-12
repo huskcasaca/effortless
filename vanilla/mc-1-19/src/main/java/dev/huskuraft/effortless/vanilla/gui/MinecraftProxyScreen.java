@@ -29,18 +29,14 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
     protected void init() {
         proxy.setWidth(width);
         proxy.setHeight(height);
-        proxy.onDestroy();
-        proxy.onCreate();
-        proxy.onLoad();
+        proxy.recreate();
     }
 
     @Override
     protected void rebuildWidgets() {
         proxy.setWidth(width);
         proxy.setHeight(height);
-        proxy.onDestroy();
-        proxy.onCreate();
-        proxy.onLoad();
+        proxy.recreate();
     }
 
     @Override

@@ -1,7 +1,33 @@
 {
   "effortless.name": "Effortless",
 
-  "effortless.settings.title": "Effortless",
+  "effortless.settings.title": "Effortless Building Settings",
+  "effortless.build_settings.title": "Build Settings",
+  "effortless.preview_settings.title": "Preview Settings",
+  "effortless.pattern_settings.title": "Pattern Settings",
+  "effortless.transformer_presets.title": "Transformer Presets",
+  "effortless.general_settings.title": "General Settings",
+  "effortless.global_general_settings.title": "Global General Settings",
+  "effortless.per_player_general_settings.title": "Per-Player General Settings",
+
+  "effortless.button.done": "Done",
+  "effortless.button.save": "Save",
+  "effortless.button.cancel": "Cancel",
+
+  "effortless.option.on": "On",
+  "effortless.option.off": "Off",
+
+  "effortless.global_general_settings.use_commands": "Use Commands",
+  "effortless.global_general_settings.allow_use_mod": "Allow Use Mod",
+  "effortless.global_general_settings.allow_break_blocks": "Allow Break Blocks",
+  "effortless.global_general_settings.allow_place_blocks": "Allow Place Blocks",
+  "effortless.global_general_settings.max_reach_distance": "Max Reach Distance",
+  "effortless.global_general_settings.max_distance_per_axis": "Max Distance Per Axis",
+  "effortless.global_general_settings.max_break_blocks": "Max Break Blocks",
+  "effortless.global_general_settings.max_place_blocks": "Max Place Blocks",
+  "effortless.global_general_settings.whitelisted_items": "Whitelisted Items",
+  "effortless.global_general_settings.blacklisted_items": "Blacklisted Items",
+
   "effortless.settings.toggle.on": "§aON§r",
   "effortless.settings.toggle.off": "§cOFF§r",
   "effortless.settings.category.config.title": "Config",
