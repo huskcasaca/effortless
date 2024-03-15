@@ -24,7 +24,7 @@ public class Dimens {
         }
     }
 
-    public static class RegularEntry {
+    public static class Entry {
         public static final int ROW_WIDTH = 278;
         public static final int MAX_SLOT_COUNT = (ROW_WIDTH - ICON_WIDTH) / SLOT_OFFSET_X;
     }
@@ -34,6 +34,12 @@ public class Dimens {
         public static final int HALF = 150;
         public static final int FULL = 306;
         public static final int TAB = 214;
+        public static final int ROW = Entry.ROW_WIDTH;
+    }
+
+    public static class Title {
+        public static final int CONTAINER_24 = 24;
+        public static final int CONTAINER_36 = 32;
     }
 
 }

@@ -40,7 +40,7 @@ public final class ItemStackList extends EditableEntryList<ItemStack> {
         }
 
         @Override
-        public void onBindItem() {
+        public void onReload() {
             itemSlot.setItemStack(item);
             nameTextWidget.setMessage(getDisplayName(item));
         }
@@ -52,7 +52,7 @@ public final class ItemStackList extends EditableEntryList<ItemStack> {
 
         @Override
         public int getWidth() {
-            return Dimens.RegularEntry.ROW_WIDTH;
+            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

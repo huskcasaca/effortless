@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.vanilla.platform;
 
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.World;
@@ -13,6 +14,7 @@ import dev.huskuraft.effortless.api.renderer.Window;
 import dev.huskuraft.effortless.api.sound.SoundManager;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftPlayerInfo;
 import dev.huskuraft.effortless.vanilla.core.MinecraftResource;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
 import dev.huskuraft.effortless.vanilla.gui.MinecraftProxyScreen;
@@ -22,6 +24,9 @@ import dev.huskuraft.effortless.vanilla.renderer.MinecraftCamera;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftWindow;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSoundManager;
 import net.minecraft.client.Minecraft;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MinecraftClient implements Client {
 
@@ -74,6 +79,12 @@ public class MinecraftClient implements Client {
     @Override
     public Player getPlayer() {
         return MinecraftPlayer.ofNullable(reference.player);
+    }
+
+    @Override
+    public List<PlayerInfo> getOnlinePlayers() {
+        if (reference.getConnection() == null) return List.of();
+        return reference.getConnection().getOnlinePlayers().stream().map(MinecraftPlayerInfo::new).collect(Collectors.toList());
     }
 
     @Override

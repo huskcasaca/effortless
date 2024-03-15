@@ -1,9 +1,15 @@
 package dev.huskuraft.effortless.screen.test;
 
+import java.util.List;
+import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.Effortless;
+import dev.huskuraft.effortless.api.core.OfflinePlayerInfo;
+import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.container.SimpleEntryList;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
@@ -12,8 +18,10 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.general.EffortlessGlobalGeneralSettingsScreen;
+import dev.huskuraft.effortless.screen.general.EffortlessPerPlayerGeneralSettingsListScreen;
 import dev.huskuraft.effortless.screen.general.EffortlessPerPlayerGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
+import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 import dev.huskuraft.effortless.session.config.BuildingConfig;
 
@@ -26,13 +34,13 @@ public class EffortlessTestScreen extends AbstractScreen {
     @Override
     public void onCreate() {
 
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.test.cancel"), button -> {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 1f).build());
 
-        var entries = addWidget(new SimpleEntryList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 60));
+        var entries = addWidget(new SimpleEntryList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36));
 
         entries.addSimpleEntry(entry -> {
             var editBox = entry.addWidget(new EditBox(getEntrance(), entry.getX() + entry.getWidth() / 2 - 100 - 38, entry.getY(), 210, 20, Text.empty()));
@@ -50,26 +58,47 @@ public class EffortlessTestScreen extends AbstractScreen {
             }));
         });
         entries.addSimpleEntry(entry -> {
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), 256, 20, Text.text("Open EffortlessSettingsScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW, 20, Text.text("Open EffortlessSettingsScreen"), (button) -> {
                 new EffortlessSettingsScreen(getEntrance()).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft() + 8, entry.getY() + 20, 256, 20, Text.text("Open EffortlessGeneralSettingsScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 20, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessGeneralSettingsScreen"), (button) -> {
                 new EffortlessGeneralSettingsScreen(getEntrance()).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft() + 16, entry.getY() + 40, 256, 20, Text.text("Open EffortlessGlobalGeneralSettingsScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 40, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessGlobalGeneralSettingsScreen"), (button) -> {
                 new EffortlessGlobalGeneralSettingsScreen(getEntrance(), BuildingConfig.DEFAULT, config -> {
 
                 }).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft() + 16, entry.getY() + 60, 256, 20, Text.text("Open EffortlessGlobalGeneralSettingsScreen"), (button) -> {
-                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), BuildingConfig.DEFAULT, BuildingConfig.DEFAULT, config -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 60, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPerPlayerGeneralSettingsScreen"), (button) -> {
+                new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
+                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, BuildingConfig.DEFAULT, BuildingConfig.DEFAULT, config -> {
+                    }).attach();
+                }).attach();
+            }));
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 80, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPlayerSearchScreen"), (button) -> {
+                new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
 
                 }).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft() + 8, entry.getY() + 80, 256, 20, Text.text("Open EffortlessPatternSettingsScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 100, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPlayerSearchScreen"), (button) -> {
+                new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getPerPlayerBuildConfigRoles(), playerInfo -> {
+                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, BuildingConfig.DEFAULT, BuildingConfig.DEFAULT, config -> {
+
+                    }).attach();
+                }).attach();
+            }));
+        });
+        entries.addSimpleEntry(entry -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPatternSettingsScreen"), (button) -> {
                 new EffortlessPatternSettingsScreen(getEntrance()).attach();
             }));
         });
+    }
+
+    private List<PlayerInfo> getPerPlayerBuildConfigRoles() {
+        var uuids = Effortless.getInstance().getSessionConfigStorage().get().playerConfigs().keySet();
+        var id2Players = getEntrance().getClient().getOnlinePlayers().stream().collect(Collectors.toMap(PlayerInfo::id, Function.identity()));
+        return uuids.stream().map(uuid -> id2Players.computeIfAbsent(uuid, OfflinePlayerInfo::new)).collect(Collectors.toList());
     }
 
 }

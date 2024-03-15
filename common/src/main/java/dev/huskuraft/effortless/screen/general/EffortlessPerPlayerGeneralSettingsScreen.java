@@ -3,7 +3,9 @@ package dev.huskuraft.effortless.screen.general;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -13,13 +15,15 @@ import dev.huskuraft.effortless.session.config.BuildingConfig;
 
 public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
+    private final PlayerInfo playerInfo;
     private final BuildingConfig globalConfig;
     private BuildingConfig playerConfig;
     private final Consumer<BuildingConfig> consumer;
 
 
-    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, BuildingConfig globalConfig, BuildingConfig playerConfig, Consumer<BuildingConfig> consumer) {
+    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, BuildingConfig globalConfig, BuildingConfig playerConfig, Consumer<BuildingConfig> consumer) {
         super(entrance, Text.translate("effortless.general_settings.title"));
+        this.playerInfo = playerInfo;
         this.globalConfig = globalConfig;
         this.playerConfig = playerConfig;
         this.consumer = consumer;
@@ -27,9 +31,12 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        var titleWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        var playerNameWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, Text.text(playerInfo.name()), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 36, false, true));
+        playerNameWidget.setColor(0xFFAAAAAA);
+
+        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36, false, true));
         entries.setRenderSelection(false);
         applyEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
@@ -110,11 +117,12 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     private void applyEntryStatus(SettingOptionsList.SettingsEntry<?> entry, boolean global) {
         entry.setActive(!global);
-        entry.getButton().setMessage(global ? "G" : "O");
+        entry.getButton().setMessage(global ? "O" : "X");
         entry.getButton().setTooltip(
-                global ? "Follow Global Value" : "Override Global Value",
-                "",
-                global ? "This config value overrides the value in the global settings" : "This config value follows the value in the global settings"
+                global ? "Click to Override" : "Click to Use Global",
+                ""
+//                ,
+//                global ? "This config value overrides the value in the global settings" : "This config value follows the value in the global settings"
         );
     }
 

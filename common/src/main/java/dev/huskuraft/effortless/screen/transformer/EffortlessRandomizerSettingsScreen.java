@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.screen.transformer;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -32,7 +33,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.edit"), button -> {
             if (entries.hasSelected()) {
@@ -74,14 +75,14 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
             entries.reset(ItemRandomizer.getDefaultItemRandomizers());
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 1f).build());
 
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.cancel"), button -> {
+            detach();
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.done"), button -> {
             applySettings.accept(lastSettings);
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.cancel"), button -> {
-            detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
-        this.entries = addWidget(new TransformerList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 60));
+        this.entries = addWidget(new TransformerList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 60));
         this.entries.reset(lastSettings.randomizers());
     }
 

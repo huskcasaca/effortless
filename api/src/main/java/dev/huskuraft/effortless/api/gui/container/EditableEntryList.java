@@ -153,15 +153,6 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
 
         public void setItem(T item) {
             this.item = item;
-            onBindItem();
-        }
-
-        @Override
-        public void onLoad() {
-            onBindItem();
-        }
-
-        public void onBindItem() {
         }
 
         public EntryList getEntryList() {

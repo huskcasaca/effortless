@@ -41,23 +41,23 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        this.textSlot = addWidget(new TextSlot(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, Text.empty()));
+        this.textSlot = addWidget(new TextSlot(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, Text.empty()));
 
         this.nameEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2 + 40, 24, Dimens.RegularEntry.ROW_WIDTH - 40, 20, null)
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2 + 40, Dimens.Title.CONTAINER_24, Dimens.Entry.ROW_WIDTH - 40, 20, null)
         );
         this.nameEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
         this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
 
         this.entries = addWidget(new SettingOptionsList(getEntrance(), 0, 54, getWidth(), getHeight() - 54 - 36, true, false));
 
-        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.save"), button -> {
-            applySettings.accept(lastSettings);
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.cancel"), button -> {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.cancel"), button -> {
+        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.save"), button -> {
+            applySettings.accept(lastSettings);
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 

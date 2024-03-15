@@ -13,6 +13,10 @@
   "effortless.button.done": "Done",
   "effortless.button.save": "Save",
   "effortless.button.cancel": "Cancel",
+  "effortless.button.select": "Select",
+
+  "effortless.online_players.title": "Online Players",
+  "effortless.online_players.search_hint": "Search Player",
 
   "effortless.option.on": "On",
   "effortless.option.off": "Off",

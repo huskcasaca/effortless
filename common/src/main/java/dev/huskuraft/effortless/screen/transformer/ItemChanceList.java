@@ -92,10 +92,6 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
             var percentage = String.format("%.2f%%", 100.0 * getItem().chance() / getEntryList().totalCount());
             chanceTextWidget.setX(((getX() + getWidth()) - 50 - getTypeface().measureWidth(percentage)));
             chanceTextWidget.setMessage(Text.text(percentage));
-        }
-
-        @Override
-        public void onBindItem() {
             itemSlot.setItemStack(getItem().content().getDefaultStack());
             itemSlot.setDescription(Text.text(String.valueOf(getItem().chance())));
             nameTextWidget.setMessage(getDisplayName(getItem()));
@@ -113,7 +109,7 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
 
         @Override
         public int getWidth() {
-            return Dimens.RegularEntry.ROW_WIDTH;
+            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

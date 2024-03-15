@@ -30,7 +30,7 @@ public class SimpleEntryList extends AbstractEntryList<SimpleEntryList.Entry> {
 
         @Override
         public int getWidth() {
-            return Dimens.RegularEntry.ROW_WIDTH;
+            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

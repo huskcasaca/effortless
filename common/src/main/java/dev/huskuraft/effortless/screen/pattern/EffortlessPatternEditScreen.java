@@ -53,16 +53,16 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, index, Text.text(String.valueOf(index + 1))));
+        this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, index, Text.text(String.valueOf(index + 1))));
 
         this.nameEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH) / 2 + 40, 24, Dimens.RegularEntry.ROW_WIDTH - 40, 20, null)
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2 + 40, 24, Dimens.Entry.ROW_WIDTH - 40, 20, null)
         );
         this.nameEditBox.setMaxLength(Pattern.MAX_NAME_LENGTH);
         this.nameEditBox.setHint(Text.translate("effortless.pattern.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.name().getString());
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
             if (entries.hasSelected()) {
@@ -127,11 +127,11 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
             ).attach();
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
-        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.save"), button -> {
-            applySettings.accept(lastSettings);
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.cancel"), button -> {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.cancel"), button -> {
+        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.save"), button -> {
+            applySettings.accept(lastSettings);
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 

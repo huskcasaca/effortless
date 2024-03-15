@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.screen.general;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -24,9 +25,9 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 36, false, false));
+        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36, false, false));
         entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, config.useCommands(), (value) -> {
             this.config = new BuildingConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBlocks(), config.maxPlaceBlocks(), config.whitelistedItems(), config.blacklistedItems());
         });

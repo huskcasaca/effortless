@@ -49,7 +49,7 @@ public final class PatternList extends EditableEntryList<Pattern> {
         }
 
         @Override
-        public void onBindItem() {
+        public void onReload() {
             nameTextWidget.setMessage(getDisplayName(getItem()));
             slotContainer.setEntries(getItem().transformers().stream().map(transformer -> new SlotData.TextSymbol(TransformerList.Entry.getSymbol(transformer), Text.empty())).collect(Collectors.toList()));
         }
@@ -61,7 +61,7 @@ public final class PatternList extends EditableEntryList<Pattern> {
 
         @Override
         public int getWidth() {
-            return Dimens.RegularEntry.ROW_WIDTH;
+            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

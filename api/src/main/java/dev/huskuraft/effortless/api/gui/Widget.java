@@ -6,8 +6,6 @@ public interface Widget extends Renderable, InputHandler {
 
     void onCreate();
 
-    void onLoad();
-
     void onReload();
 
     void onDestroy();
@@ -71,7 +69,7 @@ public interface Widget extends Renderable, InputHandler {
     default void recreate() {
         onDestroy();
         onCreate();
-        onLoad();
+        onReload();
     }
 
 }

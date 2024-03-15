@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -45,9 +46,9 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        this.entries = addWidget(new PatternList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 60));
+        this.entries = addWidget(new PatternList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 60));
         this.entries.reset(lastSettings.patterns());
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
@@ -103,11 +104,11 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
             entries.reset(Pattern.getDefaultPatterns());
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.5f).build());
 
-        this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.done"), button -> {
-            applySettings.accept(lastSettings);
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.cancel"), button -> {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.cancel"), button -> {
+        this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.done"), button -> {
+            applySettings.accept(lastSettings);
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
     }

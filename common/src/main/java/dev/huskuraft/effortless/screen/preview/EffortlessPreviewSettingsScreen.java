@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.screen.preview;
 
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -16,9 +17,9 @@ public class EffortlessPreviewSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, 35 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new SettingButtonsList(getEntrance(), 0, 32, getWidth(), getHeight() - 32 - 36));
+        var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36));
         entries.addTab(Text.translate("effortless.preview_settings.title"), (button) -> {
             new EffortlessGeneralSettingsScreen(getEntrance()).attach();
         });
