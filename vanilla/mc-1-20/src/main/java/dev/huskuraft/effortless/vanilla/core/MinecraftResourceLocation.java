@@ -10,6 +10,10 @@ public class MinecraftResourceLocation implements ResourceLocation {
         this.reference = reference;
     }
 
+    public static ResourceLocation ofNullable(net.minecraft.resources.ResourceLocation reference) {
+        return reference == null ? null : new MinecraftResourceLocation(reference);
+    }
+
     @Override
     public Object referenceValue() {
         return reference;

@@ -97,7 +97,7 @@ public class EffortlessTestScreen extends AbstractScreen {
 
     private List<PlayerInfo> getPerPlayerBuildConfigRoles() {
         var uuids = Effortless.getInstance().getSessionConfigStorage().get().playerConfigs().keySet();
-        var id2Players = getEntrance().getClient().getOnlinePlayers().stream().collect(Collectors.toMap(PlayerInfo::id, Function.identity()));
+        var id2Players = getEntrance().getClient().getOnlinePlayers().stream().collect(Collectors.toMap(PlayerInfo::getId, Function.identity()));
         return uuids.stream().map(uuid -> id2Players.computeIfAbsent(uuid, OfflinePlayerInfo::new)).collect(Collectors.toList());
     }
 

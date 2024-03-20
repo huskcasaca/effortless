@@ -72,7 +72,7 @@ public class EffortlessOnlinePlayersScreen extends AbstractScreen {
     }
 
     private void setSearchResult(String string) {
-        entries.reset(SearchTree.of(players, p -> Stream.of(p.name())).search(string));
+        entries.reset(SearchTree.of(players, p -> Stream.of(p.getName())).search(string));
         entries.setSelected(null);
         entries.setScrollAmount(0);
     }

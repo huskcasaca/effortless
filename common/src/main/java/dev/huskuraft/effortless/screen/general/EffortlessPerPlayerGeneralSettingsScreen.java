@@ -32,7 +32,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
     @Override
     public void onCreate() {
         var titleWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
-        var playerNameWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, Text.text(playerInfo.name()), TextWidget.Gravity.CENTER));
+        var playerNameWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, Text.text(playerInfo.getName()), TextWidget.Gravity.CENTER));
 
         playerNameWidget.setColor(0xFFAAAAAA);
 

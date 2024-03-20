@@ -1,9 +1,10 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import dev.huskuraft.effortless.api.core.PlayerInfo;
-import dev.huskuraft.effortless.api.text.Text;
-
 import java.util.UUID;
+
+import dev.huskuraft.effortless.api.core.PlayerInfo;
+import dev.huskuraft.effortless.api.core.PlayerSkin;
+import dev.huskuraft.effortless.api.text.Text;
 
 public class MinecraftPlayerInfo implements PlayerInfo {
 
@@ -31,6 +32,20 @@ public class MinecraftPlayerInfo implements PlayerInfo {
     @Override
     public UUID getId() {
         return reference.getProfile().getId();
+    }
+
+    @Override
+    public PlayerSkin getSkin() {
+        var skin = reference.getSkin();
+        return new PlayerSkin(
+                MinecraftResourceLocation.ofNullable(skin.texture()),
+                MinecraftResourceLocation.ofNullable(skin.capeTexture()),
+                MinecraftResourceLocation.ofNullable(skin.elytraTexture()),
+                switch (skin.model()) {
+                    case SLIM -> PlayerSkin.Model.SLIM;
+                    case WIDE -> PlayerSkin.Model.WIDE;
+                }
+        );
     }
 
     @Override

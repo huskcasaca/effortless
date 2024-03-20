@@ -36,18 +36,18 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
         @Override
         public void onCreate() {
             this.icon = addWidget(new PlayerAvatarIcon(getEntrance(), getX() + 1, getY() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getItem()));
-            this.textWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, Text.text(getItem().name())));
+            this.textWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, Text.text(getItem().getName())));
         }
 
         @Override
         public void onReload() {
             this.icon.setPlayerInfo(item);
-            this.textWidget.setMessage(item.name());
+            this.textWidget.setMessage(item.getName());
         }
 
         @Override
         public Text getNarration() {
-            return Text.translate("narrator.select", getItem().displayName());
+            return Text.translate("narrator.select", getItem().getDisplayName());
         }
 
         @Override

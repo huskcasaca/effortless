@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.vanilla.core;
 import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.PlayerInfo;
+import dev.huskuraft.effortless.api.core.PlayerSkin;
 import dev.huskuraft.effortless.api.text.Text;
 
 public class MinecraftPlayerInfo implements PlayerInfo {
@@ -29,17 +30,27 @@ public class MinecraftPlayerInfo implements PlayerInfo {
     }
 
     @Override
-    public UUID id() {
+    public UUID getId() {
         return reference.getProfile().getId();
     }
 
     @Override
-    public String name() {
+    public PlayerSkin getSkin() {
+        return new PlayerSkin(
+                MinecraftResourceLocation.ofNullable(reference.getSkinLocation()),
+                MinecraftResourceLocation.ofNullable(reference.getCapeLocation()),
+                MinecraftResourceLocation.ofNullable(reference.getElytraLocation()),
+                PlayerSkin.Model.byName(reference.getModelName())
+        );
+    }
+
+    @Override
+    public String getName() {
         return reference.getProfile().getName();
     }
 
     @Override
-    public Text displayName() {
+    public Text getDisplayName() {
         return MinecraftText.ofNullable(reference.getTabListDisplayName());
     }
 }
