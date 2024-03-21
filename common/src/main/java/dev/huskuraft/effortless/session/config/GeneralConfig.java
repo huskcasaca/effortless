@@ -4,7 +4,7 @@ import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 
-public record BuildingConfig(
+public record GeneralConfig(
         Boolean useCommands,
         Boolean allowUseMod,
         Boolean allowBreakBlocks,
@@ -41,7 +41,7 @@ public record BuildingConfig(
     public static final List<ResourceLocation> WHITELISTED_ITEMS_DEFAULT = List.of();
     public static final List<ResourceLocation> BLACKLISTED_ITEMS_DEFAULT = List.of();
 
-    public static final BuildingConfig DEFAULT = new BuildingConfig(
+    public static final GeneralConfig DEFAULT = new GeneralConfig(
             USE_COMMANDS_DEFAULT,
             ALLOW_USE_MOD_DEFAULT,
             ALLOW_BREAK_BLOCKS_DEFAULT,

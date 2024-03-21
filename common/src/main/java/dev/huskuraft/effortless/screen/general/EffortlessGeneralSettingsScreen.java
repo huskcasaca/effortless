@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.settings.SettingButtonsList;
-import dev.huskuraft.effortless.session.config.BuildingConfig;
+import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessGeneralSettingsScreen extends AbstractScreen {
 
@@ -22,13 +22,13 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
 
         var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36));
         entries.addTab(Text.translate("effortless.global_general_settings.title"), (button) -> {
-            new EffortlessGlobalGeneralSettingsScreen(getEntrance(), BuildingConfig.DEFAULT, config -> {
+            new EffortlessGlobalGeneralSettingsScreen(getEntrance(), GeneralConfig.DEFAULT, config -> {
 
             }).attach();
         });
         entries.addTab(Text.translate("effortless.per_player_general_settings.title"), (button) -> {
             new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
-                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, BuildingConfig.DEFAULT, BuildingConfig.DEFAULT, config -> {
+                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, GeneralConfig.DEFAULT, GeneralConfig.DEFAULT, config -> {
                 }).attach();
             }).attach();
         });

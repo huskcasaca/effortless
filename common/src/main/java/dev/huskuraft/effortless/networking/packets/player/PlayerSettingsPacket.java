@@ -34,12 +34,12 @@ public record PlayerSettingsPacket(
 
         @Override
         public void write(Buffer buffer, PlayerSettingsPacket packet) {
-            buffer.writeInt(packet.dimensionSettings.maxReachDistance());
-            buffer.writeInt(packet.dimensionSettings.maxBlockPlacePerAxis());
-            buffer.writeInt(packet.dimensionSettings.maxBlockPlaceAtOnce());
-            buffer.writeBoolean(packet.dimensionSettings.canBreakFar());
-            buffer.writeBoolean(packet.dimensionSettings.enableUndoRedo());
-            buffer.writeInt(packet.dimensionSettings.undoStackSize());
+            buffer.writeInt(packet.dimensionSettings().maxReachDistance());
+            buffer.writeInt(packet.dimensionSettings().maxBlockPlacePerAxis());
+            buffer.writeInt(packet.dimensionSettings().maxBlockPlaceAtOnce());
+            buffer.writeBoolean(packet.dimensionSettings().canBreakFar());
+            buffer.writeBoolean(packet.dimensionSettings().enableUndoRedo());
+            buffer.writeInt(packet.dimensionSettings().undoStackSize());
         }
 
     }

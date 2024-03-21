@@ -11,17 +11,17 @@ import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
-import dev.huskuraft.effortless.session.config.BuildingConfig;
+import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     private final PlayerInfo playerInfo;
-    private final BuildingConfig globalConfig;
-    private BuildingConfig playerConfig;
-    private final Consumer<BuildingConfig> consumer;
+    private final GeneralConfig globalConfig;
+    private GeneralConfig playerConfig;
+    private final Consumer<GeneralConfig> consumer;
 
 
-    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, BuildingConfig globalConfig, BuildingConfig playerConfig, Consumer<BuildingConfig> consumer) {
+    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig globalConfig, GeneralConfig playerConfig, Consumer<GeneralConfig> consumer) {
         super(entrance, Text.translate("effortless.general_settings.title"));
         this.playerInfo = playerInfo;
         this.globalConfig = globalConfig;
@@ -41,7 +41,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         applyEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
                 value -> {
-                    this.playerConfig = new BuildingConfig(value, playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.playerConfig = new GeneralConfig(value, playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
                 },
                 () -> globalConfig.useCommands(),
                 () -> playerConfig.useCommands()
@@ -50,7 +50,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         applyEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_use_mod"), null, null, null),
                 (value) -> {
-                    this.playerConfig = new BuildingConfig(playerConfig.useCommands(), value, playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), value, playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
                 },
                 () -> globalConfig.allowUseMod(),
                 () -> playerConfig.allowUseMod()
@@ -58,7 +58,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         applyEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_break_blocks"), null, null, null),
                 (value) -> {
-                    this.playerConfig = new BuildingConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), value, playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), value, playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
                 },
                 () -> globalConfig.allowBreakBlocks(),
                 () -> playerConfig.allowBreakBlocks()
@@ -66,39 +66,39 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         applyEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_place_blocks"), null, null, null),
                 (value) -> {
-                    this.playerConfig = new BuildingConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), value, playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), value, playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
                 },
                 () -> globalConfig.allowPlaceBlocks(),
                 () -> playerConfig.allowPlaceBlocks()
         );
         applyEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_reach_distance"), null, null, BuildingConfig.MAX_REACH_DISTANCE_RANGE_START, BuildingConfig.MAX_REACH_DISTANCE_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_reach_distance"), null, null, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END, null),
                 (value) -> {
-                    this.playerConfig = new BuildingConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), value, playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), value, playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
                 },
                 () -> globalConfig.maxReachDistance(),
                 () -> playerConfig.maxReachDistance()
         );
         applyEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_distance_per_axis"), null, null, BuildingConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, BuildingConfig.MAX_DISTANCE_PER_AXIS_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_distance_per_axis"), null, null, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_END, null),
                 (value) -> {
-                    this.playerConfig = new BuildingConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), value, playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), value, playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
                 },
                 () -> globalConfig.maxDistancePerAxis(),
                 () -> playerConfig.maxDistancePerAxis()
         );
         applyEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_break_blocks"), null, null, BuildingConfig.MAX_BREAK_BLOCKS_RANGE_START, BuildingConfig.MAX_BREAK_BLOCKS_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_break_blocks"), null, null, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_START, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_END, null),
                 (value) -> {
-                    this.playerConfig = new BuildingConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), value, playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), value, playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
                 },
                 () -> globalConfig.maxBreakBlocks(),
                 () -> playerConfig.maxBreakBlocks()
         );
         applyEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_place_blocks"), null, null, BuildingConfig.MAX_PLACE_BLOCKS_RANGE_START, BuildingConfig.MAX_PLACE_BLOCKS_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_place_blocks"), null, null, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_START, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_END, null),
                 (value) -> {
-                    this.playerConfig = new BuildingConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), value, playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), value, playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
                 },
                 () -> globalConfig.maxPlaceBlocks(),
                 () -> playerConfig.maxPlaceBlocks()

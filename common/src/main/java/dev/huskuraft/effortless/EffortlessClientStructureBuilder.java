@@ -46,7 +46,6 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.renderer.opertaion.SurfaceColor;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
-import dev.huskuraft.effortless.session.Session;
 
 public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
@@ -54,10 +53,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
-    private final AtomicReference<Session> serverSession = new AtomicReference<>();
-    private final AtomicReference<Session> clientSession = new AtomicReference<>(Session.current());
-    private final AtomicReference<Boolean> isPlayerNotified = new AtomicReference<>(false);
-
 
     public EffortlessClientStructureBuilder(EffortlessClient entrance) {
         this.entrance = entrance;
@@ -84,14 +79,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     case FAILED -> "failed";
                 }
         ));
-    }
-
-    public void onServerSession(Session session) {
-        serverSession.set(session);
-    }
-
-    public boolean isServerSessionValid() {
-        return serverSession.get() != null;
     }
 
     private EffortlessClient getEntrance() {
@@ -151,7 +138,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public Context getDefaultContext() {
-        return Context.defaultSet(!isServerSessionValid());
+        return Context.defaultSet(false);
     }
 
     @Override
@@ -212,8 +199,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void resetAll() {
-        serverSession.set(null);
-        isPlayerNotified.set(false);
         lastClientPlayerLevel.set(null);
         contexts.clear();
         undoRedoStacks.clear();
@@ -268,50 +253,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO));
     }
 
-    enum SessionStatus {
-        SERVER_NOT_LOADED,
-        CLIENT_NOT_LOADED,
-        BOTH_NOT_LOADED,
-        PROTOCOL_VERSION_MISMATCH,
-        SUCCESS
-    }
-
-    private SessionStatus getSessionStatus() {
-        if (serverSession.get() == null && clientSession.get() == null) {
-            return SessionStatus.BOTH_NOT_LOADED;
-        }
-        if (serverSession.get() == null) {
-            return SessionStatus.SERVER_NOT_LOADED;
-        }
-        if (clientSession.get() == null) {
-            return SessionStatus.CLIENT_NOT_LOADED;
-        }
-        var serverMod = serverSession.get().mods().stream().filter(mod -> mod.getId().equals(Effortless.MOD_ID)).findFirst().orElseThrow();
-        var clientMod = clientSession.get().mods().stream().filter(mod -> mod.getId().equals(Effortless.MOD_ID)).findFirst().orElseThrow();
-
-        if (!serverMod.getVersionStr().equals(clientMod.getVersionStr())) {
-            return SessionStatus.PROTOCOL_VERSION_MISMATCH;
-        }
-        return SessionStatus.SUCCESS;
-    }
-
-    private void notifySession() {
-        if (!isPlayerNotified.compareAndSet(false, true)) {
-            return;
-        }
-        var id = TextStyle.GRAY + "[" + Text.translate("effortless.name") + "]" + TextStyle.RESET + " ";
-        var message = switch (getSessionStatus()) {
-            case SERVER_NOT_LOADED -> TextStyle.RED + "Mod not found on SERVER, using commands to build instead.";
-            case CLIENT_NOT_LOADED -> TextStyle.RED + "Mod not found on CLIENT, using commands to build instead.";
-            case BOTH_NOT_LOADED -> TextStyle.RED + "Mod not found on SERVER and CLIENT, it cannot happen.";
-            case PROTOCOL_VERSION_MISMATCH -> {
-                yield TextStyle.WHITE + "Mod protocol version mismatch! " + TextStyle.GOLD + "Server: [" + serverSession.get().protocolVersion() + "]" + TextStyle.WHITE + ", " + TextStyle.GOLD + "Client: [" + clientSession.get().protocolVersion() + "]";
-            }
-            case SUCCESS -> TextStyle.WHITE + "Mod found on SERVER and CLIENT, running with loader type " + TextStyle.GOLD + "[" + serverSession.get().loaderType().name() + "]";
-        };
-        getEntrance().getClientManager().getRunningClient().getPlayer().sendMessage(id + message);
-    }
-
     private final AtomicReference<ResourceLocation> lastClientPlayerLevel = new AtomicReference<>();
 
     public void onClientTick(Client client, ClientTick.Phase phase) {
@@ -341,7 +282,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             return;
         }
 
-        notifySession();
+//        notifySession();
 
         setContext(player, getContext(player).withRandomPatternSeed());
         var context = getContextTraced(player).withPreviewType();

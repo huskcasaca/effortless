@@ -25,7 +25,7 @@ public record PlayerCommandPacket(
 
         @Override
         public void write(Buffer buffer, PlayerCommandPacket packet) {
-            buffer.writeEnum(packet.action);
+            buffer.writeEnum(packet.action());
         }
 
     }

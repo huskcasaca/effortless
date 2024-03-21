@@ -14,6 +14,7 @@ public class EffortlessClient implements ClientEntrance {
     private final EffortlessClientStructureBuilder structureBuilder = new EffortlessClientStructureBuilder(this);
     private final EffortlessClientManager clientManager = new EffortlessClientManager(this);
     private final EffortlessClientConfigStorage configStorage = new EffortlessClientConfigStorage(this);
+    private final EffortlessClientSessionManager sessionManager = new EffortlessClientSessionManager(this);
 
     public static EffortlessClient getInstance() {
         return (EffortlessClient) ClientEntrance.getInstance();
@@ -38,6 +39,10 @@ public class EffortlessClient implements ClientEntrance {
 
     public EffortlessClientConfigStorage getConfigStorage() {
         return configStorage;
+    }
+
+    public EffortlessClientSessionManager getSessionManager() {
+        return sessionManager;
     }
 
     @Override

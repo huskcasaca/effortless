@@ -60,8 +60,8 @@ public abstract class FileStorage<T> implements Storage<T> {
     @Override
     public T get() {
         synchronized (this) {
-//            if (config == null) {
-            read();
+//            if (target == null) {
+                read();
 //            }
             return target;
         }

@@ -23,7 +23,7 @@ import dev.huskuraft.effortless.screen.general.EffortlessPerPlayerGeneralSetting
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
-import dev.huskuraft.effortless.session.config.BuildingConfig;
+import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessTestScreen extends AbstractScreen {
 
@@ -65,13 +65,13 @@ public class EffortlessTestScreen extends AbstractScreen {
                 new EffortlessGeneralSettingsScreen(getEntrance()).attach();
             }));
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 40, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessGlobalGeneralSettingsScreen"), (button) -> {
-                new EffortlessGlobalGeneralSettingsScreen(getEntrance(), BuildingConfig.DEFAULT, config -> {
+                new EffortlessGlobalGeneralSettingsScreen(getEntrance(), GeneralConfig.DEFAULT, config -> {
 
                 }).attach();
             }));
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 60, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPerPlayerGeneralSettingsScreen"), (button) -> {
                 new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
-                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, BuildingConfig.DEFAULT, BuildingConfig.DEFAULT, config -> {
+                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, GeneralConfig.DEFAULT, GeneralConfig.DEFAULT, config -> {
                     }).attach();
                 }).attach();
             }));
@@ -82,7 +82,7 @@ public class EffortlessTestScreen extends AbstractScreen {
             }));
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 100, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPlayerSearchScreen"), (button) -> {
                 new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getPerPlayerBuildConfigRoles(), playerInfo -> {
-                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, BuildingConfig.DEFAULT, BuildingConfig.DEFAULT, config -> {
+                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, GeneralConfig.DEFAULT, GeneralConfig.DEFAULT, config -> {
 
                     }).attach();
                 }).attach();

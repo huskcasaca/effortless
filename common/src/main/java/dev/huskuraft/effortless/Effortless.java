@@ -10,12 +10,13 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 public class Effortless implements Entrance {
 
     public static final String MOD_ID = "effortless";
-    public static final int PROTOCOL_VERSION = 3;
+    public static final int PROTOCOL_VERSION = 4;
 
     private final CommonEventRegistry commonEventRegistry = (CommonEventRegistry) EventRegister.getCommon();
     private final EffortlessNetworkChannel networkChannel = new EffortlessNetworkChannel(this);
     private final EffortlessStructureBuilder structureBuilder = new EffortlessStructureBuilder(this);
     private final EffortlessSessionConfigStorage sessionConfigStorage = new EffortlessSessionConfigStorage(this);
+    private final EffortlessSessionManager sessionManager = new EffortlessSessionManager(this);
 
     public static Effortless getInstance() {
         return (Effortless) Entrance.getInstance();
@@ -35,6 +36,10 @@ public class Effortless implements Entrance {
 
     public EffortlessSessionConfigStorage getSessionConfigStorage() {
         return sessionConfigStorage;
+    }
+
+    public EffortlessSessionManager getSessionManager() {
+        return sessionManager;
     }
 
     @Override
