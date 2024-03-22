@@ -61,7 +61,7 @@ public class EffortlessTestScreen extends AbstractScreen {
             }));
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 60, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPerPlayerGeneralSettingsScreen"), (button) -> {
                 new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
-                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(playerInfo.getId()), (playerInfo1, config) -> {
+                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), getEntrance().getSessionManager().getServerSessionConfig().getPlayerOrNullConfig(playerInfo.getId()), (playerInfo1, config) -> {
                         getEntrance().getSessionManager().updatePlayerConfig(playerInfo1.getId(), config);
                     }).attach();
                 }).attach();
@@ -73,7 +73,7 @@ public class EffortlessTestScreen extends AbstractScreen {
             }));
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 100, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPlayerSearchScreen"), (button) -> {
                 new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getConfigurablePlayers(), playerInfo -> {
-                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(playerInfo.getId()), (playerInfo1, config) -> {
+                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), getEntrance().getSessionManager().getServerSessionConfig().getPlayerOrNullConfig(playerInfo.getId()), (playerInfo1, config) -> {
                         getEntrance().getSessionManager().updatePlayerConfig(playerInfo1.getId(), config);
                     }).attach();
                 }).attach();

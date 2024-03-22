@@ -27,7 +27,7 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
         });
         entries.addTab(Text.translate("effortless.per_player_general_settings.title"), (button) -> {
             new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getConfigurablePlayers(), playerInfo -> {
-                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(playerInfo.getId()), (playerInfo1, config) -> {
+                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), getEntrance().getSessionManager().getServerSessionConfig().getPlayerOrNullConfig(playerInfo.getId()), (playerInfo1, config) -> {
                     getEntrance().getSessionManager().updatePlayerConfig(playerInfo1.getId(), config);
                 }).attach();
             }).attach();

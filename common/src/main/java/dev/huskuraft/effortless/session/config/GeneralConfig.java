@@ -53,4 +53,17 @@ public record GeneralConfig(
             WHITELISTED_ITEMS_DEFAULT,
             BLACKLISTED_ITEMS_DEFAULT
     );
+
+    public static final GeneralConfig NULL = new GeneralConfig(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+    );
 }

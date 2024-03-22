@@ -116,11 +116,11 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     }
 
-    private void applyEntryStatus(SettingOptionsList.SettingsEntry<?> entry, boolean global) {
-        entry.setActive(!global);
-        entry.getButton().setMessage(global ? "O" : "X");
+    private void applyEntryStatus(SettingOptionsList.SettingsEntry<?> entry, boolean isGlobal) {
+        entry.setActive(!isGlobal);
+        entry.getButton().setMessage(isGlobal ? "O" : "X");
         entry.getButton().setTooltip(
-                global ? "Click to Override" : "Click to Use Global",
+                isGlobal ? "Click to Override" : "Click to Use Global",
                 ""
 //                ,
 //                global ? "This config value overrides the value in the global settings" : "This config value follows the value in the global settings"

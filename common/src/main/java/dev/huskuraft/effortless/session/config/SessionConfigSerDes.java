@@ -48,6 +48,7 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
         spec.defineInRange(KEY_MAX_REACH_DISTANCE, GeneralConfig.MAX_REACH_DISTANCE_DEFAULT, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
         spec.defineInRange(KEY_MAX_DISTANCE_PER_AXIS, GeneralConfig.MAX_DISTANCE_PER_AXIS_DEFAULT, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_END);
         spec.defineInRange(KEY_MAX_BREAK_BLOCKS, GeneralConfig.MAX_BREAK_BLOCKS_DEFAULT, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_START, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_END);
+        spec.defineInRange(KEY_MAX_PLACE_BLOCKS, GeneralConfig.MAX_PLACE_BLOCKS_DEFAULT, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_START, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_END);
         spec.defineList(KEY_WHITELISTED_ITEMS, GeneralConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
         spec.defineList(KEY_BLACKLISTED_ITEMS, GeneralConfig.BLACKLISTED_ITEMS_DEFAULT, Objects::nonNull);
         return spec;
@@ -75,6 +76,9 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
         }
         if (config.contains(KEY_MAX_BREAK_BLOCKS)) {
             spec.defineInRange(KEY_MAX_BREAK_BLOCKS, GeneralConfig.MAX_BREAK_BLOCKS_DEFAULT, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_START, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_END);
+        }
+        if (config.contains(KEY_MAX_PLACE_BLOCKS)) {
+            spec.defineInRange(KEY_MAX_PLACE_BLOCKS, GeneralConfig.MAX_PLACE_BLOCKS_DEFAULT, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_START, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_END);
         }
         if (config.contains(KEY_WHITELISTED_ITEMS)) {
             spec.defineList(KEY_WHITELISTED_ITEMS, GeneralConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);

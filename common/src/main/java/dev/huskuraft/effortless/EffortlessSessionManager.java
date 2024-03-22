@@ -17,7 +17,6 @@ public final class EffortlessSessionManager implements SessionManager {
 
     private final AtomicReference<Session> serverSession = new AtomicReference<>();
     private final AtomicReference<Session> clientSession = new AtomicReference<>();
-    private final AtomicReference<Boolean> isPlayerNotified = new AtomicReference<>(false);
 
     public EffortlessSessionManager(Effortless entrance) {
         this.entrance = entrance;
