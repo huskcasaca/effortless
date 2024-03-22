@@ -1,14 +1,13 @@
 package dev.huskuraft.effortless.screen.general;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.settings.SettingButtonsList;
-import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessGeneralSettingsScreen extends AbstractScreen {
 
@@ -22,13 +21,14 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
 
         var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36));
         entries.addTab(Text.translate("effortless.global_general_settings.title"), (button) -> {
-            new EffortlessGlobalGeneralSettingsScreen(getEntrance(), GeneralConfig.DEFAULT, config -> {
-
+            new EffortlessGlobalGeneralSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), config -> {
+                getEntrance().getSessionManager().updateGlobalConfig(config);
             }).attach();
         });
         entries.addTab(Text.translate("effortless.per_player_general_settings.title"), (button) -> {
-            new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
-                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, GeneralConfig.DEFAULT, GeneralConfig.DEFAULT, config -> {
+            new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getConfigurablePlayers(), playerInfo -> {
+                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(playerInfo.getId()), (playerInfo1, config) -> {
+                    getEntrance().getSessionManager().updatePlayerConfig(playerInfo1.getId(), config);
                 }).attach();
             }).attach();
         });
@@ -39,4 +39,8 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
 
     }
 
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
+    }
 }

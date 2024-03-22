@@ -20,7 +20,6 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
     private List<PlayerInfo> data;
     private TextWidget titleTextWidget;
     private PlayerInfoList entries;
-    private Button enableButton;
     private Button editButton;
     private Button deleteButton;
     private Button duplicateButton;
@@ -28,10 +27,10 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
     private Button doneButton;
     private Button cancelButton;
 
-    public EffortlessPerPlayerGeneralSettingsListScreen(Entrance entrance, List<PlayerInfo> data, Consumer<PlayerInfo> consumer) {
+    public EffortlessPerPlayerGeneralSettingsListScreen(Entrance entrance, List<PlayerInfo> data, Consumer<PlayerInfo> editConsumer) {
         super(entrance, Text.translate("effortless.online_players.title"));
         this.data = data;
-        this.consumer = consumer;
+        this.consumer = editConsumer;
     }
 
     @Override
@@ -44,20 +43,19 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        this.enableButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.delete"), button -> {
-            if (entries.hasSelected()) {
-                entries.deleteSelected();
-            }
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
-
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
             }
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
-
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.f, 0.25f).build());
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.duplicate"), button -> {
             if (entries.hasSelected()) {
+            }
+        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
+
+        this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
+            if (entries.hasSelected()) {
+                consumer.accept(entries.getSelected().getItem());
             }
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
@@ -66,6 +64,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
                     getEntrance(),
                     playerInfo -> {
                         this.entries.insertSelected(playerInfo);
+                        consumer.accept(playerInfo);
                         onReload();
                     }
             ).attach();

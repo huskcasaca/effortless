@@ -14,8 +14,7 @@ public class SessionSerializer implements BufferSerializer<Session> {
                 buffer.readString(),
                 buffer.readString(),
                 buffer.readList(new ModSerializer()),
-                buffer.readInt(),
-                buffer.read(new SessionConfigSerializer())
+                buffer.readInt()
         );
     }
 
@@ -26,6 +25,5 @@ public class SessionSerializer implements BufferSerializer<Session> {
         buffer.writeString(session.gameVersion());
         buffer.writeList(session.mods(), new ModSerializer());
         buffer.writeInt(session.protocolVersion());
-        buffer.write(session.config(), new SessionConfigSerializer());
     }
 }

@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.screen.general;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -18,10 +19,10 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
     private final PlayerInfo playerInfo;
     private final GeneralConfig globalConfig;
     private GeneralConfig playerConfig;
-    private final Consumer<GeneralConfig> consumer;
+    private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
 
 
-    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig globalConfig, GeneralConfig playerConfig, Consumer<GeneralConfig> consumer) {
+    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig globalConfig, GeneralConfig playerConfig, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
         super(entrance, Text.translate("effortless.general_settings.title"));
         this.playerInfo = playerInfo;
         this.globalConfig = globalConfig;
@@ -109,7 +110,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
-            consumer.accept(playerConfig);
+            consumer.accept(playerInfo, playerConfig);
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 

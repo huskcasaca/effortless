@@ -96,12 +96,12 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
 
         @Override
         public void handle(SessionPacket packet, Player player) {
-
+            getEntrance().getSessionManager().onSession(packet.session(), player);
         }
 
         @Override
         public void handle(SessionConfigUpdatePacket packet, Player player) {
-            // TODO: 22/3/24
+            getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player);
         }
     }
 

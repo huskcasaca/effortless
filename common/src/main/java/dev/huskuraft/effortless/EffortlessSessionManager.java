@@ -5,9 +5,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.networking.packets.session.SessionConfigUpdatePacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 import dev.huskuraft.effortless.session.Session;
 import dev.huskuraft.effortless.session.SessionManager;
+import dev.huskuraft.effortless.session.config.SessionConfig;
 
 public final class EffortlessSessionManager implements SessionManager {
 
@@ -19,8 +21,6 @@ public final class EffortlessSessionManager implements SessionManager {
 
     public EffortlessSessionManager(Effortless entrance) {
         this.entrance = entrance;
-
-//        getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
 
         getEntrance().getEventRegistry().getPlayerChangeWorldEvent().register(this::onPlayerChangeWorld);
         getEntrance().getEventRegistry().getPlayerRespawnEvent().register(this::onPlayerRespawn);
@@ -34,8 +34,17 @@ public final class EffortlessSessionManager implements SessionManager {
 
 
     @Override
-    public void onServerSession(Session session) {
+    public void onSession(Session session, Player player) {
         serverSession.set(session);
+    }
+
+    @Override
+    public void onSessionConfig(SessionConfig sessionConfig, Player player) {
+        getEntrance().getSessionConfigStorage().set(sessionConfig);
+
+        for (var serverPlayer : player.getServer().getPlayers()) {
+            updateSessionConfig(serverPlayer);
+        }
     }
 
     @Override
@@ -67,16 +76,19 @@ public final class EffortlessSessionManager implements SessionManager {
     public Session getLastSession() {
         var platform = Platform.getInstance();
         var protocolVersion = Effortless.PROTOCOL_VERSION;
-        var config = Effortless.getInstance().getSessionConfigStorage().get();
         return new Session(
                 platform.getLoaderType(),
                 platform.getLoaderVersion(),
                 platform.getGameVersion(),
                 platform.getRunningMods(),
-                protocolVersion,
-                config
+                protocolVersion
 
         );
+    }
+
+    @Override
+    public SessionConfig getLastSessionConfig() {
+        return getEntrance().getSessionConfigStorage().get();
     }
 
     private void onPlayerChangeWorld(Player player, World origin, World destination) {
@@ -86,10 +98,19 @@ public final class EffortlessSessionManager implements SessionManager {
     }
 
     private void onPlayerLoggedIn(Player player) {
-        getEntrance().getChannel().sendPacket(new SessionPacket(getLastSession()), player);
+        updateSession(player);
+        updateSessionConfig(player);
     }
 
     private void onPlayerLoggedOut(Player player) {
+    }
+
+    private void updateSession(Player player) {
+        getEntrance().getChannel().sendPacket(new SessionPacket(getLastSession()), player);
+    }
+
+    private void updateSessionConfig(Player player) {
+        getEntrance().getChannel().sendPacket(new SessionConfigUpdatePacket(getLastSessionConfig()), player);
     }
 
 }

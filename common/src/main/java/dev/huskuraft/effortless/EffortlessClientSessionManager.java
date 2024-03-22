@@ -1,14 +1,24 @@
 package dev.huskuraft.effortless;
 
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import dev.huskuraft.effortless.api.core.OfflinePlayerInfo;
+import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
+import dev.huskuraft.effortless.networking.packets.session.SessionConfigUpdatePacket;
 import dev.huskuraft.effortless.session.Session;
 import dev.huskuraft.effortless.session.SessionManager;
+import dev.huskuraft.effortless.session.config.GeneralConfig;
+import dev.huskuraft.effortless.session.config.SessionConfig;
 
 public final class EffortlessClientSessionManager implements SessionManager {
 
@@ -17,6 +27,8 @@ public final class EffortlessClientSessionManager implements SessionManager {
     private final AtomicReference<Session> serverSession = new AtomicReference<>();
     private final AtomicReference<Session> clientSession = new AtomicReference<>();
     private final AtomicReference<Boolean> isPlayerNotified = new AtomicReference<>(false);
+
+    private final AtomicReference<SessionConfig> serverSessionConfig = new AtomicReference<>();
 
     public EffortlessClientSessionManager(EffortlessClient entrance) {
         this.entrance = entrance;
@@ -30,8 +42,32 @@ public final class EffortlessClientSessionManager implements SessionManager {
 
 
     @Override
-    public void onServerSession(Session session) {
+    public void onSession(Session session, Player player) {
         serverSession.set(session);
+        isPlayerNotified.set(false);
+    }
+
+    @Override
+    public void onSessionConfig(SessionConfig sessionConfig, Player player) {
+        serverSessionConfig.set(sessionConfig);
+    }
+
+    public void updateSessionConfig(SessionConfig sessionConfig) {
+        getEntrance().getChannel().sendPacket(new SessionConfigUpdatePacket(sessionConfig));
+    }
+
+    public boolean updateGlobalConfig(GeneralConfig generalConfig) {
+        var serverSessionConfig = getServerSessionConfig();
+        if (serverSessionConfig == null) return false;
+        updateSessionConfig(serverSessionConfig.withGlobalConfig(generalConfig));
+        return true;
+    }
+
+    public boolean updatePlayerConfig(UUID id, GeneralConfig generalConfig) {
+        var serverSessionConfig = getServerSessionConfig();
+        if (serverSessionConfig == null) return false;
+        updateSessionConfig(serverSessionConfig.withPlayerConfig(id, generalConfig));
+        return true;
     }
 
     @Override
@@ -63,16 +99,35 @@ public final class EffortlessClientSessionManager implements SessionManager {
     public Session getLastSession() {
         var platform = Platform.getInstance();
         var protocolVersion = Effortless.PROTOCOL_VERSION;
-        var config = Effortless.getInstance().getSessionConfigStorage().get();
         return new Session(
                 platform.getLoaderType(),
                 platform.getLoaderVersion(),
                 platform.getGameVersion(),
                 platform.getRunningMods(),
-                protocolVersion,
-                config
+                protocolVersion
 
         );
+    }
+
+    @Override
+    public SessionConfig getLastSessionConfig() {
+        return null;
+    }
+
+    public Session getServerSession() {
+        return serverSession.get();
+    }
+
+    public SessionConfig getServerSessionConfig() {
+        return serverSessionConfig.get();
+    }
+
+    public List<PlayerInfo> getConfigurablePlayers() {
+        var serverSessionConfig = getServerSessionConfig();
+        if (serverSessionConfig == null) return List.of();
+
+        var id2Players = getEntrance().getClient().getOnlinePlayers().stream().collect(Collectors.toMap(PlayerInfo::getId, Function.identity()));
+        return serverSessionConfig.playerConfigs().keySet().stream().map(id -> id2Players.computeIfAbsent(id, OfflinePlayerInfo::new)).collect(Collectors.toList());
     }
 
     public void notifyPlayer() {
@@ -99,6 +154,7 @@ public final class EffortlessClientSessionManager implements SessionManager {
 
         if (getEntrance().getClient() == null || getEntrance().getClient().getPlayer() == null) {
             serverSession.set(null);
+            serverSessionConfig.set(null);
             isPlayerNotified.set(false);
             return;
         }

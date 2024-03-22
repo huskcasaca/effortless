@@ -55,8 +55,8 @@ public class EffortlessOnlinePlayersScreen extends AbstractScreen {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.select"), button -> {
-            consumer.accept(entries.getSelected().getItem());
             detach();
+            consumer.accept(entries.getSelected().getItem());
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
         this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Title.CONTAINER_24 + 26, getWidth(), getHeight() - Dimens.Title.CONTAINER_24 - 26 - 36));

@@ -98,11 +98,12 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
 
         @Override
         public void handle(SessionPacket packet, Player player) {
-            getEntrance().getSessionManager().onServerSession(packet.session());
+            getEntrance().getSessionManager().onSession(packet.session(), player);
         }
 
         @Override
         public void handle(SessionConfigUpdatePacket packet, Player player) {
+            getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player);
 
         }
     }
