@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.session.config;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -123,11 +123,11 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
         if (global) {
             config.setComment(KEY_MAX_PLACE_BLOCKS, "The maximum number of blocks a player can break when building using this mod. \nRange: " + GeneralConfig.MAX_PLACE_BLOCKS_RANGE_START + " ~ " + GeneralConfig.MAX_PLACE_BLOCKS_RANGE_END);
         }
-        setNullable(config, KEY_WHITELISTED_ITEMS, generalConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
+        setNullable(config, KEY_WHITELISTED_ITEMS, generalConfig.whitelistedItems() == null ? null : generalConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
         if (global) {
             config.setComment(KEY_WHITELISTED_ITEMS, "The list of items that players are allowed to use when building using this mod. \nIf the whitelist is empty, all items are allowed. \nIf the whitelist is not empty, only the items in the whitelist are allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
         }
-        setNullable(config, KEY_BLACKLISTED_ITEMS, generalConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
+        setNullable(config, KEY_BLACKLISTED_ITEMS, generalConfig.blacklistedItems() == null ? null : generalConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
         if (global) {
             config.setComment(KEY_BLACKLISTED_ITEMS, "The list of items that players are not allowed to use when building using this mod. \nIf the blacklist is empty, no items are not allowed. \nIf an item exists both in the blacklist and the whitelist, it will not be allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
         }
@@ -159,8 +159,8 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
                 config.get(KEY_MAX_DISTANCE_PER_AXIS),
                 config.get(KEY_MAX_BREAK_BLOCKS),
                 config.get(KEY_MAX_PLACE_BLOCKS),
-                ((List<String>) config.get(KEY_WHITELISTED_ITEMS)).stream().map(ResourceLocation::decompose).toList(),
-                ((List<String>) config.get(KEY_BLACKLISTED_ITEMS)).stream().map(ResourceLocation::decompose).toList()
+                config.get(KEY_WHITELISTED_ITEMS) == null ? null : ((List<String>) config.get(KEY_WHITELISTED_ITEMS)).stream().map(ResourceLocation::decompose).toList(),
+                config.get(KEY_BLACKLISTED_ITEMS) == null ? null : ((List<String>) config.get(KEY_BLACKLISTED_ITEMS)).stream().map(ResourceLocation::decompose).toList()
         );
     }
 
@@ -169,7 +169,7 @@ public class SessionConfigSerDes implements CommentedConfigDeserializer<SessionC
         var globalTomlConfig = (CommentedConfig) config.get(KEY_GLOBAL);
         var globalConfig = deserializeBuilderConfig(globalTomlConfig, true);
 
-        var playerConfigs = new HashMap<UUID, GeneralConfig>();
+        var playerConfigs = new LinkedHashMap<UUID, GeneralConfig>();
         var playerTomlConfig = (Config) config.get(KEY_PLAYER);
 
         if (playerTomlConfig == null) {

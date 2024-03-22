@@ -72,8 +72,8 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Set
 
     public SelectorEntry<Boolean> addSwitchEntry(Text title, Text symbol, Boolean value, Consumer<Boolean> consumer) {
         return addEntry(new SelectorEntry<>(getEntrance(), this, title, symbol, List.of(
-                Text.translate("effortless.option.on"),
-                Text.translate("effortless.option.off")
+                Text.translate("effortless.option.on").withStyle(TextStyle.GREEN),
+                Text.translate("effortless.option.off").withStyle(TextStyle.RED)
         ), List.of(Boolean.TRUE, Boolean.FALSE), value, consumer));
     }
 

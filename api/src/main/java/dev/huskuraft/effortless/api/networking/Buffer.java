@@ -2,7 +2,8 @@ package dev.huskuraft.effortless.api.networking;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -84,22 +85,22 @@ public interface Buffer extends PlatformReference {
 
     default <T> List<T> readList(BufferReader<T> reader) {
         var i = readInt();
-        var collection = new ArrayList<T>();
+        var list = new ArrayList<T>();
 
         for (int j = 0; j < i; ++j) {
-            collection.add(read(reader));
+            list.add(read(reader));
         }
-        return collection;
+        return Collections.unmodifiableList(list);
     }
 
     default <K, V> Map<K, V> readMap(BufferReader<K> keyReader, BufferReader<V> valueReader) {
         var i = readInt();
-        var map = new HashMap<K, V>();
+        var map = new LinkedHashMap<K, V>();
 
         for (int j = 0; j < i; ++j) {
             map.put(read(keyReader), read(valueReader));
         }
-        return map;
+        return Collections.unmodifiableMap(map);
     }
 
     default <T> void writeNullable(T value, BufferWriter<T> writer) {

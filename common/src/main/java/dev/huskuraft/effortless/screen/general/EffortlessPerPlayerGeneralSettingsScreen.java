@@ -4,6 +4,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
@@ -16,30 +17,28 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
-    private final PlayerInfo playerInfo;
     private final GeneralConfig globalConfig;
+    private final PlayerInfo playerInfo;
     private GeneralConfig playerConfig;
     private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
 
-
-    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig globalConfig, GeneralConfig playerConfig, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
+    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig playerConfig, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
         super(entrance, Text.translate("effortless.general_settings.title"));
+        this.globalConfig = getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig();
         this.playerInfo = playerInfo;
-        this.globalConfig = globalConfig;
         this.playerConfig = playerConfig;
         this.consumer = consumer;
     }
 
     @Override
     public void onCreate() {
-        var titleWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
-        var playerNameWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, Text.text(playerInfo.getName()), TextWidget.Gravity.CENTER));
-
-        playerNameWidget.setColor(0xFFAAAAAA);
+        var titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        var playerNameTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, Text.text(playerInfo.getName()), TextWidget.Gravity.CENTER));
+        playerNameTextWidget.setColor(0xffaaaaaa);
 
         var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36, false, true));
         entries.setRenderSelection(false);
-        applyEntry(
+        bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
                 value -> {
                     this.playerConfig = new GeneralConfig(value, playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
@@ -48,7 +47,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
                 () -> playerConfig.useCommands()
         );
 
-        applyEntry(
+        bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_use_mod"), null, null, null),
                 (value) -> {
                     this.playerConfig = new GeneralConfig(playerConfig.useCommands(), value, playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
@@ -56,7 +55,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
                 () -> globalConfig.allowUseMod(),
                 () -> playerConfig.allowUseMod()
         );
-        applyEntry(
+        bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_break_blocks"), null, null, null),
                 (value) -> {
                     this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), value, playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
@@ -64,7 +63,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
                 () -> globalConfig.allowBreakBlocks(),
                 () -> playerConfig.allowBreakBlocks()
         );
-        applyEntry(
+        bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_place_blocks"), null, null, null),
                 (value) -> {
                     this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), value, playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
@@ -72,7 +71,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
                 () -> globalConfig.allowPlaceBlocks(),
                 () -> playerConfig.allowPlaceBlocks()
         );
-        applyEntry(
+        bindEntry(
                 entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_reach_distance"), null, null, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END, null),
                 (value) -> {
                     this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), value, playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
@@ -80,7 +79,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
                 () -> globalConfig.maxReachDistance(),
                 () -> playerConfig.maxReachDistance()
         );
-        applyEntry(
+        bindEntry(
                 entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_distance_per_axis"), null, null, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_END, null),
                 (value) -> {
                     this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), value, playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
@@ -88,7 +87,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
                 () -> globalConfig.maxDistancePerAxis(),
                 () -> playerConfig.maxDistancePerAxis()
         );
-        applyEntry(
+        bindEntry(
                 entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_break_blocks"), null, null, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_START, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_END, null),
                 (value) -> {
                     this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), value, playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
@@ -96,7 +95,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
                 () -> globalConfig.maxBreakBlocks(),
                 () -> playerConfig.maxBreakBlocks()
         );
-        applyEntry(
+        bindEntry(
                 entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_place_blocks"), null, null, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_START, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_END, null),
                 (value) -> {
                     this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), value, playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
@@ -116,7 +115,12 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     }
 
-    private void applyEntryStatus(SettingOptionsList.SettingsEntry<?> entry, boolean isGlobal) {
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
+    }
+
+    private void bindEntryState(SettingOptionsList.SettingsEntry<?> entry, boolean isGlobal) {
         entry.setActive(!isGlobal);
         entry.getButton().setMessage(isGlobal ? "O" : "X");
         entry.getButton().setTooltip(
@@ -127,9 +131,9 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         );
     }
 
-    private <T> void applyEntry(SettingOptionsList.SettingsEntry<T> entry, Consumer<T> setter, Supplier<T> globalGetter, Supplier<T> playerGetter) {
+    private <T> void bindEntry(SettingOptionsList.SettingsEntry<T> entry, Consumer<T> setter, Supplier<T> globalGetter, Supplier<T> playerGetter) {
         entry.setItem(playerGetter.get() == null ? globalGetter.get() : playerGetter.get());
-        applyEntryStatus(entry, playerGetter.get() == null);
+        bindEntryState(entry, playerGetter.get() == null);
 
         entry.getButton().setOnPressListener(button -> {
             if (playerGetter.get() == null) {
@@ -138,7 +142,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
                 entry.setItem(globalGetter.get());
                 setter.accept(null);
             }
-            applyEntryStatus(entry, playerGetter.get() == null);
+            bindEntryState(entry, playerGetter.get() == null);
         });
 
         entry.setConsumer(setter);

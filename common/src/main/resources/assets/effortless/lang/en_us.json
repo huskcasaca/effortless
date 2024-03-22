@@ -10,9 +10,12 @@
   "effortless.global_general_settings.title": "Global General Settings",
   "effortless.per_player_general_settings.title": "Per-Player General Settings",
 
-  "effortless.button.done": "Done",
-  "effortless.button.save": "Save",
+  "effortless.button.add": "Add",
   "effortless.button.cancel": "Cancel",
+  "effortless.button.delete": "Delete",
+  "effortless.button.done": "Done",
+  "effortless.button.edit": "Edit",
+  "effortless.button.save": "Save",
   "effortless.button.select": "Select",
 
   "effortless.online_players.title": "Online Players",

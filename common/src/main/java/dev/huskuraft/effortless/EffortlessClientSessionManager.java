@@ -1,14 +1,10 @@
 package dev.huskuraft.effortless;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import dev.huskuraft.effortless.api.core.OfflinePlayerInfo;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.Platform;
@@ -60,6 +56,13 @@ public final class EffortlessClientSessionManager implements SessionManager {
         var serverSessionConfig = getServerSessionConfig();
         if (serverSessionConfig == null) return false;
         updateSessionConfig(serverSessionConfig.withGlobalConfig(generalConfig));
+        return true;
+    }
+
+    public boolean updatePlayerConfig(Map<UUID, GeneralConfig> playerConfigs) {
+        var serverSessionConfig = getServerSessionConfig();
+        if (serverSessionConfig == null) return false;
+        updateSessionConfig(serverSessionConfig.withPlayerConfig(playerConfigs));
         return true;
     }
 
@@ -120,14 +123,6 @@ public final class EffortlessClientSessionManager implements SessionManager {
 
     public SessionConfig getServerSessionConfig() {
         return serverSessionConfig.get();
-    }
-
-    public List<PlayerInfo> getConfigurablePlayers() {
-        var serverSessionConfig = getServerSessionConfig();
-        if (serverSessionConfig == null) return List.of();
-
-        var id2Players = getEntrance().getClient().getOnlinePlayers().stream().collect(Collectors.toMap(PlayerInfo::getId, Function.identity()));
-        return serverSessionConfig.playerConfigs().keySet().stream().map(id -> id2Players.computeIfAbsent(id, OfflinePlayerInfo::new)).collect(Collectors.toList());
     }
 
     public void notifyPlayer() {

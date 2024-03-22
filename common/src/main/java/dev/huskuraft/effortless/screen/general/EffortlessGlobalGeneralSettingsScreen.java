@@ -18,7 +18,7 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
 
 
     public EffortlessGlobalGeneralSettingsScreen(Entrance entrance, GeneralConfig config, Consumer<GeneralConfig> consumer) {
-        super(entrance, Text.translate("effortless.general_settings.title"));
+        super(entrance, Text.translate("effortless.global_general_settings.title"));
         this.config = config;
         this.consumer = consumer;
     }

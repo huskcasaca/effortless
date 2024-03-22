@@ -22,6 +22,7 @@ public abstract class FileStorage<T> implements Storage<T> {
 //            read.validate();
             this.target = read(file);
         } catch (Exception e) {
+            e.printStackTrace();
             Logger.getAnonymousLogger().warning("Cannot read config file: " + e.getMessage());
             this.target = getDefault();
         }

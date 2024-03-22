@@ -10,9 +10,6 @@ import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
-import dev.huskuraft.effortless.screen.general.EffortlessGlobalGeneralSettingsScreen;
-import dev.huskuraft.effortless.screen.general.EffortlessPerPlayerGeneralSettingsListScreen;
-import dev.huskuraft.effortless.screen.general.EffortlessPerPlayerGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
@@ -54,28 +51,9 @@ public class EffortlessTestScreen extends AbstractScreen {
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 20, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessGeneralSettingsScreen"), (button) -> {
                 new EffortlessGeneralSettingsScreen(getEntrance()).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 40, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessGlobalGeneralSettingsScreen"), (button) -> {
-                new EffortlessGlobalGeneralSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), config -> {
-                    getEntrance().getSessionManager().updateGlobalConfig(config);
-                }).attach();
-            }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 60, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPerPlayerGeneralSettingsScreen"), (button) -> {
-                new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
-                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), getEntrance().getSessionManager().getServerSessionConfig().getPlayerOrNullConfig(playerInfo.getId()), (playerInfo1, config) -> {
-                        getEntrance().getSessionManager().updatePlayerConfig(playerInfo1.getId(), config);
-                    }).attach();
-                }).attach();
-            }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 80, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPlayerSearchScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 80, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessOnlinePlayersScreen"), (button) -> {
                 new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
 
-                }).attach();
-            }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 100, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPlayerSearchScreen"), (button) -> {
-                new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getConfigurablePlayers(), playerInfo -> {
-                    new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), getEntrance().getSessionManager().getServerSessionConfig().getPlayerOrNullConfig(playerInfo.getId()), (playerInfo1, config) -> {
-                        getEntrance().getSessionManager().updatePlayerConfig(playerInfo1.getId(), config);
-                    }).attach();
                 }).attach();
             }));
         });

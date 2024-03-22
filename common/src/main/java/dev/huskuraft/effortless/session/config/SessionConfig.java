@@ -83,6 +83,14 @@ public record SessionConfig(
         );
     }
 
+    public SessionConfig withPlayerConfig(Map<UUID, GeneralConfig> config) {
+
+        return new SessionConfig(
+                globalConfig,
+                config
+        );
+    }
+
     public SessionConfig withGlobalConfig(GeneralConfig config) {
         return new SessionConfig(
                 config,
