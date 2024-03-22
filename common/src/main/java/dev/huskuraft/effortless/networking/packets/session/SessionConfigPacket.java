@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.serializer.SessionConfigSerializer;
 import dev.huskuraft.effortless.session.config.SessionConfig;
 
-public record SessionConfigUpdatePacket(
+public record SessionConfigPacket(
         SessionConfig sessionConfig
 ) implements Packet<AllPacketListener> {
 
@@ -17,15 +17,15 @@ public record SessionConfigUpdatePacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer implements BufferSerializer<SessionConfigUpdatePacket> {
+    public static class Serializer implements BufferSerializer<SessionConfigPacket> {
 
         @Override
-        public SessionConfigUpdatePacket read(Buffer buffer) {
-            return new SessionConfigUpdatePacket(buffer.read(new SessionConfigSerializer()));
+        public SessionConfigPacket read(Buffer buffer) {
+            return new SessionConfigPacket(buffer.read(new SessionConfigSerializer()));
         }
 
         @Override
-        public void write(Buffer buffer, SessionConfigUpdatePacket packet) {
+        public void write(Buffer buffer, SessionConfigPacket packet) {
             buffer.write(packet.sessionConfig(), new SessionConfigSerializer());
         }
 

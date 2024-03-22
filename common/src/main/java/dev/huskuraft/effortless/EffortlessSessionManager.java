@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.platform.Platform;
-import dev.huskuraft.effortless.networking.packets.session.SessionConfigUpdatePacket;
+import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 import dev.huskuraft.effortless.session.Session;
 import dev.huskuraft.effortless.session.SessionManager;
@@ -109,7 +109,7 @@ public final class EffortlessSessionManager implements SessionManager {
     }
 
     private void updateSessionConfig(Player player) {
-        getEntrance().getChannel().sendPacket(new SessionConfigUpdatePacket(getLastSessionConfig()), player);
+        getEntrance().getChannel().sendPacket(new SessionConfigPacket(getLastSessionConfig()), player);
     }
 
 }

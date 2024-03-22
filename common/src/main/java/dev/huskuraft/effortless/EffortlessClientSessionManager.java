@@ -10,7 +10,7 @@ import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
-import dev.huskuraft.effortless.networking.packets.session.SessionConfigUpdatePacket;
+import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.session.Session;
 import dev.huskuraft.effortless.session.SessionManager;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
@@ -49,7 +49,7 @@ public final class EffortlessClientSessionManager implements SessionManager {
     }
 
     public void updateSessionConfig(SessionConfig sessionConfig) {
-        getEntrance().getChannel().sendPacket(new SessionConfigUpdatePacket(sessionConfig));
+        getEntrance().getChannel().sendPacket(new SessionConfigPacket(sessionConfig));
     }
 
     public boolean updateGlobalConfig(GeneralConfig generalConfig) {
