@@ -7,12 +7,18 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public interface PlayerInfo extends PlatformReference {
 
-    UUID getId();
-
-    String getName();
+    PlayerProfile getProfile();
 
     Text getDisplayName();
 
     PlayerSkin getSkin();
+
+    default UUID getId() {
+        return getProfile().getId();
+    }
+
+    default String getName() {
+        return getProfile().getName();
+    }
 
 }
