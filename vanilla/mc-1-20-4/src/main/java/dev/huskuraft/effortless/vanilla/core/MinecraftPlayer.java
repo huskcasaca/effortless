@@ -10,7 +10,7 @@ import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.PlayerInfo;
+import dev.huskuraft.effortless.api.core.PlayerProfile;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.platform.Client;
@@ -46,6 +46,11 @@ public class MinecraftPlayer implements Player {
     @Override
     public UUID getId() {
         return reference.getUUID();
+    }
+
+    @Override
+    public PlayerProfile getProfile() {
+        return new MinecraftPlayerProfile(reference.getGameProfile());
     }
 
     @Override

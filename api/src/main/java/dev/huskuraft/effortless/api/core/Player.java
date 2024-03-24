@@ -6,6 +6,12 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public interface Player extends Entity {
 
+    PlayerProfile getProfile();
+
+    default boolean isOperator() {
+        return getServer().getPlayerList().isOperator(getProfile());
+    }
+
     List<ItemStack> getItemStacks();
 
     void setItemStack(int index, ItemStack itemStack);
