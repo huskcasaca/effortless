@@ -59,7 +59,7 @@ public class EffortlessOnlinePlayersScreen extends AbstractScreen {
             consumer.accept(entries.getSelected().getItem());
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Title.CONTAINER_24 + 26, getWidth(), getHeight() - Dimens.Title.CONTAINER_24 - 26 - 36));
+        this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Title.CONTAINER_24 + 26, getWidth(), getHeight() - Dimens.Title.CONTAINER_24 - 26 - 36, true));
 
         this.entries.reset(players);
     }

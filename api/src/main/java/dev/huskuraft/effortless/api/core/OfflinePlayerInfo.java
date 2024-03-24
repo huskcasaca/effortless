@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.api.text.Text;
 public record OfflinePlayerInfo(UUID id, String name, Text displayName, PlayerSkin skin) implements PlayerInfo {
 
     public OfflinePlayerInfo(UUID id) {
-        this(id, id.toString(), Text.empty(), null);
+        this(id, "Offline Player", Text.empty(), null);
     }
 
     @Override

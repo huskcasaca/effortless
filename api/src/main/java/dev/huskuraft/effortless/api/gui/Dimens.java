@@ -13,6 +13,14 @@ public class Dimens {
     public static final int SLOT_WIDTH = 18;
     public static final int SLOT_HEIGHT = 18;
 
+    public static class Icon {
+        public static final int SIZE_14 = 14;
+        public static final int SIZE_18 = 18;
+        public static final int SIZE_26 = 26;
+        public static final int SIZE_34 = 34;
+
+    }
+
     public static class CellRing {
         public static final Color RADIAL_COLOR = new Color(0.44f, 0.44f, 0.44f, 1f);
         public static final Color HIGHLIGHT_COLOR = new Color(0.84f, 0.84f, 0.84f, 1f);

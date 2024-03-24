@@ -10,8 +10,8 @@ public class PlayerAvatarIcon extends AbstractWidget {
 
     private PlayerInfo playerInfo;
 
-    public PlayerAvatarIcon(Entrance entrance, int x, int y, int width, int height, PlayerInfo playerInfo) {
-        super(entrance, x, y, width, height, null);
+    public PlayerAvatarIcon(Entrance entrance, int x, int y, int size, PlayerInfo playerInfo) {
+        super(entrance, x, y, size, size, null);
         this.playerInfo = playerInfo;
     }
 
@@ -29,5 +29,10 @@ public class PlayerAvatarIcon extends AbstractWidget {
 
     public void setPlayerInfo(PlayerInfo playerInfo) {
         this.playerInfo = playerInfo;
+    }
+
+    public void setSize(int size) {
+        setWidth(size);
+        setHeight(size);
     }
 }

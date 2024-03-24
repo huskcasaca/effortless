@@ -7,11 +7,15 @@ import dev.huskuraft.effortless.api.gui.player.PlayerAvatarIcon;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 
 public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
 
-    public PlayerInfoList(Entrance entrance, int x, int y, int width, int height) {
+    private final boolean isLargeIcon;
+
+    public PlayerInfoList(Entrance entrance, int x, int y, int width, int height, boolean isLargeIcon) {
         super(entrance, x, y, width, height);
+        this.isLargeIcon = isLargeIcon;
     }
 
     @Override
@@ -21,22 +25,25 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
 
     @Override
     protected Entry createHolder(PlayerInfo item) {
-        return new Entry(getEntrance(), item);
+        if (this.isLargeIcon) {
+            return new LargeEntry(getEntrance(), item);
+        }
+        return new NormalEntry(getEntrance(), item);
     }
 
-    public static class Entry extends EditableEntryList.Entry<PlayerInfo> {
+    private static class NormalEntry extends Entry<PlayerInfo> {
 
         private PlayerAvatarIcon icon;
         private TextWidget textWidget;
 
-        public Entry(Entrance entrance, PlayerInfo playerInfo) {
+        public NormalEntry(Entrance entrance, PlayerInfo playerInfo) {
             super(entrance, playerInfo);
         }
 
         @Override
         public void onCreate() {
-            this.icon = addWidget(new PlayerAvatarIcon(getEntrance(), getX() + 1, getY() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getItem()));
-            this.textWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, Text.text(getItem().getName())));
+            this.icon = addWidget(new PlayerAvatarIcon(getEntrance(), getX() + 1, getY() + 1, Dimens.Icon.SIZE_18, getItem()));
+            this.textWidget = addWidget(new TextWidget(getEntrance(), getX() + 6 + Dimens.Icon.SIZE_18, getY() + 6, Text.text(getItem().getName())));
         }
 
         @Override
@@ -57,7 +64,47 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
 
         @Override
         public int getHeight() {
-            return 24;
+            return Dimens.Icon.SIZE_18 + 6;
+        }
+
+    }
+
+    private static class LargeEntry extends Entry<PlayerInfo> {
+
+        private PlayerAvatarIcon icon;
+        private TextWidget textWidget;
+        private TextWidget uuidTextWidget;
+
+        public LargeEntry(Entrance entrance, PlayerInfo playerInfo) {
+            super(entrance, playerInfo);
+        }
+
+        @Override
+        public void onCreate() {
+            this.icon = addWidget(new PlayerAvatarIcon(getEntrance(), getX() + 1, getY() + 1, Dimens.Icon.SIZE_26, getItem()));
+            this.textWidget = addWidget(new TextWidget(getEntrance(), getX() + 6 + Dimens.Icon.SIZE_26, getY() + 4, Text.text(getItem().getName())));
+            this.uuidTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 6 + Dimens.Icon.SIZE_26, getY() + 4 + 11, Text.text(getItem().getId().toString()).withStyle(TextStyle.GRAY)));
+        }
+
+        @Override
+        public void onReload() {
+            this.icon.setPlayerInfo(item);
+            this.textWidget.setMessage(item.getName());
+        }
+
+        @Override
+        public Text getNarration() {
+            return Text.translate("narrator.select", getItem().getDisplayName());
+        }
+
+        @Override
+        public int getWidth() {
+            return Dimens.Entry.ROW_WIDTH;
+        }
+
+        @Override
+        public int getHeight() {
+            return Dimens.Icon.SIZE_26 + 6;
         }
 
     }

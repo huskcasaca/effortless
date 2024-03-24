@@ -24,6 +24,7 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen {
 
     private final Consumer<Map<UUID, GeneralConfig>> consumer;
+    private Map<UUID, GeneralConfig> originalData;
     private Map<UUID, GeneralConfig> data;
     private PlayerInfoList entries;
     private Button deleteButton;
@@ -34,6 +35,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
 
     public EffortlessPerPlayerGeneralSettingsListScreen(Entrance entrance, Map<UUID, GeneralConfig> data, Consumer<Map<UUID, GeneralConfig>> editConsumer) {
         super(entrance, Text.translate("effortless.per_player_general_settings.title"));
+        this.originalData = new LinkedHashMap<>(data);
         this.data = new LinkedHashMap<>(data);
         this.consumer = editConsumer;
     }
@@ -88,13 +90,15 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 60));
+        this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 60, true));
         this.entries.reset(getConfigurablePlayers());
     }
 
     @Override
     public void onReload() {
         this.deleteButton.setActive(entries.hasSelected());
+        this.editButton.setActive(entries.hasSelected());
+        this.saveButton.setActive(!data.equals(originalData));
         this.data = this.entries.items().stream().map(PlayerInfo::getId).collect(Collectors.toMap(Function.identity(), data::get, (x, y) -> y, LinkedHashMap::new));
     }
 
