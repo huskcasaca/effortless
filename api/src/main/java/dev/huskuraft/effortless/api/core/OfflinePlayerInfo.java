@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.api.core;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 import dev.huskuraft.effortless.api.text.Text;
@@ -11,13 +13,28 @@ public record OfflinePlayerInfo(UUID id, String name, Text displayName, PlayerSk
     }
 
     @Override
-    public UUID getId() {
-        return id;
-    }
+    public PlayerProfile getProfile() {
+        return new PlayerProfile() {
+            @Override
+            public UUID getId() {
+                return id;
+            }
 
-    @Override
-    public String getName() {
-        return name;
+            @Override
+            public String getName() {
+                return name;
+            }
+
+            @Override
+            public Map<String, ? extends Collection<?>> getProperties() {
+                return null;
+            }
+
+            @Override
+            public Object referenceValue() {
+                throw new NullPointerException();
+            }
+        };
     }
 
     @Override
@@ -32,7 +49,7 @@ public record OfflinePlayerInfo(UUID id, String name, Text displayName, PlayerSk
 
     @Override
     public Object referenceValue() {
-        return null;
+        throw new NullPointerException();
     }
 
 }
