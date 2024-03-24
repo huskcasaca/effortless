@@ -40,6 +40,10 @@ public final class EffortlessSessionManager implements SessionManager {
 
     @Override
     public void onSessionConfig(SessionConfig sessionConfig, Player player) {
+        if (!player.isOperator()) {
+            throw new IllegalStateException("Only operators can set session config");
+        }
+
         getEntrance().getSessionConfigStorage().set(sessionConfig);
 
         Server server = player.getServer();

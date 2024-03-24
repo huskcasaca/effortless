@@ -17,6 +17,7 @@ public class Effortless implements Entrance {
     private final EffortlessStructureBuilder structureBuilder = new EffortlessStructureBuilder(this);
     private final EffortlessSessionConfigStorage sessionConfigStorage = new EffortlessSessionConfigStorage(this);
     private final EffortlessSessionManager sessionManager = new EffortlessSessionManager(this);
+    private final EffortlessServerManager serverManager = new EffortlessServerManager(this);
 
     public static Effortless getInstance() {
         return (Effortless) Entrance.getInstance();
@@ -40,6 +41,10 @@ public class Effortless implements Entrance {
 
     public EffortlessSessionManager getSessionManager() {
         return sessionManager;
+    }
+
+    public EffortlessServerManager getServerManager() {
+        return serverManager;
     }
 
     @Override
