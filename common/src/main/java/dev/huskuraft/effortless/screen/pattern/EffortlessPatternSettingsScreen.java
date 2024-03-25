@@ -9,13 +9,14 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.config.PatternSettings;
+import dev.huskuraft.effortless.building.config.RootSettings;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.settings.PatternSettings;
 
 public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
-    private final Consumer<PatternSettings> applySettings;
-    private PatternSettings lastSettings;
+    private final Consumer<PatternSettings> consumer;
+    private PatternSettings config;
     private TextWidget titleTextWidget;
     private PatternList entries;
     private Button upButton;
@@ -30,13 +31,12 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
     public EffortlessPatternSettingsScreen(Entrance entrance) {
         super(entrance, Text.translate("effortless.pattern.settings.title"));
-        this.applySettings = pattern -> {
+        this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-            getEntrance().getConfigStorage().use(config -> {
-                config.getPatternConfig().setPatternSettings(pattern);
-            });
+            getEntrance().getConfigStorage().update(config -> new RootSettings(config.previewSettings(), this.config, config.transformerPresets()));
+
         };
-        this.lastSettings = getEntrance().getConfigStorage().get().getPatternConfig().getPatternSettings();
+        this.config = getEntrance().getConfigStorage().get().patternSettings();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.entries = addWidget(new PatternList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 60));
-        this.entries.reset(lastSettings.patterns());
+        this.entries.reset(config.patterns());
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
             if (entries.hasSelected()) {
@@ -108,28 +108,28 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.done"), button -> {
-            applySettings.accept(lastSettings);
+            consumer.accept(config);
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
     }
 
     @Override
     public void onReload() {
-        upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
-        downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
-        editButton.setActive(entries.hasSelected());
-        deleteButton.setActive(entries.hasSelected());
-        duplicateButton.setActive(entries.hasSelected());
+        this.upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
+        this.downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
+        this.editButton.setActive(entries.hasSelected());
+        this.deleteButton.setActive(entries.hasSelected());
+        this.duplicateButton.setActive(entries.hasSelected());
 
-        upButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
-        downButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
-        editButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
-        deleteButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
-        duplicateButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
-        newButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
-        resetButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
+        this.upButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
+        this.downButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
+        this.editButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
+        this.deleteButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
+        this.duplicateButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
+        this.newButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
+        this.resetButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
 
-        lastSettings = new PatternSettings(
+        this.config = new PatternSettings(
                 entries.items()
         );
     }

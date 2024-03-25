@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 
-public class TransformerSerializer implements TagSerializer<Transformer> {
+public class TransformerTagSerializer implements TagSerializer<Transformer> {
 
     private static final String TAG_ID = "id";
     private static final String TAG_NAME = "Name";

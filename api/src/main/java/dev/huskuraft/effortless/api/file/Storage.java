@@ -1,13 +1,11 @@
 package dev.huskuraft.effortless.api.file;
 
-import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 public interface Storage<T> {
 
-    default void use(Consumer<T> consumer) {
-        var config = get();
-        consumer.accept(config);
-        set(config);
+    default void update(UnaryOperator<T> operator) {
+        set(operator.apply(get()));
     }
 
     T get();

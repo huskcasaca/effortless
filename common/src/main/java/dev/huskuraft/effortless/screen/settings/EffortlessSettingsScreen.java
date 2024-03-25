@@ -6,9 +6,11 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.preview.EffortlessPreviewSettingsScreen;
+import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 
 public class EffortlessSettingsScreen extends AbstractScreen {
 
@@ -31,6 +33,12 @@ public class EffortlessSettingsScreen extends AbstractScreen {
             new EffortlessPatternSettingsScreen(getEntrance()).attach();
         });
         entries.addTab(Text.translate("effortless.transformer_presets.title"), (button) -> {
+            new EffortlessTransformerTemplateSelectScreen(
+                    getEntrance(),
+                    transformer -> {
+                    },
+                    Transformer.getDefaultTransformers()
+            ).attach();
         });
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {

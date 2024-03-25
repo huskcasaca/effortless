@@ -6,22 +6,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
-import dev.huskuraft.effortless.building.config.ModConfig;
-
 public record SessionConfig(
         GeneralConfig globalConfig,
         Map<UUID, GeneralConfig> playerConfigs
-) implements ModConfig {
-
-    @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    @Override
-    public void validate() {
-
-    }
+) {
 
     public static SessionConfig defaultConfig() {
         return new SessionConfig(GeneralConfig.DEFAULT, Map.of());

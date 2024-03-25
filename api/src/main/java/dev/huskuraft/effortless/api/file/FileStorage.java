@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import java.util.logging.Logger;
 
 import dev.huskuraft.effortless.api.platform.Platform;
@@ -51,10 +51,9 @@ public abstract class FileStorage<T> implements Storage<T> {
     }
 
     @Override
-    public void use(Consumer<T> consumer) {
+    public void update(UnaryOperator<T> operator) {
         synchronized (this) {
-            consumer.accept(get());
-            write();
+            set(operator.apply(get()));
         }
     }
 

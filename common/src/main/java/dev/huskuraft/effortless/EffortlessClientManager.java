@@ -27,7 +27,6 @@ import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
 import dev.huskuraft.effortless.screen.test.EffortlessTestScreen;
-import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerSettingsScreen;
 
 public final class EffortlessClientManager implements ClientManager {
 
@@ -154,18 +153,6 @@ public final class EffortlessClientManager implements ClientManager {
 
     private void openPatternSettingsScreen() {
         new EffortlessPatternSettingsScreen(getEntrance()).attach();
-    }
-
-    private void openRandomizerSettingsScreen() {
-        new EffortlessRandomizerSettingsScreen(
-                getEntrance(),
-                settings -> {
-                    getEntrance().getConfigStorage().use(config -> {
-                        config.getTransformerConfig().setItemRandomizerSettings(settings);
-                    });
-                },
-                getEntrance().getConfigStorage().get().getTransformerConfig().getRandomizerSettings()
-        ).attach();
     }
 
     private void openSettingsScreen() {
