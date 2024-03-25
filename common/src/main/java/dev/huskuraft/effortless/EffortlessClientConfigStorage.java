@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.file.FileType;
 import dev.huskuraft.effortless.api.file.TagElementFileStorage;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
 import dev.huskuraft.effortless.building.config.PatternSettings;
-import dev.huskuraft.effortless.building.config.PreviewSettings;
+import dev.huskuraft.effortless.building.config.RenderSettings;
 import dev.huskuraft.effortless.building.config.RootSettings;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
 import dev.huskuraft.effortless.building.config.serializer.RootSettingsTagSerializer;
@@ -31,7 +31,7 @@ public final class EffortlessClientConfigStorage extends TagElementFileStorage<R
     @Override
     public RootSettings getDefault() {
         return new RootSettings(
-                new PreviewSettings(),
+                new RenderSettings(),
                 new PatternSettings(
                         Pattern.getDefaultPatterns()),
                 new TransformerPresets(

@@ -3,7 +3,7 @@
 
   "effortless.settings.title": "Effortless Building Settings",
   "effortless.build_settings.title": "Build Settings",
-  "effortless.preview_settings.title": "Preview Settings",
+  "effortless.render_settings.title": "Render Settings",
   "effortless.pattern_settings.title": "Pattern Settings",
   "effortless.transformer_presets.title": "Transformer Presets",
   "effortless.general_settings.title": "General Settings",
@@ -34,6 +34,11 @@
   "effortless.global_general_settings.max_place_blocks": "Max Place Blocks",
   "effortless.global_general_settings.whitelisted_items": "Whitelisted Items",
   "effortless.global_general_settings.blacklisted_items": "Blacklisted Items",
+
+  "effortless.render_settings.show_other_players_build": "Show Other Players Build",
+  "effortless.render_settings.show_block_preview": "Show Block Preview",
+  "effortless.render_settings.max_render_blocks": "Max Render Blocks",
+  "effortless.render_settings.max_render_distance": "Max Render Distance",
 
   "effortless.settings.toggle.on": "§aON§r",
   "effortless.settings.toggle.off": "§cOFF§r",

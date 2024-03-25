@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.building.config;
 
 public record RootSettings(
-        PreviewSettings previewSettings,
+        RenderSettings renderSettings,
         PatternSettings patternSettings,
         TransformerPresets transformerPresets
 ) {

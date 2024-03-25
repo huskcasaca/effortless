@@ -33,7 +33,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         super(entrance, Text.translate("effortless.pattern.settings.title"));
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-            getEntrance().getConfigStorage().update(config -> new RootSettings(config.previewSettings(), this.config, config.transformerPresets()));
+            getEntrance().getConfigStorage().update(config -> new RootSettings(config.renderSettings(), this.config, config.transformerPresets()));
 
         };
         this.config = getEntrance().getConfigStorage().get().patternSettings();

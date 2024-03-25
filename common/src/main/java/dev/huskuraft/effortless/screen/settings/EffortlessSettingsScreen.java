@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
-import dev.huskuraft.effortless.screen.preview.EffortlessPreviewSettingsScreen;
+import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 
 public class EffortlessSettingsScreen extends AbstractScreen {
@@ -26,8 +26,8 @@ public class EffortlessSettingsScreen extends AbstractScreen {
         entries.addTab(Text.translate("effortless.general_settings.title"), (button) -> {
             new EffortlessGeneralSettingsScreen(getEntrance()).attach();
         });
-        entries.addTab(Text.translate("effortless.preview_settings.title"), (button) -> {
-            new EffortlessPreviewSettingsScreen(getEntrance()).attach();
+        entries.addTab(Text.translate("effortless.render_settings.title"), (button) -> {
+            new EffortlessRenderSettingsScreen(getEntrance()).attach();
         });
         entries.addTab(Text.translate("effortless.pattern_settings.title"), (button) -> {
             new EffortlessPatternSettingsScreen(getEntrance()).attach();

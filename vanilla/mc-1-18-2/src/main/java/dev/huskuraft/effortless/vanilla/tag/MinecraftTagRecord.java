@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.vanilla.tag;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.tag.TagElement;
@@ -214,23 +215,27 @@ public class MinecraftTagRecord implements TagRecord {
 
     @Override
     public <T> T getElement(String key, TagReader<T> reader) {
-        return reader.read(new MinecraftTagElement(referenceValue().get(key)));
+        return reader.read(new MinecraftTagElement(referenceValue().get(key)), true);
     }
 
     @Override
     public <T> void putElement(String key, T value, TagWriter<T> writer) {
         var tagElement = new MinecraftTagElement(null);
-        writer.write(tagElement, value);
+        writer.write(tagElement, value, true);
         referenceValue().put(key, tagElement.referenceValue());
     }
 
     @Override
-    public <T> List<T> getList(String key, TagReader<T> writer) {
+    public <T> List<T> getList(String key, TagReader<T> reader) {
         var list = new ArrayList<T>();
-        for (var minecraftListTag : (ListTag) referenceValue().get(key)) {
-            list.add(writer.read(new MinecraftTagElement(minecraftListTag)));
+        var tag = (ListTag) referenceValue().get(key);
+        if (tag == null) {
+            return Collections.unmodifiableList(list);
         }
-        return list;
+        for (var minecraftListTag : tag) {
+            list.add(reader.read(new MinecraftTagElement(minecraftListTag), true));
+        }
+        return Collections.unmodifiableList(list);
     }
 
     @Override
@@ -238,7 +243,7 @@ public class MinecraftTagRecord implements TagRecord {
         var minecraftListTag = new ListTag();
         for (var value : collection) {
             var tagElement = new MinecraftTagElement(null);
-            writer.write(tagElement, value);
+            writer.write(tagElement, value, true);
             minecraftListTag.add(tagElement.referenceValue());
         }
         referenceValue().put(key, minecraftListTag);
