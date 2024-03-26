@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.config.serializer;
+package dev.huskuraft.effortless.building.config.tag;
 
 import dev.huskuraft.effortless.api.tag.TagElement;
 import dev.huskuraft.effortless.api.tag.TagSerializer;

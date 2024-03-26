@@ -9,15 +9,15 @@ public interface Chance<T> {
     int MIN_ITEM_COUNT = 0;
     int MAX_ITEM_COUNT = Byte.MAX_VALUE;
 
-    static Chance<Item> item(Item item, byte chance) {
+    static Chance<Item> item(Item item, int chance) {
         return of(item, chance);
     }
 
     static <T> Chance<T> of(T content) {
-        return of(content, (byte) 1);
+        return of(content, 1);
     }
 
-    static <T> Chance<T> of(T content, byte chance) {
+    static <T> Chance<T> of(T content, int chance) {
         return new Chance<T>() {
             @Override
             public T content() {
@@ -25,7 +25,7 @@ public interface Chance<T> {
             }
 
             @Override
-            public byte chance() {
+            public int chance() {
                 return chance;
             }
 
@@ -41,7 +41,7 @@ public interface Chance<T> {
             @Override
             public int hashCode() {
                 int result = content != null ? content.hashCode() : 0;
-                result = 31 * result + (int) chance;
+                result = 31 * result + chance;
                 return result;
             }
 
@@ -54,5 +54,5 @@ public interface Chance<T> {
 
     T content();
 
-    byte chance();
+    int chance();
 }

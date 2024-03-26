@@ -13,6 +13,7 @@ public class EffortlessClient implements ClientEntrance {
     private final EffortlessClientNetworkChannel channel = new EffortlessClientNetworkChannel(this);
     private final EffortlessClientStructureBuilder structureBuilder = new EffortlessClientStructureBuilder(this);
     private final EffortlessClientManager clientManager = new EffortlessClientManager(this);
+    private final EffortlessClientTagConfigStorage tagConfigStorage = new EffortlessClientTagConfigStorage(this);
     private final EffortlessClientConfigStorage configStorage = new EffortlessClientConfigStorage(this);
     private final EffortlessClientSessionManager sessionManager = new EffortlessClientSessionManager(this);
 
@@ -37,7 +38,11 @@ public class EffortlessClient implements ClientEntrance {
         return clientManager;
     }
 
-    public EffortlessClientConfigStorage getConfigStorage() {
+    public EffortlessClientTagConfigStorage getConfigStorage() {
+        return tagConfigStorage;
+    }
+
+    public EffortlessClientConfigStorage getTagConfigStorage() {
         return configStorage;
     }
 

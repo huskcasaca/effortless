@@ -78,7 +78,7 @@ public class EffortlessPatternRadialScreen extends AbstractRadialScreen<Pattern,
     }
 
     private List<Slot<Pattern>> getSlots() {
-        var settingPatterns = getEntrance().getConfigStorage().get().patternSettings().patterns();
+        var settingPatterns = getEntrance().getTagConfigStorage().get().patternSettings().patterns();
         return Stream.concat(
                 Stream.concat(Stream.of(Pattern.DISABLED), settingPatterns.stream()),
                 Stream.generate(() -> Pattern.EMPTY).limit(Math.max(12 - settingPatterns.size() - 1, 0))

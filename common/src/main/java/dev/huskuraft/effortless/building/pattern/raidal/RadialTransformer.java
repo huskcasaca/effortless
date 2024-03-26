@@ -55,6 +55,18 @@ public class RadialTransformer extends Transformer {
 //        this.clockwise = clockwise;
     }
 
+    public RadialTransformer(UUID id, Text name, Vector3d position, PositionType positionTypeX, PositionType positionTypeY, PositionType positionTypeZ, int slice) {
+        super(id, name);
+        this.position = position;
+        this.positionType = new PositionType[]{positionTypeX, positionTypeY, positionTypeZ};
+        this.slice = slice;
+//        this.axis = axis;
+//        this.count = count;
+//        this.step = step;
+//        this.clockwise = clockwise;
+    }
+
+
     @Override
     public BatchOperation transform(TransformableOperation operation) {
         return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(1, slice).mapToObj(i -> {

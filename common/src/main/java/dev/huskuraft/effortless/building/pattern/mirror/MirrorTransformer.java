@@ -44,6 +44,13 @@ public class MirrorTransformer extends Transformer {
         this.axis = axis;
     }
 
+    public MirrorTransformer(UUID id, Text name, Vector3d position, PositionType positionTypeX, PositionType positionTypeY, PositionType positionTypeZ, Axis axis) {
+        super(id, name);
+        this.position = position;
+        this.positionType = new PositionType[]{positionTypeX, positionTypeY, positionTypeZ};
+        this.axis = axis;
+    }
+
     @Override
     public BatchOperation transform(TransformableOperation operation) {
         return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(

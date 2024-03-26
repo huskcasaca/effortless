@@ -27,9 +27,9 @@ public class EffortlessRenderSettingsScreen extends AbstractScreen {
         super(entrance, Text.translate("effortless.render_settings.title"));
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-            getEntrance().getConfigStorage().update(config -> new RootSettings(this.lastConfig, config.patternSettings(), config.transformerPresets()));
+            getEntrance().getTagConfigStorage().update(config -> new RootSettings(this.lastConfig, config.patternSettings(), config.transformerPresets()));
         };
-        this.lastConfig = getEntrance().getConfigStorage().get().renderSettings();
+        this.lastConfig = getEntrance().getTagConfigStorage().get().renderSettings();
         this.originalConfig = lastConfig;
     }
 

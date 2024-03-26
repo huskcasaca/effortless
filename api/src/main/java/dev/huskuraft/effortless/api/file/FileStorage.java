@@ -7,9 +7,24 @@ import java.util.logging.Logger;
 
 import dev.huskuraft.effortless.api.platform.Platform;
 
-public abstract class FileStorage<T> implements Storage<T> {
+abstract class FileStorage<T> implements Storage<T> {
 
+    private final String fileName;
+    private final FileType fileType;
     private T target;
+
+    protected FileStorage(String fileName, FileType fileType) {
+        this.fileName = fileName;
+        this.fileType = fileType;
+    }
+
+    protected String getFileName() {
+        return fileName;
+    }
+
+    protected final FileType getFileType() {
+        return fileType;
+    }
 
     private void read() {
         try {
@@ -77,12 +92,8 @@ public abstract class FileStorage<T> implements Storage<T> {
 
     public abstract T getDefault();
 
-    public abstract String getFileName();
+    protected abstract T read(File config) throws IOException;
 
-    public abstract FileType getFileType();
-
-    public abstract T read(File config) throws IOException;
-
-    public abstract void write(File file, T t) throws IOException;
+    protected abstract void write(File file, T t) throws IOException;
 
 }

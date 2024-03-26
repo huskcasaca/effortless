@@ -1,49 +1,16 @@
 package dev.huskuraft.effortless;
 
-import java.util.logging.Logger;
-
-import com.electronwill.nightconfig.core.Config;
-
-import dev.huskuraft.effortless.api.file.CommentedConfigFileStorage;
-import dev.huskuraft.effortless.api.toml.CommentedConfigDeserializer;
-import dev.huskuraft.effortless.api.toml.CommentedConfigSerializer;
+import dev.huskuraft.effortless.api.file.ConfigFileStorage;
+import dev.huskuraft.effortless.api.file.FileType;
 import dev.huskuraft.effortless.session.config.SessionConfig;
-import dev.huskuraft.effortless.session.config.SessionConfigSerDes;
+import dev.huskuraft.effortless.session.config.serializer.SessionConfigSerializer;
 
-public final class EffortlessSessionConfigStorage extends CommentedConfigFileStorage<SessionConfig> {
+public final class EffortlessSessionConfigStorage extends ConfigFileStorage<SessionConfig> {
 
-    private static final Logger LOGGER = Logger.getLogger("Effortless");
     private static final String CONFIG_NAME = "effortless.toml";
-    private static final SessionConfigSerDes SESSION_CONFIG_SERIALIZER = new SessionConfigSerDes();
-    private final Effortless entrance;
-    private SessionConfig config;
 
     public EffortlessSessionConfigStorage(Effortless entrance) {
-        this.entrance = entrance;
-        Config.setInsertionOrderPreserved(true);
+        super(CONFIG_NAME, FileType.TOML, new SessionConfigSerializer());
     }
 
-    private Effortless getEntrance() {
-        return entrance;
-    }
-
-    @Override
-    public SessionConfig getDefault() {
-        return SessionConfig.defaultConfig();
-    }
-
-    @Override
-    public String getFileName() {
-        return CONFIG_NAME;
-    }
-
-    @Override
-    public CommentedConfigSerializer<SessionConfig> getSerializer() {
-        return SESSION_CONFIG_SERIALIZER;
-    }
-
-    @Override
-    public CommentedConfigDeserializer<SessionConfig> getDeserializer() {
-        return SESSION_CONFIG_SERIALIZER;
-    }
 }

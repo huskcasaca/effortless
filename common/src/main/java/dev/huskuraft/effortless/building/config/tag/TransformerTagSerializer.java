@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.config.serializer;
+package dev.huskuraft.effortless.building.config.tag;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -61,11 +61,9 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
 
         private static final String TAG_OFFSET = "Offset";
         private static final String TAG_COUNT = "Count";
-        private static final String TAG_SIZE = "Size";
 
         @Override
         public ArrayTransformer read(TagElement tag) {
-            System.out.print(tag.asRecord().getString(TAG_SIZE));
             return new ArrayTransformer(
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
@@ -267,13 +265,13 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
 
         @Override
         public Chance<Item> read(TagElement tag) {
-            return Chance.of(tag.asRecord().getItem(TAG_CONTENT), tag.asRecord().getByte(TAG_CHANCE));
+            return Chance.of(tag.asRecord().getItem(TAG_CONTENT), tag.asRecord().getInt(TAG_CHANCE));
         }
 
         @Override
         public void write(TagElement tag, Chance<Item> chance) {
             tag.asRecord().putItem(TAG_CONTENT, chance.content());
-            tag.asRecord().putByte(TAG_CHANCE, chance.chance());
+            tag.asRecord().putInt(TAG_CHANCE, chance.chance());
         }
 
         @Override

@@ -1,13 +1,14 @@
-package dev.huskuraft.effortless.api.file;
+package dev.huskuraft.effortless.api.file.adapters;
 
 import java.io.File;
 import java.io.IOException;
 
+import dev.huskuraft.effortless.api.file.FileAdapter;
 import dev.huskuraft.effortless.api.tag.TagElement;
 import dev.huskuraft.effortless.api.tag.TagIo;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 
-public final class TagElementFileAdapter extends FileAdapter<TagElement> {
+public final class TagFileAdapter extends FileAdapter<TagElement> {
 
     @Override
     public TagElement read(File config) throws IOException {

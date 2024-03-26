@@ -139,7 +139,7 @@ public class TransformerSerializer implements BufferSerializer<Transformer> {
                     buffer.readEnum(Randomizer.Target.class),
                     buffer.readEnum(Randomizer.Category.class),
                     buffer.readList(buffer1 -> {
-                        return Chance.of(buffer1.readItem(), buffer1.readByte());
+                        return Chance.of(buffer1.readItem(), buffer1.readVarInt());
                     })
             );
         }
@@ -153,7 +153,7 @@ public class TransformerSerializer implements BufferSerializer<Transformer> {
             buffer.writeEnum(transformer.getCategory());
             buffer.writeList(transformer.getChances(), (buf, chance) -> {
                 buf.writeItem(chance.content());
-                buf.writeByte(chance.chance());
+                buf.writeVarInt(chance.chance());
             });
         }
     }

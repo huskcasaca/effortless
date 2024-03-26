@@ -1,9 +1,13 @@
 package dev.huskuraft.effortless.api.file;
 
+import dev.huskuraft.effortless.api.file.adapters.JsonFileAdapter;
+import dev.huskuraft.effortless.api.file.adapters.TagFileAdapter;
+import dev.huskuraft.effortless.api.file.adapters.TomlFileAdapter;
+
 public enum FileType {
-    JSON("json", null),
-    TOML("toml", new CommentedConfigFileAdapter()),
-    NBT("dat", new TagElementFileAdapter());
+    JSON("json", new JsonFileAdapter()),
+    TOML("toml", new TomlFileAdapter()),
+    NBT("dat", new TagFileAdapter());
 
     private final String extension;
     private final FileAdapter adapter;
