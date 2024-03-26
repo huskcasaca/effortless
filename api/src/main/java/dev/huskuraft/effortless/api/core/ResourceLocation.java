@@ -9,7 +9,7 @@ public interface ResourceLocation extends PlatformReference {
         try {
             return of(value.split(separator)[0], value.split(separator)[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new ArrayIndexOutOfBoundsException(e + "for value: " + value);
+            throw new IllegalArgumentException(e + "for value: " + value);
         }
     }
 

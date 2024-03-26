@@ -34,7 +34,7 @@ public class MirrorTransformer extends Transformer {
     private final Axis axis;
 
     public MirrorTransformer(Vector3d position, Axis axis) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.mirror"), position, new PositionType[]{PositionType.ABSOLUTE, PositionType.ABSOLUTE, PositionType.ABSOLUTE}, axis);
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.mirror"), position, new PositionType[]{PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE}, axis);
     }
 
     public MirrorTransformer(UUID id, Text name, Vector3d position, PositionType[] positionType, Axis axis) {

@@ -54,18 +54,18 @@ public class RootSettingsTagSerializer implements TagSerializer<RootSettings> {
         @Override
         public TransformerPresets read(TagElement tag) {
             return new TransformerPresets(
-                    tag.asRecord().getList(TAG_ARRAYS, new TransformerTagSerializer.ArrayTransformerSerializer()),
-                    tag.asRecord().getList(TAG_MIRRORS, new TransformerTagSerializer.MirrorTransformerSerializer()),
-                    tag.asRecord().getList(TAG_RADIALS, new TransformerTagSerializer.RadialTransformerSerializer()),
-                    tag.asRecord().getList(TAG_ITEM_RANDOMIZERS, new TransformerTagSerializer.ItemRandomizerSerializer()));
+                    tag.asRecord().getList(TAG_ARRAYS, new TransformerTagSerializer.ArrayTransformerTagSerializer()),
+                    tag.asRecord().getList(TAG_MIRRORS, new TransformerTagSerializer.MirrorTransformerTagSerializer()),
+                    tag.asRecord().getList(TAG_RADIALS, new TransformerTagSerializer.RadialTransformerTagSerializer()),
+                    tag.asRecord().getList(TAG_ITEM_RANDOMIZERS, new TransformerTagSerializer.ItemRandomizerTagSerializer()));
         }
 
         @Override
         public void write(TagElement tag, TransformerPresets config) {
-            tag.asRecord().putList(TAG_ARRAYS, config.arrayTransformers(), new TransformerTagSerializer.ArrayTransformerSerializer());
-            tag.asRecord().putList(TAG_MIRRORS, config.mirrorTransformers(), new TransformerTagSerializer.MirrorTransformerSerializer());
-            tag.asRecord().putList(TAG_RADIALS, config.radialTransformers(), new TransformerTagSerializer.RadialTransformerSerializer());
-            tag.asRecord().putList(TAG_ITEM_RANDOMIZERS, config.itemRandomizers(), new TransformerTagSerializer.ItemRandomizerSerializer());
+            tag.asRecord().putList(TAG_ARRAYS, config.arrayTransformers(), new TransformerTagSerializer.ArrayTransformerTagSerializer());
+            tag.asRecord().putList(TAG_MIRRORS, config.mirrorTransformers(), new TransformerTagSerializer.MirrorTransformerTagSerializer());
+            tag.asRecord().putList(TAG_RADIALS, config.radialTransformers(), new TransformerTagSerializer.RadialTransformerTagSerializer());
+            tag.asRecord().putList(TAG_ITEM_RANDOMIZERS, config.itemRandomizers(), new TransformerTagSerializer.ItemRandomizerTagSerializer());
         }
     }
 
