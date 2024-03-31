@@ -97,7 +97,7 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Set
         public void onCreate() {
             super.onCreate();
 
-            this.typeButton = addWidget(new Button(getEntrance(), getInnerRight() - 60, getTop(), 60, 20, getItem().value1().getDisplayName()));
+            this.typeButton = addWidget(new Button(getEntrance(), getInnerRight() - 72, getTop(), 72, 20, getItem().value1().getDisplayName()));
             this.typeButton.setOnPressListener(button -> {
                 setItem(getItem().withValue1(PositionType.values()[(getItem().value1().ordinal() + 1) % PositionType.values().length]).withValue2(0d));
                 numberField.setValue(getItem().value2());
@@ -105,14 +105,14 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Set
                 teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
             });
 
-            this.numberField = addWidget(new NumberField(getEntrance(), getInnerRight() - 60 - 72, getTop(), 72, 20, NumberField.TYPE_DOUBLE));
+            this.numberField = addWidget(new NumberField(getEntrance(), getInnerRight() - 72 - 72, getTop(), 72, 20, NumberField.TYPE_DOUBLE));
             this.numberField.setValueRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
             this.numberField.setValue(getItem().value2());
             this.numberField.setValueChangeListener(value -> {
                 super.setItem(getItem().withValue2(value.doubleValue()));
             });
 
-            this.teleportButton = addWidget(new Button(getEntrance(), getInnerRight() - 60 - 72 - 20, getTop(), 20, 20, Text.text("P")));
+            this.teleportButton = addWidget(new Button(getEntrance(), getInnerRight() - 72 - 72 - 20, getTop(), 20, 20, Text.text("P")));
             this.teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
             this.teleportButton.setOnPressListener(button -> {
                 setItem(getItem().withValue2(switch (axis) {
