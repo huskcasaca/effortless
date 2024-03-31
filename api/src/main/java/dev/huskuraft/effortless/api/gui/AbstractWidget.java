@@ -67,6 +67,7 @@ public abstract class AbstractWidget implements Widget {
 
     @Override
     public void render(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+        onReload();
         setHovered(isMouseOver(mouseX, mouseY));
 
         if (isVisible()) {
