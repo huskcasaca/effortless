@@ -90,8 +90,8 @@ public class Button extends AbstractButton {
             return this;
         }
 
-        public Builder setBounds(int i, int j, int k, int l) {
-            return this.setPos(i, j).setSize(k, l);
+        public Builder setBounds(int x, int y, int width, int height) {
+            return this.setPos(x, y).setSize(width, height);
         }
 
         public Builder setBoundsGrid(int width, int height, float row, float col, float size) {

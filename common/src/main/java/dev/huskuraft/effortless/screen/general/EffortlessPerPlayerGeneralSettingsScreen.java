@@ -17,16 +17,16 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
-    private final GeneralConfig globalConfig;
     private final PlayerInfo playerInfo;
     private GeneralConfig playerConfig;
+    private GeneralConfig globalConfig;
     private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
 
     public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig playerConfig, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
         super(entrance, Text.translate("effortless.general_settings.title"));
-        this.globalConfig = getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig();
         this.playerInfo = playerInfo;
         this.playerConfig = playerConfig;
+        this.globalConfig = getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig();
         this.consumer = consumer;
     }
 
@@ -113,6 +113,11 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
+    }
+
+    @Override
+    public void onReload() {
+        this.globalConfig = getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig();
     }
 
     @Override

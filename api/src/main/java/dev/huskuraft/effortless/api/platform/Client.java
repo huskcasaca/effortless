@@ -48,4 +48,6 @@ public interface Client extends PlatformReference {
 
     void sendCommand(String command);
 
+    void execute(Runnable runnable);
+
 }

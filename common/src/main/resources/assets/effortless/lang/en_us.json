@@ -24,6 +24,9 @@
   "effortless.option.on": "On",
   "effortless.option.off": "Off",
 
+  "effortless.not_an_operator.title": "Not an Operator",
+  "effortless.not_an_operator.message": "Cannot perform this action. You are not an operator of this server.",
+
   "effortless.global_general_settings.use_commands": "Use Commands",
   "effortless.global_general_settings.allow_use_mod": "Allow Use Mod",
   "effortless.global_general_settings.allow_break_blocks": "Allow Break Blocks",

@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
+import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
@@ -24,7 +25,17 @@ public class EffortlessSettingsScreen extends AbstractScreen {
 
         var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36));
         entries.addTab(Text.translate("effortless.general_settings.title"), (button) -> {
-            new EffortlessGeneralSettingsScreen(getEntrance()).attach();
+            getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
+                if (packet.isOperator()) {
+                    getEntrance().getClient().execute(() -> {
+                        new EffortlessGeneralSettingsScreen(getEntrance()).attach();
+                    });
+                } else {
+                    getEntrance().getClient().execute(() -> {
+                        new EffortlessNotAnOperatorScreen(getEntrance()).attach();
+                    });
+                }
+            });
         });
         entries.addTab(Text.translate("effortless.render_settings.title"), (button) -> {
             new EffortlessRenderSettingsScreen(getEntrance()).attach();
