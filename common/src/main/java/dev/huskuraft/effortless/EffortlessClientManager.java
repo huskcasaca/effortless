@@ -25,6 +25,7 @@ import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
 import dev.huskuraft.effortless.renderer.tooltip.TooltipRenderer;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
 import dev.huskuraft.effortless.screen.test.EffortlessTestScreen;
 
@@ -135,29 +136,6 @@ public final class EffortlessClientManager implements ClientManager {
         setInteractionCooldown(1);
     }
 
-    private void openTestScreen() {
-        new EffortlessTestScreen(getEntrance()).attach();
-    }
-
-    private void openModeRadialScreen() {
-        if (!(getRunningClient().getPanel() instanceof EffortlessModeRadialScreen)) {
-            new EffortlessModeRadialScreen(getEntrance(), EffortlessKeys.BUILD_MODE_RADIAL).attach();
-        }
-    }
-
-    private void openPatternRadialScreen() {
-        if (!(getRunningClient().getPanel() instanceof EffortlessPatternRadialScreen)) {
-            new EffortlessPatternRadialScreen(getEntrance(), EffortlessKeys.PATTERN_RADIAL).attach();
-        }
-    }
-
-    private void openPatternSettingsScreen() {
-        new EffortlessPatternSettingsScreen(getEntrance()).attach();
-    }
-
-    private void openSettingsScreen() {
-
-    }
 
     public void onRegisterKeys(KeyRegistry keyRegistry) {
         for (var key : EffortlessKeys.values()) {
@@ -180,16 +158,20 @@ public final class EffortlessClientManager implements ClientManager {
         }
 
         if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
-            openModeRadialScreen();
+            if (!(getRunningClient().getPanel() instanceof EffortlessModeRadialScreen)) {
+                new EffortlessModeRadialScreen(getEntrance(), EffortlessKeys.BUILD_MODE_RADIAL).attach();
+            }
         }
         if (EffortlessKeys.PATTERN_RADIAL.getBinding().isDown()) {
-            openPatternRadialScreen();
+            if (!(getRunningClient().getPanel() instanceof EffortlessPatternRadialScreen)) {
+                new EffortlessPatternRadialScreen(getEntrance(), EffortlessKeys.PATTERN_RADIAL).attach();
+            }
         }
         if (EffortlessKeys.BUILD_MODE_SETTINGS.getBinding().consumeClick()) {
-//            openModeSettings(client);
+
         }
         if (EffortlessKeys.PATTERN_SETTINGS.getBinding().consumeClick()) {
-            openPatternSettingsScreen();
+            new EffortlessPatternSettingsScreen(getEntrance()).attach();
         }
         if (EffortlessKeys.UNDO.getBinding().consumeClick()) {
             getEntrance().getStructureBuilder().undo(getRunningClient().getPlayer());
@@ -198,13 +180,14 @@ public final class EffortlessClientManager implements ClientManager {
             getEntrance().getStructureBuilder().redo(getRunningClient().getPlayer());
         }
         if (EffortlessKeys.SETTINGS.getBinding().consumeClick()) {
-            openSettingsScreen();
+            new EffortlessSettingsScreen(getEntrance()).attach();
         }
         if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
             getEntrance().getStructureBuilder().setBuildFeature(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());
         }
+
         if (Platform.getInstance().isDevelopment() && Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown() && Keys.KEY_ENTER.getBinding().isKeyDown()) {
-            openTestScreen();
+            new EffortlessTestScreen(getEntrance()).attach();
         }
     }
 
