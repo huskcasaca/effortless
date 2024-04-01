@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import dev.huskuraft.effortless.EffortlessClient;
+import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
@@ -12,20 +13,21 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.screen.item.EffortlessItemsScreen;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     private final PlayerInfo playerInfo;
-    private GeneralConfig playerConfig;
+    private GeneralConfig config;
     private GeneralConfig globalConfig;
     private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
 
-    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig playerConfig, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
+    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig config, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
         super(entrance, Text.translate("effortless.general_settings.title"));
         this.playerInfo = playerInfo;
-        this.playerConfig = playerConfig;
+        this.config = config;
         this.globalConfig = getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig();
         this.consumer = consumer;
     }
@@ -41,67 +43,99 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
                 value -> {
-                    this.playerConfig = new GeneralConfig(value, playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBlocks(), config.maxPlaceBlocks(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.useCommands(),
-                () -> playerConfig.useCommands()
+                () -> config.useCommands()
         );
 
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_use_mod"), null, null, null),
                 (value) -> {
-                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), value, playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBlocks(), config.maxPlaceBlocks(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowUseMod(),
-                () -> playerConfig.allowUseMod()
+                () -> config.allowUseMod()
         );
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_break_blocks"), null, null, null),
                 (value) -> {
-                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), value, playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBlocks(), config.maxPlaceBlocks(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowBreakBlocks(),
-                () -> playerConfig.allowBreakBlocks()
+                () -> config.allowBreakBlocks()
         );
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_place_blocks"), null, null, null),
                 (value) -> {
-                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), value, playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBlocks(), config.maxPlaceBlocks(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowPlaceBlocks(),
-                () -> playerConfig.allowPlaceBlocks()
+                () -> config.allowPlaceBlocks()
         );
         bindEntry(
                 entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_reach_distance"), null, null, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END, null),
                 (value) -> {
-                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), value, playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.maxDistancePerAxis(), config.maxBreakBlocks(), config.maxPlaceBlocks(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxReachDistance(),
-                () -> playerConfig.maxReachDistance()
+                () -> config.maxReachDistance()
         );
         bindEntry(
                 entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_distance_per_axis"), null, null, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_END, null),
                 (value) -> {
-                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), value, playerConfig.maxBreakBlocks(), playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), value, config.maxBreakBlocks(), config.maxPlaceBlocks(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxDistancePerAxis(),
-                () -> playerConfig.maxDistancePerAxis()
+                () -> config.maxDistancePerAxis()
         );
         bindEntry(
                 entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_break_blocks"), null, null, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_START, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_END, null),
                 (value) -> {
-                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), value, playerConfig.maxPlaceBlocks(), playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), value, config.maxPlaceBlocks(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxBreakBlocks(),
-                () -> playerConfig.maxBreakBlocks()
+                () -> config.maxBreakBlocks()
         );
         bindEntry(
                 entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_place_blocks"), null, null, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_START, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_END, null),
                 (value) -> {
-                    this.playerConfig = new GeneralConfig(playerConfig.useCommands(), playerConfig.allowUseMod(), playerConfig.allowBreakBlocks(), playerConfig.allowPlaceBlocks(), playerConfig.maxReachDistance(), playerConfig.maxDistancePerAxis(), playerConfig.maxBreakBlocks(), value, playerConfig.whitelistedItems(), playerConfig.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBlocks(), value, config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxPlaceBlocks(),
-                () -> playerConfig.maxPlaceBlocks()
+                () -> config.maxPlaceBlocks()
+        );
+        bindEntry(
+                entries.addTab(Text.translate("effortless.global_general_settings.whitelisted_items"), null, null, null, (entry, value) -> {
+                    entry.getButton().setOnPressListener(button1 -> {
+                        new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.whitelisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
+                            entry.setItem(value1.stream().map(Item::getId).toList());
+                        }).attach();
+                    });
+                    entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value == null ? null : value.size()));
+                }),
+                (value) -> {
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBlocks(), config.maxPlaceBlocks(), value, config.blacklistedItems());
+                },
+                () -> globalConfig.whitelistedItems(),
+                () -> config.whitelistedItems()
+
+        );
+
+        bindEntry(
+                entries.addTab(Text.translate("effortless.global_general_settings.blacklisted_items"), null, null, null, (entry, value) -> {
+                    entry.getButton().setOnPressListener(button1 -> {
+                        new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.blacklisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
+                            entry.setItem(value1.stream().map(Item::getId).toList());
+                        }).attach();
+                    });
+                    entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value == null ? null : value.size()));
+                }),
+                (value) -> {
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBlocks(), config.maxPlaceBlocks(), config.whitelistedItems(), value);
+                },
+                () -> globalConfig.blacklistedItems(),
+                () -> config.blacklistedItems()
         );
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
@@ -109,7 +143,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
-            consumer.accept(playerInfo, playerConfig);
+            consumer.accept(playerInfo, config);
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
@@ -127,8 +161,8 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     private void bindEntryState(SettingOptionsList.SettingsEntry<?> entry, boolean isGlobal) {
         entry.setActive(!isGlobal);
-        entry.getButton().setMessage(isGlobal ? "O" : "X");
-        entry.getButton().setTooltip(
+        entry.getAltButton().setMessage(isGlobal ? "O" : "X");
+        entry.getAltButton().setTooltip(
                 isGlobal ? "Click to Override" : "Click to Use Global",
                 ""
 //                ,
@@ -140,7 +174,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         entry.setItem(playerGetter.get() == null ? globalGetter.get() : playerGetter.get());
         bindEntryState(entry, playerGetter.get() == null);
 
-        entry.getButton().setOnPressListener(button -> {
+        entry.getAltButton().setOnPressListener(button -> {
             if (playerGetter.get() == null) {
                 entry.setItem(globalGetter.get());
             } else {

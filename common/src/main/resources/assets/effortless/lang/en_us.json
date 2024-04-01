@@ -17,6 +17,7 @@
   "effortless.button.edit": "Edit",
   "effortless.button.save": "Save",
   "effortless.button.select": "Select",
+  "effortless.button.clear": "Clear",
 
   "effortless.online_players.title": "Online Players",
   "effortless.online_players.search_hint": "Search Player",
@@ -37,6 +38,7 @@
   "effortless.global_general_settings.max_place_blocks": "Max Place Blocks",
   "effortless.global_general_settings.whitelisted_items": "Whitelisted Items",
   "effortless.global_general_settings.blacklisted_items": "Blacklisted Items",
+  "effortless.global_general_settings.items": "%s Item(s)",
 
   "effortless.render_settings.show_other_players_build": "Show Other Players Build",
   "effortless.render_settings.show_block_preview": "Show Block Preview",

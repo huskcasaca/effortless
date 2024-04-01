@@ -1,11 +1,13 @@
 package dev.huskuraft.effortless.screen.settings;
 
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
+import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.container.AbstractEntryList;
 import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
@@ -18,7 +20,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.PositionType;
 
-public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.SettingsEntry<?>> {
+public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Entry<?>> {
 
     private boolean showIcon;
     private boolean showButton;
@@ -79,6 +81,10 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Set
 
     public <T> SelectorEntry<T> addSelectorEntry(Text title, Text symbol, List<Text> messages, List<T> values, T value, Consumer<T> consumer) {
         return addEntry(new SelectorEntry<>(getEntrance(), this, title, symbol, messages, values, value, consumer));
+    }
+
+    public <T> ButtonEntry<T> addTab(Text title, Text symbol, T value, Consumer<T> consumer, BiConsumer<ButtonEntry<T>, T> buttonConsumer) {
+        return addEntry(new ButtonEntry<>(getEntrance(), this, title, symbol, value, consumer, buttonConsumer));
     }
 
     public final class PositionNumberEntry extends SettingsEntry<Tuple2<PositionType, Double>> {
@@ -242,7 +248,7 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Set
         public void onCreate() {
             super.onCreate();
 
-            this.button = addWidget(new Button(getEntrance(), getInnerRight() - 72, getTop(), 72, 20, getButtonMessage()));
+            this.button = addWidget(new Button(getEntrance(), getInnerRight() - Button.QUARTER_WIDTH, getTop(), Button.QUARTER_WIDTH, Button.DEFAULT_HEIGHT, getButtonMessage()));
             this.button.setOnPressListener(button -> {
                 setItem(getNextItem());
             });
@@ -277,11 +283,11 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Set
         }
     }
 
-    public abstract static class SettingsEntry<T> extends EditableEntryList.Entry<T> {
+    public abstract static class SettingsEntry<T> extends Entry<T> {
 
         protected TextSlot textSlot;
         protected AbstractWidget titleTextWidget;
-        protected Button button;
+        protected Button altButton;
         private Text symbol;
         private Consumer<T> consumer;
 
@@ -297,8 +303,8 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Set
             this.textSlot = addWidget(new TextSlot(getEntrance(), getLeft() + 1, getTop() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getSymbol()));
             this.textSlot.setVisible(this.getEntryList().isShowIcon());
 
-            this.button = addWidget(new Button(getEntrance(), getRight() - 20, getTop(), 20, 20, Text.empty()));
-            this.button.setVisible(this.getEntryList().isShowButton());
+            this.altButton = addWidget(new Button(getEntrance(), getRight() - 20, getTop(), 20, 20, Text.empty()));
+            this.altButton.setVisible(this.getEntryList().isShowButton());
 
             this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getInnerLeft() + 4, getTop() + 6, getMessage()));
         }
@@ -318,8 +324,8 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Set
             this.recreate();
         }
 
-        public Button getButton() {
-            return button;
+        public Button getAltButton() {
+            return altButton;
         }
 
         public int getInnerLeft() {
@@ -367,6 +373,54 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Set
             this.consumer = consumer;
         }
     }
+
+    public static final class ButtonEntry<T>  extends SettingsEntry<T> {
+
+        private final BiConsumer<ButtonEntry<T>, T> entryConsumer;
+        private Button button;
+
+        public ButtonEntry(Entrance entrance, SettingOptionsList entryList, Text title, Text symbol, T value, Consumer<T> consumer, BiConsumer<ButtonEntry<T>, T> entryConsumer) {
+            super(entrance, entryList, title, symbol, value, consumer);
+            this.entryConsumer = entryConsumer;
+        }
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            this.button = addWidget(new Button(getEntrance(), getInnerRight() - Button.QUARTER_WIDTH, getTop(), Button.QUARTER_WIDTH, Button.DEFAULT_HEIGHT, Text.empty()));
+            this.entryConsumer.accept(this, getItem());
+        }
+
+        @Override
+        public void setItem(T item) {
+            super.setItem(item);
+            this.entryConsumer.accept(this, item);
+        }
+
+        @Override
+        public void setActive(boolean active) {
+            super.setActive(active);
+            this.button.setActive(active);
+        }
+
+        public Button getButton() {
+            return button;
+        }
+    }
+
+
+    public abstract static class Entry<T> extends EditableEntryList.Entry<T> {
+
+        protected Entry(Entrance entrance, T item) {
+            super(entrance, item);
+        }
+
+        protected Entry(Entrance entrance, EntryList entryList, T item) {
+            super(entrance, entryList, item);
+        }
+    }
+
+
 
 
 }

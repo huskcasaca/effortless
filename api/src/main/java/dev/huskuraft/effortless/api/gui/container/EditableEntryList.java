@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.api.gui.container;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.gui.EntryList;
@@ -126,6 +127,10 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
         if (i >= 0 && i < list.size()) {
             setSelected(list.get(i));
         }
+    }
+
+    public void clear() {
+        reset(Collections.emptyList());
     }
 
     public List<T> items() {

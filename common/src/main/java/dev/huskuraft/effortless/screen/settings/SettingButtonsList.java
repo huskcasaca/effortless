@@ -46,7 +46,7 @@ public class SettingButtonsList extends AbstractEntryList<SettingButtonsList.Ent
         public void onCreate() {
             super.onCreate();
 
-            this.button = addWidget(new Button(getEntrance(), getX(), getY(), getWidth(), 20, getMessage()));
+            this.button = addWidget(new Button(getEntrance(), getX(), getY(), getWidth(), Button.DEFAULT_HEIGHT, getMessage()));
             this.button.setOnPressListener(button -> {
                 consumer.accept(button);
             });
