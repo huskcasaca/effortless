@@ -33,7 +33,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.edit"), button -> {
             if (entries.hasSelected()) {
@@ -82,7 +82,7 @@ public class EffortlessRandomizerSettingsScreen extends AbstractScreen {
             applySettings.accept(lastSettings);
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
-        this.entries = addWidget(new TransformerList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 60));
+        this.entries = addWidget(new TransformerList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_2));
         this.entries.reset(lastSettings.randomizers());
     }
 

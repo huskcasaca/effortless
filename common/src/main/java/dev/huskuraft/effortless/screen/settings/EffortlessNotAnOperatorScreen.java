@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless.screen.settings;
 
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -20,7 +19,7 @@ public class EffortlessNotAnOperatorScreen extends AbstractScreen {
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
             detach();
-        }).setBounds(getWidth() / 2 - Dimens.Buttons.TAB / 2, getHeight() / 2 + 32, Dimens.Buttons.TAB, Button.DEFAULT_HEIGHT).build());
+        }).setBounds(getWidth() / 2 - Button.TAB_WIDTH / 2, getHeight() / 2 + 32, Button.TAB_WIDTH, Button.DEFAULT_HEIGHT).build());
 
     }
 

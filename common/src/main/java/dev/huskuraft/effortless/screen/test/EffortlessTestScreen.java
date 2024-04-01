@@ -40,13 +40,13 @@ public class EffortlessTestScreen extends AbstractScreen {
     @Override
     public void onCreate() {
 
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.test.cancel"), button -> {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 1f).build());
 
-        var entries = addWidget(new SimpleEntryList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36));
+        var entries = addWidget(new SimpleEntryList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1));
 
         entries.addSimpleEntry(entry -> {
             var editBox = entry.addWidget(new EditBox(getEntrance(), entry.getX() + entry.getWidth() / 2 - 100 - 38, entry.getY(), 210, 20, Text.empty()));
@@ -89,20 +89,20 @@ public class EffortlessTestScreen extends AbstractScreen {
             }));
         });
         entries.addSimpleEntry(entry -> {
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW, 20, Text.text("Open EffortlessSettingsScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessSettingsScreen"), (button) -> {
                 new EffortlessSettingsScreen(getEntrance()).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 20, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessGeneralSettingsScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 20, Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessGeneralSettingsScreen"), (button) -> {
                 new EffortlessGeneralSettingsScreen(getEntrance()).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 80, Dimens.Buttons.ROW, 20, Text.text("Open EffortlessOnlinePlayersScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 80, Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessOnlinePlayersScreen"), (button) -> {
                 new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
 
                 }).attach();
             }));
         });
         entries.addSimpleEntry(entry -> {
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW, 20, Text.text("Open EffortlessPatternSettingsScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessPatternSettingsScreen"), (button) -> {
                 new EffortlessPatternSettingsScreen(getEntrance()).attach();
             }));
         });

@@ -62,7 +62,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         this.nameEditBox.setHint(Text.translate("effortless.pattern.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.name().getString());
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
             if (entries.hasSelected()) {

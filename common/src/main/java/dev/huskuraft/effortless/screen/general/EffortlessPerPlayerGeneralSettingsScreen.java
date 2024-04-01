@@ -32,11 +32,11 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        var titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
-        var playerNameTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, Text.text(playerInfo.getName()), TextWidget.Gravity.CENTER));
+        var titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        var playerNameTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, Text.text(playerInfo.getName()), TextWidget.Gravity.CENTER));
         playerNameTextWidget.setColor(0xffaaaaaa);
 
-        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36, false, true));
+        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1, false, true));
         entries.setRenderSelection(false);
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),

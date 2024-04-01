@@ -2,7 +2,6 @@ package dev.huskuraft.effortless.screen.settings;
 
 import java.util.function.Consumer;
 
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.container.AbstractEntryList;
@@ -27,7 +26,7 @@ public class SettingButtonsList extends AbstractEntryList<SettingButtonsList.Ent
     }
 
     public Button addTab(Text title, Consumer<Button> consumer) {
-        return addEntry(new ButtonEntry(getEntrance(), this, title, Dimens.Buttons.TAB, consumer)).getButton();
+        return addEntry(new ButtonEntry(getEntrance(), this, title, Button.TAB_WIDTH, consumer)).getButton();
     }
 
     private static final class ButtonEntry extends Entry<Void> {

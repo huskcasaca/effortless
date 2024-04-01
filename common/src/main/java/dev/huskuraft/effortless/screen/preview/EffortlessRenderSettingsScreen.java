@@ -35,9 +35,9 @@ public class EffortlessRenderSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36, false, false));
+        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1, false, false));
         entries.addSwitchEntry(Text.translate("effortless.render_settings.show_other_players_build"), null, lastConfig.showOtherPlayersBuild(), (value) -> {
             this.lastConfig = new RenderSettings(value, lastConfig.showBlockPreview(), lastConfig.maxRenderDistance(), lastConfig.maxRenderBlocks());
         });

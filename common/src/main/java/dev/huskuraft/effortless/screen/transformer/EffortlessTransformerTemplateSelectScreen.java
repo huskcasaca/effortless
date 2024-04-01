@@ -38,10 +38,10 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH - 2) / 2, Dimens.Title.CONTAINER_24, Dimens.Entry.ROW_WIDTH - 2, 20, Text.translate("effortless.transformer.template_select.search"))
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH - 2) / 2, Dimens.Screen.TITLE_24, Dimens.Entry.ROW_WIDTH - 2, 20, Text.translate("effortless.transformer.template_select.search"))
         );
 
         // FIXME: 21/10/23

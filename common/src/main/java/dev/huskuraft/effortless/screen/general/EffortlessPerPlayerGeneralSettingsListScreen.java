@@ -48,7 +48,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
     @Override
     public void onCreate() {
 
-        var titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        var titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.delete"), button -> {
             if (entries.hasSelected()) {
@@ -90,7 +90,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 60, true));
+        this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_2, true));
         this.entries.reset(getConfigurablePlayers());
     }
 

@@ -21,9 +21,9 @@ public class EffortlessSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Title.CONTAINER_36, getWidth(), getHeight() - Dimens.Title.CONTAINER_36 - 36));
+        var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1));
         entries.addTab(Text.translate("effortless.general_settings.title"), (button) -> {
             getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                 if (packet.isOperator()) {
@@ -54,7 +54,7 @@ public class EffortlessSettingsScreen extends AbstractScreen {
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.15f, 0.7f).build());
+        }).setBounds(getWidth() / 2 - Button.TAB_WIDTH / 2, getHeight() - Button.DEFAULT_HEIGHT - Button.MARGIN, Button.TAB_WIDTH, Button.DEFAULT_HEIGHT).build());
 
     }
 

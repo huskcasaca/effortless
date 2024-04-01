@@ -40,10 +40,10 @@ public class EffortlessOnlinePlayersScreen extends AbstractScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Title.CONTAINER_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, Dimens.Title.CONTAINER_24, Dimens.Entry.ROW_WIDTH, 20, Text.translate("effortless.item.picker.search"))
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, Dimens.Screen.TITLE_24, Dimens.Entry.ROW_WIDTH, 20, Text.translate("effortless.item.picker.search"))
         );
         this.searchEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
         this.searchEditBox.setHint(Text.translate("effortless.online_players.search_hint"));
@@ -59,7 +59,7 @@ public class EffortlessOnlinePlayersScreen extends AbstractScreen {
             consumer.accept(entries.getSelected().getItem());
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Title.CONTAINER_24 + 26, getWidth(), getHeight() - Dimens.Title.CONTAINER_24 - 26 - 36, true));
+        this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Screen.TITLE_24 + 26, getWidth(), getHeight() - Dimens.Screen.TITLE_24 - 26 - Dimens.Screen.BUTTON_ROW_1, true));
 
         this.entries.reset(players);
     }

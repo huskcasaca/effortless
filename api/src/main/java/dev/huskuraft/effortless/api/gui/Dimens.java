@@ -38,16 +38,30 @@ public class Dimens {
     }
 
     public static class Buttons {
-        public static final int QUARTER = 72;
-        public static final int HALF = 150;
-        public static final int FULL = 306;
-        public static final int TAB = 214;
-        public static final int ROW = Entry.ROW_WIDTH;
+        public static final int QUARTER_WIDTH = 72;
+        public static final int HALF_WIDTH = 150;
+        public static final int FULL_WIDTH = 306;
+        public static final int TAB_WIDTH = 214;
+        public static final int ROW_WIDTH = Entry.ROW_WIDTH;
+
+        public static final int HEIGHT = 20;
+
+        public static final int VERTICAL_SPACING = 4;
+        public static final int HORIZONTAL_SPACING = 6;
+
+        public static final int VERTICAL_PADDING = 8;
+        public static final int HORIZONTAL_PADDING = 8;
+
     }
 
-    public static class Title {
-        public static final int CONTAINER_24 = 24;
-        public static final int CONTAINER_36 = 32;
+    public static class Screen {
+
+        public static final int TITLE_24 = 24;
+        public static final int TITLE_36 = 32;
+
+        public static final int BUTTON_ROW_1 = Buttons.HEIGHT * 1 + Buttons.VERTICAL_SPACING * 0 + Buttons.VERTICAL_PADDING * 2;
+        public static final int BUTTON_ROW_2 = Buttons.HEIGHT * 2 + Buttons.VERTICAL_SPACING * 1 + Buttons.VERTICAL_PADDING * 2;
+        public static final int BUTTON_ROW_3 = Buttons.HEIGHT * 3 + Buttons.VERTICAL_SPACING * 2 + Buttons.VERTICAL_PADDING * 2;
     }
 
 }

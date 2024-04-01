@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.api.platform.SearchBy;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
-public class EffortlessItemPickerScreen extends AbstractScreen {
+public class EffortlessItemsScreen extends AbstractScreen {
 
     private final Consumer<Item> applySettings;
     private TextWidget titleTextWidget;
@@ -24,13 +24,14 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
     private Button addButton;
     private Button cancelButton;
 
-    public EffortlessItemPickerScreen(Entrance entrance, Consumer<Item> consumer) {
+    public EffortlessItemsScreen(Entrance entrance, Consumer<Item> consumer) {
         super(entrance, Text.translate("effortless.item.picker.title"));
         this.applySettings = consumer;
     }
 
     @Override
     public void onCreate() {
+
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
