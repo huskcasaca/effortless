@@ -38,11 +38,12 @@ public class EffortlessClient implements ClientEntrance {
         return clientManager;
     }
 
-    public EffortlessClientTagConfigStorage getConfigStorage() {
+    @Deprecated
+    public EffortlessClientTagConfigStorage getTagConfigStorage() {
         return tagConfigStorage;
     }
 
-    public EffortlessClientConfigStorage getTagConfigStorage() {
+    public EffortlessClientConfigStorage getConfigStorage() {
         return configStorage;
     }
 

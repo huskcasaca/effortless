@@ -56,10 +56,10 @@ public class EffortlessTestScreen extends AbstractScreen {
         });
         entries.addSimpleEntry(entry -> {
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getTop(), entry.getWidth() / 2, 20, Text.text("Load Toml Config"), (button) -> {
-                Logger.getAnonymousLogger().info("" + getEntrance().getTagConfigStorage().get());
+                Logger.getAnonymousLogger().info("" + getEntrance().getConfigStorage().get());
             }));
             entry.addWidget(new Button(getEntrance(), entry.getLeft() + entry.getWidth() / 2 , entry.getTop(), entry.getWidth() / 2, 20, Text.text("Save Toml Config"), (button) -> {
-                getEntrance().getTagConfigStorage().set(
+                getEntrance().getConfigStorage().set(
                         new RootSettings(
                                 new RenderSettings(),
                                 new PatternSettings(

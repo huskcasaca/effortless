@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.renderer.RenderFadeEntry;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.OperationResult;
@@ -15,6 +16,7 @@ import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResu
 import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationPreview;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationPreview;
 import dev.huskuraft.effortless.renderer.opertaion.children.OperationPreview;
+import dev.huskuraft.effortless.renderer.opertaion.children.RendererParams;
 
 public class OperationsRenderer {
 
@@ -36,6 +38,13 @@ public class OperationsRenderer {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    public int getMaxRenderBlocks() {
+        return EffortlessClient.getInstance().getConfigStorage().get().renderSettings().maxRenderBlocks();
+    }
+    public int getMaxRenderDistance() {
+        return EffortlessClient.getInstance().getConfigStorage().get().renderSettings().maxRenderDistance();
     }
 
     private void registerRenderers() {
@@ -60,8 +69,9 @@ public class OperationsRenderer {
     }
 
     public void render(Renderer renderer, float deltaTick) {
+        var renderParams = new RendererParams.Default(getMaxRenderBlocks(), getMaxRenderDistance());
         results.forEach((k, v) -> {
-            v.getValue().render(renderer, deltaTick);
+            v.getValue().render(renderer, renderParams, deltaTick);
         });
     }
 
