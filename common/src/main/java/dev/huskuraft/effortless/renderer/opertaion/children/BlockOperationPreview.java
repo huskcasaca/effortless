@@ -15,7 +15,7 @@ public class BlockOperationPreview implements OperationPreview {
 
     @Override
     public void render(Renderer renderer, RendererParams rendererParams, float deltaTick) {
-        if (rendererParams.isFull()) {
+        if (!rendererParams.shouldRenderBlocks()) {
             return;
         }
 

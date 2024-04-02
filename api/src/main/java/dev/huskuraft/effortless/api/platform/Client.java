@@ -50,4 +50,6 @@ public interface Client extends PlatformReference {
 
     void execute(Runnable runnable);
 
+    Options getOptions();
+
 }

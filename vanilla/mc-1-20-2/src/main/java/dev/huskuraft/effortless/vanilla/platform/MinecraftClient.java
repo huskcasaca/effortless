@@ -12,6 +12,7 @@ import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.platform.Client;
+import dev.huskuraft.effortless.api.platform.Options;
 import dev.huskuraft.effortless.api.renderer.Camera;
 import dev.huskuraft.effortless.api.renderer.Window;
 import dev.huskuraft.effortless.api.sound.SoundManager;
@@ -141,6 +142,11 @@ public class MinecraftClient implements Client {
     @Override
     public void execute(Runnable runnable) {
         reference.execute(runnable);
+    }
+
+    @Override
+    public Options getOptions() {
+        return new MinecraftOptions(reference.options);
     }
 
     @Override

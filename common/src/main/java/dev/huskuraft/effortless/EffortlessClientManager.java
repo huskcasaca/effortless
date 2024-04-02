@@ -48,7 +48,7 @@ public final class EffortlessClientManager implements ClientManager {
         this.entrance = entrance;
         this.tooltipRenderer = new TooltipRenderer(entrance);
 
-        this.operationsRenderer = new OperationsRenderer();
+        this.operationsRenderer = new OperationsRenderer(entrance);
         this.outlineRenderer = new OutlineRenderer();
         this.patternRenderer = new PatternRenderer();
 

@@ -23,8 +23,15 @@ public class OperationsRenderer {
     private final Map<Object, RenderFadeEntry<? extends OperationPreview>> results = Collections.synchronizedMap(new LinkedHashMap<>());
     private final Map<Class<?>, BiFunction<OperationsRenderer, OperationResult, ? extends OperationPreview>> resultRendererMap = Collections.synchronizedMap(new HashMap<>());
 
-    public OperationsRenderer() {
+    private final EffortlessClient entrance;
+
+    public OperationsRenderer(EffortlessClient entrance) {
+        this.entrance = entrance;
         registerRenderers();
+    }
+
+    public EffortlessClient getEntrance() {
+        return entrance;
     }
 
     private <R extends OperationResult, O extends OperationPreview> void registerRenderer(Class<R> result, BiFunction<OperationsRenderer, R, O> renderer) {
@@ -40,11 +47,16 @@ public class OperationsRenderer {
         }
     }
 
-    public int getMaxRenderBlocks() {
-        return EffortlessClient.getInstance().getConfigStorage().get().renderSettings().maxRenderBlocks();
+    private boolean isShowBlockPreview() {
+        return getEntrance().getConfigStorage().get().renderSettings().showBlockPreview();
     }
-    public int getMaxRenderDistance() {
-        return EffortlessClient.getInstance().getConfigStorage().get().renderSettings().maxRenderDistance();
+
+    private int getMaxRenderBlocks() {
+        return Integer.MAX_VALUE;
+    }
+
+    private int getMaxRenderDistance() {
+        return getEntrance().getClientManager().getRunningClient().getOptions().maxRenderDistance() * 16 + 16;
     }
 
     private void registerRenderers() {
@@ -69,7 +81,7 @@ public class OperationsRenderer {
     }
 
     public void render(Renderer renderer, float deltaTick) {
-        var renderParams = new RendererParams.Default(getMaxRenderBlocks(), getMaxRenderDistance());
+        var renderParams = new RendererParams.Default(isShowBlockPreview(), getMaxRenderBlocks(), getMaxRenderDistance());
         results.forEach((k, v) -> {
             v.getValue().render(renderer, renderParams, deltaTick);
         });
