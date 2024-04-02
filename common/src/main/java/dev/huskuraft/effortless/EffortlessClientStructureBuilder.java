@@ -36,6 +36,7 @@ import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.TracingResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
+import dev.huskuraft.effortless.building.operation.BlockPositionLocatable;
 import dev.huskuraft.effortless.building.operation.ItemType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
@@ -43,7 +44,6 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
-import dev.huskuraft.effortless.renderer.opertaion.SurfaceColor;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
 
@@ -318,18 +318,35 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     public void showOperationResult(UUID uuid, OperationResult result) {
         getEntrance().getClientManager().getOperationsRenderer().showResult(uuid, result);
-        if (result instanceof BatchOperationResult result1) {
-            var cluster = getEntrance().getClientManager().getOutlineRenderer().showCluster(result1.getOperation().getContext().uuid(), result1.locations())
-                    .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
-                    .lightMap(LightTexture.FULL_BLOCK)
-                    .disableNormals()
-                    .stroke(1 / 64f);
-            switch (result.getOperation().getContext().state()) {
-                case IDLE -> {
-                }
-                case PLACE_BLOCK -> cluster.colored(SurfaceColor.COLOR_WHITE);
-                case BREAK_BLOCK -> cluster.colored(SurfaceColor.COLOR_RED);
+        if (result instanceof BatchOperationResult batchOperationResult) {
+            for (var colorListEntry : batchOperationResult.getResultByColor().entrySet()) {
+                var locations =  colorListEntry.getValue().stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
+                var cluster = getEntrance().getClientManager().getOutlineRenderer().showCluster(colorListEntry.getKey().toString() + batchOperationResult.getOperation().getContext().uuid(), locations)
+                        .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
+                        .lightMap(LightTexture.FULL_BLOCK)
+                        .disableNormals()
+                        .colored(colorListEntry.getKey())
+                        .stroke(1 / 64f);
+//                switch (result.getOperation().getContext().state()) {
+//                    case IDLE -> {
+//                    }
+//                    case PLACE_BLOCK -> cluster.colored(SurfaceColor.COLOR_WHITE);
+//                    case BREAK_BLOCK -> cluster.colored(SurfaceColor.COLOR_RED);
+//                }
             }
+
+//
+//            var cluster = getEntrance().getClientManager().getOutlineRenderer().showCluster(batchOperationResult.getOperation().getContext().uuid(), batchOperationResult.locations())
+//                    .texture(OutlineRenderLayers.CHECKERED_TEXTURE_LOCATION)
+//                    .lightMap(LightTexture.FULL_BLOCK)
+//                    .disableNormals()
+//                    .stroke(1 / 64f);
+//            switch (result.getOperation().getContext().state()) {
+//                case IDLE -> {
+//                }
+//                case PLACE_BLOCK -> cluster.colored(SurfaceColor.COLOR_WHITE);
+//                case BREAK_BLOCK -> cluster.colored(SurfaceColor.COLOR_RED);
+//            }
         }
     }
 
