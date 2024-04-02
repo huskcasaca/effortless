@@ -40,7 +40,7 @@ public class ContextSerializer implements BufferSerializer<Context> {
                                 buffer.readList(new TransformerSerializer())
                         ),
                         buffer.readLong()),
-                new Context.ReachParams(0, 0)
+                new Context.ReachParams(buffer.readVarInt(), buffer.readVarInt())
         );
     }
 
@@ -63,6 +63,9 @@ public class ContextSerializer implements BufferSerializer<Context> {
         buffer.writeText(context.patternParams().pattern().name());
         buffer.writeList(context.patternParams().pattern().transformers(), new TransformerSerializer());
         buffer.writeLong(context.patternParams().seed());
+
+        buffer.writeVarInt(context.reachParams().maxBlockPlacePerAxis());
+        buffer.writeVarInt(context.reachParams().maxReachDistance());
     }
 
 }

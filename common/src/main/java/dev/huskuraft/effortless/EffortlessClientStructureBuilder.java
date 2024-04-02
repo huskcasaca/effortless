@@ -46,6 +46,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
+import dev.huskuraft.effortless.session.config.SessionConfig;
 
 public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
@@ -97,9 +98,19 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 return context.newInteraction();
             }
             if (interaction.getTarget() != Interaction.Target.BLOCK) {
+                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.reset_not_block")));
                 return context.newInteraction();
             }
             if (context.isBuilding() && context.state() != state) {
+                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.reset_click")));
+                return context.newInteraction();
+            }
+            if (state == BuildState.PLACE_BLOCK && !hasPlacePermission(player)) {
+                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_place_permission")));
+                return context.newInteraction();
+            }
+            if (state == BuildState.BREAK_BLOCK && !hasBreakPermission(player)) {
+                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
                 return context.newInteraction();
             }
             return context.withState(state).withNextInteraction(interaction);
@@ -136,14 +147,23 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
     }
 
+    public void onSessionConfig(SessionConfig sessionConfig) {
+        for (var uuid : getAllContexts().keySet()) {
+            var config = sessionConfig.getPlayerConfig(uuid);
+            getAllContexts().computeIfPresent(uuid, (uuid1, context) -> context.withReachParams(0, config.maxReachDistance()));
+        }
+    }
+
+
     @Override
-    public Context getDefaultContext() {
-        return Context.defaultSet(false);
+    public Context getDefaultContext(Player player) {
+        var config = getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player);
+        return Context.defaultSet(config.useCommands(), config.maxReachDistance());
     }
 
     @Override
     public Context getContext(Player player) {
-        return contexts.computeIfAbsent(player.getId(), uuid -> getDefaultContext());
+        return contexts.computeIfAbsent(player.getId(), uuid -> getDefaultContext(player));
     }
 
     @Override
@@ -160,6 +180,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
+    public Map<UUID, Context> getAllContexts() {
+        return contexts;
+    }
+
+    @Override
     public void setContext(Player player, Context context) {
         contexts.put(player.getId(), context);
     }
@@ -167,12 +192,32 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     // from settings screen
     @Override
     public void setBuildMode(Player player, BuildMode buildMode) {
+        if (!hasPermission(player)) {
+            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
+            return;
+        }
         updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
     }
 
     @Override
     public void setBuildFeature(Player player, SingleSelectFeature feature) {
+        if (!hasPermission(player)) {
+            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
+            return;
+        }
         updateContext(player, context -> context.withBuildFeature(feature));
+    }
+
+    public boolean hasPermission(Player player) {
+        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowUseMod();
+    }
+
+    public boolean hasBreakPermission(Player player) {
+        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowBreakBlocks();
+    }
+
+    public boolean hasPlacePermission(Player player) {
+        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowPlaceBlocks();
     }
 
     @Override
@@ -267,6 +312,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         var player = getEntrance().getClient().getPlayer();
 
+        if (!hasPermission(player)) {
+            resetContext(player);
+            return;
+        }
+
         if (player.isDeadOrDying()) {
             resetContextInteractions(player);
             return;
@@ -281,8 +331,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (getContext(player).isDisabled()) {
             return;
         }
-
-//        notifySession();
 
         setContext(player, getContext(player).withRandomPatternSeed());
         var context = getContextTraced(player).withPreviewType();

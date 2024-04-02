@@ -45,6 +45,12 @@
   "effortless.render_settings.max_render_blocks": "Max Render Blocks",
   "effortless.render_settings.max_render_distance": "Max Render Distance",
 
+  "effortless.message.permissions.no_permission": "You are not allowed to use effortless! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Use Mod]§r!",
+  "effortless.message.permissions.no_place_permission": "You are not allowed to place blocks! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Place Blocks]§r!",
+  "effortless.message.permissions.no_break_permission": "You are not allowed to break blocks! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Break Blocks]§r!",
+  "effortless.message.building.reset_click": "Reset!",
+  "effortless.message.building.reset_not_block": "Reset!",
+
   "effortless.settings.toggle.on": "§aON§r",
   "effortless.settings.toggle.off": "§cOFF§r",
   "effortless.settings.category.config.title": "Config",

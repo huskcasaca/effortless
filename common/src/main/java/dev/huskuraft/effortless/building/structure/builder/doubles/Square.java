@@ -115,7 +115,7 @@ public class Square extends DoubleClickBuilder {
 
     public static BlockInteraction traceSquare(Player player, Context context) {
         var center = context.firstBlockPosition().getCenter();
-        var reach = context.maxReachDistance();
+        var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
         return Stream.of(

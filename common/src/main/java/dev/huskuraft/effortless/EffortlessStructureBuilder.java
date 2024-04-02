@@ -64,7 +64,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public Context getDefaultContext() {
+    public Context getDefaultContext(Player player) {
         return null;
     }
 
@@ -78,6 +78,10 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
         return null;
     }
 
+    @Override
+    public Map<UUID, Context> getAllContexts() {
+        return Map.of();
+    }
 
     public void onTick() {
 

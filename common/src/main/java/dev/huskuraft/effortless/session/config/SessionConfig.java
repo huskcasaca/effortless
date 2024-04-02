@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 
+import dev.huskuraft.effortless.api.core.Player;
+
 public record SessionConfig(
         GeneralConfig globalConfig,
         Map<UUID, GeneralConfig> playerConfigs
@@ -16,18 +18,22 @@ public record SessionConfig(
     }
 
     private  <T> T getPlayerOrGlobalEntry(UUID id, Function<GeneralConfig, T> entry) {
-        return entry.apply(playerConfigs.compute(id, (key, config) -> config == null || entry.apply(config) == null ? globalConfig : config));
+        return entry.apply(playerConfigs.get(id) == null || entry.apply(playerConfigs.get(id)) == null ? globalConfig : playerConfigs.get(id));
     }
 
     private  <T> T getPlayerOrNullEntry(UUID id, Function<GeneralConfig, T> entry) {
-        return entry.apply(playerConfigs.compute(id, (key, config) -> config == null || entry.apply(config) == null ? GeneralConfig.NULL : config));
+        return entry.apply(playerConfigs.get(id) == null || entry.apply(playerConfigs.get(id)) == null ? GeneralConfig.NULL : playerConfigs.get(id));
     }
 
     public GeneralConfig getGlobalConfig() {
         return globalConfig;
     }
 
-    public GeneralConfig getPlayerOrGlobalConfig(UUID id) {
+    public GeneralConfig getPlayerConfig(Player player) {
+        return getPlayerConfig(player.getId());
+    }
+
+    public GeneralConfig getPlayerConfig(UUID id) {
         return new GeneralConfig(
                 getPlayerOrGlobalEntry(id, GeneralConfig::useCommands),
                 getPlayerOrGlobalEntry(id, GeneralConfig::allowUseMod),
@@ -42,7 +48,11 @@ public record SessionConfig(
         );
     }
 
-    public GeneralConfig getPlayerOrNullConfig(UUID id) {
+    public GeneralConfig getPlayerConfigOrNull(Player player) {
+        return getPlayerConfigOrNull(player.getId());
+    }
+
+    public GeneralConfig getPlayerConfigOrNull(UUID id) {
         return new GeneralConfig(
                 getPlayerOrNullEntry(id, GeneralConfig::useCommands),
                 getPlayerOrNullEntry(id, GeneralConfig::allowUseMod),

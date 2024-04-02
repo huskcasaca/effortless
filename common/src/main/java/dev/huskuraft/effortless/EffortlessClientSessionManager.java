@@ -46,6 +46,7 @@ public final class EffortlessClientSessionManager implements SessionManager {
     @Override
     public void onSessionConfig(SessionConfig sessionConfig, Player player) {
         serverSessionConfig.set(sessionConfig);
+        getEntrance().getStructureBuilder().onSessionConfig(sessionConfig);
     }
 
     public void updateSessionConfig(SessionConfig sessionConfig) {

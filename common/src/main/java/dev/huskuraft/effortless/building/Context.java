@@ -34,11 +34,11 @@ public record Context(
         ReachParams reachParams
 ) {
 
-    public static Context defaultSet(boolean command) {
+    public static Context defaultSet(boolean useCommands, int maxReachDistance) {
         return new Context(
                 UUID.randomUUID(),
                 BuildState.IDLE,
-                command ? BuildType.COMMAND : BuildType.BUILD,
+                useCommands ? BuildType.COMMAND : BuildType.BUILD,
                 BuildInteractions.EMPTY,
                 new StructureParams(
                         BuildMode.DISABLED,
@@ -51,7 +51,7 @@ public record Context(
                 new PatternParams(
                         Pattern.DISABLED,
                         UUID.randomUUID().getMostSignificantBits()),
-                new ReachParams(0, 0)
+                new ReachParams(0, maxReachDistance)
         );
     }
 
@@ -164,12 +164,17 @@ public record Context(
     }
 
     public int maxBlockPlacePerAxis() {
-        return 128; // reachParams.maxBlockPlacePerAxis();
+        return 1024; // reachParams.maxBlockPlacePerAxis();
+    }
+
+    public int maxNextReachDistance() {
+        return maxBlockPlacePerAxis() * 4;
     }
 
     public int maxReachDistance() {
-        return 256; // reachParams.maxReachDistance();
+        return reachParams.maxReachDistance();
     }
+
 
     public Pattern pattern() {
         return patternParams.pattern();
@@ -406,6 +411,14 @@ public record Context(
             int maxBlockPlacePerAxis,
             int maxReachDistance
     ) {
+    }
+
+    public Context withReachParams(ReachParams reachParams) {
+        return new Context(uuid, state, type, interactions, structureParams, patternParams, reachParams);
+    }
+
+    public Context withReachParams(int maxBlockPlacePerAxis, int maxReachDistance) {
+        return new Context(uuid, state, type, interactions, structureParams, patternParams, new ReachParams(maxBlockPlacePerAxis, maxReachDistance));
     }
 
 }
