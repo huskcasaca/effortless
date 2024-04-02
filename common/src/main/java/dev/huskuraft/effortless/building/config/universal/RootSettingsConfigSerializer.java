@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.building.config.RenderSettings;
 import dev.huskuraft.effortless.building.config.RootSettings;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
+import dev.huskuraft.effortless.building.pattern.Transformer;
 
 public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettings> {
 
@@ -31,8 +31,8 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettin
         var spec = new ConfigSpec();
         spec.define(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD), getDefault().renderSettings().showOtherPlayersBuild(), Boolean.class::isInstance);
         spec.define(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW), getDefault().renderSettings().showBlockPreview(), Boolean.class::isInstance);
-        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS), getDefault().renderSettings().maxRenderBlocks(), RenderSettings.MIN_MAX_RENDER_BLOCKS, RenderSettings.MAX_MAX_RENDER_BLOCKS);
-        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), getDefault().renderSettings().maxRenderDistance(), RenderSettings.MIN_MAX_RENDER_DISTANCE, RenderSettings.MAX_MAX_RENDER_DISTANCE);
+//        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS), getDefault().renderSettings().maxRenderBlocks(), RenderSettings.MIN_MAX_RENDER_BLOCKS, RenderSettings.MAX_MAX_RENDER_BLOCKS);
+//        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), getDefault().renderSettings().maxRenderDistance(), RenderSettings.MIN_MAX_RENDER_DISTANCE, RenderSettings.MAX_MAX_RENDER_DISTANCE);
         spec.defineList(KEY_PATTERNS, getDefault().patternSettings().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
         spec.defineList(KEY_TRANSFORMERS, getDefault().transformerPresets().arrayTransformers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
         return spec;
@@ -45,8 +45,10 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettin
                 new RenderSettings(
                         config.get(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD)),
                         config.get(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW)),
-                        config.get(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS)),
-                        config.get(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE))
+//                        config.get(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS)),
+//                        config.get(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE))
+                        0,
+                        0
                 ),
                 new PatternSettings(
                         config.<List<Config>>get(KEY_PATTERNS).stream().map(PatternConfigSerializer.INSTANCE::deserialize).toList()
@@ -63,8 +65,8 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettin
         var config = CommentedConfig.inMemory();
         config.set(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD), settings.renderSettings().showOtherPlayersBuild());
         config.set(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW), settings.renderSettings().showBlockPreview());
-        config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS), settings.renderSettings().maxRenderBlocks());
-        config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), settings.renderSettings().maxRenderDistance());
+//        config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS), settings.renderSettings().maxRenderBlocks());
+//        config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), settings.renderSettings().maxRenderDistance());
         config.set(KEY_PATTERNS, settings.patternSettings().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList());
         config.set(KEY_TRANSFORMERS, settings.transformerPresets().transformers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList());
         validate(config);
@@ -78,10 +80,7 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettin
                 new PatternSettings(
                         Pattern.getDefaultPatterns()),
                 new TransformerPresets(
-                        List.of(),
-                        List.of(),
-                        List.of(),
-                        ItemRandomizer.getDefaultItemRandomizers())
+                        Transformer.getDefaultTransformers())
         );
     }
 

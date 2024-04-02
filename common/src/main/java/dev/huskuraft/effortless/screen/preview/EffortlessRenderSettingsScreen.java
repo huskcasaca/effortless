@@ -45,12 +45,12 @@ public class EffortlessRenderSettingsScreen extends AbstractScreen {
             this.lastConfig = new RenderSettings(lastConfig.showOtherPlayersBuild(), value, lastConfig.maxRenderDistance(), lastConfig.maxRenderBlocks());
         });
 
-        entries.addIntegerEntry(Text.translate("effortless.render_settings.max_render_blocks"), null, lastConfig.maxRenderBlocks(), RenderSettings.MIN_MAX_RENDER_BLOCKS, RenderSettings.MAX_MAX_RENDER_BLOCKS, (value) -> {
-            this.lastConfig = new RenderSettings(lastConfig.showOtherPlayersBuild(), lastConfig.showBlockPreview(), value, lastConfig.maxRenderDistance());
-        });
-        entries.addIntegerEntry(Text.translate("effortless.render_settings.max_render_distance"), null, lastConfig.maxRenderDistance(), RenderSettings.MIN_MAX_RENDER_DISTANCE, RenderSettings.MAX_MAX_RENDER_DISTANCE, (value) -> {
-            this.lastConfig = new RenderSettings(lastConfig.showOtherPlayersBuild(), lastConfig.showBlockPreview(), lastConfig.maxRenderBlocks(), value);
-        });
+//        entries.addIntegerEntry(Text.translate("effortless.render_settings.max_render_blocks"), null, lastConfig.maxRenderBlocks(), RenderSettings.MIN_MAX_RENDER_BLOCKS, RenderSettings.MAX_MAX_RENDER_BLOCKS, (value) -> {
+//            this.lastConfig = new RenderSettings(lastConfig.showOtherPlayersBuild(), lastConfig.showBlockPreview(), value, lastConfig.maxRenderDistance());
+//        });
+//        entries.addIntegerEntry(Text.translate("effortless.render_settings.max_render_distance"), null, lastConfig.maxRenderDistance(), RenderSettings.MIN_MAX_RENDER_DISTANCE, RenderSettings.MAX_MAX_RENDER_DISTANCE, (value) -> {
+//            this.lastConfig = new RenderSettings(lastConfig.showOtherPlayersBuild(), lastConfig.showBlockPreview(), lastConfig.maxRenderBlocks(), value);
+//        });
 
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
