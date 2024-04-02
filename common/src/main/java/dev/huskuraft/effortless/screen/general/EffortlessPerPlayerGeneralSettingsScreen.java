@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -20,13 +21,17 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     private final PlayerInfo playerInfo;
+    private GeneralConfig originalConfig;
     private GeneralConfig config;
     private GeneralConfig globalConfig;
     private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
+    private AbstractWidget saveButton;
+
 
     public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig config, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
         super(entrance, Text.translate("effortless.general_settings.title"));
         this.playerInfo = playerInfo;
+        this.originalConfig = config;
         this.config = config;
         this.globalConfig = getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig();
         this.consumer = consumer;
@@ -142,7 +147,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
 
-        addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
+        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             consumer.accept(playerInfo, config);
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
@@ -151,6 +156,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     @Override
     public void onReload() {
+        this.saveButton.setActive(!config.equals(originalConfig));
         this.globalConfig = getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig();
     }
 

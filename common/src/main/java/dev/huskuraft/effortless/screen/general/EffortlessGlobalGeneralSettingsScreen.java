@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -15,12 +16,15 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
 
+    private GeneralConfig originalConfig;
     private GeneralConfig config;
     private final Consumer<GeneralConfig> consumer;
+    private AbstractWidget saveButton;
 
 
     public EffortlessGlobalGeneralSettingsScreen(Entrance entrance, GeneralConfig config, Consumer<GeneralConfig> consumer) {
         super(entrance, Text.translate("effortless.global_general_settings.title"));
+        this.originalConfig = config;
         this.config = config;
         this.consumer = consumer;
     }
@@ -78,11 +82,15 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
 
-        addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
+        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             consumer.accept(config);
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
     }
 
+    @Override
+    public void onReload() {
+        this.saveButton.setActive(!config.equals(originalConfig));
+    }
 }

@@ -22,11 +22,11 @@ public record GeneralConfig(
     public static final boolean ALLOW_BREAK_BLOCKS_DEFAULT = true;
     public static final boolean ALLOW_PLACE_BLOCKS_DEFAULT = true;
 
-    public static final int MAX_REACH_DISTANCE_DEFAULT = 32;
-    public static final int MAX_REACH_DISTANCE_RANGE_START = 0;
-    public static final int MAX_REACH_DISTANCE_RANGE_END = 1024 * 4;
+    public static final int MAX_REACH_DISTANCE_DEFAULT = 16;
+    public static final int MAX_REACH_DISTANCE_RANGE_START = 4;
+    public static final int MAX_REACH_DISTANCE_RANGE_END = 128;
 
-    public static final int MAX_DISTANCE_PER_AXIS_DEFAULT = 32;
+    public static final int MAX_DISTANCE_PER_AXIS_DEFAULT = 16;
     public static final int MAX_DISTANCE_PER_AXIS_RANGE_START = 0;
     public static final int MAX_DISTANCE_PER_AXIS_RANGE_END = 1024;
 

@@ -87,8 +87,8 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             spec.defineInRange(KEY_MAX_DISTANCE_PER_AXIS, GeneralConfig.MAX_DISTANCE_PER_AXIS_DEFAULT, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_START, GeneralConfig.MAX_DISTANCE_PER_AXIS_RANGE_END);
             spec.defineInRange(KEY_MAX_BREAK_BLOCKS, GeneralConfig.MAX_BREAK_BLOCKS_DEFAULT, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_START, GeneralConfig.MAX_BREAK_BLOCKS_RANGE_END);
             spec.defineInRange(KEY_MAX_PLACE_BLOCKS, GeneralConfig.MAX_PLACE_BLOCKS_DEFAULT, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_START, GeneralConfig.MAX_PLACE_BLOCKS_RANGE_END);
-            spec.defineList(KEY_WHITELISTED_ITEMS, GeneralConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
-            spec.defineList(KEY_BLACKLISTED_ITEMS, GeneralConfig.BLACKLISTED_ITEMS_DEFAULT, Objects::nonNull);
+            spec.defineList(KEY_WHITELISTED_ITEMS, GeneralConfig.WHITELISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
+            spec.defineList(KEY_BLACKLISTED_ITEMS, GeneralConfig.BLACKLISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
             return spec;
         }
 
