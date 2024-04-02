@@ -13,7 +13,7 @@ public class BlockInteraction extends Interaction {
         this(position, orientation, blockPosition, inside, false);
     }
 
-    private BlockInteraction(Vector3d position, Orientation orientation, BlockPosition blockPosition, boolean inside, boolean miss) {
+    public BlockInteraction(Vector3d position, Orientation orientation, BlockPosition blockPosition, boolean inside, boolean miss) {
         super(position);
         this.orientation = orientation;
         this.blockPosition = blockPosition;
@@ -44,5 +44,30 @@ public class BlockInteraction extends Interaction {
 
     public boolean isInside() {
         return this.inside;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof BlockInteraction that)) return false;
+
+        if (inside != that.inside) return false;
+        if (miss != that.miss) return false;
+        if (orientation != that.orientation) return false;
+        return blockPosition.equals(that.blockPosition);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = orientation.hashCode();
+        result = 31 * result + blockPosition.hashCode();
+        result = 31 * result + (inside ? 1 : 0);
+        result = 31 * result + (miss ? 1 : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "BlockInteraction[" + this.position + ", " + this.orientation + ", " + this.blockPosition + ", " + this.inside + ", " + this.miss + "]";
     }
 }
