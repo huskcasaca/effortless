@@ -2,6 +2,7 @@ package dev.huskuraft.effortless;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -19,6 +20,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
+import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
@@ -40,6 +42,7 @@ import dev.huskuraft.effortless.building.operation.BlockPositionLocatable;
 import dev.huskuraft.effortless.building.operation.ItemType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
+import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
@@ -346,15 +349,17 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
     }
 
-    private UUID nextIdByTag(UUID uuid, String tag) {
-        return new UUID(uuid.getMostSignificantBits() + tag.hashCode(), uuid.getLeastSignificantBits());
+    private UUID nextIdByTag(UUID uuid, Object tag) {
+        return new UUID(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits() + tag.hashCode());
     }
 
     public void showContext(UUID uuid, Context context) {
         getEntrance().getClientManager().getPatternRenderer().showPattern(uuid, context);
-        if (!context.isMissingHit() && !context.interactions().isEmpty()) {
+        if (context.interactions().isMissing() || context.interactions().isEmpty()) {
+            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, BoundingBox3d.class), BoundingBox3d.ofSize(Vector3d.ZERO, 0, 0, 0));
+        } else {
             var box = BoundingBox3d.fromLowerCornersOf(context.interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new));
-            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, "boundingBox"), box)
+            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, BoundingBox3d.class), box)
                     .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                     .lightMap(LightTexture.FULL_BLOCK)
                     .disableNormals()
@@ -369,38 +374,25 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (result instanceof BatchOperationResult batchOperationResult) {
             for (var colorListEntry : batchOperationResult.getResultByColor().entrySet()) {
                 var locations =  colorListEntry.getValue().stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
-                var cluster = getEntrance().getClientManager().getOutlineRenderer().showCluster(colorListEntry.getKey().toString() + batchOperationResult.getOperation().getContext().uuid(), locations)
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().uuid(), colorListEntry.getKey()), locations)
                         .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                         .lightMap(LightTexture.FULL_BLOCK)
                         .disableNormals()
                         .colored(colorListEntry.getKey())
                         .stroke(1 / 64f);
-//                switch (result.getOperation().getContext().state()) {
-//                    case IDLE -> {
-//                    }
-//                    case PLACE_BLOCK -> cluster.colored(SurfaceColor.COLOR_WHITE);
-//                    case BREAK_BLOCK -> cluster.colored(SurfaceColor.COLOR_RED);
-//                }
+            }
+            if (batchOperationResult.getResultByColor().isEmpty()) {
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().uuid(), BlockOperationResult.BLOCK_BREAK_OP_COLOR), Collections.emptyList());
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().uuid(), BlockOperationResult.BLOCK_PLACE_SUCC_OP_COLOR), Collections.emptyList());
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().uuid(), BlockOperationResult.BLOCK_PLACE_FAIL_OP_COLOR), Collections.emptyList());
             }
 
-//
-//            var cluster = getEntrance().getClientManager().getOutlineRenderer().showCluster(batchOperationResult.getOperation().getContext().uuid(), batchOperationResult.locations())
-//                    .texture(OutlineRenderLayers.CHECKERED_TEXTURE_LOCATION)
-//                    .lightMap(LightTexture.FULL_BLOCK)
-//                    .disableNormals()
-//                    .stroke(1 / 64f);
-//            switch (result.getOperation().getContext().state()) {
-//                case IDLE -> {
-//                }
-//                case PLACE_BLOCK -> cluster.colored(SurfaceColor.COLOR_WHITE);
-//                case BREAK_BLOCK -> cluster.colored(SurfaceColor.COLOR_RED);
-//            }
         }
     }
 
     public void showOperationResultTooltip(UUID uuid, Player player, OperationResult result, int priority) {
-        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks", player.getDisplayName()).withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
-        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks", player.getDisplayName()).withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
+        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, ItemType.PLAYER_USED), Text.translate("effortless.build.summary.placed_blocks", player.getDisplayName()).withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
+        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, ItemType.WORLD_DROPPED), Text.translate("effortless.build.summary.destroyed_blocks", player.getDisplayName()).withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
     }
 
     public void showContextTooltip(UUID uuid, Context context, int priority) {
@@ -419,7 +411,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 //        texts.add(Text.translate("effortless.build.summary.state").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getStateComponent(context.state()).withStyle(TextStyle.GOLD)));
         texts.add(Text.translate("effortless.build.summary.tracing").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getTracingComponent(context.tracingResult()).withStyle(TextStyle.GOLD)));
 
-        getEntrance().getClientManager().getTooltipRenderer().showMessages(nextIdByTag(uuid, "info"), texts, priority);
+        getEntrance().getClientManager().getTooltipRenderer().showMessages(nextIdByTag(uuid, Context.class), texts, priority);
     }
 
 }

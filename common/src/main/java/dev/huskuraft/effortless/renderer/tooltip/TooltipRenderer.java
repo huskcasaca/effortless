@@ -296,7 +296,7 @@ public class TooltipRenderer {
 
         @Override
         public boolean isVisible() {
-            return !itemStacks.isEmpty();
+            return true;
         }
     }
 

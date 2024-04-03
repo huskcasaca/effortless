@@ -58,7 +58,7 @@ public class BlockBreakOperationResult extends BlockOperationResult {
 
     public Color getColor() {
         return switch (result) {
-            case SUCCESS, CONSUME -> new Color(1f, 0, 0, 0.5f);
+            case SUCCESS, CONSUME -> BLOCK_BREAK_OP_COLOR;
             default -> null;
         };
     }

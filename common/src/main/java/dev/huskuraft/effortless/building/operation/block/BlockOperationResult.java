@@ -8,6 +8,10 @@ import dev.huskuraft.effortless.building.operation.OperationResult;
 
 public abstract class BlockOperationResult extends OperationResult {
 
+    public static final Color BLOCK_BREAK_OP_COLOR = new Color(1f, 0, 0, 0.5f);
+    public static final Color BLOCK_PLACE_SUCC_OP_COLOR = new Color(235, 235, 235);
+    public static final Color BLOCK_PLACE_FAIL_OP_COLOR = new Color(255, 0, 0);
+
     protected final BlockOperation operation;
     protected final Type result;
     protected final List<ItemStack> inputs;
