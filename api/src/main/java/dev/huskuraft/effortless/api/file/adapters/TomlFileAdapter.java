@@ -13,8 +13,8 @@ import dev.huskuraft.effortless.api.file.FileAdapter;
 public final class TomlFileAdapter extends FileAdapter<Config> {
 
     @Override
-    public Config read(File config) throws IOException {
-        return new TomlParser().parse(config, (file, configFormat) -> false);
+    public Config read(File file) throws IOException {
+        return new TomlParser().parse(file, (file1, configFormat) -> false);
     }
 
     @Override

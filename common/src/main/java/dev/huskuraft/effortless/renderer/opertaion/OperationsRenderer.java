@@ -56,7 +56,7 @@ public class OperationsRenderer {
     }
 
     private int getMaxRenderDistance() {
-        return getEntrance().getClientManager().getRunningClient().getOptions().maxRenderDistance() * 16 + 16;
+        return getEntrance().getClientManager().getRunningClient().getOptions().renderDistance() * 16 + 16;
     }
 
     private void registerRenderers() {

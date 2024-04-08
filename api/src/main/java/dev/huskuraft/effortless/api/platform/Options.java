@@ -31,6 +31,6 @@ public interface Options extends PlatformReference {
     KeyBinding keyLoadHotbarActivator();
     KeyBinding[] keyHotbarSlots();
 
-    int maxRenderDistance();
+    int renderDistance();
 
 }

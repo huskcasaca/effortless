@@ -139,7 +139,7 @@ public record MinecraftOptions(net.minecraft.client.Options referenceValue) impl
     }
 
     @Override
-    public int maxRenderDistance() {
+    public int renderDistance() {
         return referenceValue.renderDistance;
     }
 }
