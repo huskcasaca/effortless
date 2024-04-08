@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.api.math;
 
+import java.util.stream.DoubleStream;
+
 public class Vector4f {
 
     public static final Vector4f ZERO = new Vector4f(0, 0, 0, 0);
@@ -421,6 +423,14 @@ public class Vector4f {
      */
     public Vector4f abs() {
         return at(MathUtils.abs(x), MathUtils.abs(y), MathUtils.abs(z), MathUtils.abs(w));
+    }
+
+    public DoubleStream stream() {
+        return DoubleStream.of(x, y, z, w);
+    }
+
+    public double volume() {
+        return x * y * z * w;
     }
 
     @Override

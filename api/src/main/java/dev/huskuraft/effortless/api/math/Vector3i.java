@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.api.math;
 
 import java.util.Comparator;
+import java.util.stream.IntStream;
 
 public class Vector3i {
 
@@ -545,6 +546,14 @@ public class Vector3i {
      */
     public Vector3d toVector3d() {
         return Vector3d.at(x, y, z);
+    }
+
+    public IntStream stream() {
+        return IntStream.of(x, y, z);
+    }
+
+    public int volume() {
+        return x * y * z;
     }
 
     @Override

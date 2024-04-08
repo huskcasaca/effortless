@@ -26,6 +26,12 @@ public interface Player extends Entity {
         sendMessage(Text.text(message));
     }
 
+    void sendClientMessage(Text message, boolean actionBar);
+
+    default void sendClientMessage(String message, boolean actionBar) {
+        sendClientMessage(Text.text(message), actionBar);
+    }
+
     void swing(InteractionHand hand);
 
     boolean canInteractBlock(BlockPosition blockPosition);

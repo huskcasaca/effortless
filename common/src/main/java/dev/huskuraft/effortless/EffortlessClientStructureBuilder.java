@@ -19,6 +19,7 @@ import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
+import dev.huskuraft.effortless.api.lang.Tuple2;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
@@ -57,6 +58,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
+
+    private int tick = 0;
 
     public EffortlessClientStructureBuilder(EffortlessClient entrance) {
         this.entrance = entrance;
@@ -100,22 +103,35 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             if (interaction == null) {
                 return context.newInteraction();
             }
-            if (interaction.getTarget() != Interaction.Target.BLOCK) {
-                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.reset_not_block")));
+            if (interaction.getTarget() == Interaction.Target.MISS) {
+                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_target"), true);
+                return context.newInteraction();
+            }
+            if (interaction.getTarget() == Interaction.Target.ENTITY) {
+                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_entity"), true);
                 return context.newInteraction();
             }
             if (context.isBuilding() && context.state() != state) {
-                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.reset_click")));
+                player.sendClientMessage(Text.translate("effortless.message.building.build_canceled"), true);
                 return context.newInteraction();
             }
             if (state == BuildState.PLACE_BLOCK && !hasPlacePermission(player)) {
                 player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_place_permission")));
+                player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks"), true);
+
                 return context.newInteraction();
             }
             if (state == BuildState.BREAK_BLOCK && !hasBreakPermission(player)) {
                 player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
+                player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks"), true);
                 return context.newInteraction();
             }
+
+            if (context.withState(state).withNextInteraction(interaction).isSizeInBound()) {
+                player.sendClientMessage("Too Large To Build", true);
+                return context.newInteraction();
+            }
+
             return context.withState(state).withNextInteraction(interaction);
         });
     }
@@ -133,9 +149,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
             }
 
-            showContext(context.uuid(), context);
-            showOperationResult(context.uuid(), result);
-            showOperationResultTooltip(context.uuid(), player, result, 1000);
+            showContext(context.getId(), context);
+            showOperationResult(context.getId(), result);
+//            showOperationResultTooltip(context.getId(), 1024, player, result);
+//            showContextTooltip(context.getId(), 1024, context);
+            showBuildTooltip(context.getId(), 1024, player, context, result);
             setContext(player, context.newInteraction());
 
 
@@ -153,15 +171,14 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void onSessionConfig(SessionConfig sessionConfig) {
         for (var uuid : getAllContexts().keySet()) {
             var config = sessionConfig.getPlayerConfig(uuid);
-            getAllContexts().computeIfPresent(uuid, (uuid1, context) -> context.withReachParams(0, config.maxReachDistance()));
+            getAllContexts().computeIfPresent(uuid, (uuid1, context) -> context.withGeneralConfig(config));
         }
     }
-
 
     @Override
     public Context getDefaultContext(Player player) {
         var config = getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player);
-        return Context.defaultSet(config.useCommands(), config.maxReachDistance());
+        return Context.defaultSet().withGeneralConfig(config);
     }
 
     @Override
@@ -283,7 +300,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
 
-        showOperationResultTooltip(context.uuid(), player, result, 1);
+//        showOperationResultTooltip(context.getId(), 1, player, result);
+
+        showBuildTooltip(context.getId(), 1, player, context, result);
     }
 
     @Override
@@ -307,6 +326,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (phase == ClientTick.Phase.END) {
             return;
         }
+        tick++;
 
         if (getEntrance().getClient() == null || getEntrance().getClient().getPlayer() == null) {
             resetAll();
@@ -343,8 +363,13 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
 
-        showContextTooltip(player.getId(), context, 0);
-        showOperationResultTooltip(player.getId(), player, result, 1);
+//        showOperationResultTooltip(player.getId(), 0, player, result);
+//        showContextTooltip(player.getId(), 0, context);
+
+        showBuildTooltip(player.getId(), 0, player, context, result);
+        if (!getContext(player).isIdle()) {
+            showClientMessage(player, context);
+        }
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
     }
@@ -374,7 +399,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (result instanceof BatchOperationResult batchOperationResult) {
             for (var colorListEntry : batchOperationResult.getResultByColor().entrySet()) {
                 var locations =  colorListEntry.getValue().stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
-                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().uuid(), colorListEntry.getKey()), locations)
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), colorListEntry.getKey()), locations)
                         .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                         .lightMap(LightTexture.FULL_BLOCK)
                         .disableNormals()
@@ -382,36 +407,77 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                         .stroke(1 / 64f);
             }
             if (batchOperationResult.getResultByColor().isEmpty()) {
-                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().uuid(), BlockOperationResult.BLOCK_BREAK_OP_COLOR), Collections.emptyList());
-                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().uuid(), BlockOperationResult.BLOCK_PLACE_SUCC_OP_COLOR), Collections.emptyList());
-                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().uuid(), BlockOperationResult.BLOCK_PLACE_FAIL_OP_COLOR), Collections.emptyList());
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), BlockOperationResult.BLOCK_BREAK_OP_COLOR), Collections.emptyList());
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), BlockOperationResult.BLOCK_PLACE_SUCC_OP_COLOR), Collections.emptyList());
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), BlockOperationResult.BLOCK_PLACE_FAIL_OP_COLOR), Collections.emptyList());
             }
 
         }
     }
 
-    public void showOperationResultTooltip(UUID uuid, Player player, OperationResult result, int priority) {
-        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, ItemType.PLAYER_USED), Text.translate("effortless.build.summary.placed_blocks", player.getDisplayName()).withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
-        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, ItemType.WORLD_DROPPED), Text.translate("effortless.build.summary.destroyed_blocks", player.getDisplayName()).withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
-    }
+    public void showBuildTooltip(UUID id, int priority, Player player, Context context, OperationResult result) {
+        var entries = new ArrayList<>();
 
-    public void showContextTooltip(UUID uuid, Context context, int priority) {
-        var texts = new ArrayList<Text>();
-        texts.add(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
+        var playerUsed = result.getProducts(ItemType.PLAYER_USED);
+        var worldDropped = result.getProducts(ItemType.WORLD_DROPPED);
+
+        if (!playerUsed.isEmpty()) {
+            entries.add(playerUsed);
+            entries.add(Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE));
+        }
+        if (!worldDropped.isEmpty()) {
+            entries.add(worldDropped);
+            entries.add(Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED));
+        }
+
+        if (!playerUsed.isEmpty() || !worldDropped.isEmpty()) {
+            getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, ItemType.class), priority, entries);
+        } else {
+            getEntrance().getClientManager().getTooltipRenderer().showEmptyEntry(nextIdByTag(id, ItemType.class), priority);
+        }
+
+        entries.clear();
+
+        var texts = new ArrayList<Tuple2<Text, Text>>();
+        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
         var replace = AbstractRadialScreen.button(context.replaceMode());
-        texts.add(replace.getDisplayCategory().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(replace.getDisplayName().withStyle(TextStyle.GOLD)));
+        texts.add(new Tuple2<>(replace.getDisplayCategory().withStyle(TextStyle.WHITE), replace.getDisplayName().withStyle(TextStyle.GOLD)));
 
         for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
             if (option.isEmpty()) continue;
             var button = AbstractRadialScreen.button(option.get());
-            texts.add(button.getDisplayCategory().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(button.getDisplayName().withStyle(TextStyle.GOLD)));
+            texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
         }
 
-//        texts.add(Text.translate("effortless.build.summary.state").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getStateComponent(context.state()).withStyle(TextStyle.GOLD)));
-        texts.add(Text.translate("effortless.build.summary.tracing").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getTracingComponent(context.tracingResult()).withStyle(TextStyle.GOLD)));
+        entries.add(texts);
+//        getEntrance().getClientManager().getTooltipRenderer().showAsGroup(nextIdByTag(id, Context.class), priority, entries);
+//        entries.clear();
+        entries.add(context.buildMode().getIcon());
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, BuildMode.class), priority, entries);
+    }
 
-        getEntrance().getClientManager().getTooltipRenderer().showMessages(nextIdByTag(uuid, Context.class), texts, priority);
+    public void showClientMessage(Player player, Context context) {
+        var message = "";
+        if (!context.tracingResult().isSuccess()) {
+            switch (context.tracingResult()) {
+                case SUCCESS_FULFILLED -> {
+                }
+                case SUCCESS_PARTIAL -> {
+                }
+                case PASS -> {
+                }
+                case FAILED -> {
+                    message = Text.text("Cannot Reach Target Block or Entity").withStyle(TextStyle.WHITE) + "";
+                }
+            }
+
+        } else {
+            message = Text.text(context.state().name() + " " + context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)) + " " + "(" + context.getBoxSize().x() + "x" + context.getBoxSize().y() + "x" + context.getBoxSize().z() + ")";
+        }
+        player.sendClientMessage(message, true);
+
+
     }
 
 }

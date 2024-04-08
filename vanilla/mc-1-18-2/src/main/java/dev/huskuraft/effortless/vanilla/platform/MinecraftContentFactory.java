@@ -98,7 +98,7 @@ public class MinecraftContentFactory implements ContentFactory {
 
     @Override
     public Text newTranslatableText(String text, Object... args) {
-        return new MinecraftText(Component.translatable(text, args));
+        return new MinecraftText(new TranslatableComponent(text, args));
     }
 
     @Override

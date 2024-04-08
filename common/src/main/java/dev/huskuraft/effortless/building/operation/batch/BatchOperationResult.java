@@ -38,7 +38,7 @@ public class BatchOperationResult extends OperationResult {
     }
 
     @Override
-    public Collection<ItemStack> getProducts(ItemType type) {
+    public List<ItemStack> getProducts(ItemType type) {
         return ItemStackUtils.reduceStack(result.stream().map(result -> result.getProducts(type)).flatMap(Collection::stream).toList());
     }
 

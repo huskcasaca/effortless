@@ -98,7 +98,7 @@ public final class EffortlessSettingsCommands {
 //            return 0;
 //        })));
 //
-//        playerSettingsCommand.then(Commands.literal("maxBlockPlacePerAxis").then(Commands.argument("value", IntegerArgumentType.integer(ReachHelper.MIN_MAX_BLOCK_PLACE_PER_AXIS, ReachHelper.MAX_MAX_BLOCK_PLACE_PER_AXIS)).executes(context -> {
+//        playerSettingsCommand.then(Commands.literal("maxDistancePerAxis").then(Commands.argument("value", IntegerArgumentType.integer(ReachHelper.MIN_MAX_BLOCK_PLACE_PER_AXIS, ReachHelper.MAX_MAX_BLOCK_PLACE_PER_AXIS)).executes(context -> {
 //            EntityArgument.getPlayers(context, "player").forEach(player -> {
 //                try {
 //                    var value = IntegerArgumentType.getInteger(context, "value");

@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.api.math;
 
 import java.util.Comparator;
+import java.util.stream.DoubleStream;
 
 public class Vector3d {
 
@@ -494,6 +495,13 @@ public class Vector3d {
         return Vector3i.at(x, y, z);
     }
 
+    public DoubleStream stream() {
+        return DoubleStream.of(x, y, z);
+    }
+
+    public double volume() {
+        return x * y * z;
+    }
 
     @Override
     public boolean equals(Object obj) {

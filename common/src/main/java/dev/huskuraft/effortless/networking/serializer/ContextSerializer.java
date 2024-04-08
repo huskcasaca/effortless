@@ -40,13 +40,15 @@ public class ContextSerializer implements BufferSerializer<Context> {
                                 buffer.readList(new TransformerSerializer())
                         ),
                         buffer.readLong()),
-                new Context.ReachParams(buffer.readVarInt(), buffer.readVarInt())
+                new Context.LimitationParams(
+                        buffer.read(new GeneralConfigSerializer())
+                )
         );
     }
 
     @Override
     public void write(Buffer buffer, Context context) {
-        buffer.writeUUID(context.uuid());
+        buffer.writeUUID(context.getId());
         buffer.writeEnum(context.state());
         buffer.writeEnum(context.type());
         buffer.writeList(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
@@ -64,8 +66,7 @@ public class ContextSerializer implements BufferSerializer<Context> {
         buffer.writeList(context.patternParams().pattern().transformers(), new TransformerSerializer());
         buffer.writeLong(context.patternParams().seed());
 
-        buffer.writeVarInt(context.reachParams().maxBlockPlacePerAxis());
-        buffer.writeVarInt(context.reachParams().maxReachDistance());
+        buffer.write(context.limitationParams().generalConfig(), new GeneralConfigSerializer());
     }
 
 }

@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.api.math;
 
+import java.util.stream.IntStream;
+
 public class Vector2i {
 
     public static final Vector2i ZERO = new Vector2i(0, 0);
@@ -398,6 +400,14 @@ public class Vector2i {
 
     public Vector2d toVector2d() {
         return Vector2d.at(x, y);
+    }
+
+    public IntStream stream() {
+        return IntStream.of(x, y);
+    }
+
+    public int volume() {
+        return x * y;
     }
 
     @Override

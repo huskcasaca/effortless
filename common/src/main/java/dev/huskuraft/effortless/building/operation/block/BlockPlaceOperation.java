@@ -108,9 +108,9 @@ public class BlockPlaceOperation extends BlockOperation {
 
     @Override
     public BlockPlaceOperationResult commit() {
-        var result = placeBlock();
         var inputs = Collections.singletonList(blockState.getItem().getDefaultStack());
         var outputs = Collections.<ItemStack>emptyList();
+        var result = placeBlock();
 
         if (getWorld().isClient() && getContext().isPreviewOnce() && result.success()) {
             var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getInteraction().getBlockPosition().getCenter());

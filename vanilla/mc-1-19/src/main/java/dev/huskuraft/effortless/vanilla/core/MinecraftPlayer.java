@@ -120,6 +120,11 @@ public class MinecraftPlayer implements Player {
     }
 
     @Override
+    public void sendClientMessage(Text message, boolean actionBar) {
+        reference.displayClientMessage(message.reference(), actionBar);
+    }
+
+    @Override
     public void swing(InteractionHand hand) {
         reference.swing(MinecraftConvertor.toPlatformInteractionHand(hand));
     }

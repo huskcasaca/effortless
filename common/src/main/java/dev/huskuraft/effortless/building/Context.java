@@ -14,6 +14,8 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.math.BoundingBox3d;
+import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.structure.BuildMode;
@@ -22,23 +24,28 @@ import dev.huskuraft.effortless.building.structure.CubeFilling;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
+import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public record Context(
-        UUID uuid,
+        UUID getId,
         BuildState state,
         BuildType type,
         BuildInteractions interactions,
 
         StructureParams structureParams,
         PatternParams patternParams,
-        ReachParams reachParams
+        LimitationParams limitationParams
 ) {
 
-    public static Context defaultSet(boolean useCommands, int maxReachDistance) {
+    public UUID getId() {
+        return getId;
+    }
+
+    public static Context defaultSet() {
         return new Context(
                 UUID.randomUUID(),
                 BuildState.IDLE,
-                useCommands ? BuildType.COMMAND : BuildType.BUILD,
+                BuildType.BUILD,
                 BuildInteractions.EMPTY,
                 new StructureParams(
                         BuildMode.DISABLED,
@@ -51,7 +58,9 @@ public record Context(
                 new PatternParams(
                         Pattern.DISABLED,
                         UUID.randomUUID().getMostSignificantBits()),
-                new ReachParams(0, maxReachDistance)
+                new LimitationParams(
+                        GeneralConfig.DEFAULT
+                )
         );
     }
 
@@ -164,7 +173,7 @@ public record Context(
     }
 
     public int maxBlockPlacePerAxis() {
-        return 1024; // reachParams.maxBlockPlacePerAxis();
+        return 1024; // reachParams.maxDistancePerAxis();
     }
 
     public int maxNextReachDistance() {
@@ -172,7 +181,7 @@ public record Context(
     }
 
     public int maxReachDistance() {
-        return reachParams.maxReachDistance();
+        return limitationParams.generalConfig.maxReachDistance();
     }
 
 
@@ -211,23 +220,23 @@ public record Context(
     }
 
     public Context withState(BuildState state) {
-        return new Context(uuid, state, type, interactions, structureParams, patternParams, reachParams);
+        return new Context(getId, state, type, interactions, structureParams, patternParams, limitationParams);
     }
 
     public Context withPreviewType() {
-        return new Context(uuid, state, BuildType.PREVIEW, interactions, structureParams, patternParams, reachParams);
+        return new Context(getId, state, BuildType.PREVIEW, interactions, structureParams, patternParams, limitationParams);
     }
 
     public Context withPreviewOnceType() {
-        return new Context(uuid, state, BuildType.PREVIEW_ONCE, interactions, structureParams, patternParams, reachParams);
+        return new Context(getId, state, BuildType.PREVIEW_ONCE, interactions, structureParams, patternParams, limitationParams);
     }
 
     public Context withNextInteraction(BlockInteraction interaction) {
-        return new Context(uuid, state, type, interactions.put(interaction), structureParams, patternParams, reachParams);
+        return new Context(getId, state, type, interactions.put(interaction), structureParams, patternParams, limitationParams);
     }
 
     public Context withEmptyInteractions() {
-        return new Context(uuid, state, type, BuildInteractions.EMPTY, structureParams, patternParams, reachParams);
+        return new Context(getId, state, type, BuildInteractions.EMPTY, structureParams, patternParams, limitationParams);
     }
 
     public Context withNextInteractionTraced(Player player) {
@@ -235,23 +244,23 @@ public record Context(
     }
 
     public Context withBuildMode(BuildMode buildMode) {
-        return new Context(uuid, state, type, interactions, structureParams.withBuildMode(buildMode), patternParams, reachParams);
+        return new Context(getId, state, type, interactions, structureParams.withBuildMode(buildMode), patternParams, limitationParams);
     }
 
     public Context withBuildFeature(Feature feature) {
-        return new Context(uuid, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, reachParams);
+        return new Context(getId, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, limitationParams);
     }
 
     public Context withBuildFeature(Set<Feature> feature) {
-        return new Context(uuid, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, reachParams);
+        return new Context(getId, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, limitationParams);
     }
 
     public Context withPattern(Pattern pattern) {
-        return new Context(uuid, state, type, interactions, structureParams, patternParams.withPattern(pattern), reachParams);
+        return new Context(getId, state, type, interactions, structureParams, patternParams.withPattern(pattern), limitationParams);
     }
 
     public Context withRandomPatternSeed() {
-        return new Context(uuid, state, type, interactions, structureParams, patternParams.withRandomSeed(), reachParams);
+        return new Context(getId, state, type, interactions, structureParams, patternParams.withRandomSeed(), limitationParams);
     }
 
     public Context finalize(Player player, BuildStage stage) {
@@ -267,7 +276,7 @@ public record Context(
                 BuildInteractions.EMPTY,
                 structureParams,
                 patternParams,
-                reachParams
+                limitationParams
         );
     }
 
@@ -407,18 +416,31 @@ public record Context(
         }
     }
 
-    public record ReachParams(
-            int maxBlockPlacePerAxis,
-            int maxReachDistance
+    public record LimitationParams(
+            GeneralConfig generalConfig
     ) {
     }
 
-    public Context withReachParams(ReachParams reachParams) {
-        return new Context(uuid, state, type, interactions, structureParams, patternParams, reachParams);
+    public Vector3i getBoxSize() {
+        if (interactions().isEmpty() || interactions().isMissing()) {
+            return Vector3i.ZERO;
+        }
+        return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new)).getSize().toVector3i();
     }
 
-    public Context withReachParams(int maxBlockPlacePerAxis, int maxReachDistance) {
-        return new Context(uuid, state, type, interactions, structureParams, patternParams, new ReachParams(maxBlockPlacePerAxis, maxReachDistance));
+    public boolean isSizeInBound() {
+        return getBoxSize().stream().anyMatch(e -> e > limitationParams().generalConfig().maxDistancePerAxis()) && getBoxSize().volume() > limitationParams().generalConfig().maxBreakBlocks();
     }
+
+
+    public Context withReachParams(LimitationParams limitationParams) {
+        return new Context(getId, state, type, interactions, structureParams, patternParams, limitationParams);
+    }
+
+    public Context withGeneralConfig(GeneralConfig config) {
+        // FIXME: 4/4/24 commands
+        return withReachParams(new LimitationParams(config));
+    }
+
 
 }

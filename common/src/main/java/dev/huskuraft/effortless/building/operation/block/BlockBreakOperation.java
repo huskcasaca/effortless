@@ -77,9 +77,9 @@ public class BlockBreakOperation extends BlockOperation {
 
     @Override
     public BlockBreakOperationResult commit() {
-        var result = breakBlock();
         var inputs = Collections.<ItemStack>emptyList();
         var outputs = Collections.singletonList(world.getBlockState(interaction.getBlockPosition()).getItem().getDefaultStack());
+        var result = breakBlock();
 
         if (getWorld().isClient() && getContext().isPreviewOnce()) {
             if (result.success()) {
