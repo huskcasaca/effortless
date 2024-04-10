@@ -33,6 +33,10 @@ public class MinecraftBlockState implements BlockState {
         this.reference = reference;
     }
 
+    public static BlockState ofNullable(net.minecraft.world.level.block.state.BlockState value) {
+        return value == null ? null : new MinecraftBlockState(value);
+    }
+
     public static net.minecraft.world.level.block.state.BlockState mirrorTopBottom(net.minecraft.world.level.block.state.BlockState value) {
         // stairs
         if (value.getBlock() instanceof StairBlock) {
@@ -93,7 +97,7 @@ public class MinecraftBlockState implements BlockState {
 
     @Override
     public BlockState rotate(Revolve revolve) {
-        return new MinecraftBlockState(reference.rotate(switch (revolve) {
+        return ofNullable(reference.rotate(switch (revolve) {
             case NONE -> Rotation.NONE;
             case CLOCKWISE_90 -> Rotation.CLOCKWISE_90;
             case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
@@ -114,9 +118,9 @@ public class MinecraftBlockState implements BlockState {
     @Override
     public BlockState mirror(Axis axis) {
         return switch (axis) {
-            case Y -> new MinecraftBlockState(mirrorTopBottom(reference));
-            case X -> new MinecraftBlockState(mirrorFrontBack(reference));
-            case Z -> new MinecraftBlockState(mirrorLeftRight(reference));
+            case Y -> ofNullable(mirrorTopBottom(reference));
+            case X -> ofNullable(mirrorFrontBack(reference));
+            case Z -> ofNullable(mirrorLeftRight(reference));
         };
     }
 

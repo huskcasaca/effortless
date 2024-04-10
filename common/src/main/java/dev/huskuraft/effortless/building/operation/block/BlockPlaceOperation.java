@@ -108,7 +108,7 @@ public class BlockPlaceOperation extends BlockOperation {
 
     @Override
     public BlockPlaceOperationResult commit() {
-        var inputs = Collections.singletonList(blockState.getItem().getDefaultStack());
+        var inputs = blockState != null ? Collections.singletonList(blockState.getItem().getDefaultStack()) : Collections.<ItemStack>emptyList();
         var outputs = Collections.<ItemStack>emptyList();
         var result = placeBlock();
 

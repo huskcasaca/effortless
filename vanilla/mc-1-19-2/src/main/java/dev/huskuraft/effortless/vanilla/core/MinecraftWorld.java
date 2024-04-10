@@ -33,7 +33,7 @@ public class MinecraftWorld implements World {
 
     @Override
     public BlockState getBlockState(BlockPosition blockPosition) {
-        return new MinecraftBlockState(reference.getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
+        return MinecraftBlockState.ofNullable(reference.getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
     }
 
     @Override

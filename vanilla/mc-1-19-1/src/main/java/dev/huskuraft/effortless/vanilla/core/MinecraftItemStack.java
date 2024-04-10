@@ -134,7 +134,7 @@ public class MinecraftItemStack implements ItemStack {
     @Override
     public BlockState getBlockState(Player player, BlockInteraction interaction) {
 
-        return new MinecraftBlockState(Block.byItem(reference.getItem()).getStateForPlacement(new BlockPlaceContext(
+        return MinecraftBlockState.ofNullable(Block.byItem(reference.getItem()).getStateForPlacement(new BlockPlaceContext(
                 player.reference(),
                 MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
                 reference(),
