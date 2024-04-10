@@ -418,6 +418,26 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void showBuildTooltip(UUID id, int priority, Player player, Context context, OperationResult result) {
         var entries = new ArrayList<>();
 
+        var texts = new ArrayList<Tuple2<Text, Text>>();
+        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
+        var replace = AbstractRadialScreen.button(context.replaceMode());
+        texts.add(new Tuple2<>(replace.getDisplayCategory().withStyle(TextStyle.WHITE), replace.getDisplayName().withStyle(TextStyle.GOLD)));
+
+        for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
+            var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
+            if (option.isEmpty()) continue;
+            var button = AbstractRadialScreen.button(option.get());
+            texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
+        }
+
+        entries.add(texts);
+//        getEntrance().getClientManager().getTooltipRenderer().showAsGroup(nextIdByTag(id, Context.class), priority, entries);
+//        entries.clear();
+        entries.add(context.buildMode().getIcon());
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, BuildMode.class), priority, entries);
+
+        entries.clear();
+
         var playerUsed = result.getProducts(ItemType.PLAYER_USED);
         var worldDropped = result.getProducts(ItemType.WORLD_DROPPED);
 
@@ -436,25 +456,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             getEntrance().getClientManager().getTooltipRenderer().showEmptyEntry(nextIdByTag(id, ItemType.class), priority);
         }
 
-        entries.clear();
-
-        var texts = new ArrayList<Tuple2<Text, Text>>();
-        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
-        var replace = AbstractRadialScreen.button(context.replaceMode());
-        texts.add(new Tuple2<>(replace.getDisplayCategory().withStyle(TextStyle.WHITE), replace.getDisplayName().withStyle(TextStyle.GOLD)));
-
-        for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
-            var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
-            if (option.isEmpty()) continue;
-            var button = AbstractRadialScreen.button(option.get());
-            texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
-        }
-
-        entries.add(texts);
-//        getEntrance().getClientManager().getTooltipRenderer().showAsGroup(nextIdByTag(id, Context.class), priority, entries);
-//        entries.clear();
-        entries.add(context.buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, BuildMode.class), priority, entries);
     }
 
     public void showClientMessage(Player player, Context context) {
