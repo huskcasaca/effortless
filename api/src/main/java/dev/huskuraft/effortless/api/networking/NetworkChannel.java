@@ -1,12 +1,15 @@
 package dev.huskuraft.effortless.api.networking;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Logger;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -15,8 +18,6 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.platform.PlatformLoader;
 
 public abstract class NetworkChannel<P extends PacketListener> implements PacketChannel {
-
-    protected static final Logger LOGGER = Logger.getLogger("Effortless");
 
     private final ResourceLocation channelId;
     private final Side side;
@@ -44,6 +45,13 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
         }
     }
 
+    private final Map<UUID, Consumer<? extends ResponsiblePacket<?>>> responseMap = Collections.synchronizedMap(new HashMap<>());
+
+    public <T extends ResponsiblePacket<?>> void sendPacket(T packet, Consumer<T> callback) {
+        responseMap.put(packet.responseId(), callback);
+        sendPacket(packet);
+    }
+
     @Override
     public abstract void receivePacket(Packet packet, Player player);
 
@@ -57,7 +65,14 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
             throw new RuntimeException("Could not create packet in channel '" + channelId + "'", e);
         }
         try {
-            receivePacket(packet, player);
+            var packet1 = packet;
+            receivePacket(packet1, player);
+            if (packet instanceof ResponsiblePacket<P> responsiblePacket) {
+                var callback = responseMap.remove(responsiblePacket.responseId());
+                if (callback != null) {
+                    ((Consumer<ResponsiblePacket<P>>) callback).accept(responsiblePacket);
+                }
+            }
         } catch (RejectedExecutionException | ClassCastException ignored) {
         }
     }

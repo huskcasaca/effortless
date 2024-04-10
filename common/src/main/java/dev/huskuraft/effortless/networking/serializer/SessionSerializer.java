@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.networking.serializer;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.networking.BufferSerializer;
 import dev.huskuraft.effortless.api.platform.LoaderType;
-import dev.huskuraft.effortless.api.platform.Session;
+import dev.huskuraft.effortless.session.Session;
 
 public class SessionSerializer implements BufferSerializer<Session> {
 
@@ -13,7 +13,8 @@ public class SessionSerializer implements BufferSerializer<Session> {
                 buffer.readEnum(LoaderType.class),
                 buffer.readString(),
                 buffer.readString(),
-                buffer.readList(new ModSerializer())
+                buffer.readList(new ModSerializer()),
+                buffer.readInt()
         );
     }
 
@@ -23,5 +24,6 @@ public class SessionSerializer implements BufferSerializer<Session> {
         buffer.writeString(session.loaderVersion());
         buffer.writeString(session.gameVersion());
         buffer.writeList(session.mods(), new ModSerializer());
+        buffer.writeInt(session.protocolVersion());
     }
 }

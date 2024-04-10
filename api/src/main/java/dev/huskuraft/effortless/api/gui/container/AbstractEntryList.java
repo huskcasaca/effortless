@@ -128,17 +128,18 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         return false;
     }
 
-    public E addEntry(E entry) {
+    public <C extends E> C addEntry(C entry) {
         entry.onCreate();
-        entry.onLoad();
+        entry.onReload();
+
         children().add(entry);
         entry.onPositionChange(-1, children().size() - 1);
         return entry;
     }
 
-    public E addEntry(int index, E entry) {
+    public <C extends E> C addEntry(int index, C entry) {
         entry.onCreate();
-        entry.onLoad();
+        entry.onReload();
         children().add(index, entry);
         entry.onPositionChange(-1, index);
         // FIXME: 24/9/23
@@ -150,7 +151,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         return entry;
     }
 
-    public boolean removeEntry(E entry) {
+    public <C extends E> boolean removeEntry(C entry) {
         var index = children().indexOf(entry);
         boolean bl = this.children().remove(entry);
         entry.onPositionChange(index, -1);

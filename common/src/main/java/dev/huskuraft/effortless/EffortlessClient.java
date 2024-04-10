@@ -3,25 +3,19 @@ package dev.huskuraft.effortless;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.events.ClientEventRegistry;
+import dev.huskuraft.effortless.api.events.EventRegister;
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
-import dev.huskuraft.effortless.api.platform.PlatformLoader;
 
 @AutoService(ClientEntrance.class)
 public class EffortlessClient implements ClientEntrance {
 
-    private final ClientEventRegistry eventRegistry = PlatformLoader.getSingleton();
-
-    private final EffortlessClientNetworkChannel channel;
-    private final EffortlessClientStructureBuilder structureBuilder;
-    private final EffortlessClientManager clientManager;
-    private final EffortlessClientConfigManager configManager;
-
-    public EffortlessClient() {
-        this.channel = new EffortlessClientNetworkChannel(this);
-        this.structureBuilder = new EffortlessClientStructureBuilder(this);
-        this.clientManager = new EffortlessClientManager(this);
-        this.configManager = new EffortlessClientConfigManager(this);
-    }
+    private final ClientEventRegistry eventRegistry = (ClientEventRegistry) EventRegister.getClient();
+    private final EffortlessClientNetworkChannel channel = new EffortlessClientNetworkChannel(this);
+    private final EffortlessClientStructureBuilder structureBuilder = new EffortlessClientStructureBuilder(this);
+    private final EffortlessClientManager clientManager = new EffortlessClientManager(this);
+    private final EffortlessClientTagConfigStorage tagConfigStorage = new EffortlessClientTagConfigStorage(this);
+    private final EffortlessClientConfigStorage configStorage = new EffortlessClientConfigStorage(this);
+    private final EffortlessClientSessionManager sessionManager = new EffortlessClientSessionManager(this);
 
     public static EffortlessClient getInstance() {
         return (EffortlessClient) ClientEntrance.getInstance();
@@ -44,8 +38,17 @@ public class EffortlessClient implements ClientEntrance {
         return clientManager;
     }
 
-    public EffortlessClientConfigManager getConfigManager() {
-        return configManager;
+    @Deprecated
+    public EffortlessClientTagConfigStorage getTagConfigStorage() {
+        return tagConfigStorage;
+    }
+
+    public EffortlessClientConfigStorage getConfigStorage() {
+        return configStorage;
+    }
+
+    public EffortlessClientSessionManager getSessionManager() {
+        return sessionManager;
     }
 
     @Override

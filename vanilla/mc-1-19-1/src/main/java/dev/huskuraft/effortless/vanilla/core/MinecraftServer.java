@@ -1,9 +1,6 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.platform.PlayerList;
 import dev.huskuraft.effortless.api.platform.Server;
 
 public class MinecraftServer implements Server {
@@ -20,8 +17,8 @@ public class MinecraftServer implements Server {
     }
 
     @Override
-    public List<Player> getPlayers() {
-        return reference.getPlayerList().getPlayers().stream().map(MinecraftPlayer::ofNullable).collect(Collectors.toList());
+    public PlayerList getPlayerList() {
+        return new MinecraftPlayerList(reference.getPlayerList());
     }
 
     @Override

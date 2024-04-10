@@ -22,6 +22,9 @@ public class TextSlot extends Slot {
     }
 
     public int getFullWidth() {
+        if (getMessage() == null) {
+            return getWidth();
+        }
         return Math.max(getTypeface().measureWidth(getMessage()) + 1, getWidth());
     }
 
@@ -50,15 +53,17 @@ public class TextSlot extends Slot {
             renderer.disableScissor();
         }
 
-        renderer.pushPose();
-        renderer.translate(getX(), getY(), 0);
-        renderer.scale(getWidth() / 18f, getHeight() / 18f, 0);
-        renderer.translate(18f - 1, 18f, 0);
-        renderer.pushPose();
-        renderer.translate(0, -getTypeface().measureHeight(getMessage()), 0);
-        renderer.renderTextFromEnd(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, true);
-        renderer.popPose();
-        renderer.popPose();
+        if (getMessage() != null) {
+            renderer.pushPose();
+            renderer.translate(getX(), getY(), 0);
+            renderer.scale(getWidth() / 18f, getHeight() / 18f, 0);
+            renderer.translate(18f - 1, 18f, 0);
+            renderer.pushPose();
+            renderer.translate(0, -getTypeface().measureHeight(getMessage()), 0);
+            renderer.renderTextFromEnd(getTypeface(), getMessage(), 0, 0, 0xFFFFFFFF, true);
+            renderer.popPose();
+            renderer.popPose();
+        }
         renderer.popPose();
 
     }

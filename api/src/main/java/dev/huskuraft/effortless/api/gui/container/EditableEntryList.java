@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.api.gui.container;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.gui.EntryList;
@@ -128,6 +129,10 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
         }
     }
 
+    public void clear() {
+        reset(Collections.emptyList());
+    }
+
     public List<T> items() {
         return children().stream().map(entry -> entry.item).toList();
     }
@@ -153,15 +158,6 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
 
         public void setItem(T item) {
             this.item = item;
-            onBindItem();
-        }
-
-        @Override
-        public void onLoad() {
-            onBindItem();
-        }
-
-        public void onBindItem() {
         }
 
         public EntryList getEntryList() {

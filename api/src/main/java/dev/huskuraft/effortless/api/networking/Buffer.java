@@ -2,11 +2,15 @@ package dev.huskuraft.effortless.api.networking;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
@@ -81,12 +85,22 @@ public interface Buffer extends PlatformReference {
 
     default <T> List<T> readList(BufferReader<T> reader) {
         var i = readInt();
-        var collection = new ArrayList<T>();
+        var list = new ArrayList<T>();
 
         for (int j = 0; j < i; ++j) {
-            collection.add(read(reader));
+            list.add(read(reader));
         }
-        return collection;
+        return Collections.unmodifiableList(list);
+    }
+
+    default <K, V> Map<K, V> readMap(BufferReader<K> keyReader, BufferReader<V> valueReader) {
+        var i = readInt();
+        var map = new LinkedHashMap<K, V>();
+
+        for (int j = 0; j < i; ++j) {
+            map.put(read(keyReader), read(valueReader));
+        }
+        return Collections.unmodifiableMap(map);
     }
 
     default <T> void writeNullable(T value, BufferWriter<T> writer) {
@@ -154,6 +168,14 @@ public interface Buffer extends PlatformReference {
         }
     }
 
+    default <K, V> void writeMap(Map<K, V> map, BufferWriter<K> keyWriter, BufferWriter<V> valueWriter) {
+        writeInt(map.size());
+        for (var entry : map.entrySet()) {
+            keyWriter.write(this, entry.getKey());
+            valueWriter.write(this, entry.getValue());
+        }
+    }
+
     default Vector3d readVector3d() {
         return new Vector3d(readDouble(), readDouble(), readDouble());
     }
@@ -190,6 +212,15 @@ public interface Buffer extends PlatformReference {
     default void writeVector2i(Vector2i vector) {
         writeInt(vector.x());
         writeInt(vector.y());
+    }
+
+    default ResourceLocation readResourceLocation() {
+        return ResourceLocation.of(readString(), readString());
+    }
+
+    default void writeResourceLocation(ResourceLocation resourceLocation) {
+        writeString(resourceLocation.getNamespace());
+        writeString(resourceLocation.getPath());
     }
 
 }

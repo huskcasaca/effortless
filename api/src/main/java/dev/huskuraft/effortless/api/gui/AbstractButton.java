@@ -4,6 +4,7 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
 
 public abstract class AbstractButton extends AbstractWidget {
@@ -62,7 +63,8 @@ public abstract class AbstractButton extends AbstractWidget {
     protected void renderScrollingString(Renderer renderer, Typeface typeface, int x, int y) {
         int k = this.getX() + x;
         int l = this.getX() + this.getWidth() - x;
-        renderer.renderScrollingText(typeface, this.getMessage(), k, this.getY(), l, this.getY() + this.getHeight(), y);
+        // FIXME: 22/3/24
+        renderer.renderScrollingText(typeface, isActive() ? this.getMessage() : this.getMessage().withStyle(TextStyle.RESET), k, this.getY(), l, this.getY() + this.getHeight(), y);
     }
 
 

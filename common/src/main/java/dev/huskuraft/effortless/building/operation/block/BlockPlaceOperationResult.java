@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless.building.operation.block;
 
 import java.awt.*;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
     }
 
     @Override
-    public Collection<ItemStack> getProducts(ItemType type) {
+    public List<ItemStack> getProducts(ItemType type) {
         return switch (type) {
             case PLAYER_USED -> {
                 var color = getColor();
@@ -55,8 +54,8 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
 
     public Color getColor() {
         return switch (result) {
-            case SUCCESS, CONSUME -> new Color(235, 235, 235);
-            case FAIL_ITEM_INSUFFICIENT -> new Color(255, 0, 0);
+            case SUCCESS, CONSUME -> BLOCK_PLACE_SUCC_OP_COLOR;
+            case FAIL_ITEM_INSUFFICIENT -> BLOCK_PLACE_FAIL_OP_COLOR;
             default -> null;
         };
     }

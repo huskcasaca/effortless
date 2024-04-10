@@ -26,7 +26,7 @@ public record PlayerBuildPacket(
 
         @Override
         public void write(Buffer buffer, PlayerBuildPacket packet) {
-            buffer.write(packet.context, new ContextSerializer());
+            buffer.write(packet.context(), new ContextSerializer());
         }
 
     }

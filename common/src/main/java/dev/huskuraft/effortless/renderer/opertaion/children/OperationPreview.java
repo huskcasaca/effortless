@@ -4,6 +4,6 @@ import dev.huskuraft.effortless.api.renderer.Renderer;
 
 public interface OperationPreview {
 
-    void render(Renderer renderer, float deltaTick);
+    void render(Renderer renderer, RendererParams rendererParams, float deltaTick);
 
 }

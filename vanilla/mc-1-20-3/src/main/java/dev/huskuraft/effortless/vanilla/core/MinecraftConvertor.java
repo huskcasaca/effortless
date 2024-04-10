@@ -111,7 +111,7 @@ public class MinecraftConvertor {
         if (blockHitResult == null) {
             return null;
         }
-        return new BlockInteraction(fromPlatformVector3d(blockHitResult.getLocation()), fromPlatformOrientation(blockHitResult.getDirection()), toPlatformBlockPosition(blockHitResult.getBlockPos()), blockHitResult.isInside());
+        return new BlockInteraction(fromPlatformVector3d(blockHitResult.getLocation()), fromPlatformOrientation(blockHitResult.getDirection()), toPlatformBlockPosition(blockHitResult.getBlockPos()), blockHitResult.isInside(), blockHitResult.getType() == BlockHitResult.Type.MISS);
     }
 
     public static BlockHitResult toPlatformBlockInteraction(BlockInteraction blockInteraction) {

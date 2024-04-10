@@ -14,7 +14,7 @@ public abstract class TripleClickBuilder extends AbstractClickBuilder {
 
     private static BlockInteraction traceLineByAxis(Player player, Context context, Axis axis) {
         var center = context.secondBlockPosition().getCenter();
-        var reach = context.maxReachDistance();
+        var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
         return Stream.of(
@@ -43,7 +43,7 @@ public abstract class TripleClickBuilder extends AbstractClickBuilder {
 
     protected static BlockInteraction tracePlaneByAxis(Player player, Context context, Axis axis) {
         var center = context.secondBlockPosition().getCenter();
-        var reach = context.maxReachDistance();
+        var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
         return Stream.of(

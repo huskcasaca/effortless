@@ -6,21 +6,34 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.gui.AbstractButton;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 
 public class Button extends AbstractButton {
-    public static final int SMALL_WIDTH = 120;
-    public static final int DEFAULT_WIDTH = 150;
-    public static final int DEFAULT_HEIGHT = 20;
+
+    public static final int QUARTER_WIDTH = Dimens.Buttons.QUARTER_WIDTH;
+    public static final int HALF_WIDTH = Dimens.Buttons.HALF_WIDTH;
+    public static final int FULL_WIDTH = Dimens.Buttons.FULL_WIDTH;
+
+    public static final int TAB_WIDTH = Dimens.Buttons.TAB_WIDTH;
+
+    public static final int DEFAULT_HEIGHT = Dimens.Buttons.HEIGHT;
+
+    public static final int VERTICAL_PADDING = Dimens.Buttons.VERTICAL_SPACING;
+    public static final int HORIZONTAL_PADDING = Dimens.Buttons.HORIZONTAL_SPACING;
+
+    public static final int MARGIN = Dimens.Buttons.VERTICAL_PADDING;
+
+
     private OnPress onPress;
 
-    public Button(Entrance entrance, int i, int j, int k, int l, Text message) {
-        this(entrance, i, j, k, l, message, null);
+    public Button(Entrance entrance, int x, int y, int width, int height, Text message) {
+        this(entrance, x, y, width, height, message, null);
     }
 
-    public Button(Entrance entrance, int i, int j, int k, int l, Text message, OnPress onPress) {
-        super(entrance, i, j, k, l, message);
+    public Button(Entrance entrance, int x, int y, int width, int height, Text message, OnPress onPress) {
+        super(entrance, x, y, width, height, message);
         this.onPress = onPress;
     }
 
@@ -45,7 +58,7 @@ public class Button extends AbstractButton {
 //	}
 //
 //	public void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-//		this.defaultButtonNarrationText(narrationElementOutput);
+//		this.defaultButtonNarrationText(narrationElementOutput);x
 //	}
 
     public interface OnPress {
@@ -53,10 +66,7 @@ public class Button extends AbstractButton {
     }
 
     public static class Builder {
-        private static final int BUTTON_WIDTH = 72;
-        private static final int BUTTON_HEIGHT = 20;
-        private static final int BUTTON_HORIZONTAL_PADDING = 6;
-        private static final int SINGLE_VERTICAL_PADDING = 4;
+
         private final Text message;
         private final OnPress onPress;
         private final Entrance entrance;
@@ -90,12 +100,12 @@ public class Button extends AbstractButton {
             return this;
         }
 
-        public Builder setBounds(int i, int j, int k, int l) {
-            return this.setPos(i, j).setSize(k, l);
+        public Builder setBounds(int x, int y, int width, int height) {
+            return this.setPos(x, y).setSize(width, height);
         }
 
         public Builder setBoundsGrid(int width, int height, float row, float col, float size) {
-            return setBounds((int) (width / 2 - BUTTON_WIDTH * 2 - BUTTON_HORIZONTAL_PADDING * 3 / 2 + col * 4 * (BUTTON_WIDTH + BUTTON_HORIZONTAL_PADDING)), (int) (height - 28 - row * (BUTTON_HEIGHT + SINGLE_VERTICAL_PADDING)), (int) (BUTTON_WIDTH * size * 4 + BUTTON_HORIZONTAL_PADDING * (size * 4 - 1)), BUTTON_HEIGHT);
+            return setBounds((int) (width / 2 - Button.QUARTER_WIDTH * 2 - HORIZONTAL_PADDING * 3 / 2 + col * 4 * (Button.QUARTER_WIDTH + HORIZONTAL_PADDING)), (int) (height - Button.DEFAULT_HEIGHT - Button.MARGIN - row * (DEFAULT_HEIGHT + VERTICAL_PADDING)), (int) (Button.QUARTER_WIDTH * size * 4 + HORIZONTAL_PADDING * (size * 4 - 1)), DEFAULT_HEIGHT);
         }
 
         public Builder setTooltip(Text tooltip) {

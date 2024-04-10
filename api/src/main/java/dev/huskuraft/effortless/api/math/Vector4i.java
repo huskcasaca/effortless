@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.api.math;
 
+import java.util.stream.IntStream;
+
 public class Vector4i {
 
     public static final Vector4i ZERO = new Vector4i(0, 0, 0, 0);
@@ -509,6 +511,14 @@ public class Vector4i {
      */
     public Vector4d toVector4d() {
         return Vector4d.at(x, y, z, w);
+    }
+
+    public IntStream stream() {
+        return IntStream.of(x, y, z, w);
+    }
+
+    public int volume() {
+        return x * y * z * w;
     }
 
     @Override

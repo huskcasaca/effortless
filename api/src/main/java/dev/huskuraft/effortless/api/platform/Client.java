@@ -1,7 +1,10 @@
 package dev.huskuraft.effortless.api.platform;
 
+import java.util.List;
+
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.World;
@@ -23,6 +26,8 @@ public interface Client extends PlatformReference {
 
     Player getPlayer();
 
+    List<PlayerInfo> getOnlinePlayers();
+
     Typeface getTypeface();
 
     World getWorld();
@@ -42,5 +47,9 @@ public interface Client extends PlatformReference {
     void sendChat(String chat);
 
     void sendCommand(String command);
+
+    void execute(Runnable runnable);
+
+    Options getOptions();
 
 }

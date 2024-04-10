@@ -2,34 +2,34 @@ package dev.huskuraft.effortless;
 
 import com.google.auto.service.AutoService;
 
-import dev.huskuraft.effortless.api.events.EventRegistry;
-import dev.huskuraft.effortless.api.networking.NetworkChannel;
+import dev.huskuraft.effortless.api.events.CommonEventRegistry;
+import dev.huskuraft.effortless.api.events.EventRegister;
 import dev.huskuraft.effortless.api.platform.Entrance;
-import dev.huskuraft.effortless.api.platform.PlatformLoader;
+import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 
 @AutoService(Entrance.class)
 public class Effortless implements Entrance {
 
     public static final String MOD_ID = "effortless";
-    public static final int PROTOCOL_VERSION = 3;
+    public static final int PROTOCOL_VERSION = 4;
 
-    private final EventRegistry eventRegistry = PlatformLoader.getSingleton();
+    private final CommonEventRegistry commonEventRegistry = (CommonEventRegistry) EventRegister.getCommon();
     private final EffortlessNetworkChannel networkChannel = new EffortlessNetworkChannel(this);
     private final EffortlessStructureBuilder structureBuilder = new EffortlessStructureBuilder(this);
-
-    public Effortless() {
-
-    }
+    private final EffortlessSessionConfigStorage sessionConfigStorage = new EffortlessSessionConfigStorage(this);
+    private final EffortlessSessionManager sessionManager = new EffortlessSessionManager(this);
+    private final EffortlessServerManager serverManager = new EffortlessServerManager(this);
 
     public static Effortless getInstance() {
         return (Effortless) Entrance.getInstance();
     }
 
-    public EventRegistry getEventRegistry() {
-        return eventRegistry;
+    public CommonEventRegistry getEventRegistry() {
+        return commonEventRegistry;
     }
 
-    public NetworkChannel getChannel() {
+    public EffortlessNetworkChannel getChannel() {
         return networkChannel;
     }
 
@@ -37,9 +37,26 @@ public class Effortless implements Entrance {
         return structureBuilder;
     }
 
+    public EffortlessSessionConfigStorage getSessionConfigStorage() {
+        return sessionConfigStorage;
+    }
+
+    public EffortlessSessionManager getSessionManager() {
+        return sessionManager;
+    }
+
+    public EffortlessServerManager getServerManager() {
+        return serverManager;
+    }
+
     @Override
     public String getId() {
         return MOD_ID;
+    }
+
+    public static Text getSystemMessage(Text msg) {
+        var id = TextStyle.GRAY + "[" + Text.translate("effortless.name") + "]" + TextStyle.RESET + " ";
+        return Text.text(id + msg.getString());
     }
 
 }

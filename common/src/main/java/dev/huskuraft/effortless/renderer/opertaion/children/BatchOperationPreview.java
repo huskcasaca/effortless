@@ -15,9 +15,9 @@ public final class BatchOperationPreview implements OperationPreview {
     }
 
     @Override
-    public void render(Renderer renderer, float deltaTick) {
+    public void render(Renderer renderer, RendererParams rendererParams, float deltaTick) {
         for (var preview : previews) {
-            preview.render(renderer, deltaTick);
+            preview.render(renderer, rendererParams, deltaTick);
         }
     }
 

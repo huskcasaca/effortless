@@ -6,25 +6,32 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.renderer.RenderFadeEntry;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockBreakOnClientOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockPlaceOnClientOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationPreview;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationPreview;
 import dev.huskuraft.effortless.renderer.opertaion.children.OperationPreview;
+import dev.huskuraft.effortless.renderer.opertaion.children.RendererParams;
 
 public class OperationsRenderer {
 
     private final Map<Object, RenderFadeEntry<? extends OperationPreview>> results = Collections.synchronizedMap(new LinkedHashMap<>());
     private final Map<Class<?>, BiFunction<OperationsRenderer, OperationResult, ? extends OperationPreview>> resultRendererMap = Collections.synchronizedMap(new HashMap<>());
 
-    public OperationsRenderer() {
+    private final EffortlessClient entrance;
+
+    public OperationsRenderer(EffortlessClient entrance) {
+        this.entrance = entrance;
         registerRenderers();
+    }
+
+    public EffortlessClient getEntrance() {
+        return entrance;
     }
 
     private <R extends OperationResult, O extends OperationPreview> void registerRenderer(Class<R> result, BiFunction<OperationsRenderer, R, O> renderer) {
@@ -40,11 +47,21 @@ public class OperationsRenderer {
         }
     }
 
+    private boolean isShowBlockPreview() {
+        return getEntrance().getConfigStorage().get().renderSettings().showBlockPreview();
+    }
+
+    private int getMaxRenderBlocks() {
+        return Integer.MAX_VALUE;
+    }
+
+    private int getMaxRenderDistance() {
+        return getEntrance().getClientManager().getRunningClient().getOptions().renderDistance() * 16 + 16;
+    }
+
     private void registerRenderers() {
         registerRenderer(BlockPlaceOperationResult.class, BlockOperationPreview::new);
         registerRenderer(BlockBreakOperationResult.class, BlockOperationPreview::new);
-        registerRenderer(BlockPlaceOnClientOperationResult.class, BlockOperationPreview::new);
-        registerRenderer(BlockBreakOnClientOperationResult.class, BlockOperationPreview::new);
         registerRenderer(BatchOperationResult.class, BatchOperationPreview::new);
     }
 
@@ -64,8 +81,9 @@ public class OperationsRenderer {
     }
 
     public void render(Renderer renderer, float deltaTick) {
+        var renderParams = new RendererParams.Default(isShowBlockPreview(), getMaxRenderBlocks(), getMaxRenderDistance());
         results.forEach((k, v) -> {
-            v.getValue().render(renderer, deltaTick);
+            v.getValue().render(renderer, renderParams, deltaTick);
         });
     }
 

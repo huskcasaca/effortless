@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.input.KeyBinding;
-import dev.huskuraft.effortless.api.input.OptionKeys;
 import dev.huskuraft.effortless.api.text.Text;
 
 public interface ClientContentFactory extends ContentFactory {
@@ -19,8 +18,6 @@ public interface ClientContentFactory extends ContentFactory {
 
     @Deprecated
     <T> SearchTree<T> search(List<T> list, Function<T, Stream<Text>> keyExtractor);
-
-    KeyBinding getOptionKeyBinding(OptionKeys key);
 
     KeyBinding newKeyBinding(String name, String category, int code);
 

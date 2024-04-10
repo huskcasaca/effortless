@@ -14,28 +14,44 @@ public class BlockOperationPreview implements OperationPreview {
     }
 
     @Override
-    public void render(Renderer renderer, float deltaTick) {
+    public void render(Renderer renderer, RendererParams rendererParams, float deltaTick) {
+        if (!rendererParams.shouldRenderBlocks()) {
+            return;
+        }
+
         var operation = result.getOperation();
         var world = operation.getWorld();
+        var player = operation.getPlayer();
         var blockPosition = operation.getInteraction().getBlockPosition();
         var blockState = operation.getBlockState();
-        if (blockState == null) return;
+        if (world == null || blockState == null || player == null) {
+            return;
+        }
 
 //        if (item instanceof BlockItem blockItem && itemStack.is(item)) {
 //            blockState = blockItem.updateBlockStateFromTag(blockPosition, level, itemStack, blockState);
 //        }
-        var color = result.getColor();
-        if (color == null) return;
 
-        var scale = 129 / 128f;
+        var color = result.getColor();
+        if (color == null) {
+            return;
+        }
+        var distance = player.getPosition().distance(blockPosition.toVector3d());
+        if (distance > rendererParams.maxRenderDistance()) {
+            return;
+        }
+
+        var scale = 129f / 128f;
         var camera = renderer.camera().position();
 
         renderer.pushPose();
         renderer.translate(blockPosition.toVector3d().sub(camera));
-        renderer.translate((scale - 1) / -2, (scale - 1) / -2, (scale - 1) / -2);
+        renderer.translate((scale - 1) / -2f, (scale - 1) / -2f, (scale - 1) / -2f);
         renderer.scale(scale, scale, scale);
         renderer.renderBlockInWorld(BlockRenderLayers.block(color.getRGB()), world, blockPosition, blockState);
         renderer.popPose();
+
+        rendererParams.accumulate();
     }
 
 }

@@ -2,6 +2,7 @@ package dev.huskuraft.effortless;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,19 +17,21 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
+import dev.huskuraft.effortless.api.lang.Tuple2;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
+import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
-import dev.huskuraft.effortless.api.platform.Platform;
-import dev.huskuraft.effortless.api.platform.Session;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
+import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.BuildState;
-import dev.huskuraft.effortless.building.ClientBatchBuildSession;
+import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.SingleCommand;
@@ -36,16 +39,18 @@ import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.TracingResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
+import dev.huskuraft.effortless.building.operation.BlockPositionLocatable;
 import dev.huskuraft.effortless.building.operation.ItemType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
+import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
-import dev.huskuraft.effortless.renderer.opertaion.SurfaceColor;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
+import dev.huskuraft.effortless.session.config.SessionConfig;
 
 public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
@@ -53,27 +58,26 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
-    private final AtomicReference<Session> serverSession = new AtomicReference<>();
-    private final AtomicReference<Session> clientSession = new AtomicReference<>(new Session(Platform.getInstance()));
+
+    private int tick = 0;
 
     public EffortlessClientStructureBuilder(EffortlessClient entrance) {
         this.entrance = entrance;
 
         getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
-        getEntrance().getEventRegistry().getPlayerLoggedInEvent().register(this::onPlayerLoggedIn);
     }
 
-    private static Text getStateComponent(BuildState state) {
+    private static String getStateComponent(BuildState state) {
         return Text.translate("effortless.state.%s".formatted(
                 switch (state) {
                     case IDLE -> "idle";
                     case PLACE_BLOCK -> "place_block";
                     case BREAK_BLOCK -> "break_block";
                 }
-        ));
+        )).getString();
     }
 
-    private static Text getTracingComponent(TracingResult result) {
+    private static String getTracingComponent(TracingResult result) {
         return Text.translate("effortless.tracing.%s".formatted(
                 switch (result) {
                     case SUCCESS_FULFILLED -> "success_fulfilled";
@@ -81,19 +85,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     case PASS -> "pass";
                     case FAILED -> "failed";
                 }
-        ));
-    }
-
-    public void onPlayerLoggedIn(Player player) {
-        getEntrance().getClient().sendChat("[Effortless] Player logged in" + serverSession.get());
-    }
-
-    public void onServerSession(Session session) {
-        serverSession.set(session);
-    }
-
-    public boolean isServerSessionValid() {
-        return serverSession.get() != null;
+        )).getString();
     }
 
     private EffortlessClient getEntrance() {
@@ -109,15 +101,55 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public BuildResult build(Player player, BuildState state, @Nullable BlockInteraction interaction) {
         return updateContext(player, context -> {
             if (interaction == null) {
-                return context.resetBuildState();
+                return context.newInteraction();
             }
-            if (interaction.getTarget() != Interaction.Target.BLOCK) {
-                return context.resetBuildState();
+            if (interaction.getTarget() == Interaction.Target.MISS) {
+                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_target"), true);
+                return context.newInteraction();
+            }
+            if (interaction.getTarget() == Interaction.Target.ENTITY) {
+                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_entity"), true);
+                return context.newInteraction();
             }
             if (context.isBuilding() && context.state() != state) {
-                return context.resetBuildState();
+                player.sendClientMessage(Text.translate("effortless.message.building.build_canceled"), true);
+                return context.newInteraction();
             }
-            return context.withState(state).withNextInteraction(interaction);
+            if (!context.hasPermission()) {
+                if (state == BuildState.PLACE_BLOCK) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.cannot_place_blocks_no_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.no_place_permission"), true);
+                }
+                if (state == BuildState.BREAK_BLOCK) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.cannot_break_blocks_no_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.no_break_permission"), true);
+                }
+                return context.newInteraction();
+            }
+
+            var nextContext = context.withState(state).withNextInteraction(interaction);
+
+            if (!nextContext.isVolumeInBounds()) {
+                if (nextContext.state() == BuildState.PLACE_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large") + " (" + nextContext.getVolume() + "/" + nextContext.getMaxVolume() + ")", true);
+                }
+                if (nextContext.state() == BuildState.BREAK_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large") + " (" + nextContext.getVolume() + "/" + nextContext.getMaxVolume() + ")", true);
+                }
+                return context.newInteraction();
+            }
+
+            if (!nextContext.isSideLengthInBounds()) {
+                if (nextContext.state() == BuildState.PLACE_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_side_length_too_large") + " (" + nextContext.getSideLength() + "/" + nextContext.getMaxSideLength() + ")", true);
+                }
+                if (nextContext.state() == BuildState.BREAK_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_side_length_too_large") + " (" + nextContext.getSideLength() + "/" + nextContext.getMaxSideLength() + ")", true);
+                }
+                return context.newInteraction();
+            }
+
+            return nextContext;
         });
     }
 
@@ -128,16 +160,18 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
             var previewContext = finalizedContext.withPreviewOnceType();
-            var result = new ClientBatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
+            var result = new BatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
 
-            if (isServerSessionValid()) {
+            if (finalizedContext.type() != BuildType.COMMAND) {
                 getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
             }
 
-            showContext(context.uuid(), context);
-            showOperationResult(context.uuid(), result);
-            showOperationResultTooltip(context.uuid(), player, result, 1000);
-            setContext(player, context.resetBuildState());
+            showContext(context.getId(), context);
+            showOperationResult(context.getId(), result);
+//            showOperationResultTooltip(context.getId(), 1024, player, result);
+//            showContextTooltip(context.getId(), 1024, context);
+            showBuildTooltip(context.getId(), 1024, player, context, result);
+            setContext(player, context.newInteraction());
 
 
             return BuildResult.COMPLETED;
@@ -151,14 +185,22 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
     }
 
+    public void onSessionConfig(SessionConfig sessionConfig) {
+        for (var uuid : getAllContexts().keySet()) {
+            var config = sessionConfig.getPlayerConfig(uuid);
+            getAllContexts().computeIfPresent(uuid, (uuid1, context) -> context.withGeneralConfig(config));
+        }
+    }
+
     @Override
-    public Context getDefaultContext() {
-        return Context.defaultSet(!isServerSessionValid());
+    public Context getDefaultContext(Player player) {
+        var config = getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player);
+        return Context.defaultSet().withGeneralConfig(config);
     }
 
     @Override
     public Context getContext(Player player) {
-        return contexts.computeIfAbsent(player.getId(), uuid -> getDefaultContext());
+        return contexts.computeIfAbsent(player.getId(), uuid -> getDefaultContext(player));
     }
 
     @Override
@@ -175,6 +217,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
+    public Map<UUID, Context> getAllContexts() {
+        return contexts;
+    }
+
+    @Override
     public void setContext(Player player, Context context) {
         contexts.put(player.getId(), context);
     }
@@ -182,12 +229,32 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     // from settings screen
     @Override
     public void setBuildMode(Player player, BuildMode buildMode) {
+        if (!hasPermission(player)) {
+            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
+            return;
+        }
         updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
     }
 
     @Override
     public void setBuildFeature(Player player, SingleSelectFeature feature) {
+        if (!hasPermission(player)) {
+            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
+            return;
+        }
         updateContext(player, context -> context.withBuildFeature(feature));
+    }
+
+    public boolean hasPermission(Player player) {
+        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowUseMod();
+    }
+
+    public boolean hasBreakPermission(Player player) {
+        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowBreakBlocks();
+    }
+
+    public boolean hasPlacePermission(Player player) {
+        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowPlaceBlocks();
     }
 
     @Override
@@ -213,7 +280,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public void reset() {
+    public void resetAll() {
+        lastClientPlayerLevel.set(null);
         contexts.clear();
         undoRedoStacks.clear();
     }
@@ -244,12 +312,14 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void onContextReceived(Player player, Context context) {
-        var result = new ClientBatchBuildSession(player.getWorld(), player, context).build().commit();
+        var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
 
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
 
-        showOperationResultTooltip(context.uuid(), player, result, 1);
+//        showOperationResultTooltip(context.getId(), 1, player, result);
+
+        showBuildTooltip(context.getId(), 1, player, context, result);
     }
 
     @Override
@@ -267,42 +337,71 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO));
     }
 
+    private final AtomicReference<ResourceLocation> lastClientPlayerLevel = new AtomicReference<>();
+
     public void onClientTick(Client client, ClientTick.Phase phase) {
         if (phase == ClientTick.Phase.END) {
             return;
         }
+        tick++;
 
-        if (getEntrance().getClient() == null) {
+        if (getEntrance().getClient() == null || getEntrance().getClient().getPlayer() == null) {
+            resetAll();
             return;
         }
 
         var player = getEntrance().getClient().getPlayer();
-        if (player == null || getContext(player).isDisabled()) {
+
+        if (!hasPermission(player)) {
+            resetContext(player);
             return;
         }
+
+        if (player.isDeadOrDying()) {
+            resetContextInteractions(player);
+            return;
+        }
+
+        if (!player.getWorld().getDimension().location().equals(lastClientPlayerLevel.get())) {
+            resetContextInteractions(player);
+            lastClientPlayerLevel.set(player.getWorld().getDimension().location());
+            return;
+        }
+
+        if (getContext(player).isDisabled()) {
+            return;
+        }
+
         setContext(player, getContext(player).withRandomPatternSeed());
         var context = getContextTraced(player).withPreviewType();
 
-        var result = new ClientBatchBuildSession(player.getWorld(), player, context.withPreviewType()).build().commit();
+        var result = new BatchBuildSession(player.getWorld(), player, context.withPreviewType()).build().commit();
 
         showContext(player.getId(), context);
         showOperationResult(player.getId(), result);
 
-        showContextTooltip(player.getId(), context, 0);
-        showOperationResultTooltip(player.getId(), player, result, 1);
+//        showOperationResultTooltip(player.getId(), 0, player, result);
+//        showContextTooltip(player.getId(), 0, context);
+
+        showBuildTooltip(player.getId(), 0, player, context, result);
+        if (!getContext(player).isIdle()) {
+            showClientMessage(player, context);
+        }
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
     }
 
-    private UUID nextIdByTag(UUID uuid, String tag) {
-        return new UUID(uuid.getMostSignificantBits() + tag.hashCode(), uuid.getLeastSignificantBits());
+    private UUID nextIdByTag(UUID uuid, Object tag) {
+        return new UUID(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits() + tag.hashCode());
     }
 
     public void showContext(UUID uuid, Context context) {
         getEntrance().getClientManager().getPatternRenderer().showPattern(uuid, context);
-        if (!context.isMissingHit() && !context.interactions().isEmpty()) {
+        if (context.interactions().isMissing() || context.interactions().isEmpty()) {
+            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, BoundingBox3d.class), BoundingBox3d.ofSize(Vector3d.ZERO, 0, 0, 0));
+        } else {
             var box = BoundingBox3d.fromLowerCornersOf(context.interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new));
-            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, "boundingBox"), box)
+            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, BoundingBox3d.class), box)
                     .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                     .lightMap(LightTexture.FULL_BLOCK)
                     .disableNormals()
@@ -314,43 +413,99 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     public void showOperationResult(UUID uuid, OperationResult result) {
         getEntrance().getClientManager().getOperationsRenderer().showResult(uuid, result);
-        if (result instanceof BatchOperationResult result1) {
-            var cluster = getEntrance().getClientManager().getOutlineRenderer().showCluster(result1.getOperation().getContext().uuid(), result1.locations())
-                    .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
-                    .lightMap(LightTexture.FULL_BLOCK)
-                    .disableNormals()
-                    .stroke(1 / 64f);
-            switch (result.getOperation().getContext().state()) {
-                case IDLE -> {
-                }
-                case PLACE_BLOCK -> cluster.colored(SurfaceColor.COLOR_WHITE);
-                case BREAK_BLOCK -> cluster.colored(SurfaceColor.COLOR_RED);
+        if (result instanceof BatchOperationResult batchOperationResult) {
+            for (var colorListEntry : batchOperationResult.getResultByColor().entrySet()) {
+                var locations =  colorListEntry.getValue().stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), colorListEntry.getKey()), locations)
+                        .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
+                        .lightMap(LightTexture.FULL_BLOCK)
+                        .disableNormals()
+                        .colored(colorListEntry.getKey())
+                        .stroke(1 / 64f);
             }
+            if (batchOperationResult.getResultByColor().isEmpty()) {
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), BlockOperationResult.BLOCK_BREAK_OP_COLOR), Collections.emptyList());
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), BlockOperationResult.BLOCK_PLACE_SUCC_OP_COLOR), Collections.emptyList());
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), BlockOperationResult.BLOCK_PLACE_FAIL_OP_COLOR), Collections.emptyList());
+            }
+
         }
     }
 
-    public void showOperationResultTooltip(UUID uuid, Player player, OperationResult result, int priority) {
-        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, "placed"), Text.translate("effortless.build.summary.placed_blocks", player.getDisplayName()).withStyle(TextStyle.WHITE), result.getProducts(ItemType.PLAYER_USED), priority);
-        getEntrance().getClientManager().getTooltipRenderer().showTitledItems(nextIdByTag(uuid, "destroyed"), Text.translate("effortless.build.summary.destroyed_blocks", player.getDisplayName()).withStyle(TextStyle.RED), result.getProducts(ItemType.WORLD_DROPPED), priority);
-    }
+    public void showBuildTooltip(UUID id, int priority, Player player, Context context, OperationResult result) {
+        var entries = new ArrayList<>();
 
-    public void showContextTooltip(UUID uuid, Context context, int priority) {
-        var texts = new ArrayList<Text>();
-        texts.add(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
+        var texts = new ArrayList<Tuple2<Text, Text>>();
+        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
         var replace = AbstractRadialScreen.button(context.replaceMode());
-        texts.add(replace.getDisplayCategory().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(replace.getDisplayName().withStyle(TextStyle.GOLD)));
+        texts.add(new Tuple2<>(replace.getDisplayCategory().withStyle(TextStyle.WHITE), replace.getDisplayName().withStyle(TextStyle.GOLD)));
 
         for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
             if (option.isEmpty()) continue;
             var button = AbstractRadialScreen.button(option.get());
-            texts.add(button.getDisplayCategory().withStyle(TextStyle.WHITE).append(Text.text(" ")).append(button.getDisplayName().withStyle(TextStyle.GOLD)));
+            texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
         }
 
-//        texts.add(Text.translate("effortless.build.summary.state").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getStateComponent(context.state()).withStyle(TextStyle.GOLD)));
-        texts.add(Text.translate("effortless.build.summary.tracing").withStyle(TextStyle.WHITE).append(Text.text(" ")).append(getTracingComponent(context.tracingResult()).withStyle(TextStyle.GOLD)));
+        entries.add(texts);
+//        getEntrance().getClientManager().getTooltipRenderer().showAsGroup(nextIdByTag(id, Context.class), priority, entries);
+//        entries.clear();
+        entries.add(context.buildMode().getIcon());
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, BuildMode.class), priority, entries);
 
-        getEntrance().getClientManager().getTooltipRenderer().showMessages(nextIdByTag(uuid, "info"), texts, priority);
+        entries.clear();
+
+        var playerUsed = result.getProducts(ItemType.PLAYER_USED);
+        var worldDropped = result.getProducts(ItemType.WORLD_DROPPED);
+
+        if (!playerUsed.isEmpty()) {
+            entries.add(playerUsed);
+            entries.add(Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE));
+        }
+        if (!worldDropped.isEmpty()) {
+            entries.add(worldDropped);
+            entries.add(Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED));
+        }
+
+        if (!playerUsed.isEmpty() || !worldDropped.isEmpty()) {
+            getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, ItemType.class), priority, entries);
+        } else {
+            getEntrance().getClientManager().getTooltipRenderer().showEmptyEntry(nextIdByTag(id, ItemType.class), priority);
+        }
+
+    }
+
+    public void showClientMessage(Player player, Context context) {
+        var message = "";
+        if (!context.tracingResult().isSuccess()) {
+            switch (context.tracingResult()) {
+                case SUCCESS_FULFILLED -> {
+                }
+                case SUCCESS_PARTIAL -> {
+                }
+                case PASS -> {
+                }
+                case FAILED -> {
+                    message = Text.text("Cannot Reach Target Block or Entity").withStyle(TextStyle.WHITE) + "";
+                }
+            }
+        } else {
+            message = getStateComponent(context.state()) + " "
+                    + context.buildMode().getDisplayName().withStyle(TextStyle.GOLD) + " "
+                    + "("
+                    + (context.getBoxSize().x() > context.limitationParams().generalConfig().maxDistancePerAxis() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().x() + TextStyle.RESET
+                    + "x"
+                    + (context.getBoxSize().y() > context.limitationParams().generalConfig().maxDistancePerAxis() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().y() + TextStyle.RESET
+                    + "x"
+                    + (context.getBoxSize().z() > context.limitationParams().generalConfig().maxDistancePerAxis() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().z() + TextStyle.RESET
+                    + "="
+                    + (context.getBoxSize().volume() > context.limitationParams().generalConfig().maxBreakBoxVolume() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().volume() + TextStyle.RESET
+                    + ")";
+        }
+
+        player.sendClientMessage(message, true);
+
+
     }
 
 }

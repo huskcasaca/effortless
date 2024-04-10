@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.platform;
 
-import dev.huskuraft.effortless.api.events.EventRegistry;
+import dev.huskuraft.effortless.api.events.CommonEventRegistry;
 import dev.huskuraft.effortless.api.networking.NetworkChannel;
 
 public interface Entrance {
@@ -11,7 +11,7 @@ public interface Entrance {
 
     String getId();
 
-    EventRegistry getEventRegistry();
+    CommonEventRegistry getEventRegistry();
 
     NetworkChannel<?> getChannel();
 

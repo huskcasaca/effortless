@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building;
 
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.UnaryOperator;
 
 import javax.annotation.Nullable;
@@ -18,11 +20,13 @@ public abstract class StructureBuilder {
 
     public abstract BuildResult updateContext(Player player, UnaryOperator<Context> updater);
 
-    public abstract Context getDefaultContext();
+    public abstract Context getDefaultContext(Player player);
 
     public abstract Context getContext(Player player);
 
     public abstract Context getContextTraced(Player player);
+
+    public abstract Map<UUID, Context> getAllContexts();
 
     public abstract void setContext(Player player, Context context);
 
@@ -34,14 +38,14 @@ public abstract class StructureBuilder {
 
     public abstract void setPattern(Player player, Pattern pattern);
 
-    public abstract void reset();
+    public abstract void resetAll();
 
     public void resetContext(Player player) {
-        setContext(player, getDefaultContext());
+        setContext(player, getDefaultContext(player));
     }
 
-    public void resetBuildState(Player player) {
-        setContext(player, getContext(player).resetBuildState());
+    public void resetContextInteractions(Player player) {
+        setContext(player, getContext(player).newInteraction());
     }
 
     public abstract BuildResult onPlayerBreak(Player player);

@@ -82,6 +82,11 @@ public abstract class AbstractContainerWidget extends AbstractWidget implements 
     }
 
     @Override
+    public void onDestroy() {
+        clearWidgets();
+    }
+
+    @Override
     public AbstractWidget getSelected() {
         return this.focused;
     }

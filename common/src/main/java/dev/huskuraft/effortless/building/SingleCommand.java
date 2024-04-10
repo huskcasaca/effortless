@@ -24,7 +24,7 @@ public enum SingleCommand {
     UNKNOWN_21,
     UNKNOWN_22,
     UNKNOWN_23,
-    RESET_BUILD_STATE,
+    RESERVED_24,
     UNKNOWN_25,
     UNKNOWN_26,
     UNKNOWN_27,

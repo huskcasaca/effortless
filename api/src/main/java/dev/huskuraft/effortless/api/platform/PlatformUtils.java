@@ -6,4 +6,12 @@ public final class PlatformUtils {
         return ContentFactory.getInstance().getOperatingSystem();
     }
 
+    public static boolean isWindows() {
+        return getOS() == OperatingSystem.WINDOWS;
+    }
+
+    public static boolean isMacOS() {
+        return getOS() == OperatingSystem.MACOS;
+    }
+
 }

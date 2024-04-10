@@ -1,8 +1,11 @@
 package dev.huskuraft.effortless.building.operation.batch;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.ItemStack;
@@ -35,8 +38,13 @@ public class BatchOperationResult extends OperationResult {
     }
 
     @Override
-    public Collection<ItemStack> getProducts(ItemType type) {
+    public List<ItemStack> getProducts(ItemType type) {
         return ItemStackUtils.reduceStack(result.stream().map(result -> result.getProducts(type)).flatMap(Collection::stream).toList());
+    }
+
+    @Override
+    public Color getColor() {
+        return null;
     }
 
     public Collection<? extends OperationResult> getResult() {
@@ -44,8 +52,11 @@ public class BatchOperationResult extends OperationResult {
     }
 
     public List<BlockPosition> locations() {
-        return result.stream().map(result -> result.getOperation() instanceof BlockPositionLocatable blockPositionLocatable ? blockPositionLocatable.locate() : null).filter(Objects::nonNull).toList();
+        return result.stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
+    }
 
+    public Map<Color, List<OperationResult>> getResultByColor() {
+        return result.stream().filter(result -> Objects.nonNull(result.getColor())).collect(Collectors.groupingBy(OperationResult::getColor));
     }
 
 }

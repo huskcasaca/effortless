@@ -20,5 +20,11 @@ public interface ContainerWidget extends Widget {
 
     Widget getWidgetAt(double mouseX, double mouseY);
 
+    default void recreateChildren() {
+        for (var child : children()) {
+            child.recreate();
+        }
+    }
+
 }
 

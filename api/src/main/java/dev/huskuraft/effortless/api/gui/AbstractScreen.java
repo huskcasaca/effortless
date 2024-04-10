@@ -12,6 +12,11 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
         super(entrance, 0, 0, 0, 0, title);
     }
 
+    protected AbstractScreen(Entrance entrance) {
+        super(entrance, 0, 0, 0, 0, Text.empty());
+    }
+
+
     public Text getScreenTitle() {
         return getMessage();
     }

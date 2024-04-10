@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.api.texture.SpriteScaling;
 import dev.huskuraft.effortless.api.texture.Texture;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
 import dev.huskuraft.effortless.api.texture.TextureSprite;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftResourceLocation;
+import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;

@@ -22,6 +22,8 @@ public class NumberField extends AbstractContainerWidget {
     private final Button plusButton;
     private final NumberFormat format;
     private final int type;
+    private final int ctrlPressedStep = 5;
+    private final int shiftPressedStep = 10;
     private Range range;
 
     public NumberField(Entrance entrance, int x, int y, int width, int height, int type) {
@@ -34,18 +36,18 @@ public class NumberField extends AbstractContainerWidget {
         }
         this.type = type;
 
-        this.textField = addWidget(new EditBox(entrance, x + buttonWidth + 1, y + 2, width - 2 * buttonWidth - 2, height - 4, Text.empty()));
+        this.textField = addWidget(new EditBox(entrance, x + buttonWidth, y + 1, width - 2 * buttonWidth, height - 2, Text.empty()));
         this.minusButton = addWidget(new Button(entrance, x, y, buttonWidth, height, Text.text("-"), button -> {
             float valueChanged = 1f;
-            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = 5f;
-            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = 10f;
+            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = ctrlPressedStep;
+            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = shiftPressedStep;
 
             setValue(getNumber().doubleValue() - valueChanged);
         }));
         this.plusButton = addWidget(new Button(entrance, x + width - buttonWidth, y, buttonWidth, height, Text.text("+"), button -> {
             float valueChanged = 1f;
-            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = 5f;
-            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = 10f;
+            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = ctrlPressedStep;
+            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = shiftPressedStep;
 
             setValue(getNumber().doubleValue() + valueChanged);
         }));
@@ -79,6 +81,14 @@ public class NumberField extends AbstractContainerWidget {
         this.range = Range.UNBOUNDED;
     }
 
+    @Override
+    public void setActive(boolean active) {
+        super.setActive(active);
+        this.textField.setActive(active);
+        this.minusButton.setActive(active);
+        this.plusButton.setActive(active);
+    }
+
     public Number getNumber() {
         if (textField.getValue().isEmpty()) return 0;
         try {
@@ -89,7 +99,7 @@ public class NumberField extends AbstractContainerWidget {
     }
 
     public void setValue(Number number) {
-        textField.setValue(format.format(number.doubleValue()));
+        textField.setValue(number == null ? "" : format.format(number.doubleValue()));
     }
 
     public void setValueChangeListener(Consumer<Number> responder) {

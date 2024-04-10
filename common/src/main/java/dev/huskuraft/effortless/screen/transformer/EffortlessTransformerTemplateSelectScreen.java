@@ -10,8 +10,8 @@ import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
-import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.platform.SearchTree;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
@@ -38,12 +38,16 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH - 2) / 2, 24, Dimens.RegularEntry.ROW_WIDTH - 2, 20, Text.translate("effortless.transformer.template_select.search"))
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH - 2) / 2, Dimens.Screen.TITLE_24, Dimens.Entry.ROW_WIDTH - 2, 20, Text.translate("effortless.transformer.template_select.search"))
         );
 
+        // FIXME: 21/10/23
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
+            detach();
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.useTemplateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.template_select.use_template"), button -> {
             if (entries.hasSelected()) {
                 var item = entries.getSelected().getItem();
@@ -71,10 +75,6 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
                 }
             }
 
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
-        // FIXME: 21/10/23
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("gui.cancel"), button -> {
-            detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
         this.searchEditBox.setValue("");
@@ -111,7 +111,7 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     }
 
     private void setSearchResult(String string) {
-        var searchTree = ClientContentFactory.getInstance().search(transformers, Transformer::getSearchableTags);
+        var searchTree = SearchTree.ofText(transformers, Transformer::getSearchableTags);
         entries.reset(searchTree.search(string.toLowerCase(Locale.ROOT)).stream().filter(transformer -> transformer.getType() == selectedType).toList());
         entries.setSelected(null);
         entries.setScrollAmount(0);

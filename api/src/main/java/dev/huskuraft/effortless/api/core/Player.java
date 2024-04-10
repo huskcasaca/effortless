@@ -1,28 +1,16 @@
 package dev.huskuraft.effortless.api.core;
 
 import java.util.List;
-import java.util.UUID;
 
-import dev.huskuraft.effortless.api.math.Vector3d;
-import dev.huskuraft.effortless.api.platform.PlatformReference;
-import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.api.text.Text;
 
-public interface Player extends PlatformReference {
+public interface Player extends Entity {
 
-    UUID getId();
+    PlayerProfile getProfile();
 
-    Server getServer();
-
-    World getWorld();
-
-    Text getDisplayName();
-
-    Vector3d getPosition();
-
-    Vector3d getEyePosition();
-
-    Vector3d getEyeDirection();
+    default boolean isOperator() {
+        return getServer().getPlayerList().isOperator(getProfile());
+    }
 
     List<ItemStack> getItemStacks();
 
@@ -34,15 +22,21 @@ public interface Player extends PlatformReference {
 
     void sendMessage(Text messages);
 
+    default void sendMessage(String message) {
+        sendMessage(Text.text(message));
+    }
+
+    void sendClientMessage(Text message, boolean actionBar);
+
+    default void sendClientMessage(String message, boolean actionBar) {
+        sendClientMessage(Text.text(message), actionBar);
+    }
+
     void swing(InteractionHand hand);
 
     boolean canInteractBlock(BlockPosition blockPosition);
 
     boolean canAttackBlock(BlockPosition blockPosition);
-
-    GameMode getGameType();
-
-    BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids);
 
     boolean tryPlaceBlock(BlockInteraction interaction);
 

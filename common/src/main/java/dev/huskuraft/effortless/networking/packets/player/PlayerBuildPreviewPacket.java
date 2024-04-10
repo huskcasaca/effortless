@@ -29,8 +29,8 @@ public record PlayerBuildPreviewPacket(
 
         @Override
         public void write(Buffer buffer, PlayerBuildPreviewPacket packet) {
-            buffer.writeUUID(packet.playerId);
-            buffer.write(packet.context, new ContextSerializer());
+            buffer.writeUUID(packet.playerId());
+            buffer.write(packet.context(), new ContextSerializer());
         }
 
     }

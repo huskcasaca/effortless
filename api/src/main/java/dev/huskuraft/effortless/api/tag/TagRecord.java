@@ -3,10 +3,10 @@ package dev.huskuraft.effortless.api.tag;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.Item;
-import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
@@ -93,21 +93,25 @@ public interface TagRecord extends TagElement {
 
     <T> void putElement(String key, T value, TagWriter<T> writer);
 
-    <T> List<T> getList(String key, TagReader<T> writer);
+    <T> List<T> getList(String key, TagReader<T> reader);
 
     <T> void putList(String key, Collection<T> collection, TagWriter<T> writer);
 
-    default <T> T get(TagReader<T> writer) {
-        return writer.read(this);
+    default <T> T get(TagReader<T> reader) {
+        return reader.read(this, true);
     }
 
     default <T> void put(T value, TagWriter<T> writer) {
-        writer.write(this, value);
+        writer.write(this, value, true);
     }
 
     default <T extends Enum<T>> T getEnum(String key, Class<T> clazz) {
-        var id = ResourceLocation.decompose(getString(key));
-        return Enum.valueOf(clazz, id.getPath().toUpperCase(Locale.ROOT));
+        try {
+            var id = ResourceLocation.decompose(getString(key));
+            return Enum.valueOf(clazz, id.getPath().toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            return null;
+        }
     }
 
     default <T extends Enum<T>> void putEnum(String key, Enum<T> value) {
@@ -116,7 +120,11 @@ public interface TagRecord extends TagElement {
     }
 
     default ResourceLocation getResource(String key) {
-        return ResourceLocation.decompose(getString(key));
+        try {
+            return ResourceLocation.decompose(getString(key));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     default void putResource(String key, ResourceLocation value) {
@@ -124,7 +132,11 @@ public interface TagRecord extends TagElement {
     }
 
     default UUID getUUID(String key) {
-        return UUID.fromString(getString(key));
+        try {
+            return UUID.fromString(getString(key));
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     default void putUUID(String key, UUID value) {
@@ -132,32 +144,24 @@ public interface TagRecord extends TagElement {
     }
 
     default Item getItem(String key) {
-        return Item.fromId(getResource(key));
+        try {
+            return Item.fromId(Objects.requireNonNull(getResource(key)));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            return null;
+        }
     }
 
     default void putItem(String key, Item value) {
         putResource(key, value.getId());
     }
 
-    default ItemStack getItemStack(String key) {
-        return getElement(key, (tag1) -> ItemStack.of(
-                tag1.asRecord().getItem("Item"),
-                tag1.asRecord().getInt("Count"),
-                tag1.asRecord().getElement("Tag").asRecord()
-        ));
-    }
-
-    default void putItemStack(String key, ItemStack value) {
-        putElement(key, value, (tag1, itemStack) -> {
-            tag1.asRecord().putItem("Item", itemStack.getItem());
-            tag1.asRecord().putInt("Count", itemStack.getStackSize());
-            tag1.asRecord().putElement("Tag", itemStack.getTag());
-        });
-    }
-
     default Vector3d getVector3d(String key) {
-        var positions = getList(key, (tag1) -> tag1.asPrimitive().getDouble()).stream().mapToDouble(Double::doubleValue).toArray();
-        return new Vector3d(positions[0], positions[1], positions[2]);
+        try {
+            var positions = getList(key, (tag1) -> tag1.asPrimitive().getDouble()).stream().mapToDouble(Double::doubleValue).toArray();
+            return new Vector3d(positions[0], positions[1], positions[2]);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     default void putVector3d(String key, Vector3d value) {
@@ -167,8 +171,12 @@ public interface TagRecord extends TagElement {
     }
 
     default Vector3i getVector3i(String key) {
-        var positions = getList(key, (tag1) -> tag1.asPrimitive().getInt()).stream().mapToInt(Integer::intValue).toArray();
-        return new Vector3i(positions[0], positions[1], positions[2]);
+        try {
+            var positions = getList(key, (tag1) -> tag1.asPrimitive().getInt()).stream().mapToInt(Integer::intValue).toArray();
+            return new Vector3i(positions[0], positions[1], positions[2]);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     default void putVector3i(String key, Vector3i value) {
@@ -178,8 +186,12 @@ public interface TagRecord extends TagElement {
     }
 
     default Vector2d getVector2d(String key) {
-        var positions = getList(key, (tag1) -> tag1.asPrimitive().getDouble()).stream().mapToDouble(Double::doubleValue).toArray();
-        return new Vector2d(positions[0], positions[1]);
+        try {
+            var positions = getList(key, (tag1) -> tag1.asPrimitive().getDouble()).stream().mapToDouble(Double::doubleValue).toArray();
+            return new Vector2d(positions[0], positions[1]);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     default void putVector2d(String key, Vector2d value) {
@@ -189,8 +201,12 @@ public interface TagRecord extends TagElement {
     }
 
     default Vector2i getVector2i(String key) {
-        var positions = getList(key, (tag1) -> tag1.asPrimitive().getInt()).stream().mapToInt(Integer::intValue).toArray();
-        return new Vector2i(positions[0], positions[1]);
+        try {
+            var positions = getList(key, (tag1) -> tag1.asPrimitive().getInt()).stream().mapToInt(Integer::intValue).toArray();
+            return new Vector2i(positions[0], positions[1]);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     default void putVector2i(String key, Vector2i value) {

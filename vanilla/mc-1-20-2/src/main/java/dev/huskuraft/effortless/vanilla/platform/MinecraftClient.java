@@ -1,18 +1,24 @@
 package dev.huskuraft.effortless.vanilla.platform;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.PlayerInfo;
 import dev.huskuraft.effortless.api.core.Resource;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
 import dev.huskuraft.effortless.api.platform.Client;
+import dev.huskuraft.effortless.api.platform.Options;
 import dev.huskuraft.effortless.api.renderer.Camera;
 import dev.huskuraft.effortless.api.renderer.Window;
 import dev.huskuraft.effortless.api.sound.SoundManager;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
+import dev.huskuraft.effortless.vanilla.core.MinecraftPlayerInfo;
 import dev.huskuraft.effortless.vanilla.core.MinecraftResource;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
 import dev.huskuraft.effortless.vanilla.gui.MinecraftProxyScreen;
@@ -77,6 +83,12 @@ public class MinecraftClient implements Client {
     }
 
     @Override
+    public List<PlayerInfo> getOnlinePlayers() {
+        if (reference.getConnection() == null) return List.of();
+        return reference.getConnection().getOnlinePlayers().stream().map(MinecraftPlayerInfo::new).collect(Collectors.toList());
+    }
+
+    @Override
     public Typeface getTypeface() {
         return new MinecraftTypeface(reference.font);
     }
@@ -125,6 +137,16 @@ public class MinecraftClient implements Client {
     @Override
     public void sendCommand(String command) {
         reference.getConnection().sendCommand(command);
+    }
+
+    @Override
+    public void execute(Runnable runnable) {
+        reference.execute(runnable);
+    }
+
+    @Override
+    public Options getOptions() {
+        return new MinecraftOptions(reference.options);
     }
 
     @Override

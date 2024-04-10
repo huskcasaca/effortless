@@ -25,6 +25,10 @@ public interface Text extends PlatformReference {
         return ContentFactory.getInstance().newTranslatableText(text, args);
     }
 
+    static Text translate(String text, Object... args) {
+        return ContentFactory.getInstance().newTranslatableText(text, args);
+    }
+
     Text withStyle(TextStyle... styles);
 
     Text append(Text append);

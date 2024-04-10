@@ -1,7 +1,8 @@
 package dev.huskuraft.effortless.building.operation.empty;
 
-import java.util.Collection;
+import java.awt.*;
 import java.util.Collections;
+import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.building.operation.ItemType;
@@ -21,8 +22,13 @@ public class EmptyOperationResult extends OperationResult {
     }
 
     @Override
-    public Collection<ItemStack> getProducts(ItemType type) {
+    public List<ItemStack> getProducts(ItemType type) {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Color getColor() {
+        return null;
     }
 
 }

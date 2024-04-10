@@ -32,17 +32,16 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
         return new Entry(getEntrance(), this, item);
     }
 
-    // TODO: 15/9/23 remove
-    public int totalCount() {
-        return items().stream().mapToInt(Chance::chance).sum();
-    }
-
     public static class Entry extends EditableEntryList.Entry<Chance<Item>> {
 
         private ItemSlot itemSlot;
         private TextWidget nameTextWidget;
         private TextWidget chanceTextWidget;
         private NumberField numberField;
+
+        public int totalCount() {
+            return getEntryList().items().stream().mapToInt(Chance::chance).sum();
+        }
 
         public Entry(Entrance entrance, ItemChanceList itemChanceList, Chance<Item> chance) {
             super(entrance, itemChanceList, chance);
@@ -68,7 +67,7 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
         @Override
         public List<Text> getTooltip() {
             if (getEntrance().getClient().getWindow().isAltDown()) {
-                return getRandomizerEntryTooltip(getEntrance().getClient().getPlayer(), getItem(), getEntryList().totalCount());
+                return getRandomizerEntryTooltip(getEntrance().getClient().getPlayer(), getItem(), totalCount());
             } else {
                 return super.getTooltip();
             }
@@ -80,22 +79,16 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
             this.numberField.setValueRange(Chance.MIN_ITEM_COUNT, Chance.MAX_ITEM_COUNT);
             this.numberField.setValue(getItem().chance());
             this.numberField.setValueChangeListener(value -> {
-                this.setItem(Chance.of(getItem().content(), value.byteValue()));
+                this.setItem(Chance.of(getItem().content(), value.intValue()));
             });
             this.itemSlot = addWidget(new ItemSlot(getEntrance(), getX() + 1, getY() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getItem().content(), Text.text(String.valueOf(getItem().chance()))));
             this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getDisplayName(getItem())));
-            this.chanceTextWidget = addWidget(new TextWidget(getEntrance(), getX() + getWidth() - 50, getY() + 6, Text.empty()));
+            this.chanceTextWidget = addWidget(new TextWidget(getEntrance(), getX() + getWidth() - 76, getY() + 6, Text.empty(), TextWidget.Gravity.END));
         }
 
         @Override
         public void onReload() {
-            var percentage = String.format("%.2f%%", 100.0 * getItem().chance() / getEntryList().totalCount());
-            chanceTextWidget.setX(((getX() + getWidth()) - 50 - getTypeface().measureWidth(percentage)));
-            chanceTextWidget.setMessage(Text.text(percentage));
-        }
-
-        @Override
-        public void onBindItem() {
+            chanceTextWidget.setMessage(String.format("%.2f%%", 100.0 * getItem().chance() / totalCount()));
             itemSlot.setItemStack(getItem().content().getDefaultStack());
             itemSlot.setDescription(Text.text(String.valueOf(getItem().chance())));
             nameTextWidget.setMessage(getDisplayName(getItem()));
@@ -113,7 +106,7 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
 
         @Override
         public int getWidth() {
-            return Dimens.RegularEntry.ROW_WIDTH;
+            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

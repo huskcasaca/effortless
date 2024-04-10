@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless;
 
+import java.util.logging.Logger;
+
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.NetworkChannel;
@@ -10,8 +12,10 @@ import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
-import dev.huskuraft.effortless.networking.packets.session.SessionStartPacket;
+import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
+import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 
 public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketListener> {
 
@@ -33,7 +37,10 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         registerPacket(PlayerSettingsPacket.class, new PlayerSettingsPacket.Serializer());
         registerPacket(PlayerBuildPacket.class, new PlayerBuildPacket.Serializer());
         registerPacket(PlayerBuildPreviewPacket.class, new PlayerBuildPreviewPacket.Serializer());
-        registerPacket(SessionStartPacket.class, new SessionStartPacket.Serializer());
+        registerPacket(PlayerOperatorCheckPacket.class, new PlayerOperatorCheckPacket.Serializer());
+
+        registerPacket(SessionPacket.class, new SessionPacket.Serializer());
+        registerPacket(SessionConfigPacket.class, new SessionConfigPacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
     }
@@ -49,16 +56,14 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
 
     @Override
     public void receivePacket(Packet packet, Player player) {
-        player.getServer().execute(() -> {
-            try {
-                packet.handle(listener, player);
-            } catch (Exception exception) {
-                if (listener.shouldPropagateHandlingExceptions()) {
-                    throw exception;
-                }
-                LOGGER.severe("Failed to handle packet " + packet + ", suppressing error" + exception);
+        try {
+            packet.handle(listener, player);
+        } catch (Exception exception) {
+            if (listener.shouldPropagateHandlingExceptions()) {
+                throw exception;
             }
-        });
+            Logger.getAnonymousLogger().severe("Failed to handle packet " + packet + ", suppressing error" + exception);
+        }
     }
 
     @Override
@@ -73,7 +78,6 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
             switch (packet.action()) {
                 case REDO -> getEntrance().getStructureBuilder().redo(player);
                 case UNDO -> getEntrance().getStructureBuilder().undo(player);
-                case RESET_BUILD_STATE -> getEntrance().getStructureBuilder().resetBuildState(player);
             }
         }
 
@@ -92,8 +96,19 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         }
 
         @Override
-        public void handle(SessionStartPacket packet, Player player) {
+        public void handle(PlayerOperatorCheckPacket packet, Player player) {
+            var isOperator =  getEntrance().getServerManager().getRunningServer().getPlayerList().isOperator(player.getProfile());
+            getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(packet.responseId(), packet.playerId(), isOperator), player);
+        }
 
+        @Override
+        public void handle(SessionPacket packet, Player player) {
+            getEntrance().getSessionManager().onSession(packet.session(), player);
+        }
+
+        @Override
+        public void handle(SessionConfigPacket packet, Player player) {
+            getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player);
         }
     }
 

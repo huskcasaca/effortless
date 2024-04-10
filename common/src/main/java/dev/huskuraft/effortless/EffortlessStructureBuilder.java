@@ -11,9 +11,7 @@ import javax.annotation.Nullable;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.platform.Server;
-import dev.huskuraft.effortless.api.platform.Session;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
@@ -26,7 +24,6 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
-import dev.huskuraft.effortless.networking.packets.session.SessionStartPacket;
 
 public final class EffortlessStructureBuilder extends StructureBuilder {
 
@@ -67,7 +64,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public Context getDefaultContext() {
+    public Context getDefaultContext(Player player) {
         return null;
     }
 
@@ -81,6 +78,10 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
         return null;
     }
 
+    @Override
+    public Map<UUID, Context> getAllContexts() {
+        return Map.of();
+    }
 
     public void onTick() {
 
@@ -112,7 +113,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public void reset() {
+    public void resetAll() {
         contexts.clear();
         undoRedoStacks.clear();
     }
@@ -132,7 +133,8 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
 
         if (context.isPreview()) {
             // FIXME: 13/10/23 add event for server manager
-            for (var serverPlayer : player.getServer().getPlayers()) {
+            Server server = player.getServer();
+            for (var serverPlayer : server.getPlayerList().getPlayers()) {
                 if (serverPlayer.getId().equals(player.getId())) {
                     continue;
                 }
@@ -170,27 +172,23 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     private void onPlayerChangeWorld(Player player, World origin, World destination) {
-        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), player);
     }
 
     private void onPlayerRespawn(Player oldPlayer, Player newPlayer, boolean alive) {
-        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), newPlayer);
     }
 
     private void onPlayerLoggedIn(Player player) {
-        getEntrance().getChannel().sendPacket(new SessionStartPacket(new Session(Platform.getInstance())), player);
     }
 
     private void onPlayerLoggedOut(Player player) {
-        getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.RESET_BUILD_STATE), player);
     }
 
     private void onServerStarted(Server server) {
-        reset();
+        resetAll();
     }
 
     private void onServerStopped(Server server) {
-        reset();
+        resetAll();
     }
 
 }

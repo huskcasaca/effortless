@@ -15,6 +15,10 @@ public class MinecraftText implements Text {
         this.reference = reference;
     }
 
+    public static Text ofNullable(Component reference) {
+        return reference == null ? null : new MinecraftText(reference);
+    }
+
     private static ChatFormatting adapt(TextStyle textStyle) {
         return switch (textStyle) {
             case BLACK -> ChatFormatting.BLACK;

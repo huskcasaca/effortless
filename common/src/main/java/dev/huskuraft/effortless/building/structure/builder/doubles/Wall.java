@@ -17,7 +17,7 @@ public class Wall extends DoubleClickBuilder {
 
     public static BlockInteraction traceWall(Player player, Context context) {
         var center = context.firstBlockPosition().getCenter();
-        var reach = context.maxReachDistance();
+        var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
         return Stream.of(

@@ -18,4 +18,8 @@ dependencies {
 
     annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
     compileOnly 'com.google.auto.service:auto-service:1.1.1'
+
+    implementation 'com.electronwill.night-config:core:3.6.7'
+    implementation 'com.electronwill.night-config:toml:3.6.7'
+    implementation 'com.electronwill.night-config:json:3.6.7'
 }

@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.api.math;
 
+import java.util.stream.DoubleStream;
+
 public class Vector2d {
 
     public static final Vector2d ZERO = new Vector2d(0, 0);
@@ -372,6 +374,14 @@ public class Vector2d {
      */
     public Vector2i toVector2i() {
         return Vector2i.at(x, y);
+    }
+
+    public DoubleStream stream() {
+        return DoubleStream.of(x, y);
+    }
+
+    public double volume() {
+        return x * y;
     }
 
     @Override

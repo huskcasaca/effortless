@@ -10,10 +10,13 @@ import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.PlayerProfile;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
@@ -43,6 +46,21 @@ public class MinecraftPlayer implements Player {
     @Override
     public UUID getId() {
         return reference.getUUID();
+    }
+
+    @Override
+    public PlayerProfile getProfile() {
+        return new MinecraftPlayerProfile(reference.getGameProfile());
+    }
+
+    @Override
+    public boolean isDeadOrDying() {
+        return reference.isDeadOrDying();
+    }
+
+    @Override
+    public Client getClient() {
+        return new MinecraftClient(Minecraft.getInstance());
     }
 
     @Override
@@ -99,6 +117,11 @@ public class MinecraftPlayer implements Player {
     public void sendMessage(Text message) {
         reference.sendSystemMessage(message.reference());
 //        getRef().displayClientMessage(message, true);
+    }
+
+    @Override
+    public void sendClientMessage(Text message, boolean actionBar) {
+        reference.displayClientMessage(message.reference(), actionBar);
     }
 
     @Override

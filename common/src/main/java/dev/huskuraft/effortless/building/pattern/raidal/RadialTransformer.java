@@ -41,7 +41,7 @@ public class RadialTransformer extends Transformer {
     private final int slice;
 
     public RadialTransformer(Vector3d position, int slice) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, new PositionType[]{PositionType.ABSOLUTE, PositionType.ABSOLUTE, PositionType.ABSOLUTE}, slice);
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, new PositionType[]{PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE}, slice);
     }
 
     public RadialTransformer(UUID id, Text name, Vector3d position, PositionType[] positionType, int slice) {
@@ -54,6 +54,18 @@ public class RadialTransformer extends Transformer {
 //        this.step = step;
 //        this.clockwise = clockwise;
     }
+
+    public RadialTransformer(UUID id, Text name, Vector3d position, PositionType positionTypeX, PositionType positionTypeY, PositionType positionTypeZ, int slice) {
+        super(id, name);
+        this.position = position;
+        this.positionType = new PositionType[]{positionTypeX, positionTypeY, positionTypeZ};
+        this.slice = slice;
+//        this.axis = axis;
+//        this.count = count;
+//        this.step = step;
+//        this.clockwise = clockwise;
+    }
+
 
     @Override
     public BatchOperation transform(TransformableOperation operation) {

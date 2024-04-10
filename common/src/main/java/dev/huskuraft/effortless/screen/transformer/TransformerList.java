@@ -83,10 +83,6 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         public void onReload() {
             slotContainer.setWrapLines(getEntryList().getSelected() == this);
-        }
-
-        @Override
-        public void onBindItem() {
             textSlot.setMessage(getSymbol());
             slotContainer.setEntries(getData());
         }
@@ -104,7 +100,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
 
         @Override
         public int getWidth() {
-            return Dimens.RegularEntry.ROW_WIDTH;
+            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

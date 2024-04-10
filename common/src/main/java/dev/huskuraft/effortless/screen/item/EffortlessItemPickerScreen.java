@@ -1,11 +1,9 @@
 package dev.huskuraft.effortless.screen.item;
 
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Item;
-import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
@@ -33,28 +31,10 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-//        if (this.minecraft != null) {
-        var player = getEntrance().getClient().getPlayer();
-        var itemStacks = new ArrayList<Item>();
-        if (player != null) {
-//            CreativeModeTabs.tryRebuildTabContents(((LocalPlayer) player).connection.enabledFeatures(), FabricAdapter.adapt(player).canUseGameMasterBlocks(), FabricAdapter.adapt(player).level().registryAccess());
-            itemStacks.add(ItemStack.empty().getItem());
-//            itemStack.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
-//            itemStack.add(new ItemStack(Items.AIR));
-//            itemStack.addAll(CreativeModeTabs.searchTab().getSearchTabDisplayItems());
-
-        } else {
-//            itemStack.addAll(BuiltInRegistries.ITEM.stream().map(ItemStack::new).toList());
-        }
-
-//        getEntrance().getClient().getRef().populateSearchTree(SearchRegistry.CREATIVE_NAMES, itemStack);
-//        getEntrance().getClient().getRef().populateSearchTree(SearchRegistry.CREATIVE_TAGS, itemStack);
-//        }
-
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, 24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.RegularEntry.ROW_WIDTH - 2) / 2, 24, Dimens.RegularEntry.ROW_WIDTH - 2, 20, Text.translate("effortless.item.picker.search"))
+                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, Dimens.Screen.TITLE_24, Dimens.Entry.ROW_WIDTH, 20, Text.translate("effortless.item.picker.search"))
         );
         this.searchEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
         this.searchEditBox.setHint(Text.translate("effortless.item.picker.search_hint"));
@@ -62,23 +42,21 @@ public class EffortlessItemPickerScreen extends AbstractScreen {
             setSearchResult(text);
         });
 
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.item.picker.cancel"), button -> {
+            detach();
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.item.picker.add"), button -> {
             applySettings.accept(entries.getSelected().getItem().getItem());
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.item.picker.cancel"), button -> {
-            detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new ItemStackList(getEntrance(), 0, 50, getWidth(), getHeight() - 50 - 36));
+        this.entries = addWidget(new ItemStackList(getEntrance(), 0, Dimens.Screen.TITLE_24 + 26, getWidth(), getHeight() - Dimens.Screen.TITLE_24 - 26 - Dimens.Screen.BUTTON_ROW_1));
 
         setSearchResult("");
     }
 
     @Override
     public void onReload() {
-        super.onReload();
-
         addButton.setActive(entries.hasSelected());
     }
 

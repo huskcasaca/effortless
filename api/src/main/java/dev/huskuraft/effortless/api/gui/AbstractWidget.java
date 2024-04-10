@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.api.gui;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -55,11 +56,6 @@ public abstract class AbstractWidget implements Widget {
     }
 
     @Override
-    public void onLoad() {
-
-    }
-
-    @Override
     public void onReload() {
 
     }
@@ -71,6 +67,7 @@ public abstract class AbstractWidget implements Widget {
 
     @Override
     public void render(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+        onReload();
         setHovered(isMouseOver(mouseX, mouseY));
 
         if (isVisible()) {
@@ -192,6 +189,10 @@ public abstract class AbstractWidget implements Widget {
         this.message = text;
     }
 
+    public void setMessage(String text) {
+        this.message = Text.text(text);
+    }
+
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
         return this.isActive() && this.isVisible() && mouseX >= this.getX() && mouseY >= this.getY() && mouseX < (this.getX() + this.getWidth()) && mouseY < (this.getY() + this.getHeight());
@@ -266,5 +267,13 @@ public abstract class AbstractWidget implements Widget {
 
     public void setTooltip(List<Text> tooltip) {
         this.tooltip = tooltip;
+    }
+
+    public void setTooltip(Text... tooltip) {
+        this.tooltip = List.of(tooltip);
+    }
+
+    public void setTooltip(String... tooltip) {
+        this.tooltip = Stream.of(tooltip).map(Text::text).toList();
     }
 }
