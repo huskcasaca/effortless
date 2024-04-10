@@ -2,7 +2,6 @@ package dev.huskuraft.effortless.screen.general;
 
 import java.util.function.Consumer;
 
-import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
@@ -10,7 +9,6 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.screen.item.EffortlessItemsScreen;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
@@ -58,26 +56,26 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
         entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_place_box_volume"), null, config.maxPlaceBoxVolume(), GeneralConfig.MAX_PLACE_BOX_VOLUME_RANGE_START, GeneralConfig.MAX_PLACE_BOX_VOLUME_RANGE_END, (value) -> {
             this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBoxVolume(), value, config.whitelistedItems(), config.blacklistedItems());
         });
-        entries.addTab(Text.translate("effortless.global_general_settings.whitelisted_items"), null, config.whitelistedItems(), (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBoxVolume(), config.maxPlaceBoxVolume(), value, config.blacklistedItems());
-        }, (entry, value) -> {
-            entry.getButton().setOnPressListener(button1 -> {
-                new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.whitelisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
-                    entry.setItem(value1.stream().map(Item::getId).toList());
-                }).attach();
-            });
-            entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value.size()));
-        });
-        entries.addTab(Text.translate("effortless.global_general_settings.blacklisted_items"), null, config.blacklistedItems(), (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBoxVolume(), config.maxPlaceBoxVolume(), config.whitelistedItems(), value);
-        }, (entry, value) -> {
-            entry.getButton().setOnPressListener(button1 -> {
-                new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.blacklisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
-                    entry.setItem(value1.stream().map(Item::getId).toList());
-                }).attach();
-            });
-            entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value.size()));
-        });
+//        entries.addTab(Text.translate("effortless.global_general_settings.whitelisted_items"), null, config.whitelistedItems(), (value) -> {
+//            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBoxVolume(), config.maxPlaceBoxVolume(), value, config.blacklistedItems());
+//        }, (entry, value) -> {
+//            entry.getButton().setOnPressListener(button1 -> {
+//                new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.whitelisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
+//                    entry.setItem(value1.stream().map(Item::getId).toList());
+//                }).attach();
+//            });
+//            entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value.size()));
+//        });
+//        entries.addTab(Text.translate("effortless.global_general_settings.blacklisted_items"), null, config.blacklistedItems(), (value) -> {
+//            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBoxVolume(), config.maxPlaceBoxVolume(), config.whitelistedItems(), value);
+//        }, (entry, value) -> {
+//            entry.getButton().setOnPressListener(button1 -> {
+//                new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.blacklisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
+//                    entry.setItem(value1.stream().map(Item::getId).toList());
+//                }).attach();
+//            });
+//            entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value.size()));
+//        });
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
         }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
