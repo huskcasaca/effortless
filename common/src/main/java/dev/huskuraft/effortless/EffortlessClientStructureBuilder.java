@@ -127,27 +127,29 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 return context.newInteraction();
             }
 
-            if (!context.withState(state).withNextInteraction(interaction).isVolumeInBounds()) {
-                if (state == BuildState.PLACE_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large") + " (" + context.getVolume() + "/" + context.getMaxVolume() + ")", true);
+            var nextContext = context.withState(state).withNextInteraction(interaction);
+
+            if (!nextContext.isVolumeInBounds()) {
+                if (nextContext.state() == BuildState.PLACE_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large") + " (" + nextContext.getVolume() + "/" + nextContext.getMaxVolume() + ")", true);
                 }
-                if (state == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large") + " (" + context.getVolume() + "/" + context.getMaxVolume() + ")", true);
+                if (nextContext.state() == BuildState.BREAK_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large") + " (" + nextContext.getVolume() + "/" + nextContext.getMaxVolume() + ")", true);
                 }
                 return context.newInteraction();
             }
 
-            if (!context.withState(state).withNextInteraction(interaction).isSideLengthInBounds()) {
-                if (state == BuildState.PLACE_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_side_length_too_large") + " (" + context.getSideLength() + "/" + context.getMaxSideLength() + ")", true);
+            if (!nextContext.isSideLengthInBounds()) {
+                if (nextContext.state() == BuildState.PLACE_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_side_length_too_large") + " (" + nextContext.getSideLength() + "/" + nextContext.getMaxSideLength() + ")", true);
                 }
-                if (state == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_side_length_too_large") + " (" + context.getSideLength() + "/" + context.getMaxSideLength() + ")", true);
+                if (nextContext.state() == BuildState.BREAK_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_side_length_too_large") + " (" + nextContext.getSideLength() + "/" + nextContext.getMaxSideLength() + ")", true);
                 }
                 return context.newInteraction();
             }
 
-            return context.withState(state).withNextInteraction(interaction);
+            return nextContext;
         });
     }
 
