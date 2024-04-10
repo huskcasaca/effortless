@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.building.structure.builder.SingleClickBuilder;
 public class Single extends SingleClickBuilder {
 
     public static BlockInteraction traceSingle(Player player, Context context) {
-        var interaction = player.raytrace(context.maxNextReachDistance(), 1f, false);
+        var interaction = player.raytrace(context.maxReachDistance(), 0, false);
 
         var startPos = interaction.getBlockPosition();
 

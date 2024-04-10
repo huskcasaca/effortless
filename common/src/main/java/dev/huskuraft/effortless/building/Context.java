@@ -172,18 +172,17 @@ public record Context(
         return structureParams.replaceMode();
     }
 
-    public int maxBlockPlacePerAxis() {
-        return 1024; // reachParams.maxDistancePerAxis();
+    public int axisLimitation() {
+        return Integer.MAX_VALUE;
     }
 
     public int maxNextReachDistance() {
-        return maxBlockPlacePerAxis() * 4;
+        return 1024;
     }
 
     public int maxReachDistance() {
         return limitationParams.generalConfig.maxReachDistance();
     }
-
 
     public Pattern pattern() {
         return patternParams.pattern();

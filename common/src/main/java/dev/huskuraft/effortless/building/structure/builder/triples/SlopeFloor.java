@@ -31,7 +31,7 @@ public class SlopeFloor extends TripleClickBuilder {
         var y3 = context.thirdBlockPosition().y();
         var z3 = context.thirdBlockPosition().z();
 
-        int axisLimit = context.maxBlockPlacePerAxis();
+        int axisLimit = context.axisLimitation();
 
         // determine whether to use x or z axis to slope up
         boolean onXAxis = true;
