@@ -421,17 +421,6 @@ public record Context(
     ) {
     }
 
-    public Vector3i getBoxSize() {
-        if (interactions().isEmpty() || interactions().isMissing()) {
-            return Vector3i.ZERO;
-        }
-        return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new)).getSize().toVector3i();
-    }
-
-    public boolean isSizeInBound() {
-        return getBoxSize().stream().anyMatch(e -> e > limitationParams().generalConfig().maxDistancePerAxis()) && getBoxSize().volume() > limitationParams().generalConfig().maxBreakBlocks();
-    }
-
 
     public Context withReachParams(LimitationParams limitationParams) {
         return new Context(getId, state, type, interactions, structureParams, patternParams, limitationParams);
@@ -441,6 +430,51 @@ public record Context(
         // FIXME: 4/4/24 commands
         return withReachParams(new LimitationParams(config));
     }
+
+    public Vector3i getBoxSize() {
+        if (interactions().isEmpty() || interactions().isMissing()) {
+            return Vector3i.ZERO;
+        }
+        return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new)).getSize().toVector3i();
+    }
+
+    public int getVolume() {
+        return getBoxSize().volume();
+    }
+
+    public int getMaxVolume() {
+        return switch (state()) {
+            case IDLE -> 0;
+            case PLACE_BLOCK -> limitationParams().generalConfig().maxPlaceBoxVolume();
+            case BREAK_BLOCK -> limitationParams().generalConfig().maxBreakBoxVolume();
+        };
+    }
+
+    public int getSideLength() {
+        return getBoxSize().stream().max().orElse(0);
+    }
+
+    public int getMaxSideLength() {
+        return limitationParams().generalConfig().maxDistancePerAxis();
+    }
+
+    public boolean isVolumeInBounds() {
+        return getVolume() <= getMaxVolume();
+    }
+
+    public boolean isSideLengthInBounds() {
+        return getSideLength() <= getMaxSideLength();
+    }
+
+    public boolean hasPermission() {
+        return switch (state()) {
+            case IDLE -> true;
+            case PLACE_BLOCK -> limitationParams().generalConfig().allowPlaceBlocks();
+            case BREAK_BLOCK -> limitationParams().generalConfig().allowBreakBlocks();
+        };
+    }
+
+
 
 
 }

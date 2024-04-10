@@ -22,6 +22,8 @@ public class NumberField extends AbstractContainerWidget {
     private final Button plusButton;
     private final NumberFormat format;
     private final int type;
+    private final int ctrlPressedStep = 5;
+    private final int shiftPressedStep = 10;
     private Range range;
 
     public NumberField(Entrance entrance, int x, int y, int width, int height, int type) {
@@ -37,15 +39,15 @@ public class NumberField extends AbstractContainerWidget {
         this.textField = addWidget(new EditBox(entrance, x + buttonWidth, y + 1, width - 2 * buttonWidth, height - 2, Text.empty()));
         this.minusButton = addWidget(new Button(entrance, x, y, buttonWidth, height, Text.text("-"), button -> {
             float valueChanged = 1f;
-            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = 5f;
-            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = 10f;
+            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = ctrlPressedStep;
+            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = shiftPressedStep;
 
             setValue(getNumber().doubleValue() - valueChanged);
         }));
         this.plusButton = addWidget(new Button(entrance, x + width - buttonWidth, y, buttonWidth, height, Text.text("+"), button -> {
             float valueChanged = 1f;
-            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = 5f;
-            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = 10f;
+            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = ctrlPressedStep;
+            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = shiftPressedStep;
 
             setValue(getNumber().doubleValue() + valueChanged);
         }));

@@ -41,8 +41,8 @@ public record SessionConfig(
                 getPlayerOrGlobalEntry(id, GeneralConfig::allowPlaceBlocks),
                 getPlayerOrGlobalEntry(id, GeneralConfig::maxReachDistance),
                 getPlayerOrGlobalEntry(id, GeneralConfig::maxDistancePerAxis),
-                getPlayerOrGlobalEntry(id, GeneralConfig::maxBreakBlocks),
-                getPlayerOrGlobalEntry(id, GeneralConfig::maxPlaceBlocks),
+                getPlayerOrGlobalEntry(id, GeneralConfig::maxBreakBoxVolume),
+                getPlayerOrGlobalEntry(id, GeneralConfig::maxPlaceBoxVolume),
                 getPlayerOrGlobalEntry(id, GeneralConfig::whitelistedItems),
                 getPlayerOrGlobalEntry(id, GeneralConfig::blacklistedItems)
         );
@@ -60,8 +60,8 @@ public record SessionConfig(
                 getPlayerOrNullEntry(id, GeneralConfig::allowPlaceBlocks),
                 getPlayerOrNullEntry(id, GeneralConfig::maxReachDistance),
                 getPlayerOrNullEntry(id, GeneralConfig::maxDistancePerAxis),
-                getPlayerOrNullEntry(id, GeneralConfig::maxBreakBlocks),
-                getPlayerOrNullEntry(id, GeneralConfig::maxPlaceBlocks),
+                getPlayerOrNullEntry(id, GeneralConfig::maxBreakBoxVolume),
+                getPlayerOrNullEntry(id, GeneralConfig::maxPlaceBoxVolume),
                 getPlayerOrNullEntry(id, GeneralConfig::whitelistedItems),
                 getPlayerOrNullEntry(id, GeneralConfig::blacklistedItems)
         );

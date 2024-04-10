@@ -67,17 +67,17 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
     }
 
-    private static Text getStateComponent(BuildState state) {
+    private static String getStateComponent(BuildState state) {
         return Text.translate("effortless.state.%s".formatted(
                 switch (state) {
                     case IDLE -> "idle";
                     case PLACE_BLOCK -> "place_block";
                     case BREAK_BLOCK -> "break_block";
                 }
-        ));
+        )).getString();
     }
 
-    private static Text getTracingComponent(TracingResult result) {
+    private static String getTracingComponent(TracingResult result) {
         return Text.translate("effortless.tracing.%s".formatted(
                 switch (result) {
                     case SUCCESS_FULFILLED -> "success_fulfilled";
@@ -85,7 +85,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     case PASS -> "pass";
                     case FAILED -> "failed";
                 }
-        ));
+        )).getString();
     }
 
     private EffortlessClient getEntrance() {
@@ -115,20 +115,35 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 player.sendClientMessage(Text.translate("effortless.message.building.build_canceled"), true);
                 return context.newInteraction();
             }
-            if (state == BuildState.PLACE_BLOCK && !hasPlacePermission(player)) {
-                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_place_permission")));
-                player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks"), true);
-
+            if (!context.hasPermission()) {
+                if (state == BuildState.PLACE_BLOCK) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.cannot_place_blocks_no_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.no_place_permission"), true);
+                }
+                if (state == BuildState.BREAK_BLOCK) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.cannot_break_blocks_no_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.no_break_permission"), true);
+                }
                 return context.newInteraction();
             }
-            if (state == BuildState.BREAK_BLOCK && !hasBreakPermission(player)) {
-                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
-                player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks"), true);
+
+            if (!context.withState(state).withNextInteraction(interaction).isVolumeInBounds()) {
+                if (state == BuildState.PLACE_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large") + " (" + context.getVolume() + "/" + context.getMaxVolume() + ")", true);
+                }
+                if (state == BuildState.BREAK_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large") + " (" + context.getVolume() + "/" + context.getMaxVolume() + ")", true);
+                }
                 return context.newInteraction();
             }
 
-            if (context.withState(state).withNextInteraction(interaction).isSizeInBound()) {
-                player.sendClientMessage("Too Large To Build", true);
+            if (!context.withState(state).withNextInteraction(interaction).isSideLengthInBounds()) {
+                if (state == BuildState.PLACE_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_side_length_too_large") + " (" + context.getSideLength() + "/" + context.getMaxSideLength() + ")", true);
+                }
+                if (state == BuildState.BREAK_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_side_length_too_large") + " (" + context.getSideLength() + "/" + context.getMaxSideLength() + ")", true);
+                }
                 return context.newInteraction();
             }
 
@@ -472,10 +487,20 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     message = Text.text("Cannot Reach Target Block or Entity").withStyle(TextStyle.WHITE) + "";
                 }
             }
-
         } else {
-            message = Text.text(context.state().name() + " " + context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)) + " " + "(" + context.getBoxSize().x() + "x" + context.getBoxSize().y() + "x" + context.getBoxSize().z() + ")";
+            message = getStateComponent(context.state()) + " "
+                    + context.buildMode().getDisplayName().withStyle(TextStyle.GOLD) + " "
+                    + "("
+                    + (context.getBoxSize().x() > context.limitationParams().generalConfig().maxDistancePerAxis() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().x() + TextStyle.RESET
+                    + "x"
+                    + (context.getBoxSize().y() > context.limitationParams().generalConfig().maxDistancePerAxis() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().y() + TextStyle.RESET
+                    + "x"
+                    + (context.getBoxSize().z() > context.limitationParams().generalConfig().maxDistancePerAxis() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().z() + TextStyle.RESET
+                    + "="
+                    + (context.getBoxSize().volume() > context.limitationParams().generalConfig().maxBreakBoxVolume() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().volume() + TextStyle.RESET
+                    + ")";
         }
+
         player.sendClientMessage(message, true);
 
 

@@ -11,8 +11,8 @@ public record GeneralConfig(
         Boolean allowPlaceBlocks,
         Integer maxReachDistance,
         Integer maxDistancePerAxis,
-        Integer maxBreakBlocks,
-        Integer maxPlaceBlocks,
+        Integer maxBreakBoxVolume,
+        Integer maxPlaceBoxVolume,
         List<ResourceLocation> whitelistedItems,
         List<ResourceLocation> blacklistedItems
 ) {
@@ -30,13 +30,13 @@ public record GeneralConfig(
     public static final int MAX_DISTANCE_PER_AXIS_RANGE_START = 0;
     public static final int MAX_DISTANCE_PER_AXIS_RANGE_END = 1024;
 
-    public static final int MAX_BREAK_BLOCKS_DEFAULT = 1024;
-    public static final int MAX_BREAK_BLOCKS_RANGE_START = 0;
-    public static final int MAX_BREAK_BLOCKS_RANGE_END = Short.MAX_VALUE;
+    public static final int MAX_BREAK_BOX_VOLUME_DEFAULT = 1024;
+    public static final int MAX_BREAK_BOX_VOLUME_RANGE_START = 0;
+    public static final int MAX_BREAK_BOX_VOLUME_RANGE_END = Short.MAX_VALUE;
 
-    public static final int MAX_PLACE_BLOCKS_DEFAULT = 1024;
-    public static final int MAX_PLACE_BLOCKS_RANGE_START = 0;
-    public static final int MAX_PLACE_BLOCKS_RANGE_END = Short.MAX_VALUE;
+    public static final int MAX_PLACE_BOX_VOLUME_DEFAULT = 1024;
+    public static final int MAX_PLACE_BOX_VOLUME_RANGE_START = 0;
+    public static final int MAX_PLACE_BOX_VOLUME_RANGE_END = Short.MAX_VALUE;
 
     public static final List<ResourceLocation> WHITELISTED_ITEMS_DEFAULT = List.of();
     public static final List<ResourceLocation> BLACKLISTED_ITEMS_DEFAULT = List.of();
@@ -48,8 +48,8 @@ public record GeneralConfig(
             ALLOW_PLACE_BLOCKS_DEFAULT,
             MAX_REACH_DISTANCE_DEFAULT,
             MAX_DISTANCE_PER_AXIS_DEFAULT,
-            MAX_BREAK_BLOCKS_DEFAULT,
-            MAX_PLACE_BLOCKS_DEFAULT,
+            MAX_BREAK_BOX_VOLUME_DEFAULT,
+            MAX_PLACE_BOX_VOLUME_DEFAULT,
             WHITELISTED_ITEMS_DEFAULT,
             BLACKLISTED_ITEMS_DEFAULT
     );

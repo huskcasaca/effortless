@@ -30,8 +30,8 @@ public class GeneralConfigSerializer implements BufferSerializer<GeneralConfig> 
         buffer.writeNullable(generalConfig.allowPlaceBlocks(), Buffer::writeBoolean);
         buffer.writeNullable(generalConfig.maxReachDistance(), Buffer::writeVarInt);
         buffer.writeNullable(generalConfig.maxDistancePerAxis(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.maxBreakBlocks(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.maxPlaceBlocks(), Buffer::writeVarInt);
+        buffer.writeNullable(generalConfig.maxBreakBoxVolume(), Buffer::writeVarInt);
+        buffer.writeNullable(generalConfig.maxPlaceBoxVolume(), Buffer::writeVarInt);
         buffer.writeNullable(generalConfig.whitelistedItems(), (buffer1, list) -> buffer1.writeList(list, Buffer::writeResourceLocation));
         buffer.writeNullable(generalConfig.blacklistedItems(), (buffer1, list) -> buffer1.writeList(list, Buffer::writeResourceLocation));
 
