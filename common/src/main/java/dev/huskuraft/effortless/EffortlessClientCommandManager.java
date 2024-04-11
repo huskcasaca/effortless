@@ -1,17 +1,23 @@
 package dev.huskuraft.effortless;
 
+import dev.huskuraft.effortless.api.command.Command;
 import dev.huskuraft.effortless.api.command.CommandManager;
 
-public final class EffortlessCommandManager extends CommandManager {
+public final class EffortlessClientCommandManager extends CommandManager {
 
-    private final Effortless entrance;
+    private final EffortlessClient entrance;
 
-    public EffortlessCommandManager(Effortless entrance) {
+    public EffortlessClientCommandManager(EffortlessClient entrance) {
         this.entrance = entrance;
     }
 
-    public Effortless getEntrance() {
+    public EffortlessClient getEntrance() {
         return entrance;
+    }
+
+    @Override
+    public void dispatch(Command command) {
+        command.execute(getEntrance().getClient()::sendCommand);
     }
 
 //    @Override

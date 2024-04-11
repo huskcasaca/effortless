@@ -43,14 +43,14 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
         var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1, false, true));
         entries.setRenderSelection(false);
-        bindEntry(
-                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
-                value -> {
-                    this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBoxVolume(), config.maxPlaceBoxVolume(), config.whitelistedItems(), config.blacklistedItems());
-                },
-                () -> globalConfig.useCommands(),
-                () -> config.useCommands()
-        );
+//        bindEntry(
+//                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
+//                value -> {
+//                    this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxDistancePerAxis(), config.maxBreakBoxVolume(), config.maxPlaceBoxVolume(), config.whitelistedItems(), config.blacklistedItems());
+//                },
+//                () -> globalConfig.useCommands(),
+//                () -> config.useCommands()
+//        );
 
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_use_mod"), null, null, null),

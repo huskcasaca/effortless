@@ -3,8 +3,9 @@ package dev.huskuraft.effortless;
 import java.util.concurrent.atomic.AtomicReference;
 
 import dev.huskuraft.effortless.api.platform.Server;
+import dev.huskuraft.effortless.api.platform.ServerManager;
 
-public final class EffortlessServerManager {
+public final class EffortlessServerManager implements ServerManager {
 
     private final Effortless entrance;
 
