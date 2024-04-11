@@ -18,7 +18,7 @@ public class MinecraftWorld implements World {
     }
 
     public static World ofNullable(Level reference) {
-        return reference == null ? null : MinecraftWorld.ofNullable(reference);
+        return reference == null ? null : new MinecraftWorld(reference);
     }
 
     @Override
