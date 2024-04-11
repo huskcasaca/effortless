@@ -16,5 +16,9 @@ public interface ClientEntrance extends Entrance {
         return getClientManager().getRunningClient();
     }
 
+    @Override
+    default ServerManager getServerManager() {
+        throw new UnsupportedOperationException();
+    }
 }
 

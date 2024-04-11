@@ -15,5 +15,11 @@ public interface Entrance {
 
     NetworkChannel<?> getChannel();
 
+    ServerManager getServerManager();
+
+    default Server getServer() {
+        return getServerManager().getRunningServer();
+    }
+
 }
 
