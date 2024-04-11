@@ -54,6 +54,19 @@ public record GeneralConfig(
             BLACKLISTED_ITEMS_DEFAULT
     );
 
+    public static final GeneralConfig EMPTY = new GeneralConfig(
+            false,
+            false,
+            false,
+            false,
+            0,
+            0,
+            0,
+            0,
+            List.of(),
+            List.of()
+    );
+
     public static final GeneralConfig NULL = new GeneralConfig(
             null,
             null,

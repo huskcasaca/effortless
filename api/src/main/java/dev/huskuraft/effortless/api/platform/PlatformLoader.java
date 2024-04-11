@@ -85,12 +85,15 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
 
     public record Loader<S>(Class<S> clazz, String className, ClassLoader loader) {
 
-        public LoaderType getClassTypeByName() {
+        public LoaderType getLoaderTypeByName() {
             if (className.contains("vanilla")) {
                 return LoaderType.VANILLA;
             }
             if (className.contains("fabric")) {
                 return LoaderType.FABRIC;
+            }
+            if (className.contains("quilt")) {
+                return LoaderType.QUILT;
             }
             if (className.contains("forge")) {
                 return LoaderType.FORGE;
@@ -107,11 +110,11 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
         }
 
         public boolean isPresent() {
-            if (getClassTypeByName() == LoaderType.VANILLA) {
-                return true;
-            } else {
-                return getClassTypeByName() == getLoaderTypeByThread();
-            }
+            return switch (getLoaderTypeByName()) {
+                case FABRIC, QUILT -> getLoaderTypeByThread() == LoaderType.FABRIC || getLoaderTypeByThread() == LoaderType.QUILT;
+                case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
+                case VANILLA -> true;
+            };
         }
 
         public S get() {
@@ -131,11 +134,13 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
             if (loader.getClass().getPackageName().equals("net.fabricmc.loader.impl.launch.knot")) {
                 return LoaderType.FABRIC;
             }
-            var p = loader.getClass().getPackageName();
+            if (loader.getClass().getPackageName().startsWith("org.quiltmc.")) {
+                return LoaderType.QUILT;
+            }
             if (loader.getClass().getPackageName().equals("cpw.mods.modlauncher")) {
                 return LoaderType.FORGE;
             }
-            throw new IllegalStateException("Unknown loader: " + p);
+            throw new IllegalStateException("Unknown loader: " + loader.getClass().getPackageName());
         }
 
     }

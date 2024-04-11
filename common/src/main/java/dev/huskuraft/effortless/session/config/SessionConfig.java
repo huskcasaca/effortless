@@ -17,6 +17,8 @@ public record SessionConfig(
         return new SessionConfig(GeneralConfig.DEFAULT, Map.of());
     }
 
+    public static final SessionConfig EMPTY = new SessionConfig(GeneralConfig.EMPTY, Map.of());
+
     private  <T> T getPlayerOrGlobalEntry(UUID id, Function<GeneralConfig, T> entry) {
         return entry.apply(playerConfigs.get(id) == null || entry.apply(playerConfigs.get(id)) == null ? globalConfig : playerConfigs.get(id));
     }
