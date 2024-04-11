@@ -26,7 +26,7 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
             getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                 if (packet.isOperator()) {
                     getEntrance().getClient().execute(() -> {
-                        new EffortlessGlobalGeneralSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig(), config -> {
+                        new EffortlessGlobalGeneralSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig(), config -> {
                             getEntrance().getSessionManager().updateGlobalConfig(config);
                         }).attach();
                     });
@@ -41,7 +41,7 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
             getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                 if (packet.isOperator()) {
                     getEntrance().getClient().execute(() -> {
-                        new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfig().playerConfigs(), playerConfigs -> {
+                        new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().playerConfigs(), playerConfigs -> {
                             getEntrance().getSessionManager().updatePlayerConfig(playerConfigs);
                         }).attach();
                     });

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
-import dev.huskuraft.effortless.fabric.events.ClientRenderEvents;
+import dev.huskuraft.effortless.fabric.events.common.ClientRenderEvents;
 import net.minecraft.client.gui.Gui;
 
 @Mixin(Gui.class)

@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.annotation.Nullable;
+
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.platform.Client;
@@ -84,7 +86,7 @@ public final class EffortlessClientSessionManager implements SessionManager {
         if (serverSession.get() == null && clientSession.get() == null) {
             return SessionStatus.BOTH_NOT_LOADED;
         }
-        if (serverSession.get() == null) {
+        if (serverSession.get() == null || serverSessionConfig.get() == null) {
             return SessionStatus.SERVER_NOT_LOADED;
         }
         if (clientSession.get() == null) {
@@ -122,8 +124,13 @@ public final class EffortlessClientSessionManager implements SessionManager {
         return serverSession.get();
     }
 
+    @Nullable
     public SessionConfig getServerSessionConfig() {
         return serverSessionConfig.get();
+    }
+
+    public SessionConfig getServerSessionConfigOrEmpty() {
+        return serverSessionConfig.get() != null ? serverSessionConfig.get() : SessionConfig.EMPTY;
     }
 
     public void notifyPlayer() {

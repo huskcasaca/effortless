@@ -31,7 +31,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         this.playerInfo = playerInfo;
         this.originalConfig = config;
         this.config = config;
-        this.globalConfig = getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig();
+        this.globalConfig = getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig();
         this.consumer = consumer;
     }
 
@@ -155,7 +155,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
     @Override
     public void onReload() {
         this.saveButton.setActive(!config.equals(originalConfig));
-        this.globalConfig = getEntrance().getSessionManager().getServerSessionConfig().getGlobalConfig();
+        this.globalConfig = getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig();
     }
 
     @Override

@@ -72,7 +72,7 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
     }
 
     public Loader<S> findFirst() {
-        return stream().filter(Loader::isPresent).findFirst().orElseThrow();
+        return stream().filter(Loader::isPresent).findFirst().orElseGet(() -> stream().filter(Loader::isCompatible).findFirst().orElseThrow());
     }
 
     public S get() {
@@ -85,14 +85,17 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
 
     public record Loader<S>(Class<S> clazz, String className, ClassLoader loader) {
 
-        public LoaderType getClassTypeByName() {
-            if (className.contains("vanilla")) {
+        public LoaderType getLoaderTypeByName() {
+            if (className.contains(".vanilla.")) {
                 return LoaderType.VANILLA;
             }
-            if (className.contains("fabric")) {
+            if (className.contains(".fabric.")) {
                 return LoaderType.FABRIC;
             }
-            if (className.contains("forge")) {
+            if (className.contains(".quilt.")) {
+                return LoaderType.QUILT;
+            }
+            if (className.contains(".forge.")) {
                 return LoaderType.FORGE;
             }
             return LoaderType.VANILLA;
@@ -106,16 +109,26 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
             return clazz.cast(childClass.getDeclaredConstructor().newInstance());
         }
 
+        public boolean isCompatible() {
+            return switch (getLoaderTypeByName()) {
+                case FABRIC -> getLoaderTypeByThread() == LoaderType.FABRIC;
+                case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT || getLoaderTypeByThread() == LoaderType.FABRIC;
+                case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
+                case VANILLA -> true;
+            };
+        }
+
         public boolean isPresent() {
-            if (getClassTypeByName() == LoaderType.VANILLA) {
-                return true;
-            } else {
-                return getClassTypeByName() == getLoaderTypeByThread();
-            }
+            return switch (getLoaderTypeByName()) {
+                case FABRIC -> getLoaderTypeByThread() == LoaderType.FABRIC;
+                case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT;
+                case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
+                case VANILLA -> true;
+            };
         }
 
         public S get() {
-            if (!isPresent()) {
+            if (!isPresent() && !isCompatible()) {
                 throw new ServiceConfigurationError("Service " + clazz.getName() + " is not available in loader " + getLoaderTypeByThread());
             }
             try {
@@ -131,11 +144,13 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
             if (loader.getClass().getPackageName().equals("net.fabricmc.loader.impl.launch.knot")) {
                 return LoaderType.FABRIC;
             }
-            var p = loader.getClass().getPackageName();
+            if (loader.getClass().getPackageName().startsWith("org.quiltmc.")) {
+                return LoaderType.QUILT;
+            }
             if (loader.getClass().getPackageName().equals("cpw.mods.modlauncher")) {
                 return LoaderType.FORGE;
             }
-            throw new IllegalStateException("Unknown loader: " + p);
+            throw new IllegalStateException("Unknown loader: " + loader.getClass().getPackageName());
         }
 
     }

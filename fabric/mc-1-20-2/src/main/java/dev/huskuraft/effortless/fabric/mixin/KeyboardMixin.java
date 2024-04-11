@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import dev.huskuraft.effortless.fabric.events.KeyboardInputEvents;
+import dev.huskuraft.effortless.fabric.events.common.KeyboardInputEvents;
 import net.minecraft.client.KeyboardHandler;
 import net.minecraft.client.Minecraft;
 

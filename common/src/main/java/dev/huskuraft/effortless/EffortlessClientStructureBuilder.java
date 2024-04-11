@@ -50,6 +50,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
+import dev.huskuraft.effortless.session.config.GeneralConfig;
 import dev.huskuraft.effortless.session.config.SessionConfig;
 
 public final class EffortlessClientStructureBuilder extends StructureBuilder {
@@ -58,8 +59,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
-
-    private int tick = 0;
 
     public EffortlessClientStructureBuilder(EffortlessClient entrance) {
         this.entrance = entrance;
@@ -194,8 +193,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public Context getDefaultContext(Player player) {
-        var config = getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player);
-        return Context.defaultSet().withGeneralConfig(config);
+        var serverSessionConfig = getEntrance().getSessionManager().getServerSessionConfig();
+        if (serverSessionConfig == null) {
+            return Context.defaultSet().withGeneralConfig(GeneralConfig.EMPTY);
+        }
+        return Context.defaultSet().withGeneralConfig(serverSessionConfig.getPlayerConfig(player));
     }
 
     @Override
@@ -246,15 +248,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public boolean hasPermission(Player player) {
-        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowUseMod();
-    }
-
-    public boolean hasBreakPermission(Player player) {
-        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowBreakBlocks();
-    }
-
-    public boolean hasPlacePermission(Player player) {
-        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowPlaceBlocks();
+        var serverSessionConfig = getEntrance().getSessionManager().getServerSessionConfig();
+        if (serverSessionConfig == null) {
+            return false;
+        }
+        return serverSessionConfig.getPlayerConfig(player).allowUseMod();
     }
 
     @Override
@@ -343,8 +341,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (phase == ClientTick.Phase.END) {
             return;
         }
-        tick++;
-
         if (getEntrance().getClient() == null || getEntrance().getClient().getPlayer() == null) {
             resetAll();
             return;
