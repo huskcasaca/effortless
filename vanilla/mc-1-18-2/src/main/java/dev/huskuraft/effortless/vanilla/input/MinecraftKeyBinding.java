@@ -1,10 +1,7 @@
 package dev.huskuraft.effortless.vanilla.input;
 
-import com.mojang.blaze3d.platform.InputConstants;
-
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 
 public class MinecraftKeyBinding implements KeyBinding {
 
@@ -42,16 +39,6 @@ public class MinecraftKeyBinding implements KeyBinding {
     @Override
     public boolean isDown() {
         return reference.isDown();
-    }
-
-    @Override
-    public boolean isKeyDown() {
-        return InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), reference.key.getValue());
-    }
-
-    @Override
-    public String getBoundKey() {
-        return reference.getTranslatedKeyMessage().getString().toUpperCase();
     }
 
     @Override

@@ -186,8 +186,10 @@ public final class EffortlessClientManager implements ClientManager {
             getEntrance().getStructureBuilder().setBuildFeature(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());
         }
 
-        if (Platform.getInstance().isDevelopment() && Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown() && Keys.KEY_ENTER.getBinding().isKeyDown()) {
-            new EffortlessTestScreen(getEntrance()).attach();
+        if (Platform.getInstance().isDevelopment()) {
+            if (Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown() && Keys.KEY_ENTER.getBinding().isKeyDown()) {
+                new EffortlessTestScreen(getEntrance()).attach();
+            }
         }
     }
 

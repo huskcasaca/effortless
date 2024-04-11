@@ -21,8 +21,4 @@ public interface ClientContentFactory extends ContentFactory {
 
     KeyBinding newKeyBinding(String name, String category, int code);
 
-    default KeyBinding newKeyBinding(int code) {
-        return newKeyBinding("", "", code);
-    }
-
 }

@@ -9,11 +9,47 @@ public enum Keys implements Key {
     private final KeyBinding keyBinding;
 
     Keys(KeyCodes key) {
-        this.keyBinding = KeyBinding.of(key.value());
+        this.keyBinding = new KeyBinding() {
+            @Override
+            public String getName() {
+                return null;
+            }
+
+            @Override
+            public String getCategory() {
+                return null;
+            }
+
+            @Override
+            public int getDefaultKey() {
+                return key.value();
+            }
+
+            @Override
+            public boolean consumeClick() {
+                return false;
+            }
+
+            @Override
+            public boolean isDown() {
+                return isKeyDown();
+            }
+
+            @Override
+            public int getBoundCode() {
+                return key.value();
+            }
+
+            @Override
+            public Object referenceValue() {
+                return this;
+            }
+        };
     }
 
     @Override
     public KeyBinding getBinding() {
         return keyBinding;
     }
+
 }
