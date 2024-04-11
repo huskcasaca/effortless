@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import com.mojang.blaze3d.shaders.Program;
 import com.mojang.datafixers.util.Pair;
 
-import dev.huskuraft.effortless.fabric.events.ClientShadersEvents;
+import dev.huskuraft.effortless.fabric.events.common.ClientShadersEvents;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;

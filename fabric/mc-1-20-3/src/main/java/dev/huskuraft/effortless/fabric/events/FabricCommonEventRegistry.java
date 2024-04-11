@@ -3,6 +3,8 @@ package dev.huskuraft.effortless.fabric.events;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.events.CommonEventRegistry;
+import dev.huskuraft.effortless.fabric.events.common.PlatformLifecycleEvents;
+import dev.huskuraft.effortless.fabric.events.common.ServerPlayerEvents;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
