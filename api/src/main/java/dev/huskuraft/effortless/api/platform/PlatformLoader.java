@@ -72,7 +72,7 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
     }
 
     public Loader<S> findFirst() {
-        return stream().filter(Loader::isPresent).findFirst().orElseThrow();
+        return stream().filter(Loader::isPresent).findFirst().orElseGet(() -> stream().filter(Loader::isCompatible).findFirst().orElseThrow());
     }
 
     public S get() {
@@ -86,16 +86,16 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
     public record Loader<S>(Class<S> clazz, String className, ClassLoader loader) {
 
         public LoaderType getLoaderTypeByName() {
-            if (className.contains("vanilla")) {
+            if (className.contains(".vanilla.")) {
                 return LoaderType.VANILLA;
             }
-            if (className.contains("fabric")) {
+            if (className.contains(".fabric.")) {
                 return LoaderType.FABRIC;
             }
-            if (className.contains("quilt")) {
+            if (className.contains(".quilt.")) {
                 return LoaderType.QUILT;
             }
-            if (className.contains("forge")) {
+            if (className.contains(".forge.")) {
                 return LoaderType.FORGE;
             }
             return LoaderType.VANILLA;
@@ -109,16 +109,26 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
             return clazz.cast(childClass.getDeclaredConstructor().newInstance());
         }
 
+        public boolean isCompatible() {
+            return switch (getLoaderTypeByName()) {
+                case FABRIC -> getLoaderTypeByThread() == LoaderType.FABRIC;
+                case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT || getLoaderTypeByThread() == LoaderType.FABRIC;
+                case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
+                case VANILLA -> true;
+            };
+        }
+
         public boolean isPresent() {
             return switch (getLoaderTypeByName()) {
-                case FABRIC, QUILT -> getLoaderTypeByThread() == LoaderType.FABRIC || getLoaderTypeByThread() == LoaderType.QUILT;
+                case FABRIC -> getLoaderTypeByThread() == LoaderType.FABRIC;
+                case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT;
                 case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
                 case VANILLA -> true;
             };
         }
 
         public S get() {
-            if (!isPresent()) {
+            if (!isPresent() && !isCompatible()) {
                 throw new ServiceConfigurationError("Service " + clazz.getName() + " is not available in loader " + getLoaderTypeByThread());
             }
             try {
