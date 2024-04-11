@@ -79,9 +79,9 @@ public class Sphere extends TripleClickBuilder {
         var z3 = context.thirdBlockPosition().z();
 
         if (isCenter) {
-            x1 = (x2 - x1) / 2 + x1;
-            y1 = (y2 - y1) / 2 + y1;
-            z1 = (z2 - z1) / 2 + z1;
+            x1 = (x1 - x2) * 2 + x1;
+            y1 = (y1 - y2) * 2 + y1;
+            z1 = (z1 - z2) * 2 + z1;
         }
 
         var minX = isHorizontal ? Math.min(x1, x2) : Math.min(x1, Math.min(x2, x3));
