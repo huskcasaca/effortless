@@ -83,9 +83,9 @@ public class Circle extends DoubleClickBuilder {
         var z2 = context.secondBlockPosition().z();
 
         if (isCenter) {
-            x1 = (x2 - x1) / 2 + x1;
-            y1 = (y2 - y1) / 2 + y1;
-            z1 = (z2 - z1) / 2 + z1;
+            x1 = (x1 - x2) * 2 + x1;
+            y1 = (y1 - y2) * 2 + y1;
+            z1 = (z1 - z2) * 2 + z1;
         }
 
         var centerX = x1 + (x2 - x1) / 2f;
