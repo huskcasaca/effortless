@@ -481,7 +481,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 case PASS -> {
                 }
                 case FAILED -> {
-                    message = Text.text("Cannot Reach Target Block or Entity").withStyle(TextStyle.WHITE) + "";
+                    message = Text.translate("effortless.message.building.cannot_reach_target").withStyle(TextStyle.WHITE).getString();
                 }
             }
         } else {
