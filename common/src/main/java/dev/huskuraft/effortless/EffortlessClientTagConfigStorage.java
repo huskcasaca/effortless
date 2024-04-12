@@ -23,7 +23,7 @@ public final class EffortlessClientTagConfigStorage extends TagElementFileStorag
         return new RootSettings(
                 new RenderSettings(),
                 new PatternSettings(
-                        Pattern.getDefaultPatterns()),
+                        Pattern.getPatternPresets()),
                 new TransformerPresets(
                         List.of(),
                         List.of(),

@@ -23,6 +23,9 @@ public class RadialTransformer extends Transformer {
 
     public static final RadialTransformer ZERO = new RadialTransformer(Vector3d.ZERO, 0);
 
+    public static final RadialTransformer DEFAULT = new RadialTransformer(Vector3d.ZERO, 4);
+
+
     public static final Range1i SLICE_RANGE = new Range1i(0, 720);
 
     //    private final boolean enabled;

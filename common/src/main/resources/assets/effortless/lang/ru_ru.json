@@ -294,6 +294,16 @@
   "effortless.pattern.edit.save": "Сохранить",
   "effortless.pattern.edit.cancel": "Отмена",
 
+  "effortless.pattern.array_preset": "Шаблон массива",
+  "effortless.pattern.mirror_x_preset": "Шаблон зеркального отражения по X",
+  "effortless.pattern.mirror_y_preset": "Шаблон зеркального отражения по Y",
+  "effortless.pattern.mirror_z_preset": "Шаблон зеркального отражения по Z",
+  "effortless.pattern.radial_preset": "Радиальный шаблон",
+  "effortless.pattern.item_single_random_preset": "Шаблон случайного одиночного элемента",
+  "effortless.pattern.item_single_sequence_preset": "Шаблон последовательного одиночного элемента",
+  "effortless.pattern.item_group_random_preset": "Шаблон случайной группы элементов",
+  "effortless.pattern.item_group_sequence_preset": "Шаблон последовательной группы элементов",
+
   "effortless.transformer.template_select.title": "Выбрать шаблон трансформера",
   "effortless.transformer.template_select.search": "Поиск",
   "effortless.transformer.template_select.search_hint": "Поиск трансформера",

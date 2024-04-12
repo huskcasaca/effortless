@@ -294,6 +294,16 @@
   "effortless.pattern.edit.save": "保存",
   "effortless.pattern.edit.cancel": "取消",
 
+  "effortless.pattern.array_preset": "陣列預設圖案",
+  "effortless.pattern.mirror_x_preset": "X軸鏡像預設圖案",
+  "effortless.pattern.mirror_y_preset": "Y軸鏡像預設圖案",
+  "effortless.pattern.mirror_z_preset": "Z軸鏡像預設圖案",
+  "effortless.pattern.radial_preset": "徑向預設圖案",
+  "effortless.pattern.item_single_random_preset": "單個隨機物品預設圖案",
+  "effortless.pattern.item_single_sequence_preset": "單個序列物品預設圖案",
+  "effortless.pattern.item_group_random_preset": "組隨機物品預設圖案",
+  "effortless.pattern.item_group_sequence_preset": "組序列物品預設圖案",
+
   "effortless.transformer.template_select.title": "選擇變換模板",
   "effortless.transformer.template_select.search": "搜索",
   "effortless.transformer.template_select.search_hint": "搜索變換",

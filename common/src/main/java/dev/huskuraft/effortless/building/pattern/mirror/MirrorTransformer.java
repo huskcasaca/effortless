@@ -23,6 +23,12 @@ public class MirrorTransformer extends Transformer {
     public static final MirrorTransformer ZERO_Y = new MirrorTransformer(Vector3d.ZERO, Axis.Y);
     public static final MirrorTransformer ZERO_Z = new MirrorTransformer(Vector3d.ZERO, Axis.Z);
 
+    public static final MirrorTransformer DEFAULT_X = new MirrorTransformer(new Vector3d(0, 0, 0), Axis.X);
+    public static final MirrorTransformer DEFAULT_Y = new MirrorTransformer(new Vector3d(0, 0, 0), Axis.Y);
+    public static final MirrorTransformer DEFAULT_Z = new MirrorTransformer(new Vector3d(0, 0, 0), Axis.Z);
+
+
+
     //    private final boolean enabled;
 
     private final Vector3d position;

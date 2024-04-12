@@ -36,11 +36,9 @@ public abstract class Transformer {
 
     public static List<Transformer> getDefaultTransformers() {
         return Stream.of(
-                List.of(ArrayTransformer.ZERO),
-                List.of(MirrorTransformer.ZERO_X),
-                List.of(MirrorTransformer.ZERO_Y),
-                List.of(MirrorTransformer.ZERO_Z),
-                List.of(RadialTransformer.ZERO),
+                List.of(ArrayTransformer.DEFAULT),
+                List.of(MirrorTransformer.DEFAULT_X, MirrorTransformer.DEFAULT_Y, MirrorTransformer.DEFAULT_Z),
+                List.of(RadialTransformer.DEFAULT),
                 ItemRandomizer.getDefaultItemRandomizers()
         ).flatMap(List::stream).collect(Collectors.toList());
     }

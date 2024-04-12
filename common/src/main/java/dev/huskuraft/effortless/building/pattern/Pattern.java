@@ -8,6 +8,10 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
+import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
+import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
+import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
+import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public final class Pattern {
 
@@ -31,9 +35,41 @@ public final class Pattern {
         this(UUID.randomUUID(), name, transformers);
     }
 
-    public static List<Pattern> getDefaultPatterns() {
+    public static Pattern getDefaultPattern() {
+        return new Pattern(Text.translate("effortless.pattern.default"), List.of());
+    }
+
+    public static List<Pattern> getPatternPresets() {
         return List.of(
-                Pattern.DEFAULT
+                new Pattern(Text.translate("effortless.pattern.array_preset"), List.of(
+                        ArrayTransformer.DEFAULT
+                )),
+                new Pattern(Text.translate("effortless.pattern.mirror_x_preset"), List.of(
+                        MirrorTransformer.DEFAULT_X
+                )),
+                new Pattern(Text.translate("effortless.pattern.mirror_y_preset"), List.of(
+                        MirrorTransformer.DEFAULT_Y
+                )),
+                new Pattern(Text.translate("effortless.pattern.mirror_z_preset"), List.of(
+                        MirrorTransformer.DEFAULT_Z
+                )),
+                new Pattern(Text.translate("effortless.pattern.radial_preset"), List.of(
+                        RadialTransformer.DEFAULT
+                )),
+                new Pattern(Text.translate("effortless.pattern.item_single_random_preset"), List.of(
+                        ItemRandomizer.getDefaultItemRandomizers().get(1).withRandomOrder().withSingleTarget()
+                )),
+                new Pattern(Text.translate("effortless.pattern.item_single_sequence_preset"), List.of(
+                        ItemRandomizer.getDefaultItemRandomizers().get(1).withSequenceOrder().withSingleTarget()
+                )),
+                new Pattern(Text.translate("effortless.pattern.item_group_random_preset"), List.of(
+                        ArrayTransformer.DEFAULT,
+                        ItemRandomizer.getDefaultItemRandomizers().get(1).withRandomOrder().withGroupTarget()
+                )),
+                new Pattern(Text.translate("effortless.pattern.item_group_sequence_preset"), List.of(
+                        ArrayTransformer.DEFAULT,
+                        ItemRandomizer.getDefaultItemRandomizers().get(1).withSequenceOrder().withGroupTarget()
+                ))
         );
     }
 
