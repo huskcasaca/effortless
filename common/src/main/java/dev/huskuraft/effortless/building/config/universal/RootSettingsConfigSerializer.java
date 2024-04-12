@@ -78,7 +78,7 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettin
         return new RootSettings(
                 new RenderSettings(),
                 new PatternSettings(
-                        Pattern.getDefaultPatterns()),
+                        Pattern.getPatternPresets()),
                 new TransformerPresets(
                         Transformer.getDefaultTransformers())
         );

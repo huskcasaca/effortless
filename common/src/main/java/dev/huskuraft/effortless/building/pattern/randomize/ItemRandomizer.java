@@ -37,6 +37,22 @@ public class ItemRandomizer extends Randomizer<Item> {
         this.chances = chances;
     }
 
+    public ItemRandomizer withSequenceOrder() {
+        return new ItemRandomizer(id, name, Order.SEQUENCE, target, category, chances);
+    }
+
+    public ItemRandomizer withRandomOrder() {
+        return new ItemRandomizer(id, name, Order.RANDOM, target, category, chances);
+    }
+
+    public ItemRandomizer withSingleTarget() {
+        return new ItemRandomizer(id, name, order, Target.SINGLE, category, chances);
+    }
+
+    public ItemRandomizer withGroupTarget() {
+        return new ItemRandomizer(id, name, order, Target.GROUP, category, chances);
+    }
+
     public static ItemRandomizer create(Text name, Order order, Target target, Category category, Collection<Chance<Item>> chances) {
         for (var chance : chances) {
             if (category != Randomizer.extract(chance.content())) {

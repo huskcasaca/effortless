@@ -95,13 +95,13 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
                         entries.insertSelected(pattern);
                         onReload();
                     },
-                    Pattern.DEFAULT,
+                    Pattern.getDefaultPattern(),
                     entries.indexOfSelected() == -1 ? entries.children().size() : entries.indexOfSelected() + 1
             ).attach();
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.reset"), button -> {
-            entries.reset(Pattern.getDefaultPatterns());
+            entries.reset(Pattern.getPatternPresets());
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.5f).build());
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.settings.cancel"), button -> {

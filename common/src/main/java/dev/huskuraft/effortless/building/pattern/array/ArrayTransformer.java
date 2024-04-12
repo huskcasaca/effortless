@@ -19,6 +19,8 @@ import dev.huskuraft.effortless.building.pattern.Transformers;
 public class ArrayTransformer extends Transformer {
 
     public static final ArrayTransformer ZERO = new ArrayTransformer(new Vector3d(0, 0, 0), 0);
+    public static final ArrayTransformer DEFAULT = new ArrayTransformer(new Vector3d(1, 1, 1), 4);
+
 
     public static final BoundingBox3d OFFSET_BOUND = new BoundingBox3d(
             Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE,

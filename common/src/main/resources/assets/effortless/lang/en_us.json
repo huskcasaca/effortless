@@ -294,6 +294,16 @@
   "effortless.pattern.edit.save": "Save",
   "effortless.pattern.edit.cancel": "Cancel",
 
+  "effortless.pattern.array_preset": "Array Preset Pattern",
+  "effortless.pattern.mirror_x_preset": "Mirror X Preset Pattern",
+  "effortless.pattern.mirror_y_preset": "Mirror Y Preset Pattern",
+  "effortless.pattern.mirror_z_preset": "Mirror Z Preset Pattern",
+  "effortless.pattern.radial_preset": "Radial Preset Pattern",
+  "effortless.pattern.item_single_random_preset": "Item Single Random Preset Pattern",
+  "effortless.pattern.item_single_sequence_preset": "Item Single Sequence Preset Pattern",
+  "effortless.pattern.item_group_random_preset": "Item Group Random Preset Pattern",
+  "effortless.pattern.item_group_sequence_preset": "Item Group Sequence Preset Pattern",
+
   "effortless.transformer.template_select.title": "Select Transformer Template",
   "effortless.transformer.template_select.search": "Search",
   "effortless.transformer.template_select.search_hint": "Search Transformer",

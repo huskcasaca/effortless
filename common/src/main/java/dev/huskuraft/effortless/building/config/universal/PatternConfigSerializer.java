@@ -53,7 +53,7 @@ public class PatternConfigSerializer implements ConfigSerializer<Pattern> {
 
     @Override
     public Pattern getDefault() {
-        return Pattern.DEFAULT;
+        return Pattern.getDefaultPattern();
     }
 
     public static String randomIdString() {
