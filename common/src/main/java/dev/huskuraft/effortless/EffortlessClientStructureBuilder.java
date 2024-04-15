@@ -127,22 +127,22 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             var nextContext = context.withState(state).withNextInteraction(interaction);
 
-            if (!nextContext.isVolumeInBounds()) {
+            if (!nextContext.isBoxVolumeInBounds()) {
                 if (nextContext.state() == BuildState.PLACE_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large") + " (" + nextContext.getVolume() + "/" + nextContext.getMaxVolume() + ")", true);
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large") + " (" + nextContext.getBoxVolume() + "/" + nextContext.getMaxBoxVolume() + ")", true);
                 }
                 if (nextContext.state() == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large") + " (" + nextContext.getVolume() + "/" + nextContext.getMaxVolume() + ")", true);
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large") + " (" + nextContext.getBoxVolume() + "/" + nextContext.getMaxBoxVolume() + ")", true);
                 }
                 return context.newInteraction();
             }
 
-            if (!nextContext.isSideLengthInBounds()) {
+            if (!nextContext.isBoxSideLengthInBounds()) {
                 if (nextContext.state() == BuildState.PLACE_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_side_length_too_large") + " (" + nextContext.getSideLength() + "/" + nextContext.getMaxSideLength() + ")", true);
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_side_length_too_large") + " (" + nextContext.getBoxSideLength() + "/" + nextContext.getMaxBoxSideLength() + ")", true);
                 }
                 if (nextContext.state() == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_side_length_too_large") + " (" + nextContext.getSideLength() + "/" + nextContext.getMaxSideLength() + ")", true);
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_side_length_too_large") + " (" + nextContext.getBoxSideLength() + "/" + nextContext.getMaxBoxSideLength() + ")", true);
                 }
                 return context.newInteraction();
             }
@@ -488,13 +488,13 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             message = getStateComponent(context.state()) + " "
                     + context.buildMode().getDisplayName().withStyle(TextStyle.GOLD) + " "
                     + "("
-                    + (context.getBoxSize().x() > context.limitationParams().generalConfig().maxDistancePerAxis() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().x() + TextStyle.RESET
+                    + (context.getInteractionBox().x() > context.getMaxBoxSideLength() ? TextStyle.RED : TextStyle.WHITE) + context.getInteractionBox().x() + TextStyle.RESET
                     + "x"
-                    + (context.getBoxSize().y() > context.limitationParams().generalConfig().maxDistancePerAxis() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().y() + TextStyle.RESET
+                    + (context.getInteractionBox().y() > context.getMaxBoxSideLength() ? TextStyle.RED : TextStyle.WHITE) + context.getInteractionBox().y() + TextStyle.RESET
                     + "x"
-                    + (context.getBoxSize().z() > context.limitationParams().generalConfig().maxDistancePerAxis() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().z() + TextStyle.RESET
+                    + (context.getInteractionBox().z() > context.getMaxBoxSideLength() ? TextStyle.RED : TextStyle.WHITE) + context.getInteractionBox().z() + TextStyle.RESET
                     + "="
-                    + (context.getBoxSize().volume() > context.limitationParams().generalConfig().maxBreakBoxVolume() ? TextStyle.RED : TextStyle.WHITE) + context.getBoxSize().volume() + TextStyle.RESET
+                    + (context.getInteractionBox().volume() > context.getMaxBoxVolume() ? TextStyle.RED : TextStyle.WHITE) + context.getInteractionBox().volume() + TextStyle.RESET
                     + ")";
         }
 

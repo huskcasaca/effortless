@@ -42,12 +42,12 @@ public record SessionConfig(
                 getPlayerOrGlobalEntry(id, GeneralConfig::allowBreakBlocks),
                 getPlayerOrGlobalEntry(id, GeneralConfig::allowPlaceBlocks),
                 getPlayerOrGlobalEntry(id, GeneralConfig::maxReachDistance),
-                getPlayerOrGlobalEntry(id, GeneralConfig::maxDistancePerAxis),
-                getPlayerOrGlobalEntry(id, GeneralConfig::maxBreakBoxVolume),
-                getPlayerOrGlobalEntry(id, GeneralConfig::maxPlaceBoxVolume),
+                getPlayerOrGlobalEntry(id, GeneralConfig::maxBoxVolumePerBreak),
+                getPlayerOrGlobalEntry(id, GeneralConfig::maxBoxVolumePerPlace),
+                getPlayerOrGlobalEntry(id, GeneralConfig::maxBoxSideLengthPerBreak),
+                getPlayerOrGlobalEntry(id, GeneralConfig::maxBoxSideLengthPerPlace),
                 getPlayerOrGlobalEntry(id, GeneralConfig::whitelistedItems),
-                getPlayerOrGlobalEntry(id, GeneralConfig::blacklistedItems)
-        );
+                getPlayerOrGlobalEntry(id, GeneralConfig::blacklistedItems));
     }
 
     public GeneralConfig getPlayerConfigOrNull(Player player) {
@@ -61,12 +61,12 @@ public record SessionConfig(
                 getPlayerOrNullEntry(id, GeneralConfig::allowBreakBlocks),
                 getPlayerOrNullEntry(id, GeneralConfig::allowPlaceBlocks),
                 getPlayerOrNullEntry(id, GeneralConfig::maxReachDistance),
-                getPlayerOrNullEntry(id, GeneralConfig::maxDistancePerAxis),
-                getPlayerOrNullEntry(id, GeneralConfig::maxBreakBoxVolume),
-                getPlayerOrNullEntry(id, GeneralConfig::maxPlaceBoxVolume),
+                getPlayerOrNullEntry(id, GeneralConfig::maxBoxVolumePerBreak),
+                getPlayerOrNullEntry(id, GeneralConfig::maxBoxVolumePerPlace),
+                getPlayerOrNullEntry(id, GeneralConfig::maxBoxSideLengthPerBreak),
+                getPlayerOrNullEntry(id, GeneralConfig::maxBoxSideLengthPerPlace),
                 getPlayerOrNullEntry(id, GeneralConfig::whitelistedItems),
-                getPlayerOrNullEntry(id, GeneralConfig::blacklistedItems)
-        );
+                getPlayerOrNullEntry(id, GeneralConfig::blacklistedItems));
     }
 
     public SessionConfig withPlayerConfig(UUID id, GeneralConfig config) {

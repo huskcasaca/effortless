@@ -17,9 +17,9 @@ public class GeneralConfigSerializer implements BufferSerializer<GeneralConfig> 
                 buffer.readNullable(Buffer::readVarInt),
                 buffer.readNullable(Buffer::readVarInt),
                 buffer.readNullable(Buffer::readVarInt),
+                buffer.readNullable(Buffer::readVarInt),
                 buffer.readNullable(buffer1 -> buffer1.readList(Buffer::readResourceLocation)),
-                buffer.readNullable(buffer1 -> buffer1.readList(Buffer::readResourceLocation))
-        );
+                buffer.readNullable(buffer1 -> buffer1.readList(Buffer::readResourceLocation)));
     }
 
     @Override
@@ -29,9 +29,10 @@ public class GeneralConfigSerializer implements BufferSerializer<GeneralConfig> 
         buffer.writeNullable(generalConfig.allowBreakBlocks(), Buffer::writeBoolean);
         buffer.writeNullable(generalConfig.allowPlaceBlocks(), Buffer::writeBoolean);
         buffer.writeNullable(generalConfig.maxReachDistance(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.maxDistancePerAxis(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.maxBreakBoxVolume(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.maxPlaceBoxVolume(), Buffer::writeVarInt);
+        buffer.writeNullable(generalConfig.maxBoxVolumePerBreak(), Buffer::writeVarInt);
+        buffer.writeNullable(generalConfig.maxBoxVolumePerPlace(), Buffer::writeVarInt);
+        buffer.writeNullable(generalConfig.maxBoxSideLengthPerBreak(), Buffer::writeVarInt);
+        buffer.writeNullable(generalConfig.maxBoxSideLengthPerPlace(), Buffer::writeVarInt);
         buffer.writeNullable(generalConfig.whitelistedItems(), (buffer1, list) -> buffer1.writeList(list, Buffer::writeResourceLocation));
         buffer.writeNullable(generalConfig.blacklistedItems(), (buffer1, list) -> buffer1.writeList(list, Buffer::writeResourceLocation));
 

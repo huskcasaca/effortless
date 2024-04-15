@@ -430,39 +430,43 @@ public record Context(
         return withReachParams(new LimitationParams(config));
     }
 
-    public Vector3i getBoxSize() {
+    public Vector3i getInteractionBox() {
         if (interactions().isEmpty() || interactions().isMissing()) {
             return Vector3i.ZERO;
         }
         return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new)).getSize().toVector3i();
     }
 
-    public int getVolume() {
-        return getBoxSize().volume();
+    public int getBoxVolume() {
+        return getInteractionBox().volume();
     }
 
-    public int getMaxVolume() {
+    public int getMaxBoxVolume() {
         return switch (state()) {
             case IDLE -> 0;
-            case PLACE_BLOCK -> limitationParams().generalConfig().maxPlaceBoxVolume();
-            case BREAK_BLOCK -> limitationParams().generalConfig().maxBreakBoxVolume();
+            case PLACE_BLOCK -> limitationParams().generalConfig().maxBoxVolumePerPlace();
+            case BREAK_BLOCK -> limitationParams().generalConfig().maxBoxVolumePerBreak();
         };
     }
 
-    public int getSideLength() {
-        return getBoxSize().stream().max().orElse(0);
+    public int getBoxSideLength() {
+        return getInteractionBox().stream().max().orElse(0);
     }
 
-    public int getMaxSideLength() {
-        return limitationParams().generalConfig().maxDistancePerAxis();
+    public int getMaxBoxSideLength() {
+        return switch (state()) {
+            case IDLE -> 0;
+            case PLACE_BLOCK -> limitationParams().generalConfig().maxBoxSideLengthPerPlace();
+            case BREAK_BLOCK -> limitationParams().generalConfig().maxBoxSideLengthPerBreak();
+        };
     }
 
-    public boolean isVolumeInBounds() {
-        return getVolume() <= getMaxVolume();
+    public boolean isBoxVolumeInBounds() {
+        return getBoxVolume() <= getMaxBoxVolume();
     }
 
-    public boolean isSideLengthInBounds() {
-        return getSideLength() <= getMaxSideLength();
+    public boolean isBoxSideLengthInBounds() {
+        return getBoxSideLength() <= getMaxBoxSideLength();
     }
 
     public boolean hasPermission() {
