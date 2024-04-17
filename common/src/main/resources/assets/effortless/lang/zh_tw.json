@@ -318,8 +318,22 @@
   "effortless.build.summary.structure": "結構",
   "effortless.build.summary.state": "狀態",
   "effortless.build.summary.tracing": "追蹤",
-  "effortless.build.summary.placed_blocks": "放置的方塊",
-  "effortless.build.summary.destroyed_blocks": "破壞的方塊",
+
+  "effortless.build.summary.blocks_placed": "已放置",
+  "effortless.build.summary.blocks_destroyed": "已破壞",
+
+  "effortless.build.summary.blocks_not_placeable": "受限制",
+  "effortless.build.summary.blocks_not_breakable": "受限制",
+
+  "effortless.build.summary.blocks_place_insufficient": "数量不足",
+  "effortless.build.summary.blocks_break_insufficient": "数量不足",
+
+  "effortless.build.summary.blocks_place_not_whitelisted": "未列入白名單",
+  "effortless.build.summary.blocks_break_not_whitelisted": "未列入白名單",
+
+  "effortless.build.summary.blocks_place_blacklisted": "列入黑名單",
+  "effortless.build.summary.blocks_break_blacklisted": "列入黑名單",
+
   "effortless.position.move_to_player": "移動到玩家",
   "effortless.position": "位置 %s",
   "effortless.position.absolute": "絕對",

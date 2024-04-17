@@ -32,6 +32,15 @@ public class BlockBreakOperation extends BlockOperation {
         if (player.getGameType().isSpectator()) { // move
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_MODIFY;
         }
+        
+        // whitelist/blacklist
+        if (!context.limitationParams().generalConfig().whitelistedItems().isEmpty() && !context.limitationParams().generalConfig().whitelistedItems().contains(getItemStack().getItem().getId())) {
+            return BlockOperationResult.Type.FAIL_WHITELISTED;
+        }
+
+        if (!context.limitationParams().generalConfig().blacklistedItems().isEmpty() && context.limitationParams().generalConfig().blacklistedItems().contains(getItemStack().getItem().getId())) {
+            return BlockOperationResult.Type.FAIL_BLACKLISTED;
+        }
 
         // action permission
         if (!player.canInteractBlock(getInteraction().getBlockPosition())) {
@@ -55,6 +64,7 @@ public class BlockBreakOperation extends BlockOperation {
         if (world.getBlockState(getInteraction().getBlockPosition()).isAir()) {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
+
         if (context.isPreview() && world.isClient()) {
             return BlockOperationResult.Type.CONSUME;
         }
@@ -63,6 +73,7 @@ public class BlockBreakOperation extends BlockOperation {
 //            CommandManager.dispatch(new SetBlockCommand(Items.AIR.item().getDefaultStack().getBlockState(getPlayer(), getInteraction()), getInteraction().getBlockPosition(), SetBlockCommand.Mode.REPLACE));
 //            return BlockOperationResult.Type.SUCCESS;
 //        }
+
 
         if (player.tryBreakBlock(getInteraction())) {
             return BlockOperationResult.Type.SUCCESS;
@@ -74,7 +85,7 @@ public class BlockBreakOperation extends BlockOperation {
     @Override
     public BlockBreakOperationResult commit() {
         var inputs = Collections.<ItemStack>emptyList();
-        var outputs = Collections.singletonList(world.getBlockState(interaction.getBlockPosition()).getItem().getDefaultStack());
+        var outputs = Collections.singletonList(getItemStack());
         var result = breakBlock();
 
         if (getWorld().isClient() && getContext().isPreviewOnce()) {
@@ -110,4 +121,7 @@ public class BlockBreakOperation extends BlockOperation {
         return this;
     }
 
+    private ItemStack getItemStack() {
+        return world.getBlockState(interaction.getBlockPosition()).getItem().getDefaultStack();
+    }
 }

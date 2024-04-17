@@ -2,8 +2,8 @@ package dev.huskuraft.effortless;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -39,7 +39,8 @@ import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.TracingResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.BlockPositionLocatable;
-import dev.huskuraft.effortless.building.operation.ItemType;
+import dev.huskuraft.effortless.building.operation.ItemStackUtils;
+import dev.huskuraft.effortless.building.operation.ItemSummaryType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
@@ -47,6 +48,7 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
+import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationPreview;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
@@ -409,20 +411,20 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void showOperationResult(UUID uuid, OperationResult result) {
         getEntrance().getClientManager().getOperationsRenderer().showResult(uuid, result);
         if (result instanceof BatchOperationResult batchOperationResult) {
-            for (var colorListEntry : batchOperationResult.getResultByColor().entrySet()) {
-                var locations =  colorListEntry.getValue().stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
-                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), colorListEntry.getKey()), locations)
+
+            var resultMap = batchOperationResult.getResult().stream().filter(BlockOperationResult.class::isInstance).map(BlockOperationResult.class::cast).filter(blockOperationResult -> BlockOperationPreview.getColorByOpResult(blockOperationResult) != null).collect(Collectors.groupingBy(BlockOperationPreview::getColorByOpResult));
+
+            for (var allColor : BlockOperationPreview.getAllColors()) {
+                if (resultMap.get(allColor) == null) continue;
+                var locations =  resultMap.get(allColor).stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), allColor), locations)
                         .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                         .lightMap(LightTexture.FULL_BLOCK)
                         .disableNormals()
-                        .colored(colorListEntry.getKey())
+                        .colored(allColor)
                         .stroke(1 / 64f);
             }
-            if (batchOperationResult.getResultByColor().isEmpty()) {
-                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), BlockOperationResult.BLOCK_BREAK_OP_COLOR), Collections.emptyList());
-                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), BlockOperationResult.BLOCK_PLACE_SUCC_OP_COLOR), Collections.emptyList());
-                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), BlockOperationResult.BLOCK_PLACE_FAIL_OP_COLOR), Collections.emptyList());
-            }
+
 
         }
     }
@@ -447,25 +449,32 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 //        entries.clear();
         entries.add(context.buildMode().getIcon());
         getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, BuildMode.class), priority, entries);
-
         entries.clear();
 
-        var playerUsed = result.getProducts(ItemType.PLAYER_USED);
-        var worldDropped = result.getProducts(ItemType.WORLD_DROPPED);
-
-        if (!playerUsed.isEmpty()) {
-            entries.add(playerUsed);
-            entries.add(Text.translate("effortless.build.summary.placed_blocks").withStyle(TextStyle.WHITE));
-        }
-        if (!worldDropped.isEmpty()) {
-            entries.add(worldDropped);
-            entries.add(Text.translate("effortless.build.summary.destroyed_blocks").withStyle(TextStyle.RED));
-        }
-
-        if (!playerUsed.isEmpty() || !worldDropped.isEmpty()) {
-            getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, ItemType.class), priority, entries);
-        } else {
-            getEntrance().getClientManager().getTooltipRenderer().showEmptyEntry(nextIdByTag(id, ItemType.class), priority);
+        for (var itemType : ItemSummaryType.values()) {
+            var products = result.getProducts(itemType);
+            if (!products.isEmpty()) {
+                var color = switch (itemType) {
+                    case BLOCKS_PLACED -> TextStyle.WHITE;
+                    case BLOCKS_DESTROYED -> TextStyle.RED;
+                    case BLOCKS_PLACE_INSUFFICIENT -> TextStyle.RED;
+                    case BLOCKS_BREAK_INSUFFICIENT -> TextStyle.RED;
+                    case BLOCKS_NOT_PLACEABLE -> TextStyle.GRAY;
+                    case BLOCKS_NOT_BREAKABLE -> TextStyle.GRAY;
+                    case BLOCKS_PLACE_NOT_WHITELISTED -> TextStyle.GRAY;
+                    case BLOCKS_BREAK_NOT_WHITELISTED -> TextStyle.GRAY;
+                    case BLOCKS_PLACE_BLACKLISTED -> TextStyle.GRAY;
+                    case BLOCKS_BREAK_BLACKLISTED -> TextStyle.GRAY;
+                };
+                entries.add(products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList());
+                entries.add(Text.translate("effortless.build.summary." + itemType.name().toLowerCase(Locale.ROOT)).withStyle(color));
+            }
+            if (!entries.isEmpty()) {
+                getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, itemType), priority, entries);
+            } else {
+                getEntrance().getClientManager().getTooltipRenderer().showEmptyEntry(nextIdByTag(id, itemType), priority);
+            }
+            entries.clear();
         }
 
     }

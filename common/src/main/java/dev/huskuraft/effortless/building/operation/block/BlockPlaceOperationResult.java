@@ -1,12 +1,10 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.building.operation.ItemStackUtils;
-import dev.huskuraft.effortless.building.operation.ItemType;
+import dev.huskuraft.effortless.building.operation.ItemSummaryType;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
@@ -37,26 +35,30 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
     }
 
     @Override
-    public List<ItemStack> getProducts(ItemType type) {
+    public List<ItemStack> getProducts(ItemSummaryType type) {
         return switch (type) {
-            case PLAYER_USED -> {
-                var color = getColor();
-                if (color != null) {
-                    yield inputs().stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getRGB())).toList();
-                }
-                yield Collections.emptyList();
-            }
-            case WORLD_DROPPED -> {
-                yield Collections.emptyList();
-            }
+            case BLOCKS_PLACED -> switch (result) {
+                case SUCCESS, CONSUME, FAIL_ITEM_INSUFFICIENT -> inputs();
+                default -> Collections.emptyList();
+            };
+            case BLOCKS_PLACE_INSUFFICIENT -> switch (result) {
+                case FAIL_ITEM_INSUFFICIENT -> inputs();
+                default -> Collections.emptyList();
+            };
+            case BLOCKS_NOT_PLACEABLE -> switch (result) {
+                case FAIL_PLAYER_CANNOT_BREAK -> inputs();
+                default -> Collections.emptyList();
+            };
+            case BLOCKS_PLACE_NOT_WHITELISTED -> switch (result) {
+                case FAIL_WHITELISTED -> inputs();
+                default -> Collections.emptyList();
+            };
+            case BLOCKS_PLACE_BLACKLISTED -> switch (result) {
+                case FAIL_BLACKLISTED -> inputs();
+                default -> Collections.emptyList();
+            };
+            default -> Collections.emptyList();
         };
     }
 
-    public Color getColor() {
-        return switch (result) {
-            case SUCCESS, CONSUME -> BLOCK_PLACE_SUCC_OP_COLOR;
-            case FAIL_ITEM_INSUFFICIENT -> BLOCK_PLACE_FAIL_OP_COLOR;
-            default -> null;
-        };
-    }
 }

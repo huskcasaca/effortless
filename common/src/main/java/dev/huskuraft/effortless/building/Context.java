@@ -85,7 +85,7 @@ public record Context(
     }
 
     public boolean isPreview() {
-        return type().isPreview();
+        return type() == BuildType.PREVIEW || type() == BuildType.PREVIEW_ONCE;
     }
 
     public boolean isPreviewOnce() {

@@ -318,8 +318,22 @@
   "effortless.build.summary.structure": "Структура",
   "effortless.build.summary.state": "Состояние",
   "effortless.build.summary.tracing": "Трассировка",
-  "effortless.build.summary.placed_blocks": "Установленные блоки",
-  "effortless.build.summary.destroyed_blocks": "Разрушенные блоки",
+
+  "effortless.build.summary.blocks_placed": "Установлено",
+  "effortless.build.summary.blocks_destroyed": "Уничтожено",
+
+  "effortless.build.summary.blocks_not_placeable": "Заблокировано",
+  "effortless.build.summary.blocks_not_breakable": "Заблокировано",
+
+  "effortless.build.summary.blocks_place_insufficient": "Недостаточно",
+  "effortless.build.summary.blocks_break_insufficient": "Недостаточно",
+
+  "effortless.build.summary.blocks_place_not_whitelisted": "В черном списке",
+  "effortless.build.summary.blocks_break_not_whitelisted": "В черном списке",
+
+  "effortless.build.summary.blocks_place_blacklisted": "Не в белом списке",
+  "effortless.build.summary.blocks_break_blacklisted": "Не в белом списке",
+
   "effortless.position.move_to_player": "Переместить к игроку",
   "effortless.position": "Позиция %s",
   "effortless.position.absolute": "Абсолютная",

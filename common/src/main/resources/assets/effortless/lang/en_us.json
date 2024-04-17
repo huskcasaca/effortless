@@ -318,8 +318,22 @@
   "effortless.build.summary.structure": "Structure",
   "effortless.build.summary.state": "State",
   "effortless.build.summary.tracing": "Tracing",
-  "effortless.build.summary.placed_blocks": "Blocks Placed",
-  "effortless.build.summary.destroyed_blocks": "Blocks Destroyed",
+
+  "effortless.build.summary.blocks_placed": "Placed",
+  "effortless.build.summary.blocks_destroyed": "Destroyed",
+
+  "effortless.build.summary.blocks_not_placeable": "Obstructed",
+  "effortless.build.summary.blocks_not_breakable": "Obstructed",
+
+  "effortless.build.summary.blocks_place_insufficient": "Insufficient",
+  "effortless.build.summary.blocks_break_insufficient": "Insufficient",
+
+  "effortless.build.summary.blocks_place_not_whitelisted": "Blacklisted",
+  "effortless.build.summary.blocks_break_not_whitelisted": "Blacklisted",
+
+  "effortless.build.summary.blocks_place_blacklisted": "Not Whitelisted",
+  "effortless.build.summary.blocks_break_blacklisted": "Not Whitelisted",
+
   "effortless.position.move_to_player": "Move To Player",
   "effortless.position": "Position %s",
   "effortless.position.absolute": "Absolute",

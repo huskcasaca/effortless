@@ -1,11 +1,20 @@
 package dev.huskuraft.effortless.renderer.opertaion.children;
 
+import java.awt.*;
+import java.util.List;
+
 import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
+import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.BlockRenderLayers;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 
 public class BlockOperationPreview implements OperationPreview {
+
+    public static final Color BLOCK_BREAK_OP_COLOR = new Color(1f, 0, 0, 0.5f);
+    public static final Color BLOCK_PLACE_SUCC_OP_COLOR = new Color(235, 235, 235);
+    public static final Color BLOCK_PLACE_FAIL_OP_COLOR = new Color(255, 0, 0);
 
     private final BlockOperationResult result;
 
@@ -32,10 +41,12 @@ public class BlockOperationPreview implements OperationPreview {
 //            blockState = blockItem.updateBlockStateFromTag(blockPosition, level, itemStack, blockState);
 //        }
 
-        var color = result.getColor();
+        var color = getColorByOpResult(result);
+
         if (color == null) {
             return;
         }
+
         var distance = player.getPosition().distance(blockPosition.toVector3d());
         if (distance > rendererParams.maxRenderDistance()) {
             return;
@@ -52,6 +63,34 @@ public class BlockOperationPreview implements OperationPreview {
         renderer.popPose();
 
         rendererParams.accumulate();
+    }
+
+    public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
+        if (blockOperationResult instanceof BlockPlaceOperationResult) {
+            return switch (blockOperationResult.result()) {
+                case SUCCESS, CONSUME -> Color.WHITE;
+                case FAIL_ITEM_INSUFFICIENT -> Color.RED;
+                default -> Color.GRAY;
+            };
+        }
+        if (blockOperationResult instanceof BlockBreakOperationResult) {
+            return switch (blockOperationResult.result()) {
+                case SUCCESS, CONSUME -> BLOCK_BREAK_OP_COLOR;
+                default -> Color.GRAY;
+            };
+        }
+        return null;
+    }
+
+    public static List<Color> getAllColors() {
+        return List.of(
+                Color.WHITE,
+                Color.RED,
+                Color.GRAY,
+                BLOCK_BREAK_OP_COLOR,
+                BLOCK_PLACE_SUCC_OP_COLOR,
+                BLOCK_PLACE_FAIL_OP_COLOR
+        );
     }
 
 }

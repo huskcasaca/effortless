@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.building.operation;
 
-import java.awt.*;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
@@ -14,8 +13,6 @@ public abstract class OperationResult {
 
 //    public abstract boolean isSuccess();
 
-    public abstract List<ItemStack> getProducts(ItemType type);
-
-    public abstract Color getColor();
+    public abstract List<ItemStack> getProducts(ItemSummaryType type);
 
 }
