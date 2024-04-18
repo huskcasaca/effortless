@@ -169,8 +169,8 @@
   "effortless.position.right": "右",
 
   "effortless.state.idle": "閒置",
-  "effortless.state.place_block": "放置方塊",
-  "effortless.state.break_block": "破壞方塊",
+  "effortless.state.placing_block": "放置方塊",
+  "effortless.state.breaking_block": "破壞方塊",
 
   "effortless.tracing.success_fulfilled": "成功完成",
   "effortless.tracing.success_partial": "部分成功",

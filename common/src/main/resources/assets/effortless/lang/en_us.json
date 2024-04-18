@@ -169,8 +169,8 @@
   "effortless.position.right": "Right",
 
   "effortless.state.idle": "Idle",
-  "effortless.state.place_block": "Place Blocks",
-  "effortless.state.break_block": "Break Blocks",
+  "effortless.state.placing_block": "Placing Blocks",
+  "effortless.state.breaking_block": "Breaking Blocks",
 
   "effortless.tracing.success_fulfilled": "Success",
   "effortless.tracing.success_partial": "Pending",

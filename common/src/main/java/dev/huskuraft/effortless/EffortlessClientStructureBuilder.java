@@ -71,8 +71,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         return Text.translate("effortless.state.%s".formatted(
                 switch (state) {
                     case IDLE -> "idle";
-                    case PLACE_BLOCK -> "place_block";
-                    case BREAK_BLOCK -> "break_block";
+                    case PLACE_BLOCK -> "placing_block";
+                    case BREAK_BLOCK -> "breaking_block";
                 }
         )).getString();
     }
@@ -100,6 +100,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     @Override
     public BuildResult build(Player player, BuildState state, @Nullable BlockInteraction interaction) {
         return updateContext(player, context -> {
+
             if (interaction == null) {
                 return context.newInteraction();
             }
@@ -115,14 +116,15 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 player.sendClientMessage(Text.translate("effortless.message.building.build_canceled"), true);
                 return context.newInteraction();
             }
-            if (!context.hasPermission()) {
+
+            if (!context.withState(state).hasPermission()) {
                 if (state == BuildState.PLACE_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.cannot_place_blocks_no_permission")));
-                    player.sendClientMessage(Text.translate("effortless.message.building.no_place_permission"), true);
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_place_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_no_permission"), true);
                 }
                 if (state == BuildState.BREAK_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permission")));
-                    player.sendClientMessage(Text.translate("effortless.message.building.no_break_permission"), true);
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permissio"), true);
                 }
                 return context.newInteraction();
             }

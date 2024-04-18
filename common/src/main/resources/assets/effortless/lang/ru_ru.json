@@ -169,8 +169,8 @@
   "effortless.position.right": "Справа",
 
   "effortless.state.idle": "Неактивно",
-  "effortless.state.place_block": "Установка блоков",
-  "effortless.state.break_block": "Ломание блоков",
+  "effortless.state.placing_block": "Установка блоков",
+  "effortless.state.breaking_block": "Разрушение блоков",
 
   "effortless.tracing.success_fulfilled": "Успешно",
   "effortless.tracing.success_partial": "Ожидание",
