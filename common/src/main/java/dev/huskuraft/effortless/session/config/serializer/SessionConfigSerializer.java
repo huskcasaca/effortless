@@ -131,7 +131,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.set(KEY_WHITELISTED_ITEMS, generalConfig.whitelistedItems() == null ? null : generalConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
             config.set(KEY_BLACKLISTED_ITEMS, generalConfig.blacklistedItems() == null ? null : generalConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
 
-            config.setComment(KEY_USE_COMMANDS, "Should use commands to build using this mod? It's available for client side only.");
+            config.setComment(KEY_USE_COMMANDS, "Should use commands to build using this mod?");
             config.setComment(KEY_ALLOW_USE_MOD, "Should allow players to use this mod?");
             config.setComment(KEY_ALLOW_BREAK_BLOCKS, "Should allow players to break blocks using this mod?");
             config.setComment(KEY_ALLOW_PLACE_BLOCKS, "Should allow players to place blocks using this mod?");
