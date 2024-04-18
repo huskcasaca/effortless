@@ -6,11 +6,11 @@ import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 
-public final class BatchOperationPreview implements OperationPreview {
+public final class BatchOperationRenderer implements OperationRenderer {
 
-    private final List<OperationPreview> previews;
+    private final List<OperationRenderer> previews;
 
-    public BatchOperationPreview(OperationsRenderer operationsRenderer, BatchOperationResult result) {
+    public BatchOperationRenderer(OperationsRenderer operationsRenderer, BatchOperationResult result) {
         this.previews = result.getResult().stream().map(operationsRenderer::createRenderer).toList();
     }
 

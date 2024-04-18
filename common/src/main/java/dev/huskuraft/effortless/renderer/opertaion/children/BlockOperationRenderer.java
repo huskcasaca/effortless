@@ -10,15 +10,18 @@ import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResu
 import dev.huskuraft.effortless.renderer.opertaion.BlockRenderLayers;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 
-public class BlockOperationPreview implements OperationPreview {
+public class BlockOperationRenderer implements OperationRenderer {
 
-    public static final Color BLOCK_BREAK_OP_COLOR = new Color(1f, 0, 0, 0.5f);
-    public static final Color BLOCK_PLACE_SUCC_OP_COLOR = new Color(235, 235, 235);
-    public static final Color BLOCK_PLACE_FAIL_OP_COLOR = new Color(255, 0, 0);
+    public static final Color BLOCK_PLACE_SUCCESS_COLOR = new Color(255, 255, 255);
+    public static final Color BLOCK_PLACE_INSUFFICIENT_COLOR = new Color(235, 0, 0);
+    public static final Color BLOCK_PLACE_FAIL_COLOR = new Color(128, 128, 128);
+
+    public static final Color BLOCK_BREAK_SUCCESS_COLOR = new Color(235, 0, 0);
+    public static final Color BLOCK_BREAK_FAIL_COLOR = new Color(128, 128, 128);
 
     private final BlockOperationResult result;
 
-    public BlockOperationPreview(OperationsRenderer operationsRenderer, BlockOperationResult result) {
+    public BlockOperationRenderer(OperationsRenderer operationsRenderer, BlockOperationResult result) {
         this.result = result;
     }
 
@@ -67,16 +70,19 @@ public class BlockOperationPreview implements OperationPreview {
 
     public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
         if (blockOperationResult instanceof BlockPlaceOperationResult) {
+            if (blockOperationResult.getOperation().getBlockState().isAir()) {
+                return Color.GRAY;
+            }
             return switch (blockOperationResult.result()) {
-                case SUCCESS, CONSUME -> Color.WHITE;
-                case FAIL_ITEM_INSUFFICIENT -> Color.RED;
-                default -> Color.GRAY;
+                case SUCCESS, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
+                case FAIL_ITEM_INSUFFICIENT -> BLOCK_PLACE_INSUFFICIENT_COLOR;
+                default -> BLOCK_PLACE_FAIL_COLOR;
             };
         }
         if (blockOperationResult instanceof BlockBreakOperationResult) {
             return switch (blockOperationResult.result()) {
-                case SUCCESS, CONSUME -> BLOCK_BREAK_OP_COLOR;
-                default -> Color.GRAY;
+                case SUCCESS, CONSUME -> BLOCK_BREAK_SUCCESS_COLOR;
+                default -> BLOCK_BREAK_FAIL_COLOR;
             };
         }
         return null;
@@ -84,12 +90,11 @@ public class BlockOperationPreview implements OperationPreview {
 
     public static List<Color> getAllColors() {
         return List.of(
-                Color.WHITE,
-                Color.RED,
-                Color.GRAY,
-                BLOCK_BREAK_OP_COLOR,
-                BLOCK_PLACE_SUCC_OP_COLOR,
-                BLOCK_PLACE_FAIL_OP_COLOR
+                BLOCK_PLACE_SUCCESS_COLOR,
+                BLOCK_PLACE_INSUFFICIENT_COLOR,
+                BLOCK_PLACE_FAIL_COLOR,
+                BLOCK_BREAK_SUCCESS_COLOR,
+                BLOCK_BREAK_FAIL_COLOR
         );
     }
 

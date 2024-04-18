@@ -13,15 +13,15 @@ import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
-import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationPreview;
-import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationPreview;
-import dev.huskuraft.effortless.renderer.opertaion.children.OperationPreview;
+import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationRenderer;
+import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationRenderer;
+import dev.huskuraft.effortless.renderer.opertaion.children.OperationRenderer;
 import dev.huskuraft.effortless.renderer.opertaion.children.RendererParams;
 
 public class OperationsRenderer {
 
-    private final Map<Object, RenderFadeEntry<? extends OperationPreview>> results = Collections.synchronizedMap(new LinkedHashMap<>());
-    private final Map<Class<?>, BiFunction<OperationsRenderer, OperationResult, ? extends OperationPreview>> resultRendererMap = Collections.synchronizedMap(new HashMap<>());
+    private final Map<Object, RenderFadeEntry<? extends OperationRenderer>> results = Collections.synchronizedMap(new LinkedHashMap<>());
+    private final Map<Class<?>, BiFunction<OperationsRenderer, OperationResult, ? extends OperationRenderer>> resultRendererMap = Collections.synchronizedMap(new HashMap<>());
 
     private final EffortlessClient entrance;
 
@@ -34,12 +34,12 @@ public class OperationsRenderer {
         return entrance;
     }
 
-    private <R extends OperationResult, O extends OperationPreview> void registerRenderer(Class<R> result, BiFunction<OperationsRenderer, R, O> renderer) {
+    private <R extends OperationResult, O extends OperationRenderer> void registerRenderer(Class<R> result, BiFunction<OperationsRenderer, R, O> renderer) {
         resultRendererMap.put(result, (BiFunction<OperationsRenderer, OperationResult, O>) renderer);
     }
 
     @SuppressWarnings({"unchecked"})
-    public <R extends OperationResult> OperationPreview createRenderer(R result) {
+    public <R extends OperationResult> OperationRenderer createRenderer(R result) {
         try {
             return resultRendererMap.get(result.getClass()).apply(this, result);
         } catch (Exception e) {
@@ -60,9 +60,9 @@ public class OperationsRenderer {
     }
 
     private void registerRenderers() {
-        registerRenderer(BlockPlaceOperationResult.class, BlockOperationPreview::new);
-        registerRenderer(BlockBreakOperationResult.class, BlockOperationPreview::new);
-        registerRenderer(BatchOperationResult.class, BatchOperationPreview::new);
+        registerRenderer(BlockPlaceOperationResult.class, BlockOperationRenderer::new);
+        registerRenderer(BlockBreakOperationResult.class, BlockOperationRenderer::new);
+        registerRenderer(BatchOperationResult.class, BatchOperationRenderer::new);
     }
 
     public <R extends OperationResult> void showResult(Object id, R result) {

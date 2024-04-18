@@ -48,7 +48,7 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
-import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationPreview;
+import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
 import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
@@ -297,22 +297,25 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public BuildResult onPlayerBreak(Player player) {
         var context = getContext(player);
         var interaction = context.withBreakingState().trace(player);
-        return build(player, BuildState.BREAK_BLOCK, interaction);
+        var result =  build(player, BuildState.BREAK_BLOCK, interaction);
+        if (result.isSuccess()) {
+            player.swing(InteractionHand.MAIN);
+        }
+
+        return result;
     }
 
     @Override
     public BuildResult onPlayerPlace(Player player) {
         var context = getContext(player);
-
-        if (player.getItemStack(InteractionHand.MAIN).isEmpty()) {
-            return BuildResult.CANCELED;
-        }
-
+//        if (player.getItemStack(InteractionHand.MAIN).isEmpty()) {
+//            return BuildResult.CANCELED;
+//        }
         var interaction = context.withPlacingState().trace(player);
         var result = build(player, BuildState.PLACE_BLOCK, interaction);
 
         if (result.isSuccess()) {
-//            player.swing(PlayerHand.MAIN);
+            player.swing(InteractionHand.MAIN);
         }
         return result;
     }
@@ -425,9 +428,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getClientManager().getOperationsRenderer().showResult(uuid, result);
         if (result instanceof BatchOperationResult batchOperationResult) {
 
-            var resultMap = batchOperationResult.getResult().stream().filter(BlockOperationResult.class::isInstance).map(BlockOperationResult.class::cast).filter(blockOperationResult -> BlockOperationPreview.getColorByOpResult(blockOperationResult) != null).collect(Collectors.groupingBy(BlockOperationPreview::getColorByOpResult));
+            var resultMap = batchOperationResult.getResult().stream().filter(BlockOperationResult.class::isInstance).map(BlockOperationResult.class::cast).filter(blockOperationResult -> BlockOperationRenderer.getColorByOpResult(blockOperationResult) != null).collect(Collectors.groupingBy(BlockOperationRenderer::getColorByOpResult));
 
-            for (var allColor : BlockOperationPreview.getAllColors()) {
+            for (var allColor : BlockOperationRenderer.getAllColors()) {
                 if (resultMap.get(allColor) == null) continue;
                 var locations =  resultMap.get(allColor).stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
                 getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), allColor), locations)
