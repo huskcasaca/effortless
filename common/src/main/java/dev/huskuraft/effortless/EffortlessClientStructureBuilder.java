@@ -117,11 +117,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
             if (!context.hasPermission()) {
                 if (state == BuildState.PLACE_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.cannot_place_blocks_no_permission")));
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.cannot_place_blocks_no_permission")));
                     player.sendClientMessage(Text.translate("effortless.message.building.no_place_permission"), true);
                 }
                 if (state == BuildState.BREAK_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.cannot_break_blocks_no_permission")));
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permission")));
                     player.sendClientMessage(Text.translate("effortless.message.building.no_break_permission"), true);
                 }
                 return context.newInteraction();
@@ -232,7 +232,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     // from settings screen
     @Override
     public void setBuildMode(Player player, BuildMode buildMode) {
-        if (!hasPermission(player)) {
+        if (!isSessionValid(player)) {
+            getEntrance().getSessionManager().notifyPlayer();
+            return;
+        }
+        if (!isPermissionGranted(player)) {
             player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
             return;
         }
@@ -241,19 +245,23 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void setBuildFeature(Player player, SingleSelectFeature feature) {
-        if (!hasPermission(player)) {
+        if (!isSessionValid(player)) {
+            getEntrance().getSessionManager().notifyPlayer();
+            return;
+        }
+        if (!isPermissionGranted(player)) {
             player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
             return;
         }
         updateContext(player, context -> context.withBuildFeature(feature));
     }
 
-    public boolean hasPermission(Player player) {
-        var serverSessionConfig = getEntrance().getSessionManager().getServerSessionConfig();
-        if (serverSessionConfig == null) {
-            return false;
-        }
-        return serverSessionConfig.getPlayerConfig(player).allowUseMod();
+    public boolean isSessionValid(Player player) {
+        return getEntrance().getSessionManager().isSessionValid();
+    }
+
+    public boolean isPermissionGranted(Player player) {
+        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowUseMod();
     }
 
     @Override
@@ -349,7 +357,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         var player = getEntrance().getClient().getPlayer();
 
-        if (!hasPermission(player)) {
+        if (!isSessionValid(player)) {
+            resetContext(player);
+            return;
+        }
+
+        if (!isPermissionGranted(player)) {
             resetContext(player);
             return;
         }

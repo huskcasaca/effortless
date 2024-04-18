@@ -53,26 +53,26 @@ public final class EffortlessSessionManager implements SessionManager {
     }
 
     @Override
-    public boolean isServerSessionValid() {
+    public boolean isSessionValid() {
         return serverSession.get() != null;
     }
 
     @Override
     public SessionStatus getSessionStatus() {
         if (serverSession.get() == null && clientSession.get() == null) {
-            return SessionStatus.BOTH_NOT_LOADED;
+            return SessionStatus.MOD_MISSING;
         }
         if (serverSession.get() == null) {
-            return SessionStatus.SERVER_NOT_LOADED;
+            return SessionStatus.SERVER_MOD_MISSING;
         }
         if (clientSession.get() == null) {
-            return SessionStatus.CLIENT_NOT_LOADED;
+            return SessionStatus.CLIENT_MOD_MISSING;
         }
         var serverMod = serverSession.get().mods().stream().filter(mod -> mod.getId().equals(Effortless.MOD_ID)).findFirst().orElseThrow();
         var clientMod = clientSession.get().mods().stream().filter(mod -> mod.getId().equals(Effortless.MOD_ID)).findFirst().orElseThrow();
 
         if (!serverMod.getVersionStr().equals(clientMod.getVersionStr())) {
-            return SessionStatus.PROTOCOL_VERSION_MISMATCH;
+            return SessionStatus.PROTOCOL_NOT_MATCH;
         }
         return SessionStatus.SUCCESS;
     }

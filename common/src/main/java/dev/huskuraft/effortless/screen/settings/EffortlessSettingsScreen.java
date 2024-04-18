@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.screen.settings;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
@@ -20,22 +21,33 @@ public class EffortlessSettingsScreen extends AbstractScreen {
     }
 
     @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
+    }
+
+    @Override
     public void onCreate() {
         addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1));
         entries.addTab(Text.translate("effortless.general_settings.title"), (button) -> {
-            getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
-                if (packet.isOperator()) {
-                    getEntrance().getClient().execute(() -> {
-                        new EffortlessGeneralSettingsScreen(getEntrance()).attach();
-                    });
-                } else {
-                    getEntrance().getClient().execute(() -> {
-                        new EffortlessNotAnOperatorScreen(getEntrance()).attach();
-                    });
-                }
-            });
+            if (!getEntrance().getSessionManager().isSessionValid()) {
+                getEntrance().getClient().execute(() -> {
+                    new EffortlessSessionStatusScreen(getEntrance()).attach();
+                });
+            } else {
+                getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
+                    if (packet.isOperator()) {
+                        getEntrance().getClient().execute(() -> {
+                            new EffortlessGeneralSettingsScreen(getEntrance()).attach();
+                        });
+                    } else {
+                        getEntrance().getClient().execute(() -> {
+                            new EffortlessNotAnOperatorScreen(getEntrance()).attach();
+                        });
+                    }
+                });
+            }
         });
         entries.addTab(Text.translate("effortless.render_settings.title"), (button) -> {
             new EffortlessRenderSettingsScreen(getEntrance()).attach();

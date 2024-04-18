@@ -9,7 +9,7 @@ public interface SessionManager {
 
     void onSessionConfig(SessionConfig sessionConfig, Player player);
 
-    boolean isServerSessionValid();
+    boolean isSessionValid();
 
     SessionStatus getSessionStatus();
 
@@ -18,11 +18,11 @@ public interface SessionManager {
     SessionConfig getLastSessionConfig();
 
     enum SessionStatus {
-        SERVER_NOT_LOADED,
-        CLIENT_NOT_LOADED,
-        BOTH_NOT_LOADED,
-        PROTOCOL_VERSION_MISMATCH,
-        SUCCESS
+        SUCCESS,
+        MOD_MISSING,
+        SERVER_MOD_MISSING,
+        CLIENT_MOD_MISSING,
+        PROTOCOL_NOT_MATCH
     }
 
 }

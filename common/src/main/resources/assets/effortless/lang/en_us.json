@@ -341,5 +341,13 @@
   "effortless.position.relative_once": "Relative Once",
 
   "effortless.test.save": "Save",
-  "effortless.test.cancel": "Cancel"
+  "effortless.test.cancel": "Cancel",
+
+
+  "effortless.session_status.title": "Invalid Session",
+  "effortless.session_status.message.success": "Mod found on server and client, running with loader type §6[%s]§r.",
+  "effortless.session_status.message.mod_missing": "§cMod not found on server and client, it cannot happen.",
+  "effortless.session_status.message.server_mod_missing": "§cMod not found on server side.§r",
+  "effortless.session_status.message.client_mod_missing": "§cMod not found on client side.§r",
+  "effortless.session_status.message.protocol_not_match": "§cMod protocol version not match! Server: §6[%s]§c, Client: §6[%s]§c.§r"
 }
