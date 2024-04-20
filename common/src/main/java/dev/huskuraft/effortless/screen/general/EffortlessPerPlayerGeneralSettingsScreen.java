@@ -21,16 +21,18 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     private final PlayerInfo playerInfo;
+    private GeneralConfig defaultConfig;
     private GeneralConfig originalConfig;
     private GeneralConfig config;
     private GeneralConfig globalConfig;
     private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
+    private AbstractWidget resetButton;
     private AbstractWidget saveButton;
-
 
     public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig config, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
         super(entrance, Text.translate("effortless.general_settings.title"));
         this.playerInfo = playerInfo;
+        this.defaultConfig = GeneralConfig.NULL;
         this.originalConfig = config;
         this.config = config;
         this.globalConfig = getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig();
@@ -153,19 +155,24 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 1 / 3f).build());
+
+        this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.reset"), button -> {
+            config = defaultConfig;
+            recreate();
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 1 / 3f, 1 / 3f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             consumer.accept(playerInfo, config);
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 2 / 3f, 1 / 3f).build());
 
     }
 
     @Override
     public void onReload() {
+        this.resetButton.setActive(!config.equals(defaultConfig));
         this.saveButton.setActive(!config.equals(originalConfig));
-        this.globalConfig = getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig();
     }
 
     @Override
@@ -173,32 +180,25 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         return (EffortlessClient) super.getEntrance();
     }
 
-    private void bindEntryState(SettingOptionsList.SettingsEntry<?> entry, boolean isGlobal) {
+    private <T> void bindEntryState(SettingOptionsList.SettingsEntry<T> entry, Consumer<T> setter, Supplier<T> globalGetter, Supplier<T> playerGetter) {
+        var isGlobal = playerGetter.get() == null;
         entry.setActive(!isGlobal);
+        entry.setConsumer(null);
+        entry.setItem(isGlobal ? globalGetter.get() : playerGetter.get());
+        entry.setConsumer(setter);
         entry.getAltButton().setMessage(isGlobal ? "O" : "X");
-        entry.getAltButton().setTooltip(
-                isGlobal ? "Click to Override" : "Click to Use Global",
-                ""
-//                ,
-//                global ? "This config value overrides the value in the global settings" : "This config value follows the value in the global settings"
-        );
+        entry.getAltButton().setTooltip(isGlobal ? "Click to Override" : "Click to Use Global");
     }
 
     private <T> void bindEntry(SettingOptionsList.SettingsEntry<T> entry, Consumer<T> setter, Supplier<T> globalGetter, Supplier<T> playerGetter) {
-        entry.setItem(playerGetter.get() == null ? globalGetter.get() : playerGetter.get());
-        bindEntryState(entry, playerGetter.get() == null);
+        bindEntryState(entry, setter, globalGetter, playerGetter);
 
         entry.getAltButton().setOnPressListener(button -> {
-            if (playerGetter.get() == null) {
-                entry.setItem(globalGetter.get());
-            } else {
-                entry.setItem(globalGetter.get());
-                setter.accept(null);
-            }
-            bindEntryState(entry, playerGetter.get() == null);
+            setter.accept(playerGetter.get() == null ? globalGetter.get() : playerGetter.get());
+            bindEntryState(entry, setter, globalGetter, playerGetter);
         });
 
-        entry.setConsumer(setter);
+
     }
 
 }

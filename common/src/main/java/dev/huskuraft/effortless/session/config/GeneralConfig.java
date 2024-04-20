@@ -35,13 +35,13 @@ public record GeneralConfig(
     public static final int MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START = 1;
     public static final int MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END = Short.MAX_VALUE;
 
-    public static final int MAX_BOX_VOLUME_PER_BREAK_DEFAULT = 1024;
+    public static final int MAX_BOX_VOLUME_PER_BREAK_DEFAULT = 1024 * 1024;
     public static final int MAX_BOX_VOLUME_PER_BREAK_RANGE_START = 1;
-    public static final int MAX_BOX_VOLUME_PER_BREAK_RANGE_END = Short.MAX_VALUE;
+    public static final int MAX_BOX_VOLUME_PER_BREAK_RANGE_END = Integer.MAX_VALUE;
 
-    public static final int MAX_BOX_VOLUME_PER_PLACE_DEFAULT = 1024;
+    public static final int MAX_BOX_VOLUME_PER_PLACE_DEFAULT = 1024 * 1024;
     public static final int MAX_BOX_VOLUME_PER_PLACE_RANGE_START = 1;
-    public static final int MAX_BOX_VOLUME_PER_PLACE_RANGE_END = Short.MAX_VALUE;
+    public static final int MAX_BOX_VOLUME_PER_PLACE_RANGE_END = Integer.MAX_VALUE;
 
     public static final List<ResourceLocation> WHITELISTED_ITEMS_DEFAULT = List.of();
     public static final List<ResourceLocation> BLACKLISTED_ITEMS_DEFAULT = List.of();

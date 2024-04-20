@@ -16,14 +16,16 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
 
+    private GeneralConfig defaultConfig;
     private GeneralConfig originalConfig;
     private GeneralConfig config;
     private final Consumer<GeneralConfig> consumer;
+    private AbstractWidget resetButton;
     private AbstractWidget saveButton;
-
 
     public EffortlessGlobalGeneralSettingsScreen(Entrance entrance, GeneralConfig config, Consumer<GeneralConfig> consumer) {
         super(entrance, Text.translate("effortless.global_general_settings.title"));
+        this.defaultConfig = GeneralConfig.DEFAULT;
         this.originalConfig = config;
         this.config = config;
         this.consumer = consumer;
@@ -83,17 +85,23 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
         });
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 1 / 3f).build());
+
+        this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.reset"), button -> {
+            config = defaultConfig;
+            recreate();
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 1 / 3f, 1 / 3f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             consumer.accept(config);
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getWidth(), getHeight(), 0f, 2 / 3f, 1 / 3f).build());
 
     }
 
     @Override
     public void onReload() {
+        this.resetButton.setActive(!config.equals(defaultConfig));
         this.saveButton.setActive(!config.equals(originalConfig));
     }
 }
