@@ -138,14 +138,6 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         }
 
         @Override
-        public void setActive(boolean active) {
-            super.setActive(active);
-            this.typeButton.setActive(active);
-            this.numberField.setActive(active);
-            this.teleportButton.setActive(active);
-        }
-
-        @Override
         public void setItem(Tuple2<PositionType, Double> item) {
             super.setItem(item);
             this.typeButton.setMessage(getItem().value1().getDisplayName());
@@ -180,12 +172,6 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         }
 
         @Override
-        public void setActive(boolean active) {
-            super.setActive(active);
-            this.numberField.setActive(active);
-        }
-
-        @Override
         public void setItem(Double item) {
             super.setItem(item);
             this.numberField.setValue(getItem());
@@ -215,12 +201,6 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
                 super.setItem(value.intValue());
             });
 
-        }
-
-        @Override
-        public void setActive(boolean active) {
-            super.setActive(active);
-            this.numberField.setActive(active);
         }
 
         @Override
@@ -276,11 +256,6 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
             this.button.setMessage(getButtonMessage());
         }
 
-        @Override
-        public void setActive(boolean active) {
-            super.setActive(active);
-            this.button.setActive(active);
-        }
     }
 
     public abstract static class SettingsEntry<T> extends Entry<T> {
@@ -359,18 +334,13 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
             return (SettingOptionsList) super.getEntryList();
         }
 
-        @Override
-        public void setActive(boolean active) {
-            super.setActive(active);
-            if (active) {
-                this.titleTextWidget.setMessage(this.titleTextWidget.getMessage().withStyle(TextStyle.RESET, TextStyle.WHITE));
-            } else {
-                this.titleTextWidget.setMessage(this.titleTextWidget.getMessage().withStyle(TextStyle.ITALIC, TextStyle.GRAY));
-            }
-        }
 
         public void setConsumer(Consumer<T> consumer) {
             this.consumer = consumer;
+        }
+
+        public AbstractWidget getTitleTextWidget() {
+            return titleTextWidget;
         }
     }
 
@@ -395,12 +365,6 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         public void setItem(T item) {
             super.setItem(item);
             this.entryConsumer.accept(this, item);
-        }
-
-        @Override
-        public void setActive(boolean active) {
-            super.setActive(active);
-            this.button.setActive(active);
         }
 
         public Button getButton() {

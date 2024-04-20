@@ -132,6 +132,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         entry.onCreate();
         entry.onReload();
 
+        entry.setParent(this);
         children().add(entry);
         entry.onPositionChange(-1, children().size() - 1);
         return entry;
@@ -140,6 +141,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     public <C extends E> C addEntry(int index, C entry) {
         entry.onCreate();
         entry.onReload();
+        entry.setParent(this);
         children().add(index, entry);
         entry.onPositionChange(-1, index);
         // FIXME: 24/9/23
@@ -152,10 +154,11 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     public <C extends E> boolean removeEntry(C entry) {
+        entry.setParent(null);
         var index = children().indexOf(entry);
-        boolean bl = this.children().remove(entry);
+        var removed = this.children().remove(entry);
         entry.onPositionChange(index, -1);
-        if (bl && entry == this.getSelected()) {
+        if (removed && entry == this.getSelected()) {
             this.setSelected(null);
         }
         for (int i = 0; i < children().size(); i++) {
@@ -163,20 +166,23 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
                 children().get(i).onPositionChange(i + 1, i);
             }
         }
-        return bl;
+        return removed;
     }
 
     public final void clearEntries() {
-        this.children().clear();
-        this.setSelected(null);
-        this.setFocused(null);
+        children().forEach(widget -> widget.setParent(null));
+        children().clear();
+        setSelected(null);
+        setFocused(null);
     }
 
     public void replaceEntries(Collection<? extends E> collection) {
-        this.children().clear();
-        this.children().addAll(collection);
-        this.setSelected(null);
-        this.setFocused(null);
+        children().forEach(widget -> widget.setParent(null));
+        children().clear();
+        collection.forEach(widget -> widget.setParent(this));
+        children().addAll(collection);
+        setSelected(null);
+        setFocused(null);
     }
 
     public void swap(int i, int j) {
@@ -196,11 +202,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     protected int getMaxPosition() {
-        var i = 0;
-        for (var child : children()) {
-            i += child.getHeight();
-        }
-        return i;
+        return children().stream().mapToInt(Widget::getHeight).sum();
     }
 
     protected void clickedHeader(int i, int j) {

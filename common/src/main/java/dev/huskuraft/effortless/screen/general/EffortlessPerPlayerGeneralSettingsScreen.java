@@ -14,6 +14,7 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.screen.item.EffortlessItemsScreen;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
@@ -182,7 +183,9 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     private <T> void bindEntryState(SettingOptionsList.SettingsEntry<T> entry, Consumer<T> setter, Supplier<T> globalGetter, Supplier<T> playerGetter) {
         var isGlobal = playerGetter.get() == null;
-        entry.setActive(!isGlobal);
+        entry.children().forEach(child -> child.setActive(!isGlobal));
+        entry.getAltButton().setActive(true);
+        entry.getTitleTextWidget().setMessage(entry.getTitleTextWidget().getMessage().withStyle(isGlobal ? TextStyle.ITALIC : TextStyle.RESET, isGlobal ? TextStyle.GRAY : TextStyle.WHITE));
         entry.setConsumer(null);
         entry.setItem(isGlobal ? globalGetter.get() : playerGetter.get());
         entry.setConsumer(setter);
@@ -194,7 +197,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         bindEntryState(entry, setter, globalGetter, playerGetter);
 
         entry.getAltButton().setOnPressListener(button -> {
-            setter.accept(playerGetter.get() == null ? globalGetter.get() : playerGetter.get());
+            setter.accept(playerGetter.get() == null ? globalGetter.get() : null);
             bindEntryState(entry, setter, globalGetter, playerGetter);
         });
 
