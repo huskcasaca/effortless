@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.screen.general;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Item;
@@ -67,8 +68,8 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
             this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), value, config.blacklistedItems());
         }, (entry, value) -> {
             entry.getButton().setOnPressListener(button1 -> {
-                new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.whitelisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
-                    entry.setItem(value1.stream().map(Item::getId).toList());
+                new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.whitelisted_items"), value.stream().map(Item::fromIdOptional).filter(Optional::isPresent).map(Optional::get).toList(), (value1) -> {
+                    entry.setItem(value1.stream().map(Item::getId).distinct().toList());
                 }).attach();
             });
             entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value.size()));
@@ -77,8 +78,8 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
             this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), value);
         }, (entry, value) -> {
             entry.getButton().setOnPressListener(button1 -> {
-                new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.blacklisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
-                    entry.setItem(value1.stream().map(Item::getId).toList());
+                new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.blacklisted_items"), value.stream().map(Item::fromIdOptional).filter(Optional::isPresent).map(Optional::get).toList(), (value1) -> {
+                    entry.setItem(value1.stream().map(Item::getId).distinct().toList());
                 }).attach();
             });
             entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value.size()));

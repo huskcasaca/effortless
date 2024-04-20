@@ -29,8 +29,8 @@ public class EffortlessItemsScreen extends AbstractScreen {
     public EffortlessItemsScreen(Entrance entrance, Text title, List<Item> items, Consumer<List<Item>> consumer) {
         super(entrance, title);
         this.consumer = consumer;
-        this.originalItems = items;
-        this.items = items;
+        this.originalItems = items.stream().distinct().toList();
+        this.items = items.stream().distinct().toList();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class EffortlessItemsScreen extends AbstractScreen {
         }).setBoundsGrid(getWidth(), getHeight(), 1f, 1 / 3f, 1 / 3f).build());
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.add"), button -> {
             new EffortlessItemPickerScreen(getEntrance(), (item) -> {
-                if (item != null) {
+                if (item != null && !items.contains(item)) {
                     entries.insertSelected(item.getDefaultStack());
                     onReload();
                 }
