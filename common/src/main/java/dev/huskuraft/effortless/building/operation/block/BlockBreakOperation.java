@@ -30,9 +30,9 @@ public class BlockBreakOperation extends BlockOperation {
 
         // spectator
         if (player.getGameType().isSpectator()) { // move
-            return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_MODIFY;
+            return BlockOperationResult.Type.FAIL_PLAYER_IS_SPECTATOR;
         }
-        
+
         // whitelist/blacklist
         if (!context.limitationParams().generalConfig().whitelistedItems().isEmpty() && !context.limitationParams().generalConfig().whitelistedItems().contains(getItemStack().getItem().getId())) {
             return BlockOperationResult.Type.FAIL_WHITELISTED;
@@ -40,6 +40,15 @@ public class BlockBreakOperation extends BlockOperation {
 
         if (!context.limitationParams().generalConfig().blacklistedItems().isEmpty() && context.limitationParams().generalConfig().blacklistedItems().contains(getItemStack().getItem().getId())) {
             return BlockOperationResult.Type.FAIL_BLACKLISTED;
+        }
+
+        // world permission
+        if (!isInBorderBound()) {
+            return BlockOperationResult.Type.FAIL_WORLD_BORDER;
+        }
+
+        if (!isInHeightBound()) {
+            return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
         }
 
         // action permission
@@ -78,7 +87,7 @@ public class BlockBreakOperation extends BlockOperation {
         if (player.tryBreakBlock(getInteraction())) {
             return BlockOperationResult.Type.SUCCESS;
         } else {
-            return BlockOperationResult.Type.FAIL_INTERNAL;
+            return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
     }
 

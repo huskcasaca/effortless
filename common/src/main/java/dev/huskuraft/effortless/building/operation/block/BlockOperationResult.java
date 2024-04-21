@@ -43,9 +43,13 @@ public abstract class BlockOperationResult extends OperationResult {
 
     public enum Type {
         SUCCESS,
+        SUCCESS_PARTIAL,
         CONSUME,
 
-        FAIL_PLAYER_CANNOT_MODIFY,
+        FAIL_WORLD_HEIGHT,
+        FAIL_WORLD_BORDER,
+
+        FAIL_PLAYER_IS_SPECTATOR,
         FAIL_PLAYER_CANNOT_ATTACK,
         FAIL_PLAYER_CANNOT_BREAK,
         FAIL_PLAYER_CANNOT_INTERACT,
@@ -59,28 +63,26 @@ public abstract class BlockOperationResult extends OperationResult {
         FAIL_BLOCK_STATE_AIR,
         FAIL_BLOCK_STATE_NULL,
 
-        FAIL_INTERNAL,
-
         FAIL_UNKNOWN;
 
         public boolean consumesAction() {
-            return this == SUCCESS || this == CONSUME;
+            return this == SUCCESS || this == SUCCESS_PARTIAL|| this == CONSUME;
         }
 
         public boolean success() {
-            return this == SUCCESS || this == CONSUME;
+            return this == SUCCESS || this == SUCCESS_PARTIAL || this == CONSUME;
         }
 
         public boolean fail() {
-            return this != SUCCESS && this != CONSUME;
+            return this != SUCCESS && this != SUCCESS_PARTIAL && this != CONSUME;
         }
 
         public boolean shouldSwing() {
-            return this == SUCCESS;
+            return this == SUCCESS || this == SUCCESS_PARTIAL;
         }
 
         public boolean shouldAwardStats() {
-            return this == SUCCESS;
+            return this == SUCCESS || this == SUCCESS_PARTIAL;
         }
     }
 }

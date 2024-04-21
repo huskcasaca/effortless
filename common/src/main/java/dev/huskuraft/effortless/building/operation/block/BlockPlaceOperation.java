@@ -38,7 +38,7 @@ public class BlockPlaceOperation extends BlockOperation {
 
         // spectator
         if (player.getGameType().isSpectator()) {
-            return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_MODIFY;
+            return BlockOperationResult.Type.FAIL_PLAYER_IS_SPECTATOR;
         }
 
         // whitelist/blacklist
@@ -48,6 +48,15 @@ public class BlockPlaceOperation extends BlockOperation {
 
         if (!context.limitationParams().generalConfig().blacklistedItems().isEmpty() && context.limitationParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
             return BlockOperationResult.Type.FAIL_BLACKLISTED;
+        }
+
+        // world permission
+        if (!isInBorderBound()) {
+            return BlockOperationResult.Type.FAIL_WORLD_BORDER;
+        }
+
+        if (!isInHeightBound()) {
+            return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
         }
 
         // action permission
@@ -92,7 +101,7 @@ public class BlockPlaceOperation extends BlockOperation {
         }
 
         if (context.replaceMode() == ReplaceMode.QUICK && !player.tryBreakBlock(getInteraction())) {
-            return BlockOperationResult.Type.FAIL_INTERNAL;
+            return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
 //        if (context.type() == BuildType.COMMAND) {
@@ -107,11 +116,11 @@ public class BlockPlaceOperation extends BlockOperation {
         player.setItemStack(InteractionHand.MAIN, originalItemStack);
 
         if (!placed) {
-            return BlockOperationResult.Type.FAIL_INTERNAL;
+            return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
         if (!world.getBlockState(getInteraction().getBlockPosition()).equals(blockState) && !world.setBlockState(getInteraction().getBlockPosition(), blockState)) {
-            return BlockOperationResult.Type.FAIL_INTERNAL;
+            return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
         return BlockOperationResult.Type.SUCCESS;

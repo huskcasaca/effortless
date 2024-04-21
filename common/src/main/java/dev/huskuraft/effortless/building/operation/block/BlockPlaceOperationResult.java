@@ -38,7 +38,7 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
     public List<ItemStack> getProducts(ItemSummaryType type) {
         return switch (type) {
             case BLOCKS_PLACED -> switch (result) {
-                case SUCCESS, CONSUME, FAIL_ITEM_INSUFFICIENT -> inputs();
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME, FAIL_ITEM_INSUFFICIENT -> inputs();
                 default -> Collections.emptyList();
             };
             case BLOCKS_PLACE_INSUFFICIENT -> switch (result) {
@@ -46,7 +46,7 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
                 default -> Collections.emptyList();
             };
             case BLOCKS_NOT_PLACEABLE -> switch (result) {
-                case FAIL_PLAYER_CANNOT_BREAK -> inputs();
+                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> inputs();
                 default -> Collections.emptyList();
             };
             case BLOCKS_PLACE_NOT_WHITELISTED -> switch (result) {

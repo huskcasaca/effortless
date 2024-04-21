@@ -4,9 +4,11 @@ import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.DimensionType;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceKey;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.core.WorldBorder;
 import net.minecraft.world.level.Level;
 
 public class MinecraftWorld implements World {
@@ -47,9 +49,20 @@ public class MinecraftWorld implements World {
     }
 
     @Override
-    public ResourceKey<World> getDimension() {
+    public ResourceKey<World> getDimensionId() {
         return new MinecraftResourceKey<>(reference.dimension());
     }
+
+    @Override
+    public DimensionType getDimensionType() {
+        return new MinecraftDimensionType(reference.dimensionType());
+    }
+
+    @Override
+    public WorldBorder getWorldBorder() {
+        return new MinecraftWorldBorder(reference.getWorldBorder());
+    }
+
 
     @Override
     public boolean equals(Object obj) {
