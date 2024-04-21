@@ -2,6 +2,11 @@
 
 ----------
 
+### 2.3.1
+* Fix crash on Quilt ([#96](https://github.com/huskcasaca/effortless/pull/96))
+
+----------
+
 ### 2.3.0
 
 * Add server config ([#83](https://github.com/huskcasaca/effortless/pull/83))
