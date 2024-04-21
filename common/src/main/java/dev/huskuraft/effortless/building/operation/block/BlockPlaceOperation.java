@@ -41,18 +41,42 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_MODIFY;
         }
 
+        // whitelist/blacklist
+        if (!context.limitationParams().generalConfig().whitelistedItems().isEmpty() && !context.limitationParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
+            return BlockOperationResult.Type.FAIL_WHITELISTED;
+        }
+
+        if (!context.limitationParams().generalConfig().blacklistedItems().isEmpty() && context.limitationParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
+            return BlockOperationResult.Type.FAIL_BLACKLISTED;
+        }
+
+        // action permission
+        var itemStack = storage.search(blockState.getItem()).orElse(null);
+
+        if (itemStack == null || itemStack.isEmpty()) {
+            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
+        }
+
+        if (itemStack.isAir()) {
+            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
+        }
+
+        if (!itemStack.getItem().isBlockItem()) {
+            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
+        }
+
         // action permission
         if (!player.canInteractBlock(getInteraction().getBlockPosition())) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
         }
 
         switch (context.replaceMode()) {
-            case DISABLED, NORMAL -> {
+            case DISABLED -> {
                 if (!player.getWorld().getBlockState(getInteraction().getBlockPosition()).isReplaceable(player, getInteraction())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
-            case QUICK -> {
+            case NORMAL, QUICK -> {
                 if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getInteraction().getBlockPosition()).isDestroyable()) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
@@ -60,16 +84,6 @@ public class BlockPlaceOperation extends BlockOperation {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
-        }
-        // action permission
-        var itemStack = storage.searchByItem(blockState.getItem()).orElse(null);
-
-        if (itemStack == null || itemStack.isEmpty()) {
-            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
-        }
-
-        if (!itemStack.getItem().isBlockItem()) {
-            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
         }
 
         if (context.isPreview() && player.getWorld().isClient()) {
@@ -135,6 +149,10 @@ public class BlockPlaceOperation extends BlockOperation {
     @Override
     public BlockPlaceOperation refactor(RefactorContext refactorContext) {
         return new BlockPlaceOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()));
+    }
+
+    private ItemStack getItemStack() {
+        return storage.search(blockState.getItem()).orElse(null);
     }
 
 }

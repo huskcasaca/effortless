@@ -69,15 +69,18 @@ public abstract class AbstractContainerWidget extends AbstractWidget implements 
     }
 
     public <T extends AbstractWidget> T addWidget(T widget) {
+        widget.setParent(this);
         children.add(widget);
         return widget;
     }
 
     public void removeWidget(AbstractWidget widget) {
+        widget.setParent(null);
         children().remove(widget);
     }
 
     public void clearWidgets() {
+        children().forEach(widget -> widget.setParent(null));
         children().clear();
     }
 

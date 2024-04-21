@@ -1,16 +1,11 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.awt.*;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 
 public abstract class BlockOperationResult extends OperationResult {
-
-    public static final Color BLOCK_BREAK_OP_COLOR = new Color(1f, 0, 0, 0.5f);
-    public static final Color BLOCK_PLACE_SUCC_OP_COLOR = new Color(235, 235, 235);
-    public static final Color BLOCK_PLACE_FAIL_OP_COLOR = new Color(255, 0, 0);
 
     protected final BlockOperation operation;
     protected final Type result;
@@ -46,8 +41,6 @@ public abstract class BlockOperationResult extends OperationResult {
         return outputs;
     }
 
-    public abstract Color getColor();
-
     public enum Type {
         SUCCESS,
         CONSUME,
@@ -59,6 +52,9 @@ public abstract class BlockOperationResult extends OperationResult {
 
         FAIL_ITEM_INSUFFICIENT,
         FAIL_ITEM_NOT_BLOCK,
+
+        FAIL_WHITELISTED,
+        FAIL_BLACKLISTED,
 
         FAIL_BLOCK_STATE_AIR,
         FAIL_BLOCK_STATE_NULL,

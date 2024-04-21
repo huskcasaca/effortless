@@ -18,6 +18,7 @@
   "effortless.button.save": "儲存",
   "effortless.button.select": "選擇",
   "effortless.button.clear": "清除",
+  "effortless.button.reset": "重置",
 
   "effortless.online_players.title": "線上玩家",
   "effortless.online_players.search_hint": "搜尋玩家",
@@ -32,13 +33,14 @@
   "effortless.global_general_settings.allow_use_mod": "允許使用模組",
   "effortless.global_general_settings.allow_break_blocks": "允許破壞方塊",
   "effortless.global_general_settings.allow_place_blocks": "允許放置方塊",
-  "effortless.global_general_settings.max_reach_distance": "最大互動距離",
-  "effortless.global_general_settings.max_distance_per_axis": "每軸最大距離",
-  "effortless.global_general_settings.max_break_box_volume": "最大破壞區域體積",
-  "effortless.global_general_settings.max_place_box_volume": "最大放置區域體積",
+  "effortless.global_general_settings.max_reach_distance": "最大觸及距離",
+  "effortless.global_general_settings.max_box_volume_per_break": "最大單次破壞區域體積",
+  "effortless.global_general_settings.max_box_volume_per_place": "最大單次放置區域體積",
+  "effortless.global_general_settings.max_box_side_length_per_break": "最大單次破壞區域邊長",
+  "effortless.global_general_settings.max_box_side_length_per_place": "最大單次放置區域邊長",
   "effortless.global_general_settings.whitelisted_items": "白名單物品",
   "effortless.global_general_settings.blacklisted_items": "黑名單物品",
-  "effortless.global_general_settings.items": "%s個物品",
+  "effortless.global_general_settings.items": "%s 個物品",
 
   "effortless.render_settings.show_other_players_build": "顯示其他玩家建築",
   "effortless.render_settings.show_block_preview": "顯示方塊預覽",
@@ -55,8 +57,8 @@
   "effortless.message.building.cannot_break_blocks_no_permission": "無破壞方塊權限",
   "effortless.message.building.cannot_place_blocks_box_volume_too_large": "無法放置方塊！區域體積太大",
   "effortless.message.building.cannot_break_blocks_box_volume_too_large": "無法破壞方塊！區域體積太大",
-  "effortless.message.building.cannot_place_blocks_side_length_too_large": "無法放置方塊！邊長太大",
-  "effortless.message.building.cannot_break_blocks_side_length_too_large": "無法破壞方塊！邊長太大",
+  "effortless.message.building.cannot_place_blocks_box_side_length_too_large": "無法放置方塊！區域邊長太大",
+  "effortless.message.building.cannot_break_blocks_box_side_length_too_large": "無法破壞方塊！區域邊長太大",
 
   "effortless.settings.toggle.on": "§a開啟§r",
   "effortless.settings.toggle.off": "§c關閉§r",
@@ -168,8 +170,8 @@
   "effortless.position.right": "右",
 
   "effortless.state.idle": "閒置",
-  "effortless.state.place_block": "放置方塊",
-  "effortless.state.break_block": "破壞方塊",
+  "effortless.state.placing_block": "放置方塊",
+  "effortless.state.breaking_block": "破壞方塊",
 
   "effortless.tracing.success_fulfilled": "成功完成",
   "effortless.tracing.success_partial": "部分成功",
@@ -317,8 +319,22 @@
   "effortless.build.summary.structure": "結構",
   "effortless.build.summary.state": "狀態",
   "effortless.build.summary.tracing": "追蹤",
-  "effortless.build.summary.placed_blocks": "放置的方塊",
-  "effortless.build.summary.destroyed_blocks": "破壞的方塊",
+
+  "effortless.build.summary.blocks_placed": "已放置",
+  "effortless.build.summary.blocks_destroyed": "已破壞",
+
+  "effortless.build.summary.blocks_not_placeable": "受限制",
+  "effortless.build.summary.blocks_not_breakable": "受限制",
+
+  "effortless.build.summary.blocks_place_insufficient": "数量不足",
+  "effortless.build.summary.blocks_break_insufficient": "数量不足",
+
+  "effortless.build.summary.blocks_place_not_whitelisted": "未列入白名單",
+  "effortless.build.summary.blocks_break_not_whitelisted": "未列入白名單",
+
+  "effortless.build.summary.blocks_place_blacklisted": "列入黑名單",
+  "effortless.build.summary.blocks_break_blacklisted": "列入黑名單",
+
   "effortless.position.move_to_player": "移動到玩家",
   "effortless.position": "位置 %s",
   "effortless.position.absolute": "絕對",

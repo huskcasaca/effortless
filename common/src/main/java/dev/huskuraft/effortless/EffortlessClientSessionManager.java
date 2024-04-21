@@ -77,26 +77,26 @@ public final class EffortlessClientSessionManager implements SessionManager {
     }
 
     @Override
-    public boolean isServerSessionValid() {
-        return serverSession.get() != null;
+    public boolean isSessionValid() {
+        return getSessionStatus() == SessionStatus.SUCCESS;
     }
 
     @Override
     public SessionStatus getSessionStatus() {
         if (serverSession.get() == null && clientSession.get() == null) {
-            return SessionStatus.BOTH_NOT_LOADED;
+            return SessionStatus.MOD_MISSING;
         }
         if (serverSession.get() == null || serverSessionConfig.get() == null) {
-            return SessionStatus.SERVER_NOT_LOADED;
+            return SessionStatus.SERVER_MOD_MISSING;
         }
         if (clientSession.get() == null) {
-            return SessionStatus.CLIENT_NOT_LOADED;
+            return SessionStatus.CLIENT_MOD_MISSING;
         }
         var serverMod = serverSession.get().mods().stream().filter(mod -> mod.getId().equals(Effortless.MOD_ID)).findFirst().orElseThrow();
         var clientMod = clientSession.get().mods().stream().filter(mod -> mod.getId().equals(Effortless.MOD_ID)).findFirst().orElseThrow();
 
         if (!serverMod.getVersionStr().equals(clientMod.getVersionStr())) {
-            return SessionStatus.PROTOCOL_VERSION_MISMATCH;
+            return SessionStatus.PROTOCOL_NOT_MATCH;
         }
         return SessionStatus.SUCCESS;
     }
@@ -134,21 +134,19 @@ public final class EffortlessClientSessionManager implements SessionManager {
     }
 
     public void notifyPlayer() {
-        if (!isPlayerNotified.compareAndSet(false, true)) {
-            return;
-        }
         var id = TextStyle.GRAY + "[" + Text.translate("effortless.name") + "]" + TextStyle.RESET + " ";
         var message = switch (getSessionStatus()) {
-            case SERVER_NOT_LOADED -> TextStyle.RED + "Mod is not found on SERVER side.";
-            case CLIENT_NOT_LOADED -> TextStyle.RED + "Mod is not found on CLIENT side.";
-            case BOTH_NOT_LOADED -> TextStyle.RED + "Mod not found on SERVER and CLIENT, it cannot happen.";
-            case PROTOCOL_VERSION_MISMATCH -> {
-                yield TextStyle.WHITE + "Protocol version mismatch! " + TextStyle.GOLD + "Server: [" + serverSession.get().protocolVersion() + "]" + TextStyle.WHITE + ", " + TextStyle.GOLD + "Client: [" + clientSession.get().protocolVersion() + "]";
-            }
-            case SUCCESS -> TextStyle.WHITE + "Mod found on SERVER and CLIENT, running with loader type " + TextStyle.GOLD + "[" + serverSession.get().loaderType().name() + "]";
+            case MOD_MISSING -> Text.translate("effortless.session_status.message.mod_missing");
+            case SERVER_MOD_MISSING -> Text.translate("effortless.session_status.message.server_mod_missing");
+            case CLIENT_MOD_MISSING -> Text.translate("effortless.session_status.message.client_mod_missing");
+            case PROTOCOL_NOT_MATCH -> Text.translate("effortless.session_status.message.protocol_not_match", serverSession.get().protocolVersion(), clientSession.get().protocolVersion());
+            case SUCCESS -> Text.translate("effortless.session_status.message.success", serverSession.get().loaderType().name());
         };
-        getEntrance().getClientManager().getRunningClient().getPlayer().sendMessage(id + message);
+        if (getSessionStatus() != SessionStatus.SUCCESS) {
+            getEntrance().getClientManager().getRunningClient().getPlayer().sendMessage(id + message);
+        }
     }
+
 
     public void onClientTick(Client client, ClientTick.Phase phase) {
         if (phase == ClientTick.Phase.END) {
@@ -164,11 +162,15 @@ public final class EffortlessClientSessionManager implements SessionManager {
 
         var player = getEntrance().getClient().getPlayer();
 
+        clientSession.set(getLastSession());
+
         if (getEntrance().getStructureBuilder().getContext(player).isDisabled()) {
             return;
         }
 
-        clientSession.set(getLastSession());
+        if (!isPlayerNotified.compareAndSet(false, true)) {
+            return;
+        }
 
         notifyPlayer();
 

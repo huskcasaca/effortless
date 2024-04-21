@@ -13,12 +13,12 @@ public interface Storage {
 
     Storage FULL = new Storage() {
         @Override
-        public Optional<ItemStack> searchByTag(ItemStack stack) {
+        public Optional<ItemStack> searchTag(ItemStack stack) {
             return Optional.of(stack);
         }
 
         @Override
-        public Optional<ItemStack> searchByItem(Item item) {
+        public Optional<ItemStack> search(Item item) {
             return Optional.of(item.getDefaultStack());
         }
 
@@ -35,12 +35,12 @@ public interface Storage {
     };
     Storage EMPTY = new Storage() {
         @Override
-        public Optional<ItemStack> searchByTag(ItemStack stack) {
+        public Optional<ItemStack> searchTag(ItemStack stack) {
             return Optional.empty();
         }
 
         @Override
-        public Optional<ItemStack> searchByItem(Item item) {
+        public Optional<ItemStack> search(Item item) {
             return Optional.empty();
         }
 
@@ -77,13 +77,13 @@ public interface Storage {
             }
 
             @Override
-            public Optional<ItemStack> searchByTag(ItemStack stack) {
-                return getStorage().searchByTag(stack);
+            public Optional<ItemStack> searchTag(ItemStack stack) {
+                return getStorage().searchTag(stack);
             }
 
             @Override
-            public Optional<ItemStack> searchByItem(Item item) {
-                return getStorage().searchByItem(item);
+            public Optional<ItemStack> search(Item item) {
+                return getStorage().search(item);
             }
 
             @Override
@@ -114,7 +114,7 @@ public interface Storage {
 
             // FIXME: 24/12/23
             @Override
-            public Optional<ItemStack> searchByItem(Item item) {
+            public Optional<ItemStack> search(Item item) {
                 var last = cache.get(item);
                 if (last != null && !last.isEmpty()) {
                     return Optional.of(last);
@@ -130,8 +130,8 @@ public interface Storage {
             }
 
             @Override
-            public Optional<ItemStack> searchByTag(ItemStack itemStack) {
-                var result = searchByItem(itemStack.getItem());
+            public Optional<ItemStack> searchTag(ItemStack itemStack) {
+                var result = search(itemStack.getItem());
                 if (result.isPresent() && result.get().tagEquals(itemStack)) {
                     return result;
                 } else {
@@ -141,7 +141,7 @@ public interface Storage {
 
             @Override
             public boolean consume(ItemStack itemStack) {
-                var found = searchByTag(itemStack);
+                var found = searchTag(itemStack);
                 if (found.isEmpty()) {
                     return false;
                 }
@@ -160,9 +160,9 @@ public interface Storage {
         };
     }
 
-    Optional<ItemStack> searchByTag(ItemStack stack);
+    Optional<ItemStack> searchTag(ItemStack stack);
 
-    Optional<ItemStack> searchByItem(Item item);
+    Optional<ItemStack> search(Item item);
 
     boolean consume(ItemStack stack);
 

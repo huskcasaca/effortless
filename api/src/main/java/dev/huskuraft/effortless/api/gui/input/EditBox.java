@@ -352,12 +352,12 @@ public class EditBox extends AbstractWidget {
             this.setFocus(false);
             return false;
         } else {
-            boolean bl = isMouseOver(mouseX, mouseY);
+            boolean isMouseOver = isMouseOver(mouseX, mouseY);
             if (this.canLoseFocus) {
-                this.setFocus(bl);
+                this.setFocus(isMouseOver);
             }
 
-            if (this.isFocused() && bl && button == 0) {
+            if (this.isFocused() && isMouseOver && button == 0) {
                 var j = (int) MathUtils.floor(mouseX) - this.getX();
                 if (this.bordered) {
                     j -= 4;

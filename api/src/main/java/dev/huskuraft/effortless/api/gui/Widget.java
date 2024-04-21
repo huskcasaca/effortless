@@ -66,6 +66,8 @@ public interface Widget extends Renderable, InputHandler {
         return getX() + getWidth() / 2;
     }
 
+    Widget getParent();
+
     default void recreate() {
         onDestroy();
         onCreate();

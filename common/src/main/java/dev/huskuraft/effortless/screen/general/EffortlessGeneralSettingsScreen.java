@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
 import dev.huskuraft.effortless.screen.settings.EffortlessNotAnOperatorScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 import dev.huskuraft.effortless.screen.settings.SettingButtonsList;
 
 public class EffortlessGeneralSettingsScreen extends AbstractScreen {
@@ -23,32 +24,46 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
 
         var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1));
         entries.addTab(Text.translate("effortless.global_general_settings.title"), (button) -> {
-            getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
-                if (packet.isOperator()) {
-                    getEntrance().getClient().execute(() -> {
-                        new EffortlessGlobalGeneralSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig(), config -> {
-                            getEntrance().getSessionManager().updateGlobalConfig(config);
-                        }).attach();
-                    });
-                } else {
-                    getEntrance().getClient().execute(() -> {
-                        new EffortlessNotAnOperatorScreen(getEntrance()).attach();
-                    });
-                }
-            });
+            if (!getEntrance().getSessionManager().isSessionValid()) {
+                getEntrance().getClient().execute(() -> {
+                    new EffortlessSessionStatusScreen(getEntrance()).attach();
+                });
+            } else {
+                getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
+                    if (packet.isOperator()) {
+                        getEntrance().getClient().execute(() -> {
+                            new EffortlessGlobalGeneralSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig(), config -> {
+                                getEntrance().getSessionManager().updateGlobalConfig(config);
+                            }).attach();
+                        });
+                    } else {
+                        getEntrance().getClient().execute(() -> {
+                            new EffortlessNotAnOperatorScreen(getEntrance()).attach();
+                        });
+                    }
+                });
+            }
+
         });
         entries.addTab(Text.translate("effortless.per_player_general_settings.title"), (button) -> {
             getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
-                if (packet.isOperator()) {
+
+                if (!getEntrance().getSessionManager().isSessionValid()) {
                     getEntrance().getClient().execute(() -> {
-                        new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().playerConfigs(), playerConfigs -> {
-                            getEntrance().getSessionManager().updatePlayerConfig(playerConfigs);
-                        }).attach();
+                        new EffortlessSessionStatusScreen(getEntrance()).attach();
                     });
                 } else {
-                    getEntrance().getClient().execute(() -> {
-                        new EffortlessNotAnOperatorScreen(getEntrance()).attach();
-                    });
+                    if (packet.isOperator()) {
+                        getEntrance().getClient().execute(() -> {
+                            new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().playerConfigs(), playerConfigs -> {
+                                getEntrance().getSessionManager().updatePlayerConfig(playerConfigs);
+                            }).attach();
+                        });
+                    } else {
+                        getEntrance().getClient().execute(() -> {
+                            new EffortlessNotAnOperatorScreen(getEntrance()).attach();
+                        });
+                    }
                 }
             });
         });

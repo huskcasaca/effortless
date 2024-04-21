@@ -10,9 +10,10 @@ public record GeneralConfig(
         Boolean allowBreakBlocks,
         Boolean allowPlaceBlocks,
         Integer maxReachDistance,
-        Integer maxDistancePerAxis,
-        Integer maxBreakBoxVolume,
-        Integer maxPlaceBoxVolume,
+        Integer maxBoxVolumePerBreak,
+        Integer maxBoxVolumePerPlace,
+        Integer maxBoxSideLengthPerBreak,
+        Integer maxBoxSideLengthPerPlace,
         List<ResourceLocation> whitelistedItems,
         List<ResourceLocation> blacklistedItems
 ) {
@@ -26,17 +27,21 @@ public record GeneralConfig(
     public static final int MAX_REACH_DISTANCE_RANGE_START = 1;
     public static final int MAX_REACH_DISTANCE_RANGE_END = 1024;
 
-    public static final int MAX_DISTANCE_PER_AXIS_DEFAULT = 1024;
-    public static final int MAX_DISTANCE_PER_AXIS_RANGE_START = 1;
-    public static final int MAX_DISTANCE_PER_AXIS_RANGE_END = Short.MAX_VALUE;
+    public static final int MAX_BOX_SIDE_LENGTH_PER_BREAK_DEFAULT = 1024;
+    public static final int MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_START = 1;
+    public static final int MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_END = Short.MAX_VALUE;
 
-    public static final int MAX_BREAK_BOX_VOLUME_DEFAULT = 1024;
-    public static final int MAX_BREAK_BOX_VOLUME_RANGE_START = 1;
-    public static final int MAX_BREAK_BOX_VOLUME_RANGE_END = Short.MAX_VALUE;
+    public static final int MAX_BOX_SIDE_LENGTH_PER_PLACE_DEFAULT = 1024;
+    public static final int MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START = 1;
+    public static final int MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END = Short.MAX_VALUE;
 
-    public static final int MAX_PLACE_BOX_VOLUME_DEFAULT = 1024;
-    public static final int MAX_PLACE_BOX_VOLUME_RANGE_START = 1;
-    public static final int MAX_PLACE_BOX_VOLUME_RANGE_END = Short.MAX_VALUE;
+    public static final int MAX_BOX_VOLUME_PER_BREAK_DEFAULT = 1024 * 1024;
+    public static final int MAX_BOX_VOLUME_PER_BREAK_RANGE_START = 1;
+    public static final int MAX_BOX_VOLUME_PER_BREAK_RANGE_END = Integer.MAX_VALUE;
+
+    public static final int MAX_BOX_VOLUME_PER_PLACE_DEFAULT = 1024 * 1024;
+    public static final int MAX_BOX_VOLUME_PER_PLACE_RANGE_START = 1;
+    public static final int MAX_BOX_VOLUME_PER_PLACE_RANGE_END = Integer.MAX_VALUE;
 
     public static final List<ResourceLocation> WHITELISTED_ITEMS_DEFAULT = List.of();
     public static final List<ResourceLocation> BLACKLISTED_ITEMS_DEFAULT = List.of();
@@ -47,12 +52,12 @@ public record GeneralConfig(
             ALLOW_BREAK_BLOCKS_DEFAULT,
             ALLOW_PLACE_BLOCKS_DEFAULT,
             MAX_REACH_DISTANCE_DEFAULT,
-            MAX_DISTANCE_PER_AXIS_DEFAULT,
-            MAX_BREAK_BOX_VOLUME_DEFAULT,
-            MAX_PLACE_BOX_VOLUME_DEFAULT,
+            MAX_BOX_VOLUME_PER_BREAK_DEFAULT,
+            MAX_BOX_VOLUME_PER_PLACE_DEFAULT,
+            MAX_BOX_SIDE_LENGTH_PER_BREAK_DEFAULT,
+            MAX_BOX_SIDE_LENGTH_PER_PLACE_DEFAULT,
             WHITELISTED_ITEMS_DEFAULT,
-            BLACKLISTED_ITEMS_DEFAULT
-    );
+            BLACKLISTED_ITEMS_DEFAULT);
 
     public static final GeneralConfig EMPTY = new GeneralConfig(
             false,
@@ -63,9 +68,9 @@ public record GeneralConfig(
             0,
             0,
             0,
+            0,
             List.of(),
-            List.of()
-    );
+            List.of());
 
     public static final GeneralConfig NULL = new GeneralConfig(
             null,
@@ -77,6 +82,6 @@ public record GeneralConfig(
             null,
             null,
             null,
-            null
-    );
+            null,
+            null);
 }
