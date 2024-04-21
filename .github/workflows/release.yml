@@ -29,6 +29,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          EFFORTLESS_PORT_TYPE: active
         with:
           arguments: modrinth
 

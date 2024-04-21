@@ -63,7 +63,7 @@ def devPorts = [
 ['fabric', 'forge', 'vanilla', 'multiplatform'].forEach { platform ->
     include "$platform"
     def ports
-    switch (System.getenv("EF_PORT_TYPE")) {
+    switch (System.getenv("EFFORTLESS_PORT_TYPE")) {
         case 'full': ports = fullPorts; break
         case 'active': ports = activePorts; break
         case 'dev': ports = devPorts; break
