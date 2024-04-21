@@ -57,8 +57,8 @@
   "effortless.message.building.cannot_break_blocks_no_permission": "Нет разрешения на разрушение блоков",
   "effortless.message.building.cannot_place_blocks_box_volume_too_large": "Не удается разместить блоки! Объем блока слишком велик",
   "effortless.message.building.cannot_break_blocks_box_volume_too_large": "Не удается разрушить блоки! Объем блока слишком велик",
-  "effortless.message.building.cannot_place_blocks_side_length_too_large": "Не удается разместить блоки! Длина стороны блока слишком велика",
-  "effortless.message.building.cannot_break_blocks_side_length_too_large": "Не удается разрушить блоки! Длина стороны блока слишком велика",
+  "effortless.message.building.cannot_place_blocks_box_side_length_too_large": "Не удается разместить блоки! Длина стороны блока слишком велика",
+  "effortless.message.building.cannot_break_blocks_box_side_length_too_large": "Не удается разрушить блоки! Длина стороны блока слишком велика",
 
   "effortless.settings.toggle.on": "§aВКЛ§r",
   "effortless.settings.toggle.off": "§cВЫКЛ§r",
@@ -342,5 +342,12 @@
   "effortless.position.relative_once": "Относительная однократно",
 
   "effortless.test.save": "Сохранить",
-  "effortless.test.cancel": "Отмена"
+  "effortless.test.cancel": "Отмена",
+
+  "effortless.session_status.title": "Недопустимая сессия",
+  "effortless.session_status.message.success": "Мод найден на сервере и клиенте, запущен с типом загрузчика §6[%s]§r.",
+  "effortless.session_status.message.mod_missing": "§cМод не найден на сервере и клиенте, это невозможно.",
+  "effortless.session_status.message.server_mod_missing": "§cМод не найден на стороне сервера.§r",
+  "effortless.session_status.message.client_mod_missing": "§cМод не найден на стороне клиента.§r",
+  "effortless.session_status.message.protocol_not_match": "§cВерсия протокола мода не совпадает! Сервер: §6[%s]§c, Клиент: §6[%s]§c.§r"
 }

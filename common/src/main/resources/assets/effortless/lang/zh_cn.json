@@ -342,5 +342,12 @@
   "effortless.position.relative_once": "单次相对",
 
   "effortless.test.save": "保存",
-  "effortless.test.cancel": "取消"
+  "effortless.test.cancel": "取消",
+
+  "effortless.session_status.title": "无效会话",
+  "effortless.session_status.message.success": "服务器和客户端均找到此模组，正在使用加载器类型 §6[%s]§r 运行。",
+  "effortless.session_status.message.mod_missing": "§c服务器和客户端均未找到此模组，这不可能发生。",
+  "effortless.session_status.message.server_mod_missing": "§c服务器端未找到此模组。§r",
+  "effortless.session_status.message.client_mod_missing": "§c客户端未找到此模组。§r",
+  "effortless.session_status.message.protocol_not_match": "§c模组协议版本不匹配！服务器: §6[%s]§c，客户端: §6[%s]§c。§r"
 }

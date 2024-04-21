@@ -18,6 +18,7 @@
   "effortless.button.save": "Speichern",
   "effortless.button.select": "Auswählen",
   "effortless.button.clear": "Leeren",
+  "effortless.button.reset": "Zurücksetzen",
 
   "effortless.online_players.title": "Online Spieler",
   "effortless.online_players.search_hint": "Spieler suchen",
@@ -33,9 +34,10 @@
   "effortless.global_general_settings.allow_break_blocks": "Blöcke zerstören erlauben",
   "effortless.global_general_settings.allow_place_blocks": "Blöcke platzieren erlauben",
   "effortless.global_general_settings.max_reach_distance": "Maximale Reichweite",
-  "effortless.global_general_settings.max_distance_per_axis": "Maximale Distanz pro Achse",
-  "effortless.global_general_settings.max_break_box_volume": "Maximal zerstörte Blöcke",
-  "effortless.global_general_settings.max_place_box_volume": "Maximal platzierte Blöcke",
+  "effortless.global_general_settings.max_box_volume_per_break": "Maximales Volumen pro Kiste pro Abbau",
+  "effortless.global_general_settings.max_box_volume_per_place": "Maximales Volumen pro Kiste pro Platzierung",
+  "effortless.global_general_settings.max_box_side_length_per_break": "Maximale Seitenlänge pro Kiste pro Abbau",
+  "effortless.global_general_settings.max_box_side_length_per_place": "Maximale Seitenlänge pro Kiste pro Platzierung",
   "effortless.global_general_settings.whitelisted_items": "Erlaubte Gegenstände",
   "effortless.global_general_settings.blacklisted_items": "Verbotene Gegenstände",
   "effortless.global_general_settings.items": "%s Gegenstand/Gegenstände",
@@ -51,12 +53,12 @@
   "effortless.message.building.build_canceled": "Bau abgebrochen",
   "effortless.message.building.cannot_reach_target": "Ziel nicht erreichbar",
   "effortless.message.building.cannot_reach_entity": "Entität nicht anvisierbar",
-  "effortless.message.building.cannot_place_blocks_no_permission": "Keine Berechtigung, Blöcke zu platzieren",
-  "effortless.message.building.cannot_break_blocks_no_permission": "Keine Berechtigung, Blöcke zu zerstören",
-  "effortless.message.building.cannot_place_blocks_box_volume_too_large": "Kann Blöcke nicht platzieren! Zu viele Blöcke",
-  "effortless.message.building.cannot_break_blocks_box_volume_too_large": "Kann Blöcke nicht zerstören! Zu viele Blöcke",
-  "effortless.message.building.cannot_place_blocks_side_length_too_large": "Kann Blöcke nicht platzieren! Seitenlänge ist zu groß",
-  "effortless.message.building.cannot_break_blocks_side_length_too_large": "Kann Blöcke nicht zerstören! Seitenlänge ist zu groß",
+  "effortless.message.building.cannot_place_blocks_no_permission": "Keine Berechtigung zum Platzieren von Blöcken",
+  "effortless.message.building.cannot_break_blocks_no_permission": "Keine Berechtigung zum Zerstören von Blöcken",
+  "effortless.message.building.cannot_place_blocks_box_volume_too_large": "Kann Blöcke nicht platzieren! Volumen des Blocks ist zu groß",
+  "effortless.message.building.cannot_break_blocks_box_volume_too_large": "Kann Blöcke nicht zerstören! Volumen des Blocks ist zu groß",
+  "effortless.message.building.cannot_place_blocks_box_side_length_too_large": "Kann Blöcke nicht platzieren! Seitenlänge des Blocks ist zu groß",
+  "effortless.message.building.cannot_break_blocks_box_side_length_too_large": "Kann Blöcke nicht zerstören! Seitenlänge des Blocks ist zu groß",
 
   "effortless.settings.toggle.on": "§aAN§r",
   "effortless.settings.toggle.off": "§cAUS§r",
@@ -167,9 +169,9 @@
   "effortless.position.left": "Links",
   "effortless.position.right": "Rechts",
 
-  "effortless.state.idle": "Leerlauf",
-  "effortless.state.place_block": "Blöcke platzieren",
-  "effortless.state.break_block": "Blöcke zerstören",
+  "effortless.state.idle": "Inaktiv",
+  "effortless.state.placing_block": "Blöcke platzieren",
+  "effortless.state.breaking_block": "Blöcke zerstören",
 
   "effortless.tracing.success_fulfilled": "Erfolg",
   "effortless.tracing.success_partial": "Ausstehend",
@@ -236,7 +238,7 @@
   "commands.effortless.enable_undo_redo.failure": "Rückgängig/Wiederholen von %s konnte nicht gesetzt werden",
   "commands.effortless.undo_stack_size.success": "Größe des Rückgängig-Speichers von %s auf %s gesetzt",
   "commands.effortless.undo_stack_size.failure": "Größe des Rückgängig-Speichers von %s konnte nicht gesetzt werden",
-  "commands.reserved": "RESERVIERT",
+  "commands.reserved": "NIE",
 
   "effortless.building.title": "Effortless Building",
   "effortless.building.radial.title": "Effortless Building",
@@ -315,10 +317,24 @@
   "effortless.transformer.edit.cancel": "Abbrechen",
 
   "effortless.build.summary.structure": "Struktur",
-  "effortless.build.summary.state": "Status",
-  "effortless.build.summary.tracing": "Nachverfolgung",
-  "effortless.build.summary.placed_blocks": "Platzierte Blöcke",
-  "effortless.build.summary.destroyed_blocks": "Zerstörte Blöcke",
+  "effortless.build.summary.state": "Zustand",
+  "effortless.build.summary.tracing": "Verfolgung",
+
+  "effortless.build.summary.blocks_placed": "Platziert",
+  "effortless.build.summary.blocks_destroyed": "Zerstört",
+
+  "effortless.build.summary.blocks_not_placeable": "Nicht platzierbar",
+  "effortless.build.summary.blocks_not_breakable": "Nicht zerstörbar",
+
+  "effortless.build.summary.blocks_place_insufficient": "Nicht genug",
+  "effortless.build.summary.blocks_break_insufficient": "Nicht genug",
+
+  "effortless.build.summary.blocks_place_not_whitelisted": "Nicht zugelassen",
+  "effortless.build.summary.blocks_break_not_whitelisted": "Nicht zugelassen",
+
+  "effortless.build.summary.blocks_place_blacklisted": "Schwarze Liste",
+  "effortless.build.summary.blocks_break_blacklisted": "Schwarze Liste",
+
   "effortless.position.move_to_player": "Zum Spieler bewegen",
   "effortless.position": "Position %s",
   "effortless.position.absolute": "Absolut",
@@ -326,5 +342,12 @@
   "effortless.position.relative_once": "Einmal relativ",
 
   "effortless.test.save": "Speichern",
-  "effortless.test.cancel": "Abbrechen"
+  "effortless.test.cancel": "Abbrechen",
+
+  "effortless.session_status.title": "Ungültige Sitzung",
+  "effortless.session_status.message.success": "Mod auf Server und Client gefunden, läuft mit Loader-Typ §6[%s]§r.",
+  "effortless.session_status.message.mod_missing": "§cMod nicht auf Server und Client gefunden, es kann nicht passieren.",
+  "effortless.session_status.message.server_mod_missing": "§cMod auf Serverseite nicht gefunden.§r",
+  "effortless.session_status.message.client_mod_missing": "§cMod auf Clientseite nicht gefunden.§r",
+  "effortless.session_status.message.protocol_not_match": "§cMod-Protokollversion stimmt nicht überein! Server: §6[%s]§c, Client: §6[%s]§c.§r"
 }
