@@ -342,5 +342,12 @@
   "effortless.position.relative_once": "單次相對",
 
   "effortless.test.save": "保存",
-  "effortless.test.cancel": "取消"
+  "effortless.test.cancel": "取消",
+
+  "effortless.session_status.title": "無效會話",
+  "effortless.session_status.message.success": "伺服器和客戶端均找到此模組，正在使用載入器類型 §6[%s]§r 執行。",
+  "effortless.session_status.message.mod_missing": "§c伺服器和客戶端均未找到此模組，這不可能發生。",
+  "effortless.session_status.message.server_mod_missing": "§c伺服器端未找到此模組。§r",
+  "effortless.session_status.message.client_mod_missing": "§c客戶端未找到此模組。§r",
+  "effortless.session_status.message.protocol_not_match": "§c模組協議版本不匹配！伺服器: §6[%s]§c，客戶端: §6[%s]§c。§r"
 }

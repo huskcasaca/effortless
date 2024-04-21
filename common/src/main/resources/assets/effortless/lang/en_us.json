@@ -344,7 +344,6 @@
   "effortless.test.save": "Save",
   "effortless.test.cancel": "Cancel",
 
-
   "effortless.session_status.title": "Invalid Session",
   "effortless.session_status.message.success": "Mod found on server and client, running with loader type §6[%s]§r.",
   "effortless.session_status.message.mod_missing": "§cMod not found on server and client, it cannot happen.",
