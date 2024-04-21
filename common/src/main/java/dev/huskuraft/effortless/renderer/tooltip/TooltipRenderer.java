@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
@@ -32,8 +33,8 @@ public class TooltipRenderer {
         this.entrance = entrance;
     }
 
-    public Entrance getEntrance() {
-        return entrance;
+    public EffortlessClient getEntrance() {
+        return (EffortlessClient) entrance;
     }
 
     public void showMessages(Object id, int priority, List<Text> texts) {
@@ -108,6 +109,9 @@ public class TooltipRenderer {
     }
 
     public void renderGuiOverlay(Renderer renderer, float deltaTick) {
+        if (getEntrance().getClient().getPanel() != null) {
+            return;
+        }
         var contentSide = AxisDirection.POSITIVE;
         var contentGravity = AxisDirection.NEGATIVE;
         renderer.pushPose();
@@ -428,25 +432,13 @@ public class TooltipRenderer {
                 if (!entry.isVisible()) {
                     continue;
                 }
-//                entry.setContentSide(contentGravity);
                 renderer.pushPose();
-//                switch (getContentSide()) {
-//                    case POSITIVE ->
-//                            renderer.translate(renderer.window().getGuiScaledWidth() - (contentGravity == AxisDirection.POSITIVE ? entry.getContentWidth() : width), 0, 0);
-//                    case NEGATIVE -> renderer.translate(0, 0, 0);
-//                }
-//                    renderer.renderRect(0, 0, entry.getWidth(), -entry.getHeight() - 4, renderer.optionColor(0.8f * entry.getAlpha()));
-//                    renderer.translate(0, -2, 0);
                 renderer.pushPose();
                 renderer.translate(entry.getPaddingX(), -entry.getPaddingY(), 0);
                 entry.render(renderer, 0, 0, deltaTick);
                 renderer.popPose();
                 renderer.popPose();
                 renderer.translate(0, -entry.getHeight(), 0);
-//                    renderer.translate(0, -6, 0);
-
-//                height += entry.getHeight();
-//                alpha = Math.max(alpha, entry.getAlpha());
             }
         }
 
