@@ -2,12 +2,28 @@
 
 ----------
 
+### 2.3.0
+
+* Add server config ([#83](https://github.com/huskcasaca/effortless/pull/83))
+* Fix game crashes with quilt ([#85](https://github.com/huskcasaca/effortless/pull/85))
+* Fix keeps causing server crash direct cause unknown ([#86](https://github.com/huskcasaca/effortless/pull/86))
+* Fix game crash upon attempted opening of build wheel ([#87](https://github.com/huskcasaca/effortless/pull/87))
+* Fix Center Start point does not work in Circle and Cylinder building modes ([#88](https://github.com/huskcasaca/effortless/pull/88))
+* Fix left ctrl unusable on launch ([#89](https://github.com/huskcasaca/effortless/pull/89))
+* Add patter presets ([#90](https://github.com/huskcasaca/effortless/pull/90))
+* Fix some bugs ([#93](https://github.com/huskcasaca/effortless/pull/93))
+* Add world border limitation ([#94](https://github.com/huskcasaca/effortless/pull/94))
+* Add German translations ([#91](https://github.com/huskcasaca/effortless/pull/91), thanks @AndiLeni)
+* Fix translation entries ([#95](https://github.com/huskcasaca/effortless/pull/95))
+
+----------
+
 ### 2.2.0
 
-* Reset build on ESC ([#70](https://github.com/huskcasaca/effortless/pull/70)
-* Add block placing/breaking on client side only ([#71](https://github.com/huskcasaca/effortless/pull/71)
-* Use ServiceLoader ([#73](https://github.com/huskcasaca/effortless/pull/73)
-* Fix Player/World NPE ([#74](https://github.com/huskcasaca/effortless/pull/74)
+* Reset build on ESC ([#70](https://github.com/huskcasaca/effortless/pull/70))
+* Add block placing/breaking on client side only ([#71](https://github.com/huskcasaca/effortless/pull/71))
+* Use ServiceLoader ([#73](https://github.com/huskcasaca/effortless/pull/73))
+* Fix Player/World NPE ([#74](https://github.com/huskcasaca/effortless/pull/74))
 
 ----------
 
