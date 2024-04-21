@@ -27,24 +27,49 @@ includeBuild 'fuse-gradle-plugin'
 include ':api'
 include ':common'
 
+def fullPorts = [
+    '1-17-1',
+    '1-18',
+    '1-18-1',
+    '1-18-2',
+    '1-19',
+    '1-19-1',
+    '1-19-2',
+    '1-19-3',
+    '1-19-4',
+    '1-20',
+    '1-20-1',
+    '1-20-2',
+    '1-20-3',
+    '1-20-4',
+]
+
+def activePorts = [
+    '1-17-1',
+    '1-18-2',
+    '1-19-2',
+    '1-19-3',
+    '1-19-4',
+    '1-20-1',
+    '1-20-2',
+    '1-20-4',
+]
+
+def devPorts = [
+    '1-17-1',
+    '1-20-2',
+]
+
 ['fabric', 'forge', 'vanilla', 'multiplatform'].forEach { platform ->
     include "$platform"
-    [
-        '1-17-1',
-        '1-18',
-        '1-18-1',
-        '1-18-2',
-        '1-19',
-        '1-19-1',
-        '1-19-2',
-        '1-19-3',
-        '1-19-4',
-        '1-20',
-        '1-20-1',
-        '1-20-2',
-        '1-20-3',
-        '1-20-4',
-    ].forEach { port ->
+    def ports
+    switch (System.getenv("EF_PORT_TYPE")) {
+        case 'full': ports = fullPorts; break
+        case 'active': ports = activePorts; break
+        case 'dev': ports = devPorts; break
+        default: ports = fullPorts
+    }
+    ports.each { port ->
         include ":${platform}:mc-${port}"
     }
 }
