@@ -111,8 +111,8 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
 
         public boolean isCompatible() {
             return switch (getLoaderTypeByName()) {
-                case FABRIC -> getLoaderTypeByThread() == LoaderType.FABRIC;
-                case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT || getLoaderTypeByThread() == LoaderType.FABRIC;
+                case FABRIC -> getLoaderTypeByThread() == LoaderType.FABRIC || getLoaderTypeByThread() == LoaderType.QUILT;
+                case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT;
                 case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
                 case VANILLA -> true;
             };
