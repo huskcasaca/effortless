@@ -108,18 +108,27 @@ Please note that currently, this mod needs to be installed on both the client si
 
 - Pure Vanilla Compatibility: The mod is designed to be fully compatible with a pure vanilla game without adding new
   items or making incompatible modifications.
-- Building Commands: It provides a set of commands specifically designed for building, which are available to players on
-  the server side only.
 - Randomizer: It includes an item randomizer that lets players place blocks and entities randomly from a pre-defined
   list.
-- Magnet: It has a magnet option that allows players to pick up items far away from them.
 
-## Building
+## How to Use
 
-Hold ALT key to switch build modes in the radial panel. There are buttons for undo/redo, transformer settings and
-replace modes on the left. The options for each build mode (like a filled vs hollow wall) are on the right.
+- Hold **LEFT_ALT/LEFT_OPTION** key to open **Build Mode Radial**. You can switch build modes to create different structures. There are buttons for **Undo/Redo**, **General Settings** and **Replace Modes** on the left side.
+- Hold **LEFT_WIN/LEFT_COMMAND** key to open  **Build Pattern Radial**. You can switch build patterns to transform the basic structure. If you do not want to create complex structures, just choose **Disable**.
+
+- Click **ATTACK/DESTROY** key to start destroying blocks.
+- Click **USE_ITEM/PLACE_BLOCK** key to start placing blocks.
+
+- Click **H** key to open **Settings**. You can change all basic settings of this mod. There are settings for **General Settings**, **Render Settings**, **Pattern Settings** and **Transformer Presets**. You can also hold **LEFT_ALT/LEFT_OPTION** key and click the settings icon to open **Settings**.
+- Click **P** key to open **Pattern Settings**. You can edit or delete patterns. You can also create your custom pattern by adding different transformers in it.
+- Click **R** key to cycle between **Replace Modes**. You can choose **Disable**, **Normal** or **Quick**.
+
+- Click **LEFT_BRACKET** key to perform **Undo**. You can undo your last build operation.
+- Click **RIGHT_BRACKET** key to perform **Redo**. You can redo your last build operation.
+
 
 ### Build Modes
+- Build modes are the basic shapes you need to choose when creating a structure. There are currently 13 different types of shapes. Each one has unique features like hollow or filled.
 
 - **Disable**: Place in the vanilla way.
 - **Single**: Place with increased reach distance.
@@ -133,13 +142,21 @@ replace modes on the left. The options for each build mode (like a filled vs hol
 - **Circle**: Place a circle shape in any of the three axes.
 - **Cylinder**: Place a cylindrical shape in any of the three axes.
 - **Sphere**: Place a sphere made of blocks.
+- **Pyramid**: Place a pyramid made of blocks.
+- **Cone**: Place a cone made of blocks.
 
 ### Build Transformers
+- Build transformers are part of the build pattern and are used to modify the build structure. You can use a mirror to create a mirrored copy of a wall shape. You can also use an item randomizer to create a wall of random blocks. You can also combine different build transformers to create complex shapes. There are currently 4 types of transformers.
 
 - **Mirror**: Mirrors blocks and entities for even and uneven builds.
 - **Array**: Copies blocks and entities in a specific direction for a specified number of times.
-- **Radial Mirror**: Places blocks and entities in a circular pattern around a central point. The circle can be divided
+- **Radial**: Places blocks and entities in a circular pattern around a central point. The circle can be divided
   into sections, and each section will contain a copy of the block placements.
+- **Item Randomize**: Randomizes the placement of blocks and entities.
+
+### Build Patterns
+- Build patterns are containers of build transformers. You can combine different build patterns to create complex shapes. There are currently 9 presets of build patterns.
+
 
 ### Replace Modes
 
@@ -147,27 +164,28 @@ replace modes on the left. The options for each build mode (like a filled vs hol
 - **Normal**: Replaces existing blocks when placing new blocks, excluding the first block.
 - **Quick**: Replaces existing blocks, including the first block, when placing new blocks.
 
+
 ## Screenshots
 
-### Building Menu
+### Build Modes
 
-![Radial Menu](assets/screenshots/radial_menu.png)
+![Build Modes](assets/screenshots/build_modes.png)
 
-### Line Mode
+### Build Patterns
 
-![Line Mode](assets/screenshots/line_mode.png)
+![Build Patterns](assets/screenshots/build_patterns.png)
 
-### Filled Wall Mode
+### Single Array Build Pattern
 
-![Filled Wall Mode](assets/screenshots/filled_wall_mode.png)
+![Single Array Build Pattern](assets/screenshots/build_pattern_array.png)
 
-### Filled Floor Mode
+### Single Mirror Build Pattern
 
-![Filled Floor Mode](assets/screenshots/filled_floor_mode.png)
+![Single Mirror Build Pattern](assets/screenshots/build_pattern_mirror.png)
 
-### Filled Cube Mode
+### Single Item Randomizer Build Pattern
 
-![Filled Cube Mode](assets/screenshots/filled_cube_mode.png)
+![Single Item Randomizer Build Pattern](assets/screenshots/build_pattern_item_randomzier.png)
 
 ## Credits
 
