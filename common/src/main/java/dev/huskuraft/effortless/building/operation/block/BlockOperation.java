@@ -63,5 +63,12 @@ public abstract class BlockOperation extends TransformableOperation {
         return interaction;
     }
 
+    public boolean isInBorderBound() {
+        return getWorld().getWorldBorder().isInBounds(getInteraction().getBlockPosition());
+    }
+
+    public boolean isInHeightBound() {
+        return getInteraction().getBlockPosition().y() >= getWorld().getMinBuildHeight() && getInteraction().getBlockPosition().y() <= getWorld().getMaxBuildHeight();
+    }
 
 }

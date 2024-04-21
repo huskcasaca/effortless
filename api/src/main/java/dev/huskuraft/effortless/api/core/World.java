@@ -14,6 +14,18 @@ public interface World extends PlatformReference {
 
     boolean isClient();
 
-    ResourceKey<World> getDimension();
+    ResourceKey<World> getDimensionId();
+
+    DimensionType getDimensionType();
+
+    default int getMinBuildHeight() {
+        return getDimensionType().minY();
+    }
+
+    default int getMaxBuildHeight() {
+        return getDimensionType().minY() + getDimensionType().height();
+    }
+
+    WorldBorder getWorldBorder();
 
 }
