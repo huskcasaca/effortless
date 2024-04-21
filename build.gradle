@@ -3,6 +3,3 @@ plugins {
     id 'com.modrinth.minotaur' version "2.+" apply false // modrinth publishing
     id 'dev.huskuraft.fuse' apply false
 }
-
-
-apply from: 'patch.gradle'
