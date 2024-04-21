@@ -15,7 +15,7 @@ from a pre-defined list for random placement.
     <span> | </span>
     <a href="https://github.com/huskcasaca/effortless/wiki">Documentation</a>
     <span> | </span>
-    <a href="https://discord.gg/3xAEjUek">Discord</a>
+    <a href="https://discord.gg/FwbBg8uUZ7">Discord</a>
 </div>
 
 ## Platforms
