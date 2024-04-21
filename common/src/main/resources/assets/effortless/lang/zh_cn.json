@@ -181,7 +181,7 @@
   "effortless.transformer.no_name": "无名称",
   "effortless.transformer.empty": "空",
 
-  "effortless.transformer.array": "数组",
+  "effortless.transformer.array": "阵列",
   "effortless.transformer.array.count": "数量",
   "effortless.transformer.array.offset": "偏移",
   "effortless.transformer.array.offset.x": "X偏移",
@@ -296,7 +296,7 @@
   "effortless.pattern.edit.save": "保存",
   "effortless.pattern.edit.cancel": "取消",
 
-  "effortless.pattern.array_preset": "数组预设图案",
+  "effortless.pattern.array_preset": "阵列预设图案",
   "effortless.pattern.mirror_x_preset": "X轴镜像预设图案",
   "effortless.pattern.mirror_y_preset": "Y轴镜像预设图案",
   "effortless.pattern.mirror_z_preset": "Z轴镜像预设图案",
