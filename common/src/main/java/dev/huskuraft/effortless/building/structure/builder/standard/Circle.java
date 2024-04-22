@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.structure.builder.doubles;
+package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +11,9 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
-import dev.huskuraft.effortless.building.structure.builder.DoubleClickBuilder;
-import dev.huskuraft.effortless.building.structure.builder.singles.Single;
+import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
-public class Circle extends DoubleClickBuilder {
+public class Circle extends AbstractBlockStructure {
 
     public static boolean isPosInCircle(float centerX, float centerY, float radiusX, float radiusY, int x, int y, boolean fill) {
 
@@ -118,8 +117,12 @@ public class Circle extends DoubleClickBuilder {
     }
 
     @Override
-    protected Stream<BlockPosition> collectFinalBlocks(Context context) {
+    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
         return collectCircleBlocks(context);
     }
 
+    @Override
+    public int totalClicks(Context context) {
+        return 2;
+    }
 }

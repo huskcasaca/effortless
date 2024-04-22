@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.structure.builder.triples;
+package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,12 +8,9 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.TripleClickBuilder;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Line;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Square;
-import dev.huskuraft.effortless.building.structure.builder.singles.Single;
+import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
-public class Cube extends TripleClickBuilder {
+public class Cube extends AbstractBlockStructure {
 
     public static void addFullCubeBlocks(List<BlockPosition> list, int x1, int x2, int y1, int y2, int z1, int z2) {
         for (int l = x1; x1 < x2 ? l <= x2 : l >= x2; l += x1 < x2 ? 1 : -1) {
@@ -138,18 +135,22 @@ public class Cube extends TripleClickBuilder {
 
 
     @Override
-    protected Stream<BlockPosition> collectStartBlocks(Context context) {
+    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
         return Single.collectSingleBlocks(context);
     }
 
     @Override
-    protected Stream<BlockPosition> collectInterBlocks(Context context) {
+    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
         return collectCubePlaneBlocks(context);
     }
 
     @Override
-    protected Stream<BlockPosition> collectFinalBlocks(Context context) {
+    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
         return collectCubeBlocks(context);
     }
 
+    @Override
+    public int totalClicks(Context context) {
+        return 3;
+    }
 }

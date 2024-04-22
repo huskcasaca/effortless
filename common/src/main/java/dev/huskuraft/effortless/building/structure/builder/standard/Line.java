@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.structure.builder.doubles;
+package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,9 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.DoubleClickBuilder;
-import dev.huskuraft.effortless.building.structure.builder.singles.Single;
+import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
-public class Line extends DoubleClickBuilder {
+public class Line extends AbstractBlockStructure {
 
     public static BlockInteraction traceLine(Player player, Context context) {
         var center = context.firstBlockPosition().getCenter();
@@ -91,8 +90,13 @@ public class Line extends DoubleClickBuilder {
     }
 
     @Override
-    protected Stream<BlockPosition> collectFinalBlocks(Context context) {
+    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
         return collectLineBlocks(context);
+    }
+
+    @Override
+    public int totalClicks(Context context) {
+        return 2;
     }
 
     static class NearestLineCriteria extends AxisCriteria {
