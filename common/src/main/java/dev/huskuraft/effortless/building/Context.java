@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.building;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ import dev.huskuraft.effortless.building.structure.CubeFilling;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
+import dev.huskuraft.effortless.building.structure.UniformLength;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public record Context(
@@ -34,7 +36,7 @@ public record Context(
 
         StructureParams structureParams,
         PatternParams patternParams,
-        LimitationParams limitationParams
+        ConfigParams limitationParams
 ) {
 
     public UUID getId() {
@@ -54,11 +56,13 @@ public record Context(
                         PlaneFilling.PLANE_FULL,
                         PlaneFacing.BOTH,
                         RaisedEdge.RAISE_LONG_EDGE,
-                        ReplaceMode.DISABLED),
+                        ReplaceMode.DISABLED,
+                        UniformLength.DISABLE
+                ),
                 new PatternParams(
-                        Pattern.DISABLED,
-                        UUID.randomUUID().getMostSignificantBits()),
-                new LimitationParams(
+                        Pattern.DISABLED
+                ),
+                new ConfigParams(
                         GeneralConfig.DEFAULT
                 )
         );
@@ -333,7 +337,8 @@ public record Context(
             PlaneFilling planeFilling,
             PlaneFacing planeFacing,
             RaisedEdge raisedEdge,
-            ReplaceMode replaceMode
+            ReplaceMode replaceMode,
+            UniformLength uniformLength
     ) {
 
         public Set<Feature> buildFeatures() {
@@ -343,7 +348,7 @@ public record Context(
         }
 
         public StructureParams withBuildMode(BuildMode buildMode) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, uniformLength);
         }
 
         public StructureParams withBuildFeature(Feature feature) {
@@ -376,27 +381,31 @@ public record Context(
         }
 
         public StructureParams withCircleStart(CircleStart circleStart) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, uniformLength);
         }
 
         public StructureParams withCubeFilling(CubeFilling cubeFilling) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, uniformLength);
         }
 
         public StructureParams withPlaneFilling(PlaneFilling planeFilling) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, uniformLength);
         }
 
         public StructureParams withPlaneFacing(PlaneFacing planeFacing) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, uniformLength);
         }
 
         public StructureParams withRaisedEdge(RaisedEdge raisedEdge) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, uniformLength);
         }
 
         public StructureParams withReplaceMode(ReplaceMode replaceMode) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, uniformLength);
+        }
+
+        public StructureParams withUniformLength(UniformLength uniformLength) {
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, uniformLength);
         }
 
     }
@@ -406,28 +415,32 @@ public record Context(
             long seed
     ) {
 
+        public PatternParams(Pattern pattern) {
+            this(pattern, new Random().nextLong());
+        }
+
         public PatternParams withPattern(Pattern pattern) {
             return new PatternParams(pattern, seed);
         }
 
         public PatternParams withRandomSeed() {
-            return new PatternParams(pattern, UUID.randomUUID().getMostSignificantBits());
+            return new PatternParams(pattern, new Random().nextLong());
         }
     }
 
-    public record LimitationParams(
+    public record ConfigParams(
             GeneralConfig generalConfig
     ) {
     }
 
 
-    public Context withReachParams(LimitationParams limitationParams) {
-        return new Context(getId, state, type, interactions, structureParams, patternParams, limitationParams);
+    public Context withReachParams(ConfigParams configParams) {
+        return new Context(getId, state, type, interactions, structureParams, patternParams, configParams);
     }
 
     public Context withGeneralConfig(GeneralConfig config) {
         // FIXME: 4/4/24 commands
-        return withReachParams(new LimitationParams(config));
+        return withReachParams(new ConfigParams(config));
     }
 
     public Vector3i getInteractionBox() {

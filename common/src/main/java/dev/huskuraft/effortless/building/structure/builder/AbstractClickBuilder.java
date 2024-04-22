@@ -12,6 +12,10 @@ public abstract class AbstractClickBuilder implements Builder {
 
     private static final double LOOK_VEC_TOLERANCE = 0.01;
 
+    public static int axisSign(int value) {
+        return MathUtils.sign(value) == 0 ? 1 : (int) MathUtils.sign(value);
+    }
+
     // TODO: 13/10/23 entity
     protected static Vector3d getEntityLookAngleGap(Player player) {
         var look = player.getEyeDirection();

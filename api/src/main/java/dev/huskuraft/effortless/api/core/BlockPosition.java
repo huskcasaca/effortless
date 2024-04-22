@@ -141,4 +141,33 @@ public final class BlockPosition extends Vector3i {
         };
     }
 
+    @Override
+    public BlockPosition add(Vector3i... others) {
+        return BlockPosition.at(super.add(others));
+    }
+
+    @Override
+    public BlockPosition add(Vector3i other) {
+        return BlockPosition.at(super.add(other));
+    }
+
+    @Override
+    public BlockPosition add(int x, int y, int z) {
+        return BlockPosition.at(super.add(x, y, z));
+    }
+
+    @Override
+    public BlockPosition withX(int x) {
+        return new BlockPosition(x, y, z);
+    }
+
+    @Override
+    public BlockPosition withY(int y) {
+        return new BlockPosition(x, y, z);
+    }
+
+    @Override
+    public BlockPosition withZ(int z) {
+        return new BlockPosition(x, y, z);
+    }
 }

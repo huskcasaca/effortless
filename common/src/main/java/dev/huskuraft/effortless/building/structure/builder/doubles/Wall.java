@@ -8,8 +8,10 @@ import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.UniformLength;
 import dev.huskuraft.effortless.building.structure.builder.DoubleClickBuilder;
 import dev.huskuraft.effortless.building.structure.builder.singles.Single;
 
@@ -19,8 +21,9 @@ public class Wall extends DoubleClickBuilder {
         var center = context.firstBlockPosition().getCenter();
         var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
+        var uniformLength = context.structureParams().uniformLength() != UniformLength.DISABLE;
 
-        return Stream.of(
+        var result = Stream.of(
                         new WallCriteria(Axis.X, player, center, reach, skipRaytrace),
                         new WallCriteria(Axis.Z, player, center, reach, skipRaytrace)
                 )
@@ -28,6 +31,27 @@ public class Wall extends DoubleClickBuilder {
                 .min(Comparator.comparing(WallCriteria::distanceAngle))
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
+
+
+        if (result != null && uniformLength) {
+            var firstBlockPos = context.firstBlockInteraction().getBlockPosition();
+            var secondBlockPos = result.getBlockPosition();
+
+            var diff = secondBlockPos.sub(firstBlockPos);
+            if (diff.x() == 0) {
+                result = result.withPosition(firstBlockPos.add(diff.withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z())))));
+            } else if (diff.z() == 0) {
+                result = result.withPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y()))).withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y())))));
+            } else if (diff.y() == 0) {
+                result = result.withPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z())))));
+            }
+        }
+        return result;
+    }
+
+
+    public static int sign(int a) {
+        return ((int) Math.signum(a)) == 0 ? 1 : (int) Math.signum(a);
     }
 
     public static Stream<BlockPosition> collectWallBlocks(Context context) {

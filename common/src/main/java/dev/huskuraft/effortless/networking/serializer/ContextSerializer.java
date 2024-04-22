@@ -13,6 +13,7 @@ import dev.huskuraft.effortless.building.structure.CubeFilling;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
+import dev.huskuraft.effortless.building.structure.UniformLength;
 
 public class ContextSerializer implements BufferSerializer<Context> {
 
@@ -32,7 +33,8 @@ public class ContextSerializer implements BufferSerializer<Context> {
                         buffer.readEnum(PlaneFilling.class),
                         buffer.readEnum(PlaneFacing.class),
                         buffer.readEnum(RaisedEdge.class),
-                        buffer.readEnum(ReplaceMode.class)),
+                        buffer.readEnum(ReplaceMode.class),
+                        buffer.readEnum(UniformLength.class)),
                 new Context.PatternParams(
                         new Pattern(
                                 buffer.readUUID(),
@@ -40,7 +42,7 @@ public class ContextSerializer implements BufferSerializer<Context> {
                                 buffer.readList(new TransformerSerializer())
                         ),
                         buffer.readLong()),
-                new Context.LimitationParams(
+                new Context.ConfigParams(
                         buffer.read(new GeneralConfigSerializer())
                 )
         );
@@ -53,13 +55,14 @@ public class ContextSerializer implements BufferSerializer<Context> {
         buffer.writeEnum(context.type());
         buffer.writeList(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
 
-        buffer.writeEnum(context.buildMode());
-        buffer.writeEnum(context.circleStart());
-        buffer.writeEnum(context.cubeFilling());
-        buffer.writeEnum(context.planeFilling());
-        buffer.writeEnum(context.planeFacing());
-        buffer.writeEnum(context.raisedEdge());
-        buffer.writeEnum(context.replaceMode());
+        buffer.writeEnum(context.structureParams().buildMode());
+        buffer.writeEnum(context.structureParams().circleStart());
+        buffer.writeEnum(context.structureParams().cubeFilling());
+        buffer.writeEnum(context.structureParams().planeFilling());
+        buffer.writeEnum(context.structureParams().planeFacing());
+        buffer.writeEnum(context.structureParams().raisedEdge());
+        buffer.writeEnum(context.structureParams().replaceMode());
+        buffer.writeEnum(context.structureParams().uniformLength());
 
         buffer.writeUUID(context.patternParams().pattern().id());
         buffer.writeText(context.patternParams().pattern().name());
