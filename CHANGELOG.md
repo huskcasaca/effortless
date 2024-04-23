@@ -2,6 +2,13 @@
 
 ----------
 
+### 2.3.2
+
+* Fix server timeout ([#99](https://github.com/huskcasaca/effortless/pull/99))
+* Fix propertyGetter NPE ([#100](https://github.com/huskcasaca/effortless/pull/100))
+
+----------
+
 ### 2.3.1
 * Fix crash on Quilt ([#96](https://github.com/huskcasaca/effortless/pull/96))
 
