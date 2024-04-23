@@ -6,11 +6,11 @@ import java.util.function.Predicate;
 
 public interface OperationFilter<O> extends Predicate<O> {
 
-    static <O extends BlockPositionLocatable> OperationFilter<O> distinctByLocation() {
-        return distinctBy(BlockPositionLocatable::locate);
+    static <O extends Operation> OperationFilter<O> distinctByLocation() {
+        return distinctBy(Operation::locate);
     }
 
-    private static <O> OperationFilter<O> distinctBy(Function<O, ?> propertyGetter) {
+    static <O extends Operation> OperationFilter<O> distinctBy(Function<O, ?> propertyGetter) {
         var seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(propertyGetter.apply(t));
     }

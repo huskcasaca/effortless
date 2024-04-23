@@ -38,9 +38,9 @@ import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.TracingResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
-import dev.huskuraft.effortless.building.operation.BlockPositionLocatable;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.ItemSummaryType;
+import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
@@ -434,7 +434,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             for (var allColor : BlockOperationRenderer.getAllColors()) {
                 if (resultMap.get(allColor) == null) continue;
-                var locations =  resultMap.get(allColor).stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
+                var locations =  resultMap.get(allColor).stream().map(OperationResult::getOperation).map(Operation::locate).filter(Objects::nonNull).toList();
                 getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), allColor), locations)
                         .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                         .lightMap(LightTexture.FULL_BLOCK)
