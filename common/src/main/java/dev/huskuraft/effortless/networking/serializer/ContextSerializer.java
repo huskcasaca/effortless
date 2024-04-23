@@ -42,7 +42,7 @@ public class ContextSerializer implements BufferSerializer<Context> {
                                 buffer.readList(new TransformerSerializer())
                         ),
                         buffer.readLong()),
-                new Context.ConfigParams(
+                new Context.CustomParams(
                         buffer.read(new GeneralConfigSerializer())
                 )
         );
@@ -69,7 +69,7 @@ public class ContextSerializer implements BufferSerializer<Context> {
         buffer.writeList(context.patternParams().pattern().transformers(), new TransformerSerializer());
         buffer.writeLong(context.patternParams().seed());
 
-        buffer.write(context.limitationParams().generalConfig(), new GeneralConfigSerializer());
+        buffer.write(context.customParams().generalConfig(), new GeneralConfigSerializer());
     }
 
 }

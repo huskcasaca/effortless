@@ -21,6 +21,7 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.lang.Tuple2;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
@@ -105,7 +106,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 return context.newInteraction();
             }
             if (interaction.getTarget() == Interaction.Target.MISS) {
-                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_target"), true);
+                var traced = player.raytrace(Short.MAX_VALUE, 0f, false);
+                var message = " (" + TextStyle.RED + MathUtils.round(traced.getPosition().distance(player.getEyePosition())) + TextStyle.RESET + "/" + context.customParams().generalConfig().maxReachDistance() + ")";
+                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_target") + message, true);
                 return context.newInteraction();
             }
             if (interaction.getTarget() == Interaction.Target.ENTITY) {
@@ -299,7 +302,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public BuildResult onPlayerBreak(Player player) {
         var context = getContext(player);
         var interaction = context.withBreakingState().trace(player);
-        var result =  build(player, BuildState.BREAK_BLOCK, interaction);
+        var result = build(player, BuildState.BREAK_BLOCK, interaction);
         if (result.isSuccess()) {
             player.swing(InteractionHand.MAIN);
         }
@@ -387,7 +390,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             return;
         }
 
-        setContext(player, getContext(player).withRandomPatternSeed());
+        reloadContext(player);
+
         var context = getContextTraced(player).withPreviewType();
 
         var result = new BatchBuildSession(player.getWorld(), player, context.withPreviewType()).build().commit();
@@ -509,6 +513,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 }
                 case FAILED -> {
                     message = Text.translate("effortless.message.building.cannot_reach_target").withStyle(TextStyle.WHITE).getString();
+                    var interaction = context.interactions().results().stream().filter(result -> result != null && result.getTarget() == Interaction.Target.MISS).findAny();
+                    if (interaction.isPresent()) {
+                        message += " (" + interaction.get().getBlockPosition().distance(player.getPosition().toVector3i()) + "/" + context.customParams().generalConfig().maxReachDistance() + ")";
+                    }
                 }
             }
         } else {
