@@ -8,6 +8,7 @@ public enum BuildFeature {
     PLANE_FACING("plane_facing", PlaneFacing.values()),
     PLANE_FILLING("plane_filling", PlaneFilling.values()),
     RAISED_EDGE("raised_edge", RaisedEdge.values()),
+    UNIFORM_LENGTH("uniform_length", UniformLength.values()),
     ;
 
     private final String name;

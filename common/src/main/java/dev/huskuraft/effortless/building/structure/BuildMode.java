@@ -28,17 +28,17 @@ public enum BuildMode {
 
     LINE("line", new Line(), Category.SQUARE /*, OptionEnum.THICKNESS*/),
     //    SQUARE("square", new Square(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
-    WALL("wall", new Wall(), Category.SQUARE, BuildFeature.PLANE_FILLING),
-    FLOOR("floor", new Floor(), Category.SQUARE, BuildFeature.PLANE_FILLING),
-    CUBE("cube", new Cube(), Category.SQUARE, BuildFeature.CUBE_FILLING),
+    WALL("wall", new Wall(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.UNIFORM_LENGTH),
+    FLOOR("floor", new Floor(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.UNIFORM_LENGTH),
+    CUBE("cube", new Cube(), Category.SQUARE, BuildFeature.CUBE_FILLING, BuildFeature.UNIFORM_LENGTH),
 
     DIAGONAL_LINE("diagonal_line", new DiagonalLine(), Category.DIAGONAL),
     DIAGONAL_WALL("diagonal_wall", new DiagonalWall(), Category.DIAGONAL),
     SLOPE_FLOOR("slope_floor", new SlopeFloor(), Category.DIAGONAL, BuildFeature.RAISED_EDGE),
 
-    CIRCLE("circle", new Circle(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
-    CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
-    SPHERE("sphere", new Sphere(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
+    CIRCLE("circle", new Circle(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.UNIFORM_LENGTH),
+    CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.UNIFORM_LENGTH),
+    SPHERE("sphere", new Sphere(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.UNIFORM_LENGTH),
 
     PYRAMID("pyramid", new Pyramid(), Category.ROOF),
     CONE("cone", new Cone(), Category.ROOF),

@@ -410,6 +410,15 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
     }
 
+    private void reloadContext(Player player) {
+        setContext(player, getContext(player).withRandomPatternSeed());
+//        if (Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown()) {
+//            setContext(player, getContext(player).withBuildFeature(UniformLength.LIMIT_TO_MAX));
+//        } else {
+//            setContext(player, getContext(player).withBuildFeature(UniformLength.DISABLE));
+//        }
+    }
+
     private UUID nextIdByTag(UUID uuid, Object tag) {
         return new UUID(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits() + tag.hashCode());
     }
