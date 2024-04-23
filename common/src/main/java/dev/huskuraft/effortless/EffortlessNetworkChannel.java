@@ -75,15 +75,19 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
 
         @Override
         public void handle(PlayerCommandPacket packet, Player player) {
-            switch (packet.action()) {
-                case REDO -> getEntrance().getStructureBuilder().redo(player);
-                case UNDO -> getEntrance().getStructureBuilder().undo(player);
-            }
+            getEntrance().getServer().execute(() -> {
+                switch (packet.action()) {
+                    case REDO -> getEntrance().getStructureBuilder().redo(player);
+                    case UNDO -> getEntrance().getStructureBuilder().undo(player);
+                }
+            });
         }
 
         @Override
         public void handle(PlayerBuildPacket packet, Player player) {
-            getEntrance().getStructureBuilder().onContextReceived(player, packet.context());
+            getEntrance().getServer().execute(() -> {
+                getEntrance().getStructureBuilder().onContextReceived(player, packet.context());
+            });
         }
 
         @Override
@@ -97,18 +101,25 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
 
         @Override
         public void handle(PlayerOperatorCheckPacket packet, Player player) {
-            var isOperator =  getEntrance().getServerManager().getRunningServer().getPlayerList().isOperator(player.getProfile());
-            getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(packet.responseId(), packet.playerId(), isOperator), player);
+            getEntrance().getServer().execute(() -> {
+                var isOperator =  getEntrance().getServerManager().getRunningServer().getPlayerList().isOperator(player.getProfile());
+                getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(packet.responseId(), packet.playerId(), isOperator), player);
+            });
+
         }
 
         @Override
         public void handle(SessionPacket packet, Player player) {
-            getEntrance().getSessionManager().onSession(packet.session(), player);
+            getEntrance().getServer().execute(() -> {
+                getEntrance().getSessionManager().onSession(packet.session(), player);
+            });
         }
 
         @Override
         public void handle(SessionConfigPacket packet, Player player) {
-            getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player);
+            getEntrance().getServer().execute(() -> {
+                getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player);
+            });
         }
     }
 
