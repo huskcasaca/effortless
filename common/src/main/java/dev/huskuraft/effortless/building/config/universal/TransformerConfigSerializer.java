@@ -335,7 +335,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 
         @Override
         public Chance<Item> getDefault() {
-            return Chance.item(Items.AIR.item(), (byte) 0);
+            return Chance.item(Items.AIR, (byte) 0);
         }
 
         @Override
