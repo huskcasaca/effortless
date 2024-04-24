@@ -57,7 +57,7 @@ public class MinecraftItemStack implements ItemStack {
 
     @Override
     public Item getItem() {
-        return new MinecraftItem(reference.getItem());
+        return MinecraftItem.ofNullable(reference.getItem());
     }
 
     @Override

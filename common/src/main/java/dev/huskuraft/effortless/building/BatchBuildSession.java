@@ -4,6 +4,7 @@ import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.operation.OperationFilter;
@@ -27,7 +28,7 @@ public class BatchBuildSession implements BuildSession {
     }
 
     protected BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockPlaceOperation(world, player, context, storage, interaction, null);
+        return new BlockPlaceOperation(world, player, context, storage, interaction, Items.AIR.getBlock().getDefaultBlockState());
     }
 
     protected BlockBreakOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {

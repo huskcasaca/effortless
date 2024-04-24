@@ -53,7 +53,7 @@ public class MinecraftContentFactory implements ContentFactory {
 
     @Override
     public Optional<Item> newOptionalItem(ResourceLocation location) {
-        return BuiltInRegistries.ITEM.getOptional(location.<net.minecraft.resources.ResourceLocation>reference()).map(item -> new MinecraftItem(item));
+        return BuiltInRegistries.ITEM.getOptional(location.<net.minecraft.resources.ResourceLocation>reference()).map(MinecraftItem::ofNullable);
     }
 
     @Override
