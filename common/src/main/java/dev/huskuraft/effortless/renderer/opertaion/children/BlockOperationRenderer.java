@@ -70,6 +70,9 @@ public class BlockOperationRenderer implements OperationRenderer {
 
     public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
         if (blockOperationResult instanceof BlockPlaceOperationResult) {
+            if (blockOperationResult.getOperation().getBlockState() == null) {
+                return Color.GRAY;
+            }
             if (blockOperationResult.getOperation().getBlockState().isAir()) {
                 return Color.GRAY;
             }

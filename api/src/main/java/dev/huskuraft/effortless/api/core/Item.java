@@ -17,8 +17,12 @@ public interface Item extends PlatformReference {
 
     ItemStack getDefaultStack();
 
-    boolean isBlockItem();
+    Block getBlock();
 
     ResourceLocation getId();
+
+    default boolean isBlockItem() {
+        return this instanceof BlockItem;
+    }
 
 }
