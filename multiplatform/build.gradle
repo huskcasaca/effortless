@@ -32,4 +32,9 @@ subprojects {
         uploadFile = fuseJar.archiveFile
     }
 
+    def order = parent.subprojects.toList().indexOf(it);
+    if (order != 0) {
+        tasks.modrinth.dependsOn(parent.subprojects[order - 1].tasks.modrinth)
+    }
+
 }
