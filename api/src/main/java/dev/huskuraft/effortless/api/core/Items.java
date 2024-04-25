@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.core;
 
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 
-public enum Items {
+public enum Items implements Item {
     AIR,
 
     STONE,
@@ -1342,8 +1342,27 @@ public enum Items {
     SNORT_POTTERY_SHERD,
     ;
 
-    public Item item() {
+    private Item item() {
         return ContentFactory.getInstance().getItem(this);
     }
 
+    @Override
+    public ItemStack getDefaultStack() {
+        return item().getDefaultStack();
+    }
+
+    @Override
+    public Block getBlock() {
+        return item().getBlock();
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return item().getId();
+    }
+
+    @Override
+    public Object referenceValue() {
+        return item().referenceValue();
+    }
 }

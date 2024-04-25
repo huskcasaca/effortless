@@ -112,7 +112,7 @@ public class MinecraftBlockState implements BlockState {
 
     @Override
     public Item getItem() {
-        return new MinecraftItem(reference.getBlock().asItem());
+        return MinecraftItem.ofNullable(reference.getBlock().asItem());
     }
 
     @Override

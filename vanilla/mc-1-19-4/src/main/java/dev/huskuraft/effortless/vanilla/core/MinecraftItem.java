@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.vanilla.core;
 
+import dev.huskuraft.effortless.api.core.Block;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.BlockItem;
 
 public class MinecraftItem implements Item {
 
@@ -12,6 +12,10 @@ public class MinecraftItem implements Item {
 
     public MinecraftItem(net.minecraft.world.item.Item reference) {
         this.reference = reference;
+    }
+
+    public static Item ofNullable(net.minecraft.world.item.Item reference) {
+        return reference == null ? null : reference instanceof net.minecraft.world.item.BlockItem blockItem ? new MinecraftBlockItem(blockItem) : new MinecraftItem(reference);
     }
 
     @Override
@@ -25,8 +29,8 @@ public class MinecraftItem implements Item {
     }
 
     @Override
-    public boolean isBlockItem() {
-        return reference instanceof BlockItem;
+    public Block getBlock() {
+        return new MinecraftBlock(net.minecraft.world.level.block.Block.byItem(reference));
     }
 
     @Override
