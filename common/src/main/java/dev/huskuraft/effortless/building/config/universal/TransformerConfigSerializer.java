@@ -106,7 +106,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         public ConfigSpec getSpec(Config config) {
             var spec = new ConfigSpec();
             spec.define(KEY_ID, TransformerConfigSerializer::randomIdString, TransformerConfigSerializer::isIdCorrect);
-            spec.define(KEY_NAME, getDefault().getName().getString(), String.class::isInstance);
+            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineVector3d(spec, KEY_OFFSET, ArrayTransformer.ZERO.offset(), ArrayTransformer.OFFSET_BOUND);
             spec.defineInRange(KEY_COUNT, getDefault().count(), ArrayTransformer.MIN_COUNT, ArrayTransformer.MAX_COUNT);
@@ -158,7 +158,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         public ConfigSpec getSpec(Config config) {
             var spec = new ConfigSpec();
             spec.define(KEY_ID, TransformerConfigSerializer::randomIdString, TransformerConfigSerializer::isIdCorrect);
-            spec.define(KEY_NAME, getDefault().getName().getString(), String.class::isInstance);
+            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineVector3d(spec, KEY_POSITION, MirrorTransformer.ZERO_Y.position());
             definePositionType(spec, KEY_POSITION_TYPE, getDefault().getPositionType());
@@ -214,7 +214,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         public ConfigSpec getSpec(Config config) {
             var spec = new ConfigSpec();
             spec.define(KEY_ID, TransformerConfigSerializer::randomIdString, TransformerConfigSerializer::isIdCorrect);
-            spec.define(KEY_NAME, getDefault().getName().getString(), String.class::isInstance);
+            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineVector3d(spec, KEY_POSITION, RadialTransformer.ZERO.position());
             definePositionType(spec, KEY_POSITION_TYPE, getDefault().getPositionType());
@@ -272,7 +272,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         public ConfigSpec getSpec(Config config) {
             var spec = new ConfigSpec();
             spec.define(KEY_ID, TransformerConfigSerializer::randomIdString, TransformerConfigSerializer::isIdCorrect);
-            spec.define(KEY_NAME, getDefault().getName().getString(), String.class::isInstance);
+            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineEnum(spec, KEY_ORDER, getDefault().getOrder());
             defineEnum(spec, KEY_SUPPLIER, getDefault().getTarget());
@@ -328,7 +328,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         @Override
         public ConfigSpec getSpec(Config config) {
             var spec = new ConfigSpec();
-            spec.define(KEY_CONTENT, getDefault().content().getId().getString(), predicate((value) -> Item.fromId(ResourceLocation.decompose((String) value))));
+            spec.define(KEY_CONTENT, () -> getDefault().content().getId().getString(), predicate((value) -> Item.fromId(ResourceLocation.decompose((String) value))));
             spec.defineInRange(KEY_CHANCE, getDefault().chance(),  Chance.MIN_ITEM_COUNT, Chance.MAX_ITEM_COUNT);
             return spec;
         }
@@ -358,7 +358,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
     }
 
     public static void defineVector3d(ConfigSpec configSpec, String key, Vector3d defaultValue, double minX, double maxX, double minY, double maxY, double minZ, double maxZ) {
-        configSpec.define(key, List.of(defaultValue.x(), defaultValue.y(), defaultValue.z()), value ->
+        configSpec.define(key, () -> List.of(defaultValue.x(), defaultValue.y(), defaultValue.z()), value ->
                 value instanceof List list && list.size() == 3 &&
                         list.get(0) instanceof Number x && x.doubleValue() >= minX && x.doubleValue() <= maxX &&
                         list.get(1) instanceof Number y && y.doubleValue() >= minY && y.doubleValue() <= maxY &&
@@ -378,7 +378,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
     }
 
     public static <T extends Enum<T>> void defineEnum(ConfigSpec configSpec, String key, T defaultValue) {
-        configSpec.define(key, defaultValue.name().toLowerCase(Locale.ROOT), (value) -> value instanceof String name && Arrays.stream(defaultValue.getDeclaringClass().getEnumConstants()).anyMatch(e -> e.name().equals(name.toUpperCase(Locale.ROOT))));
+        configSpec.define(key, () -> defaultValue.name().toLowerCase(Locale.ROOT), (value) -> value instanceof String name && Arrays.stream(defaultValue.getDeclaringClass().getEnumConstants()).anyMatch(e -> e.name().equals(name.toUpperCase(Locale.ROOT))));
     }
 
     public static void setVector3d(Config config, String key, Vector3d value) {
@@ -392,7 +392,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 
 
     public static void definePositionType(ConfigSpec configSpec, String key, PositionType[] defaultValue) {
-        configSpec.define(key, Arrays.stream(defaultValue).map(Enum::name).map(String::toLowerCase).toList(), value -> value instanceof List<?> list && list.size() == defaultValue.length && list.stream().allMatch(value1 -> value1 instanceof String name && isSuccess(() -> PositionType.valueOf(name.toUpperCase(Locale.ROOT)))));
+        configSpec.define(key, () -> Arrays.stream(defaultValue).map(Enum::name).map(String::toLowerCase).toList(), value -> value instanceof List<?> list && list.size() == defaultValue.length && list.stream().allMatch(value1 -> value1 instanceof String name && isSuccess(() -> PositionType.valueOf(name.toUpperCase(Locale.ROOT)))));
     }
 
     public static void setPositionType(Config config, String key, PositionType[] value) {
