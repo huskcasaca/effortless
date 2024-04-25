@@ -214,6 +214,10 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             this.skipRaytrace = skipRaytrace;
         }
 
+        public Axis getAxis() {
+            return axis;
+        }
+
         protected static Vector3d getBound(Vector3d start, Vector3d eye, Vector3d look) {
             return new Vector3d(
                     MathUtils.round(getAxisBound(start.x(), eye.x(), look.x())),

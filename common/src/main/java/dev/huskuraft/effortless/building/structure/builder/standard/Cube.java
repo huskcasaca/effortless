@@ -1,9 +1,11 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
+import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
@@ -89,6 +91,33 @@ public class Cube extends AbstractBlockStructure {
         return list.stream();
     }
 
+    public static BlockInteraction traceCube(Player player, Context context, Axis axis) {
+        var center = context.firstBlockPosition().getCenter().add(context.secondBlockPosition().getCenter()).div(2);
+        var radius = context.firstBlockPosition().getCenter().sub(context.secondBlockPosition().getCenter()).div(2);
+
+        var reach = context.maxNextReachDistance();
+        var skipRaytrace = context.skipRaytrace();
+
+        return Stream.of(
+                        new AxisLineCriteria(Axis.X, player, center.add(radius.x(), 0, 0), reach, skipRaytrace),
+                        new AxisLineCriteria(Axis.X, player, center.sub(radius.x(), 0, 0), reach, skipRaytrace),
+                        new AxisLineCriteria(Axis.Y, player, center.add(0, radius.y(), 0), reach, skipRaytrace),
+                        new AxisLineCriteria(Axis.Y, player, center.sub(0, radius.y(), 0), reach, skipRaytrace),
+                        new AxisLineCriteria(Axis.Z, player, center.add(0, 0, radius.z()), reach, skipRaytrace),
+                        new AxisLineCriteria(Axis.Z, player, center.sub(0, 0, radius.z()), reach, skipRaytrace)
+                )
+                .filter(criteria -> criteria.getAxis() != axis)
+                .filter(criteria -> criteria.isInRange())
+                .min(Comparator.comparing(axisLineCriteria -> axisLineCriteria.distanceToLineSqr()))
+                .map(criteria -> criteria.tracePlane())
+                .map(interaction -> interaction.withPosition(switch (axis) {
+                    case X -> context.secondBlockPosition().withX(interaction.getBlockPosition().x());
+                    case Y -> context.secondBlockPosition().withY(interaction.getBlockPosition().y());
+                    case Z -> context.secondBlockPosition().withZ(interaction.getBlockPosition().z());
+                }))
+                .orElse(null);
+    }
+
     @Override
     protected BlockInteraction traceFirstInteraction(Player player, Context context) {
         return Single.traceSingle(player, context);
@@ -108,29 +137,36 @@ public class Cube extends AbstractBlockStructure {
         var y2 = context.secondBlockPosition().y();
         var z2 = context.secondBlockPosition().z();
 
-        if (y1 == y2) {
-            if (x1 == x2 && z1 == z2) {
-                return Line.traceLine(player, context);
-            }
-            if (x1 == x2) {
-                return tracePlaneZ(player, context);
-            }
-            if (z1 == z2) {
-                return tracePlaneX(player, context);
-            }
-            return traceLineY(player, context);
-        } else {
-            if (x1 == x2 && z1 == z2) {
-                return tracePlaneY(player, context);
-            }
-            if (x1 == x2) {
-                return traceLineX(player, context);
-            }
-            if (z1 == z2) {
-                return traceLineZ(player, context);
-            }
+        if (x1 == x2 && y1 == y2 && z1 == z2) {
+            return Single.traceSingle(player, context);
         }
+
+        if (x1 == x2 && y1 == y2) {
+            return tracePlaneZ(player, context);
+        }
+
+        if (y1 == y2 && z1 == z2) {
+            return tracePlaneX(player, context);
+        }
+
+        if (z1 == z2 && x1 == x2) {
+            return tracePlaneY(player, context);
+        }
+
+        if (x1 == x2) {
+            return traceCube(player, context, Axis.X);
+        }
+
+        if (y1 == y2) {
+            return traceCube(player, context, Axis.Y);
+        }
+
+        if (z1 == z2) {
+            return traceCube(player, context, Axis.Z);
+        }
+
         return null;
+
     }
 
 
