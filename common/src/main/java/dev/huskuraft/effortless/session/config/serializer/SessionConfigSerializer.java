@@ -36,9 +36,9 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
     @Override
     public ConfigSpec getSpec(Config config) {
         var spec = new ConfigSpec();
-        spec.define(KEY_GLOBAL, GlobalGeneralConfigSerializer.INSTANCE.serialize(getDefault().globalConfig()), Config.class::isInstance);
-        spec.define(KEY_PLAYER, Config.inMemory(), Config.class::isInstance);
-        return ConfigSerializer.super.getSpec(config);
+        spec.define(KEY_GLOBAL, () -> GlobalGeneralConfigSerializer.INSTANCE.serialize(getDefault().globalConfig()), Config.class::isInstance);
+        spec.define(KEY_PLAYER, () -> Config.inMemory(), Config.class::isInstance);
+        return spec;
     }
 
     @Override
@@ -48,6 +48,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
 
     @Override
     public SessionConfig deserialize(Config config) {
+        validate(config);
         return new SessionConfig(
                 GlobalGeneralConfigSerializer.INSTANCE.deserialize(config.get(KEY_GLOBAL)),
                 ((Config) config.get(KEY_PLAYER)).entrySet().stream().map(e -> {
@@ -67,6 +68,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
         for (var entry : sessionConfig.playerConfigs().entrySet()) {
             config.add(List.of(KEY_PLAYER, entry.getKey().toString()), PerPlayerGeneralConfigSerializer.INSTANCE.serialize(entry.getValue()));
         }
+        validate(config);
         return config;
     }
 
@@ -80,17 +82,17 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
         @Override
         public ConfigSpec getSpec(Config config) {
             var spec = new ConfigSpec();
-            spec.define(KEY_USE_COMMANDS, GeneralConfig.USE_COMMANDS_DEFAULT, Objects::nonNull);
-            spec.define(KEY_ALLOW_USE_MOD, GeneralConfig.ALLOW_USE_MOD_DEFAULT, Objects::nonNull);
-            spec.define(KEY_ALLOW_BREAK_BLOCKS, GeneralConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Objects::nonNull);
-            spec.define(KEY_ALLOW_PLACE_BLOCKS, GeneralConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Objects::nonNull);
+            spec.define(KEY_USE_COMMANDS, () -> GeneralConfig.USE_COMMANDS_DEFAULT, Objects::nonNull);
+            spec.define(KEY_ALLOW_USE_MOD, () -> GeneralConfig.ALLOW_USE_MOD_DEFAULT, Objects::nonNull);
+            spec.define(KEY_ALLOW_BREAK_BLOCKS, () -> GeneralConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Objects::nonNull);
+            spec.define(KEY_ALLOW_PLACE_BLOCKS, () -> GeneralConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Objects::nonNull);
             spec.defineInRange(KEY_MAX_REACH_DISTANCE, GeneralConfig.MAX_REACH_DISTANCE_DEFAULT, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_BREAK, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_DEFAULT, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_PLACE, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_DEFAULT, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_DEFAULT, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_DEFAULT, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END);
-            spec.defineList(KEY_WHITELISTED_ITEMS, GeneralConfig.WHITELISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
-            spec.defineList(KEY_BLACKLISTED_ITEMS, GeneralConfig.BLACKLISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
+            spec.defineList(KEY_WHITELISTED_ITEMS, () -> GeneralConfig.WHITELISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
+            spec.defineList(KEY_BLACKLISTED_ITEMS, () -> GeneralConfig.BLACKLISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
             return spec;
         }
 
@@ -131,10 +133,10 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.set(KEY_WHITELISTED_ITEMS, generalConfig.whitelistedItems() == null ? null : generalConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
             config.set(KEY_BLACKLISTED_ITEMS, generalConfig.blacklistedItems() == null ? null : generalConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
 
-            config.setComment(KEY_USE_COMMANDS, "Should use commands to build using this mod?");
-            config.setComment(KEY_ALLOW_USE_MOD, "Should allow players to use this mod?");
-            config.setComment(KEY_ALLOW_BREAK_BLOCKS, "Should allow players to break blocks using this mod?");
-            config.setComment(KEY_ALLOW_PLACE_BLOCKS, "Should allow players to place blocks using this mod?");
+            config.setComment(KEY_USE_COMMANDS, "Should use commands to build using this mod.");
+            config.setComment(KEY_ALLOW_USE_MOD, "Should allow players to use this mod.");
+            config.setComment(KEY_ALLOW_BREAK_BLOCKS, "Should allow players to break blocks using this mod.");
+            config.setComment(KEY_ALLOW_PLACE_BLOCKS, "Should allow players to place blocks using this mod.");
             config.setComment(KEY_MAX_REACH_DISTANCE, "The maximum distance a player can reach when building using this mod. \nRange: " + GeneralConfig.MAX_REACH_DISTANCE_RANGE_START + " ~ " + GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
             config.setComment(KEY_MAX_BOX_VOLUME_PER_BREAK, "The maximum box volume a player can break at once when building using this mod.. \nRange: " + GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
             config.setComment(KEY_MAX_BOX_VOLUME_PER_PLACE, "The maximum box volume a player can place at once  when building using this mod. \nRange: " + GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
@@ -167,16 +169,16 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
         public ConfigSpec getSpec(Config config) {
             var spec = new ConfigSpec();
             if (config.contains(KEY_USE_COMMANDS)) {
-                spec.define(KEY_USE_COMMANDS, GeneralConfig.USE_COMMANDS_DEFAULT, Boolean.class::isInstance);
+                spec.define(KEY_USE_COMMANDS, () -> GeneralConfig.USE_COMMANDS_DEFAULT, Boolean.class::isInstance);
             }
             if (config.contains(KEY_ALLOW_USE_MOD)) {
-                spec.define(KEY_ALLOW_USE_MOD, GeneralConfig.ALLOW_USE_MOD_DEFAULT, Boolean.class::isInstance);
+                spec.define(KEY_ALLOW_USE_MOD, () -> GeneralConfig.ALLOW_USE_MOD_DEFAULT, Boolean.class::isInstance);
             }
             if (config.contains(KEY_ALLOW_BREAK_BLOCKS)) {
-                spec.define(KEY_ALLOW_BREAK_BLOCKS, GeneralConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Boolean.class::isInstance);
+                spec.define(KEY_ALLOW_BREAK_BLOCKS, () -> GeneralConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Boolean.class::isInstance);
             }
             if (config.contains(KEY_ALLOW_PLACE_BLOCKS)) {
-                spec.define(KEY_ALLOW_PLACE_BLOCKS, GeneralConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Boolean.class::isInstance);
+                spec.define(KEY_ALLOW_PLACE_BLOCKS, () -> GeneralConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Boolean.class::isInstance);
             }
             if (config.contains(KEY_MAX_REACH_DISTANCE)) {
                 spec.defineInRange(KEY_MAX_REACH_DISTANCE, GeneralConfig.MAX_REACH_DISTANCE_DEFAULT, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
@@ -194,10 +196,10 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
                 spec.defineInRange(KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_DEFAULT, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END);
             }
             if (config.contains(KEY_WHITELISTED_ITEMS)) {
-                spec.defineList(KEY_WHITELISTED_ITEMS, GeneralConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
+                spec.defineList(KEY_WHITELISTED_ITEMS, () -> GeneralConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
             }
             if (config.contains(KEY_BLACKLISTED_ITEMS)) {
-                spec.defineList(KEY_BLACKLISTED_ITEMS, GeneralConfig.BLACKLISTED_ITEMS_DEFAULT, Objects::nonNull);
+                spec.defineList(KEY_BLACKLISTED_ITEMS, () -> GeneralConfig.BLACKLISTED_ITEMS_DEFAULT, Objects::nonNull);
             }
             return spec;
         }

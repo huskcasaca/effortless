@@ -26,8 +26,8 @@ public class PatternConfigSerializer implements ConfigSerializer<Pattern> {
     public ConfigSpec getSpec(Config config) {
         var spec = new ConfigSpec();
         spec.define(KEY_ID, PatternConfigSerializer::randomIdString, PatternConfigSerializer::isIdCorrect);
-        spec.define(KEY_NAME, getDefault().name().getString(), String.class::isInstance);
-        spec.defineList(KEY_TRANSFORMERS, getDefault().transformers(), Config.class::isInstance);
+        spec.define(KEY_NAME, () -> getDefault().name().getString(), String.class::isInstance);
+        spec.defineList(KEY_TRANSFORMERS, () -> getDefault().transformers(), Config.class::isInstance);
         return spec;
     }
 
