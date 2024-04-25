@@ -10,11 +10,9 @@ import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
-import dev.huskuraft.effortless.building.structure.UniformLength;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
 public class Square extends AbstractBlockStructure {
@@ -118,7 +116,6 @@ public class Square extends AbstractBlockStructure {
         var center = context.firstBlockPosition().getCenter();
         var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
-        var uniformLength = context.structureParams().uniformLength() != UniformLength.DISABLE;
 
         var result = Stream.of(
                         context.planeFacing() != PlaneFacing.HORIZONTAL ? new NearestLineCriteria(Axis.X, player, center, reach, skipRaytrace) : null,
@@ -130,20 +127,7 @@ public class Square extends AbstractBlockStructure {
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        if (result != null && uniformLength) {
-            var firstBlockPos = context.firstBlockInteraction().getBlockPosition();
-            var secondBlockPos = result.getBlockPosition();
-
-            var diff = secondBlockPos.sub(firstBlockPos);
-            if (diff.x() == 0) {
-                result = result.withPosition(firstBlockPos.add(diff.withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z())))));
-            } else if (diff.z() == 0) {
-                result = result.withPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y()))).withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y())))));
-            } else if (diff.y() == 0) {
-                result = result.withPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z())))));
-            }
-        }
-        return result;
+        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength());
     }
 
     @Override

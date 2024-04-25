@@ -2,15 +2,14 @@ package dev.huskuraft.effortless.building.structure;
 
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 
-public enum UniformLength implements SingleSelectFeature {
-    DISABLE("uniform_length_disable"),
-    LIMIT_TO_MIN("uniform_length_limit_to_min"),
-    LIMIT_TO_MAX("uniform_length_limit_to_max"),
+public enum CubeLength implements SingleSelectFeature {
+    DISABLE("cube_length_disable"),
+    LIMIT_TO_MAX("cube_length_limit_to_max"),
     ;
 
     private final String name;
 
-    UniformLength(String name) {
+    CubeLength(String name) {
         this.name = name;
     }
 

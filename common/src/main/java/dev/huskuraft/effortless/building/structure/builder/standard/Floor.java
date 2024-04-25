@@ -18,13 +18,15 @@ public class Floor extends AbstractBlockStructure {
         var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
-        return Stream.of(
+        var result = Stream.of(
                         new FloorCriteria(Axis.Y, player, center, reach, skipRaytrace)
                 )
                 .filter(AxisCriteria::isInRange)
                 .findFirst()
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
+
+        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength());
     }
 
     public static Stream<BlockPosition> collectFloorBlocks(Context context) {

@@ -12,8 +12,8 @@ import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.CubeFilling;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
-import dev.huskuraft.effortless.building.structure.UniformLength;
 
 public class ContextSerializer implements BufferSerializer<Context> {
 
@@ -34,7 +34,7 @@ public class ContextSerializer implements BufferSerializer<Context> {
                         buffer.readEnum(PlaneFacing.class),
                         buffer.readEnum(RaisedEdge.class),
                         buffer.readEnum(ReplaceMode.class),
-                        buffer.readEnum(UniformLength.class)),
+                        buffer.readEnum(PlaneLength.class)),
                 new Context.PatternParams(
                         new Pattern(
                                 buffer.readUUID(),
@@ -62,7 +62,7 @@ public class ContextSerializer implements BufferSerializer<Context> {
         buffer.writeEnum(context.structureParams().planeFacing());
         buffer.writeEnum(context.structureParams().raisedEdge());
         buffer.writeEnum(context.structureParams().replaceMode());
-        buffer.writeEnum(context.structureParams().uniformLength());
+        buffer.writeEnum(context.structureParams().planeLength());
 
         buffer.writeUUID(context.patternParams().pattern().id());
         buffer.writeText(context.patternParams().pattern().name());
