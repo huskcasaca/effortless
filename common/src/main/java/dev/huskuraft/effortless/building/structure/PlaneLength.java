@@ -20,6 +20,6 @@ public enum PlaneLength implements SingleSelectFeature {
 
     @Override
     public String getCategory() {
-        return BuildFeature.UNIFORM_LENGTH.getName();
+        return BuildFeature.PLANE_LENGTH.getName();
     }
 }

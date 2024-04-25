@@ -20,6 +20,6 @@ public enum CubeLength implements SingleSelectFeature {
 
     @Override
     public String getCategory() {
-        return BuildFeature.UNIFORM_LENGTH.getName();
+        return BuildFeature.PLANE_LENGTH.getName();
     }
 }
