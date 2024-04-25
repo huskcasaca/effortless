@@ -12,7 +12,7 @@ record ForgeMod(ModInfo modInfo) implements Mod {
 
     @Override
     public String getVersionStr() {
-        return modInfo().getVersion().getQualifier();
+        return modInfo().getVersion().toString();
     }
 
     @Override

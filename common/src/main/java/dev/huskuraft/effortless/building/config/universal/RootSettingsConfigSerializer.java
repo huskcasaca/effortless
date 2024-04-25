@@ -29,12 +29,12 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettin
     @Override
     public ConfigSpec getSpec(Config config) {
         var spec = new ConfigSpec();
-        spec.define(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD), getDefault().renderSettings().showOtherPlayersBuild(), Boolean.class::isInstance);
-        spec.define(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW), getDefault().renderSettings().showBlockPreview(), Boolean.class::isInstance);
-//        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS), getDefault().renderSettings().maxRenderBlocks(), RenderSettings.MIN_MAX_RENDER_BLOCKS, RenderSettings.MAX_MAX_RENDER_BLOCKS);
-//        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), getDefault().renderSettings().maxRenderDistance(), RenderSettings.MIN_MAX_RENDER_DISTANCE, RenderSettings.MAX_MAX_RENDER_DISTANCE);
-        spec.defineList(KEY_PATTERNS, getDefault().patternSettings().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
-        spec.defineList(KEY_TRANSFORMERS, getDefault().transformerPresets().arrayTransformers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
+        spec.define(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD), () -> getDefault().renderSettings().showOtherPlayersBuild(), Boolean.class::isInstance);
+        spec.define(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW), () -> getDefault().renderSettings().showBlockPreview(), Boolean.class::isInstance);
+//        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS), () -> getDefault().renderSettings().maxRenderBlocks(), RenderSettings.MIN_MAX_RENDER_BLOCKS, RenderSettings.MAX_MAX_RENDER_BLOCKS);
+//        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), () -> getDefault().renderSettings().maxRenderDistance(), RenderSettings.MIN_MAX_RENDER_DISTANCE, RenderSettings.MAX_MAX_RENDER_DISTANCE);
+        spec.defineList(KEY_PATTERNS, () -> getDefault().patternSettings().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
+        spec.defineList(KEY_TRANSFORMERS, () -> getDefault().transformerPresets().arrayTransformers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
         return spec;
     }
 

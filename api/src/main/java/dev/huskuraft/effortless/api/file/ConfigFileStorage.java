@@ -9,15 +9,16 @@ import dev.huskuraft.effortless.api.config.ConfigSerializer;
 
 public abstract class ConfigFileStorage<T> extends FileStorage<T> {
 
-    private final ConfigSerializer<T> serializer;
-
     static {
         Config.setInsertionOrderPreserved(true);
     }
 
+    private final ConfigSerializer<T> serializer;
+
     protected ConfigFileStorage(String fileName, FileType fileType, ConfigSerializer<T> serializer) {
         super(fileName, fileType);
         this.serializer = serializer;
+        get();
     }
 
     @Override

@@ -5,9 +5,7 @@ import com.electronwill.nightconfig.core.ConfigSpec;
 
 public interface ConfigSerializer<T> {
 
-    default ConfigSpec getSpec(Config config) {
-        return null;
-    }
+    ConfigSpec getSpec(Config config);
 
     T getDefault();
 

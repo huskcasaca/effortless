@@ -31,6 +31,7 @@ abstract class FileStorage<T> implements Storage<T> {
             var file = getTargetFile();
             if (!file.exists()) {
                 this.target = getDefault();
+                write();
                 return;
             }
             // TODO: 27/2/24

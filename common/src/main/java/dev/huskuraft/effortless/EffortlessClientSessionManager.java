@@ -162,7 +162,9 @@ public final class EffortlessClientSessionManager implements SessionManager {
 
         var player = getEntrance().getClient().getPlayer();
 
-        clientSession.set(getLastSession());
+        if (clientSession.get() == null) {
+            clientSession.set(getLastSession());
+        }
 
         if (getEntrance().getStructureBuilder().getContext(player).isDisabled()) {
             return;
