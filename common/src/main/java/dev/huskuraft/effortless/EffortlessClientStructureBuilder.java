@@ -258,16 +258,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         updateContext(player, context -> context.withBuildFeature(feature));
     }
 
-    public boolean isSessionValid(Player player) {
-        return getEntrance().getSessionManager().isSessionValid();
-    }
-
-    public boolean isPermissionGranted(Player player) {
-        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowUseMod();
-    }
-
     @Override
     public void setBuildFeature(Player player, MultiSelectFeature feature) {
+        if (!isPermissionGranted(player)) {
+            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
+            return;
+        }
         updateContext(player, context -> {
             var features = context.buildFeatures().stream().filter(f -> f.getClass().equals(feature.getClass())).collect(Collectors.toSet());
             if (features.contains(feature)) {
@@ -283,6 +279,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void setPattern(Player player, Pattern pattern) {
+        if (!isPermissionGranted(player)) {
+            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
+            return;
+        }
         updateContext(player, context -> {
             return context.withPattern(pattern).finalize(player, BuildStage.UPDATE_CONTEXT);
         });
@@ -404,6 +404,14 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
+    }
+
+    private boolean isSessionValid(Player player) {
+        return getEntrance().getSessionManager().isSessionValid();
+    }
+
+    private boolean isPermissionGranted(Player player) {
+        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowUseMod();
     }
 
     private UUID nextIdByTag(UUID uuid, Object tag) {
