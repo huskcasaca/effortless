@@ -171,8 +171,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
 //            }
 
-            showContext(context.getId(), context);
-            showOperationResult(context.getId(), result);
+            showBuildContextResult(context.getId(), context, result);
 //            showOperationResultTooltip(context.getId(), 1024, player, result);
 //            showContextTooltip(context.getId(), 1024, context);
             showBuildTooltip(context.getId(), 1024, player, context, result);
@@ -329,8 +328,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void onContextReceived(Player player, Context context) {
         var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
 
-        showContext(player.getId(), context);
-        showOperationResult(player.getId(), result);
+        player.getId();
+
+        showBuildContextResult(player.getId(), context, result);
 
 //        showOperationResultTooltip(context.getId(), 1, player, result);
 
@@ -396,15 +396,16 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         var result = new BatchBuildSession(player.getWorld(), player, context.withPreviewType()).build().commit();
 
-        showContext(player.getId(), context);
-        showOperationResult(player.getId(), result);
+        player.getId();
+
+        showBuildContextResult(player.getId(), context, result);
 
 //        showOperationResultTooltip(player.getId(), 0, player, result);
 //        showContextTooltip(player.getId(), 0, context);
 
         showBuildTooltip(player.getId(), 0, player, context, result);
         if (!getContext(player).isIdle()) {
-            showClientMessage(player, context);
+            showBuildMessage(player, context);
         }
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
@@ -427,17 +428,18 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowUseMod();
     }
 
-    private UUID nextIdByTag(UUID uuid, Object tag) {
+    private UUID generateId(UUID uuid, Object tag) {
         return new UUID(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits() + tag.hashCode());
     }
 
-    public void showContext(UUID uuid, Context context) {
+    public void showBuildContextResult(UUID uuid, Context context, OperationResult result) {
         getEntrance().getClientManager().getPatternRenderer().showPattern(uuid, context);
+
         if (context.interactions().isMissing() || context.interactions().isEmpty()) {
-            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, BoundingBox3d.class), BoundingBox3d.ofSize(Vector3d.ZERO, 0, 0, 0));
+            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(generateId(uuid, BoundingBox3d.class), BoundingBox3d.ofSize(Vector3d.ZERO, 0, 0, 0));
         } else {
             var box = BoundingBox3d.fromLowerCornersOf(context.interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new));
-            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(nextIdByTag(uuid, BoundingBox3d.class), box)
+            getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(generateId(uuid, BoundingBox3d.class), box)
                     .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                     .lightMap(LightTexture.FULL_BLOCK)
                     .disableNormals()
@@ -445,9 +447,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     .stroke(1 / 64f);
         }
 
-    }
-
-    public void showOperationResult(UUID uuid, OperationResult result) {
         getEntrance().getClientManager().getOperationsRenderer().showResult(uuid, result);
         if (result instanceof BatchOperationResult batchOperationResult) {
 
@@ -456,7 +455,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             for (var allColor : BlockOperationRenderer.getAllColors()) {
                 if (resultMap.get(allColor) == null) continue;
                 var locations =  resultMap.get(allColor).stream().map(OperationResult::getOperation).map(Operation::locate).filter(Objects::nonNull).toList();
-                getEntrance().getClientManager().getOutlineRenderer().showCluster(nextIdByTag(batchOperationResult.getOperation().getContext().getId(), allColor), locations)
+                getEntrance().getClientManager().getOutlineRenderer().showCluster(generateId(batchOperationResult.getOperation().getContext().getId(), allColor), locations)
                         .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                         .lightMap(LightTexture.FULL_BLOCK)
                         .disableNormals()
@@ -484,10 +483,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
 
         entries.add(texts);
-//        getEntrance().getClientManager().getTooltipRenderer().showAsGroup(nextIdByTag(id, Context.class), priority, entries);
+//        getEntrance().getClientManager().getTooltipRenderer().showAsGroup(generateId(id, Context.class), priority, entries);
 //        entries.clear();
         entries.add(context.buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, BuildMode.class), priority, entries);
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, BuildMode.class), priority, entries);
         entries.clear();
 
         for (var itemType : ItemSummaryType.values()) {
@@ -509,16 +508,16 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 entries.add(Text.translate("effortless.build.summary." + itemType.name().toLowerCase(Locale.ROOT)).withStyle(color));
             }
             if (!entries.isEmpty()) {
-                getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(nextIdByTag(id, itemType), priority, entries);
+                getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, itemType), priority, entries);
             } else {
-                getEntrance().getClientManager().getTooltipRenderer().showEmptyEntry(nextIdByTag(id, itemType), priority);
+                getEntrance().getClientManager().getTooltipRenderer().showEmptyEntry(generateId(id, itemType), priority);
             }
             entries.clear();
         }
 
     }
 
-    public void showClientMessage(Player player, Context context) {
+    public void showBuildMessage(Player player, Context context) {
         var message = "";
         if (!context.tracingResult().isSuccess()) {
             switch (context.tracingResult()) {
