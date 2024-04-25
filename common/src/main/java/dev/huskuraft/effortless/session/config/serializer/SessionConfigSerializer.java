@@ -133,10 +133,10 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.set(KEY_WHITELISTED_ITEMS, generalConfig.whitelistedItems() == null ? null : generalConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
             config.set(KEY_BLACKLISTED_ITEMS, generalConfig.blacklistedItems() == null ? null : generalConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
 
-            config.setComment(KEY_USE_COMMANDS, "Should use commands to build using this mod?");
-            config.setComment(KEY_ALLOW_USE_MOD, "Should allow players to use this mod?");
-            config.setComment(KEY_ALLOW_BREAK_BLOCKS, "Should allow players to break blocks using this mod?");
-            config.setComment(KEY_ALLOW_PLACE_BLOCKS, "Should allow players to place blocks using this mod?");
+            config.setComment(KEY_USE_COMMANDS, "Should use commands to build using this mod.");
+            config.setComment(KEY_ALLOW_USE_MOD, "Should allow players to use this mod.");
+            config.setComment(KEY_ALLOW_BREAK_BLOCKS, "Should allow players to break blocks using this mod.");
+            config.setComment(KEY_ALLOW_PLACE_BLOCKS, "Should allow players to place blocks using this mod.");
             config.setComment(KEY_MAX_REACH_DISTANCE, "The maximum distance a player can reach when building using this mod. \nRange: " + GeneralConfig.MAX_REACH_DISTANCE_RANGE_START + " ~ " + GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
             config.setComment(KEY_MAX_BOX_VOLUME_PER_BREAK, "The maximum box volume a player can break at once when building using this mod.. \nRange: " + GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
             config.setComment(KEY_MAX_BOX_VOLUME_PER_PLACE, "The maximum box volume a player can place at once  when building using this mod. \nRange: " + GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
