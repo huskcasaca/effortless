@@ -3,9 +3,9 @@ package dev.huskuraft.effortless.building.structure;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 
 public enum PlaneFacing implements SingleSelectFeature {
-    HORIZONTAL("face_horizontal"),
+    BOTH("face_both"),
     VERTICAL("face_vertical"),
-    BOTH("face_both");
+    HORIZONTAL("face_horizontal");
 
     private final String name;
 

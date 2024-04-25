@@ -12,7 +12,6 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
-import dev.huskuraft.effortless.building.structure.PlaneLength;
 
 public abstract class AbstractBlockStructure implements BlockStructure {
 
@@ -82,35 +81,33 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return new BuildFeature[] {};
     }
 
-    public static BlockInteraction transformUniformLengthInteraction(BlockInteraction start, BlockInteraction end, PlaneLength planeLength) {
+    public static BlockInteraction transformUniformLengthInteraction(BlockInteraction start, BlockInteraction end, boolean limit) {
         if (start == null || end == null) {
             return null;
+        }
+        if (!limit) {
+            return end;
         }
         var firstBlockPos = start.getBlockPosition();
         var secondBlockPos = end.getBlockPosition();
         var diff = secondBlockPos.sub(firstBlockPos);
 
-        return switch (planeLength) {
-            case DISABLE -> end;
-            case LIMIT_TO_MAX -> {
-                if (diff.x() == 0 && diff.y() == 0 && diff.z() == 0) {
-                    yield end;
-                }
-                if ((diff.x() == 0 && diff.y() == 0) || (diff.x() == 0 && diff.z() == 0) || (diff.y() == 0 && diff.z() == 0)) {
-                    yield end;
-                }
-                if (diff.x() == 0) {
-                    yield end.withPosition(firstBlockPos.add(diff.withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z())))));
-                }
-                if (diff.z() == 0) {
-                    yield end.withPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y()))).withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y())))));
-                }
-                if (diff.y() == 0) {
-                    yield end.withPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z())))));
-                }
-                yield end;
-            }
-        };
+        if (diff.x() == 0 && diff.y() == 0 && diff.z() == 0) {
+            return end;
+        }
+        if ((diff.x() == 0 && diff.y() == 0) || (diff.x() == 0 && diff.z() == 0) || (diff.y() == 0 && diff.z() == 0)) {
+            return end;
+        }
+        if (diff.x() == 0) {
+            return end.withPosition(firstBlockPos.add(diff.withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z())))));
+        }
+        if (diff.z() == 0) {
+            return end.withPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y()))).withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y())))));
+        }
+        if (diff.y() == 0) {
+            return end.withPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z())))));
+        }
+        return end;
     }
 
 

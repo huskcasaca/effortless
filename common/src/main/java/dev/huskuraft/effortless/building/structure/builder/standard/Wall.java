@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
 public class Wall extends AbstractBlockStructure {
@@ -28,7 +29,7 @@ public class Wall extends AbstractBlockStructure {
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength());
+        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength() == PlaneLength.LIMIT_TO_MAX);
     }
 
 
