@@ -2,6 +2,15 @@
 
 ----------
 
+### 2.3.3
+
+- Fix crash on lantern ([#102](https://github.com/huskcasaca/effortless/pull/102))
+- Fix modrinth push not in project order ([#103](https://github.com/huskcasaca/effortless/pull/103))
+- Fix forge crash ([#106](https://github.com/huskcasaca/effortless/pull/106))
+- Fix fabric config ([#107](https://github.com/huskcasaca/effortless/pull/107))
+
+----------
+
 ### 2.3.2
 
 * Fix server timeout ([#99](https://github.com/huskcasaca/effortless/pull/99))
@@ -10,6 +19,7 @@
 ----------
 
 ### 2.3.1
+
 * Fix crash on Quilt ([#96](https://github.com/huskcasaca/effortless/pull/96))
 
 ----------
