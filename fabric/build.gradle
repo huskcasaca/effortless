@@ -61,6 +61,7 @@ subprojects {
             exclude dependency('com.google.code.findbugs:jsr305')
         }
         relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.fabric'
+        relocate 'com.electronwill.nightconfig', 'dev.huskuraft.effortless.api.nightconfig'
     }
 
     remapJar {
