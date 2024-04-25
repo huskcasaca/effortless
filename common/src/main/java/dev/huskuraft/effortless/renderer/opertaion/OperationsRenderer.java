@@ -52,7 +52,7 @@ public class OperationsRenderer {
     }
 
     private int getMaxRenderBlocks() {
-        return Integer.MAX_VALUE;
+        return 1024;
     }
 
     private int getMaxRenderDistance() {
