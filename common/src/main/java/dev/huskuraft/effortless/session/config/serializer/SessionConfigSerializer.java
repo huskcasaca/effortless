@@ -48,6 +48,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
 
     @Override
     public SessionConfig deserialize(Config config) {
+        validate(config);
         return new SessionConfig(
                 GlobalGeneralConfigSerializer.INSTANCE.deserialize(config.get(KEY_GLOBAL)),
                 ((Config) config.get(KEY_PLAYER)).entrySet().stream().map(e -> {
@@ -67,6 +68,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
         for (var entry : sessionConfig.playerConfigs().entrySet()) {
             config.add(List.of(KEY_PLAYER, entry.getKey().toString()), PerPlayerGeneralConfigSerializer.INSTANCE.serialize(entry.getValue()));
         }
+        validate(config);
         return config;
     }
 
