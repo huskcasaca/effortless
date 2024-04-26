@@ -2,14 +2,14 @@ package dev.huskuraft.effortless.building.structure;
 
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 
-public enum PlaneFacing implements SingleSelectFeature {
-    BOTH("face_both"),
-    VERTICAL("face_vertical"),
-    HORIZONTAL("face_horizontal");
+public enum PlaneLength implements SingleSelectFeature {
+    DISABLE("plane_length_disable"),
+    LIMIT_TO_MAX("plane_length_limit_to_max"),
+    ;
 
     private final String name;
 
-    PlaneFacing(String name) {
+    PlaneLength(String name) {
         this.name = name;
     }
 
@@ -20,6 +20,6 @@ public enum PlaneFacing implements SingleSelectFeature {
 
     @Override
     public String getCategory() {
-        return BuildFeature.PLANE_FACING.getName();
+        return BuildFeature.PLANE_LENGTH.getName();
     }
 }

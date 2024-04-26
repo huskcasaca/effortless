@@ -6,21 +6,21 @@ import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
-import dev.huskuraft.effortless.building.structure.builder.Builder;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Circle;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Floor;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Line;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Wall;
-import dev.huskuraft.effortless.building.structure.builder.singles.Disable;
-import dev.huskuraft.effortless.building.structure.builder.singles.Single;
-import dev.huskuraft.effortless.building.structure.builder.triples.Cone;
-import dev.huskuraft.effortless.building.structure.builder.triples.Cube;
-import dev.huskuraft.effortless.building.structure.builder.triples.Cylinder;
-import dev.huskuraft.effortless.building.structure.builder.triples.DiagonalLine;
-import dev.huskuraft.effortless.building.structure.builder.triples.DiagonalWall;
-import dev.huskuraft.effortless.building.structure.builder.triples.Pyramid;
-import dev.huskuraft.effortless.building.structure.builder.triples.SlopeFloor;
-import dev.huskuraft.effortless.building.structure.builder.triples.Sphere;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.standard.Circle;
+import dev.huskuraft.effortless.building.structure.builder.standard.Cone;
+import dev.huskuraft.effortless.building.structure.builder.standard.Cube;
+import dev.huskuraft.effortless.building.structure.builder.standard.Cylinder;
+import dev.huskuraft.effortless.building.structure.builder.standard.DiagonalLine;
+import dev.huskuraft.effortless.building.structure.builder.standard.DiagonalWall;
+import dev.huskuraft.effortless.building.structure.builder.standard.Disable;
+import dev.huskuraft.effortless.building.structure.builder.standard.Floor;
+import dev.huskuraft.effortless.building.structure.builder.standard.Line;
+import dev.huskuraft.effortless.building.structure.builder.standard.Pyramid;
+import dev.huskuraft.effortless.building.structure.builder.standard.Single;
+import dev.huskuraft.effortless.building.structure.builder.standard.SlopeFloor;
+import dev.huskuraft.effortless.building.structure.builder.standard.Sphere;
+import dev.huskuraft.effortless.building.structure.builder.standard.Wall;
 
 public enum BuildMode {
     DISABLED("disabled", new Disable(), Category.BASIC),
@@ -28,17 +28,17 @@ public enum BuildMode {
 
     LINE("line", new Line(), Category.SQUARE /*, OptionEnum.THICKNESS*/),
     //    SQUARE("square", new Square(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
-    WALL("wall", new Wall(), Category.SQUARE, BuildFeature.PLANE_FILLING),
-    FLOOR("floor", new Floor(), Category.SQUARE, BuildFeature.PLANE_FILLING),
-    CUBE("cube", new Cube(), Category.SQUARE, BuildFeature.CUBE_FILLING),
+    WALL("wall", new Wall(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_LENGTH),
+    FLOOR("floor", new Floor(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_LENGTH),
+    CUBE("cube", new Cube(), Category.SQUARE, BuildFeature.CUBE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
 
     DIAGONAL_LINE("diagonal_line", new DiagonalLine(), Category.DIAGONAL),
     DIAGONAL_WALL("diagonal_wall", new DiagonalWall(), Category.DIAGONAL),
     SLOPE_FLOOR("slope_floor", new SlopeFloor(), Category.DIAGONAL, BuildFeature.RAISED_EDGE),
 
-    CIRCLE("circle", new Circle(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
-    CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
-    SPHERE("sphere", new Sphere(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
+    CIRCLE("circle", new Circle(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
+    CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
+    SPHERE("sphere", new Sphere(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
 
     PYRAMID("pyramid", new Pyramid(), Category.ROOF),
     CONE("cone", new Cone(), Category.ROOF),
@@ -46,19 +46,19 @@ public enum BuildMode {
 
 //    DOME("dome", new Dome(), Category.ROOF);
 
-    private final Builder provider;
+    private final BlockStructure provider;
     private final Category category;
     private final BuildFeature[] features;
     private final String name;
 
-    BuildMode(String name, Builder instance, Category category, BuildFeature... features) {
+    BuildMode(String name, BlockStructure instance, Category category, BuildFeature... features) {
         this.name = name;
         this.provider = instance;
         this.category = category;
         this.features = features;
     }
 
-    public Builder getInstance() {
+    public BlockStructure getInstance() {
         return provider;
     }
 

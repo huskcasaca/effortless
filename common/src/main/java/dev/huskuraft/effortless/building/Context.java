@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.building;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.CubeFilling;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
@@ -34,7 +36,7 @@ public record Context(
 
         StructureParams structureParams,
         PatternParams patternParams,
-        LimitationParams limitationParams
+        CustomParams customParams
 ) {
 
     public UUID getId() {
@@ -54,11 +56,13 @@ public record Context(
                         PlaneFilling.PLANE_FULL,
                         PlaneFacing.BOTH,
                         RaisedEdge.RAISE_LONG_EDGE,
-                        ReplaceMode.DISABLED),
+                        ReplaceMode.DISABLED,
+                        PlaneLength.DISABLE
+                ),
                 new PatternParams(
-                        Pattern.DISABLED,
-                        UUID.randomUUID().getMostSignificantBits()),
-                new LimitationParams(
+                        Pattern.DISABLED
+                ),
+                new CustomParams(
                         GeneralConfig.DEFAULT
                 )
         );
@@ -181,7 +185,7 @@ public record Context(
     }
 
     public int maxReachDistance() {
-        return limitationParams.generalConfig.maxReachDistance();
+        return customParams.generalConfig.maxReachDistance();
     }
 
     public Pattern pattern() {
@@ -219,23 +223,23 @@ public record Context(
     }
 
     public Context withState(BuildState state) {
-        return new Context(getId, state, type, interactions, structureParams, patternParams, limitationParams);
+        return new Context(getId, state, type, interactions, structureParams, patternParams, customParams);
     }
 
     public Context withPreviewType() {
-        return new Context(getId, state, BuildType.PREVIEW, interactions, structureParams, patternParams, limitationParams);
+        return new Context(getId, state, BuildType.PREVIEW, interactions, structureParams, patternParams, customParams);
     }
 
     public Context withPreviewOnceType() {
-        return new Context(getId, state, BuildType.PREVIEW_ONCE, interactions, structureParams, patternParams, limitationParams);
+        return new Context(getId, state, BuildType.PREVIEW_ONCE, interactions, structureParams, patternParams, customParams);
     }
 
     public Context withNextInteraction(BlockInteraction interaction) {
-        return new Context(getId, state, type, interactions.put(interaction), structureParams, patternParams, limitationParams);
+        return new Context(getId, state, type, interactions.put(interaction), structureParams, patternParams, customParams);
     }
 
     public Context withEmptyInteractions() {
-        return new Context(getId, state, type, BuildInteractions.EMPTY, structureParams, patternParams, limitationParams);
+        return new Context(getId, state, type, BuildInteractions.EMPTY, structureParams, patternParams, customParams);
     }
 
     public Context withNextInteractionTraced(Player player) {
@@ -243,23 +247,23 @@ public record Context(
     }
 
     public Context withBuildMode(BuildMode buildMode) {
-        return new Context(getId, state, type, interactions, structureParams.withBuildMode(buildMode), patternParams, limitationParams);
+        return new Context(getId, state, type, interactions, structureParams.withBuildMode(buildMode), patternParams, customParams);
     }
 
     public Context withBuildFeature(Feature feature) {
-        return new Context(getId, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, limitationParams);
+        return new Context(getId, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, customParams);
     }
 
     public Context withBuildFeature(Set<Feature> feature) {
-        return new Context(getId, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, limitationParams);
+        return new Context(getId, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, customParams);
     }
 
     public Context withPattern(Pattern pattern) {
-        return new Context(getId, state, type, interactions, structureParams, patternParams.withPattern(pattern), limitationParams);
+        return new Context(getId, state, type, interactions, structureParams, patternParams.withPattern(pattern), customParams);
     }
 
     public Context withRandomPatternSeed() {
-        return new Context(getId, state, type, interactions, structureParams, patternParams.withRandomSeed(), limitationParams);
+        return new Context(getId, state, type, interactions, structureParams, patternParams.withRandomSeed(), customParams);
     }
 
     public Context finalize(Player player, BuildStage stage) {
@@ -275,7 +279,7 @@ public record Context(
                 BuildInteractions.EMPTY,
                 structureParams,
                 patternParams,
-                limitationParams
+                customParams
         );
     }
 
@@ -333,37 +337,41 @@ public record Context(
             PlaneFilling planeFilling,
             PlaneFacing planeFacing,
             RaisedEdge raisedEdge,
-            ReplaceMode replaceMode
+            ReplaceMode replaceMode,
+            PlaneLength planeLength
     ) {
 
         public Set<Feature> buildFeatures() {
             return Stream.of(
-                    Set.of(circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge)
+                    Set.of(circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, planeLength)
             ).flatMap(Set::stream).collect(Collectors.toSet());
         }
 
         public StructureParams withBuildMode(BuildMode buildMode) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
         }
 
         public StructureParams withBuildFeature(Feature feature) {
-            if (feature instanceof CircleStart feature1) {
-                return withCircleStart(feature1);
+            if (feature instanceof CircleStart circleStart) {
+                return withCircleStart(circleStart);
             }
-            if (feature instanceof CubeFilling feature1) {
-                return withCubeFilling(feature1);
+            if (feature instanceof CubeFilling cubeFilling) {
+                return withCubeFilling(cubeFilling);
             }
-            if (feature instanceof PlaneFilling feature1) {
-                return withPlaneFilling(feature1);
+            if (feature instanceof PlaneFilling planeFilling) {
+                return withPlaneFilling(planeFilling);
             }
-            if (feature instanceof PlaneFacing feature1) {
-                return withPlaneFacing(feature1);
+            if (feature instanceof PlaneFacing planeFacing) {
+                return withPlaneFacing(planeFacing);
             }
-            if (feature instanceof RaisedEdge feature1) {
-                return withRaisedEdge(feature1);
+            if (feature instanceof RaisedEdge raisedEdge) {
+                return withRaisedEdge(raisedEdge);
             }
-            if (feature instanceof ReplaceMode replaceMode1) {
-                return withReplaceMode(replaceMode1);
+            if (feature instanceof ReplaceMode replaceMode) {
+                return withReplaceMode(replaceMode);
+            }
+            if (feature instanceof PlaneLength planeLength) {
+                return withUniformLength(planeLength);
             }
             return this;
         }
@@ -376,27 +384,31 @@ public record Context(
         }
 
         public StructureParams withCircleStart(CircleStart circleStart) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
         }
 
         public StructureParams withCubeFilling(CubeFilling cubeFilling) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
         }
 
         public StructureParams withPlaneFilling(PlaneFilling planeFilling) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
         }
 
         public StructureParams withPlaneFacing(PlaneFacing planeFacing) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
         }
 
         public StructureParams withRaisedEdge(RaisedEdge raisedEdge) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
         }
 
         public StructureParams withReplaceMode(ReplaceMode replaceMode) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
+        }
+
+        public StructureParams withUniformLength(PlaneLength planeLength) {
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
         }
 
     }
@@ -406,28 +418,32 @@ public record Context(
             long seed
     ) {
 
+        public PatternParams(Pattern pattern) {
+            this(pattern, new Random().nextLong());
+        }
+
         public PatternParams withPattern(Pattern pattern) {
             return new PatternParams(pattern, seed);
         }
 
         public PatternParams withRandomSeed() {
-            return new PatternParams(pattern, UUID.randomUUID().getMostSignificantBits());
+            return new PatternParams(pattern, new Random().nextLong());
         }
     }
 
-    public record LimitationParams(
+    public record CustomParams(
             GeneralConfig generalConfig
     ) {
     }
 
 
-    public Context withReachParams(LimitationParams limitationParams) {
-        return new Context(getId, state, type, interactions, structureParams, patternParams, limitationParams);
+    public Context withReachParams(CustomParams customParams) {
+        return new Context(getId, state, type, interactions, structureParams, patternParams, customParams);
     }
 
     public Context withGeneralConfig(GeneralConfig config) {
         // FIXME: 4/4/24 commands
-        return withReachParams(new LimitationParams(config));
+        return withReachParams(new CustomParams(config));
     }
 
     public Vector3i getInteractionBox() {
@@ -444,8 +460,8 @@ public record Context(
     public int getMaxBoxVolume() {
         return switch (state()) {
             case IDLE -> 0;
-            case PLACE_BLOCK -> limitationParams().generalConfig().maxBoxVolumePerPlace();
-            case BREAK_BLOCK -> limitationParams().generalConfig().maxBoxVolumePerBreak();
+            case PLACE_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
+            case BREAK_BLOCK -> customParams().generalConfig().maxBoxVolumePerBreak();
         };
     }
 
@@ -456,8 +472,8 @@ public record Context(
     public int getMaxBoxSideLength() {
         return switch (state()) {
             case IDLE -> 0;
-            case PLACE_BLOCK -> limitationParams().generalConfig().maxBoxSideLengthPerPlace();
-            case BREAK_BLOCK -> limitationParams().generalConfig().maxBoxSideLengthPerBreak();
+            case PLACE_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
+            case BREAK_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerBreak();
         };
     }
 
@@ -472,8 +488,8 @@ public record Context(
     public boolean hasPermission() {
         return switch (state()) {
             case IDLE -> true;
-            case PLACE_BLOCK -> limitationParams().generalConfig().allowPlaceBlocks();
-            case BREAK_BLOCK -> limitationParams().generalConfig().allowBreakBlocks();
+            case PLACE_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
+            case BREAK_BLOCK -> customParams().generalConfig().allowBreakBlocks();
         };
     }
 

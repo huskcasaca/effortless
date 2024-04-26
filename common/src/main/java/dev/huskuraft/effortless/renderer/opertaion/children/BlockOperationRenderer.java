@@ -27,11 +27,16 @@ public class BlockOperationRenderer implements OperationRenderer {
 
     @Override
     public void render(Renderer renderer, RendererParams rendererParams, float deltaTick) {
-        if (!rendererParams.shouldRenderBlocks()) {
+        if (!rendererParams.showBlockPreview()) {
             return;
         }
 
         var operation = result.getOperation();
+
+        if (rendererParams.maxRenderBlocks() < operation.getContext().getBoxVolume()) {
+            return;
+        }
+
         var world = operation.getWorld();
         var player = operation.getPlayer();
         var blockPosition = operation.getInteraction().getBlockPosition();
@@ -65,7 +70,6 @@ public class BlockOperationRenderer implements OperationRenderer {
         renderer.renderBlockInWorld(BlockRenderLayers.block(color.getRGB()), world, blockPosition, blockState);
         renderer.popPose();
 
-        rendererParams.accumulate();
     }
 
     public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {

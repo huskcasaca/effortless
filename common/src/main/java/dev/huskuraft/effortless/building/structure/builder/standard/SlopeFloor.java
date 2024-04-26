@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.structure.builder.triples;
+package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -9,11 +9,9 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
-import dev.huskuraft.effortless.building.structure.builder.TripleClickBuilder;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Floor;
-import dev.huskuraft.effortless.building.structure.builder.singles.Single;
+import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
-public class SlopeFloor extends TripleClickBuilder {
+public class SlopeFloor extends AbstractBlockStructure {
 
     // add slope floor from first to second
     public static Stream<BlockPosition> collectSlopeFloorBlocks(Context context) {
@@ -107,17 +105,22 @@ public class SlopeFloor extends TripleClickBuilder {
     }
 
     @Override
-    protected Stream<BlockPosition> collectStartBlocks(Context context) {
+    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
         return Single.collectSingleBlocks(context);
     }
 
     @Override
-    protected Stream<BlockPosition> collectInterBlocks(Context context) {
+    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
         return Floor.collectFloorBlocks(context);
     }
 
     @Override
-    protected Stream<BlockPosition> collectFinalBlocks(Context context) {
+    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
         return collectSlopeFloorBlocks(context);
+    }
+
+    @Override
+    public int totalClicks(Context context) {
+        return 3;
     }
 }

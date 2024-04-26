@@ -34,11 +34,11 @@ public class BlockBreakOperation extends BlockOperation {
         }
 
         // whitelist/blacklist
-        if (!context.limitationParams().generalConfig().whitelistedItems().isEmpty() && !context.limitationParams().generalConfig().whitelistedItems().contains(getItemStack().getItem().getId())) {
+        if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(getItemStack().getItem().getId())) {
             return BlockOperationResult.Type.FAIL_WHITELISTED;
         }
 
-        if (!context.limitationParams().generalConfig().blacklistedItems().isEmpty() && context.limitationParams().generalConfig().blacklistedItems().contains(getItemStack().getItem().getId())) {
+        if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(getItemStack().getItem().getId())) {
             return BlockOperationResult.Type.FAIL_BLACKLISTED;
         }
 

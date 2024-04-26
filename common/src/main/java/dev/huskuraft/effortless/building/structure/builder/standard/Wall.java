@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.structure.builder.doubles;
+package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,17 +10,17 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.DoubleClickBuilder;
-import dev.huskuraft.effortless.building.structure.builder.singles.Single;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
+import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
-public class Wall extends DoubleClickBuilder {
+public class Wall extends AbstractBlockStructure {
 
     public static BlockInteraction traceWall(Player player, Context context) {
         var center = context.firstBlockPosition().getCenter();
         var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
-        return Stream.of(
+        var result = Stream.of(
                         new WallCriteria(Axis.X, player, center, reach, skipRaytrace),
                         new WallCriteria(Axis.Z, player, center, reach, skipRaytrace)
                 )
@@ -28,6 +28,13 @@ public class Wall extends DoubleClickBuilder {
                 .min(Comparator.comparing(WallCriteria::distanceAngle))
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
+
+        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength() == PlaneLength.LIMIT_TO_MAX);
+    }
+
+
+    public static int sign(int a) {
+        return ((int) Math.signum(a)) == 0 ? 1 : (int) Math.signum(a);
     }
 
     public static Stream<BlockPosition> collectWallBlocks(Context context) {
@@ -66,8 +73,22 @@ public class Wall extends DoubleClickBuilder {
     }
 
     @Override
-    protected Stream<BlockPosition> collectFinalBlocks(Context context) {
+    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
         return collectWallBlocks(context);
+    }
+
+    @Override
+    public Stream<BlockPosition> collect(Context context) {
+        return switch (context.interactionsSize()) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Wall.collectWallBlocks(context);
+            default -> Stream.empty();
+        };
+    }
+
+    @Override
+    public int totalClicks(Context context) {
+        return 2;
     }
 
     public static class WallCriteria extends AxisCriteria {

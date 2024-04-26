@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.structure.builder.singles;
+package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.stream.Stream;
 
@@ -6,9 +6,9 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.SingleClickBuilder;
+import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
-public class Single extends SingleClickBuilder {
+public class Single extends AbstractBlockStructure {
 
     public static BlockInteraction traceSingle(Player player, Context context) {
         var interaction = player.raytrace(context.maxReachDistance(), 0, false);
@@ -36,8 +36,13 @@ public class Single extends SingleClickBuilder {
     }
 
     @Override
-    protected Stream<BlockPosition> collectFinalBlocks(Context context) {
+    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
         return collectSingleBlocks(context);
+    }
+
+    @Override
+    public int totalClicks(Context context) {
+        return 1;
     }
 
 }

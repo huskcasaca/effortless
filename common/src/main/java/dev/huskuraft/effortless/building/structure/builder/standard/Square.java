@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.structure.builder.doubles;
+package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,10 +13,10 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
-import dev.huskuraft.effortless.building.structure.builder.DoubleClickBuilder;
-import dev.huskuraft.effortless.building.structure.builder.singles.Single;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
+import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
-public class Square extends DoubleClickBuilder {
+public class Square extends AbstractBlockStructure {
 
     public static void addFullSquareBlocksX(List<BlockPosition> list, int x, int y1, int y2, int z1, int z2) {
         for (int z = z1; z1 < z2 ? z <= z2 : z >= z2; z += z1 < z2 ? 1 : -1) {
@@ -118,7 +118,7 @@ public class Square extends DoubleClickBuilder {
         var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
-        return Stream.of(
+        var result = Stream.of(
                         context.planeFacing() != PlaneFacing.HORIZONTAL ? new NearestLineCriteria(Axis.X, player, center, reach, skipRaytrace) : null,
                         context.planeFacing() != PlaneFacing.VERTICAL ? new NearestLineCriteria(Axis.Y, player, center, reach, skipRaytrace) : null,
                         context.planeFacing() != PlaneFacing.HORIZONTAL ? new NearestLineCriteria(Axis.Z, player, center, reach, skipRaytrace) : null)
@@ -127,6 +127,8 @@ public class Square extends DoubleClickBuilder {
                 .min(Comparator.comparing(NearestLineCriteria::distanceToLineSqr))
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
+
+        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength() == PlaneLength.LIMIT_TO_MAX);
     }
 
     @Override
@@ -140,8 +142,13 @@ public class Square extends DoubleClickBuilder {
     }
 
     @Override
-    protected Stream<BlockPosition> collectFinalBlocks(Context context) {
+    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
         return collectSquareBlocks(context);
+    }
+
+    @Override
+    public int totalClicks(Context context) {
+        return 2;
     }
 
     public static class NearestLineCriteria extends Line.NearestLineCriteria {

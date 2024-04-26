@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.structure.builder.triples;
+package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
 import java.util.stream.Stream;
@@ -7,40 +7,11 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.TripleClickBuilder;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Circle;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Floor;
-import dev.huskuraft.effortless.building.structure.builder.singles.Single;
+import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
-public class Cone extends TripleClickBuilder {
+public class Cone extends AbstractBlockStructure {
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return Floor.traceFloor(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        return traceLineY(player, context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectStartBlocks(Context context) {
-        return Single.collectSingleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectInterBlocks(Context context) {
-        return Circle.collectCircleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectFinalBlocks(Context context) {
+    protected static Stream<BlockPosition> collectConeBlocks(Context context) {
 
         var list = new ArrayList<BlockPosition>();
 
@@ -86,5 +57,40 @@ public class Cone extends TripleClickBuilder {
             }
         }
         return list.stream();
+    }
+
+    @Override
+    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
+        return Single.traceSingle(player, context);
+    }
+
+    @Override
+    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
+        return Floor.traceFloor(player, context);
+    }
+
+    @Override
+    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
+        return traceLineY(player, context);
+    }
+
+    @Override
+    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
+        return Single.collectSingleBlocks(context);
+    }
+
+    @Override
+    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
+        return Circle.collectCircleBlocks(context);
+    }
+
+    @Override
+    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
+        return Cone.collectConeBlocks(context);
+    }
+
+    @Override
+    public int totalClicks(Context context) {
+        return 3;
     }
 }

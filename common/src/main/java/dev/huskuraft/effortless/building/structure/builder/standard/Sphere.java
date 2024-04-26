@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.structure.builder.triples;
+package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +11,9 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
-import dev.huskuraft.effortless.building.structure.builder.TripleClickBuilder;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Circle;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Floor;
-import dev.huskuraft.effortless.building.structure.builder.doubles.Wall;
-import dev.huskuraft.effortless.building.structure.builder.singles.Single;
+import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
-public class Sphere extends TripleClickBuilder {
+public class Sphere extends AbstractBlockStructure {
 
     public static boolean isPosInSphere(float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, int x, int y, int z, boolean fill) {
 
@@ -133,17 +129,22 @@ public class Sphere extends TripleClickBuilder {
     }
 
     @Override
-    protected Stream<BlockPosition> collectStartBlocks(Context context) {
+    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
         return Single.collectSingleBlocks(context);
     }
 
     @Override
-    protected Stream<BlockPosition> collectInterBlocks(Context context) {
+    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
         return Circle.collectCircleBlocks(context);
     }
 
     @Override
-    protected Stream<BlockPosition> collectFinalBlocks(Context context) {
+    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
         return collectSphereBlocks(context);
+    }
+
+    @Override
+    public int totalClicks(Context context) {
+        return 3;
     }
 }
