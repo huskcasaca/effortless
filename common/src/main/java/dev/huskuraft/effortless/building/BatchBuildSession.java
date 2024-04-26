@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.building.operation.OperationFilter;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperation;
+import dev.huskuraft.effortless.building.operation.block.BlockInteractOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperation;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
@@ -35,20 +36,26 @@ public class BatchBuildSession implements BuildSession {
         return new BlockBreakOperation(world, player, context, storage, interaction);
     }
 
-    protected BatchOperation createBaseDeferred(World world, Player player, Context context, Storage storage) {
+    protected BlockInteractOperation createBlockInteractOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
+        return new BlockInteractOperation(world, player, context, storage, interaction);
+    }
+
+    protected BatchOperation createDeferredOperations(World world, Player player, Context context, Storage storage) {
         var operations = new DeferredBatchOperation(context, () -> switch (context.state()) {
             case IDLE -> Stream.<BlockOperation>empty();
             case PLACE_BLOCK ->
                     context.collect().map(interaction -> createBlockPlaceOperationFromHit(world, player, context, storage, interaction));
             case BREAK_BLOCK ->
                     context.collect().map(interaction -> createBlockBreakOperationFromHit(world, player, context, storage, interaction));
+            case INTERACT_BLOCK ->
+                    context.collect().map(interaction -> createBlockInteractOperationFromHit(world, player, context, storage, interaction));
         });
         return ItemRandomizer.create(null, player.getItemStack(InteractionHand.MAIN).getItem()).transform(operations);
     }
 
     protected BatchOperation create(World world, Player player, Context context) {
         var storage = Storage.create(player, context.isPreview());
-        var operations = createBaseDeferred(world, player, context, storage);
+        var operations = createDeferredOperations(world, player, context, storage);
 
         for (var transformer : context.pattern().transformers()) {
             if (transformer.isValid()) {

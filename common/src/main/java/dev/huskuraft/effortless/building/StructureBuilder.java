@@ -4,19 +4,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Nullable;
-
-import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 
 public abstract class StructureBuilder {
-
-    public abstract BuildResult build(Player player, BuildState state);
-
-    public abstract BuildResult build(Player player, BuildState state, @Nullable BlockInteraction interaction);
 
     public abstract BuildResult updateContext(Player player, UnaryOperator<Context> updater);
 
@@ -47,10 +40,6 @@ public abstract class StructureBuilder {
     public void resetContextInteractions(Player player) {
         setContext(player, getContext(player).newInteraction());
     }
-
-    public abstract BuildResult onPlayerBreak(Player player);
-
-    public abstract BuildResult onPlayerPlace(Player player);
 
     public abstract void onContextReceived(Player player, Context context);
 

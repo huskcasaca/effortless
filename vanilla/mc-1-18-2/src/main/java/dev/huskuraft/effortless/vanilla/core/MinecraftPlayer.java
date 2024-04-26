@@ -23,6 +23,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 
@@ -188,6 +189,15 @@ public class MinecraftPlayer implements Player {
             return Minecraft.getInstance().gameMode != null && Minecraft.getInstance().gameMode.destroyBlock(minecraftBlockPosition);
         }
         return false;
+    }
+
+    @Override
+    public boolean tryInteractionBlock(BlockInteraction interaction) {
+        var minecraftWorld = reference.level;
+        var minecraftInteractionHand = MinecraftConvertor.toPlatformInteractionHand(interaction.getHand());
+        var minecraftItemStack = reference.getItemInHand(minecraftInteractionHand);
+        var minecraftBlockInteraction = MinecraftConvertor.toPlatformBlockInteraction(interaction);
+        return minecraftWorld.getBlockState(minecraftBlockInteraction.getBlockPos()).use(minecraftWorld, reference, minecraftInteractionHand, minecraftBlockInteraction).consumesAction() || minecraftItemStack.useOn(new UseOnContext(reference, minecraftInteractionHand, minecraftBlockInteraction)).consumesAction();
     }
 
     @Override

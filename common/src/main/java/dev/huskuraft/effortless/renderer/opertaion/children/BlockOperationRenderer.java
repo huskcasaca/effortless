@@ -5,6 +5,7 @@ import java.util.List;
 
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
+import dev.huskuraft.effortless.building.operation.block.BlockInteractOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.BlockRenderLayers;
@@ -92,6 +93,12 @@ public class BlockOperationRenderer implements OperationRenderer {
                 default -> BLOCK_BREAK_FAIL_COLOR;
             };
         }
+        if (blockOperationResult instanceof BlockInteractOperationResult) {
+            return switch (blockOperationResult.result()) {
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> Color.YELLOW;
+                default -> BLOCK_BREAK_FAIL_COLOR;
+            };
+        }
         return null;
     }
 
@@ -101,7 +108,8 @@ public class BlockOperationRenderer implements OperationRenderer {
                 BLOCK_PLACE_INSUFFICIENT_COLOR,
                 BLOCK_PLACE_FAIL_COLOR,
                 BLOCK_BREAK_SUCCESS_COLOR,
-                BLOCK_BREAK_FAIL_COLOR
+                BLOCK_BREAK_FAIL_COLOR,
+                Color.YELLOW
         );
     }
 

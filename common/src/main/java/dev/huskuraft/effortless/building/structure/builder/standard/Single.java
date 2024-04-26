@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
@@ -15,14 +16,13 @@ public class Single extends AbstractBlockStructure {
 
         var startPos = interaction.getBlockPosition();
 
-        var tracingAbsolute = context.isBreakingBlock() || context.replaceMode().isQuick();
+        var tracingAbsolute = context.isBreakingBlock() || context.replaceMode().isQuick() || context.state() == BuildState.INTERACT_BLOCK;
         var replaceable = player.getWorld().getBlockState(startPos).isReplaceable(player, interaction);
 
-        var tracingRelative = !tracingAbsolute && !replaceable;
-
-        if (tracingRelative) {
+        if (!tracingAbsolute && !replaceable) {
             startPos = startPos.relative(interaction.getDirection());
         }
+
         return interaction.withPosition(startPos);
     }
 

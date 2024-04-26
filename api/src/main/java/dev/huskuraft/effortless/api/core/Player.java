@@ -42,4 +42,6 @@ public interface Player extends Entity {
 
     boolean tryBreakBlock(BlockInteraction interaction);
 
+    boolean tryInteractionBlock(BlockInteraction interaction);
+
 }
