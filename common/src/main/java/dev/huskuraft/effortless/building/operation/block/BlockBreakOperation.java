@@ -84,7 +84,7 @@ public class BlockBreakOperation extends BlockOperation {
 //        }
 
 
-        if (player.tryBreakBlock(getInteraction())) {
+        if (player.destroyBlock(getInteraction())) {
             return BlockOperationResult.Type.SUCCESS;
         } else {
             return BlockOperationResult.Type.FAIL_UNKNOWN;

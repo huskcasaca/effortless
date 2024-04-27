@@ -38,10 +38,8 @@ public interface Player extends Entity {
 
     boolean canAttackBlock(BlockPosition blockPosition);
 
-    boolean tryPlaceBlock(BlockInteraction interaction);
+    boolean destroyBlock(BlockInteraction interaction);
 
-    boolean tryBreakBlock(BlockInteraction interaction);
-
-    boolean tryInteractBlock(BlockInteraction interaction);
+    boolean useItem(BlockInteraction interaction);
 
 }

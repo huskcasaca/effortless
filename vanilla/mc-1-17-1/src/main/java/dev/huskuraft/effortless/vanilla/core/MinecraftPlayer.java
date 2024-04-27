@@ -21,8 +21,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -173,15 +171,7 @@ public class MinecraftPlayer implements Player {
     }
 
     @Override
-    public boolean tryPlaceBlock(BlockInteraction interaction) {
-        var minecraftInteractionHand = MinecraftConvertor.toPlatformInteractionHand(interaction.getHand());
-        var minecraftItemStack = reference.getItemInHand(minecraftInteractionHand);
-        var minecraftBlockInteraction = MinecraftConvertor.toPlatformBlockInteraction(interaction);
-        return ((BlockItem) minecraftItemStack.getItem()).place(new BlockPlaceContext(reference, minecraftInteractionHand, minecraftItemStack, minecraftBlockInteraction)).consumesAction();
-    }
-
-    @Override
-    public boolean tryBreakBlock(BlockInteraction interaction) {
+    public boolean destroyBlock(BlockInteraction interaction) {
         var minecraftBlockPosition = MinecraftConvertor.toPlatformBlockPosition(interaction.getBlockPosition());
         if (reference instanceof ServerPlayer serverPlayer) {
             return serverPlayer.gameMode.destroyBlock(minecraftBlockPosition);
@@ -193,7 +183,7 @@ public class MinecraftPlayer implements Player {
     }
 
     @Override
-    public boolean tryInteractBlock(BlockInteraction interaction) {
+    public boolean useItem(BlockInteraction interaction) {
         var minecraftWorld = reference.level;
         var minecraftInteractionHand = MinecraftConvertor.toPlatformInteractionHand(interaction.getHand());
         var minecraftItemStack = reference.getItemInHand(minecraftInteractionHand);

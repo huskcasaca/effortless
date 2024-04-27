@@ -100,7 +100,7 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
-        if (context.replaceMode() == ReplaceMode.QUICK && !player.tryBreakBlock(getInteraction())) {
+        if (context.replaceMode() == ReplaceMode.QUICK && !player.destroyBlock(getInteraction())) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
@@ -112,7 +112,7 @@ public class BlockPlaceOperation extends BlockOperation {
         // compatible layer
         var originalItemStack = player.getItemStack(InteractionHand.MAIN);
         player.setItemStack(InteractionHand.MAIN, itemStack);
-        var placed = player.tryPlaceBlock(interaction);
+        var placed = player.useItem(interaction);
         player.setItemStack(InteractionHand.MAIN, originalItemStack);
 
         if (!placed) {
