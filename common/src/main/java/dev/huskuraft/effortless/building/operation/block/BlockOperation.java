@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.building.operation.block;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
@@ -61,6 +62,10 @@ public abstract class BlockOperation extends TransformableOperation {
 
     public BlockInteraction getInteraction() {
         return interaction;
+    }
+
+    public InteractionHand getHand() {
+        return InteractionHand.MAIN;
     }
 
     public boolean isInBorderBound() {

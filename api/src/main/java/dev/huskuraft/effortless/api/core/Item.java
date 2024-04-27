@@ -21,8 +21,6 @@ public interface Item extends PlatformReference {
 
     ResourceLocation getId();
 
-    default boolean isBlockItem() {
-        return this instanceof BlockItem;
-    }
+    InteractionResult use(Player player, BlockInteraction blockInteraction);
 
 }

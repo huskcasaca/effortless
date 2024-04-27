@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.Collections;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
@@ -58,7 +57,7 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         // action permission
-        var itemStack = storage.search(player.getItemStack(InteractionHand.MAIN).getItem()).orElse(Items.AIR.getDefaultStack());
+        var itemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.getDefaultStack());
 
 //        if (itemStack == null) {
 //            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
@@ -83,10 +82,10 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         // compatible layer
-        var originalItemStack = player.getItemStack(InteractionHand.MAIN);
-        player.setItemStack(InteractionHand.MAIN, itemStack);
-        var interacted = player.useItem(interaction);
-        player.setItemStack(InteractionHand.MAIN, originalItemStack);
+        var originalItemStack = player.getItemStack(getHand());
+        player.setItemStack(getHand(), itemStack);
+        var interacted = player.useItem(getInteraction());
+        player.setItemStack(getHand(), originalItemStack);
 
         if (!interacted) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;

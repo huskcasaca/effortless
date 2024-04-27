@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.Collections;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
@@ -70,7 +70,7 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
 
-        if (!itemStack.getItem().isBlockItem()) {
+        if (!(itemStack.getItem() instanceof BlockItem blockItem)) {
             return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
         }
 
@@ -110,18 +110,18 @@ public class BlockPlaceOperation extends BlockOperation {
 //        }
 
         // compatible layer
-        var originalItemStack = player.getItemStack(InteractionHand.MAIN);
-        player.setItemStack(InteractionHand.MAIN, itemStack);
-        var placed = player.useItem(interaction);
-        player.setItemStack(InteractionHand.MAIN, originalItemStack);
+        var originalItemStack = player.getItemStack(getHand());
+        player.setItemStack(getHand(), itemStack);
+        var placed = blockItem.place(player, getInteraction()).consumesAction();
+        player.setItemStack(getHand(), originalItemStack);
 
         if (!placed) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
-        if (!world.getBlockState(getInteraction().getBlockPosition()).equals(blockState) && !world.setBlockState(getInteraction().getBlockPosition(), blockState)) {
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
-        }
+//        if (!world.getBlockState(getInteraction().getBlockPosition()).equals(blockState) && !world.setBlockState(getInteraction().getBlockPosition(), blockState)) {
+//            return BlockOperationResult.Type.FAIL_UNKNOWN;
+//        }
 
         return BlockOperationResult.Type.SUCCESS;
     }

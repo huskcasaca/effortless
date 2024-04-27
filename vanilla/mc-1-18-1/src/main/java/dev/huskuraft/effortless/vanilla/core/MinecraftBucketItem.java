@@ -4,6 +4,7 @@ import dev.huskuraft.effortless.api.core.Block;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BucketItem;
+import dev.huskuraft.effortless.api.core.InteractionResult;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
@@ -35,6 +36,11 @@ public record MinecraftBucketItem(net.minecraft.world.item.BucketItem referenceV
     @Override
     public ResourceLocation getId() {
         return new MinecraftItem(referenceValue()).getId();
+    }
+
+    @Override
+    public InteractionResult use(Player player, BlockInteraction blockInteraction) {
+        return new MinecraftItem(referenceValue()).use(player, blockInteraction);
     }
 
 }

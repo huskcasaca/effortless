@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.InteractionResult;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
@@ -147,6 +148,11 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
     @Override
     public Map<Property, PropertyValue> getPropertiesMap() {
         return reference.getValues().entrySet().stream().collect(Collectors.toMap(entry -> new MinecraftProperty(entry.getKey()), entry -> new MinecraftPropertyValue(entry.getValue())));
+    }
+
+    @Override
+    public InteractionResult use(Player player, BlockInteraction blockInteraction) {
+        return MinecraftConvertor.toPlatformInteractionResult(reference.use(player.getWorld().reference(), player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)));
     }
 
 }

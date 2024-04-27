@@ -40,6 +40,10 @@ public interface Player extends Entity {
 
     boolean destroyBlock(BlockInteraction interaction);
 
-    boolean useItem(BlockInteraction interaction);
+    default boolean useItem(BlockInteraction interaction) {
+        return getWorld().getBlockState(interaction.getBlockPosition()).use(this, interaction).consumesAction()
+                || getItemStack(interaction.getHand()).getItem().use(this, interaction).consumesAction();
+    }
+
 
 }

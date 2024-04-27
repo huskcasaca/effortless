@@ -30,4 +30,6 @@ public interface BlockState extends StateHolder {
         return "[" + getProperties().stream().map(PropertyHolder::getAsString).collect(Collectors.joining(",")) + "]";
     }
 
+    InteractionResult use(Player player, BlockInteraction blockInteraction);
+
 }

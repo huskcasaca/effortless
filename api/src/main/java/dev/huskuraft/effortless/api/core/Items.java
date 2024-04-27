@@ -1362,6 +1362,11 @@ public enum Items implements Item {
     }
 
     @Override
+    public InteractionResult use(Player player, BlockInteraction blockInteraction) {
+        return item().use(player, blockInteraction);
+    }
+
+    @Override
     public Object referenceValue() {
         return item().referenceValue();
     }
