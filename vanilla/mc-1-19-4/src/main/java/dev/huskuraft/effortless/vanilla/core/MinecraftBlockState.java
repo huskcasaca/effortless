@@ -25,13 +25,7 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-public class MinecraftBlockState implements BlockState {
-
-    private final net.minecraft.world.level.block.state.BlockState reference;
-
-    public MinecraftBlockState(net.minecraft.world.level.block.state.BlockState reference) {
-        this.reference = reference;
-    }
+public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockState reference) implements BlockState {
 
     public static BlockState ofNullable(net.minecraft.world.level.block.state.BlockState value) {
         return value == null ? null : new MinecraftBlockState(value);
@@ -153,16 +147,6 @@ public class MinecraftBlockState implements BlockState {
     @Override
     public Map<Property, PropertyValue> getPropertiesMap() {
         return reference.getValues().entrySet().stream().collect(Collectors.toMap(entry -> new MinecraftProperty(entry.getKey()), entry -> new MinecraftPropertyValue(entry.getValue())));
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftBlockState blockState && reference.equals(blockState.reference);
-    }
-
-    @Override
-    public int hashCode() {
-        return reference.hashCode();
     }
 
 }
