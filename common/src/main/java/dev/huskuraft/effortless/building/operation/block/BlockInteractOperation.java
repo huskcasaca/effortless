@@ -3,7 +3,9 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.Collections;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.sound.SoundInstance;
@@ -55,9 +57,20 @@ public class BlockInteractOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
         }
 
-        if (blockState.isAir()) {
-            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
-        }
+        // action permission
+        var itemStack = storage.search(player.getItemStack(InteractionHand.MAIN).getItem()).orElse(Items.AIR.getDefaultStack());
+
+//        if (itemStack == null) {
+//            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
+//        }
+//
+//        if (blockState.isAir()) {
+//            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
+//        }
+//
+//        if (!itemStack.getItem().isBlockItem()) {
+//            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
+//        }
 
         // action permission
         if (!player.canInteractBlock(getInteraction().getBlockPosition())) {
@@ -65,13 +78,17 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         if (context.isPreview() && player.getWorld().isClient()) {
+            itemStack.decrease(1);
             return BlockOperationResult.Type.CONSUME;
         }
 
         // compatible layer
-        var placed = player.tryInteractionBlock(interaction);
+        var originalItemStack = player.getItemStack(InteractionHand.MAIN);
+        player.setItemStack(InteractionHand.MAIN, itemStack);
+        var interacted = player.tryInteractionBlock(interaction);
+        player.setItemStack(InteractionHand.MAIN, originalItemStack);
 
-        if (!placed) {
+        if (!interacted) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
