@@ -8,6 +8,8 @@ import com.google.auto.service.AutoService;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.core.fluid.Fluid;
+import dev.huskuraft.effortless.api.core.fluid.Fluids;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.OperatingSystem;
@@ -17,6 +19,7 @@ import dev.huskuraft.effortless.api.tag.InputStreamTagReader;
 import dev.huskuraft.effortless.api.tag.OutputStreamTagWriter;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.vanilla.core.MinecraftFluid;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItem;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
@@ -122,6 +125,7 @@ public class MinecraftContentFactory implements ContentFactory {
         };
     }
 
+    @Override
     public Sound getSound(Sounds sounds) {
         var sound = switch (sounds) {
             case UI_BUTTON_CLICK -> SoundEvents.UI_BUTTON_CLICK.value();
@@ -131,4 +135,15 @@ public class MinecraftContentFactory implements ContentFactory {
         return new MinecraftSound(sound);
     }
 
+    @Override
+    public Fluid getFluid(Fluids fluids) {
+        var fluid = switch (fluids) {
+            case EMPTY -> net.minecraft.world.level.material.Fluids.EMPTY;
+            case FLOWING_WATER -> net.minecraft.world.level.material.Fluids.FLOWING_WATER;
+            case WATER -> net.minecraft.world.level.material.Fluids.WATER;
+            case FLOWING_LAVA -> net.minecraft.world.level.material.Fluids.FLOWING_LAVA;
+            case LAVA -> net.minecraft.world.level.material.Fluids.LAVA;
+        };
+        return new MinecraftFluid(fluid);
+    }
 }
