@@ -192,7 +192,7 @@ public class MinecraftPlayer implements Player {
     }
 
     @Override
-    public boolean tryInteractionBlock(BlockInteraction interaction) {
+    public boolean tryInteractBlock(BlockInteraction interaction) {
         var minecraftWorld = reference.level();
         var minecraftInteractionHand = MinecraftConvertor.toPlatformInteractionHand(interaction.getHand());
         var minecraftItemStack = reference.getItemInHand(minecraftInteractionHand);

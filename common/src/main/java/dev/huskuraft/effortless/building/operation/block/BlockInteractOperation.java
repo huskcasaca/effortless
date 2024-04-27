@@ -85,7 +85,7 @@ public class BlockInteractOperation extends BlockOperation {
         // compatible layer
         var originalItemStack = player.getItemStack(InteractionHand.MAIN);
         player.setItemStack(InteractionHand.MAIN, itemStack);
-        var interacted = player.tryInteractionBlock(interaction);
+        var interacted = player.tryInteractBlock(interaction);
         player.setItemStack(InteractionHand.MAIN, originalItemStack);
 
         if (!interacted) {
