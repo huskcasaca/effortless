@@ -25,13 +25,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 
-public class MinecraftPlayer implements Player {
-
-    protected final net.minecraft.world.entity.player.Player reference;
-
-    MinecraftPlayer(net.minecraft.world.entity.player.Player reference) {
-        this.reference = reference;
-    }
+public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference) implements Player {
 
     public static Player ofNullable(net.minecraft.world.entity.player.Player reference) {
         return reference == null ? null : new MinecraftPlayer(reference);
@@ -189,16 +183,6 @@ public class MinecraftPlayer implements Player {
         var minecraftItemStack = reference.getItemInHand(minecraftInteractionHand);
         var minecraftBlockInteraction = MinecraftConvertor.toPlatformBlockInteraction(interaction);
         return minecraftWorld.getBlockState(minecraftBlockInteraction.getBlockPos()).use(minecraftWorld, reference, minecraftInteractionHand, minecraftBlockInteraction).consumesAction() || minecraftItemStack.useOn(new UseOnContext(reference, minecraftInteractionHand, minecraftBlockInteraction)).consumesAction();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftPlayer player && reference.equals(player.reference);
-    }
-
-    @Override
-    public int hashCode() {
-        return reference.hashCode();
     }
 
 }
