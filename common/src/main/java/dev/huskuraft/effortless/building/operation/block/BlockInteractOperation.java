@@ -95,7 +95,7 @@ public class BlockInteractOperation extends BlockOperation {
                     }
                 }
             } else {
-                if (getBlockState().getBlock().getLiquidPlaceable() != null || getBlockState().isAir()) {
+                if (getBlockState().getBlock().getLiquidPlaceable() != null || getBlockState().isAir() || getBlockState().canReplace(bucketItem.getContent())) {
                     if (bucketItem.emptyContent(getWorld(), getPlayer(), getBlockPosition(), getInteraction())) {
                         return BlockOperationResult.Type.SUCCESS;
                     }

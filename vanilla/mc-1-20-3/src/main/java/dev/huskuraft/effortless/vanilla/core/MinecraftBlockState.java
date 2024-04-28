@@ -14,6 +14,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.Property;
 import dev.huskuraft.effortless.api.core.PropertyValue;
 import dev.huskuraft.effortless.api.core.Revolve;
+import dev.huskuraft.effortless.api.core.fluid.Fluid;
 import dev.huskuraft.effortless.api.sound.SoundSet;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSoundSet;
 import net.minecraft.core.Direction;
@@ -154,6 +155,11 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
     @Override
     public Block getBlock() {
         return new MinecraftBlock(referenceValue().getBlock());
+    }
+
+    @Override
+    public boolean canReplace(Fluid fluid) {
+        return referenceValue().canBeReplaced((net.minecraft.world.level.material.Fluid) fluid.reference());
     }
 
     @Override

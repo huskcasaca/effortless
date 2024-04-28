@@ -76,14 +76,6 @@ public record Context(
         return state.isIdle();
     }
 
-    public boolean isPlacingBlock() {
-        return state() == BuildState.PLACE_BLOCK;
-    }
-
-    public boolean isBreakingBlock() {
-        return state() == BuildState.BREAK_BLOCK;
-    }
-
     public boolean isDisabled() {
         return structureParams().buildMode() == BuildMode.DISABLED;
     }

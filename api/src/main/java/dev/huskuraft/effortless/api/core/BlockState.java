@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.api.core;
 
 import java.util.stream.Collectors;
 
+import dev.huskuraft.effortless.api.core.fluid.Fluid;
 import dev.huskuraft.effortless.api.sound.SoundSet;
 
 public interface BlockState extends StateHolder {
@@ -31,6 +32,8 @@ public interface BlockState extends StateHolder {
     }
 
     Block getBlock();
+
+    boolean canReplace(Fluid fluid);
 
     InteractionResult use(Player player, BlockInteraction blockInteraction);
 
