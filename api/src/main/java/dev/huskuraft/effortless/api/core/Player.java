@@ -1,24 +1,22 @@
 package dev.huskuraft.effortless.api.core;
 
-import java.util.List;
-
 import dev.huskuraft.effortless.api.text.Text;
 
 public interface Player extends Entity {
 
     PlayerProfile getProfile();
 
+    Inventory getInventory();
+
     default boolean isOperator() {
         return getServer().getPlayerList().isOperator(getProfile());
     }
 
-    List<ItemStack> getItemStacks();
-
-    void setItemStack(int index, ItemStack itemStack);
-
     ItemStack getItemStack(InteractionHand hand);
 
     void setItemStack(InteractionHand hand, ItemStack itemStack);
+
+    void drop(ItemStack itemStack, boolean dropAround, boolean includeThrowerName);
 
     void sendMessage(Text messages);
 
@@ -44,6 +42,15 @@ public interface Player extends Entity {
         return getWorld().getBlockState(interaction.getBlockPosition()).use(this, interaction).consumesAction()
                 || getItemStack(interaction.getHand()).getItem().use(this, interaction).consumesAction();
     }
+
+    void awardStat(Stat<?> stat, int increment);
+
+    default void awardStat(Stat<?> stat) {
+        awardStat(stat, 1);
+    }
+
+    void resetStat(Stat<?> stat);
+
 
 
 }

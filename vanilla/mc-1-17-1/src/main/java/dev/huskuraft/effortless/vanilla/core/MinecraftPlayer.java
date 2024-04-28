@@ -1,16 +1,16 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.Inventory;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.PlayerProfile;
+import dev.huskuraft.effortless.api.core.Stat;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.platform.Client;
@@ -44,6 +44,11 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
     @Override
     public PlayerProfile getProfile() {
         return new MinecraftPlayerProfile(reference.getGameProfile());
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return new MinecraftInventory(reference.getInventory());
     }
 
     @Override
@@ -87,16 +92,6 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
     }
 
     @Override
-    public List<ItemStack> getItemStacks() {
-        return reference.getInventory().items.stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
-    }
-
-    @Override
-    public void setItemStack(int index, ItemStack itemStack) {
-        reference.getInventory().setItem(index, itemStack.reference());
-    }
-
-    @Override
     public ItemStack getItemStack(InteractionHand hand) {
         return new MinecraftItemStack(reference.getItemInHand(MinecraftConvertor.toPlatformInteractionHand(hand)));
     }
@@ -104,6 +99,11 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
     @Override
     public void setItemStack(InteractionHand hand, ItemStack itemStack) {
         reference.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, itemStack.reference());
+    }
+
+    @Override
+    public void drop(ItemStack itemStack, boolean dropAround, boolean includeThrowerName) {
+        reference.drop(itemStack.reference(), dropAround, includeThrowerName);
     }
 
     @Override
@@ -173,6 +173,16 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
             return Minecraft.getInstance().gameMode != null && Minecraft.getInstance().gameMode.destroyBlock(minecraftBlockPosition);
         }
         return false;
+    }
+
+    @Override
+    public void awardStat(Stat<?> stat, int increment) {
+        referenceValue().awardStat((net.minecraft.stats.Stat<?>) stat.reference(), increment);
+    }
+
+    @Override
+    public void resetStat(Stat<?> stat) {
+        referenceValue().resetStat(stat.reference());
     }
 
 }

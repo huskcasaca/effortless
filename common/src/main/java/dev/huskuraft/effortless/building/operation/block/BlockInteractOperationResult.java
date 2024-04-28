@@ -31,7 +31,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
     public List<ItemStack> getProducts(ItemSummaryType type) {
         return switch (type) {
             case BLOCKS_INTERACTED -> switch (result) {
-                case SUCCESS, SUCCESS_PARTIAL, SUCCESS_PREVIEW, FAIL_ITEM_INSUFFICIENT -> inputs();
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME, FAIL_ITEM_INSUFFICIENT -> inputs();
                 default -> Collections.emptyList();
             };
             case BLOCKS_NOT_INTERACTABLE -> switch (result) {

@@ -39,7 +39,7 @@ public class BlockBreakOperationResult extends BlockOperationResult {
     public List<ItemStack> getProducts(ItemSummaryType type) {
         return switch (type) {
             case BLOCKS_DESTROYED -> switch (result) {
-                case SUCCESS, SUCCESS_PARTIAL, SUCCESS_PREVIEW -> outputs();
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> outputs();
                 default -> List.of();
             };
             case BLOCKS_BREAK_INSUFFICIENT -> switch (result) {

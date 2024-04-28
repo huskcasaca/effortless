@@ -8,11 +8,15 @@ import com.google.auto.service.AutoService;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.core.Stat;
+import dev.huskuraft.effortless.api.core.StatType;
+import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.fluid.Fluid;
 import dev.huskuraft.effortless.api.core.fluid.Fluids;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.OperatingSystem;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.api.sound.Sounds;
 import dev.huskuraft.effortless.api.tag.InputStreamTagReader;
@@ -36,6 +40,7 @@ import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 
 @AutoService(ContentFactory.class)
 public class MinecraftContentFactory implements ContentFactory {
@@ -146,5 +151,26 @@ public class MinecraftContentFactory implements ContentFactory {
             case LAVA -> net.minecraft.world.level.material.Fluids.LAVA;
         };
         return new MinecraftFluid(fluid);
+    }
+
+    @Override
+    public <T extends PlatformReference> StatType<T> getStatType(StatTypes statTypes) {
+        var statType = switch (statTypes) {
+            case ITEM_USED -> Stats.ITEM_USED;
+            case ITEM_BROKEN -> Stats.ITEM_BROKEN;
+            case ITEM_PICKED_UP -> Stats.ITEM_PICKED_UP;
+            case ITEM_DROPPED -> Stats.ITEM_DROPPED;
+        };
+        return new StatType<T>() {
+            @Override
+            public Stat<T> get(T value) {
+                return () -> statType.get(value.reference());
+            }
+
+            @Override
+            public Object referenceValue() {
+                return statType;
+            }
+        };
     }
 }

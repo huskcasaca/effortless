@@ -97,7 +97,7 @@ public class BlockPlaceOperation extends BlockOperation {
 
         if (context.isPreview() && player.getWorld().isClient()) {
             itemStack.decrease(1);
-            return BlockOperationResult.Type.SUCCESS_PREVIEW;
+            return BlockOperationResult.Type.CONSUME;
         }
 
         if (context.replaceMode() == ReplaceMode.QUICK && !player.destroyBlock(getInteraction())) {

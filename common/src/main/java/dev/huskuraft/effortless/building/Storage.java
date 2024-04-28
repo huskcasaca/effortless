@@ -62,9 +62,9 @@ public interface Storage {
 
             {
                 if (copy) {
-                    survivalStorage = Storage.create(player.getItemStacks().stream().map(ItemStack::copy).toList());
+                    survivalStorage = Storage.create(player.getInventory().getItems().stream().map(ItemStack::copy).toList());
                 } else {
-                    survivalStorage = Storage.create(player.getItemStacks());
+                    survivalStorage = Storage.create(player.getInventory().getItems());
                 }
             }
 

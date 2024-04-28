@@ -76,33 +76,35 @@ public class BlockInteractOperation extends BlockOperation {
 
         if (context.isPreview() && player.getWorld().isClient()) {
             selectedItemStack.decrease(1);
-            return BlockOperationResult.Type.SUCCESS_PREVIEW;
+            return BlockOperationResult.Type.CONSUME;
         }
 
         // compatible layer
         var originalItemStack = player.getItemStack(getHand());
 
-        if (originalItemStack.getItem() instanceof BucketItem bucketItem) {
-            if (bucketItem.isEmpty()) {
-                var bucketCollectable = getBlockState().getBlock().getBucketCollectable();
-                if (bucketCollectable != null) {
-                    var collected = bucketCollectable.pickupBlock(getWorld(), getPlayer(), getBlockPosition(), getBlockState());
-                    if (!collected.isEmpty()) {
-                        return BlockOperationResult.Type.SUCCESS;
-                    }
-                }
-            } else {
-                if (getBlockState().getBlock().getLiquidPlaceable() != null || getBlockState().isAir() || getBlockState().canReplace(bucketItem.getContent())) {
-                    if (bucketItem.useContent(getWorld(), getPlayer(), getBlockPosition(), getInteraction())) {
-                        bucketItem.useExtraContent(getWorld(), getPlayer(), getBlockPosition(), originalItemStack);
-                        return BlockOperationResult.Type.SUCCESS;
-                    }
-                }
-            }
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
-        }
+//        if (originalItemStack.getItem() instanceof BucketItem bucketItem) {
+//            if (bucketItem.isEmpty()) {
+//                var bucketCollectable = getBlockState().getBlock().getBucketCollectable();
+//                if (bucketCollectable != null) {
+//                    var collected = bucketCollectable.pickupBlock(getWorld(), getPlayer(), getBlockPosition(), getBlockState());
+//                    if (!collected.isEmpty()) {
+//                        player.awardStat(StatTypes.ITEM_USED.get(bucketItem));
+//                        return BlockOperationResult.Type.SUCCESS;
+//                    }
+//                }
+//            } else {
+//                if (getBlockState().getBlock().getLiquidPlaceable() != null || getBlockState().isAir() || getBlockState().canReplace(bucketItem.getContent())) {
+//                    if (bucketItem.useContent(getWorld(), getPlayer(), getBlockPosition(), getInteraction())) {
+//                        bucketItem.useExtraContent(getWorld(), getPlayer(), getBlockPosition(), originalItemStack);
+//                        player.awardStat(StatTypes.ITEM_USED.get(bucketItem));
+//                        return BlockOperationResult.Type.SUCCESS;
+//                    }
+//                }
+//            }
+//            return BlockOperationResult.Type.FAIL_UNKNOWN;
+//        }
 
-        if (blockState.isAir()) {
+        if (!(originalItemStack.getItem() instanceof BucketItem) && blockState.isAir()) {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
 
