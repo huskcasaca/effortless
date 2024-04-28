@@ -24,14 +24,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
         if (result().fail()) {
             return new EmptyOperation();
         }
-
-        return new BlockBreakOperation(
-                operation.getWorld(),
-                operation.getPlayer(),
-                operation.getContext(),
-                operation.getStorage(),
-                operation.getInteraction()
-        );
+        return new EmptyOperation();
     }
 
     @Override
