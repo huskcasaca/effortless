@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.Block;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.InteractionResult;
@@ -148,6 +149,11 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
     @Override
     public Map<Property, PropertyValue> getPropertiesMap() {
         return reference.getValues().entrySet().stream().collect(Collectors.toMap(entry -> new MinecraftProperty(entry.getKey()), entry -> new MinecraftPropertyValue(entry.getValue())));
+    }
+
+    @Override
+    public Block getBlock() {
+        return new MinecraftBlock(referenceValue().getBlock());
     }
 
     @Override

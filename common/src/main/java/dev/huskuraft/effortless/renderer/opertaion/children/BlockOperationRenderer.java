@@ -40,7 +40,7 @@ public class BlockOperationRenderer implements OperationRenderer {
 
         var world = operation.getWorld();
         var player = operation.getPlayer();
-        var blockPosition = operation.getInteraction().getBlockPosition();
+        var blockPosition = operation.getBlockPosition();
         var blockState = operation.getBlockState();
         if (world == null || blockState == null || player == null) {
             return;

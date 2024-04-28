@@ -37,7 +37,7 @@ public abstract class BlockOperation extends TransformableOperation {
 
     @Override
     public BlockPosition locate() {
-        return getInteraction().getBlockPosition();
+        return getBlockPosition();
     }
 
     public World getWorld() {
@@ -64,16 +64,24 @@ public abstract class BlockOperation extends TransformableOperation {
         return interaction;
     }
 
+    public BlockPosition getBlockPosition() {
+        return getInteraction().getBlockPosition();
+    }
+
+    public BlockPosition getRelativeBlockPosition() {
+        return getInteraction().getBlockPosition().relative(getInteraction().getDirection());
+    }
+
     public InteractionHand getHand() {
         return InteractionHand.MAIN;
     }
 
     public boolean isInBorderBound() {
-        return getWorld().getWorldBorder().isInBounds(getInteraction().getBlockPosition());
+        return getWorld().getWorldBorder().isInBounds(getBlockPosition());
     }
 
     public boolean isInHeightBound() {
-        return getInteraction().getBlockPosition().y() >= getWorld().getMinBuildHeight() && getInteraction().getBlockPosition().y() <= getWorld().getMaxBuildHeight();
+        return getBlockPosition().y() >= getWorld().getMinBuildHeight() && getBlockPosition().y() <= getWorld().getMaxBuildHeight();
     }
 
 }

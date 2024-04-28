@@ -75,21 +75,21 @@ public class BlockPlaceOperation extends BlockOperation {
         }
 
         // action permission
-        if (!player.canInteractBlock(getInteraction().getBlockPosition())) {
+        if (!player.canInteractBlock(getBlockPosition())) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
         }
 
         switch (context.replaceMode()) {
             case DISABLED -> {
-                if (!player.getWorld().getBlockState(getInteraction().getBlockPosition()).isReplaceable(player, getInteraction())) {
+                if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
             case NORMAL, QUICK -> {
-                if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getInteraction().getBlockPosition()).isDestroyable()) {
+                if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
-                if (!player.canAttackBlock(getInteraction().getBlockPosition())) {
+                if (!player.canAttackBlock(getBlockPosition())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
@@ -105,7 +105,7 @@ public class BlockPlaceOperation extends BlockOperation {
         }
 
 //        if (context.type() == BuildType.COMMAND) {
-//            CommandManager.dispatch(new SetBlockCommand(getBlockState(), getInteraction().getBlockPosition(), SetBlockCommand.Mode.REPLACE));
+//            CommandManager.dispatch(new SetBlockCommand(getBlockState(), getBlockPosition(), SetBlockCommand.Mode.REPLACE));
 //            return BlockOperationResult.Type.SUCCESS;
 //        }
 
@@ -119,7 +119,7 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
-//        if (!world.getBlockState(getInteraction().getBlockPosition()).equals(blockState) && !world.setBlockState(getInteraction().getBlockPosition(), blockState)) {
+//        if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockState(getBlockPosition(), blockState)) {
 //            return BlockOperationResult.Type.FAIL_UNKNOWN;
 //        }
 
@@ -133,7 +133,7 @@ public class BlockPlaceOperation extends BlockOperation {
         var result = placeBlock();
 
         if (getWorld().isClient() && getContext().isPreviewOnce() && result.success()) {
-            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getInteraction().getBlockPosition().getCenter());
+            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
             getPlayer().getClient().getSoundManager().play(sound);
         }
 

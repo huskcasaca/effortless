@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.Collections;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BucketItem;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
@@ -72,7 +73,7 @@ public class BlockInteractOperation extends BlockOperation {
 //        }
 
         // action permission
-        if (!player.canInteractBlock(getInteraction().getBlockPosition())) {
+        if (!player.canInteractBlock(getBlockPosition())) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
         }
 
@@ -83,10 +84,29 @@ public class BlockInteractOperation extends BlockOperation {
 
         // compatible layer
         var originalItemStack = player.getItemStack(getHand());
+
+        if (originalItemStack.getItem() instanceof BucketItem bucketItem) {
+            if (bucketItem.isEmpty()) {
+                var bucketCollectable = getBlockState().getBlock().getBucketCollectable();
+                if (bucketCollectable != null) {
+                    var collected = bucketCollectable.pickupBlock(getWorld(), getPlayer(), getBlockPosition(), getBlockState());
+                    if (!collected.isEmpty()) {
+                        return BlockOperationResult.Type.SUCCESS;
+                    }
+                }
+            } else {
+                if (getBlockState().getBlock().getLiquidPlaceable() != null || getBlockState().isAir()) {
+                    if (bucketItem.emptyContent(getWorld(), getPlayer(), getBlockPosition(), getInteraction())) {
+                        return BlockOperationResult.Type.SUCCESS;
+                    }
+                }
+            }
+            return BlockOperationResult.Type.FAIL_UNKNOWN;
+        }
+
         player.setItemStack(getHand(), itemStack);
         var interacted = player.useItem(getInteraction());
         player.setItemStack(getHand(), originalItemStack);
-
         if (!interacted) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
@@ -101,7 +121,7 @@ public class BlockInteractOperation extends BlockOperation {
         var result = interactBlock();
 
         if (getWorld().isClient() && getContext().isPreviewOnce() && result.success()) {
-            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getInteraction().getBlockPosition().getCenter());
+            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
             getPlayer().getClient().getSoundManager().play(sound);
         }
 
