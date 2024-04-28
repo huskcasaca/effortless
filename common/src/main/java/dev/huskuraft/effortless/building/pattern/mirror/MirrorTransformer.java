@@ -90,9 +90,9 @@ public class MirrorTransformer extends Transformer {
         return switch (stage) {
             case NONE -> this;
             case UPDATE_CONTEXT, INTERACT -> new MirrorTransformer(id, name, new Vector3d(
-                    positionType[0].getStage() == stage ? position.x() + session.getPlayer().getPosition().x() : position.x(),
-                    positionType[1].getStage() == stage ? position.y() + session.getPlayer().getPosition().y() : position.y(),
-                    positionType[2].getStage() == stage ? position.z() + session.getPlayer().getPosition().z() : position.z()
+                    positionType[0].getStage() == stage ? position.x() + session.getPlayer().getPosition().toVector3i().x() : position.x(),
+                    positionType[1].getStage() == stage ? position.y() + session.getPlayer().getPosition().toVector3i().y() : position.y(),
+                    positionType[2].getStage() == stage ? position.z() + session.getPlayer().getPosition().toVector3i().z() : position.z()
             ), new PositionType[]{
                     positionType[0].getStage() == stage ? PositionType.ABSOLUTE : positionType[0],
                     positionType[1].getStage() == stage ? PositionType.ABSOLUTE : positionType[1],

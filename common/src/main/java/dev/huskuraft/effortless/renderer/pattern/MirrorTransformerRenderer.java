@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.renderer.pattern;
 import java.awt.*;
 
 import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 
@@ -19,17 +18,12 @@ public class MirrorTransformerRenderer extends TransformerRenderer {
 
     @Override
     public void render(Renderer renderer, float deltaTick) {
-        var axis = transformer.axis();
-        var cam = renderer.camera().position();
-        var position = transformer.position();
-        var planeCenter = new Vector3d(axis != Axis.X ? cam.x() : position.x(), axis != Axis.Y ? cam.y() : position.y(), axis != Axis.Z ? cam.z() : position.z());
 
-        renderPlaneByAxis(renderer, planeCenter, 1024, transformer.axis(), new Color(0, 0, 0, 72));
+        renderPlaneByAxis(renderer, transformer.position(), 1024, transformer.axis(), new Color(0, 0, 0, 72));
         for (var value : Axis.values()) {
-            if (value == axis) {
-                continue;
+            if (value != transformer.axis()) {
+                renderLineByAxis(renderer, transformer.position(), 1024, value, new Color(0, 0, 0, 200));
             }
-            renderLineByAxis(renderer, planeCenter, 1024, value, new Color(0, 0, 0, 200));
         }
     }
 

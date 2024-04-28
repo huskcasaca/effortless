@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
+import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 
 public class PatternRenderer {
 
@@ -42,6 +43,9 @@ public class PatternRenderer {
                 }
                 if (transformer instanceof ArrayTransformer arrayTransformer) {
                     new ArrayTransformerRenderer(arrayTransformer).render(renderer, deltaTick);
+                }
+                if (transformer instanceof RadialTransformer radialTransformer) {
+                    new RadialTransformerRenderer(radialTransformer, true).render(renderer, deltaTick);
                 }
             }
         });

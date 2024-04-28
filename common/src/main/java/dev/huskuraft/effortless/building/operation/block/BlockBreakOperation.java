@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
-import dev.huskuraft.effortless.building.pattern.RevolveContext;
+import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public class BlockBreakOperation extends BlockOperation {
 
@@ -121,8 +121,8 @@ public class BlockBreakOperation extends BlockOperation {
     }
 
     @Override
-    public BlockBreakOperation revolve(RevolveContext revolveContext) {
-        return new BlockBreakOperation(world, player, context, storage, revolveContext.revolve(interaction));
+    public BlockBreakOperation rotate(RotateContext rotateContext) {
+        return new BlockBreakOperation(world, player, context, storage, rotateContext.rotate(interaction));
     }
 
     @Override

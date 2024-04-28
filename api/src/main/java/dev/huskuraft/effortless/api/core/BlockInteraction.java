@@ -25,8 +25,12 @@ public class BlockInteraction extends Interaction {
         return new BlockInteraction(this.position, orientation, this.blockPosition, this.inside, this.miss);
     }
 
-    public BlockInteraction withPosition(BlockPosition blockPosition) {
+    public BlockInteraction withBlockPosition(BlockPosition blockPosition) {
         return new BlockInteraction(this.position, this.orientation, blockPosition, this.inside, this.miss);
+    }
+
+    public BlockInteraction withPosition(Vector3d position) {
+        return new BlockInteraction(position, this.orientation, this.blockPosition, this.inside, this.miss);
     }
 
     public BlockPosition getBlockPosition() {

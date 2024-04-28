@@ -110,7 +110,7 @@ public class Cube extends AbstractBlockStructure {
                 .filter(criteria -> criteria.isInRange())
                 .min(Comparator.comparing(axisLineCriteria -> axisLineCriteria.distanceToLineSqr()))
                 .map(criteria -> criteria.tracePlane())
-                .map(interaction -> interaction.withPosition(switch (axis) {
+                .map(interaction -> interaction.withBlockPosition(switch (axis) {
                     case X -> context.secondBlockPosition().withX(interaction.getBlockPosition().x());
                     case Y -> context.secondBlockPosition().withY(interaction.getBlockPosition().y());
                     case Z -> context.secondBlockPosition().withZ(interaction.getBlockPosition().z());
