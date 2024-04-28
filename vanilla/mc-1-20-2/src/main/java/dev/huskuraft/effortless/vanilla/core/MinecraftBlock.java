@@ -32,7 +32,7 @@ public record MinecraftBlock(
 
                 @Override
                 public ItemStack pickupBlock(World world, Player player, BlockPosition blockPosition, BlockState blockState) {
-                    return new MinecraftItemStack(bucketPickup.pickupBlock(world.reference(), player.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference()));
+                    return new MinecraftItemStack(bucketPickup.pickupBlock(player.reference(), world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference()));
                 }
 
                 @Override
