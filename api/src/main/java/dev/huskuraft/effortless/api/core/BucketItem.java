@@ -27,6 +27,7 @@ public interface BucketItem extends Item {
                     var collected = bucketCollectable.pickupBlock(player.getWorld(), player, blockInteraction.getBlockPosition(), blockState);
                     if (!collected.isEmpty()) {
                         player.awardStat(StatTypes.ITEM_USED.get(bucketItem));
+                        var result = createFilledResult(player, itemStack, collected);
                         return InteractionResult.SUCCESS;
                     }
                 }
@@ -43,4 +44,32 @@ public interface BucketItem extends Item {
         }
         return InteractionResult.PASS;
     }
+
+    static ItemStack createFilledResult(Player player, ItemStack emptyItemStack, ItemStack filledItemStack, boolean preventDuplicates) {
+        var isCreative = player.getGameType().isCreative(); // player.getAbilities().instabuild;
+        if (preventDuplicates && isCreative) {
+            if (!player.getInventory().getItems().contains(filledItemStack)) {
+                player.getInventory().addItem(filledItemStack);
+            }
+            return emptyItemStack;
+        } else {
+            if (!isCreative) {
+                emptyItemStack.decrease(1);
+            }
+
+            if (emptyItemStack.isEmpty()) {
+                return filledItemStack;
+            } else {
+                if (!player.getInventory().addItem(filledItemStack)) {
+                    player.drop(filledItemStack, false, false);
+                }
+                return emptyItemStack;
+            }
+        }
+    }
+
+    static ItemStack createFilledResult(Player pPlayer, ItemStack emptyItemStack, ItemStack filledItemStack) {
+        return createFilledResult(pPlayer, emptyItemStack, filledItemStack, true);
+    }
+
 }
