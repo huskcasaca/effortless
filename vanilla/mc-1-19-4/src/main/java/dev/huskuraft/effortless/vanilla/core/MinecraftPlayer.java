@@ -1,16 +1,16 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.Inventory;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.PlayerProfile;
+import dev.huskuraft.effortless.api.core.Stat;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.platform.Client;
@@ -21,18 +21,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 
-public class MinecraftPlayer implements Player {
-
-    protected final net.minecraft.world.entity.player.Player reference;
-
-    MinecraftPlayer(net.minecraft.world.entity.player.Player reference) {
-        this.reference = reference;
-    }
+public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference) implements Player {
 
     public static Player ofNullable(net.minecraft.world.entity.player.Player reference) {
         return reference == null ? null : new MinecraftPlayer(reference);
@@ -51,6 +43,11 @@ public class MinecraftPlayer implements Player {
     @Override
     public PlayerProfile getProfile() {
         return new MinecraftPlayerProfile(reference.getGameProfile());
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return new MinecraftInventory(reference.getInventory());
     }
 
     @Override
@@ -94,16 +91,6 @@ public class MinecraftPlayer implements Player {
     }
 
     @Override
-    public List<ItemStack> getItemStacks() {
-        return reference.getInventory().items.stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
-    }
-
-    @Override
-    public void setItemStack(int index, ItemStack itemStack) {
-        reference.getInventory().setItem(index, itemStack.reference());
-    }
-
-    @Override
     public ItemStack getItemStack(InteractionHand hand) {
         return new MinecraftItemStack(reference.getItemInHand(MinecraftConvertor.toPlatformInteractionHand(hand)));
     }
@@ -111,6 +98,11 @@ public class MinecraftPlayer implements Player {
     @Override
     public void setItemStack(InteractionHand hand, ItemStack itemStack) {
         reference.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, itemStack.reference());
+    }
+
+    @Override
+    public void drop(ItemStack itemStack, boolean dropAround, boolean includeThrowerName) {
+        reference.drop(itemStack.reference(), dropAround, includeThrowerName);
     }
 
     @Override
@@ -171,15 +163,7 @@ public class MinecraftPlayer implements Player {
     }
 
     @Override
-    public boolean tryPlaceBlock(BlockInteraction interaction) {
-        var minecraftInteractionHand = MinecraftConvertor.toPlatformInteractionHand(interaction.getHand());
-        var minecraftItemStack = reference.getItemInHand(minecraftInteractionHand);
-        var minecraftBlockInteraction = MinecraftConvertor.toPlatformBlockInteraction(interaction);
-        return ((BlockItem) minecraftItemStack.getItem()).place(new BlockPlaceContext(reference, minecraftInteractionHand, minecraftItemStack, minecraftBlockInteraction)).consumesAction();
-    }
-
-    @Override
-    public boolean tryBreakBlock(BlockInteraction interaction) {
+    public boolean destroyBlock(BlockInteraction interaction) {
         var minecraftBlockPosition = MinecraftConvertor.toPlatformBlockPosition(interaction.getBlockPosition());
         if (reference instanceof ServerPlayer serverPlayer) {
             return serverPlayer.gameMode.destroyBlock(minecraftBlockPosition);
@@ -191,13 +175,13 @@ public class MinecraftPlayer implements Player {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftPlayer player && reference.equals(player.reference);
+    public void awardStat(Stat<?> stat, int increment) {
+        referenceValue().awardStat((net.minecraft.stats.Stat<?>) stat.reference(), increment);
     }
 
     @Override
-    public int hashCode() {
-        return reference.hashCode();
+    public void resetStat(Stat<?> stat) {
+        referenceValue().resetStat(stat.reference());
     }
 
 }

@@ -4,14 +4,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.Block;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.InteractionResult;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.Property;
 import dev.huskuraft.effortless.api.core.PropertyValue;
 import dev.huskuraft.effortless.api.core.Revolve;
+import dev.huskuraft.effortless.api.core.fluid.Fluid;
 import dev.huskuraft.effortless.api.sound.SoundSet;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSoundSet;
 import net.minecraft.core.Direction;
@@ -25,13 +28,7 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-public class MinecraftBlockState implements BlockState {
-
-    private final net.minecraft.world.level.block.state.BlockState reference;
-
-    public MinecraftBlockState(net.minecraft.world.level.block.state.BlockState reference) {
-        this.reference = reference;
-    }
+public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockState reference) implements BlockState {
 
     public static BlockState ofNullable(net.minecraft.world.level.block.state.BlockState value) {
         return value == null ? null : new MinecraftBlockState(value);
@@ -156,13 +153,18 @@ public class MinecraftBlockState implements BlockState {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftBlockState blockState && reference.equals(blockState.reference);
+    public Block getBlock() {
+        return new MinecraftBlock(referenceValue().getBlock());
     }
 
     @Override
-    public int hashCode() {
-        return reference.hashCode();
+    public boolean canReplace(Fluid fluid) {
+        return referenceValue().canBeReplaced((net.minecraft.world.level.material.Fluid) fluid.reference());
+    }
+
+    @Override
+    public InteractionResult use(Player player, BlockInteraction blockInteraction) {
+        return MinecraftConvertor.toPlatformInteractionResult(reference.use(player.getWorld().reference(), player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)));
     }
 
 }

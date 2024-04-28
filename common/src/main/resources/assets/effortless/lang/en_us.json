@@ -172,6 +172,7 @@
   "effortless.state.idle": "Idle",
   "effortless.state.placing_block": "Placing Blocks",
   "effortless.state.breaking_block": "Breaking Blocks",
+  "effortless.state.interacting_block": "Interacting Blocks",
 
   "effortless.tracing.success_fulfilled": "Success",
   "effortless.tracing.success_partial": "Pending",
@@ -322,9 +323,11 @@
 
   "effortless.build.summary.blocks_placed": "Placed",
   "effortless.build.summary.blocks_destroyed": "Destroyed",
+  "effortless.build.summary.blocks_interacted": "Interacted",
 
   "effortless.build.summary.blocks_not_placeable": "Obstructed",
   "effortless.build.summary.blocks_not_breakable": "Obstructed",
+  "effortless.build.summary.blocks_not_interactable": "Obstructed",
 
   "effortless.build.summary.blocks_place_insufficient": "Insufficient",
   "effortless.build.summary.blocks_break_insufficient": "Insufficient",

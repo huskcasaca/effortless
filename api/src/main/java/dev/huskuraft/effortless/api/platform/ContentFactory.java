@@ -7,6 +7,10 @@ import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.core.StatType;
+import dev.huskuraft.effortless.api.core.StatTypes;
+import dev.huskuraft.effortless.api.core.fluid.Fluid;
+import dev.huskuraft.effortless.api.core.fluid.Fluids;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.api.sound.Sounds;
@@ -66,5 +70,9 @@ public interface ContentFactory {
     default Item getItem(Items items) {
         return getOptionalItem(items).orElseThrow();
     }
+
+    Fluid getFluid(Fluids fluids);
+
+    <T extends PlatformReference> StatType<T> getStatType(StatTypes statTypes);
 
 }

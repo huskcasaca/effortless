@@ -4,26 +4,31 @@ import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.BucketItem;
+import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
 public class Single extends AbstractBlockStructure {
 
     public static BlockInteraction traceSingle(Player player, Context context) {
-        var interaction = player.raytrace(context.maxReachDistance(), 0, false);
+        var isHoldingEmptyBucket = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && bucketItem.isEmpty();
+        var isHoldingFilledBucket = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && !bucketItem.isEmpty();
 
-        var startPos = interaction.getBlockPosition();
+        var interaction = player.raytrace(context.maxReachDistance(), 0, isHoldingEmptyBucket);
 
-        var tracingAbsolute = context.isBreakingBlock() || context.replaceMode().isQuick();
-        var replaceable = player.getWorld().getBlockState(startPos).isReplaceable(player, interaction);
+        var startBlockPosition = interaction.getBlockPosition();
 
-        var tracingRelative = !tracingAbsolute && !replaceable;
+        var isTracingTarget = context.state() == BuildState.BREAK_BLOCK || context.state() == BuildState.INTERACT_BLOCK;
+        var isReplaceBlock = context.replaceMode().isQuick() || player.getWorld().getBlockState(startBlockPosition).isReplaceable(player, interaction);
 
-        if (tracingRelative) {
-            startPos = startPos.relative(interaction.getDirection());
+        if (context.state() == BuildState.INTERACT_BLOCK && isHoldingFilledBucket || !isTracingTarget && !isReplaceBlock) {
+            startBlockPosition = startBlockPosition.relative(interaction.getDirection());
         }
-        return interaction.withPosition(startPos);
+
+        return interaction.withPosition(startBlockPosition);
     }
 
     public static Stream<BlockPosition> collectSingleBlocks(Context context) {

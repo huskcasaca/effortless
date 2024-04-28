@@ -6,14 +6,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
-import javax.annotation.Nullable;
-
-import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.building.BuildResult;
-import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.SingleCommand;
@@ -48,15 +44,6 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
         return entrance;
     }
 
-    @Override
-    public BuildResult build(Player player, BuildState state) {
-        return null;
-    }
-
-    @Override
-    public BuildResult build(Player player, BuildState state, @Nullable BlockInteraction interaction) {
-        return null;
-    }
 
     @Override
     public BuildResult updateContext(Player player, UnaryOperator<Context> updater) {
@@ -116,16 +103,6 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     public void resetAll() {
         contexts.clear();
         undoRedoStacks.clear();
-    }
-
-    @Override
-    public BuildResult onPlayerBreak(Player player) {
-        return BuildResult.CANCELED;
-    }
-
-    @Override
-    public BuildResult onPlayerPlace(Player player) {
-        return BuildResult.CANCELED;
     }
 
     @Override

@@ -5,6 +5,7 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.EntityInteraction;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
+import dev.huskuraft.effortless.api.core.InteractionResult;
 import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.math.Matrix3f;
 import dev.huskuraft.effortless.api.math.Matrix4f;
@@ -158,6 +159,17 @@ public class MinecraftConvertor {
             case SOUTH -> Direction.SOUTH;
             case WEST -> Direction.WEST;
             case EAST -> Direction.EAST;
+        };
+    }
+
+
+    public static InteractionResult toPlatformInteractionResult(net.minecraft.world.InteractionResult interactionResult) {
+        return switch (interactionResult) {
+            case SUCCESS -> InteractionResult.SUCCESS;
+            case CONSUME -> InteractionResult.CONSUME;
+            case CONSUME_PARTIAL -> InteractionResult.CONSUME_PARTIAL;
+            case PASS -> InteractionResult.PASS;
+            case FAIL -> InteractionResult.FAIL;
         };
     }
 

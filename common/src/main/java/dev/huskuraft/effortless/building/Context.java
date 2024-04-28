@@ -76,14 +76,6 @@ public record Context(
         return state.isIdle();
     }
 
-    public boolean isPlacingBlock() {
-        return state() == BuildState.PLACE_BLOCK;
-    }
-
-    public boolean isBreakingBlock() {
-        return state() == BuildState.BREAK_BLOCK;
-    }
-
     public boolean isDisabled() {
         return structureParams().buildMode() == BuildMode.DISABLED;
     }
@@ -214,24 +206,12 @@ public record Context(
         }
     }
 
-    public Context withPlacingState() {
-        return this.withState(BuildState.PLACE_BLOCK);
-    }
-
-    public Context withBreakingState() {
-        return this.withState(BuildState.BREAK_BLOCK);
-    }
-
-    public Context withState(BuildState state) {
+    public Context withBuildState(BuildState state) {
         return new Context(getId, state, type, interactions, structureParams, patternParams, customParams);
     }
 
-    public Context withPreviewType() {
-        return new Context(getId, state, BuildType.PREVIEW, interactions, structureParams, patternParams, customParams);
-    }
-
-    public Context withPreviewOnceType() {
-        return new Context(getId, state, BuildType.PREVIEW_ONCE, interactions, structureParams, patternParams, customParams);
+    public Context withBuildType(BuildType type) {
+        return new Context(getId, state, type, interactions, structureParams, patternParams, customParams);
     }
 
     public Context withNextInteraction(BlockInteraction interaction) {
@@ -462,6 +442,7 @@ public record Context(
             case IDLE -> 0;
             case PLACE_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
             case BREAK_BLOCK -> customParams().generalConfig().maxBoxVolumePerBreak();
+            case INTERACT_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
         };
     }
 
@@ -474,6 +455,7 @@ public record Context(
             case IDLE -> 0;
             case PLACE_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
             case BREAK_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerBreak();
+            case INTERACT_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
         };
     }
 
@@ -490,6 +472,7 @@ public record Context(
             case IDLE -> true;
             case PLACE_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
             case BREAK_BLOCK -> customParams().generalConfig().allowBreakBlocks();
+            case INTERACT_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
         };
     }
 

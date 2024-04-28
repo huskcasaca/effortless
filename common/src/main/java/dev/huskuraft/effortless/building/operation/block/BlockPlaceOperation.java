@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.Collections;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
@@ -70,26 +70,26 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
 
-        if (!itemStack.getItem().isBlockItem()) {
+        if (!(itemStack.getItem() instanceof BlockItem blockItem)) {
             return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
         }
 
         // action permission
-        if (!player.canInteractBlock(getInteraction().getBlockPosition())) {
+        if (!player.canInteractBlock(getBlockPosition())) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
         }
 
         switch (context.replaceMode()) {
             case DISABLED -> {
-                if (!player.getWorld().getBlockState(getInteraction().getBlockPosition()).isReplaceable(player, getInteraction())) {
+                if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
             case NORMAL, QUICK -> {
-                if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getInteraction().getBlockPosition()).isDestroyable()) {
+                if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
-                if (!player.canAttackBlock(getInteraction().getBlockPosition())) {
+                if (!player.canAttackBlock(getBlockPosition())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
@@ -100,28 +100,28 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
-        if (context.replaceMode() == ReplaceMode.QUICK && !player.tryBreakBlock(getInteraction())) {
+        if (context.replaceMode() == ReplaceMode.QUICK && !player.destroyBlock(getInteraction())) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
 //        if (context.type() == BuildType.COMMAND) {
-//            CommandManager.dispatch(new SetBlockCommand(getBlockState(), getInteraction().getBlockPosition(), SetBlockCommand.Mode.REPLACE));
+//            CommandManager.dispatch(new SetBlockCommand(getBlockState(), getBlockPosition(), SetBlockCommand.Mode.REPLACE));
 //            return BlockOperationResult.Type.SUCCESS;
 //        }
 
         // compatible layer
-        var originalItemStack = player.getItemStack(InteractionHand.MAIN);
-        player.setItemStack(InteractionHand.MAIN, itemStack);
-        var placed = player.tryPlaceBlock(interaction);
-        player.setItemStack(InteractionHand.MAIN, originalItemStack);
+        var originalItemStack = player.getItemStack(getHand());
+        player.setItemStack(getHand(), itemStack);
+        var placed = blockItem.place(player, getInteraction()).consumesAction();
+        player.setItemStack(getHand(), originalItemStack);
 
         if (!placed) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
-        if (!world.getBlockState(getInteraction().getBlockPosition()).equals(blockState) && !world.setBlockState(getInteraction().getBlockPosition(), blockState)) {
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
-        }
+//        if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockState(getBlockPosition(), blockState)) {
+//            return BlockOperationResult.Type.FAIL_UNKNOWN;
+//        }
 
         return BlockOperationResult.Type.SUCCESS;
     }
@@ -133,7 +133,7 @@ public class BlockPlaceOperation extends BlockOperation {
         var result = placeBlock();
 
         if (getWorld().isClient() && getContext().isPreviewOnce() && result.success()) {
-            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getInteraction().getBlockPosition().getCenter());
+            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
             getPlayer().getClient().getSoundManager().play(sound);
         }
 
