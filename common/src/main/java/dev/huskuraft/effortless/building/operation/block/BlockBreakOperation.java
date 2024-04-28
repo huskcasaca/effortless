@@ -75,7 +75,7 @@ public class BlockBreakOperation extends BlockOperation {
         }
 
         if (context.isPreview() && world.isClient()) {
-            return BlockOperationResult.Type.CONSUME;
+            return BlockOperationResult.Type.SUCCESS_PREVIEW;
         }
 
 //        if (context.type() == BuildType.COMMAND) {

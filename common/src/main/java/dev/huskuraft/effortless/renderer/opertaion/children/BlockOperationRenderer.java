@@ -82,20 +82,20 @@ public class BlockOperationRenderer implements OperationRenderer {
                 return Color.GRAY;
             }
             return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
+                case SUCCESS, SUCCESS_PARTIAL, SUCCESS_PREVIEW -> BLOCK_PLACE_SUCCESS_COLOR;
                 case FAIL_ITEM_INSUFFICIENT -> BLOCK_PLACE_INSUFFICIENT_COLOR;
                 default -> BLOCK_PLACE_FAIL_COLOR;
             };
         }
         if (blockOperationResult instanceof BlockBreakOperationResult) {
             return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_BREAK_SUCCESS_COLOR;
+                case SUCCESS, SUCCESS_PARTIAL, SUCCESS_PREVIEW -> BLOCK_BREAK_SUCCESS_COLOR;
                 default -> BLOCK_BREAK_FAIL_COLOR;
             };
         }
         if (blockOperationResult instanceof BlockInteractOperationResult) {
             return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> Color.YELLOW;
+                case SUCCESS, SUCCESS_PARTIAL, SUCCESS_PREVIEW -> Color.YELLOW;
                 default -> BLOCK_BREAK_FAIL_COLOR;
             };
         }

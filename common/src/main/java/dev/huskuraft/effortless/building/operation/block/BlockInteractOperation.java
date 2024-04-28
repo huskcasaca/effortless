@@ -76,7 +76,7 @@ public class BlockInteractOperation extends BlockOperation {
 
         if (context.isPreview() && player.getWorld().isClient()) {
             selectedItemStack.decrease(1);
-            return BlockOperationResult.Type.CONSUME;
+            return BlockOperationResult.Type.SUCCESS_PREVIEW;
         }
 
         // compatible layer

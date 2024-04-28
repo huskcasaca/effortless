@@ -44,7 +44,7 @@ public abstract class BlockOperationResult extends OperationResult {
     public enum Type {
         SUCCESS,
         SUCCESS_PARTIAL,
-        CONSUME,
+        SUCCESS_PREVIEW,
 
         FAIL_WORLD_HEIGHT,
         FAIL_WORLD_BORDER,
@@ -66,15 +66,15 @@ public abstract class BlockOperationResult extends OperationResult {
         FAIL_UNKNOWN;
 
         public boolean consumesAction() {
-            return this == SUCCESS || this == SUCCESS_PARTIAL|| this == CONSUME;
+            return this == SUCCESS || this == SUCCESS_PARTIAL|| this == SUCCESS_PREVIEW;
         }
 
         public boolean success() {
-            return this == SUCCESS || this == SUCCESS_PARTIAL || this == CONSUME;
+            return this == SUCCESS || this == SUCCESS_PARTIAL || this == SUCCESS_PREVIEW;
         }
 
         public boolean fail() {
-            return this != SUCCESS && this != SUCCESS_PARTIAL && this != CONSUME;
+            return this != SUCCESS && this != SUCCESS_PARTIAL && this != SUCCESS_PREVIEW;
         }
 
         public boolean shouldSwing() {
