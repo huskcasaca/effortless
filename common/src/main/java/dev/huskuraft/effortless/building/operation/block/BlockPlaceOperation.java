@@ -14,7 +14,7 @@ import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
-import dev.huskuraft.effortless.building.pattern.RevolveContext;
+import dev.huskuraft.effortless.building.pattern.RotateContext;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 
 public class BlockPlaceOperation extends BlockOperation {
@@ -151,8 +151,8 @@ public class BlockPlaceOperation extends BlockOperation {
     }
 
     @Override
-    public BlockPlaceOperation revolve(RevolveContext revolveContext) {
-        return null;
+    public BlockPlaceOperation rotate(RotateContext rotateContext) {
+        return new BlockPlaceOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(blockState));
     }
 
     @Override

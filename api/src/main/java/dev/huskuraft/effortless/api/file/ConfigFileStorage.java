@@ -18,7 +18,6 @@ public abstract class ConfigFileStorage<T> extends FileStorage<T> {
     protected ConfigFileStorage(String fileName, FileType fileType, ConfigSerializer<T> serializer) {
         super(fileName, fileType);
         this.serializer = serializer;
-        get();
     }
 
     @Override

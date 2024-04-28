@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.building.operation;
 
-import dev.huskuraft.effortless.building.pattern.RevolveContext;
+import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public interface Rotatable<O> extends Trait {
 
-    O revolve(RevolveContext revolveContext);
+    O rotate(RotateContext rotateContext);
 
 }

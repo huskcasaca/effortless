@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
-import dev.huskuraft.effortless.building.pattern.RevolveContext;
+import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public final class EmptyOperation extends TransformableOperation {
 
@@ -45,7 +45,7 @@ public final class EmptyOperation extends TransformableOperation {
     }
 
     @Override
-    public TransformableOperation revolve(RevolveContext revolveContext) {
+    public TransformableOperation rotate(RotateContext rotateContext) {
         return this;
     }
 }

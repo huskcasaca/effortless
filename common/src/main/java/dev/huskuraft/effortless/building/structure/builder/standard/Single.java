@@ -28,7 +28,7 @@ public class Single extends AbstractBlockStructure {
             startBlockPosition = startBlockPosition.relative(interaction.getDirection());
         }
 
-        return interaction.withPosition(startBlockPosition);
+        return interaction.withBlockPosition(startBlockPosition);
     }
 
     public static Stream<BlockPosition> collectSingleBlocks(Context context) {

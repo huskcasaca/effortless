@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
@@ -62,7 +63,7 @@ public class BatchBuildSession implements BuildSession {
                 operations = transformer.transform(operations);
             }
         }
-        operations = operations.flatten();
+        operations = operations.flatten().filter(Objects::nonNull);
         operations = operations.filter(OperationFilter.distinctByLocation());
 
         return operations;

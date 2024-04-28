@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
-import dev.huskuraft.effortless.building.pattern.RevolveContext;
+import dev.huskuraft.effortless.building.pattern.RotateContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 
@@ -72,9 +72,9 @@ public class RadialTransformer extends Transformer {
 
     @Override
     public BatchOperation transform(TransformableOperation operation) {
-        return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(1, slice).mapToObj(i -> {
+        return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(0, slice).mapToObj(i -> {
             var angle = 2 * MathUtils.PI / slice * i;
-            return operation.revolve(RevolveContext.absolute(position, angle));
+            return operation.rotate(RotateContext.absolute(position, angle));
         }));
     }
 
@@ -140,9 +140,9 @@ public class RadialTransformer extends Transformer {
         return switch (stage) {
             case NONE -> this;
             case UPDATE_CONTEXT, INTERACT -> new RadialTransformer(id, name, new Vector3d(
-                    positionType[0].getStage() == stage ? position.x() + session.getPlayer().getPosition().x() : position.x(),
-                    positionType[1].getStage() == stage ? position.y() + session.getPlayer().getPosition().y() : position.y(),
-                    positionType[2].getStage() == stage ? position.z() + session.getPlayer().getPosition().z() : position.z()
+                    positionType[0].getStage() == stage ? position.x() + session.getPlayer().getPosition().toVector3i().x() : position.x(),
+                    positionType[1].getStage() == stage ? position.y() + session.getPlayer().getPosition().toVector3i().y() : position.y(),
+                    positionType[2].getStage() == stage ? position.z() + session.getPlayer().getPosition().toVector3i().z() : position.z()
             ), new PositionType[]{
                     positionType[0].getStage() == stage ? PositionType.ABSOLUTE : positionType[0],
                     positionType[1].getStage() == stage ? PositionType.ABSOLUTE : positionType[1],

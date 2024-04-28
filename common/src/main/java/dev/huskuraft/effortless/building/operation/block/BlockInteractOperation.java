@@ -14,7 +14,7 @@ import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
-import dev.huskuraft.effortless.building.pattern.RevolveContext;
+import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public class BlockInteractOperation extends BlockOperation {
 
@@ -143,7 +143,7 @@ public class BlockInteractOperation extends BlockOperation {
     }
 
     @Override
-    public BlockInteractOperation revolve(RevolveContext revolveContext) {
+    public BlockInteractOperation rotate(RotateContext rotateContext) {
         return null;
     }
 

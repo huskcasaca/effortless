@@ -122,9 +122,9 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
             this.teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
             this.teleportButton.setOnPressListener(button -> {
                 setItem(getItem().withValue2(switch (axis) {
-                    case X -> getEntrance().getClient().getPlayer().getPosition().x();
-                    case Y -> getEntrance().getClient().getPlayer().getPosition().y();
-                    case Z -> getEntrance().getClient().getPlayer().getPosition().z();
+                    case X -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().x();
+                    case Y -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().y();
+                    case Z -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().z();
                 }));
                 numberField.setValue(getItem().value2());
             });

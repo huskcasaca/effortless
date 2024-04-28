@@ -503,6 +503,17 @@ public class Vector3d {
         return x * y * z;
     }
 
+
+    public Vector3d rotY(double pYaw) {
+        var cos = MathUtils.cos(pYaw);
+        var sin = MathUtils.sin(pYaw);
+        var x = this.x * (double) cos + this.z * (double) sin;
+        var y = this.y;
+        var z = this.z * (double) cos - this.x * (double) sin;
+        return new Vector3d(x, y, z);
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Vector3d other)) {

@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
-import dev.huskuraft.effortless.building.pattern.RevolveContext;
+import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public class DeferredBatchOperation extends BatchOperation {
 
@@ -35,8 +35,8 @@ public class DeferredBatchOperation extends BatchOperation {
     }
 
     @Override
-    public DeferredBatchOperation revolve(RevolveContext revolveContext) {
-        return new DeferredBatchOperation(context, () -> operations().map(o -> o.revolve(revolveContext)));
+    public DeferredBatchOperation rotate(RotateContext rotateContext) {
+        return new DeferredBatchOperation(context, () -> operations().map(o -> o.rotate(rotateContext)));
     }
 
     @Override
