@@ -19,8 +19,13 @@ public record MinecraftBucketItem(net.minecraft.world.item.BucketItem referenceV
     }
 
     @Override
-    public boolean emptyContent(World world, Player player, BlockPosition blockPosition, BlockInteraction blockInteraction) {
+    public boolean useContent(World world, Player player, BlockPosition blockPosition, BlockInteraction blockInteraction) {
         return referenceValue().emptyContents(player.reference(), world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction));
+    }
+
+    @Override
+    public void useExtraContent(World world, Player player, BlockPosition blockPosition, ItemStack itemStack) {
+        referenceValue().checkExtraContent(player.reference(), world.reference(), itemStack.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition));
     }
 
     @Override

@@ -58,9 +58,9 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         // action permission
-        var itemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.getDefaultStack());
+        var selectedItemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.getDefaultStack());
 
-//        if (itemStack == null) {
+//        if (selectedItemStack == null) {
 //            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
 //        }
 //
@@ -68,7 +68,7 @@ public class BlockInteractOperation extends BlockOperation {
 //            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
 //        }
 //
-//        if (!itemStack.getItem().isBlockItem()) {
+//        if (!selectedItemStack.getItem().isBlockItem()) {
 //            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
 //        }
 
@@ -78,7 +78,7 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         if (context.isPreview() && player.getWorld().isClient()) {
-            itemStack.decrease(1);
+            selectedItemStack.decrease(1);
             return BlockOperationResult.Type.CONSUME;
         }
 
@@ -96,7 +96,8 @@ public class BlockInteractOperation extends BlockOperation {
                 }
             } else {
                 if (getBlockState().getBlock().getLiquidPlaceable() != null || getBlockState().isAir() || getBlockState().canReplace(bucketItem.getContent())) {
-                    if (bucketItem.emptyContent(getWorld(), getPlayer(), getBlockPosition(), getInteraction())) {
+                    if (bucketItem.useContent(getWorld(), getPlayer(), getBlockPosition(), getInteraction())) {
+                        bucketItem.useExtraContent(getWorld(), getPlayer(), getBlockPosition(), originalItemStack);
                         return BlockOperationResult.Type.SUCCESS;
                     }
                 }
@@ -104,7 +105,7 @@ public class BlockInteractOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
-        player.setItemStack(getHand(), itemStack);
+        player.setItemStack(getHand(), selectedItemStack);
         var interacted = player.useItem(getInteraction());
         player.setItemStack(getHand(), originalItemStack);
         if (!interacted) {

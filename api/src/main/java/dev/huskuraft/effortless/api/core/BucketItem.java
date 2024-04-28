@@ -7,7 +7,9 @@ public interface BucketItem extends Item {
 
     Fluid getContent();
 
-    boolean emptyContent(World world, Player player, BlockPosition blockPosition, BlockInteraction blockInteraction);
+    boolean useContent(World world, Player player, BlockPosition blockPosition, BlockInteraction blockInteraction);
+
+    void useExtraContent(World world, Player player, BlockPosition blockPosition, ItemStack itemStack);
 
     default boolean isEmpty() {
         return getContent().referenceValue().equals(Fluids.EMPTY.referenceValue());
