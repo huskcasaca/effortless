@@ -64,9 +64,6 @@ public class BlockInteractOperation extends BlockOperation {
 //            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
 //        }
 //
-//        if (blockState.isAir()) {
-//            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
-//        }
 //
 //        if (!selectedItemStack.getItem().isBlockItem()) {
 //            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
@@ -103,6 +100,10 @@ public class BlockInteractOperation extends BlockOperation {
                 }
             }
             return BlockOperationResult.Type.FAIL_UNKNOWN;
+        }
+
+        if (blockState.isAir()) {
+            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
 
         player.setItemStack(getHand(), selectedItemStack);
