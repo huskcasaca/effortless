@@ -27,7 +27,7 @@ public class Floor extends AbstractBlockStructure {
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength() == PlaneLength.LIMIT_TO_MAX);
+        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength() == PlaneLength.EQUAL);
     }
 
     public static Stream<BlockPosition> collectFloorBlocks(Context context) {

@@ -137,6 +137,7 @@
   "effortless.option.cube_filling": "Cube Filling",
   "effortless.option.raised_edge": "Raised Edge",
   "effortless.option.circle_start": "Circle Start",
+  "effortless.option.plane_length": "Plane Length",
 
   "effortless.action.undo": "Undo",
   "effortless.action.redo": "Redo",
@@ -164,6 +165,9 @@
   "effortless.action.replace_normal": "Normal",
   "effortless.action.replace_quick": "Quick",
   "effortless.action.mode_settings": "Build Mode",
+
+  "effortless.action.plane_length_variable": "Variable",
+  "effortless.action.plane_length_equal": "Equal",
 
   "effortless.position.disabled": "Disabled",
   "effortless.position.left": "Left",

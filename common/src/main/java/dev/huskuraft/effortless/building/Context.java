@@ -57,7 +57,7 @@ public record Context(
                         PlaneFacing.BOTH,
                         RaisedEdge.RAISE_LONG_EDGE,
                         ReplaceMode.DISABLED,
-                        PlaneLength.DISABLE
+                        PlaneLength.VARIABLE
                 ),
                 new PatternParams(
                         Pattern.DISABLED

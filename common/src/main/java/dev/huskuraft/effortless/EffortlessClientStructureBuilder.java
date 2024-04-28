@@ -396,9 +396,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     private void reloadContext(Player player) {
         setContext(player, getContext(player).withRandomPatternSeed());
 //        if (Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown()) {
-//            setContext(player, getContext(player).withBuildFeature(UniformLength.LIMIT_TO_MAX));
+//            setContext(player, getContext(player).withBuildFeature(PlaneLength.EQUAL));
 //        } else {
-//            setContext(player, getContext(player).withBuildFeature(UniformLength.DISABLE));
+//            setContext(player, getContext(player).withBuildFeature(PlaneLength.VARIABLE));
 //        }
     }
 
