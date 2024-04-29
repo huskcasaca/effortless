@@ -42,7 +42,7 @@ public class RotateContext {
         angle = angle - MathUtils.PI;
 
         if (angle < -0.751 * MathUtils.PI || angle > 0.749 * MathUtils.PI) {
-            newBlockState = blockState.rotate(Revolve.CLOCKWISE_180);
+            newBlockState = blockState;
             if (alternate) {
                 newBlockState = newBlockState.mirror(Axis.X);
             }
@@ -57,7 +57,7 @@ public class RotateContext {
                 newBlockState = newBlockState.mirror(Axis.Z);
             }
         } else {
-            newBlockState = blockState;
+            newBlockState = blockState.rotate(Revolve.CLOCKWISE_180);
             if (alternate) {
                 newBlockState = newBlockState.mirror(Axis.X);
             }
@@ -71,13 +71,13 @@ public class RotateContext {
         angle = angle - MathUtils.PI;
 
         if (angle < -0.751 * MathUtils.PI || angle > 0.749 * MathUtils.PI) {
-            newOrientation = orientation.getClockWise(Axis.Y).getClockWise(Axis.Y);
+            newOrientation = orientation;
         } else if (angle < -0.251 * MathUtils.PI) {
             newOrientation = orientation.getClockWise(Axis.Y);
         } else if (angle > 0.249 * MathUtils.PI) {
             newOrientation = orientation.getClockWise(Axis.Y).getClockWise(Axis.Y).getClockWise(Axis.Y);
         } else {
-            newOrientation = orientation;
+            newOrientation = orientation.getClockWise(Axis.Y).getClockWise(Axis.Y);
         }
 
         return newOrientation;
@@ -96,6 +96,9 @@ public class RotateContext {
     }
 
     public BlockState rotate(BlockState blockState) {
+        if (blockState == null) {
+            return null;
+        }
         return rotateBlockState(blockState, angle, false);
     }
 

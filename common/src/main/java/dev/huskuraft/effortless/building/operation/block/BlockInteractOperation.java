@@ -144,7 +144,7 @@ public class BlockInteractOperation extends BlockOperation {
 
     @Override
     public BlockInteractOperation rotate(RotateContext rotateContext) {
-        return null;
+        return new BlockInteractOperation(world, player, context, storage, rotateContext.rotate(interaction));
     }
 
     @Override

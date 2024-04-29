@@ -119,9 +119,10 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
-//        if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockState(getBlockPosition(), blockState)) {
-//            return BlockOperationResult.Type.FAIL_UNKNOWN;
-//        }
+        // FIXME: 29/4/24
+        if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockState(getBlockPosition(), blockState)) {
+            return BlockOperationResult.Type.FAIL_UNKNOWN;
+        }
 
         return BlockOperationResult.Type.SUCCESS;
     }
@@ -158,10 +159,6 @@ public class BlockPlaceOperation extends BlockOperation {
     @Override
     public BlockPlaceOperation refactor(RefactorContext refactorContext) {
         return new BlockPlaceOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()));
-    }
-
-    private ItemStack getItemStack() {
-        return storage.search(blockState.getItem()).orElse(null);
     }
 
 }

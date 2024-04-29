@@ -30,19 +30,19 @@ public class MirrorContext {
     }
 
     public BlockPosition mirror(BlockPosition blockPosition) {
-        Vector3d vector = mirror(blockPosition.getCenter());
+        var vector = mirror(blockPosition.getCenter());
         return BlockPosition.at(vector);
     }
 
-    public Orientation mirror(Orientation dir) {
-        return dir.getAxis() == axis ? dir : dir.getOpposite();
+    public Orientation mirror(Orientation orientation) {
+        return orientation.getAxis() != axis ? orientation : orientation.getOpposite();
     }
 
     public BlockInteraction mirror(BlockInteraction blockInteraction) {
-        var location = mirror(blockInteraction.getPosition());
         var direction = mirror(blockInteraction.getDirection());
+        var position = mirror(blockInteraction.getPosition());
         var blockPosition = mirror(blockInteraction.getBlockPosition());
-        return new BlockInteraction(location, direction, blockPosition, blockInteraction.isInside());
+        return blockInteraction.withDirection(direction).withPosition(position).withBlockPosition(blockPosition);
     }
 
     public BlockState mirror(BlockState blockState) {
