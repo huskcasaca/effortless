@@ -15,7 +15,7 @@ public class Single extends AbstractBlockStructure {
 
     public static BlockInteraction traceSingle(Player player, Context context) {
         var isHoldingEmptyBucket = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && bucketItem.isEmpty();
-        var isHoldingFilledBucket = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && !bucketItem.isEmpty();
+        var isHoldingNonBlockItem = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && !bucketItem.isEmpty();
 
         var interaction = player.raytrace(context.maxReachDistance(), 0, isHoldingEmptyBucket);
 
@@ -24,7 +24,7 @@ public class Single extends AbstractBlockStructure {
         var isTracingTarget = context.state() == BuildState.BREAK_BLOCK || context.state() == BuildState.INTERACT_BLOCK;
         var isReplaceBlock = context.replaceMode().isQuick() || player.getWorld().getBlockState(startBlockPosition).isReplaceable(player, interaction);
 
-        if (context.state() == BuildState.INTERACT_BLOCK && isHoldingFilledBucket || !isTracingTarget && !isReplaceBlock) {
+        if ((isHoldingNonBlockItem && context.state() == BuildState.INTERACT_BLOCK || !isTracingTarget) && !isReplaceBlock) {
             startBlockPosition = startBlockPosition.relative(interaction.getDirection());
         }
 

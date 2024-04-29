@@ -181,6 +181,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             return;
         }
         updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
+        if (buildMode.isDisabled()) {
+            updateContext(player, context -> context.withPattern(Pattern.DISABLED));
+
+        }
     }
 
     @Override
