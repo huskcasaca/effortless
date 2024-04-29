@@ -467,25 +467,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
         var entries = new ArrayList<>();
 
-        var texts = new ArrayList<Tuple2<Text, Text>>();
-        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
-        var replace = AbstractRadialScreen.button(context.replaceMode());
-        texts.add(new Tuple2<>(replace.getDisplayCategory().withStyle(TextStyle.WHITE), replace.getDisplayName().withStyle(TextStyle.GOLD)));
-
-        for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
-            var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
-            if (option.isEmpty()) continue;
-            var button = AbstractRadialScreen.button(option.get());
-            texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
-        }
-
-        entries.add(texts);
-//        getEntrance().getClientManager().getTooltipRenderer().showAsGroup(generateId(id, Context.class), priority, entries);
-//        entries.clear();
-        entries.add(context.buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, BuildMode.class), priority, entries);
-        entries.clear();
-
         for (var itemType : ItemSummaryType.values()) {
             var products = result.getProducts(itemType);
             if (!products.isEmpty()) {
@@ -506,13 +487,24 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 entries.add(products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList());
                 entries.add(Text.translate("effortless.build.summary." + itemType.name().toLowerCase(Locale.ROOT)).withStyle(color));
             }
-            if (!entries.isEmpty()) {
-                getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, itemType), priority, entries);
-            } else {
-                getEntrance().getClientManager().getTooltipRenderer().showEmptyEntry(generateId(id, itemType), priority);
-            }
-            entries.clear();
         }
+
+        var texts = new ArrayList<Tuple2<Text, Text>>();
+        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
+        var replace = AbstractRadialScreen.button(context.replaceMode());
+        texts.add(new Tuple2<>(replace.getDisplayCategory().withStyle(TextStyle.WHITE), replace.getDisplayName().withStyle(TextStyle.GOLD)));
+
+        for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
+            var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
+            if (option.isEmpty()) continue;
+            var button = AbstractRadialScreen.button(option.get());
+            texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
+        }
+
+        entries.add(texts);
+
+        entries.add(context.buildMode().getIcon());
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries);
 
     }
 
