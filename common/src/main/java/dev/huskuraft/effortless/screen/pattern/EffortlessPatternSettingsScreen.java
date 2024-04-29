@@ -9,8 +9,8 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
-import dev.huskuraft.effortless.building.config.RootConfig;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 
 public class EffortlessPatternSettingsScreen extends AbstractScreen {
@@ -33,7 +33,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         super(entrance, Text.translate("effortless.pattern.settings.title"));
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-            getEntrance().getConfigStorage().update(config -> new RootConfig(config.renderConfig(), this.config, config.transformerPresets()));
+            getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), this.config, config.transformerPresets()));
 
         };
         this.config = getEntrance().getConfigStorage().get().patternConfig();

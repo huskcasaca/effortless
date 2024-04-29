@@ -17,9 +17,9 @@ import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.PositionType;
+import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
-import dev.huskuraft.effortless.building.config.RootConfig;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
@@ -60,7 +60,7 @@ public class EffortlessTestScreen extends AbstractScreen {
             }));
             entry.addWidget(new Button(getEntrance(), entry.getLeft() + entry.getWidth() / 2 , entry.getTop(), entry.getWidth() / 2, 20, Text.text("Save Toml Config"), (button) -> {
                 getEntrance().getConfigStorage().set(
-                        new RootConfig(
+                        new ClientConfig(
                                 new RenderConfig(),
                                 new PatternConfig(
                                         List.of(

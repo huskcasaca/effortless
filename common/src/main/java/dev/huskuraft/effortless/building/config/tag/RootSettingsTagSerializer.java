@@ -2,20 +2,20 @@ package dev.huskuraft.effortless.building.config.tag;
 
 import dev.huskuraft.effortless.api.tag.TagElement;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
+import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
-import dev.huskuraft.effortless.building.config.RootConfig;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
 
-public class RootSettingsTagSerializer implements TagSerializer<RootConfig> {
+public class RootSettingsTagSerializer implements TagSerializer<ClientConfig> {
 
     private static final String TAG_RENDER_SETTINGS = "Render";
     private static final String TAG_PATTERN_SETTINGS = "Patterns";
     private static final String TAG_TRANSFORMER_PRESETS = "Transformers";
 
     @Override
-    public RootConfig read(TagElement tag) {
-        return new RootConfig(
+    public ClientConfig read(TagElement tag) {
+        return new ClientConfig(
                 tag.asRecord().getElement(TAG_RENDER_SETTINGS, new RenderSettingsTagSerializer()),
                 tag.asRecord().getElement(TAG_PATTERN_SETTINGS, new PatternSettingsTagSerializer()),
                 tag.asRecord().getElement(TAG_TRANSFORMER_PRESETS, new TransformerPresetsTagSerializer())
@@ -23,7 +23,7 @@ public class RootSettingsTagSerializer implements TagSerializer<RootConfig> {
     }
 
     @Override
-    public void write(TagElement tag, RootConfig config) {
+    public void write(TagElement tag, ClientConfig config) {
         tag.asRecord().putElement(TAG_RENDER_SETTINGS, config.renderConfig(), new RenderSettingsTagSerializer());
         tag.asRecord().putElement(TAG_PATTERN_SETTINGS, config.patternConfig(), new PatternSettingsTagSerializer());
         tag.asRecord().putElement(TAG_TRANSFORMER_PRESETS, config.transformerPresets(), new TransformerPresetsTagSerializer());

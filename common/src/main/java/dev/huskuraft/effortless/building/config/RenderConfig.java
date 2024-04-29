@@ -2,19 +2,18 @@ package dev.huskuraft.effortless.building.config;
 
 public record RenderConfig(
         boolean showOtherPlayersBuild,
+        boolean showOtherPlayersBuildTooltips,
         boolean showBlockPreview,
-        int maxRenderBlocks,
+        int maxRenderVolume,
         int maxRenderDistance
 ) {
 
-    public static final int MIN_MAX_RENDER_BLOCKS = 0;
-    public static final int MAX_MAX_RENDER_BLOCKS = 4096;
-
-    public static final int MIN_MAX_RENDER_DISTANCE = 16;
-    public static final int MAX_MAX_RENDER_DISTANCE = 512;
+    public static final int MAX_RENDER_VOLUME_MIN = 16;
+    public static final int MAX_RENDER_VOLUME_MAX = 4096;
 
     public RenderConfig() {
         this(
+                true,
                 true,
                 true,
                 1024,
