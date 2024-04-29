@@ -23,7 +23,7 @@ public record GeneralConfig(
     public static final boolean ALLOW_BREAK_BLOCKS_DEFAULT = true;
     public static final boolean ALLOW_PLACE_BLOCKS_DEFAULT = true;
 
-    public static final int MAX_REACH_DISTANCE_DEFAULT = 1024;
+    public static final int MAX_REACH_DISTANCE_DEFAULT = 128;
     public static final int MAX_REACH_DISTANCE_RANGE_START = 0;
     public static final int MAX_REACH_DISTANCE_RANGE_END = Short.MAX_VALUE;
 

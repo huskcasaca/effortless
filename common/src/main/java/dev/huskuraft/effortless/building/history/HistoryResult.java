@@ -39,8 +39,8 @@ public record HistoryResult(
     }
 
     public enum Type {
-        SUCCESS_UNDO("undo+_success"),
-        SUCCESS_REDO("redo+_success"),
+        SUCCESS_UNDO("undo_success"),
+        SUCCESS_REDO("redo_success"),
         NOTHING_TO_UNDO("nothing_to_undo"),
         NOTHING_TO_REDO("nothing_to_redo"),
         ;
@@ -51,6 +51,9 @@ public record HistoryResult(
             this.name = name;
         }
 
+        public String getName() {
+            return name;
+        }
     }
 
 

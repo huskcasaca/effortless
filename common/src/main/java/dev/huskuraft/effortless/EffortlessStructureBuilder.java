@@ -141,7 +141,6 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     @Override
     public void redo(Player player) {
         try {
-            getOperationResultStack(player).redo();
             getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.SUCCESS_REDO, getOperationResultStack(player).redo())), player);
         } catch (EmptyStackException e) {
             getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.NOTHING_TO_REDO)), player);

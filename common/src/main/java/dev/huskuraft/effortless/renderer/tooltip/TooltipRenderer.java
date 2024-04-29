@@ -81,29 +81,34 @@ public class TooltipRenderer {
     }
 
     private void showEntry(Object id, int priority, Entry entry) {
-        prioritiedMap.compute(priority, (k, v) -> {
-            if (v == null) {
-                v = new LinkedHashMap<>();
-            }
-            v.put(id, entry);
-            return v;
-        });
+        synchronized (prioritiedMap) {
+            prioritiedMap.compute(priority, (k, v) -> {
+                if (v == null) {
+                    v = new LinkedHashMap<>();
+                }
+                v.put(id, entry);
+                return v;
+            });
+        }
     }
 
 
     public void tick() {
-        var iterator = prioritiedMap.values().iterator();
-        while (iterator.hasNext()) {
-            var map = iterator.next();
-            for (var iterator1 = map.values().iterator(); iterator1.hasNext(); ) {
-                var entry = iterator1.next();
-                entry.tick();
-                if (!entry.isAlive()) {
-                    iterator1.remove();
+
+        synchronized (prioritiedMap) {
+            var iterator = prioritiedMap.values().iterator();
+            while (iterator.hasNext()) {
+                var map = iterator.next();
+                for (var iterator1 = map.values().iterator(); iterator1.hasNext(); ) {
+                    var entry = iterator1.next();
+                    entry.tick();
+                    if (!entry.isAlive()) {
+                        iterator1.remove();
+                    }
                 }
-            }
-            if (map.isEmpty()) {
-                iterator.remove();
+                if (map.isEmpty()) {
+                    iterator.remove();
+                }
             }
         }
     }
@@ -116,27 +121,28 @@ public class TooltipRenderer {
         renderer.translate(0f, renderer.window().getGuiScaledHeight() * 1f, 0);
         renderer.translate(-1f * contentSide.getStep(), 0, 0);
         renderer.translate(0, -8, 0);
-
-        for (var map : prioritiedMap.values()) {
-            for (var iterator = new LinkedList<>(map.values()).descendingIterator(); iterator.hasNext(); ) {
-                var entry = iterator.next();
-                if (!entry.isVisible()) {
-                    continue;
+        synchronized (prioritiedMap) {
+            for (var map : prioritiedMap.values()) {
+                for (var iterator = new LinkedList<>(map.values()).descendingIterator(); iterator.hasNext(); ) {
+                    var entry = iterator.next();
+                    if (!entry.isVisible()) {
+                        continue;
+                    }
+                    entry.setContentSide(contentGravity);
+                    renderer.pushPose();
+                    if (contentSide == AxisDirection.POSITIVE) {
+                        renderer.translate(renderer.window().getGuiScaledWidth() - entry.getWidth(), 0, 0);
+                    }
+                    renderer.renderRect(0, 0, entry.getWidth(), -entry.getHeight() - 8, renderer.optionColor(0.8f * entry.getAlpha()));
+                    renderer.translate(0, -4, 0);
+                    renderer.pushPose();
+                    renderer.translate(entry.getPaddingX(), -entry.getPaddingY(), 0);
+                    entry.render(renderer, 0, 0, deltaTick);
+                    renderer.popPose();
+                    renderer.popPose();
+                    renderer.translate(0, -entry.getHeight(), 0);
+                    renderer.translate(0, -10, 0);
                 }
-                entry.setContentSide(contentGravity);
-                renderer.pushPose();
-                if (contentSide == AxisDirection.POSITIVE) {
-                    renderer.translate(renderer.window().getGuiScaledWidth() - entry.getWidth(), 0, 0);
-                }
-                renderer.renderRect(0, 0, entry.getWidth(), -entry.getHeight() - 4, renderer.optionColor(0.8f * entry.getAlpha()));
-                renderer.translate(0, -2, 0);
-                renderer.pushPose();
-                renderer.translate(entry.getPaddingX(), -entry.getPaddingY(), 0);
-                entry.render(renderer, 0, 0, deltaTick);
-                renderer.popPose();
-                renderer.popPose();
-                renderer.translate(0, -entry.getHeight(), 0);
-                renderer.translate(0, -6, 0);
             }
         }
         renderer.popPose();

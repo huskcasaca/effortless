@@ -318,13 +318,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void onHistoryResultReceived(Player player, HistoryResult historyResult) {
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1,
-                List.of(
-                        Text.text(historyResult.type().name()),
-                        Text.text(historyResult.context().buildMode().name()),
-                        historyResult.itemSummary().values().stream().flatMap(List::stream).toList()
-                )
-        );
+        var entries = new ArrayList<>();
+        entries.add(historyResult.itemSummary().values().stream().flatMap(List::stream).toList());
+        entries.add(Text.translate("effortless.history." + historyResult.type().getName()));
+        entries.add(historyResult.context().buildMode().getIcon());
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1, entries);
     }
 
     @Override
