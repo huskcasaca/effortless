@@ -111,6 +111,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             showBuildContextResult(context.getId(), 1024, player, context, result);
             showBuildTooltip(context.getId(), 1024, player, context, result);
+            getEntrance().getClientManager().getTooltipRenderer().resetEntry(generateId(player.getId(), Context.class), 0);
             setContext(player, context.newInteraction());
 
 
@@ -322,7 +323,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         entries.add(historyResult.itemSummary().values().stream().flatMap(List::stream).toList());
         entries.add(Text.translate("effortless.history." + historyResult.type().getName()));
         entries.add(historyResult.context().buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1, entries);
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1, entries, true);
     }
 
     @Override
@@ -489,8 +490,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         var texts = new ArrayList<Tuple2<Text, Text>>();
         texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
-        var replace = AbstractRadialScreen.button(context.replaceMode());
-        texts.add(new Tuple2<>(replace.getDisplayCategory().withStyle(TextStyle.WHITE), replace.getDisplayName().withStyle(TextStyle.GOLD)));
+        texts.add(new Tuple2<>(AbstractRadialScreen.button(context.replaceMode()).getDisplayCategory().withStyle(TextStyle.WHITE), AbstractRadialScreen.button(context.replaceMode()).getDisplayName().withStyle(TextStyle.GOLD)));
 
         for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
@@ -498,11 +498,15 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var button = AbstractRadialScreen.button(option.get());
             texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
         }
+        if (!context.pattern().equals(Pattern.DISABLED)) {
+            texts.add(new Tuple2<>(Text.translate("effortless.build.summary.pattern").withStyle(TextStyle.WHITE), (context.pattern().equals(Pattern.DISABLED) ? Text.translate("effortless.build.summary.pattern_disabled") : Text.translate("effortless.build.summary.pattern_enabled")).withStyle(TextStyle.GOLD)));
+        }
 
         entries.add(texts);
 
         entries.add(context.buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries);
+        player.sendMessage("showTooltip" + context.type());
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries, context.type() == BuildType.BUILD);
 
     }
 
