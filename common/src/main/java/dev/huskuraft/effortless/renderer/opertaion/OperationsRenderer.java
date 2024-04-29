@@ -49,7 +49,7 @@ public class OperationsRenderer {
     }
 
     private boolean isShowBlockPreview() {
-        return getEntrance().getConfigStorage().get().renderSettings().showBlockPreview();
+        return getEntrance().getConfigStorage().get().renderConfig().showBlockPreview();
     }
 
     private int getMaxRenderBlocks() {

@@ -10,16 +10,16 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.config.RenderSettings;
-import dev.huskuraft.effortless.building.config.RootSettings;
+import dev.huskuraft.effortless.building.config.RenderConfig;
+import dev.huskuraft.effortless.building.config.RootConfig;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
 
 public class EffortlessRenderSettingsScreen extends AbstractScreen {
 
-    private final Consumer<RenderSettings> consumer;
-    private RenderSettings originalConfig;
-    private RenderSettings lastConfig;
+    private final Consumer<RenderConfig> consumer;
+    private RenderConfig originalConfig;
+    private RenderConfig lastConfig;
 
     private AbstractWidget saveButton;
 
@@ -27,9 +27,9 @@ public class EffortlessRenderSettingsScreen extends AbstractScreen {
         super(entrance, Text.translate("effortless.render_settings.title"));
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-            getEntrance().getConfigStorage().update(config -> new RootSettings(this.lastConfig, config.patternSettings(), config.transformerPresets()));
+            getEntrance().getConfigStorage().update(config -> new RootConfig(this.lastConfig, config.patternConfig(), config.transformerPresets()));
         };
-        this.lastConfig = getEntrance().getConfigStorage().get().renderSettings();
+        this.lastConfig = getEntrance().getConfigStorage().get().renderConfig();
         this.originalConfig = lastConfig;
     }
 
@@ -39,10 +39,10 @@ public class EffortlessRenderSettingsScreen extends AbstractScreen {
 
         var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1, false, false));
         entries.addSwitchEntry(Text.translate("effortless.render_settings.show_other_players_build"), null, lastConfig.showOtherPlayersBuild(), (value) -> {
-            this.lastConfig = new RenderSettings(value, lastConfig.showBlockPreview(), lastConfig.maxRenderDistance(), lastConfig.maxRenderBlocks());
+            this.lastConfig = new RenderConfig(value, lastConfig.showBlockPreview(), lastConfig.maxRenderDistance(), lastConfig.maxRenderBlocks());
         });
         entries.addSwitchEntry(Text.translate("effortless.render_settings.show_block_preview"), null, lastConfig.showBlockPreview(), (value) -> {
-            this.lastConfig = new RenderSettings(lastConfig.showOtherPlayersBuild(), value, lastConfig.maxRenderDistance(), lastConfig.maxRenderBlocks());
+            this.lastConfig = new RenderConfig(lastConfig.showOtherPlayersBuild(), value, lastConfig.maxRenderDistance(), lastConfig.maxRenderBlocks());
         });
 
 //        entries.addIntegerEntry(Text.translate("effortless.render_settings.max_render_blocks"), null, lastConfig.maxRenderBlocks(), RenderSettings.MIN_MAX_RENDER_BLOCKS, RenderSettings.MAX_MAX_RENDER_BLOCKS, (value) -> {

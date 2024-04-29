@@ -2,20 +2,20 @@ package dev.huskuraft.effortless.building.config.tag;
 
 import dev.huskuraft.effortless.api.tag.TagElement;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
-import dev.huskuraft.effortless.building.config.PatternSettings;
-import dev.huskuraft.effortless.building.config.RenderSettings;
-import dev.huskuraft.effortless.building.config.RootSettings;
+import dev.huskuraft.effortless.building.config.PatternConfig;
+import dev.huskuraft.effortless.building.config.RenderConfig;
+import dev.huskuraft.effortless.building.config.RootConfig;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
 
-public class RootSettingsTagSerializer implements TagSerializer<RootSettings> {
+public class RootSettingsTagSerializer implements TagSerializer<RootConfig> {
 
     private static final String TAG_RENDER_SETTINGS = "Render";
     private static final String TAG_PATTERN_SETTINGS = "Patterns";
     private static final String TAG_TRANSFORMER_PRESETS = "Transformers";
 
     @Override
-    public RootSettings read(TagElement tag) {
-        return new RootSettings(
+    public RootConfig read(TagElement tag) {
+        return new RootConfig(
                 tag.asRecord().getElement(TAG_RENDER_SETTINGS, new RenderSettingsTagSerializer()),
                 tag.asRecord().getElement(TAG_PATTERN_SETTINGS, new PatternSettingsTagSerializer()),
                 tag.asRecord().getElement(TAG_TRANSFORMER_PRESETS, new TransformerPresetsTagSerializer())
@@ -23,24 +23,24 @@ public class RootSettingsTagSerializer implements TagSerializer<RootSettings> {
     }
 
     @Override
-    public void write(TagElement tag, RootSettings config) {
-        tag.asRecord().putElement(TAG_RENDER_SETTINGS, config.renderSettings(), new RenderSettingsTagSerializer());
-        tag.asRecord().putElement(TAG_PATTERN_SETTINGS, config.patternSettings(), new PatternSettingsTagSerializer());
+    public void write(TagElement tag, RootConfig config) {
+        tag.asRecord().putElement(TAG_RENDER_SETTINGS, config.renderConfig(), new RenderSettingsTagSerializer());
+        tag.asRecord().putElement(TAG_PATTERN_SETTINGS, config.patternConfig(), new PatternSettingsTagSerializer());
         tag.asRecord().putElement(TAG_TRANSFORMER_PRESETS, config.transformerPresets(), new TransformerPresetsTagSerializer());
     }
 
-    public static class RenderSettingsTagSerializer implements TagSerializer<RenderSettings> {
+    public static class RenderSettingsTagSerializer implements TagSerializer<RenderConfig> {
 
-        public RenderSettings read(TagElement tag) {
-            return new RenderSettings();
+        public RenderConfig read(TagElement tag) {
+            return new RenderConfig();
         }
 
-        public void write(TagElement tag, RenderSettings config) {
+        public void write(TagElement tag, RenderConfig config) {
             tag.asRecord(); // avoid NPE
         }
 
-        public RenderSettings getFallback() {
-            return new RenderSettings();
+        public RenderConfig getFallback() {
+            return new RenderConfig();
         }
     }
 
@@ -70,19 +70,19 @@ public class RootSettingsTagSerializer implements TagSerializer<RootSettings> {
     }
 
 
-    public static class PatternSettingsTagSerializer implements TagSerializer<PatternSettings> {
+    public static class PatternSettingsTagSerializer implements TagSerializer<PatternConfig> {
 
         private static final String TAG_PATTERNS = "Patterns";
 
         @Override
-        public PatternSettings read(TagElement tag) {
-            return new PatternSettings(
+        public PatternConfig read(TagElement tag) {
+            return new PatternConfig(
                     tag.asRecord().getList(TAG_PATTERNS, new PatternTagSerializer())
             );
         }
 
         @Override
-        public void write(TagElement tag, PatternSettings Config) {
+        public void write(TagElement tag, PatternConfig Config) {
             tag.asRecord().putList(TAG_PATTERNS, Config.patterns(), new PatternTagSerializer());
         }
     }
