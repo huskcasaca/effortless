@@ -12,14 +12,14 @@ import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
-import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
+import dev.huskuraft.effortless.building.history.HistoryResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
-import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerHistoryResultPacket;
 
 public final class EffortlessStructureBuilder extends StructureBuilder {
 
@@ -131,10 +131,10 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     @Override
     public void undo(Player player) {
         try {
-            getOperationResultStack(player).undo();
-            getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.UNDO), player);
+            ;
+            getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.SUCCESS_UNDO, getOperationResultStack(player).undo())), player);
         } catch (EmptyStackException e) {
-//            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.NOTHING_TO_UNDO), player);
+            getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.NOTHING_TO_UNDO)), player);
         }
     }
 
@@ -142,9 +142,9 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     public void redo(Player player) {
         try {
             getOperationResultStack(player).redo();
-            getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO), player);
+            getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.SUCCESS_REDO, getOperationResultStack(player).redo())), player);
         } catch (EmptyStackException e) {
-//            getEntrance().getChannel().sendPacket(new PlayerActionPacket(SingleAction.NOTHING_TO_REDO), player);
+            getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.NOTHING_TO_REDO)), player);
         }
     }
 

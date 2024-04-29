@@ -71,14 +71,19 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
                 switch (settings) {
                     case GENERAL -> {
                         new EffortlessSettingsScreen(getEntrance()).attach();
+                        detach();
                     }
                 }
                 return;
             }
             if (entry.getContent() instanceof UndoRedo undoRedo) {
                 switch (undoRedo) {
-                    case UNDO -> getEntrance().getStructureBuilder().undo(getEntrance().getClient().getPlayer());
-                    case REDO -> getEntrance().getStructureBuilder().redo(getEntrance().getClient().getPlayer());
+                    case UNDO -> {
+                        getEntrance().getStructureBuilder().undo(getEntrance().getClient().getPlayer());
+                    }
+                    case REDO -> {
+                        getEntrance().getStructureBuilder().redo(getEntrance().getClient().getPlayer());
+                    }
                 }
                 return;
             }

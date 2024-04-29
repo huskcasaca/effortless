@@ -3,6 +3,7 @@ package dev.huskuraft.effortless;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -38,6 +39,7 @@ import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.TracingResult;
+import dev.huskuraft.effortless.building.history.HistoryResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.ItemSummaryType;
@@ -313,6 +315,16 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         showBuildContextResult(player.getId(), 1, player, context, result);
         showBuildTooltip(context.getId(), 1, player, context, result);
+    }
+
+    public void onHistoryResultReceived(Player player, HistoryResult historyResult) {
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1,
+                List.of(
+                        Text.text(historyResult.type().name()),
+                        Text.text(historyResult.context().buildMode().name()),
+                        historyResult.itemSummary().values().stream().flatMap(List::stream).toList()
+                )
+        );
     }
 
     @Override

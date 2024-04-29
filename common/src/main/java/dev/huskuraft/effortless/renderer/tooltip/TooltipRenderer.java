@@ -109,9 +109,6 @@ public class TooltipRenderer {
     }
 
     public void renderGuiOverlay(Renderer renderer, float deltaTick) {
-        if (getEntrance().getClient().getPanel() != null) {
-            return;
-        }
         var contentSide = AxisDirection.POSITIVE;
         var contentGravity = AxisDirection.NEGATIVE;
         renderer.pushPose();
