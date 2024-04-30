@@ -39,13 +39,13 @@ public class EffortlessRenderSettingsScreen extends AbstractScreen {
 
         var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1, false, false));
         entries.addSwitchEntry(Text.translate("effortless.render_settings.show_other_players_build"), null, lastConfig.showOtherPlayersBuild(), (value) -> {
-            this.lastConfig = new RenderConfig(value, lastConfig.showOtherPlayersBuildTooltips(), lastConfig.showBlockPreview(), lastConfig.maxRenderDistance(), lastConfig.maxRenderVolume());
+            this.lastConfig = new RenderConfig(value, lastConfig.showOtherPlayersBuildTooltips(), lastConfig.showBlockPreview(), lastConfig.maxRenderVolume(), lastConfig.maxRenderDistance());
         });
         entries.addSwitchEntry(Text.translate("effortless.render_settings.show_other_players_build_tooltips"), null, lastConfig.showOtherPlayersBuildTooltips(), (value) -> {
-            this.lastConfig = new RenderConfig(lastConfig.showOtherPlayersBuild(), value, lastConfig.showBlockPreview(), lastConfig.maxRenderDistance(), lastConfig.maxRenderVolume());
+            this.lastConfig = new RenderConfig(lastConfig.showOtherPlayersBuild(), value, lastConfig.showBlockPreview(), lastConfig.maxRenderVolume(), lastConfig.maxRenderDistance());
         });
         entries.addSwitchEntry(Text.translate("effortless.render_settings.show_block_preview"), null, lastConfig.showBlockPreview(), (value) -> {
-            this.lastConfig = new RenderConfig(lastConfig.showOtherPlayersBuild(), lastConfig.showOtherPlayersBuildTooltips(), value, lastConfig.maxRenderDistance(), lastConfig.maxRenderVolume());
+            this.lastConfig = new RenderConfig(lastConfig.showOtherPlayersBuild(), lastConfig.showOtherPlayersBuildTooltips(), value, lastConfig.maxRenderVolume(), lastConfig.maxRenderDistance());
         });
         entries.addIntegerEntry(Text.translate("effortless.render_settings.max_render_volume"), null, lastConfig.maxRenderVolume(), RenderConfig.MAX_RENDER_VOLUME_MIN, RenderConfig.MAX_RENDER_VOLUME_MAX, (value) -> {
             this.lastConfig = new RenderConfig(lastConfig.showOtherPlayersBuild(), lastConfig.showOtherPlayersBuildTooltips(), lastConfig.showBlockPreview(), value, lastConfig.maxRenderDistance());

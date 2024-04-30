@@ -50,7 +50,7 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<ClientConf
                         config.get(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW)),
                         config.get(List.of(KEY_RENDER, KEY_MAX_RENDER_VOLUME)),
 //                        config.get(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE))
-                        0
+                        128
                 ),
                 new PatternConfig(
                         config.<List<Config>>get(KEY_PATTERNS).stream().map(PatternConfigSerializer.INSTANCE::deserialize).toList()
