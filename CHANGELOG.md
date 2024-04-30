@@ -2,6 +2,18 @@
 
 ----------
 
+### 2.4.0
+
+- Add side length uniform feature ([#109](https://github.com/huskcasaca/effortless/pull/109))
+- Add block interaction feature ([#111](https://github.com/huskcasaca/effortless/pull/111))
+- Fix crash in RadialTransformer ([#112](https://github.com/huskcasaca/effortless/pull/112))
+- Add more client config options ([#113](https://github.com/huskcasaca/effortless/pull/113))
+- Add more build tooltip ([#114](https://github.com/huskcasaca/effortless/pull/114))
+- Rename to Effortless Structure ([#115](https://github.com/huskcasaca/effortless/pull/115))
+- Add Spanish and French translations ([#116](https://github.com/huskcasaca/effortless/pull/116))
+
+----------
+
 ### 2.3.3
 
 - Fix crash on lantern ([#102](https://github.com/huskcasaca/effortless/pull/102))
