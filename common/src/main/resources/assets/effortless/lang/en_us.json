@@ -1,7 +1,7 @@
 {
-  "effortless.name": "Effortless",
+  "effortless.name": "Effortless Structure",
 
-  "effortless.settings.title": "Effortless Building Settings",
+  "effortless.settings.title": "Effortless Structure Settings",
   "effortless.build_settings.title": "Build Settings",
   "effortless.render_settings.title": "Render Settings",
   "effortless.pattern_settings.title": "Pattern Settings",
@@ -49,7 +49,7 @@
   "effortless.render_settings.max_render_volume": "Max Render Volume",
   "effortless.render_settings.max_render_distance": "Max Render Distance",
 
-  "effortless.message.permissions.no_permission": "You are not allowed to use effortless! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Use Mod]§r!",
+  "effortless.message.permissions.no_permission": "You are not allowed to use Effortless Structure! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Use Mod]§r!",
   "effortless.message.permissions.no_place_permission": "You are not allowed to place blocks! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Place Blocks]§r!",
   "effortless.message.permissions.no_break_permission": "You are not allowed to break blocks! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Break Blocks]§r!",
   "effortless.message.building.build_canceled": "Build Canceled",
@@ -98,7 +98,7 @@
   "effortless.render.options.outlines": "Outlines",
   "effortless.render.options.block_tex": "Block Texture",
   "effortless.render.options.dissolve_shader": "Dissolve Shader",
-  "key.effortless.category": "Effortless Building",
+  "key.effortless.category": "Effortless Structure",
   "key.effortless.settings.desc": "Basic Settings",
   "key.effortless.build_mode_settings.desc": "Open Build Mode Settings",
   "key.effortless.pattern_settings.desc": "Open Pattern Settings",
@@ -247,8 +247,8 @@
   "commands.effortless.undo_stack_size.failure": "Failed to set undoStackSize of %s",
   "commands.reserved": "NIE",
 
-  "effortless.building.title": "Effortless Building",
-  "effortless.building.radial.title": "Effortless Building",
+  "effortless.building.title": "Effortless Structure",
+  "effortless.building.radial.title": "Effortless Structure",
   "effortless.building.settings.title": "Build Mode Settings",
 
   "effortless.randomizer.settings.title": "Randomizer Settings",
