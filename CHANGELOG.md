@@ -2,6 +2,12 @@
 
 ----------
 
+### 2.4.1
+
+- Fix statistics award issue ([#117](https://github.com/huskcasaca/effortless/pull/117))
+
+----------
+
 ### 2.4.0
 
 - Add side length uniform feature ([#109](https://github.com/huskcasaca/effortless/pull/109))
