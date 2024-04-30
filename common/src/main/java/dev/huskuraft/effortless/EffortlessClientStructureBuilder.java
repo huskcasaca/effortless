@@ -53,7 +53,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
-import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
+import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 import dev.huskuraft.effortless.session.config.SessionConfig;
 
@@ -490,12 +490,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         var texts = new ArrayList<Tuple2<Text, Text>>();
         texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
-        texts.add(new Tuple2<>(AbstractRadialScreen.button(context.replaceMode()).getDisplayCategory().withStyle(TextStyle.WHITE), AbstractRadialScreen.button(context.replaceMode()).getDisplayName().withStyle(TextStyle.GOLD)));
+        texts.add(new Tuple2<>(AbstractWheelScreen.button(context.replaceMode()).getDisplayCategory().withStyle(TextStyle.WHITE), AbstractWheelScreen.button(context.replaceMode()).getDisplayName().withStyle(TextStyle.GOLD)));
 
         for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
             if (option.isEmpty()) continue;
-            var button = AbstractRadialScreen.button(option.get());
+            var button = AbstractWheelScreen.button(option.get());
             texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
         }
         if (!context.pattern().equals(Pattern.DISABLED)) {

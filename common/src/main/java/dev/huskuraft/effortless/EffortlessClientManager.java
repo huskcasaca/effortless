@@ -23,10 +23,10 @@ import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
 import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
 import dev.huskuraft.effortless.renderer.tooltip.TooltipRenderer;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternRadialScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternWheelScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
-import dev.huskuraft.effortless.screen.structure.EffortlessModeRadialScreen;
+import dev.huskuraft.effortless.screen.structure.EffortlessBuildModeWheelScreen;
 import dev.huskuraft.effortless.screen.test.EffortlessTestScreen;
 
 public final class EffortlessClientManager implements ClientManager {
@@ -158,13 +158,13 @@ public final class EffortlessClientManager implements ClientManager {
         }
 
         if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
-            if (!(getRunningClient().getPanel() instanceof EffortlessModeRadialScreen)) {
-                new EffortlessModeRadialScreen(getEntrance(), EffortlessKeys.BUILD_MODE_RADIAL).attach();
+            if (!(getRunningClient().getPanel() instanceof EffortlessBuildModeWheelScreen)) {
+                new EffortlessBuildModeWheelScreen(getEntrance(), EffortlessKeys.BUILD_MODE_RADIAL).attach();
             }
         }
         if (EffortlessKeys.PATTERN_RADIAL.getBinding().isDown()) {
-            if (!(getRunningClient().getPanel() instanceof EffortlessPatternRadialScreen)) {
-                new EffortlessPatternRadialScreen(getEntrance(), EffortlessKeys.PATTERN_RADIAL).attach();
+            if (!(getRunningClient().getPanel() instanceof EffortlessPatternWheelScreen)) {
+                new EffortlessPatternWheelScreen(getEntrance(), EffortlessKeys.PATTERN_RADIAL).attach();
             }
         }
         if (EffortlessKeys.BUILD_MODE_SETTINGS.getBinding().consumeClick()) {
@@ -250,8 +250,8 @@ public final class EffortlessClientManager implements ClientManager {
 
     public void onRenderGui(Renderer renderer, float deltaTick) {
         if (getRunningClient().getPanel() != null
-                && !(getRunningClient().getPanel() instanceof EffortlessModeRadialScreen)
-                && !(getRunningClient().getPanel() instanceof EffortlessPatternRadialScreen)) {
+                && !(getRunningClient().getPanel() instanceof EffortlessBuildModeWheelScreen)
+                && !(getRunningClient().getPanel() instanceof EffortlessPatternWheelScreen)) {
             return;
         }
 

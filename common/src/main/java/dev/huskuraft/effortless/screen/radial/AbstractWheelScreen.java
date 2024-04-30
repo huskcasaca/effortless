@@ -20,7 +20,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.Option;
 
-public class AbstractRadialScreen<S, B> extends AbstractScreen {
+public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     private static final float FADE_SPEED = 0.5f;
     private static final int WATERMARK_TEXT_COLOR = 0x8d7f7f7f;
@@ -61,7 +61,7 @@ public class AbstractRadialScreen<S, B> extends AbstractScreen {
     // TODO: 20/2/23 rename
     private float visibility = 1;
 
-    public AbstractRadialScreen(Entrance entrance, Text text) {
+    public AbstractWheelScreen(Entrance entrance, Text text) {
         super(entrance, text);
     }
 

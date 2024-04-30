@@ -1,8 +1,12 @@
-package dev.huskuraft.effortless.screen.structure;
+package dev.huskuraft.effortless.screen.pattern;
 
-import java.util.Arrays;
+import java.awt.*;
+import java.util.List;
+import java.util.stream.Stream;
 
+import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
@@ -10,32 +14,47 @@ import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.Option;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.history.UndoRedo;
+import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
-import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.screen.radial.AbstractRadialScreen;
+import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
+import dev.huskuraft.effortless.screen.structure.EffortlessBuildModeWheelScreen;
 
-public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, Option> {
+public class EffortlessPatternWheelScreen extends AbstractWheelScreen<Pattern, Option> {
 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
     private static final Button<Option> SETTING_OPTION = button(Settings.GENERAL);
+    private static final Button<Option> REPLACE_OPTION = button(ReplaceMode.DISABLED);
 
     private final Key assignedKey;
 
-    public EffortlessModeRadialScreen(Entrance entrance, Key assignedKey) {
-        super(entrance, Text.translate("effortless.building.radial.title"));
+    public EffortlessPatternWheelScreen(Entrance entrance, Key assignedKey) {
+        super(entrance, Text.translate("effortless.pattern.radial.title"));
         this.assignedKey = assignedKey;
     }
 
-    public static Slot<BuildMode> slot(BuildMode mode) {
+    public static Slot<Pattern> slot(Pattern pattern) {
+
+        if (pattern == Pattern.DISABLED) return slot(
+                pattern.id(),
+                pattern.name(),
+                ResourceLocation.of(Effortless.MOD_ID, "textures/mode/disabled.png"),
+                new Color(0.25f, 0.25f, 0.25f, 0.5f),
+                pattern);
+        if (pattern == Pattern.EMPTY) return slot(
+                pattern.id(),
+                pattern.name(),
+                ResourceLocation.of(Effortless.MOD_ID, "textures/mode/empty.png"),
+                new Color(0.25f, 0.25f, 0.25f, 0.5f),
+                pattern);
         return slot(
-                mode,
-                mode.getDisplayName(),
-                mode.getIcon(),
-                mode.getTintColor(),
-                mode);
+                pattern.id(),
+                pattern.name(),
+                ResourceLocation.of(Effortless.MOD_ID, "textures/mode/sphere.png"),
+                new Color(0.25f, 0.25f, 0.25f, 0.5f),
+                pattern);
     }
 
     @Override
@@ -45,6 +64,26 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
 
     public Key getAssignedKey() {
         return assignedKey;
+    }
+
+    private void selectPattern(Pattern pattern) {
+        getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), pattern);
+    }
+
+    private void selectBuildFeature(SingleSelectFeature feature) {
+        getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), feature);
+    }
+
+    private void selectBuildFeature(MultiSelectFeature feature) {
+        getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), feature);
+    }
+
+    private List<Slot<Pattern>> getSlots() {
+        var settingPatterns = getEntrance().getConfigStorage().get().patternConfig().patterns();
+        return Stream.concat(
+                Stream.concat(Stream.of(Pattern.DISABLED), settingPatterns.stream()),
+                Stream.generate(() -> Pattern.EMPTY).limit(Math.max(12 - settingPatterns.size() - 1, 0))
+        ).map(EffortlessPatternWheelScreen::slot).toList();
     }
 
     @Override
@@ -60,11 +99,21 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
     public void onCreate() {
         super.onCreate();
 
-        setRadialSlots(
-                Arrays.stream(BuildMode.values()).map(EffortlessModeRadialScreen::slot).toList()
+        setLeftButtons(
+                buttonSet(REDO_OPTION, UNDO_OPTION),
+                buttonSet(SETTING_OPTION, REPLACE_OPTION)
         );
-        setRadialSelectResponder(slot -> {
-            getEntrance().getStructureBuilder().setBuildMode(getEntrance().getClient().getPlayer(), slot.getContent());
+
+        setRadialSlots(
+                getSlots()
+        );
+        setRadialSelectResponder(entry -> {
+            if (entry.getContent() == Pattern.EMPTY) {
+                new EffortlessPatternSettingsScreen(getEntrance()).attach();
+
+            } else {
+                selectPattern(entry.getContent());
+            }
         });
         setRadialOptionSelectResponder(entry -> {
             if (entry.getContent() instanceof Settings settings) {
@@ -105,17 +154,13 @@ public class EffortlessModeRadialScreen extends AbstractRadialScreen<BuildMode, 
     @Override
     public void onReload() {
         var context = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer());
-
-        setSelectedSlots(slot(context.buildMode()));
+        setSelectedSlots(slot(context.pattern()));
         setLeftButtons(
                 buttonSet(REDO_OPTION, UNDO_OPTION),
                 buttonSet(SETTING_OPTION, button(context.replaceMode()))
         );
-        setRightButtons(
-                Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map(EffortlessModeRadialScreen::<Option>button).toList())).toList()
-        );
         setSelectedButtons(
-                context.buildFeatures().stream().map(EffortlessModeRadialScreen::<Option>button).toList()
+                context.buildFeatures().stream().map(EffortlessBuildModeWheelScreen::<Option>button).toList()
         );
     }
 
