@@ -17,7 +17,6 @@ import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResu
 import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationRenderer;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationRenderer;
 import dev.huskuraft.effortless.renderer.opertaion.children.OperationRenderer;
-import dev.huskuraft.effortless.renderer.opertaion.children.RendererParams;
 
 public class OperationsRenderer {
 
@@ -48,22 +47,11 @@ public class OperationsRenderer {
         }
     }
 
-    private boolean isShowBlockPreview() {
-        return getEntrance().getConfigStorage().get().renderSettings().showBlockPreview();
-    }
-
-    private int getMaxRenderBlocks() {
-        return 1024;
-    }
-
-    private int getMaxRenderDistance() {
-        return getEntrance().getClientManager().getRunningClient().getOptions().renderDistance() * 16 + 16;
-    }
-
     private void registerRenderers() {
         registerRenderer(BlockPlaceOperationResult.class, BlockOperationRenderer::new);
         registerRenderer(BlockBreakOperationResult.class, BlockOperationRenderer::new);
         registerRenderer(BlockInteractOperationResult.class, BlockOperationRenderer::new);
+
         registerRenderer(BatchOperationResult.class, BatchOperationRenderer::new);
     }
 
@@ -83,7 +71,10 @@ public class OperationsRenderer {
     }
 
     public void render(Renderer renderer, float deltaTick) {
-        var renderParams = new RendererParams.Default(isShowBlockPreview(), getMaxRenderBlocks(), getMaxRenderDistance());
+        var renderParams = new OperationRenderer.RenderContext.Default(
+                getEntrance().getConfigStorage().get().renderConfig().showBlockPreview(),
+                getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume(),
+                getEntrance().getClientManager().getRunningClient().getOptions().renderDistance() * 16 + 16);
         results.forEach((k, v) -> {
             v.getValue().render(renderer, renderParams, deltaTick);
         });

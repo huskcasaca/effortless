@@ -7,20 +7,21 @@ import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.ConfigSpec;
 
 import dev.huskuraft.effortless.api.config.ConfigSerializer;
-import dev.huskuraft.effortless.building.config.PatternSettings;
-import dev.huskuraft.effortless.building.config.RenderSettings;
-import dev.huskuraft.effortless.building.config.RootSettings;
+import dev.huskuraft.effortless.building.config.ClientConfig;
+import dev.huskuraft.effortless.building.config.PatternConfig;
+import dev.huskuraft.effortless.building.config.RenderConfig;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 
-public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettings> {
+public class RootSettingsConfigSerializer implements ConfigSerializer<ClientConfig> {
 
     private static final String KEY_RENDER = "render";
 
     private static final String KEY_SHOW_OTHER_PLAYERS_BUILD = "showOtherPlayersBuild";
+    private static final String KEY_SHOW_OTHER_PLAYERS_BUILD_TOOLTIPS = "showOtherPlayersBuildTooltips";
     private static final String KEY_SHOW_BLOCK_PREVIEW = "showBlockPreview";
-    private static final String KEY_MAX_RENDER_BLOCKS = "maxRenderBlocks";
+    private static final String KEY_MAX_RENDER_VOLUME = "maxRenderVolume";
     private static final String KEY_MAX_RENDER_DISTANCE = "maxRenderDistance";
 
     private static final String KEY_PATTERNS = "patterns";
@@ -29,28 +30,29 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettin
     @Override
     public ConfigSpec getSpec(Config config) {
         var spec = new ConfigSpec();
-        spec.define(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD), () -> getDefault().renderSettings().showOtherPlayersBuild(), Boolean.class::isInstance);
-        spec.define(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW), () -> getDefault().renderSettings().showBlockPreview(), Boolean.class::isInstance);
-//        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS), () -> getDefault().renderSettings().maxRenderBlocks(), RenderSettings.MIN_MAX_RENDER_BLOCKS, RenderSettings.MAX_MAX_RENDER_BLOCKS);
-//        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), () -> getDefault().renderSettings().maxRenderDistance(), RenderSettings.MIN_MAX_RENDER_DISTANCE, RenderSettings.MAX_MAX_RENDER_DISTANCE);
-        spec.defineList(KEY_PATTERNS, () -> getDefault().patternSettings().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
+        spec.define(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD), () -> getDefault().renderConfig().showOtherPlayersBuild(), Boolean.class::isInstance);
+        spec.define(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD_TOOLTIPS), () -> getDefault().renderConfig().showOtherPlayersBuildTooltips(), Boolean.class::isInstance);
+        spec.define(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW), () -> getDefault().renderConfig().showBlockPreview(), Boolean.class::isInstance);
+        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_VOLUME), getDefault().renderConfig().maxRenderVolume(), RenderConfig.MAX_RENDER_VOLUME_MIN, RenderConfig.MAX_RENDER_VOLUME_MAX);
+//        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), () -> getDefault().renderConfig().maxRenderDistance(), RenderConfig.MIN_MAX_RENDER_DISTANCE, RenderConfig.MAX_MAX_RENDER_DISTANCE);
+        spec.defineList(KEY_PATTERNS, () -> getDefault().patternConfig().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
         spec.defineList(KEY_TRANSFORMERS, () -> getDefault().transformerPresets().arrayTransformers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
         return spec;
     }
 
     @Override
-    public RootSettings deserialize(Config config) {
+    public ClientConfig deserialize(Config config) {
         validate(config);
-        return new RootSettings(
-                new RenderSettings(
+        return new ClientConfig(
+                new RenderConfig(
                         config.get(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD)),
+                        config.get(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD_TOOLTIPS)),
                         config.get(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW)),
-//                        config.get(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS)),
+                        config.get(List.of(KEY_RENDER, KEY_MAX_RENDER_VOLUME)),
 //                        config.get(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE))
-                        0,
-                        0
+                        128
                 ),
-                new PatternSettings(
+                new PatternConfig(
                         config.<List<Config>>get(KEY_PATTERNS).stream().map(PatternConfigSerializer.INSTANCE::deserialize).toList()
                 ),
                 new TransformerPresets(
@@ -61,23 +63,23 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<RootSettin
     }
 
     @Override
-    public Config serialize(RootSettings settings) {
+    public Config serialize(ClientConfig settings) {
         var config = CommentedConfig.inMemory();
-        config.set(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD), settings.renderSettings().showOtherPlayersBuild());
-        config.set(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW), settings.renderSettings().showBlockPreview());
-//        config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_BLOCKS), settings.renderSettings().maxRenderBlocks());
-//        config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), settings.renderSettings().maxRenderDistance());
-        config.set(KEY_PATTERNS, settings.patternSettings().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList());
+        config.set(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD), settings.renderConfig().showOtherPlayersBuild());
+        config.set(List.of(KEY_RENDER, KEY_SHOW_BLOCK_PREVIEW), settings.renderConfig().showBlockPreview());
+        config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_VOLUME), settings.renderConfig().maxRenderVolume());
+//        config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), settings.renderConfig().maxRenderDistance());
+        config.set(KEY_PATTERNS, settings.patternConfig().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList());
         config.set(KEY_TRANSFORMERS, settings.transformerPresets().transformers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList());
         validate(config);
         return config;
     }
 
     @Override
-    public RootSettings getDefault() {
-        return new RootSettings(
-                new RenderSettings(),
-                new PatternSettings(
+    public ClientConfig getDefault() {
+        return new ClientConfig(
+                new RenderConfig(),
+                new PatternConfig(
                         Pattern.getPatternPresets()),
                 new TransformerPresets(
                         Transformer.getDefaultTransformers())

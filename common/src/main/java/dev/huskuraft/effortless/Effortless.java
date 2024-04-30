@@ -17,7 +17,7 @@ public class Effortless implements Entrance {
     private final CommonEventRegistry commonEventRegistry = (CommonEventRegistry) EventRegister.getCommon();
     private final EffortlessNetworkChannel networkChannel = new EffortlessNetworkChannel(this);
     private final EffortlessStructureBuilder structureBuilder = new EffortlessStructureBuilder(this);
-    private final EffortlessSessionConfigStorage sessionConfigStorage = new EffortlessSessionConfigStorage(this);
+    private final EffortlessConfigStorage sessionConfigStorage = new EffortlessConfigStorage(this);
     private final EffortlessSessionManager sessionManager = new EffortlessSessionManager(this);
     private final EffortlessServerManager serverManager = new EffortlessServerManager(this);
 
@@ -37,7 +37,7 @@ public class Effortless implements Entrance {
         return structureBuilder;
     }
 
-    public EffortlessSessionConfigStorage getSessionConfigStorage() {
+    public EffortlessConfigStorage getSessionConfigStorage() {
         return sessionConfigStorage;
     }
 

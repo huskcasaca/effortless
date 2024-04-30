@@ -27,14 +27,14 @@ public class BlockOperationRenderer implements OperationRenderer {
     }
 
     @Override
-    public void render(Renderer renderer, RendererParams rendererParams, float deltaTick) {
-        if (!rendererParams.showBlockPreview()) {
+    public void render(Renderer renderer, RenderContext renderContext, float deltaTick) {
+        if (!renderContext.showBlockPreview()) {
             return;
         }
 
         var operation = result.getOperation();
 
-        if (rendererParams.maxRenderBlocks() < operation.getContext().getBoxVolume()) {
+        if (renderContext.maxRenderVolume() < operation.getContext().getBoxVolume()) {
             return;
         }
 
@@ -57,7 +57,7 @@ public class BlockOperationRenderer implements OperationRenderer {
         }
 
         var distance = player.getPosition().distance(blockPosition.toVector3d());
-        if (distance > rendererParams.maxRenderDistance()) {
+        if (distance > renderContext.maxRenderDistance()) {
             return;
         }
 

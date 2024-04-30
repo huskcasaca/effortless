@@ -4,7 +4,7 @@ import java.util.List;
 
 import dev.huskuraft.effortless.building.pattern.Pattern;
 
-public record PatternSettings(
+public record PatternConfig(
         List<Pattern> patterns
 ) {
 

@@ -43,8 +43,10 @@
   "effortless.global_general_settings.items": "%s Item(s)",
 
   "effortless.render_settings.show_other_players_build": "Show Other Players Build",
+  "effortless.render_settings.show_other_players_build_tooltips": "Show Other Players Build Tooltips",
   "effortless.render_settings.show_block_preview": "Show Block Preview",
   "effortless.render_settings.max_render_blocks": "Max Render Blocks",
+  "effortless.render_settings.max_render_volume": "Max Render Volume",
   "effortless.render_settings.max_render_distance": "Max Render Distance",
 
   "effortless.message.permissions.no_permission": "You are not allowed to use effortless! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Use Mod]§r!",

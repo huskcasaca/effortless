@@ -9,14 +9,14 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.config.PatternSettings;
-import dev.huskuraft.effortless.building.config.RootSettings;
+import dev.huskuraft.effortless.building.config.ClientConfig;
+import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 
 public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
-    private final Consumer<PatternSettings> consumer;
-    private PatternSettings config;
+    private final Consumer<PatternConfig> consumer;
+    private PatternConfig config;
     private TextWidget titleTextWidget;
     private PatternList entries;
     private Button upButton;
@@ -33,10 +33,10 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         super(entrance, Text.translate("effortless.pattern.settings.title"));
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-            getEntrance().getConfigStorage().update(config -> new RootSettings(config.renderSettings(), this.config, config.transformerPresets()));
+            getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), this.config, config.transformerPresets()));
 
         };
-        this.config = getEntrance().getConfigStorage().get().patternSettings();
+        this.config = getEntrance().getConfigStorage().get().patternConfig();
     }
 
     @Override
@@ -129,7 +129,7 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
         this.newButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
         this.resetButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
 
-        this.config = new PatternSettings(
+        this.config = new PatternConfig(
                 entries.items()
         );
     }

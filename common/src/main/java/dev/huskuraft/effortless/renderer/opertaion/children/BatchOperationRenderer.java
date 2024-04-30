@@ -15,9 +15,9 @@ public final class BatchOperationRenderer implements OperationRenderer {
     }
 
     @Override
-    public void render(Renderer renderer, RendererParams rendererParams, float deltaTick) {
+    public void render(Renderer renderer, RenderContext renderContext, float deltaTick) {
         for (var preview : previews) {
-            preview.render(renderer, rendererParams, deltaTick);
+            preview.render(renderer, renderContext, deltaTick);
         }
     }
 

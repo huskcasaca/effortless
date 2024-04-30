@@ -107,9 +107,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
 //            }
 
-            showBuildContextResult(context.getId(), context, result);
-//            showOperationResultTooltip(context.getId(), 1024, player, result);
-//            showContextTooltip(context.getId(), 1024, context);
+            showBuildContextResult(context.getId(), 1024, player, context, result);
             showBuildTooltip(context.getId(), 1024, player, context, result);
             setContext(player, context.newInteraction());
 
@@ -313,12 +311,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void onContextReceived(Player player, Context context) {
         var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
 
-        player.getId();
-
-        showBuildContextResult(player.getId(), context, result);
-
-//        showOperationResultTooltip(context.getId(), 1, player, result);
-
+        showBuildContextResult(player.getId(), 1, player, context, result);
         showBuildTooltip(context.getId(), 1, player, context, result);
     }
 
@@ -384,11 +377,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         player.getId();
 
-        showBuildContextResult(player.getId(), context, result);
-
-//        showOperationResultTooltip(player.getId(), 0, player, result);
-//        showContextTooltip(player.getId(), 0, context);
-
+        showBuildContextResult(player.getId(), 0, player, context, result);
         showBuildTooltip(player.getId(), 0, player, context, result);
         if (!getContext(player).isIdle()) {
             showBuildMessage(player, context);
@@ -418,7 +407,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         return new UUID(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits() + tag.hashCode());
     }
 
-    public void showBuildContextResult(UUID uuid, Context context, OperationResult result) {
+    public void showBuildContextResult(UUID uuid, int priority, Player player, Context context, OperationResult result) {
+        if (player.getId() != getEntrance().getClient().getPlayer().getId()) {
+            if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuild()) {
+                return;
+            }
+        }
         getEntrance().getClientManager().getPatternRenderer().showPattern(uuid, context);
 
         if (context.interactions().isMissing() || context.interactions().isEmpty()) {
@@ -454,6 +448,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildTooltip(UUID id, int priority, Player player, Context context, OperationResult result) {
+        if (player.getId() != getEntrance().getClient().getPlayer().getId()) {
+            if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuildTooltips()) {
+                return;
+            }
+        }
         var entries = new ArrayList<>();
 
         var texts = new ArrayList<Tuple2<Text, Text>>();

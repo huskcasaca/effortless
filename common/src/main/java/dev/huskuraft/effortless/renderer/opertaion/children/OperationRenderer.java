@@ -4,6 +4,19 @@ import dev.huskuraft.effortless.api.renderer.Renderer;
 
 public interface OperationRenderer {
 
-    void render(Renderer renderer, RendererParams rendererParams, float deltaTick);
+    void render(Renderer renderer, RenderContext renderContext, float deltaTick);
 
+    interface RenderContext {
+
+        boolean showBlockPreview();
+
+        int maxRenderVolume();
+
+        int maxRenderDistance();
+
+        record Default(boolean showBlockPreview, int maxRenderVolume, int maxRenderDistance) implements RenderContext {
+        }
+
+
+    }
 }
