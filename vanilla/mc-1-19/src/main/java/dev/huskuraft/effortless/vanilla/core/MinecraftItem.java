@@ -38,7 +38,7 @@ public record MinecraftItem(net.minecraft.world.item.Item referenceValue) implem
     }
 
     @Override
-    public InteractionResult use(Player player, BlockInteraction blockInteraction) {
+    public InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction) {
         return MinecraftConvertor.toPlatformInteractionResult(referenceValue().useOn(new UseOnContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction))));
     }
 }

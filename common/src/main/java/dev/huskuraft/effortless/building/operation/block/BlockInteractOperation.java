@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.api.core.BucketItem;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.building.Context;
@@ -82,34 +83,18 @@ public class BlockInteractOperation extends BlockOperation {
         // compatible layer
         var originalItemStack = player.getItemStack(getHand());
 
-//        if (originalItemStack.getItem() instanceof BucketItem bucketItem) {
-//            if (bucketItem.isEmpty()) {
-//                var bucketCollectable = getBlockState().getBlock().getBucketCollectable();
-//                if (bucketCollectable != null) {
-//                    var collected = bucketCollectable.pickupBlock(getWorld(), getPlayer(), getBlockPosition(), getBlockState());
-//                    if (!collected.isEmpty()) {
-//                        player.awardStat(StatTypes.ITEM_USED.get(bucketItem));
-//                        return BlockOperationResult.Type.SUCCESS;
-//                    }
-//                }
-//            } else {
-//                if (getBlockState().getBlock().getLiquidPlaceable() != null || getBlockState().isAir() || getBlockState().canReplace(bucketItem.getContent())) {
-//                    if (bucketItem.useContent(getWorld(), getPlayer(), getBlockPosition(), getInteraction())) {
-//                        bucketItem.useExtraContent(getWorld(), getPlayer(), getBlockPosition(), originalItemStack);
-//                        player.awardStat(StatTypes.ITEM_USED.get(bucketItem));
-//                        return BlockOperationResult.Type.SUCCESS;
-//                    }
-//                }
-//            }
-//            return BlockOperationResult.Type.FAIL_UNKNOWN;
-//        }
-
         if (!(originalItemStack.getItem() instanceof BucketItem) && blockState.isAir()) {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
 
         player.setItemStack(getHand(), selectedItemStack);
-        var interacted = player.useItem(getInteraction());
+        var interacted = getWorld().getBlockState(interaction.getBlockPosition()).use(player, interaction).consumesAction();
+        if (!interacted) {
+            interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();
+            if (interacted && !world.isClient()) {
+                player.awardStat(StatTypes.ITEM_USED.get(selectedItemStack.getItem()));
+            }
+        }
         player.setItemStack(getHand(), originalItemStack);
         if (!interacted) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
