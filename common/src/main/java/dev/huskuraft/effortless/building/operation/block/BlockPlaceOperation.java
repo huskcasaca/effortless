@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.building.Context;
@@ -112,12 +113,14 @@ public class BlockPlaceOperation extends BlockOperation {
         // compatible layer
         var originalItemStack = player.getItemStack(getHand());
         player.setItemStack(getHand(), itemStack);
-        var placed = blockItem.place(player, getInteraction()).consumesAction();
+        var placed = blockItem.placeOnBlock(player, getInteraction()).consumesAction();
         player.setItemStack(getHand(), originalItemStack);
 
         if (!placed) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
+        player.awardStat(StatTypes.ITEM_USED.get(itemStack.getItem()));
+
 
         // FIXME: 29/4/24
         if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockState(getBlockPosition(), blockState)) {

@@ -16,7 +16,7 @@ public interface BucketItem extends Item {
     }
 
     @Override
-    default InteractionResult use(Player player, BlockInteraction blockInteraction) {
+    default InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction) {
         var itemStack = player.getItemStack(blockInteraction.getHand());
         var blockState = player.getWorld().getBlockState(blockInteraction.getBlockPosition());
 

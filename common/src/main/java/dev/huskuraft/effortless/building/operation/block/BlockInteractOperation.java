@@ -90,7 +90,7 @@ public class BlockInteractOperation extends BlockOperation {
         player.setItemStack(getHand(), selectedItemStack);
         var interacted = getWorld().getBlockState(interaction.getBlockPosition()).use(player, interaction).consumesAction();
         if (!interacted) {
-            interacted = player.getItemStack(interaction.getHand()).getItem().use(player, interaction).consumesAction();
+            interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();
             if (interacted && !world.isClient()) {
                 player.awardStat(StatTypes.ITEM_USED.get(selectedItemStack.getItem()));
             }

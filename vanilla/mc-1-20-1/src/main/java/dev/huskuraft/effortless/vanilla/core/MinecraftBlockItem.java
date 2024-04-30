@@ -27,12 +27,12 @@ public record MinecraftBlockItem(net.minecraft.world.item.BlockItem referenceVal
     }
 
     @Override
-    public InteractionResult use(Player player, BlockInteraction blockInteraction) {
-        return new MinecraftItem(referenceValue()).use(player, blockInteraction);
+    public InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction) {
+        return new MinecraftItem(referenceValue()).useOnBlock(player, blockInteraction);
     }
 
     @Override
-    public InteractionResult place(Player player, BlockInteraction blockInteraction) {
+    public InteractionResult placeOnBlock(Player player, BlockInteraction blockInteraction) {
         return MinecraftConvertor.toPlatformInteractionResult(referenceValue().place(new BlockPlaceContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), player.getItemStack(blockInteraction.getHand()).reference(), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction))));
     }
 }

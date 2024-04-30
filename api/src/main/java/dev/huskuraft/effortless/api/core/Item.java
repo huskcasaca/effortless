@@ -21,6 +21,6 @@ public interface Item extends PlatformReference {
 
     ResourceLocation getId();
 
-    InteractionResult use(Player player, BlockInteraction blockInteraction);
+    InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction);
 
 }

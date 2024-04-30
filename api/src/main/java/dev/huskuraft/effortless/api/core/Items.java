@@ -1362,8 +1362,8 @@ public enum Items implements Item {
     }
 
     @Override
-    public InteractionResult use(Player player, BlockInteraction blockInteraction) {
-        return item().use(player, blockInteraction);
+    public InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction) {
+        return item().useOnBlock(player, blockInteraction);
     }
 
     @Override

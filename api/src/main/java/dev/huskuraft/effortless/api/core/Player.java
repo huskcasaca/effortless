@@ -40,7 +40,7 @@ public interface Player extends Entity {
 
     default boolean useItem(BlockInteraction interaction) {
         return getWorld().getBlockState(interaction.getBlockPosition()).use(this, interaction).consumesAction()
-                || getItemStack(interaction.getHand()).getItem().use(this, interaction).consumesAction();
+                || getItemStack(interaction.getHand()).getItem().useOnBlock(this, interaction).consumesAction();
     }
 
     void awardStat(Stat<?> stat, int increment);
