@@ -249,6 +249,12 @@ public final class EffortlessClientManager implements ClientManager {
     }
 
     public void onRenderGui(Renderer renderer, float deltaTick) {
+        if (getRunningClient().getPanel() != null
+                && !(getRunningClient().getPanel() instanceof EffortlessModeRadialScreen)
+                && !(getRunningClient().getPanel() instanceof EffortlessPatternRadialScreen)) {
+            return;
+        }
+
         getTooltipRenderer().renderGuiOverlay(renderer, deltaTick);
 //
 //        var centerX = renderer.window().getGuiScaledWidth() / 2 - 1;

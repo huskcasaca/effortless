@@ -37,28 +37,28 @@ public class TooltipRenderer {
         return (EffortlessClient) entrance;
     }
 
-    public void showMessages(Object id, int priority, List<Text> texts) {
-        showEntry(id, priority, new ComponentsEntry(texts));
-    }
+//    public void showMessages(Object id, int priority, List<Text> texts) {
+//        showEntry(id, priority, new ComponentsEntry(texts));
+//    }
+//
+//    public void showMessagePairs(Object id, int priority, List<Tuple2<Text, Text>> texts) {
+//        showEntry(id, priority, new ComponentPairEntry(texts));
+//    }
+//
+//    public void showTitledItems(Object id, int priority, Text title, List<ItemStack> groups) {
+//        showEntry(id, priority, new TitledItemsEntry(title, groups));
+//    }
+//
+//    public void showItems(Object id, int priority, Collection<ItemStack> items) {
+//        showEntry(id, priority, new ItemsEntry(items));
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    public void showEmptyEntry(Object id, int priority) {
+//        showEntry(id, priority, new EmptyEntry());
+//    }
 
-    public void showMessagePairs(Object id, int priority, List<Tuple2<Text, Text>> texts) {
-        showEntry(id, priority, new ComponentPairEntry(texts));
-    }
-
-    public void showTitledItems(Object id, int priority, Text title, List<ItemStack> groups) {
-        showEntry(id, priority, new TitledItemsEntry(title, groups));
-    }
-
-    public void showItems(Object id, int priority, Collection<ItemStack> items) {
-        showEntry(id, priority, new ItemsEntry(items));
-    }
-
-    @SuppressWarnings("unchecked")
-    public void showEmptyEntry(Object id, int priority) {
-        showEntry(id, priority, new EmptyEntry());
-    }
-
-    public void showGroupEntry(Object id, int priority, List<Object> entry) {
+    public void showGroupEntry(Object id, int priority, List<Object> entry, boolean immediate) {
         var entries = entry.stream().map(object -> {
             if (object instanceof List<?> list && !list.isEmpty()) {
                 if (list.get(0) instanceof Text text) {
@@ -77,41 +77,88 @@ public class TooltipRenderer {
             }
             return null;
         }).filter(Objects::nonNull).toList();
-        showEntry(id, priority, new GroupEntry(entries));
+        showEntry(id, priority, new GroupEntry(entries), immediate);
     }
 
-    private void showEntry(Object id, int priority, Entry entry) {
-        prioritiedMap.compute(priority, (k, v) -> {
-            if (v == null) {
-                v = new LinkedHashMap<>();
-            }
-            v.put(id, entry);
-            return v;
-        });
+    public void showEntry(Object id, int priority, Entry entry, boolean immediate) {
+        synchronized (prioritiedMap) {
+            prioritiedMap.compute(priority, (k, entry1) -> {
+                if (entry1 == null) {
+                    entry1 = new LinkedHashMap<>();
+                }
+                entry1.compute(id, (k1, v1) -> {
+                    entry.ticksAlive = v1 != null ? v1.ticksAlive : 0;
+                    if (immediate) {
+                        entry.ticksAlive = Entry.FADE_TICKS;
+                    }
+                    return entry;
+                });
+                return entry1;
+            });
+        }
     }
+
+    public void hideEntry(Object id, int priority, boolean immediate) {
+        synchronized (prioritiedMap) {
+            if (immediate) {
+                prioritiedMap.getOrDefault(priority, new LinkedHashMap<>()).remove(id);
+            } else {
+                prioritiedMap.getOrDefault(priority, new LinkedHashMap<>()).computeIfPresent(id, (k, entry) -> {
+                    entry.ticksTillRemoval = MathUtils.min(entry.ticksTillRemoval, Entry.FADE_TICKS);
+                    entry.ticksAlive = Entry.FADE_TICKS;
+                    return entry;
+                });
+            }
+        }
+    }
+
+    public void hideAllEntries(boolean immediate) {
+        synchronized (prioritiedMap) {
+            if (immediate) {
+                prioritiedMap.clear();
+            } else {
+                for (var value : prioritiedMap.values()) {
+                    for (var entry : value.values()) {
+                        entry.ticksTillRemoval = MathUtils.min(entry.ticksTillRemoval, Entry.FADE_TICKS);
+                        entry.ticksAlive = Entry.FADE_TICKS;
+                    }
+                }
+            }
+        }
+    }
+//
+//    public void resetEntry(Object id, int priority) {
+//        synchronized (prioritiedMap) {
+//            prioritiedMap.getOrDefault(priority, new LinkedHashMap<>()).computeIfPresent(id, (k, v) -> {
+//                v.ticksTillRemoval = Entry.ALIVE_TICKS;
+//                v.ticksAlive = 0;
+//                return v;
+//            });
+//        }
+//    }
 
 
     public void tick() {
-        var iterator = prioritiedMap.values().iterator();
-        while (iterator.hasNext()) {
-            var map = iterator.next();
-            for (var iterator1 = map.values().iterator(); iterator1.hasNext(); ) {
-                var entry = iterator1.next();
-                entry.tick();
-                if (!entry.isAlive()) {
-                    iterator1.remove();
+
+        synchronized (prioritiedMap) {
+            var iterator = prioritiedMap.values().iterator();
+            while (iterator.hasNext()) {
+                var map = iterator.next();
+                for (var iterator1 = map.values().iterator(); iterator1.hasNext(); ) {
+                    var entry = iterator1.next();
+                    entry.tick();
+                    if (!entry.isAlive()) {
+                        iterator1.remove();
+                    }
                 }
-            }
-            if (map.isEmpty()) {
-                iterator.remove();
+                if (map.isEmpty()) {
+                    iterator.remove();
+                }
             }
         }
     }
 
     public void renderGuiOverlay(Renderer renderer, float deltaTick) {
-        if (getEntrance().getClient().getPanel() != null) {
-            return;
-        }
         var contentSide = AxisDirection.POSITIVE;
         var contentGravity = AxisDirection.NEGATIVE;
         renderer.pushPose();
@@ -119,27 +166,37 @@ public class TooltipRenderer {
         renderer.translate(0f, renderer.window().getGuiScaledHeight() * 1f, 0);
         renderer.translate(-1f * contentSide.getStep(), 0, 0);
         renderer.translate(0, -8, 0);
+        synchronized (prioritiedMap) {
+            for (var map : prioritiedMap.values()) {
+                for (var iterator = new LinkedList<>(map.values()).descendingIterator(); iterator.hasNext(); ) {
+                    var entry = iterator.next();
+                    if (!entry.isVisible()) {
+                        continue;
+                    }
+                    entry.setContentSide(contentGravity);
+                    renderer.pushPose();
+                    var removalTicks = entry.ticksTillRemoval - deltaTick;
+                    if (removalTicks < Entry.FADE_TICKS) {
+                        renderer.translate(entry.getWidth() * (MathUtils.lerp(removalTicks / Entry.FADE_TICKS, 1, 0) * MathUtils.lerp(removalTicks / Entry.FADE_TICKS, 1, 0)), 0, 0);
+                    }
+                    var appearTicks = entry.ticksAlive + deltaTick;
+                    if (appearTicks < Entry.FADE_TICKS) {
+                        renderer.translate(entry.getWidth() * (MathUtils.lerp(appearTicks / Entry.FADE_TICKS, 1, 0) * MathUtils.lerp(appearTicks / Entry.FADE_TICKS, 1, 0)), 0, 0);
+                    }
 
-        for (var map : prioritiedMap.values()) {
-            for (var iterator = new LinkedList<>(map.values()).descendingIterator(); iterator.hasNext(); ) {
-                var entry = iterator.next();
-                if (!entry.isVisible()) {
-                    continue;
+                    if (contentSide == AxisDirection.POSITIVE) {
+                        renderer.translate(renderer.window().getGuiScaledWidth() - entry.getWidth(), 0, 0);
+                    }
+                    renderer.renderRect(0, 0, entry.getWidth(), -entry.getHeight() - 8, renderer.optionColor(0.8f * entry.getAlpha()));
+                    renderer.translate(0, -4, 0);
+                    renderer.pushPose();
+                    renderer.translate(entry.getPaddingX(), -entry.getPaddingY(), 0);
+                    entry.render(renderer, 0, 0, deltaTick);
+                    renderer.popPose();
+                    renderer.popPose();
+                    renderer.translate(0, -entry.getHeight(), 0);
+                    renderer.translate(0, -10, 0);
                 }
-                entry.setContentSide(contentGravity);
-                renderer.pushPose();
-                if (contentSide == AxisDirection.POSITIVE) {
-                    renderer.translate(renderer.window().getGuiScaledWidth() - entry.getWidth(), 0, 0);
-                }
-                renderer.renderRect(0, 0, entry.getWidth(), -entry.getHeight() - 4, renderer.optionColor(0.8f * entry.getAlpha()));
-                renderer.translate(0, -2, 0);
-                renderer.pushPose();
-                renderer.translate(entry.getPaddingX(), -entry.getPaddingY(), 0);
-                entry.render(renderer, 0, 0, deltaTick);
-                renderer.popPose();
-                renderer.popPose();
-                renderer.translate(0, -entry.getHeight(), 0);
-                renderer.translate(0, -6, 0);
             }
         }
         renderer.popPose();
@@ -473,8 +530,10 @@ public class TooltipRenderer {
     private abstract class Entry extends AbstractWidget {
 
         private static final int FADE_TICKS = 10;
+        private static final int ALIVE_TICKS = 30;
 
-        private int ticksTillRemoval = 40;
+        private int ticksAlive = 0;
+        private int ticksTillRemoval = ALIVE_TICKS;
         private AxisDirection contentSide = AxisDirection.POSITIVE;
 
         protected Entry() {
@@ -503,19 +562,20 @@ public class TooltipRenderer {
         }
 
         public void tick() {
+            ticksAlive++;
             ticksTillRemoval--;
         }
 
         public boolean isAlive() {
-            return ticksTillRemoval >= -FADE_TICKS;
+            return ticksTillRemoval >= 0;
         }
 
         public boolean isFading() {
-            return ticksTillRemoval < 0;
+            return ticksTillRemoval < FADE_TICKS || ticksAlive < FADE_TICKS;
         }
 
         public float getAlpha() {
-            return isFading() ? (float) (ticksTillRemoval + FADE_TICKS) / FADE_TICKS : 1;
+            return isFading() ? MathUtils.min((float) (ticksTillRemoval) / FADE_TICKS, (float) (ticksAlive) / FADE_TICKS) : 1;
         }
 
         public AxisDirection getContentSide() {

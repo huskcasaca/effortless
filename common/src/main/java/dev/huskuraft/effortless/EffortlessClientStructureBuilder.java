@@ -3,6 +3,7 @@ package dev.huskuraft.effortless;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -38,6 +39,7 @@ import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.TracingResult;
+import dev.huskuraft.effortless.building.history.HistoryResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.ItemSummaryType;
@@ -109,6 +111,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             showBuildContextResult(context.getId(), 1024, player, context, result);
             showBuildTooltip(context.getId(), 1024, player, context, result);
+            getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
             setContext(player, context.newInteraction());
 
 
@@ -180,8 +183,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
         updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
         if (buildMode.isDisabled()) {
+            getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
             updateContext(player, context -> context.withPattern(Pattern.DISABLED));
-
         }
     }
 
@@ -313,6 +316,14 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         showBuildContextResult(player.getId(), 1, player, context, result);
         showBuildTooltip(context.getId(), 1, player, context, result);
+    }
+
+    public void onHistoryResultReceived(Player player, HistoryResult historyResult) {
+        var entries = new ArrayList<>();
+        entries.add(historyResult.itemSummary().values().stream().flatMap(List::stream).toList());
+        entries.add(Text.translate("effortless.history." + historyResult.type().getName()));
+        entries.add(historyResult.context().buildMode().getIcon());
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1, entries, true);
     }
 
     @Override
@@ -455,25 +466,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
         var entries = new ArrayList<>();
 
-        var texts = new ArrayList<Tuple2<Text, Text>>();
-        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
-        var replace = AbstractRadialScreen.button(context.replaceMode());
-        texts.add(new Tuple2<>(replace.getDisplayCategory().withStyle(TextStyle.WHITE), replace.getDisplayName().withStyle(TextStyle.GOLD)));
-
-        for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
-            var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
-            if (option.isEmpty()) continue;
-            var button = AbstractRadialScreen.button(option.get());
-            texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
-        }
-
-        entries.add(texts);
-//        getEntrance().getClientManager().getTooltipRenderer().showAsGroup(generateId(id, Context.class), priority, entries);
-//        entries.clear();
-        entries.add(context.buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, BuildMode.class), priority, entries);
-        entries.clear();
-
         for (var itemType : ItemSummaryType.values()) {
             var products = result.getProducts(itemType);
             if (!products.isEmpty()) {
@@ -494,13 +486,26 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 entries.add(products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList());
                 entries.add(Text.translate("effortless.build.summary." + itemType.name().toLowerCase(Locale.ROOT)).withStyle(color));
             }
-            if (!entries.isEmpty()) {
-                getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, itemType), priority, entries);
-            } else {
-                getEntrance().getClientManager().getTooltipRenderer().showEmptyEntry(generateId(id, itemType), priority);
-            }
-            entries.clear();
         }
+
+        var texts = new ArrayList<Tuple2<Text, Text>>();
+        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
+        texts.add(new Tuple2<>(AbstractRadialScreen.button(context.replaceMode()).getDisplayCategory().withStyle(TextStyle.WHITE), AbstractRadialScreen.button(context.replaceMode()).getDisplayName().withStyle(TextStyle.GOLD)));
+
+        for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
+            var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
+            if (option.isEmpty()) continue;
+            var button = AbstractRadialScreen.button(option.get());
+            texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
+        }
+        if (!context.pattern().equals(Pattern.DISABLED)) {
+            texts.add(new Tuple2<>(Text.translate("effortless.build.summary.pattern").withStyle(TextStyle.WHITE), (context.pattern().equals(Pattern.DISABLED) ? Text.translate("effortless.build.summary.pattern_disabled") : Text.translate("effortless.build.summary.pattern_enabled")).withStyle(TextStyle.GOLD)));
+        }
+
+        entries.add(texts);
+
+        entries.add(context.buildMode().getIcon());
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries, context.type() == BuildType.BUILD);
 
     }
 

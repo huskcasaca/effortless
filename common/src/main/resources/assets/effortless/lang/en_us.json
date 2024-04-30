@@ -326,6 +326,9 @@
   "effortless.build.summary.structure": "Structure",
   "effortless.build.summary.state": "State",
   "effortless.build.summary.tracing": "Tracing",
+  "effortless.build.summary.pattern": "Pattern",
+  "effortless.build.summary.pattern_enabled": "Enabled",
+  "effortless.build.summary.pattern_disabled": "Disabled",
 
   "effortless.build.summary.blocks_placed": "Placed",
   "effortless.build.summary.blocks_destroyed": "Destroyed",
@@ -358,5 +361,10 @@
   "effortless.session_status.message.mod_missing": "§cMod not found on server and client, it cannot happen.",
   "effortless.session_status.message.server_mod_missing": "§cMod not found on server side.§r",
   "effortless.session_status.message.client_mod_missing": "§cMod not found on client side.§r",
-  "effortless.session_status.message.protocol_not_match": "§cMod protocol version not match! Server: §6[%s]§c, Client: §6[%s]§c.§r"
+  "effortless.session_status.message.protocol_not_match": "§cMod protocol version not match! Server: §6[%s]§c, Client: §6[%s]§c.§r",
+
+  "effortless.history.undo_success": "Undo Build",
+  "effortless.history.redo_success": "Redo Build",
+  "effortless.history.nothing_to_undo": "Nothing to Undo",
+  "effortless.history.nothing_to_redo": "Nothing to Redo"
 }
