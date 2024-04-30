@@ -1,8 +1,8 @@
 ![Logo](assets/logo.png)
 
-# Effortless
+# Effortless Structure
 
-[Effortless]() is a multiplatform mod for placing and breaking blocks in Minecraft. It offers a set of modes allowing
+[Effortless Structure]() is a multiplatform mod for placing and breaking blocks in Minecraft. It offers a set of modes allowing
 players to create structures and designs with ease. Additionally, it includes an randomizer that randomly selects items
 from a pre-defined list for random placement.
 
@@ -195,4 +195,4 @@ Please note that currently, this mod needs to be installed on both the client si
 
 ## License
 
-Effortless is licensed under LGPLv3.
+Effortless Structure is licensed under LGPLv3.
