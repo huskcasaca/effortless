@@ -1,7 +1,7 @@
 {
   "effortless.name": "Effortless Structure",
 
-  "effortless.settings.title": "Einstellungen Effortless Building",
+  "effortless.settings.title": "Einstellungen Effortless Structure",
   "effortless.build_settings.title": "Bau Einstellungen",
   "effortless.render_settings.title": "Render Einstellungen",
   "effortless.pattern_settings.title": "Muster Einstellungen",
@@ -43,8 +43,10 @@
   "effortless.global_general_settings.items": "%s Gegenstand/Gegenstände",
 
   "effortless.render_settings.show_other_players_build": "Bauten anderer Spieler anzeigen",
+  "effortless.render_settings.show_other_players_build_tooltips": "Tooltips für Bau anderer Spieler anzeigen",
   "effortless.render_settings.show_block_preview": "Blockvorschau anzeigen",
   "effortless.render_settings.max_render_blocks": "Maximale Anzahl gerenderter Blöcke",
+  "effortless.render_settings.max_render_volume": "Maximales gerendertes Volumen",
   "effortless.render_settings.max_render_distance": "Maximale Renderdistanz",
 
   "effortless.message.permissions.no_permission": "Du darfst Effortless Structure nicht verwenden! Bitte gehe zu §b[Globale/Pro-Spieler allgemeine Einstellungen]§r und aktiviere §b[Mod verwenden erlauben]§r!",
@@ -96,7 +98,7 @@
   "effortless.render.options.outlines": "Umrisse",
   "effortless.render.options.block_tex": "Blocktextur",
   "effortless.render.options.dissolve_shader": "Auflösungs-Shader",
-  "key.effortless.category": "Effortless Building",
+  "key.effortless.category": "Effortless Structure",
   "key.effortless.settings.desc": "Grundeinstellungen",
   "key.effortless.build_mode_settings.desc": "Baumodus Einstellungen öffnen",
   "key.effortless.pattern_settings.desc": "Muster Einstellungen öffnen",
@@ -137,6 +139,7 @@
   "effortless.option.cube_filling": "Würfelfüllung",
   "effortless.option.raised_edge": "Erhöhte Kante",
   "effortless.option.circle_start": "Kreisanfang",
+  "effortless.option.plane_length": "Länge der Ebene",
 
   "effortless.action.undo": "Rückgängig",
   "effortless.action.redo": "Wiederholen",
@@ -165,6 +168,9 @@
   "effortless.action.replace_quick": "Schnell",
   "effortless.action.mode_settings": "Baumodus",
 
+  "effortless.action.plane_length_variable": "Variabel",
+  "effortless.action.plane_length_equal": "Gleich",
+
   "effortless.position.disabled": "Deaktiviert",
   "effortless.position.left": "Links",
   "effortless.position.right": "Rechts",
@@ -172,6 +178,7 @@
   "effortless.state.idle": "Inaktiv",
   "effortless.state.placing_block": "Blöcke platzieren",
   "effortless.state.breaking_block": "Blöcke zerstören",
+  "effortless.state.interacting_block": "Blöcke interagieren",
 
   "effortless.tracing.success_fulfilled": "Erfolg",
   "effortless.tracing.success_partial": "Ausstehend",
@@ -240,8 +247,8 @@
   "commands.effortless.undo_stack_size.failure": "Größe des Rückgängig-Speichers von %s konnte nicht gesetzt werden",
   "commands.reserved": "NIE",
 
-  "effortless.building.title": "Effortless Building",
-  "effortless.building.radial.title": "Effortless Building",
+  "effortless.building.title": "Effortless Structure",
+  "effortless.building.radial.title": "Effortless Structure",
   "effortless.building.settings.title": "Einstellungen für den Baumodus",
 
   "effortless.randomizer.settings.title": "Einstellungen für den Zufallsgenerator",
@@ -319,12 +326,17 @@
   "effortless.build.summary.structure": "Struktur",
   "effortless.build.summary.state": "Zustand",
   "effortless.build.summary.tracing": "Verfolgung",
+  "effortless.build.summary.pattern": "Muster",
+  "effortless.build.summary.pattern_enabled": "Aktiviert",
+  "effortless.build.summary.pattern_disabled": "Deaktiviert",
 
   "effortless.build.summary.blocks_placed": "Platziert",
   "effortless.build.summary.blocks_destroyed": "Zerstört",
+  "effortless.build.summary.blocks_interacted": "Interagiert",
 
   "effortless.build.summary.blocks_not_placeable": "Nicht platzierbar",
   "effortless.build.summary.blocks_not_breakable": "Nicht zerstörbar",
+  "effortless.build.summary.blocks_not_interactable": "Nicht interagierbar",
 
   "effortless.build.summary.blocks_place_insufficient": "Nicht genug",
   "effortless.build.summary.blocks_break_insufficient": "Nicht genug",
@@ -349,5 +361,10 @@
   "effortless.session_status.message.mod_missing": "§cMod nicht auf Server und Client gefunden, es kann nicht passieren.",
   "effortless.session_status.message.server_mod_missing": "§cMod auf Serverseite nicht gefunden.§r",
   "effortless.session_status.message.client_mod_missing": "§cMod auf Clientseite nicht gefunden.§r",
-  "effortless.session_status.message.protocol_not_match": "§cMod-Protokollversion stimmt nicht überein! Server: §6[%s]§c, Client: §6[%s]§c.§r"
+  "effortless.session_status.message.protocol_not_match": "§cMod-Protokollversion stimmt nicht überein! Server: §6[%s]§c, Client: §6[%s]§c.§r",
+
+  "effortless.history.undo_success": "Bau rückgängig gemacht",
+  "effortless.history.redo_success": "Bau wiederholt",
+  "effortless.history.nothing_to_undo": "Nichts zum Rückgängigmachen",
+  "effortless.history.nothing_to_redo": "Nichts zum Wiederholen"
 }

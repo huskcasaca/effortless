@@ -42,9 +42,11 @@
   "effortless.global_general_settings.blacklisted_items": "黑名单物品",
   "effortless.global_general_settings.items": "%s 个物品",
 
-  "effortless.render_settings.show_other_players_build": "显示其他玩家建筑",
+  "effortless.render_settings.show_other_players_build": "显示其他玩家建造",
+  "effortless.render_settings.show_other_players_build_tooltips": "显示其他玩家建造提示",
   "effortless.render_settings.show_block_preview": "显示方块预览",
   "effortless.render_settings.max_render_blocks": "最大渲染方块数",
+  "effortless.render_settings.max_render_volume": "最大渲染体积",
   "effortless.render_settings.max_render_distance": "最大渲染距离",
 
   "effortless.message.permissions.no_permission": "您无权使用轻松建造！请前往§b[全局/玩家个别常规设置]§r并启用§b[允许使用模组]§r！",
@@ -137,6 +139,7 @@
   "effortless.option.cube_filling": "立方体填充",
   "effortless.option.raised_edge": "凸起边缘",
   "effortless.option.circle_start": "圆形起点",
+  "effortless.option.plane_length": "平面长度",
 
   "effortless.action.undo": "撤销",
   "effortless.action.redo": "重做",
@@ -165,13 +168,17 @@
   "effortless.action.replace_quick": "快速",
   "effortless.action.mode_settings": "建造模式",
 
+  "effortless.action.plane_length_variable": "可变",
+  "effortless.action.plane_length_equal": "相等",
+
   "effortless.position.disabled": "关闭",
   "effortless.position.left": "左",
   "effortless.position.right": "右",
 
   "effortless.state.idle": "空闲",
-  "effortless.state.placing_block": "正在放置方块",
-  "effortless.state.breaking_block": "正在破坏方块",
+  "effortless.state.placing_block": "放置方块",
+  "effortless.state.breaking_block": "破坏方块",
+  "effortless.state.interacting_block": "交互方块",
 
   "effortless.tracing.success_fulfilled": "成功",
   "effortless.tracing.success_partial": "部分",
@@ -319,12 +326,17 @@
   "effortless.build.summary.structure": "结构",
   "effortless.build.summary.state": "状态",
   "effortless.build.summary.tracing": "追踪",
+  "effortless.build.summary.pattern": "模式",
+  "effortless.build.summary.pattern_enabled": "已启用",
+  "effortless.build.summary.pattern_disabled": "已禁用",
 
   "effortless.build.summary.blocks_placed": "已放置",
   "effortless.build.summary.blocks_destroyed": "已破坏",
+  "effortless.build.summary.blocks_interacted": "已交互",
 
-  "effortless.build.summary.blocks_not_placeable": "受限制",
-  "effortless.build.summary.blocks_not_breakable": "受限制",
+  "effortless.build.summary.blocks_not_placeable": "无法放置",
+  "effortless.build.summary.blocks_not_breakable": "无法破坏",
+  "effortless.build.summary.blocks_not_interactable": "无法交互",
 
   "effortless.build.summary.blocks_place_insufficient": "数量不足",
   "effortless.build.summary.blocks_break_insufficient": "数量不足",
@@ -349,5 +361,10 @@
   "effortless.session_status.message.mod_missing": "§c服务器和客户端均未找到此模组，这不可能发生。",
   "effortless.session_status.message.server_mod_missing": "§c服务器端未找到此模组。§r",
   "effortless.session_status.message.client_mod_missing": "§c客户端未找到此模组。§r",
-  "effortless.session_status.message.protocol_not_match": "§c模组协议版本不匹配！服务器: §6[%s]§c，客户端: §6[%s]§c。§r"
+  "effortless.session_status.message.protocol_not_match": "§c模组协议版本不匹配！服务器: §6[%s]§c，客户端: §6[%s]§c。§r",
+
+  "effortless.history.undo_success": "撤销建筑",
+  "effortless.history.redo_success": "重做建筑",
+  "effortless.history.nothing_to_undo": "无可撤销的操作",
+  "effortless.history.nothing_to_redo": "无可重做的操作"
 }
