@@ -1,7 +1,7 @@
 {
-  "effortless.name": "Без усилий",
+  "effortless.name": "Безусилий Строение",
 
-  "effortless.settings.title": "Без усилий",
+  "effortless.settings.title": "Безусилий Строение Hастроек",
   "effortless.build_settings.title": "Настройки сборки",
   "effortless.render_settings.title": "Настройки отображения",
   "effortless.pattern_settings.title": "Настройки узора",
@@ -43,11 +43,13 @@
   "effortless.global_general_settings.items": "%s предмет(ов)",
 
   "effortless.render_settings.show_other_players_build": "Показывать постройки других игроков",
+  "effortless.render_settings.show_other_players_build_tooltips": "Показывать подсказки по постройкам других игроков",
   "effortless.render_settings.show_block_preview": "Показывать предварительный просмотр блока",
   "effortless.render_settings.max_render_blocks": "Максимальное количество отображаемых блоков",
+  "effortless.render_settings.max_render_volume": "Максимальный объем отрисовки",
   "effortless.render_settings.max_render_distance": "Максимальное отображаемое расстояние",
 
-  "effortless.message.permissions.no_permission": "У вас нет разрешения на использование мода Effortless! Перейдите в раздел §b[Общие/Персональные настройки]§r и активируйте §b[Разрешить использование модов]§r!",
+  "effortless.message.permissions.no_permission": "У вас нет разрешения на использование мода Безусилий Строение! Перейдите в раздел §b[Общие/Персональные настройки]§r и активируйте §b[Разрешить использование модов]§r!",
   "effortless.message.permissions.no_place_permission": "У вас нет разрешения на установку блоков! Перейдите в раздел §b[Общие/Персональные настройки]§r и активируйте §b[Разрешить установку блоков]§r!",
   "effortless.message.permissions.no_break_permission": "У вас нет разрешения на разрушение блоков! Перейдите в раздел §b[Общие/Персональные настройки]§r и активируйте §b[Разрешить разрушение блоков]§r!",
   "effortless.message.building.build_canceled": "Постройка отменена",
@@ -96,7 +98,7 @@
   "effortless.render.options.outlines": "Контуры",
   "effortless.render.options.block_tex": "Текстура блока",
   "effortless.render.options.dissolve_shader": "Шейдер растворения",
-  "key.effortless.category": "Построение без усилий",
+  "key.effortless.category": "Безусилий Строение",
   "key.effortless.settings.desc": "Основные настройки",
   "key.effortless.build_mode_settings.desc": "Открыть настройки режима строительства",
   "key.effortless.pattern_settings.desc": "Открыть настройки шаблона",
@@ -137,6 +139,7 @@
   "effortless.option.cube_filling": "Заполнение куба",
   "effortless.option.raised_edge": "Поднятый край",
   "effortless.option.circle_start": "Начало окружности",
+  "effortless.option.plane_length": "Длина плоскости",
 
   "effortless.action.undo": "Отменить",
   "effortless.action.redo": "Повторить",
@@ -165,6 +168,9 @@
   "effortless.action.replace_quick": "Быстрый",
   "effortless.action.mode_settings": "Режим строительства",
 
+  "effortless.action.plane_length_variable": "Переменная",
+  "effortless.action.plane_length_equal": "Равная",
+
   "effortless.position.disabled": "Выключено",
   "effortless.position.left": "Слева",
   "effortless.position.right": "Справа",
@@ -172,6 +178,7 @@
   "effortless.state.idle": "Неактивно",
   "effortless.state.placing_block": "Установка блоков",
   "effortless.state.breaking_block": "Разрушение блоков",
+  "effortless.state.interacting_block": "Взаимодействие с блоками",
 
   "effortless.tracing.success_fulfilled": "Успешно",
   "effortless.tracing.success_partial": "Ожидание",
@@ -240,8 +247,8 @@
   "commands.effortless.undo_stack_size.failure": "Не удалось установить undoStackSize для %s",
   "commands.reserved": "NIE",
 
-  "effortless.building.title": "Построение без усилий",
-  "effortless.building.radial.title": "Построение без усилий",
+  "effortless.building.title": "Безусилий Строение",
+  "effortless.building.radial.title": "Безусилий Строение",
   "effortless.building.settings.title": "Настройки режима построения",
 
   "effortless.randomizer.settings.title": "Настройки случайности",
@@ -319,12 +326,17 @@
   "effortless.build.summary.structure": "Структура",
   "effortless.build.summary.state": "Состояние",
   "effortless.build.summary.tracing": "Трассировка",
+  "effortless.build.summary.pattern": "Шаблон",
+  "effortless.build.summary.pattern_enabled": "Включен",
+  "effortless.build.summary.pattern_disabled": "Отключен",
 
   "effortless.build.summary.blocks_placed": "Установлено",
   "effortless.build.summary.blocks_destroyed": "Уничтожено",
+  "effortless.build.summary.blocks_interacted": "Взаимодействовано",
 
   "effortless.build.summary.blocks_not_placeable": "Заблокировано",
   "effortless.build.summary.blocks_not_breakable": "Заблокировано",
+  "effortless.build.summary.blocks_not_interactable": "Заблокировано",
 
   "effortless.build.summary.blocks_place_insufficient": "Недостаточно",
   "effortless.build.summary.blocks_break_insufficient": "Недостаточно",
@@ -349,5 +361,10 @@
   "effortless.session_status.message.mod_missing": "§cМод не найден на сервере и клиенте, это невозможно.",
   "effortless.session_status.message.server_mod_missing": "§cМод не найден на стороне сервера.§r",
   "effortless.session_status.message.client_mod_missing": "§cМод не найден на стороне клиента.§r",
-  "effortless.session_status.message.protocol_not_match": "§cВерсия протокола мода не совпадает! Сервер: §6[%s]§c, Клиент: §6[%s]§c.§r"
+  "effortless.session_status.message.protocol_not_match": "§cВерсия протокола мода не совпадает! Сервер: §6[%s]§c, Клиент: §6[%s]§c.§r",
+
+  "effortless.history.undo_success": "Отменить построение",
+  "effortless.history.redo_success": "Повторить построение",
+  "effortless.history.nothing_to_undo": "Нечего отменять",
+  "effortless.history.nothing_to_redo": "Нечего повторять"
 }
