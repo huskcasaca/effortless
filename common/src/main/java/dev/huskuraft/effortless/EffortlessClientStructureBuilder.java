@@ -111,7 +111,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             showBuildContextResult(context.getId(), 1024, player, context, result);
             showBuildTooltip(context.getId(), 1024, player, context, result);
-            getEntrance().getClientManager().getTooltipRenderer().resetEntry(generateId(player.getId(), Context.class), 0);
+            getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
             setContext(player, context.newInteraction());
 
 
@@ -183,8 +183,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
         updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
         if (buildMode.isDisabled()) {
+            getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
             updateContext(player, context -> context.withPattern(Pattern.DISABLED));
-
         }
     }
 
@@ -505,7 +505,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         entries.add(texts);
 
         entries.add(context.buildMode().getIcon());
-        player.sendMessage("showTooltip" + context.type());
         getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries, context.type() == BuildType.BUILD);
 
     }

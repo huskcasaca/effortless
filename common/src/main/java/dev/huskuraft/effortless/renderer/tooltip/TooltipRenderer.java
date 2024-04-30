@@ -82,18 +82,18 @@ public class TooltipRenderer {
 
     public void showEntry(Object id, int priority, Entry entry, boolean immediate) {
         synchronized (prioritiedMap) {
-            prioritiedMap.compute(priority, (k, v) -> {
-                if (v == null) {
-                    v = new LinkedHashMap<>();
+            prioritiedMap.compute(priority, (k, entry1) -> {
+                if (entry1 == null) {
+                    entry1 = new LinkedHashMap<>();
                 }
-                v.compute(id, (k1, v1) -> {
+                entry1.compute(id, (k1, v1) -> {
                     entry.ticksAlive = v1 != null ? v1.ticksAlive : 0;
                     if (immediate) {
                         entry.ticksAlive = Entry.FADE_TICKS;
                     }
                     return entry;
                 });
-                return v;
+                return entry1;
             });
         }
     }
@@ -103,24 +103,39 @@ public class TooltipRenderer {
             if (immediate) {
                 prioritiedMap.getOrDefault(priority, new LinkedHashMap<>()).remove(id);
             } else {
-                prioritiedMap.getOrDefault(priority, new LinkedHashMap<>()).computeIfPresent(id, (k, v) -> {
-                    v.ticksTillRemoval = MathUtils.min(v.ticksTillRemoval, Entry.FADE_TICKS);
-                    v.ticksAlive = Entry.FADE_TICKS;
-                    return v;
+                prioritiedMap.getOrDefault(priority, new LinkedHashMap<>()).computeIfPresent(id, (k, entry) -> {
+                    entry.ticksTillRemoval = MathUtils.min(entry.ticksTillRemoval, Entry.FADE_TICKS);
+                    entry.ticksAlive = Entry.FADE_TICKS;
+                    return entry;
                 });
             }
         }
     }
 
-    public void resetEntry(Object id, int priority) {
+    public void hideAllEntries(boolean immediate) {
         synchronized (prioritiedMap) {
-            prioritiedMap.getOrDefault(priority, new LinkedHashMap<>()).computeIfPresent(id, (k, v) -> {
-                v.ticksTillRemoval = Entry.ALIVE_TICKS;
-                v.ticksAlive = 0;
-                return v;
-            });
+            if (immediate) {
+                prioritiedMap.clear();
+            } else {
+                for (var value : prioritiedMap.values()) {
+                    for (var entry : value.values()) {
+                        entry.ticksTillRemoval = MathUtils.min(entry.ticksTillRemoval, Entry.FADE_TICKS);
+                        entry.ticksAlive = Entry.FADE_TICKS;
+                    }
+                }
+            }
         }
     }
+//
+//    public void resetEntry(Object id, int priority) {
+//        synchronized (prioritiedMap) {
+//            prioritiedMap.getOrDefault(priority, new LinkedHashMap<>()).computeIfPresent(id, (k, v) -> {
+//                v.ticksTillRemoval = Entry.ALIVE_TICKS;
+//                v.ticksAlive = 0;
+//                return v;
+//            });
+//        }
+//    }
 
 
     public void tick() {
@@ -515,7 +530,7 @@ public class TooltipRenderer {
     private abstract class Entry extends AbstractWidget {
 
         private static final int FADE_TICKS = 10;
-        private static final int ALIVE_TICKS = 50;
+        private static final int ALIVE_TICKS = 30;
 
         private int ticksAlive = 0;
         private int ticksTillRemoval = ALIVE_TICKS;
@@ -556,11 +571,11 @@ public class TooltipRenderer {
         }
 
         public boolean isFading() {
-            return ticksTillRemoval < FADE_TICKS;
+            return ticksTillRemoval < FADE_TICKS || ticksAlive < FADE_TICKS;
         }
 
         public float getAlpha() {
-            return isFading() ? (float) (ticksTillRemoval) / FADE_TICKS : 1;
+            return isFading() ? MathUtils.min((float) (ticksTillRemoval) / FADE_TICKS, (float) (ticksAlive) / FADE_TICKS) : 1;
         }
 
         public AxisDirection getContentSide() {
