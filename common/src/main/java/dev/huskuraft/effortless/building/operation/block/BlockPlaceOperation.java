@@ -119,8 +119,9 @@ public class BlockPlaceOperation extends BlockOperation {
         if (!placed) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
-        player.awardStat(StatTypes.ITEM_USED.get(itemStack.getItem()));
-
+        if (!world.isClient()) {
+            player.awardStat(StatTypes.ITEM_USED.get(itemStack.getItem()));
+        }
 
         // FIXME: 29/4/24
         if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockState(getBlockPosition(), blockState)) {
