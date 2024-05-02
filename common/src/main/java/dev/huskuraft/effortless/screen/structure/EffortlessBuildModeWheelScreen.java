@@ -6,10 +6,13 @@ import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.Feature;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.Option;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
+import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.UndoRedo;
+import dev.huskuraft.effortless.building.replace.PassiveMode;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildMode;
@@ -18,7 +21,7 @@ import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
 public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMode, Option> {
 
-    private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
+    private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO, false);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
     private static final Button<Option> SETTING_OPTION = button(Settings.GENERAL);
 
@@ -91,6 +94,10 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
                 getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), replaceMode.next());
                 return;
             }
+            if (entry.getContent() instanceof PassiveMode passiveMode) {
+                getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig(), config.transformerPresets(), passiveMode != PassiveMode.ENABLED));
+                return;
+            }
             if (entry.getContent() instanceof SingleSelectFeature singleSelectFeature) {
                 getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), singleSelectFeature);
                 return;
@@ -107,15 +114,14 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
         var context = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer());
 
         setSelectedSlots(slot(context.buildMode()));
+        var passiveMode = (getEntrance().getConfigStorage().get().passiveMode()) ? PassiveMode.ENABLED : PassiveMode.DISABLED;
         setLeftButtons(
                 buttonSet(REDO_OPTION, UNDO_OPTION),
-                buttonSet(SETTING_OPTION, button(context.replaceMode()))
+                buttonSet(button(passiveMode, passiveMode != PassiveMode.DISABLED), button(context.replaceMode(), context.replaceMode() != ReplaceMode.DISABLED)),
+                buttonSet(SETTING_OPTION, SETTING_OPTION)
         );
         setRightButtons(
-                Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map(EffortlessBuildModeWheelScreen::<Option>button).toList())).toList()
-        );
-        setSelectedButtons(
-                context.buildFeatures().stream().map(EffortlessBuildModeWheelScreen::<Option>button).toList()
+                Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, context.buildFeatures().contains(option))).toList())).toList()
         );
     }
 

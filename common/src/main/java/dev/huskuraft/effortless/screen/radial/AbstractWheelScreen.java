@@ -56,7 +56,6 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     private Slot<S> hoveredSlot;
     private Button<B> hoveredButton;
     private Collection<? extends Slot<S>> selectedSlot = new HashSet<>();
-    private Collection<? extends Button<B>> selectedButton = new HashSet<>();
     private float lastScrollOffset = 0;
     // TODO: 20/2/23 rename
     private float visibility = 1;
@@ -101,7 +100,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         };
     }
 
-    protected static <T> Button<T> button(Object id, Text name, Text category, ResourceLocation icon, T content) {
+    protected static <T> Button<T> button(Object id, Text name, Text category, ResourceLocation icon, T content, boolean activated) {
         return new Button<>() {
 
             @Override
@@ -134,6 +133,10 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
                 return content;
             }
 
+            @Override
+            public boolean isActivated() {
+                return activated;
+            }
         };
     }
 
@@ -157,12 +160,17 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     public static <T extends Option> Button<T> button(T option) {
+        return button(option, false);
+    }
+
+    public static <T extends Option> Button<T> button(T option, boolean activated) {
         return button(
                 option,
                 option.getDisplayName(),
                 option.getDisplayCategory(),
                 option.getIcon(),
-                option);
+                option,
+                activated);
     }
 
     @Override
@@ -261,10 +269,6 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     public final void setSelectedSlots(Collection<? extends Slot<S>> slots) {
         this.selectedSlot = slots;
-    }
-
-    public final void setSelectedButtons(Collection<? extends Button<B>> options) {
-        this.selectedButton = options;
     }
 
     private void renderRadialSlots(Renderer renderer, int mouseX, int mouseY, List<? extends Slot<S>> slots) {
@@ -386,7 +390,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
                 var x2 = x + BUTTON_WIDTH / 2d;
                 var y2 = y + BUTTON_HEIGHT / 2d;
 
-                var isActivated = selectedButton != null && selectedButton.stream().anyMatch(b -> Objects.equals(b.getId(), button.getId()));
+                var isActivated = button.isActivated();
                 var isHovered = x1 <= mouseCenterX && x2 >= mouseCenterX && y1 <= mouseCenterY && y2 >= mouseCenterY;
 
                 var color = RADIAL_BUTTON_COLOR_STATE.defaultColor();
@@ -474,6 +478,8 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         Color getTintColor();
 
         T getContent();
+
+        boolean isActivated();
 
     }
 

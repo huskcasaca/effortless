@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.screen.pattern;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -10,16 +11,17 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.Feature;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.Option;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.replace.PassiveMode;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
-import dev.huskuraft.effortless.screen.structure.EffortlessBuildModeWheelScreen;
 
 public class EffortlessPatternWheelScreen extends AbstractWheelScreen<Pattern, Option> {
 
@@ -154,13 +156,16 @@ public class EffortlessPatternWheelScreen extends AbstractWheelScreen<Pattern, O
     @Override
     public void onReload() {
         var context = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer());
+
         setSelectedSlots(slot(context.pattern()));
+        var passiveMode = (getEntrance().getConfigStorage().get().passiveMode()) ? PassiveMode.ENABLED : PassiveMode.DISABLED;
         setLeftButtons(
                 buttonSet(REDO_OPTION, UNDO_OPTION),
-                buttonSet(SETTING_OPTION, button(context.replaceMode()))
+                buttonSet(button(passiveMode, passiveMode != PassiveMode.DISABLED), button(context.replaceMode(), context.replaceMode() != ReplaceMode.DISABLED)),
+                buttonSet(SETTING_OPTION, SETTING_OPTION)
         );
-        setSelectedButtons(
-                context.buildFeatures().stream().map(EffortlessBuildModeWheelScreen::<Option>button).toList()
+        setRightButtons(
+                Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, context.buildFeatures().contains(option))).toList())).toList()
         );
     }
 
