@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.api.text.TextStyle;
 public class Effortless implements Entrance {
 
     public static final String MOD_ID = "effortless";
-    public static final int PROTOCOL_VERSION = 6;
+    public static final int PROTOCOL_VERSION = 7;
 
     private final CommonEventRegistry commonEventRegistry = (CommonEventRegistry) EventRegister.getCommon();
     private final EffortlessNetworkChannel networkChannel = new EffortlessNetworkChannel(this);
