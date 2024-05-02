@@ -87,7 +87,14 @@ public class TooltipRenderer {
                     entry1 = new LinkedHashMap<>();
                 }
                 entry1.compute(id, (k1, v1) -> {
-                    entry.ticksAlive = v1 != null ? v1.ticksAlive : 0;
+                    if (v1 != null && !immediate) {
+                        if (v1.ticksTillRemoval < Entry.FADE_TICKS) {
+                            entry.ticksAlive = (int) (Entry.FADE_TICKS * (MathUtils.lerp(1.0 * v1.ticksTillRemoval / Entry.FADE_TICKS, 0, 1) * MathUtils.lerp(1.0 * v1.ticksTillRemoval / Entry.FADE_TICKS, 0, 1)));
+                            entry.ticksTillRemoval = Entry.ALIVE_TICKS;
+                        } else {
+                            entry.ticksAlive = v1.ticksAlive;
+                        }
+                    }
                     if (immediate) {
                         entry.ticksAlive = Entry.FADE_TICKS;
                     }
