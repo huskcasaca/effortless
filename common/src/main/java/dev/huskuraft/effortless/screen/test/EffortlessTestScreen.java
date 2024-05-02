@@ -83,7 +83,8 @@ public class EffortlessTestScreen extends AbstractScreen {
                                         List.of(),
                                         List.of(),
                                         List.of(),
-                                        ItemRandomizer.getDefaultItemRandomizers())
+                                        ItemRandomizer.getDefaultItemRandomizers()),
+                                false
                         )
                 );
             }));

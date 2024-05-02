@@ -12,13 +12,15 @@ public class RootSettingsTagSerializer implements TagSerializer<ClientConfig> {
     private static final String TAG_RENDER_SETTINGS = "Render";
     private static final String TAG_PATTERN_SETTINGS = "Patterns";
     private static final String TAG_TRANSFORMER_PRESETS = "Transformers";
+    private static final String TAG_PASSIVE_MODE = "PassiveMode";
 
     @Override
     public ClientConfig read(TagElement tag) {
         return new ClientConfig(
                 tag.asRecord().getElement(TAG_RENDER_SETTINGS, new RenderSettingsTagSerializer()),
                 tag.asRecord().getElement(TAG_PATTERN_SETTINGS, new PatternSettingsTagSerializer()),
-                tag.asRecord().getElement(TAG_TRANSFORMER_PRESETS, new TransformerPresetsTagSerializer())
+                tag.asRecord().getElement(TAG_TRANSFORMER_PRESETS, new TransformerPresetsTagSerializer()),
+                tag.asRecord().getBoolean(TAG_PASSIVE_MODE)
         );
     }
 
@@ -27,6 +29,7 @@ public class RootSettingsTagSerializer implements TagSerializer<ClientConfig> {
         tag.asRecord().putElement(TAG_RENDER_SETTINGS, config.renderConfig(), new RenderSettingsTagSerializer());
         tag.asRecord().putElement(TAG_PATTERN_SETTINGS, config.patternConfig(), new PatternSettingsTagSerializer());
         tag.asRecord().putElement(TAG_TRANSFORMER_PRESETS, config.transformerPresets(), new TransformerPresetsTagSerializer());
+        tag.asRecord().putBoolean(TAG_PASSIVE_MODE, config.passiveMode());
     }
 
     public static class RenderSettingsTagSerializer implements TagSerializer<RenderConfig> {
