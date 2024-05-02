@@ -18,6 +18,7 @@ import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.events.EventResult;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.lang.Tuple2;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
@@ -238,8 +239,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         undoRedoStacks.clear();
     }
 
-    public BuildResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
-        return updateContext(player, context -> {
+    public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
+        if (getEntrance().getConfigStorage().get().passiveMode() && !EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
+            return EventResult.pass();
+        }
+
+        var buildResult = updateContext(player, context -> {
 
             var state = switch (type) {
                 case ATTACK -> BuildState.BREAK_BLOCK;
@@ -307,6 +312,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             return nextContext;
         });
+
+        if (buildResult.isSuccess()) {
+            player.swing(hand);
+        }
+
+        return EventResult.interrupt(buildResult.isSuccess());
     }
 
 
@@ -376,6 +387,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
 
         if (getContext(player).isDisabled()) {
+            return;
+        }
+
+        if (getEntrance().getConfigStorage().get().passiveMode() && !EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
+            getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, false);
             return;
         }
 
