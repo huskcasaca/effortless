@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
@@ -62,6 +63,10 @@ public class EffortlessSettingsScreen extends AbstractScreen {
                     },
                     Transformer.getDefaultTransformers()
             ).attach();
+        });
+        entries.addTab(Text.translate("effortless.settings.passive_mode").getString() + getEntrance().getConfigStorage().get().passiveMode(), (button) -> {
+            getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig(), config.transformerPresets(), !config.passiveMode()));
+            button.setMessage(Text.translate("effortless.settings.passive_mode").getString() + getEntrance().getConfigStorage().get().passiveMode());
         });
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {

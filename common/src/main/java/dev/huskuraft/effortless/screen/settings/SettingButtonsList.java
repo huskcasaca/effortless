@@ -29,6 +29,10 @@ public class SettingButtonsList extends AbstractEntryList<SettingButtonsList.Ent
         return addEntry(new ButtonEntry(getEntrance(), this, title, Button.TAB_WIDTH, consumer)).getButton();
     }
 
+    public Button addTab(String title, Consumer<Button> consumer) {
+        return addEntry(new ButtonEntry(getEntrance(), this, Text.text(title), Button.TAB_WIDTH, consumer)).getButton();
+    }
+
     private static final class ButtonEntry extends Entry<Void> {
 
         private Consumer<Button> consumer;

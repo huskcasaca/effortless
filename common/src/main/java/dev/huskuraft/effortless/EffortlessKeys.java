@@ -17,6 +17,7 @@ public enum EffortlessKeys implements Key {
     REDO("redo", KeyCodes.KEY_RIGHT_BRACKET),
     //    CYCLE_REPLACE_MODE("cycle_replace", KeyCodes.KEY_UNKNOWN),
     TOGGLE_REPLACE("toggle_replace", KeyCodes.KEY_UNKNOWN),
+    PASSIVE_BUILD_MODIFIER("passive_build_modifier", KeyCodes.KEY_UNKNOWN),
 
 //    TOGGLE_QUICK_REPLACE("toggle_quick_replace", KeyCodes.KEY_UNKNOWN),
 //	  TOGGLE_ALT_PLACE("toggle_alt_place", KeyCodes.KEY_UNKNOWN),
