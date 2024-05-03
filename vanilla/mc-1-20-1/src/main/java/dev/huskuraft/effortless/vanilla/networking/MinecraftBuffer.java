@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.vanilla.networking;
 
-import java.util.UUID;
-
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.networking.Buffer;
@@ -23,16 +21,6 @@ public class MinecraftBuffer implements Buffer {
     @Override
     public FriendlyByteBuf referenceValue() {
         return reference;
-    }
-
-    @Override
-    public UUID readUUID() {
-        return reference.readUUID();
-    }
-
-    @Override
-    public <T extends Enum<T>> T readEnum(Class<T> clazz) {
-        return reference.readEnum(clazz);
     }
 
     @Override
@@ -98,16 +86,6 @@ public class MinecraftBuffer implements Buffer {
     @Override
     public TagRecord readTagRecord() {
         return new MinecraftTagRecord(reference.readNbt());
-    }
-
-    @Override
-    public void writeUUID(UUID uuid) {
-        reference.writeUUID(uuid);
-    }
-
-    @Override
-    public <T extends Enum<T>> void writeEnum(Enum<T> value) {
-        reference.writeEnum(value);
     }
 
     @Override

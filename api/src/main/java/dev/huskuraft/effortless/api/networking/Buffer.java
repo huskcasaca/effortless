@@ -31,9 +31,13 @@ public interface Buffer extends PlatformReference {
         return null;
     }
 
-    UUID readUUID();
+    default UUID readUUID() {
+        return new UUID(readLong(), readLong());
+    }
 
-    <T extends Enum<T>> T readEnum(Class<T> clazz);
+    default <T extends Enum<T>> T readEnum(Class<T> clazz) {
+        return clazz.getEnumConstants()[readVarInt()];
+    }
 
     String readString();
 
@@ -102,9 +106,14 @@ public interface Buffer extends PlatformReference {
         if (value != null) write(value, writer);
     }
 
-    void writeUUID(UUID uuid);
+    default void writeUUID(UUID uuid) {
+        writeLong(uuid.getMostSignificantBits());
+        writeLong(uuid.getLeastSignificantBits());
+    }
 
-    <T extends Enum<T>> void writeEnum(Enum<T> value);
+    default <T extends Enum<T>> void writeEnum(Enum<T> value) {
+        writeVarInt(value.ordinal());
+    }
 
     void writeString(String value);
 
