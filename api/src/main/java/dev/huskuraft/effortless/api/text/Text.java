@@ -13,19 +13,15 @@ public interface Text extends PlatformReference {
         return ContentFactory.getInstance().newText(text);
     }
 
-    static Text text(String text, Text... args) {
-        return ContentFactory.getInstance().newText(text, args);
-    }
-
     static Text translate(String text) {
         return ContentFactory.getInstance().newTranslatableText(text);
     }
 
-    static Text translate(String text, Text... args) {
-        return ContentFactory.getInstance().newTranslatableText(text, args);
-    }
-
     static Text translate(String text, Object... args) {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof Text text1)
+                args[i] = (text1).reference();
+        }
         return ContentFactory.getInstance().newTranslatableText(text, args);
     }
 

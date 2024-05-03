@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.vanilla.platform;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import com.google.auto.service.AutoService;
@@ -90,18 +89,8 @@ public class MinecraftContentFactory implements ContentFactory {
     }
 
     @Override
-    public Text newText(String text, Text... args) {
-        return new MinecraftText(Component.translatable(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
-    }
-
-    @Override
     public Text newTranslatableText(String text) {
         return new MinecraftText(Component.translatable(text));
-    }
-
-    @Override
-    public Text newTranslatableText(String text, Text... args) {
-        return new MinecraftText(Component.translatable(text, Arrays.stream(args).map(text1 -> text1.reference()).toArray(Object[]::new)));
     }
 
     @Override

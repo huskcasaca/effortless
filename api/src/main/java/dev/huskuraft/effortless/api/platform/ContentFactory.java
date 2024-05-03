@@ -47,11 +47,7 @@ public interface ContentFactory {
 
     Text newText(String text);
 
-    Text newText(String text, Text... args);
-
     Text newTranslatableText(String text);
-
-    Text newTranslatableText(String text, Text... args);
 
     Text newTranslatableText(String text, Object... args);
 
