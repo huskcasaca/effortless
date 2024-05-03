@@ -37,7 +37,15 @@ public interface Buffer extends PlatformReference {
 
     String readString();
 
-    Text readText();
+    default Text readText() {
+        return Text.text(readString())
+                .withBold(readNullable(Buffer::readBoolean))
+                .withItalic(readNullable(Buffer::readBoolean))
+                .withUnderlined(readNullable(Buffer::readBoolean))
+                .withStrikethrough(readNullable(Buffer::readBoolean))
+                .withObfuscated(readNullable(Buffer::readBoolean))
+                .withColor(readNullable(Buffer::readInt));
+    }
 
     boolean readBoolean();
 
@@ -54,20 +62,6 @@ public interface Buffer extends PlatformReference {
     long readVarLong();
 
     float readFloat();
-
-//    boolean[] readBooleanArray();
-//
-//    byte[] readByteArray();
-//
-//    short[] readShortArray();
-//
-//    int[] readIntArray();
-//
-//    long[] readLongArray();
-//
-//    float[] readFloatArray();
-//
-//    double[] readDoubleArray();
 
     double readDouble();
 
@@ -114,7 +108,15 @@ public interface Buffer extends PlatformReference {
 
     void writeString(String value);
 
-    void writeText(Text value);
+    default void writeText(Text value) {
+        writeString(value.getString());
+        writeNullable(value.isBold(), Buffer::writeBoolean);
+        writeNullable(value.isItalic(), Buffer::writeBoolean);
+        writeNullable(value.isUnderlined(), Buffer::writeBoolean);
+        writeNullable(value.isStrikethrough(), Buffer::writeBoolean);
+        writeNullable(value.isObfuscated(), Buffer::writeBoolean);
+        writeNullable(value.getColor(), Buffer::writeInt);
+    }
 
     void writeBoolean(boolean value);
 
@@ -131,20 +133,6 @@ public interface Buffer extends PlatformReference {
     void writeVarLong(long value);
 
     void writeFloat(float value);
-
-//    void writeBooleanArray(boolean[] value);
-//
-//    void writeByteArray(byte[] value);
-//
-//    void writeShortArray(short[] value);
-//
-//    void writeIntArray(int[] value);
-//
-//    void writeLongArray(long[] value);
-//
-//    void writeFloatArray(float[] value);
-//
-//    void writeDoubleArray(double[] value);
 
     void writeDouble(double value);
 

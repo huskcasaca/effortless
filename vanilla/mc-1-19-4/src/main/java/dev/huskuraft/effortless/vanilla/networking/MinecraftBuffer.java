@@ -6,10 +6,8 @@ import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.tag.TagRecord;
-import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItem;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
-import dev.huskuraft.effortless.vanilla.core.MinecraftText;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -40,11 +38,6 @@ public class MinecraftBuffer implements Buffer {
     @Override
     public String readString() {
         return reference.readUtf();
-    }
-
-    @Override
-    public Text readText() {
-        return new MinecraftText(reference.readComponent());
     }
 
     @Override
@@ -120,11 +113,6 @@ public class MinecraftBuffer implements Buffer {
     @Override
     public void writeString(String value) {
         reference.writeUtf(value);
-    }
-
-    @Override
-    public void writeText(Text value) {
-        reference.writeComponent(value.reference());
     }
 
     @Override

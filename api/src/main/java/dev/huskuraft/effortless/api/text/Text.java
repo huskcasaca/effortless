@@ -25,16 +25,37 @@ public interface Text extends PlatformReference {
         return ContentFactory.getInstance().newTranslatableText(text, args);
     }
 
-    Text withStyle(TextStyle... styles);
+    default Style getStyle() {
+        return new Style(getColor(), isBold(), isItalic(), isUnderlined(), isStrikethrough(), isObfuscated());
+    }
 
-    Text append(Text append);
+    default Text withStyle(Style style) {
+        return withBold(style.bold()).withItalic(style.italic()).withUnderlined(style.underlined()).withStrikethrough(style.strikethrough()).withObfuscated(style.obfuscated()).withColor(style.color());
+    }
 
-    Text copy();
+    default Text withStyle(TextStyle... styles) {
+        return withStyle(getStyle().applyFormat(styles));
+    }
+
+    Text withBold(Boolean bold);
+    Text withItalic(Boolean italic);
+    Text withUnderlined(Boolean underlined);
+    Text withStrikethrough(Boolean strikethrough);
+    Text withObfuscated(Boolean obfuscated);
+    Text withColor(Integer color);
+
+    Boolean isBold();
+
+    Boolean isItalic();
+
+    Boolean isUnderlined();
+
+    Boolean isStrikethrough();
+
+    Boolean isObfuscated();
+
+    Integer getColor();
 
     String getString();
-
-    default boolean isBlank() {
-        return getString().isBlank();
-    }
 
 }

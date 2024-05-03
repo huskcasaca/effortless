@@ -434,7 +434,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
             var tooltip = new ArrayList<Text>();
             tooltip.add(hoveredButton.getDisplayCategory().withStyle(TextStyle.WHITE));
             tooltip.add(hoveredButton.getDisplayName().withStyle(TextStyle.GOLD));
-            if (!hoveredButton.getDisplayTooltip().isBlank()) {
+            if (!hoveredButton.getDisplayTooltip().getString().isBlank()) {
                 tooltip.add(Text.empty());
                 if (Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
                     tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text(TextStyle.GRAY + hoveredButton.getDisplayTooltip().getString())));

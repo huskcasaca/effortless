@@ -27,11 +27,13 @@ public enum TextStyle {
     LIGHT_PURPLE("LIGHT_PURPLE", 'd', 13, 16733695),
     YELLOW("YELLOW", 'e', 14, 16777045),
     WHITE("WHITE", 'f', 15, 16777215),
+
     OBFUSCATED("OBFUSCATED", 'k', true),
     BOLD("BOLD", 'l', true),
     STRIKETHROUGH("STRIKETHROUGH", 'm', true),
     UNDERLINE("UNDERLINE", 'n', true),
     ITALIC("ITALIC", 'o', true),
+
     RESET("RESET", 'r', -1, null);
 
     public static final char PREFIX_CODE = '§';
