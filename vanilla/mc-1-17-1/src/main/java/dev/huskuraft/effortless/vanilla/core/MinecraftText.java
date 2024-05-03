@@ -7,13 +7,7 @@ import dev.huskuraft.effortless.api.text.TextStyle;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
-public class MinecraftText implements Text {
-
-    private final Component reference;
-
-    public MinecraftText(Component reference) {
-        this.reference = reference;
-    }
+public record MinecraftText(Component referenceValue) implements Text {
 
     public static Text ofNullable(Component reference) {
         return reference == null ? null : new MinecraftText(reference);
@@ -46,43 +40,25 @@ public class MinecraftText implements Text {
         };
     }
 
-    @Override
-    public Component referenceValue() {
-        return reference;
-    }
 
     @Override
     public Text withStyle(TextStyle... styles) {
-        return new MinecraftText(reference.copy().withStyle(Arrays.stream(styles).map(MinecraftText::adapt).toArray(ChatFormatting[]::new)));
+        return new MinecraftText(referenceValue().copy().withStyle(Arrays.stream(styles).map(MinecraftText::adapt).toArray(ChatFormatting[]::new)));
     }
 
     @Override
     public Text append(Text append) {
-        return new MinecraftText(reference.copy().append(append.<Component>reference()));
+        return new MinecraftText(referenceValue().copy().append(append.<Component>reference()));
     }
 
     @Override
     public Text copy() {
-        return new MinecraftText(reference.copy());
+        return new MinecraftText(referenceValue().copy());
     }
 
     @Override
     public String getString() {
-        return reference.getString();
+        return referenceValue().getString();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftText text && reference.equals(text.reference);
-    }
-
-    @Override
-    public int hashCode() {
-        return reference.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return getString();
-    }
 }
