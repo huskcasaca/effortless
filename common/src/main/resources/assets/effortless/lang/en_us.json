@@ -366,5 +366,13 @@
   "effortless.history.undo_success": "Undo Build",
   "effortless.history.redo_success": "Redo Build",
   "effortless.history.nothing_to_undo": "Nothing to Undo",
-  "effortless.history.nothing_to_redo": "Nothing to Redo"
+  "effortless.history.nothing_to_redo": "Nothing to Redo",
+
+  "effortless.option.passive_mode": "Passive Mode",
+  "effortless.action.passive_mode_disabled": "Disabled",
+  "effortless.action.passive_mode_enabled": "Enabled",
+
+  "effortless.action.passive_mode_disabled.tooltip": "You can start to build anytime.",
+  "effortless.action.passive_mode_enabled.tooltip": "If enabled, you can start to build only when pressed and hold the %s key. \nMake sure you have assigned the hotkey in key binds settings."
+
 }

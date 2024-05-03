@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.screen.radial;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -12,6 +13,8 @@ import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
+import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
@@ -100,7 +103,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         };
     }
 
-    protected static <T> Button<T> button(Object id, Text name, Text category, ResourceLocation icon, T content, boolean activated) {
+    protected static <T> Button<T> button(Object id, Text name, Text category, ResourceLocation icon, Text tooltip, T content, boolean activated) {
         return new Button<>() {
 
             @Override
@@ -116,6 +119,11 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
             @Override
             public Text getDisplayCategory() {
                 return category;
+            }
+
+            @Override
+            public Text getDisplayTooltip() {
+                return tooltip;
             }
 
             @Override
@@ -166,9 +174,10 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     public static <T extends Option> Button<T> button(T option, boolean activated) {
         return button(
                 option,
-                option.getDisplayName(),
-                option.getDisplayCategory(),
+                option.getNameText(),
+                option.getCategoryText(),
                 option.getIcon(),
+                option.getTooltipText(),
                 option,
                 activated);
     }
@@ -422,12 +431,18 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         super.renderWidgetOverlay(renderer, mouseX, mouseY, deltaTick);
 
         if (hoveredButton != null) {
-            renderer.renderTooltip(
-                    getTypeface(),
-                    List.of(
-                            hoveredButton.getDisplayCategory().withStyle(TextStyle.WHITE),
-                            hoveredButton.getDisplayName().withStyle(TextStyle.GOLD)
-                    ), mouseX, mouseY);
+            var tooltip = new ArrayList<Text>();
+            tooltip.add(hoveredButton.getDisplayCategory().withStyle(TextStyle.WHITE));
+            tooltip.add(hoveredButton.getDisplayName().withStyle(TextStyle.GOLD));
+            if (!hoveredButton.getDisplayTooltip().isBlank()) {
+                tooltip.add(Text.empty());
+                if (Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
+                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text(TextStyle.GRAY + hoveredButton.getDisplayTooltip().getString())));
+                } else {
+
+                }
+            }
+            renderer.renderTooltip(getTypeface(), tooltip, mouseX, mouseY);
         }
     }
 
@@ -472,6 +487,8 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         Text getDisplayName();
 
         Text getDisplayCategory();
+
+        Text getDisplayTooltip();
 
         ResourceLocation getIcon();
 

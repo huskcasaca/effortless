@@ -114,7 +114,7 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
         var context = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer());
 
         setSelectedSlots(slot(context.buildMode()));
-        var passiveMode = (getEntrance().getConfigStorage().get().passiveMode()) ? PassiveMode.ENABLED : PassiveMode.DISABLED;
+        var passiveMode = getEntrance().getConfigStorage().get().passiveMode() ? PassiveMode.ENABLED : PassiveMode.DISABLED;
         setLeftButtons(
                 buttonSet(REDO_OPTION, UNDO_OPTION),
                 buttonSet(button(passiveMode, passiveMode != PassiveMode.DISABLED), button(context.replaceMode(), context.replaceMode() != ReplaceMode.DISABLED)),

@@ -10,12 +10,28 @@ public interface Option {
 
     String getCategory();
 
-    default Text getDisplayName() {
-        return Text.translate("effortless.action.%s".formatted(getName()));
+    default String getNameKey() {
+        return "effortless.action.%s".formatted(getName());
     }
 
-    default Text getDisplayCategory() {
-        return Text.translate("effortless.option.%s".formatted(getCategory()));
+    default String getCategoryKey() {
+        return "effortless.option.%s".formatted(getCategory());
+    }
+
+    default String getTooltipKey() {
+        return "effortless.action.%s.tooltip".formatted(getName());
+    }
+
+    default Text getNameText() {
+        return Text.translate(getNameKey());
+    }
+
+    default Text getCategoryText() {
+        return Text.translate(getCategoryKey());
+    }
+
+    default Text getTooltipText() {
+        return Text.empty();
     }
 
     default ResourceLocation getIcon() {
