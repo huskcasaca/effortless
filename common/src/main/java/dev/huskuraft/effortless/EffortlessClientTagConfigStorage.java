@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.building.config.tag.RootSettingsTagSerializer;
 public final class EffortlessClientTagConfigStorage extends TagElementFileStorage<ClientConfig> {
 
     public EffortlessClientTagConfigStorage(EffortlessClient entrance) {
-        super("effortless.dat", FileType.NBT, new RootSettingsTagSerializer());
+        super("effortless-client.dat", FileType.NBT, new RootSettingsTagSerializer());
     }
 
     @Override
