@@ -22,4 +22,7 @@ dependencies {
     implementation 'com.electronwill.night-config:core:3.6.7'
     implementation 'com.electronwill.night-config:toml:3.6.7'
     implementation 'com.electronwill.night-config:json:3.6.7'
+
+    compileOnly 'io.netty:netty-all:4.1.109.Final'
+
 }

@@ -8,8 +8,8 @@ import dev.huskuraft.effortless.api.networking.BufferReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
-import dev.huskuraft.effortless.vanilla.networking.MinecraftBuffer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.ChannelBuilder;
@@ -55,14 +55,14 @@ public class ForgeNetworking implements Networking {
         public static void registerReceiver(BufferReceiver receiver) {
             CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
-                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
+                    receiver.receiveBuffer(new Buffer(event1.getPayload()), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
                 }
             });
 
         }
 
         public static void send(Buffer buffer, Player player) {
-            var minecraftPacket = NetworkDirection.PLAY_TO_SERVER.buildPacket(buffer.reference(), CHANNEL.getName()).getThis();
+            var minecraftPacket = NetworkDirection.PLAY_TO_SERVER.buildPacket(new FriendlyByteBuf(buffer), CHANNEL.getName()).getThis();
             Minecraft.getInstance().getConnection().send(minecraftPacket);
         }
     }
@@ -71,13 +71,13 @@ public class ForgeNetworking implements Networking {
         public static void registerReceiver(BufferReceiver receiver) {
             CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
-                    receiver.receiveBuffer(new MinecraftBuffer(event1.getPayload()), MinecraftPlayer.ofNullable(event1.getSource().getSender()));
+                    receiver.receiveBuffer(new Buffer(event1.getPayload()), MinecraftPlayer.ofNullable(event1.getSource().getSender()));
                 }
             });
         }
 
         public static void send(Buffer buffer, Player player) {
-            var minecraftPacket = NetworkDirection.PLAY_TO_CLIENT.buildPacket(buffer.reference(), CHANNEL.getName()).getThis();
+            var minecraftPacket = NetworkDirection.PLAY_TO_CLIENT.buildPacket(new FriendlyByteBuf(buffer), CHANNEL.getName()).getThis();
             ((ServerPlayer) player.reference()).connection.send(minecraftPacket);
         }
     }

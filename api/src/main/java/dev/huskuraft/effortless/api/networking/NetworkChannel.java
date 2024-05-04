@@ -21,6 +21,7 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
 
     private final ResourceLocation channelId;
     private final Side side;
+    private final Map<UUID, Consumer<? extends ResponsiblePacket<?>>> responseMap = Collections.synchronizedMap(new HashMap<>());
     private PacketSet<P> packetSet = new PacketSet<>();
 
     protected NetworkChannel(ResourceLocation channelId, Side side) {
@@ -44,8 +45,6 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
             case SERVER -> getPlatformChannel().sendToClient(buffer, player);
         }
     }
-
-    private final Map<UUID, Consumer<? extends ResponsiblePacket<?>>> responseMap = Collections.synchronizedMap(new HashMap<>());
 
     public <T extends ResponsiblePacket<?>> void sendPacket(T packet, Consumer<T> callback) {
         responseMap.put(packet.responseId(), callback);
