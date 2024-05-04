@@ -1,50 +1,31 @@
 package dev.huskuraft.effortless.vanilla.tag;
 
-import java.util.Objects;
-
 import dev.huskuraft.effortless.api.tag.TagElement;
-import dev.huskuraft.effortless.api.tag.TagPrimitive;
-import dev.huskuraft.effortless.api.tag.TagRecord;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NumericTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 
-public class MinecraftTagElement implements TagElement {
+public record MinecraftTagElement(Tag referenceValue) implements TagElement {
 
-    protected Tag reference;
+    public static TagElement ofNullable(Tag tag) {
+        if (tag == null) return null;
+        if (tag instanceof NumericTag numericTag) return new MinecraftTagPrimitive(numericTag);
+        if (tag instanceof StringTag stringTag) return new MinecraftTagLiteral(stringTag);
+        if (tag instanceof CompoundTag compoundTag) return new MinecraftTagRecord(compoundTag);
+        if (tag instanceof ListTag listTag) return new MinecraftTagList(listTag);
 
-    public MinecraftTagElement(Tag reference) {
-        this.reference = reference;
+        return new MinecraftTagElement(tag);
     }
 
     @Override
-    public Tag referenceValue() {
-        return Objects.requireNonNull(reference);
-    }
-
-    public void setReference(Tag tag) {
-        this.reference = tag;
+    public byte getId() {
+        return referenceValue().getId();
     }
 
     @Override
-    public TagRecord asRecord() {
-        if (reference == null) {
-            this.reference = new CompoundTag();
-        }
-        return new MinecraftTagRecord(this);
-    }
-
-    @Override
-    public TagPrimitive asPrimitive() {
-        return new MinecraftTagPrimitive(this);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftTagElement tagElement && reference.equals(tagElement.reference);
-    }
-
-    @Override
-    public int hashCode() {
-        return reference.hashCode();
+    public String getAsString() {
+        return referenceValue().getAsString();
     }
 }

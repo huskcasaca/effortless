@@ -1,77 +1,53 @@
 package dev.huskuraft.effortless.vanilla.tag;
 
 import dev.huskuraft.effortless.api.tag.TagPrimitive;
-import dev.huskuraft.effortless.api.tag.TagRecord;
-import net.minecraft.nbt.DoubleTag;
-import net.minecraft.nbt.IntTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NumericTag;
 
-public class MinecraftTagPrimitive implements TagPrimitive {
+public record MinecraftTagPrimitive(NumericTag referenceValue) implements TagPrimitive {
 
-    private final MinecraftTagElement proxy;
-
-    public MinecraftTagPrimitive(MinecraftTagElement tag) {
-        this.proxy = tag;
+    @Override
+    public byte getId() {
+        return new MinecraftTagElement(referenceValue()).getId();
     }
 
     @Override
-    public Tag referenceValue() {
-        return proxy.referenceValue();
-    }
-
-    private void setReference(Tag tag) {
-        proxy.setReference(tag);
+    public String getAsString() {
+        return new MinecraftTagElement(referenceValue()).getAsString();
     }
 
     @Override
-    public TagRecord asRecord() {
-        return new MinecraftTagRecord(proxy);
+    public long getAsLong() {
+        return referenceValue().getAsLong();
     }
 
     @Override
-    public TagPrimitive asPrimitive() {
-        return this;
+    public int getAsInt() {
+        return referenceValue().getAsInt();
     }
 
     @Override
-    public String getString() {
-        return referenceValue().getAsString();
+    public short getAsShort() {
+        return referenceValue().getAsShort();
     }
 
     @Override
-    public void putString(String value) {
-        setReference(StringTag.valueOf(value));
+    public byte getAsByte() {
+        return referenceValue().getAsByte();
     }
 
     @Override
-    public int getInt() {
-        return ((IntTag) referenceValue()).getAsInt();
+    public double getAsDouble() {
+        return referenceValue().getAsDouble();
     }
 
     @Override
-    public void putInt(int value) {
-        setReference(IntTag.valueOf(value));
+    public float getAsFloat() {
+        return referenceValue().getAsFloat();
     }
 
     @Override
-    public double getDouble() {
-        return ((DoubleTag) referenceValue()).getAsDouble();
-    }
-
-    @Override
-    public void putDouble(double value) {
-        setReference(DoubleTag.valueOf(value));
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftTagElement tagElement && referenceValue().equals(tagElement.reference) || obj instanceof MinecraftTagPrimitive tagPrimitive && referenceValue().equals(tagPrimitive.referenceValue());
-    }
-
-    @Override
-    public int hashCode() {
-        return referenceValue().hashCode();
+    public Number getAsNumber() {
+        return referenceValue().getAsNumber();
     }
 
 }

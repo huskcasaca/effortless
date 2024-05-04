@@ -1,31 +1,54 @@
 package dev.huskuraft.effortless.api.tag;
 
-import java.util.Locale;
-
-import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.platform.TagFactory;
 
 public interface TagPrimitive extends TagElement {
 
-    String getString();
 
-    void putString(String value);
-
-    int getInt();
-
-    void putInt(int value);
-
-    double getDouble();
-
-    void putDouble(double value);
-
-    default <T extends Enum<T>> void putEnum(Enum<T> value) {
-        var id = ResourceLocation.of("effortless", value.name().toLowerCase(Locale.ROOT));
-        putString(id.toString());
+    static TagPrimitive of(boolean value) {
+        return TagFactory.getInstance().newPrimitive(value);
+    }
+    static TagPrimitive of(byte value) {
+        return TagFactory.getInstance().newPrimitive(value);
+    }
+    static TagPrimitive of(short value) {
+        return TagFactory.getInstance().newPrimitive(value);
+    }
+    static TagPrimitive of(int value) {
+        return TagFactory.getInstance().newPrimitive(value);
+    }
+    static TagPrimitive of(long value) {
+        return TagFactory.getInstance().newPrimitive(value);
+    }
+    static TagPrimitive of(float value) {
+        return TagFactory.getInstance().newPrimitive(value);
+    }
+    static TagPrimitive of(double value) {
+        return TagFactory.getInstance().newPrimitive(value);
     }
 
-    default <T extends Enum<T>> T getEnum(Class<T> clazz) {
-        var id = ResourceLocation.decompose(getString());
-        return Enum.valueOf(clazz, id.getPath().toUpperCase(Locale.ROOT));
-    }
+    long getAsLong();
+
+    int getAsInt();
+
+    short getAsShort();
+
+    byte getAsByte();
+
+    double getAsDouble();
+
+    float getAsFloat();
+
+    Number getAsNumber();
+
+//    default <T extends Enum<T>> void putEnum(Enum<T> value) {
+//        var id = ResourceLocation.of("effortless", value.name().toLowerCase(Locale.ROOT));
+//        putString(id.toString());
+//    }
+//
+//    default <T extends Enum<T>> T getEnum(Class<T> clazz) {
+//        var id = ResourceLocation.decompose(getString());
+//        return Enum.valueOf(clazz, id.getPath().toUpperCase(Locale.ROOT));
+//    }
 
 }

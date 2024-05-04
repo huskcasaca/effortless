@@ -19,13 +19,13 @@ public abstract class TagElementFileStorage<T> extends FileStorage<T> {
     @Override
     protected T read(File config) throws IOException {
         var tag = (TagElement) getFileType().getAdapter().read(config);
-        return getSerializer().read(tag, true);
+        return getSerializer().decode(tag, true);
     }
 
     @Override
     protected void write(File file, T t) throws IOException {
         var tag = TagRecord.newRecord();
-        getSerializer().write(tag, t, true);
+        getSerializer().encode(t, true);
         getFileType().getAdapter().write(file, tag);
     }
 
