@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.networking.packets.session;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.serializer.SessionSerializer;
@@ -17,16 +17,16 @@ public record SessionPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer implements BufferSerializer<SessionPacket> {
+    public static class Serializer implements NetByteBufSerializer<SessionPacket> {
 
         @Override
-        public SessionPacket read(Buffer buffer) {
-            return new SessionPacket(buffer.read(new SessionSerializer()));
+        public SessionPacket read(NetByteBuf byteBuf) {
+            return new SessionPacket(byteBuf.read(new SessionSerializer()));
         }
 
         @Override
-        public void write(Buffer buffer, SessionPacket packet) {
-            buffer.write(packet.session(), new SessionSerializer());
+        public void write(NetByteBuf byteBuf, SessionPacket packet) {
+            byteBuf.write(packet.session(), new SessionSerializer());
         }
 
     }

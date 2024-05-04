@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.networking.packets.player;
 import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.ResponsiblePacket;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 
@@ -27,18 +27,18 @@ public record PlayerOperatorCheckPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer implements BufferSerializer<PlayerOperatorCheckPacket> {
+    public static class Serializer implements NetByteBufSerializer<PlayerOperatorCheckPacket> {
 
         @Override
-        public PlayerOperatorCheckPacket read(Buffer buffer) {
-            return new PlayerOperatorCheckPacket(buffer.readUUID(), buffer.readUUID(), buffer.readBoolean());
+        public PlayerOperatorCheckPacket read(NetByteBuf byteBuf) {
+            return new PlayerOperatorCheckPacket(byteBuf.readUUID(), byteBuf.readUUID(), byteBuf.readBoolean());
         }
 
         @Override
-        public void write(Buffer buffer, PlayerOperatorCheckPacket packet) {
-            buffer.writeUUID(packet.responseId());
-            buffer.writeUUID(packet.playerId());
-            buffer.writeBoolean(packet.isOperator());
+        public void write(NetByteBuf byteBuf, PlayerOperatorCheckPacket packet) {
+            byteBuf.writeUUID(packet.responseId());
+            byteBuf.writeUUID(packet.playerId());
+            byteBuf.writeBoolean(packet.isOperator());
         }
 
     }

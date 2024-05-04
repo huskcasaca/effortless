@@ -20,17 +20,17 @@ import dev.huskuraft.effortless.api.text.Text;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
-public final class Buffer extends WrappedByteBuf {
+public final class NetByteBuf extends WrappedByteBuf {
 
-    public Buffer(ByteBuf source) {
+    public NetByteBuf(ByteBuf source) {
         super(source);
     }
 
-    public static Buffer newBuffer() {
-        return new Buffer(Unpooled.buffer());
+    public static NetByteBuf newBuffer() {
+        return new NetByteBuf(Unpooled.buffer());
     }
 
-    public <T> T readNullable(BufferReader<T> reader) {
+    public <T> T readNullable(NetByteBufReader<T> reader) {
         if (readBoolean()) return read(reader);
         return null;
     }
@@ -49,12 +49,12 @@ public final class Buffer extends WrappedByteBuf {
 
     public Text readText() {
         return Text.text(readString())
-                .withBold(readNullable(Buffer::readBoolean))
-                .withItalic(readNullable(Buffer::readBoolean))
-                .withUnderlined(readNullable(Buffer::readBoolean))
-                .withStrikethrough(readNullable(Buffer::readBoolean))
-                .withObfuscated(readNullable(Buffer::readBoolean))
-                .withColor(readNullable(Buffer::readInt));
+                .withBold(readNullable(NetByteBuf::readBoolean))
+                .withItalic(readNullable(NetByteBuf::readBoolean))
+                .withUnderlined(readNullable(NetByteBuf::readBoolean))
+                .withStrikethrough(readNullable(NetByteBuf::readBoolean))
+                .withObfuscated(readNullable(NetByteBuf::readBoolean))
+                .withColor(readNullable(NetByteBuf::readInt));
     }
 
     public int readVarInt() {
@@ -76,11 +76,11 @@ public final class Buffer extends WrappedByteBuf {
         return ItemStack.empty();
     }
 
-    public <T> T read(BufferReader<T> reader) {
+    public <T> T read(NetByteBufReader<T> reader) {
         return reader.read(this);
     }
 
-    public <T> List<T> readList(BufferReader<T> reader) {
+    public <T> List<T> readList(NetByteBufReader<T> reader) {
         var i = readInt();
         var list = new ArrayList<T>();
 
@@ -90,7 +90,7 @@ public final class Buffer extends WrappedByteBuf {
         return Collections.unmodifiableList(list);
     }
 
-    public <K, V> Map<K, V> readMap(BufferReader<K> keyReader, BufferReader<V> valueReader) {
+    public <K, V> Map<K, V> readMap(NetByteBufReader<K> keyReader, NetByteBufReader<V> valueReader) {
         var i = readInt();
         var map = new LinkedHashMap<K, V>();
 
@@ -100,7 +100,7 @@ public final class Buffer extends WrappedByteBuf {
         return Collections.unmodifiableMap(map);
     }
 
-    public <T> void writeNullable(T value, BufferWriter<T> writer) {
+    public <T> void writeNullable(T value, NetByteBufWriter<T> writer) {
         writeBoolean(value != null);
         if (value != null) write(value, writer);
     }
@@ -120,12 +120,12 @@ public final class Buffer extends WrappedByteBuf {
 
     public void writeText(Text value) {
         writeString(value.getString());
-        writeNullable(value.isBold(), Buffer::writeBoolean);
-        writeNullable(value.isItalic(), Buffer::writeBoolean);
-        writeNullable(value.isUnderlined(), Buffer::writeBoolean);
-        writeNullable(value.isStrikethrough(), Buffer::writeBoolean);
-        writeNullable(value.isObfuscated(), Buffer::writeBoolean);
-        writeNullable(value.getColor(), Buffer::writeInt);
+        writeNullable(value.isBold(), NetByteBuf::writeBoolean);
+        writeNullable(value.isItalic(), NetByteBuf::writeBoolean);
+        writeNullable(value.isUnderlined(), NetByteBuf::writeBoolean);
+        writeNullable(value.isStrikethrough(), NetByteBuf::writeBoolean);
+        writeNullable(value.isObfuscated(), NetByteBuf::writeBoolean);
+        writeNullable(value.getColor(), NetByteBuf::writeInt);
     }
 
     public void writeVarInt(int value) {
@@ -146,18 +146,18 @@ public final class Buffer extends WrappedByteBuf {
 
     }
 
-    public <T> void write(T value, BufferWriter<T> writer) {
+    public <T> void write(T value, NetByteBufWriter<T> writer) {
         writer.write(this, value);
     }
 
-    public <T> void writeList(Collection<T> collection, BufferWriter<T> writer) {
+    public <T> void writeList(Collection<T> collection, NetByteBufWriter<T> writer) {
         writeInt(collection.size());
         for (var object : collection) {
             write(object, writer);
         }
     }
 
-    public <K, V> void writeMap(Map<K, V> map, BufferWriter<K> keyWriter, BufferWriter<V> valueWriter) {
+    public <K, V> void writeMap(Map<K, V> map, NetByteBufWriter<K> keyWriter, NetByteBufWriter<V> valueWriter) {
         writeInt(map.size());
         for (var entry : map.entrySet()) {
             keyWriter.write(this, entry.getKey());

@@ -20,13 +20,13 @@ public class VarInt {
         return (pData & 128) == 128;
     }
 
-    public static int read(Buffer buffer) {
+    public static int read(NetByteBuf byteBuf) {
         int i = 0;
         int j = 0;
 
         byte b0;
         do {
-            b0 = buffer.readByte();
+            b0 = byteBuf.readByte();
             i |= (b0 & 127) << j++ * 7;
             if (j > 5) {
                 throw new RuntimeException("VarInt too big");
@@ -36,13 +36,13 @@ public class VarInt {
         return i;
     }
 
-    public static Buffer write(Buffer buffer, int pValue) {
+    public static NetByteBuf write(NetByteBuf byteBuf, int pValue) {
         while ((pValue & -128) != 0) {
-            buffer.writeByte((byte) (pValue & 127 | 128));
+            byteBuf.writeByte((byte) (pValue & 127 | 128));
             pValue >>>= 7;
         }
 
-        buffer.writeByte(pValue);
-        return buffer;
+        byteBuf.writeByte(pValue);
+        return byteBuf;
     }
 }

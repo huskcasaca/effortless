@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.networking.packets.player;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 
@@ -14,15 +14,15 @@ public record PlayerSettingsPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer implements BufferSerializer<PlayerSettingsPacket> {
+    public static class Serializer implements NetByteBufSerializer<PlayerSettingsPacket> {
 
         @Override
-        public PlayerSettingsPacket read(Buffer buffer) {
+        public PlayerSettingsPacket read(NetByteBuf byteBuf) {
             return new PlayerSettingsPacket();
         }
 
         @Override
-        public void write(Buffer buffer, PlayerSettingsPacket packet) {
+        public void write(NetByteBuf byteBuf, PlayerSettingsPacket packet) {
         }
 
     }

@@ -1,26 +1,26 @@
 package dev.huskuraft.effortless.networking.serializer;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 
-public class BlockPositionSerializer implements BufferSerializer<BlockPosition> {
+public class BlockPositionSerializer implements NetByteBufSerializer<BlockPosition> {
 
     @Override
-    public BlockPosition read(Buffer buffer) {
+    public BlockPosition read(NetByteBuf byteBuf) {
         return BlockPosition.at(
-                buffer.readInt(),
-                buffer.readInt(),
-                buffer.readInt()
+                byteBuf.readInt(),
+                byteBuf.readInt(),
+                byteBuf.readInt()
         );
     }
 
 
     @Override
-    public void write(Buffer buffer, BlockPosition blockPosition) {
-        buffer.writeInt(blockPosition.x());
-        buffer.writeInt(blockPosition.y());
-        buffer.writeInt(blockPosition.z());
+    public void write(NetByteBuf byteBuf, BlockPosition blockPosition) {
+        byteBuf.writeInt(blockPosition.x());
+        byteBuf.writeInt(blockPosition.y());
+        byteBuf.writeInt(blockPosition.z());
     }
 
 }

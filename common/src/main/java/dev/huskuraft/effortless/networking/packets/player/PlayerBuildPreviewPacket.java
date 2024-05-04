@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.networking.packets.player;
 import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
@@ -20,17 +20,17 @@ public record PlayerBuildPreviewPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer implements BufferSerializer<PlayerBuildPreviewPacket> {
+    public static class Serializer implements NetByteBufSerializer<PlayerBuildPreviewPacket> {
 
         @Override
-        public PlayerBuildPreviewPacket read(Buffer buffer) {
-            return new PlayerBuildPreviewPacket(buffer.readUUID(), buffer.read(new ContextSerializer()));
+        public PlayerBuildPreviewPacket read(NetByteBuf byteBuf) {
+            return new PlayerBuildPreviewPacket(byteBuf.readUUID(), byteBuf.read(new ContextSerializer()));
         }
 
         @Override
-        public void write(Buffer buffer, PlayerBuildPreviewPacket packet) {
-            buffer.writeUUID(packet.playerId());
-            buffer.write(packet.context(), new ContextSerializer());
+        public void write(NetByteBuf byteBuf, PlayerBuildPreviewPacket packet) {
+            byteBuf.writeUUID(packet.playerId());
+            byteBuf.write(packet.context(), new ContextSerializer());
         }
 
     }

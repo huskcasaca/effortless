@@ -20,13 +20,13 @@ public class VarLong {
         return (pData & 128) == 128;
     }
 
-    public static long read(Buffer buffer) {
+    public static long read(NetByteBuf byteBuf) {
         long i = 0L;
         int j = 0;
 
         byte b0;
         do {
-            b0 = buffer.readByte();
+            b0 = byteBuf.readByte();
             i |= (long) (b0 & 127) << j++ * 7;
             if (j > 10) {
                 throw new RuntimeException("VarLong too big");
@@ -36,13 +36,13 @@ public class VarLong {
         return i;
     }
 
-    public static Buffer write(Buffer buffer, long pValue) {
+    public static NetByteBuf write(NetByteBuf byteBuf, long pValue) {
         while ((pValue & -128L) != 0L) {
-            buffer.writeByte((byte) ((int) (pValue & 127L) | 128));
+            byteBuf.writeByte((byte) ((int) (pValue & 127L) | 128));
             pValue >>>= 7;
         }
 
-        buffer.writeByte((byte) pValue);
-        return buffer;
+        byteBuf.writeByte((byte) pValue);
+        return byteBuf;
     }
 }

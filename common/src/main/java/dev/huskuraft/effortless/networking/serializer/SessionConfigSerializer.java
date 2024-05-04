@@ -1,23 +1,23 @@
 package dev.huskuraft.effortless.networking.serializer;
 
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.session.config.SessionConfig;
 
-public class SessionConfigSerializer implements BufferSerializer<SessionConfig> {
+public class SessionConfigSerializer implements NetByteBufSerializer<SessionConfig> {
 
     @Override
-    public SessionConfig read(Buffer buffer) {
+    public SessionConfig read(NetByteBuf byteBuf) {
         return new SessionConfig(
-                buffer.read(new GeneralConfigSerializer()),
-                buffer.readMap(Buffer::readUUID, new GeneralConfigSerializer())
+                byteBuf.read(new GeneralConfigSerializer()),
+                byteBuf.readMap(NetByteBuf::readUUID, new GeneralConfigSerializer())
         );
     }
 
     @Override
-    public void write(Buffer buffer, SessionConfig sessionConfig) {
-        buffer.write(sessionConfig.globalConfig(), new GeneralConfigSerializer());
-        buffer.writeMap(sessionConfig.playerConfigs(), Buffer::writeUUID, new GeneralConfigSerializer());
+    public void write(NetByteBuf byteBuf, SessionConfig sessionConfig) {
+        byteBuf.write(sessionConfig.globalConfig(), new GeneralConfigSerializer());
+        byteBuf.writeMap(sessionConfig.playerConfigs(), NetByteBuf::writeUUID, new GeneralConfigSerializer());
     }
 
 }

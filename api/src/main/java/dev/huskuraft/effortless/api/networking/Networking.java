@@ -18,12 +18,12 @@ public interface Networking {
         return Entrance.getInstance().getChannel().getCompatibilityVersionStr();
     }
 
-    void sendToClient(Buffer buffer, Player player);
+    void sendToClient(NetByteBuf byteBuf, Player player);
 
-    void sendToServer(Buffer buffer, Player player);
+    void sendToServer(NetByteBuf byteBuf, Player player);
 
-    void registerClientReceiver(BufferReceiver receiver);
+    void registerClientReceiver(NetByteBufReceiver receiver);
 
-    void registerServerReceiver(BufferReceiver receiver);
+    void registerServerReceiver(NetByteBufReceiver receiver);
 
 }

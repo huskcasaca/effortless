@@ -1,40 +1,40 @@
 package dev.huskuraft.effortless.networking.serializer;
 
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
-public class GeneralConfigSerializer implements BufferSerializer<GeneralConfig> {
+public class GeneralConfigSerializer implements NetByteBufSerializer<GeneralConfig> {
 
     @Override
-    public GeneralConfig read(Buffer buffer) {
+    public GeneralConfig read(NetByteBuf byteBuf) {
         return new GeneralConfig(
-                buffer.readNullable(Buffer::readBoolean),
-                buffer.readNullable(Buffer::readBoolean),
-                buffer.readNullable(Buffer::readBoolean),
-                buffer.readNullable(Buffer::readBoolean),
-                buffer.readNullable(Buffer::readVarInt),
-                buffer.readNullable(Buffer::readVarInt),
-                buffer.readNullable(Buffer::readVarInt),
-                buffer.readNullable(Buffer::readVarInt),
-                buffer.readNullable(Buffer::readVarInt),
-                buffer.readNullable(buffer1 -> buffer1.readList(Buffer::readResourceLocation)),
-                buffer.readNullable(buffer1 -> buffer1.readList(Buffer::readResourceLocation)));
+                byteBuf.readNullable(NetByteBuf::readBoolean),
+                byteBuf.readNullable(NetByteBuf::readBoolean),
+                byteBuf.readNullable(NetByteBuf::readBoolean),
+                byteBuf.readNullable(NetByteBuf::readBoolean),
+                byteBuf.readNullable(NetByteBuf::readVarInt),
+                byteBuf.readNullable(NetByteBuf::readVarInt),
+                byteBuf.readNullable(NetByteBuf::readVarInt),
+                byteBuf.readNullable(NetByteBuf::readVarInt),
+                byteBuf.readNullable(NetByteBuf::readVarInt),
+                byteBuf.readNullable(buffer1 -> buffer1.readList(NetByteBuf::readResourceLocation)),
+                byteBuf.readNullable(buffer1 -> buffer1.readList(NetByteBuf::readResourceLocation)));
     }
 
     @Override
-    public void write(Buffer buffer, GeneralConfig generalConfig) {
-        buffer.writeNullable(generalConfig.useCommands(), Buffer::writeBoolean);
-        buffer.writeNullable(generalConfig.allowUseMod(), Buffer::writeBoolean);
-        buffer.writeNullable(generalConfig.allowBreakBlocks(), Buffer::writeBoolean);
-        buffer.writeNullable(generalConfig.allowPlaceBlocks(), Buffer::writeBoolean);
-        buffer.writeNullable(generalConfig.maxReachDistance(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.maxBoxVolumePerBreak(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.maxBoxVolumePerPlace(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.maxBoxSideLengthPerBreak(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.maxBoxSideLengthPerPlace(), Buffer::writeVarInt);
-        buffer.writeNullable(generalConfig.whitelistedItems(), (buffer1, list) -> buffer1.writeList(list, Buffer::writeResourceLocation));
-        buffer.writeNullable(generalConfig.blacklistedItems(), (buffer1, list) -> buffer1.writeList(list, Buffer::writeResourceLocation));
+    public void write(NetByteBuf byteBuf, GeneralConfig generalConfig) {
+        byteBuf.writeNullable(generalConfig.useCommands(), NetByteBuf::writeBoolean);
+        byteBuf.writeNullable(generalConfig.allowUseMod(), NetByteBuf::writeBoolean);
+        byteBuf.writeNullable(generalConfig.allowBreakBlocks(), NetByteBuf::writeBoolean);
+        byteBuf.writeNullable(generalConfig.allowPlaceBlocks(), NetByteBuf::writeBoolean);
+        byteBuf.writeNullable(generalConfig.maxReachDistance(), NetByteBuf::writeVarInt);
+        byteBuf.writeNullable(generalConfig.maxBoxVolumePerBreak(), NetByteBuf::writeVarInt);
+        byteBuf.writeNullable(generalConfig.maxBoxVolumePerPlace(), NetByteBuf::writeVarInt);
+        byteBuf.writeNullable(generalConfig.maxBoxSideLengthPerBreak(), NetByteBuf::writeVarInt);
+        byteBuf.writeNullable(generalConfig.maxBoxSideLengthPerPlace(), NetByteBuf::writeVarInt);
+        byteBuf.writeNullable(generalConfig.whitelistedItems(), (buffer1, list) -> buffer1.writeList(list, NetByteBuf::writeResourceLocation));
+        byteBuf.writeNullable(generalConfig.blacklistedItems(), (buffer1, list) -> buffer1.writeList(list, NetByteBuf::writeResourceLocation));
 
     }
 }

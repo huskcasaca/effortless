@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.networking.packets.player;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.building.history.HistoryResult;
 import dev.huskuraft.effortless.building.operation.ItemSummaryType;
@@ -19,24 +19,24 @@ public record PlayerHistoryResultPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer implements BufferSerializer<PlayerHistoryResultPacket> {
+    public static class Serializer implements NetByteBufSerializer<PlayerHistoryResultPacket> {
 
         @Override
-        public PlayerHistoryResultPacket read(Buffer buffer) {
+        public PlayerHistoryResultPacket read(NetByteBuf byteBuf) {
             return new PlayerHistoryResultPacket(
                     new HistoryResult(
-                            buffer.readEnum(HistoryResult.Type.class),
-                            buffer.read(new ContextSerializer()),
-                            buffer.readMap((buffer1) -> buffer1.readEnum(ItemSummaryType.class), (buffer1) -> buffer1.readList(Buffer::readItemStack)))
+                            byteBuf.readEnum(HistoryResult.Type.class),
+                            byteBuf.read(new ContextSerializer()),
+                            byteBuf.readMap((buffer1) -> buffer1.readEnum(ItemSummaryType.class), (buffer1) -> buffer1.readList(NetByteBuf::readItemStack)))
             );
 
         }
 
         @Override
-        public void write(Buffer buffer, PlayerHistoryResultPacket packet) {
-            buffer.writeEnum(packet.historyResult().type());
-            buffer.write(packet.historyResult().context(), new ContextSerializer());
-            buffer.writeMap(packet.historyResult().itemSummary(), Buffer::writeEnum, ((buffer1, itemStacks) -> buffer1.writeList(itemStacks, Buffer::writeItemStack)));
+        public void write(NetByteBuf byteBuf, PlayerHistoryResultPacket packet) {
+            byteBuf.writeEnum(packet.historyResult().type());
+            byteBuf.write(packet.historyResult().context(), new ContextSerializer());
+            byteBuf.writeMap(packet.historyResult().itemSummary(), NetByteBuf::writeEnum, ((buffer1, itemStacks) -> buffer1.writeList(itemStacks, NetByteBuf::writeItemStack)));
         }
 
     }
