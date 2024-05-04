@@ -30,7 +30,6 @@ import dev.huskuraft.effortless.vanilla.sound.MinecraftSound;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
 import net.minecraft.Util;
 import net.minecraft.core.DefaultedRegistry;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -42,11 +41,6 @@ public class MinecraftContentFactory implements ContentFactory {
     @Override
     public ResourceLocation newResourceLocation(String namespace, String path) {
         return new MinecraftResourceLocation(new net.minecraft.resources.ResourceLocation(namespace, path));
-    }
-
-    @Override
-    public TagRecord newTagRecord() {
-        return new MinecraftTagRecord(new CompoundTag());
     }
 
     @Override

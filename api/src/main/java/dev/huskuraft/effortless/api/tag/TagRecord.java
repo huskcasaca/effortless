@@ -12,14 +12,15 @@ import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
-import dev.huskuraft.effortless.api.platform.ContentFactory;
+import dev.huskuraft.effortless.api.platform.TagFactory;
 import dev.huskuraft.effortless.api.text.Text;
 
 public interface TagRecord extends TagElement {
 
     static TagRecord newRecord() {
-        return ContentFactory.getInstance().newTagRecord();
+        return TagFactory.getInstance().newRecord();
     }
+
 
     TagElement get(String key);
 
@@ -139,14 +140,6 @@ public interface TagRecord extends TagElement {
     default void putText(String key, Text value) {
         putString(key, value.getString());
     }
-
-
-
-
-
-
-
-
 
 
 

@@ -7,8 +7,14 @@ import dev.huskuraft.effortless.api.platform.TagFactory;
 
 public interface TagList extends TagElement {
 
-    static TagList of(Collection<TagElement> tags) {
+    static TagList newList() {
         return TagFactory.getInstance().newList();
+    }
+
+    static TagList of(Collection<TagElement> tags) {
+        var tag = TagFactory.getInstance().newList();
+        tags.forEach(tag::addTag);
+        return tag;
     }
 
     default boolean addTag(TagElement tag) {

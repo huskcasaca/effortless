@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.config.tag;
 
 import dev.huskuraft.effortless.api.tag.TagElement;
+import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 
@@ -21,9 +22,11 @@ public class PatternTagSerializer implements TagSerializer<Pattern> {
 
     @Override
     public TagElement encode(Pattern pattern) {
+        var tag = TagRecord.newRecord();
         tag.asRecord().putUUID(TAG_ID, pattern.id());
         tag.asRecord().putText(TAG_NAME, pattern.name());
         tag.asRecord().putList(TAG_TRANSFORMERS, pattern.transformers(), new TransformerTagSerializer());
+        return tag;
     }
 
 

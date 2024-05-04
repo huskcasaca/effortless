@@ -26,8 +26,6 @@ public interface ContentFactory {
 
     ResourceLocation newResourceLocation(String namespace, String path);
 
-    TagRecord newTagRecord();
-
     Optional<Item> newOptionalItem(ResourceLocation location);
 
     default Item newItem(ResourceLocation location) {
