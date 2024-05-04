@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.core.Items;
+import dev.huskuraft.effortless.api.core.Registry;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
@@ -67,8 +67,7 @@ public final class NetByteBuf extends WrappedByteBuf {
 
     // use Registries
     public Item readItem() {
-        // FIXME: 4/5/24
-        return Items.AIR;
+        return Registry.ITEM.byIdOrThrow(readVarInt());
     }
 
     public ItemStack readItemStack() {
@@ -138,7 +137,7 @@ public final class NetByteBuf extends WrappedByteBuf {
 
 
     public void writeItem(Item value) {
-
+        writeVarInt(Registry.ITEM.getId(value));
     }
 
     // TODO: 7/12/23 extract
