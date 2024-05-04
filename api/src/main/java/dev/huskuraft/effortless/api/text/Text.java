@@ -63,4 +63,8 @@ public interface Text extends PlatformReference {
 
     String getString();
 
+    default String getEncodedString() {
+        return getStyle().getPrefixString() + getString() + getStyle().getSuffixString();
+    }
+
 }

@@ -128,7 +128,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
     public ConfigSpec getSpec(Config config) {
         var spec = new ConfigSpec();
         spec.define(KEY_ID, TransformerConfigSerializer::randomIdString, TransformerConfigSerializer::isIdCorrect);
-        spec.define(KEY_NAME, () -> getDefault().getName(), String.class::isInstance);
+        spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
         return spec;
     }
 

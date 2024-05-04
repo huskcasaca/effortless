@@ -49,4 +49,43 @@ public record Style(
         return style;
     }
 
+    public TextStyle recoveryColor(int color) {
+        for (var value : TextStyle.values()) {
+            if (value.getColor() != null && value.getColor().equals(color)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    public String getPrefixString() {
+        var builder = new StringBuilder();
+        if (Boolean.TRUE.equals(obfuscated)) {
+            builder.append(TextStyle.OBFUSCATED);
+        }
+        if (Boolean.TRUE.equals(bold)) {
+            builder.append(TextStyle.BOLD);
+        }
+        if (Boolean.TRUE.equals(italic)) {
+            builder.append(TextStyle.ITALIC);
+        }
+        if (Boolean.TRUE.equals(underlined)) {
+            builder.append(TextStyle.UNDERLINE);
+        }
+        if (Boolean.TRUE.equals(strikethrough)) {
+            builder.append(TextStyle.STRIKETHROUGH);
+        }
+        if (color != null && recoveryColor(color) != null) {
+            builder.append(recoveryColor(color));
+        }
+        return builder.toString();
+    }
+
+    public String getSuffixString() {
+        if (getPrefixString().isEmpty()) {
+            return "";
+        }
+        return TextStyle.RESET.toString();
+    }
+
 }
