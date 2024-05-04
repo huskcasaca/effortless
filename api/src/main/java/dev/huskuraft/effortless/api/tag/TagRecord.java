@@ -30,7 +30,7 @@ public interface TagRecord extends TagElement {
 
 
     default String getString(String key) {
-        return getTag(key).asPrimitive().getAsString();
+        return getTag(key).asLiteral().getAsString();
     }
 
     default void putString(String key, String value) {
