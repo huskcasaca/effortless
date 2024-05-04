@@ -132,7 +132,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
                     tag.asRecord().getVector3d(TAG_POSITION),
-                    tag.asRecord().getElement(TAG_POSITION_TYPE, new PositionTypeArrayTagSerializer()),
+                    tag.asRecord().getTag(TAG_POSITION_TYPE, new PositionTypeArrayTagSerializer()),
                     tag.asRecord().getEnum(TAG_AXIS, Axis.class)
             );
         }
@@ -143,7 +143,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             tag.asRecord().putUUID(TAG_ID, transformer.getId());
             tag.asRecord().putText(TAG_NAME, transformer.getName());
             tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
-            tag.asRecord().putElement(TAG_POSITION_TYPE, transformer.getPositionType(), new PositionTypeArrayTagSerializer());
+            tag.asRecord().putTag(TAG_POSITION_TYPE, transformer.getPositionType(), new PositionTypeArrayTagSerializer());
             tag.asRecord().putEnum(TAG_AXIS, transformer.axis());
             return tag;
         }
@@ -174,7 +174,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
                     tag.asRecord().getVector3d(TAG_POSITION),
-                    tag.asRecord().getElement(TAG_POSITION_TYPE, new PositionTypeArrayTagSerializer()),
+                    tag.asRecord().getTag(TAG_POSITION_TYPE, new PositionTypeArrayTagSerializer()),
                     tag.asRecord().getInt(TAG_SLICE)
             );
         }
@@ -185,7 +185,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             tag.asRecord().putUUID(TAG_ID, transformer.getId());
             tag.asRecord().putText(TAG_NAME, transformer.getName());
             tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
-            tag.asRecord().putElement(TAG_POSITION_TYPE, transformer.getPositionType(), new PositionTypeArrayTagSerializer());
+            tag.asRecord().putTag(TAG_POSITION_TYPE, transformer.getPositionType(), new PositionTypeArrayTagSerializer());
             tag.asRecord().putInt(TAG_SLICE, transformer.slices());
             return tag;
         }

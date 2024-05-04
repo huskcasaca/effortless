@@ -25,7 +25,7 @@ public interface TagList extends TagElement {
 
     boolean setTag(int index, TagElement tag);
 
-    TagElement get(int index);
+    TagElement getTag(int index);
 
     int size();
 

@@ -18,12 +18,12 @@ public record MinecraftTagRecord(CompoundTag referenceValue) implements TagRecor
     }
 
     @Override
-    public TagElement get(String key) {
+    public TagElement getTag(String key) {
         return MinecraftTagElement.ofNullable(referenceValue().get(key));
     }
 
     @Override
-    public TagElement put(String key, TagElement value) {
+    public TagElement putTag(String key, TagElement value) {
         return MinecraftTagElement.ofNullable(referenceValue().put(key, (Tag) value.referenceValue()));
     }
 

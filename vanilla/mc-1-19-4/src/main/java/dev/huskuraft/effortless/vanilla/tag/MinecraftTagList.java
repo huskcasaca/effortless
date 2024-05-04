@@ -30,7 +30,7 @@ public record MinecraftTagList(ListTag referenceValue) implements TagList {
     }
 
     @Override
-    public TagElement get(int index) {
+    public TagElement getTag(int index) {
         return MinecraftTagElement.ofNullable(referenceValue().get(index));
     }
 
