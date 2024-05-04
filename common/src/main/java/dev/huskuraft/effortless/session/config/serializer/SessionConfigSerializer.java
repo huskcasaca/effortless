@@ -74,10 +74,10 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
 
     public static class GlobalGeneralConfigSerializer implements ConfigSerializer<GeneralConfig> {
 
+        public static final GlobalGeneralConfigSerializer INSTANCE = new GlobalGeneralConfigSerializer();
+
         private GlobalGeneralConfigSerializer() {
         }
-
-        public static final GlobalGeneralConfigSerializer INSTANCE  = new GlobalGeneralConfigSerializer();
 
         @Override
         public ConfigSpec getSpec(Config config) {
@@ -152,10 +152,10 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
 
     public static class PerPlayerGeneralConfigSerializer implements ConfigSerializer<GeneralConfig> {
 
+        public static final PerPlayerGeneralConfigSerializer INSTANCE = new PerPlayerGeneralConfigSerializer();
+
         private PerPlayerGeneralConfigSerializer() {
         }
-
-        public static final PerPlayerGeneralConfigSerializer INSTANCE  = new PerPlayerGeneralConfigSerializer();
 
         private static <T> void addOrRemove(Config config, String path, T value) {
             if (value == null) {

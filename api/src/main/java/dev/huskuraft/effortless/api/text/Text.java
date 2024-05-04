@@ -38,10 +38,15 @@ public interface Text extends PlatformReference {
     }
 
     Text withBold(Boolean bold);
+
     Text withItalic(Boolean italic);
+
     Text withUnderlined(Boolean underlined);
+
     Text withStrikethrough(Boolean strikethrough);
+
     Text withObfuscated(Boolean obfuscated);
+
     Text withColor(Integer color);
 
     Boolean isBold();

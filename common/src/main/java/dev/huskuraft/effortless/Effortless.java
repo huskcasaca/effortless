@@ -25,6 +25,11 @@ public class Effortless implements Entrance {
         return (Effortless) Entrance.getInstance();
     }
 
+    public static Text getSystemMessage(Text msg) {
+        var id = TextStyle.GRAY + "[" + Text.translate("effortless.name") + "]" + TextStyle.RESET + " ";
+        return Text.text(id + msg.getString());
+    }
+
     public CommonEventRegistry getEventRegistry() {
         return commonEventRegistry;
     }
@@ -52,11 +57,6 @@ public class Effortless implements Entrance {
     @Override
     public String getId() {
         return MOD_ID;
-    }
-
-    public static Text getSystemMessage(Text msg) {
-        var id = TextStyle.GRAY + "[" + Text.translate("effortless.name") + "]" + TextStyle.RESET + " ";
-        return Text.text(id + msg.getString());
     }
 
 }

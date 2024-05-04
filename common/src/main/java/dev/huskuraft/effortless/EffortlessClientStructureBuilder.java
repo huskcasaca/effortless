@@ -64,6 +64,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private final Map<UUID, Context> contexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
+    private final AtomicReference<ResourceLocation> lastClientPlayerLevel = new AtomicReference<>();
 
     public EffortlessClientStructureBuilder(EffortlessClient entrance) {
         this.entrance = entrance;
@@ -107,7 +108,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var result = new BatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
 
 //            if (finalizedContext.type() != BuildType.COMMAND) {
-                getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
+            getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
 //            }
 
             showBuildContextResult(context.getId(), 1024, player, context, result);
@@ -320,7 +321,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         return EventResult.interrupt(buildResult.isSuccess());
     }
 
-
     @Override
     public void onContextReceived(Player player, Context context) {
         var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
@@ -351,8 +351,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void redo(Player player) {
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO));
     }
-
-    private final AtomicReference<ResourceLocation> lastClientPlayerLevel = new AtomicReference<>();
 
     public void onClientTick(Client client, ClientTick.Phase phase) {
         if (phase == ClientTick.Phase.END) {
@@ -461,7 +459,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             for (var allColor : BlockOperationRenderer.getAllColors()) {
                 if (resultMap.get(allColor) == null) continue;
-                var locations =  resultMap.get(allColor).stream().map(OperationResult::getOperation).map(Operation::locate).filter(Objects::nonNull).toList();
+                var locations = resultMap.get(allColor).stream().map(OperationResult::getOperation).map(Operation::locate).filter(Objects::nonNull).toList();
                 getEntrance().getClientManager().getOutlineRenderer().showCluster(generateId(batchOperationResult.getOperation().getContext().getId(), allColor), locations)
                         .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                         .lightMap(LightTexture.FULL_BLOCK)

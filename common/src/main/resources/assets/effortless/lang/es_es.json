@@ -1,6 +1,5 @@
 {
   "effortless.name": "Effortless Structure",
-
   "effortless.settings.title": "Ajustes de Effortless Structure",
   "effortless.build_settings.title": "Ajustes de Construcción",
   "effortless.render_settings.title": "Ajustes de Renderizado",
@@ -9,7 +8,6 @@
   "effortless.general_settings.title": "Ajustes Generales",
   "effortless.global_general_settings.title": "Ajustes Generales Globales",
   "effortless.per_player_general_settings.title": "Ajustes Generales por Jugador",
-
   "effortless.button.add": "Agregar",
   "effortless.button.cancel": "Cancelar",
   "effortless.button.delete": "Eliminar",
@@ -19,16 +17,12 @@
   "effortless.button.select": "Seleccionar",
   "effortless.button.clear": "Limpiar",
   "effortless.button.reset": "Restablecer",
-
   "effortless.online_players.title": "Jugadores en línea",
   "effortless.online_players.search_hint": "Buscar jugador",
-
   "effortless.option.on": "Encendido",
   "effortless.option.off": "Apagado",
-
   "effortless.not_an_operator.title": "No es un Operador",
   "effortless.not_an_operator.message": "No se puede realizar esta acción. No eres un operador de este servidor.",
-
   "effortless.global_general_settings.use_commands": "Usar Comandos",
   "effortless.global_general_settings.allow_use_mod": "Permitir Uso del Mod",
   "effortless.global_general_settings.allow_break_blocks": "Permitir Romper Bloques",
@@ -41,14 +35,12 @@
   "effortless.global_general_settings.whitelisted_items": "Elementos en Lista Blanca",
   "effortless.global_general_settings.blacklisted_items": "Elementos en Lista Negra",
   "effortless.global_general_settings.items": "%s elemento(s)",
-
   "effortless.render_settings.show_other_players_build": "Mostrar Construcciones de Otros Jugadores",
   "effortless.render_settings.show_other_players_build_tooltips": "Mostrar Información sobre Construcciones de Otros Jugadores",
   "effortless.render_settings.show_block_preview": "Mostrar Vista Previa de Bloque",
   "effortless.render_settings.max_render_blocks": "Máximo de Bloques a Renderizar",
   "effortless.render_settings.max_render_volume": "Máximo de Volumen a Renderizar",
   "effortless.render_settings.max_render_distance": "Máxima Distancia de Renderizado",
-
   "effortless.message.permissions.no_permission": "¡No tienes permiso para usar Effortless Structure! ¡Ve a §b[Configuración general global/por jugador]§r y habilita §b[Permitir uso del mod]§r!",
   "effortless.message.permissions.no_place_permission": "¡No tienes permiso para colocar bloques! ¡Ve a §b[Configuración general global/por jugador]§r y habilita §b[Permitir colocar bloques]§r!",
   "effortless.message.permissions.no_break_permission": "¡No tienes permiso para romper bloques! ¡Ve a §b[Configuración general global/por jugador]§r y habilita §b[Permitir romper bloques]§r!",
@@ -61,7 +53,6 @@
   "effortless.message.building.cannot_break_blocks_box_volume_too_large": "¡No se pueden romper bloques! El volumen de la caja es demasiado grande",
   "effortless.message.building.cannot_place_blocks_box_side_length_too_large": "¡No se pueden colocar bloques! La longitud del lado de la caja es demasiado grande",
   "effortless.message.building.cannot_break_blocks_box_side_length_too_large": "¡No se pueden romper bloques! La longitud del lado de la caja es demasiado grande",
-
   "effortless.settings.toggle.on": "§aENCENDIDO§r",
   "effortless.settings.toggle.off": "§cAPAGADO§r",
   "effortless.settings.category.config.title": "Configuración",
@@ -127,7 +118,6 @@
   "effortless.mode.pyramid": "Pirámide",
   "effortless.mode.cone": "Cono",
   "effortless.mode.dome": "Domo",
-
   "effortless.option.history": "Historial",
   "effortless.option.transformer": "Transformador",
   "effortless.option.replace": "Reemplazar",
@@ -140,7 +130,6 @@
   "effortless.option.raised_edge": "Borde elevado",
   "effortless.option.circle_start": "Inicio del círculo",
   "effortless.option.plane_length": "Longitud del plano",
-
   "effortless.action.undo": "Deshacer",
   "effortless.action.redo": "Rehacer",
   "effortless.action.magnet": "Imán",
@@ -162,45 +151,35 @@
   "effortless.action.face_horizontal": "Horizontal",
   "effortless.action.face_vertical": "Vertical",
   "effortless.action.face_both": "Ambos",
-
   "effortless.action.replace_disabled": "Desactivado",
   "effortless.action.replace_normal": "Normal",
   "effortless.action.replace_quick": "Rápido",
   "effortless.action.mode_settings": "Modo de construcción",
-
   "effortless.action.plane_length_variable": "Variable",
   "effortless.action.plane_length_equal": "Igual",
-
   "effortless.position.disabled": "Desactivado",
   "effortless.position.left": "Izquierda",
   "effortless.position.right": "Derecha",
-
   "effortless.state.idle": "Inactivo",
   "effortless.state.placing_block": "Colocando bloques",
   "effortless.state.breaking_block": "Rompiendo bloques",
   "effortless.state.interacting_block": "Interactuando con bloques",
-
   "effortless.tracing.success_fulfilled": "Éxito",
   "effortless.tracing.success_partial": "Pendiente",
   "effortless.tracing.pass": "Desactivado",
   "effortless.tracing.failed": "Fallido",
-
   "effortless.transformer.no_name": "Sin nombre",
   "effortless.transformer.empty": "Vacío",
-
   "effortless.transformer.array": "Arreglo",
   "effortless.transformer.array.count": "Cantidad",
   "effortless.transformer.array.offset": "Desplazamiento",
   "effortless.transformer.array.offset.x": "Desplazamiento X",
   "effortless.transformer.array.offset.y": "Desplazamiento Y",
   "effortless.transformer.array.offset.z": "Desplazamiento Z",
-
   "effortless.transformer.mirror": "Espejo",
   "effortless.transformer.mirror.axis": "Eje",
-
   "effortless.transformer.radial": "Radial",
   "effortless.transformer.radial.slices": "Rebanadas",
-
   "effortless.transformer.item_rand": "Aleatorizar objeto",
   "effortless.transformer.randomize.example.empty": "Vacío",
   "effortless.transformer.randomize.example.variant_cobblestone": "Variante de adoquín",
@@ -218,13 +197,11 @@
   "effortless.transformer.randomize.example.colorful_shulker_box": "Caja de Shulker colorida",
   "effortless.transformer.randomize.example.colorful_bed": "Cama colorida",
   "effortless.transformer.randomize.example.colorful_banner": "Estandarte colorido",
-
   "effortless.randomizer.order.sequence": "Secuencia",
   "effortless.randomizer.order.random": "Aleatorio",
   "effortless.randomizer.target.single": "Individual",
   "effortless.randomizer.target.group": "Grupo",
   "effortless.randomizer.category.item": "Objeto",
-
   "effortless.axis.undefined": "Indefinido",
   "effortless.axis.x": "X",
   "effortless.axis.y": "Y",
@@ -232,7 +209,6 @@
   "effortless.axis.x_plane": "Este Oeste",
   "effortless.axis.y_plane": "Arriba Abajo",
   "effortless.axis.z_plane": "Sur Norte",
-
   "commands.effortless.max_reach_distance.success": "Se ha establecido maxReachDistance de %s a %s",
   "commands.effortless.max_reach_distance.failure": "No se pudo establecer maxReachDistance de %s",
   "commands.effortless.max_block_place_per_axis.success": "Se ha establecido maxBlockPlacePerAxis de %s a %s",
@@ -246,11 +222,9 @@
   "commands.effortless.undo_stack_size.success": "Se ha establecido undoStackSize de %s a %s",
   "commands.effortless.undo_stack_size.failure": "No se pudo establecer undoStackSize de %s",
   "commands.reserved": "NIE",
-
   "effortless.building.title": "Effortless Structure",
   "effortless.building.radial.title": "Effortless Structure",
   "effortless.building.settings.title": "Configuración del modo de construcción",
-
   "effortless.randomizer.settings.title": "Configuración del aleatorizador",
   "effortless.randomizer.settings.edit": "Editar",
   "effortless.randomizer.settings.delete": "Eliminar",
@@ -259,7 +233,6 @@
   "effortless.randomizer.settings.reset": "Restablecer a predeterminado",
   "effortless.randomizer.settings.done": "Hecho",
   "effortless.randomizer.settings.cancel": "Cancelar",
-
   "effortless.randomizer.edit.title": "Editar aleatorizador",
   "effortless.randomizer.edit.name_hint": "Nombre del aleatorizador",
   "effortless.randomizer.edit.order": "Orden: %s",
@@ -271,20 +244,16 @@
   "effortless.randomizer.edit.save": "Guardar",
   "effortless.randomizer.edit.cancel": "Cancelar",
   "effortless.randomizer.edit.total_probability": "Probabilidad total: %s",
-
   "effortless.item.picker.title": "Buscar objeto",
   "effortless.item.picker.search": "Buscar",
   "effortless.item.picker.search_hint": "Buscar objeto",
   "effortless.item.picker.add": "Agregar objeto",
   "effortless.item.picker.cancel": "Cancelar",
-
   "effortless.pattern.no_name": "Sin Nombre",
   "effortless.pattern.default": "Nuevo Patrón",
   "effortless.pattern.disabled": "Desactivado",
   "effortless.pattern.empty": "Patrón Vacío",
-
   "effortless.pattern.radial.title": "Construcción sin Esfuerzo",
-
   "effortless.pattern.settings.title": "Configuración del Patrón",
   "effortless.pattern.settings.edit": "Editar",
   "effortless.pattern.settings.delete": "Eliminar",
@@ -293,7 +262,6 @@
   "effortless.pattern.settings.reset": "Restablecer a Predeterminado",
   "effortless.pattern.settings.done": "Hecho",
   "effortless.pattern.settings.cancel": "Cancelar",
-
   "effortless.pattern.edit.title": "Editar Patrón",
   "effortless.pattern.edit.name_hint": "Nombre del Patrón",
   "effortless.pattern.edit.edit": "Editar",
@@ -302,7 +270,6 @@
   "effortless.pattern.edit.add": "Agregar Transformador",
   "effortless.pattern.edit.save": "Guardar",
   "effortless.pattern.edit.cancel": "Cancelar",
-
   "effortless.pattern.array_preset": "Patrón de Matriz Predefinido",
   "effortless.pattern.mirror_x_preset": "Patrón de Espejo X Predefinido",
   "effortless.pattern.mirror_y_preset": "Patrón de Espejo Y Predefinido",
@@ -312,57 +279,45 @@
   "effortless.pattern.item_single_sequence_preset": "Patrón de Objeto Individual en Secuencia Predefinido",
   "effortless.pattern.item_group_random_preset": "Patrón de Grupo de Objetos Aleatorio Predefinido",
   "effortless.pattern.item_group_sequence_preset": "Patrón de Grupo de Objetos en Secuencia Predefinido",
-
   "effortless.transformer.template_select.title": "Seleccionar Plantilla de Transformador",
   "effortless.transformer.template_select.search": "Buscar",
   "effortless.transformer.template_select.search_hint": "Buscar Transformador",
   "effortless.transformer.template_select.use_template": "Usar Plantilla",
-
   "effortless.transformer.edit.title": "Editar Transformador",
   "effortless.transformer.edit.name_hint": "Nombre del Transformador",
   "effortless.transformer.edit.save": "Guardar",
   "effortless.transformer.edit.cancel": "Cancelar",
-
   "effortless.build.summary.structure": "Estructura",
   "effortless.build.summary.state": "Estado",
   "effortless.build.summary.tracing": "Rastreo",
   "effortless.build.summary.pattern": "Patrón",
   "effortless.build.summary.pattern_enabled": "Activado",
   "effortless.build.summary.pattern_disabled": "Desactivado",
-
   "effortless.build.summary.blocks_placed": "Colocados",
   "effortless.build.summary.blocks_destroyed": "Destruidos",
   "effortless.build.summary.blocks_interacted": "Interactuados",
-
   "effortless.build.summary.blocks_not_placeable": "Obstruidos",
   "effortless.build.summary.blocks_not_breakable": "Obstruidos",
   "effortless.build.summary.blocks_not_interactable": "Obstruidos",
-
   "effortless.build.summary.blocks_place_insufficient": "Insuficiente",
   "effortless.build.summary.blocks_break_insufficient": "Insuficiente",
-
   "effortless.build.summary.blocks_place_not_whitelisted": "En Lista Negra",
   "effortless.build.summary.blocks_break_not_whitelisted": "En Lista Negra",
-
   "effortless.build.summary.blocks_place_blacklisted": "No en Lista Blanca",
   "effortless.build.summary.blocks_break_blacklisted": "No en Lista Blanca",
-
   "effortless.position.move_to_player": "Mover al Jugador",
   "effortless.position": "Posición %s",
   "effortless.position.absolute": "Absoluta",
   "effortless.position.relative": "Relativa Siempre",
   "effortless.position.relative_once": "Relativa una Vez",
-
   "effortless.test.save": "Guardar",
   "effortless.test.cancel": "Cancelar",
-
   "effortless.session_status.title": "Sesión Inválida",
   "effortless.session_status.message.success": "Mod encontrado en el servidor y el cliente, ejecutándose con tipo de cargador §6[%s]§r.",
   "effortless.session_status.message.mod_missing": "§cMod no encontrado en el servidor y el cliente, esto no puede ocurrir.",
   "effortless.session_status.message.server_mod_missing": "§cMod no encontrado en el lado del servidor.§r",
   "effortless.session_status.message.client_mod_missing": "§cMod no encontrado en el lado del cliente.§r",
   "effortless.session_status.message.protocol_not_match": "§c¡La versión del protocolo del mod no coincide! Servidor: §6[%s]§c, Cliente: §6[%s]§c.§r",
-
   "effortless.history.undo_success": "Deshacer Construcción",
   "effortless.history.redo_success": "Rehacer Construcción",
   "effortless.history.nothing_to_undo": "Nada para deshacer",

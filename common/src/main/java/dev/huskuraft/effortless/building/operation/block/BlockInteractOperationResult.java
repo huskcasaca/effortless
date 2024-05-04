@@ -35,7 +35,8 @@ public class BlockInteractOperationResult extends BlockOperationResult {
                 default -> Collections.emptyList();
             };
             case BLOCKS_NOT_INTERACTABLE -> switch (result) {
-                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> inputs();
+                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT ->
+                        inputs();
                 default -> Collections.emptyList();
             };
             case BLOCKS_PLACE_NOT_WHITELISTED -> switch (result) {

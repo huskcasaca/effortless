@@ -405,7 +405,6 @@ public class TooltipRenderer {
     }
 
 
-
     public class IconEntry extends Entry {
 
         private static final int MAX_COLUMN = 9;
@@ -456,6 +455,7 @@ public class TooltipRenderer {
 
     private class GroupEntry extends Entry {
         private final List<Entry> entries;
+
         public GroupEntry(List<Entry> entries) {
             this.entries = entries;
         }
@@ -547,16 +547,19 @@ public class TooltipRenderer {
             super(entrance, Text.empty());
         }
 
-        public int getContentWidth(){
+        public int getContentWidth() {
             return 0;
         }
-        public int getContentHeight(){
+
+        public int getContentHeight() {
             return 0;
         }
-        public int getPaddingX(){
+
+        public int getPaddingX() {
             return 0;
         }
-        public int getPaddingY(){
+
+        public int getPaddingY() {
             return 0;
         }
 

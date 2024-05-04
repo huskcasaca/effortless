@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.api.tag.TagElement;
 import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
 
-public abstract class TagElementFileStorage<T> extends FileStorage<T>  {
+public abstract class TagElementFileStorage<T> extends FileStorage<T> {
 
     private final TagSerializer<T> serializer;
 

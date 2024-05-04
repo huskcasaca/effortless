@@ -13,7 +13,7 @@ public record Style(
         @Nullable HoverEvent hoverEvent,
         @Nullable String insertion,
         @Nullable ResourceLocation font*/
-)  {
+) {
 
     public static Style EMPTY = new Style(null, null, null, null, null, null/*, null, null, null, null*/);
 

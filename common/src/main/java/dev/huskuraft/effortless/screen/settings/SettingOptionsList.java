@@ -42,22 +42,22 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         return this.getWidth() / 2 + 160;
     }
 
+    public boolean isShowIcon() {
+        return showIcon;
+    }
+
     public void setShowIcon(boolean visible) {
         this.showIcon = visible;
         this.recreateChildren();
     }
 
+    public boolean isShowButton() {
+        return showButton;
+    }
+
     public void setShowButton(boolean visible) {
         this.showButton = visible;
         this.recreateChildren();
-    }
-
-    public boolean isShowIcon() {
-        return showIcon;
-    }
-
-    public boolean isShowButton() {
-        return showButton;
     }
 
     public PositionNumberEntry addPositionNumberEntry(Axis axis, Tuple2<PositionType, Double> value, Consumer<Tuple2<PositionType, Double>> consumer) {
@@ -85,6 +85,131 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
 
     public <T> ButtonEntry<T> addTab(Text title, Text symbol, T value, Consumer<T> consumer, BiConsumer<ButtonEntry<T>, T> buttonConsumer) {
         return addEntry(new ButtonEntry<>(getEntrance(), this, title, symbol, value, consumer, buttonConsumer));
+    }
+
+    public abstract static class SettingsEntry<T> extends Entry<T> {
+
+        protected TextSlot textSlot;
+        protected AbstractWidget titleTextWidget;
+        protected Button altButton;
+        private Text symbol;
+        private Consumer<T> consumer;
+
+        protected SettingsEntry(Entrance entrance, SettingOptionsList entryList, Text title, Text symbol, T value, Consumer<T> consumer) {
+            super(entrance, entryList, value);
+            super.setMessage(title);
+            this.symbol = symbol;
+            this.consumer = consumer;
+        }
+
+        @Override
+        public void onCreate() {
+            this.textSlot = addWidget(new TextSlot(getEntrance(), getLeft() + 1, getTop() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getSymbol()));
+            this.textSlot.setVisible(this.getEntryList().isShowIcon());
+
+            this.altButton = addWidget(new Button(getEntrance(), getRight() - 20, getTop(), 20, 20, Text.empty()));
+            this.altButton.setVisible(this.getEntryList().isShowButton());
+
+            this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getInnerLeft() + 4, getTop() + 6, getMessage()));
+        }
+
+        @Override
+        public void setMessage(Text text) {
+            super.setMessage(text);
+            this.titleTextWidget.setMessage(getMessage());
+        }
+
+        public Text getSymbol() {
+            return symbol;
+        }
+
+        public void setSymbol(Text symbol) {
+            this.symbol = symbol;
+            this.recreate();
+        }
+
+        public Button getAltButton() {
+            return altButton;
+        }
+
+        public int getInnerLeft() {
+            return getEntryList().isShowIcon() ? getLeft() + 20 : getLeft();
+        }
+
+        public int getInnerRight() {
+            return getEntryList().isShowButton() ? getRight() - 20 : getRight();
+        }
+
+        @Override
+        public int getWidth() {
+            return Dimens.Entry.ROW_WIDTH;
+        }
+
+        @Override
+        public int getHeight() {
+            return 24;
+        }
+
+        @Override
+        public void setItem(T item) {
+            super.setItem(item);
+            if (consumer != null) {
+                consumer.accept(item);
+            }
+        }
+
+        @Override
+        public SettingOptionsList getEntryList() {
+            return (SettingOptionsList) super.getEntryList();
+        }
+
+
+        public void setConsumer(Consumer<T> consumer) {
+            this.consumer = consumer;
+        }
+
+        public AbstractWidget getTitleTextWidget() {
+            return titleTextWidget;
+        }
+    }
+
+    public static final class ButtonEntry<T> extends SettingsEntry<T> {
+
+        private final BiConsumer<ButtonEntry<T>, T> entryConsumer;
+        private Button button;
+
+        public ButtonEntry(Entrance entrance, SettingOptionsList entryList, Text title, Text symbol, T value, Consumer<T> consumer, BiConsumer<ButtonEntry<T>, T> entryConsumer) {
+            super(entrance, entryList, title, symbol, value, consumer);
+            this.entryConsumer = entryConsumer;
+        }
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            this.button = addWidget(new Button(getEntrance(), getInnerRight() - Button.QUARTER_WIDTH, getTop(), Button.QUARTER_WIDTH, Button.DEFAULT_HEIGHT, Text.empty()));
+            this.entryConsumer.accept(this, getItem());
+        }
+
+        @Override
+        public void setItem(T item) {
+            super.setItem(item);
+            this.entryConsumer.accept(this, item);
+        }
+
+        public Button getButton() {
+            return button;
+        }
+    }
+
+    public abstract static class Entry<T> extends EditableEntryList.Entry<T> {
+
+        protected Entry(Entrance entrance, T item) {
+            super(entrance, item);
+        }
+
+        protected Entry(Entrance entrance, EntryList entryList, T item) {
+            super(entrance, entryList, item);
+        }
     }
 
     public final class PositionNumberEntry extends SettingsEntry<Tuple2<PositionType, Double>> {
@@ -238,6 +363,7 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         private int getIndex() {
             return getItem() == null ? -1 : values.indexOf(getItem());
         }
+
         private T getNextItem() {
             return values.get((getIndex() + 1) % values.size());
         }
@@ -257,134 +383,6 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         }
 
     }
-
-    public abstract static class SettingsEntry<T> extends Entry<T> {
-
-        protected TextSlot textSlot;
-        protected AbstractWidget titleTextWidget;
-        protected Button altButton;
-        private Text symbol;
-        private Consumer<T> consumer;
-
-        protected SettingsEntry(Entrance entrance, SettingOptionsList entryList, Text title, Text symbol, T value, Consumer<T> consumer) {
-            super(entrance, entryList, value);
-            super.setMessage(title);
-            this.symbol = symbol;
-            this.consumer = consumer;
-        }
-
-        @Override
-        public void onCreate() {
-            this.textSlot = addWidget(new TextSlot(getEntrance(), getLeft() + 1, getTop() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getSymbol()));
-            this.textSlot.setVisible(this.getEntryList().isShowIcon());
-
-            this.altButton = addWidget(new Button(getEntrance(), getRight() - 20, getTop(), 20, 20, Text.empty()));
-            this.altButton.setVisible(this.getEntryList().isShowButton());
-
-            this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getInnerLeft() + 4, getTop() + 6, getMessage()));
-        }
-
-        @Override
-        public void setMessage(Text text) {
-            super.setMessage(text);
-            this.titleTextWidget.setMessage(getMessage());
-        }
-
-        public Text getSymbol() {
-            return symbol;
-        }
-
-        public void setSymbol(Text symbol) {
-            this.symbol = symbol;
-            this.recreate();
-        }
-
-        public Button getAltButton() {
-            return altButton;
-        }
-
-        public int getInnerLeft() {
-            return getEntryList().isShowIcon() ? getLeft() + 20 : getLeft();
-        }
-
-        public int getInnerRight() {
-            return getEntryList().isShowButton() ? getRight() - 20 : getRight();
-        }
-
-        @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
-        }
-
-        @Override
-        public int getHeight() {
-            return 24;
-        }
-
-        @Override
-        public void setItem(T item) {
-            super.setItem(item);
-            if (consumer != null) {
-                consumer.accept(item);
-            }
-        }
-
-        @Override
-        public SettingOptionsList getEntryList() {
-            return (SettingOptionsList) super.getEntryList();
-        }
-
-
-        public void setConsumer(Consumer<T> consumer) {
-            this.consumer = consumer;
-        }
-
-        public AbstractWidget getTitleTextWidget() {
-            return titleTextWidget;
-        }
-    }
-
-    public static final class ButtonEntry<T>  extends SettingsEntry<T> {
-
-        private final BiConsumer<ButtonEntry<T>, T> entryConsumer;
-        private Button button;
-
-        public ButtonEntry(Entrance entrance, SettingOptionsList entryList, Text title, Text symbol, T value, Consumer<T> consumer, BiConsumer<ButtonEntry<T>, T> entryConsumer) {
-            super(entrance, entryList, title, symbol, value, consumer);
-            this.entryConsumer = entryConsumer;
-        }
-
-        @Override
-        public void onCreate() {
-            super.onCreate();
-            this.button = addWidget(new Button(getEntrance(), getInnerRight() - Button.QUARTER_WIDTH, getTop(), Button.QUARTER_WIDTH, Button.DEFAULT_HEIGHT, Text.empty()));
-            this.entryConsumer.accept(this, getItem());
-        }
-
-        @Override
-        public void setItem(T item) {
-            super.setItem(item);
-            this.entryConsumer.accept(this, item);
-        }
-
-        public Button getButton() {
-            return button;
-        }
-    }
-
-
-    public abstract static class Entry<T> extends EditableEntryList.Entry<T> {
-
-        protected Entry(Entrance entrance, T item) {
-            super(entrance, item);
-        }
-
-        protected Entry(Entrance entrance, EntryList entryList, T item) {
-            super(entrance, entryList, item);
-        }
-    }
-
-
 
 
 }

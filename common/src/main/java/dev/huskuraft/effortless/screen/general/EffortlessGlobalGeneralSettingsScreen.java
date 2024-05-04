@@ -17,10 +17,10 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
 
+    private final Consumer<GeneralConfig> consumer;
     private GeneralConfig defaultConfig;
     private GeneralConfig originalConfig;
     private GeneralConfig config;
-    private final Consumer<GeneralConfig> consumer;
     private AbstractWidget resetButton;
     private AbstractWidget saveButton;
 
@@ -51,7 +51,8 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
         });
         entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_reach_distance"), null, config.maxReachDistance(), GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END, (value) -> {
             this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
-        });;
+        });
+        ;
         entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_box_volume_per_break"), null, config.maxBoxVolumePerBreak(), GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END, (value) -> {
             this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), value, config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
         });

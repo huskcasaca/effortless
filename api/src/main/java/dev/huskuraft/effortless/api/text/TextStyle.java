@@ -47,10 +47,6 @@ public enum TextStyle {
     @Nullable
     private final Integer color;
 
-    private static String cleanName(String string) {
-        return string.toLowerCase(Locale.ROOT).replaceAll("[^a-z]", "");
-    }
-
     TextStyle(String name, char code, int id, @Nullable Integer color) {
         this(name, code, false, id, color);
     }
@@ -66,6 +62,60 @@ public enum TextStyle {
         this.id = id;
         this.color = color;
         this.toString = "§" + code;
+    }
+
+    private static String cleanName(String string) {
+        return string.toLowerCase(Locale.ROOT).replaceAll("[^a-z]", "");
+    }
+
+    @Nullable
+    public static String stripFormatting(@Nullable String text) {
+        return text == null ? null : STRIP_FORMATTING_PATTERN.matcher(text).replaceAll("");
+    }
+
+    @Nullable
+    public static TextStyle getByName(@Nullable String friendlyName) {
+        return friendlyName == null ? null : FORMATTING_BY_NAME.get(cleanName(friendlyName));
+    }
+
+    @Nullable
+    public static TextStyle getById(int index) {
+        if (index < 0) {
+            return RESET;
+        } else {
+            for (var textStyle : values()) {
+                if (textStyle.getId() == index) {
+                    return textStyle;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    @Nullable
+    public static TextStyle getByCode(char code) {
+        var c0 = Character.toLowerCase(code);
+
+        for (var textStyle : values()) {
+            if (textStyle.code == c0) {
+                return textStyle;
+            }
+        }
+
+        return null;
+    }
+
+    public static Collection<String> getNames(boolean getColor, boolean getFancyStyling) {
+        var list = new ArrayList<String>();
+
+        for (var textStyle : values()) {
+            if ((!textStyle.isColor() || getColor) && (!textStyle.isFormat() || getFancyStyling)) {
+                list.add(textStyle.getName());
+            }
+        }
+
+        return list;
     }
 
     public char getChar() {
@@ -95,55 +145,5 @@ public enum TextStyle {
 
     public String toString() {
         return this.toString;
-    }
-
-    @Nullable
-    public static String stripFormatting(@Nullable String text) {
-        return text == null ? null : STRIP_FORMATTING_PATTERN.matcher(text).replaceAll("");
-    }
-
-    @Nullable
-    public static TextStyle getByName(@Nullable String friendlyName) {
-        return friendlyName == null ? null : FORMATTING_BY_NAME.get(cleanName(friendlyName));
-    }
-
-    @Nullable
-    public static TextStyle getById(int index) {
-        if (index < 0) {
-            return RESET;
-        } else {
-            for(var textStyle : values()) {
-                if (textStyle.getId() == index) {
-                    return textStyle;
-                }
-            }
-
-            return null;
-        }
-    }
-
-    @Nullable
-    public static TextStyle getByCode(char code) {
-        var c0 = Character.toLowerCase(code);
-
-        for(var textStyle : values()) {
-            if (textStyle.code == c0) {
-                return textStyle;
-            }
-        }
-
-        return null;
-    }
-
-    public static Collection<String> getNames(boolean getColor, boolean getFancyStyling) {
-        var list = new ArrayList<String>();
-
-        for(var textStyle : values()) {
-            if ((!textStyle.isColor() || getColor) && (!textStyle.isFormat() || getFancyStyling)) {
-                list.add(textStyle.getName());
-            }
-        }
-
-        return list;
     }
 }

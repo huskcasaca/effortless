@@ -4,14 +4,14 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.quiltmc.loader.api.QuiltLoader;
+
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.platform.Environment;
 import dev.huskuraft.effortless.api.platform.LoaderType;
 import dev.huskuraft.effortless.api.platform.Mod;
 import dev.huskuraft.effortless.api.platform.Platform;
-
-import org.quiltmc.loader.api.QuiltLoader;
 
 @AutoService(Platform.class)
 public class QuiltPlatform implements Platform {

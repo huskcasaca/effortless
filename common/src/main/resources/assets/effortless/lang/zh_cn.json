@@ -1,6 +1,5 @@
 {
   "effortless.name": "轻松建造",
-
   "effortless.settings.title": "轻松建造设置",
   "effortless.build_settings.title": "建造设置",
   "effortless.render_settings.title": "渲染设置",
@@ -9,7 +8,6 @@
   "effortless.general_settings.title": "常规设置",
   "effortless.global_general_settings.title": "全局常规设置",
   "effortless.per_player_general_settings.title": "玩家个别常规设置",
-
   "effortless.button.add": "添加",
   "effortless.button.cancel": "取消",
   "effortless.button.delete": "删除",
@@ -19,16 +17,12 @@
   "effortless.button.select": "选择",
   "effortless.button.clear": "清除",
   "effortless.button.reset": "重置",
-
   "effortless.online_players.title": "在线玩家",
   "effortless.online_players.search_hint": "搜索玩家",
-
   "effortless.option.on": "开启",
   "effortless.option.off": "关闭",
-
   "effortless.not_an_operator.title": "非操作员",
   "effortless.not_an_operator.message": "无法执行此操作。您不是此服务器的操作员。",
-
   "effortless.global_general_settings.use_commands": "使用指令",
   "effortless.global_general_settings.allow_use_mod": "允许使用模组",
   "effortless.global_general_settings.allow_break_blocks": "允许破坏方块",
@@ -41,14 +35,12 @@
   "effortless.global_general_settings.whitelisted_items": "白名单物品",
   "effortless.global_general_settings.blacklisted_items": "黑名单物品",
   "effortless.global_general_settings.items": "%s 个物品",
-
   "effortless.render_settings.show_other_players_build": "显示其他玩家建造",
   "effortless.render_settings.show_other_players_build_tooltips": "显示其他玩家建造提示",
   "effortless.render_settings.show_block_preview": "显示方块预览",
   "effortless.render_settings.max_render_blocks": "最大渲染方块数",
   "effortless.render_settings.max_render_volume": "最大渲染体积",
   "effortless.render_settings.max_render_distance": "最大渲染距离",
-
   "effortless.message.permissions.no_permission": "您无权使用轻松建造！请前往§b[全局/玩家个别常规设置]§r并启用§b[允许使用模组]§r！",
   "effortless.message.permissions.no_place_permission": "您无权放置方块！请前往§b[全局/玩家个别常规设置]§r并启用§b[允许放置方块]§r！",
   "effortless.message.permissions.no_break_permission": "您无权破坏方块！请前往§b[全局/玩家个别常规设置]§r并启用§b[允许破坏方块]§r！",
@@ -61,7 +53,6 @@
   "effortless.message.building.cannot_break_blocks_box_volume_too_large": "无法破坏方块！区域体积过大",
   "effortless.message.building.cannot_place_blocks_box_side_length_too_large": "无法放置方块！区域边长过大",
   "effortless.message.building.cannot_break_blocks_box_side_length_too_large": "无法破坏方块！区域边长过大",
-
   "effortless.settings.toggle.on": "§a开启§r",
   "effortless.settings.toggle.off": "§c关闭§r",
   "effortless.settings.category.config.title": "配置",
@@ -103,7 +94,7 @@
   "key.effortless.build_mode_settings.desc": "打开建造模式设置",
   "key.effortless.pattern_settings.desc": "打开图案设置",
   "key.effortless.build_mode_radial.desc": "显示建造模式环形菜单",
-  "key.effortless.pattern_radial.desc":"显示图案环形菜单",
+  "key.effortless.pattern_radial.desc": "显示图案环形菜单",
   "key.effortless.undo.desc": "建造操作撤销",
   "key.effortless.redo.desc": "建造操作重做",
   "key.effortless.toggle_replace.desc": "切换替换模式",
@@ -127,7 +118,6 @@
   "effortless.mode.pyramid": "金字塔",
   "effortless.mode.cone": "圆锥体",
   "effortless.mode.dome": "穹顶",
-
   "effortless.option.history": "历史",
   "effortless.option.transformer": "转换",
   "effortless.option.replace": "替换",
@@ -140,7 +130,6 @@
   "effortless.option.raised_edge": "凸起边缘",
   "effortless.option.circle_start": "圆形起点",
   "effortless.option.plane_length": "平面长度",
-
   "effortless.action.undo": "撤销",
   "effortless.action.redo": "重做",
   "effortless.action.magnet": "磁吸",
@@ -162,45 +151,35 @@
   "effortless.action.face_horizontal": "水平",
   "effortless.action.face_vertical": "垂直",
   "effortless.action.face_both": "双向",
-
   "effortless.action.replace_disabled": "关闭",
   "effortless.action.replace_normal": "普通",
   "effortless.action.replace_quick": "快速",
   "effortless.action.mode_settings": "建造模式",
-
   "effortless.action.plane_length_variable": "可变",
   "effortless.action.plane_length_equal": "相等",
-
   "effortless.position.disabled": "关闭",
   "effortless.position.left": "左",
   "effortless.position.right": "右",
-
   "effortless.state.idle": "空闲",
   "effortless.state.placing_block": "放置方块",
   "effortless.state.breaking_block": "破坏方块",
   "effortless.state.interacting_block": "交互方块",
-
   "effortless.tracing.success_fulfilled": "成功",
   "effortless.tracing.success_partial": "部分",
   "effortless.tracing.pass": "跳过",
   "effortless.tracing.failed": "失败",
-
   "effortless.transformer.no_name": "无名称",
   "effortless.transformer.empty": "空",
-
   "effortless.transformer.array": "阵列",
   "effortless.transformer.array.count": "数量",
   "effortless.transformer.array.offset": "偏移",
   "effortless.transformer.array.offset.x": "X偏移",
   "effortless.transformer.array.offset.y": "Y偏移",
   "effortless.transformer.array.offset.z": "Z偏移",
-
   "effortless.transformer.mirror": "镜像",
   "effortless.transformer.mirror.axis": "坐标轴",
-
   "effortless.transformer.radial": "环状",
   "effortless.transformer.radial.slices": "切片数",
-
   "effortless.transformer.item_rand": "物品随机变换",
   "effortless.transformer.randomize.example.empty": "空",
   "effortless.transformer.randomize.example.variant_cobblestone": "变种鹅卵石",
@@ -218,13 +197,11 @@
   "effortless.transformer.randomize.example.colorful_shulker_box": "多彩潜影盒",
   "effortless.transformer.randomize.example.colorful_bed": "多彩床",
   "effortless.transformer.randomize.example.colorful_banner": "多彩旗帜",
-
   "effortless.randomizer.order.sequence": "顺序",
   "effortless.randomizer.order.random": "随机",
   "effortless.randomizer.target.single": "单个",
   "effortless.randomizer.target.group": "群组",
   "effortless.randomizer.category.item": "物品",
-
   "effortless.axis.undefined": "未定义",
   "effortless.axis.x": "X",
   "effortless.axis.y": "Y",
@@ -232,7 +209,6 @@
   "effortless.axis.x_plane": "东西",
   "effortless.axis.y_plane": "上下",
   "effortless.axis.z_plane": "南北",
-
   "commands.effortless.max_reach_distance.success": "将 %s 的 maxReachDistance 设置为 %s",
   "commands.effortless.max_reach_distance.failure": "无法设置 %s 的 maxReachDistance",
   "commands.effortless.max_block_place_per_axis.success": "将 %s 的 maxBlockPlacePerAxis 设置为 %s",
@@ -246,11 +222,9 @@
   "commands.effortless.undo_stack_size.success": "将 %s 的 undoStackSize 设置为%s",
   "commands.effortless.undo_stack_size.failure": "无法设置 %s 的 undoStackSize",
   "commands.reserved": "NIE",
-
   "effortless.building.title": "轻松建造",
   "effortless.building.radial.title": "轻松建造",
   "effortless.building.settings.title": "建造模式设置",
-
   "effortless.randomizer.settings.title": "随机化设置",
   "effortless.randomizer.settings.edit": "编辑",
   "effortless.randomizer.settings.delete": "删除",
@@ -259,7 +233,6 @@
   "effortless.randomizer.settings.reset": "重置",
   "effortless.randomizer.settings.done": "完成",
   "effortless.randomizer.settings.cancel": "取消",
-
   "effortless.randomizer.edit.title": "编辑随机变换",
   "effortless.randomizer.edit.name_hint": "随机变换名称",
   "effortless.randomizer.edit.order": "顺序：%s",
@@ -271,20 +244,16 @@
   "effortless.randomizer.edit.save": "保存",
   "effortless.randomizer.edit.cancel": "取消",
   "effortless.randomizer.edit.total_probability": "总概率：%s",
-
   "effortless.item.picker.title": "搜索物品",
   "effortless.item.picker.search": "搜索",
   "effortless.item.picker.search_hint": "搜索物品",
   "effortless.item.picker.add": "添加物品",
   "effortless.item.picker.cancel": "取消",
-
   "effortless.pattern.no_name": "无名称",
   "effortless.pattern.default": "新建图案",
   "effortless.pattern.disabled": "禁用",
   "effortless.pattern.empty": "空图案",
-
   "effortless.pattern.radial.title": "轻松建造",
-
   "effortless.pattern.settings.title": "图案设置",
   "effortless.pattern.settings.edit": "编辑",
   "effortless.pattern.settings.delete": "删除",
@@ -293,7 +262,6 @@
   "effortless.pattern.settings.reset": "重置",
   "effortless.pattern.settings.done": "完成",
   "effortless.pattern.settings.cancel": "取消",
-
   "effortless.pattern.edit.title": "编辑图案",
   "effortless.pattern.edit.name_hint": "图案名称",
   "effortless.pattern.edit.edit": "编辑",
@@ -302,7 +270,6 @@
   "effortless.pattern.edit.add": "添加变换",
   "effortless.pattern.edit.save": "保存",
   "effortless.pattern.edit.cancel": "取消",
-
   "effortless.pattern.array_preset": "阵列预设图案",
   "effortless.pattern.mirror_x_preset": "X轴镜像预设图案",
   "effortless.pattern.mirror_y_preset": "Y轴镜像预设图案",
@@ -312,57 +279,45 @@
   "effortless.pattern.item_single_sequence_preset": "单个序列元素预设图案",
   "effortless.pattern.item_group_random_preset": "组随机物品预设图案",
   "effortless.pattern.item_group_sequence_preset": "组序列物品预设图案",
-
   "effortless.transformer.template_select.title": "选择变换模板",
   "effortless.transformer.template_select.search": "搜索",
   "effortless.transformer.template_select.search_hint": "搜索变换",
   "effortless.transformer.template_select.use_template": "使用模板",
-
   "effortless.transformer.edit.title": "编辑变换",
   "effortless.transformer.edit.name_hint": "变换名称",
   "effortless.transformer.edit.save": "保存",
   "effortless.transformer.edit.cancel": "取消",
-
   "effortless.build.summary.structure": "结构",
   "effortless.build.summary.state": "状态",
   "effortless.build.summary.tracing": "追踪",
   "effortless.build.summary.pattern": "模式",
   "effortless.build.summary.pattern_enabled": "已启用",
   "effortless.build.summary.pattern_disabled": "已禁用",
-
   "effortless.build.summary.blocks_placed": "已放置",
   "effortless.build.summary.blocks_destroyed": "已破坏",
   "effortless.build.summary.blocks_interacted": "已交互",
-
   "effortless.build.summary.blocks_not_placeable": "无法放置",
   "effortless.build.summary.blocks_not_breakable": "无法破坏",
   "effortless.build.summary.blocks_not_interactable": "无法交互",
-
   "effortless.build.summary.blocks_place_insufficient": "数量不足",
   "effortless.build.summary.blocks_break_insufficient": "数量不足",
-
   "effortless.build.summary.blocks_place_not_whitelisted": "未列入白名单",
   "effortless.build.summary.blocks_break_not_whitelisted": "未列入白名单",
-
   "effortless.build.summary.blocks_place_blacklisted": "列入黑名单",
   "effortless.build.summary.blocks_break_blacklisted": "列入黑名单",
-
   "effortless.position.move_to_player": "移动到玩家",
   "effortless.position": "位置 %s",
   "effortless.position.absolute": "绝对",
   "effortless.position.relative": "始终相对",
   "effortless.position.relative_once": "单次相对",
-
   "effortless.test.save": "保存",
   "effortless.test.cancel": "取消",
-
   "effortless.session_status.title": "无效会话",
   "effortless.session_status.message.success": "服务器和客户端均找到此模组，正在使用加载器类型 §6[%s]§r 运行。",
   "effortless.session_status.message.mod_missing": "§c服务器和客户端均未找到此模组，这不可能发生。",
   "effortless.session_status.message.server_mod_missing": "§c服务器端未找到此模组。§r",
   "effortless.session_status.message.client_mod_missing": "§c客户端未找到此模组。§r",
   "effortless.session_status.message.protocol_not_match": "§c模组协议版本不匹配！服务器: §6[%s]§c，客户端: §6[%s]§c。§r",
-
   "effortless.history.undo_success": "撤销建筑",
   "effortless.history.redo_success": "重做建筑",
   "effortless.history.nothing_to_undo": "无可撤销的操作",

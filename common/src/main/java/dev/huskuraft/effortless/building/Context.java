@@ -39,10 +39,6 @@ public record Context(
         CustomParams customParams
 ) {
 
-    public UUID getId() {
-        return getId;
-    }
-
     public static Context defaultSet() {
         return new Context(
                 UUID.randomUUID(),
@@ -70,6 +66,10 @@ public record Context(
 
     private static BlockInteraction withPosition(BlockInteraction blockInteraction, BlockPosition blockPosition) {
         return new BlockInteraction(blockInteraction.getPosition().add(blockPosition.sub(blockInteraction.getBlockPosition()).toVector3d()), blockInteraction.getDirection(), blockPosition, blockInteraction.isInside());
+    }
+
+    public UUID getId() {
+        return getId;
     }
 
     public boolean isIdle() {
@@ -282,6 +282,65 @@ public record Context(
         }
     }
 
+    public Context withReachParams(CustomParams customParams) {
+        return new Context(getId, state, type, interactions, structureParams, patternParams, customParams);
+    }
+
+    public Context withGeneralConfig(GeneralConfig config) {
+        // FIXME: 4/4/24 commands
+        return withReachParams(new CustomParams(config));
+    }
+
+    public Vector3i getInteractionBox() {
+        if (interactions().isEmpty() || interactions().isMissing()) {
+            return Vector3i.ZERO;
+        }
+        return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new)).getSize().toVector3i();
+    }
+
+    public int getBoxVolume() {
+        return getInteractionBox().volume();
+    }
+
+    public int getMaxBoxVolume() {
+        return switch (state()) {
+            case IDLE -> 0;
+            case PLACE_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
+            case BREAK_BLOCK -> customParams().generalConfig().maxBoxVolumePerBreak();
+            case INTERACT_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
+        };
+    }
+
+    public int getBoxSideLength() {
+        return getInteractionBox().stream().max().orElse(0);
+    }
+
+    public int getMaxBoxSideLength() {
+        return switch (state()) {
+            case IDLE -> 0;
+            case PLACE_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
+            case BREAK_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerBreak();
+            case INTERACT_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
+        };
+    }
+
+    public boolean isBoxVolumeInBounds() {
+        return getBoxVolume() <= getMaxBoxVolume();
+    }
+
+    public boolean isBoxSideLengthInBounds() {
+        return getBoxSideLength() <= getMaxBoxSideLength();
+    }
+
+    public boolean hasPermission() {
+        return switch (state()) {
+            case IDLE -> true;
+            case PLACE_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
+            case BREAK_BLOCK -> customParams().generalConfig().allowBreakBlocks();
+            case INTERACT_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
+        };
+    }
+
     public record BuildInteractions(
             List<BlockInteraction> results
     ) {
@@ -415,68 +474,6 @@ public record Context(
             GeneralConfig generalConfig
     ) {
     }
-
-
-    public Context withReachParams(CustomParams customParams) {
-        return new Context(getId, state, type, interactions, structureParams, patternParams, customParams);
-    }
-
-    public Context withGeneralConfig(GeneralConfig config) {
-        // FIXME: 4/4/24 commands
-        return withReachParams(new CustomParams(config));
-    }
-
-    public Vector3i getInteractionBox() {
-        if (interactions().isEmpty() || interactions().isMissing()) {
-            return Vector3i.ZERO;
-        }
-        return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new)).getSize().toVector3i();
-    }
-
-    public int getBoxVolume() {
-        return getInteractionBox().volume();
-    }
-
-    public int getMaxBoxVolume() {
-        return switch (state()) {
-            case IDLE -> 0;
-            case PLACE_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
-            case BREAK_BLOCK -> customParams().generalConfig().maxBoxVolumePerBreak();
-            case INTERACT_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
-        };
-    }
-
-    public int getBoxSideLength() {
-        return getInteractionBox().stream().max().orElse(0);
-    }
-
-    public int getMaxBoxSideLength() {
-        return switch (state()) {
-            case IDLE -> 0;
-            case PLACE_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
-            case BREAK_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerBreak();
-            case INTERACT_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
-        };
-    }
-
-    public boolean isBoxVolumeInBounds() {
-        return getBoxVolume() <= getMaxBoxVolume();
-    }
-
-    public boolean isBoxSideLengthInBounds() {
-        return getBoxSideLength() <= getMaxBoxSideLength();
-    }
-
-    public boolean hasPermission() {
-        return switch (state()) {
-            case IDLE -> true;
-            case PLACE_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
-            case BREAK_BLOCK -> customParams().generalConfig().allowBreakBlocks();
-            case INTERACT_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
-        };
-    }
-
-
 
 
 }

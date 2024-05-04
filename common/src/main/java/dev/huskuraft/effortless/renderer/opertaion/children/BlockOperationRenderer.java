@@ -26,6 +26,46 @@ public class BlockOperationRenderer implements OperationRenderer {
         this.result = result;
     }
 
+    public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
+        if (blockOperationResult instanceof BlockPlaceOperationResult) {
+            if (blockOperationResult.getOperation().getBlockState() == null) {
+                return Color.GRAY;
+            }
+            if (blockOperationResult.getOperation().getBlockState().isAir()) {
+                return Color.GRAY;
+            }
+            return switch (blockOperationResult.result()) {
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
+                case FAIL_ITEM_INSUFFICIENT -> BLOCK_PLACE_INSUFFICIENT_COLOR;
+                default -> BLOCK_PLACE_FAIL_COLOR;
+            };
+        }
+        if (blockOperationResult instanceof BlockBreakOperationResult) {
+            return switch (blockOperationResult.result()) {
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_BREAK_SUCCESS_COLOR;
+                default -> BLOCK_BREAK_FAIL_COLOR;
+            };
+        }
+        if (blockOperationResult instanceof BlockInteractOperationResult) {
+            return switch (blockOperationResult.result()) {
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> Color.YELLOW;
+                default -> BLOCK_BREAK_FAIL_COLOR;
+            };
+        }
+        return null;
+    }
+
+    public static List<Color> getAllColors() {
+        return List.of(
+                BLOCK_PLACE_SUCCESS_COLOR,
+                BLOCK_PLACE_INSUFFICIENT_COLOR,
+                BLOCK_PLACE_FAIL_COLOR,
+                BLOCK_BREAK_SUCCESS_COLOR,
+                BLOCK_BREAK_FAIL_COLOR,
+                Color.YELLOW
+        );
+    }
+
     @Override
     public void render(Renderer renderer, RenderContext renderContext, float deltaTick) {
         if (!renderContext.showBlockPreview()) {
@@ -71,46 +111,6 @@ public class BlockOperationRenderer implements OperationRenderer {
         renderer.renderBlockInWorld(BlockRenderLayers.block(color.getRGB()), world, blockPosition, blockState);
         renderer.popPose();
 
-    }
-
-    public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
-        if (blockOperationResult instanceof BlockPlaceOperationResult) {
-            if (blockOperationResult.getOperation().getBlockState() == null) {
-                return Color.GRAY;
-            }
-            if (blockOperationResult.getOperation().getBlockState().isAir()) {
-                return Color.GRAY;
-            }
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
-                case FAIL_ITEM_INSUFFICIENT -> BLOCK_PLACE_INSUFFICIENT_COLOR;
-                default -> BLOCK_PLACE_FAIL_COLOR;
-            };
-        }
-        if (blockOperationResult instanceof BlockBreakOperationResult) {
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_BREAK_SUCCESS_COLOR;
-                default -> BLOCK_BREAK_FAIL_COLOR;
-            };
-        }
-        if (blockOperationResult instanceof BlockInteractOperationResult) {
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> Color.YELLOW;
-                default -> BLOCK_BREAK_FAIL_COLOR;
-            };
-        }
-        return null;
-    }
-
-    public static List<Color> getAllColors() {
-        return List.of(
-                BLOCK_PLACE_SUCCESS_COLOR,
-                BLOCK_PLACE_INSUFFICIENT_COLOR,
-                BLOCK_PLACE_FAIL_COLOR,
-                BLOCK_BREAK_SUCCESS_COLOR,
-                BLOCK_BREAK_FAIL_COLOR,
-                Color.YELLOW
-        );
     }
 
 }

@@ -22,11 +22,11 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     private final PlayerInfo playerInfo;
+    private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
     private GeneralConfig defaultConfig;
     private GeneralConfig originalConfig;
     private GeneralConfig config;
     private GeneralConfig globalConfig;
-    private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
     private AbstractWidget resetButton;
     private AbstractWidget saveButton;
 

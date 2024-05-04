@@ -39,10 +39,6 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
         private TextWidget chanceTextWidget;
         private NumberField numberField;
 
-        public int totalCount() {
-            return getEntryList().items().stream().mapToInt(Chance::chance).sum();
-        }
-
         public Entry(Entrance entrance, ItemChanceList itemChanceList, Chance<Item> chance) {
             super(entrance, itemChanceList, chance);
         }
@@ -57,6 +53,10 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
                     Text.translate("effortless.randomizer.edit.total_probability", TextStyle.GOLD + percentage + TextStyle.DARK_GRAY + " (" + chance.chance() + "/" + totalCount + ")").withStyle(TextStyle.GRAY)
             );
             return components;
+        }
+
+        public int totalCount() {
+            return getEntryList().items().stream().mapToInt(Chance::chance).sum();
         }
 
         @Override

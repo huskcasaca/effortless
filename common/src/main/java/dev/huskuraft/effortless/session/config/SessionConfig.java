@@ -13,17 +13,17 @@ public record SessionConfig(
         Map<UUID, GeneralConfig> playerConfigs
 ) {
 
+    public static final SessionConfig EMPTY = new SessionConfig(GeneralConfig.EMPTY, Map.of());
+
     public static SessionConfig defaultConfig() {
         return new SessionConfig(GeneralConfig.DEFAULT, Map.of());
     }
 
-    public static final SessionConfig EMPTY = new SessionConfig(GeneralConfig.EMPTY, Map.of());
-
-    private  <T> T getPlayerOrGlobalEntry(UUID id, Function<GeneralConfig, T> entry) {
+    private <T> T getPlayerOrGlobalEntry(UUID id, Function<GeneralConfig, T> entry) {
         return entry.apply(playerConfigs.get(id) == null || entry.apply(playerConfigs.get(id)) == null ? globalConfig : playerConfigs.get(id));
     }
 
-    private  <T> T getPlayerOrNullEntry(UUID id, Function<GeneralConfig, T> entry) {
+    private <T> T getPlayerOrNullEntry(UUID id, Function<GeneralConfig, T> entry) {
         return entry.apply(playerConfigs.get(id) == null || entry.apply(playerConfigs.get(id)) == null ? GeneralConfig.NULL : playerConfigs.get(id));
     }
 

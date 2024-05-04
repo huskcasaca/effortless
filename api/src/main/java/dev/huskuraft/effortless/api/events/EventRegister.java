@@ -18,6 +18,14 @@ public class EventRegister {
         return method.getReturnType();
     }
 
+    public static EventRegister getClient() {
+        return PlatformLoader.getSingleton(ClientEventRegistry.class);
+    }
+
+    public static EventRegister getCommon() {
+        return PlatformLoader.getSingleton(CommonEventRegistry.class);
+    }
+
     @SuppressWarnings("unchecked")
     public <T> Event<T> get(Class<T> clazz) {
         return (Event<T>) events.computeIfAbsent(clazz, clazz1 -> {
@@ -43,14 +51,6 @@ public class EventRegister {
     public <T> void clear(T... typeGetter) {
         if (typeGetter.length != 0) throw new IllegalStateException("array must be empty!");
         clear((Class<T>) typeGetter.getClass().getComponentType());
-    }
-
-    public static EventRegister getClient() {
-        return PlatformLoader.getSingleton(ClientEventRegistry.class);
-    }
-
-    public static EventRegister getCommon() {
-        return PlatformLoader.getSingleton(CommonEventRegistry.class);
     }
 
 }

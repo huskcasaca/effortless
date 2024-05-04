@@ -21,66 +21,6 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return MathUtils.sign(value) == 0 ? 1 : (int) MathUtils.sign(value);
     }
 
-
-    protected BlockInteraction traceInteraction(Player player, Context context, int index) {
-        return switch (index) {
-            case 0 -> traceFirstInteraction(player, context);
-            case 1 -> traceSecondInteraction(player, context);
-            case 2 -> traceThirdInteraction(player, context);
-            default -> null;
-        };
-    }
-
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return null;
-    }
-
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return null;
-    }
-
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        return null;
-    }
-
-
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Stream.of(context.firstBlockPosition());
-    }
-
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return Stream.of();
-    }
-
-    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
-        return Stream.of();
-    }
-
-    @Override
-    public BlockInteraction trace(Player player, Context context) {
-        if (context.interactionsSize() >= totalClicks(context)) {
-            return null;
-        }
-        return traceInteraction(player, context, context.interactionsSize());
-    }
-
-    @Override
-    public Stream<BlockPosition> collect(Context context) {
-        if (context.interactionsSize() > totalClicks(context)) {
-            return null;
-        }
-        return switch (context.interactionsSize()) {
-            case 1 -> collectFirstBlocks(context);
-            case 2 -> collectSecondBlocks(context);
-            case 3 -> collectThirdBlocks(context);
-            default -> Stream.empty();
-        };
-    }
-
-    public BuildFeature[] getSupportedFeatures() {
-        return new BuildFeature[] {};
-    }
-
     public static BlockInteraction transformUniformLengthInteraction(BlockInteraction start, BlockInteraction end, boolean limit) {
         if (start == null || end == null) {
             return null;
@@ -109,7 +49,6 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         }
         return end;
     }
-
 
     private static BlockInteraction traceLineByAxis(Player player, Context context, Axis axis) {
         var center = context.secondBlockPosition().getCenter();
@@ -169,7 +108,6 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return tracePlaneByAxis(player, context, Axis.Z);
     }
 
-
     // TODO: 13/10/23 entity
     protected static Vector3d getEntityLookAngleGap(Player player) {
         var look = player.getEyeDirection();
@@ -192,6 +130,64 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return new Vector3d(x, y, z).normalize();
     }
 
+    protected BlockInteraction traceInteraction(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> traceFirstInteraction(player, context);
+            case 1 -> traceSecondInteraction(player, context);
+            case 2 -> traceThirdInteraction(player, context);
+            default -> null;
+        };
+    }
+
+    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
+        return null;
+    }
+
+    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
+        return null;
+    }
+
+    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
+        return null;
+    }
+
+    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
+        return Stream.of(context.firstBlockPosition());
+    }
+
+    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
+        return Stream.of();
+    }
+
+    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
+        return Stream.of();
+    }
+
+    @Override
+    public BlockInteraction trace(Player player, Context context) {
+        if (context.interactionsSize() >= totalClicks(context)) {
+            return null;
+        }
+        return traceInteraction(player, context, context.interactionsSize());
+    }
+
+    @Override
+    public Stream<BlockPosition> collect(Context context) {
+        if (context.interactionsSize() > totalClicks(context)) {
+            return null;
+        }
+        return switch (context.interactionsSize()) {
+            case 1 -> collectFirstBlocks(context);
+            case 2 -> collectSecondBlocks(context);
+            case 3 -> collectThirdBlocks(context);
+            default -> Stream.empty();
+        };
+    }
+
+    public BuildFeature[] getSupportedFeatures() {
+        return new BuildFeature[]{};
+    }
+
     public abstract static class AxisCriteria {
         protected final Player player;
         protected final Vector3d center;
@@ -209,10 +205,6 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             this.center = center;
             this.reach = reach;
             this.skipRaytrace = skipRaytrace;
-        }
-
-        public Axis getAxis() {
-            return axis;
         }
 
         protected static Vector3d getBound(Vector3d start, Vector3d eye, Vector3d look) {
@@ -285,6 +277,10 @@ public abstract class AbstractBlockStructure implements BlockStructure {
 //                intersects = rayTraceResult != null && rayTraceResult.getType() == HitResult.Type.BLOCK && planeBound.subtract(rayTraceResult.getLocation()).lengthSqr() > 4;
 //            }
             return planeBound.sub(start).dot(look) > 0 && distToPlayerSq > 2 && distToPlayerSq < reach * reach; // !intersects;
+        }
+
+        public Axis getAxis() {
+            return axis;
         }
 
         public Vector3d startVec() {

@@ -9,7 +9,7 @@ public interface TagWriter<T> {
     }
 
     default void write(TagElement tag, T t, boolean validate) {
-        write(tag, validate ? validate(t): t);
+        write(tag, validate ? validate(t) : t);
     }
 
 }
