@@ -5,6 +5,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.Tuple2;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.EntryList;
@@ -14,7 +15,6 @@ import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.api.gui.input.NumberField;
 import dev.huskuraft.effortless.api.gui.slot.TextSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
-import dev.huskuraft.effortless.api.lang.Tuple2;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;

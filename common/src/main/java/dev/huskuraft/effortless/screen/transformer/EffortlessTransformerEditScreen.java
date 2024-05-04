@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.Tuple2;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
@@ -11,7 +12,6 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.slot.TextSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
-import dev.huskuraft.effortless.api.lang.Tuple2;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;

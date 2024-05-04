@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.api.lang;
+package dev.huskuraft.effortless.api.core;
 
 import java.util.List;
 

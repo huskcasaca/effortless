@@ -21,7 +21,7 @@ public enum Settings implements Option {
 
     @Override
     public String getCategory() {
-        return "settings";
+        return "misc";
     }
 
 }

@@ -25,6 +25,33 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
     private static final Button<Option> SETTING_OPTION = button(Settings.GENERAL);
 
+    private static final Button<Option> REPLACE_DISABLED_OPTION = button(ReplaceMode.DISABLED, false);
+    private static final Button<Option> REPLACE_NORMAL_OPTION = button(ReplaceMode.NORMAL, true);
+    private static final Button<Option> REPLACE_QUICK_OPTION = button(ReplaceMode.QUICK, true);
+
+    private static final Button<Option> REPLACE_OPTION = lazyButton(() -> {
+        var entrance = EffortlessClient.getInstance();
+        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+        return switch (context.replaceMode()) {
+            case DISABLED -> REPLACE_DISABLED_OPTION;
+            case NORMAL -> REPLACE_NORMAL_OPTION;
+            case QUICK -> REPLACE_QUICK_OPTION;
+        };
+    });
+
+
+    private static final Button<Option> PASSIVE_MODE_DISABLED_OPTION = button(PassiveMode.DISABLED, false);
+    private static final Button<Option> PASSIVE_MODE_ENABLED_OPTION = button(PassiveMode.ENABLED, true);
+
+    private static final Button<Option> PASSIVE_MODE_OPTION = lazyButton(() -> {
+        var entrance = EffortlessClient.getInstance();
+        if (entrance.getConfigStorage().get().passiveMode()) {
+            return PASSIVE_MODE_ENABLED_OPTION;
+        } else {
+            return PASSIVE_MODE_DISABLED_OPTION;
+        }
+    });
+
     private final Key assignedKey;
 
     public EffortlessBuildModeWheelScreen(Entrance entrance, Key assignedKey) {
@@ -114,11 +141,9 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
         var context = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer());
 
         setSelectedSlots(slot(context.buildMode()));
-        var passiveMode = getEntrance().getConfigStorage().get().passiveMode() ? PassiveMode.ENABLED : PassiveMode.DISABLED;
         setLeftButtons(
-                buttonSet(REDO_OPTION, UNDO_OPTION),
-                buttonSet(button(passiveMode, passiveMode != PassiveMode.DISABLED), button(context.replaceMode(), context.replaceMode() != ReplaceMode.DISABLED)),
-                buttonSet(SETTING_OPTION, SETTING_OPTION)
+                buttonSet(REPLACE_OPTION, REDO_OPTION, UNDO_OPTION),
+                buttonSet(PASSIVE_MODE_OPTION, SETTING_OPTION, SETTING_OPTION)
         );
         setRightButtons(
                 Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, context.buildFeatures().contains(option))).toList())).toList()

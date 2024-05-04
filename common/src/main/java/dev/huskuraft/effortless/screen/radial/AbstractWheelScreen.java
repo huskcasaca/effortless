@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.Player;
@@ -169,6 +170,51 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     public static <T extends Option> Button<T> button(T option) {
         return button(option, false);
+    }
+
+    public static <T extends Option> Button<T> lazyButton(Supplier<Button<T>> supplier) {
+        return new Button<>() {
+
+            @Override
+            public Object getId() {
+                return supplier.get().getId();
+            }
+
+            @Override
+            public Text getDisplayName() {
+                return supplier.get().getDisplayName();
+            }
+
+            @Override
+            public Text getDisplayCategory() {
+                return supplier.get().getDisplayCategory();
+            }
+
+            @Override
+            public Text getDisplayTooltip() {
+                return supplier.get().getDisplayTooltip();
+            }
+
+            @Override
+            public ResourceLocation getIcon() {
+                return supplier.get().getIcon();
+            }
+
+            @Override
+            public Color getTintColor() {
+                return supplier.get().getTintColor();
+            }
+
+            @Override
+            public T getContent() {
+                return supplier.get().getContent();
+            }
+
+            @Override
+            public boolean isActivated() {
+                return supplier.get().isActivated();
+            }
+        };
     }
 
     public static <T extends Option> Button<T> button(T option, boolean activated) {
@@ -435,8 +481,9 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
             tooltip.add(hoveredButton.getDisplayCategory().withStyle(TextStyle.WHITE));
             tooltip.add(hoveredButton.getDisplayName().withStyle(TextStyle.GOLD));
             if (!hoveredButton.getDisplayTooltip().getString().isBlank()) {
-                tooltip.add(Text.empty());
+
                 if (Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
+                    tooltip.add(Text.empty());
                     tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text(TextStyle.GRAY + hoveredButton.getDisplayTooltip().getString())));
                 } else {
 
