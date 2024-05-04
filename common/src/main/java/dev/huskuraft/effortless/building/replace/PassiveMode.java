@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.replace;
 
 import dev.huskuraft.effortless.EffortlessKeys;
+import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 
@@ -15,13 +16,6 @@ public enum PassiveMode implements SingleSelectFeature {
     }
 
 
-    public PassiveMode next() {
-        return switch (this) {
-            case DISABLED -> ENABLED;
-            case ENABLED -> DISABLED;
-        };
-    }
-
     @Override
     public String getName() {
         return name;
@@ -33,7 +27,12 @@ public enum PassiveMode implements SingleSelectFeature {
     }
 
     @Override
+    public String getTooltipKey() {
+        return Lang.asKey("option.%s.tooltip".formatted(getCategory()));
+    }
+
+    @Override
     public Text getTooltipText() {
-        return Text.translate(getTooltipKey(), EffortlessKeys.PASSIVE_BUILD_MODIFIER);
+        return Text.translate(getTooltipKey(), Text.translate(EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().getName()));
     }
 }

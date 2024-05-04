@@ -10,12 +10,14 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
 import dev.huskuraft.effortless.api.input.Keys;
+import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
@@ -23,6 +25,7 @@ import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.Option;
+import dev.huskuraft.effortless.building.structure.BuildMode;
 
 public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
@@ -481,16 +484,22 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
             tooltip.add(hoveredButton.getDisplayCategory().withStyle(TextStyle.WHITE));
             tooltip.add(hoveredButton.getDisplayName().withStyle(TextStyle.GOLD));
             if (!hoveredButton.getDisplayTooltip().getString().isBlank()) {
-
-                if (Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
+                tooltip.add(Text.empty());
+                if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
+                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(TextStyle.DARK_GRAY)).withStyle(TextStyle.DARK_GRAY));
+                } else {
+                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(TextStyle.GRAY)).withStyle(TextStyle.DARK_GRAY));
                     tooltip.add(Text.empty());
                     tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text(TextStyle.GRAY + hoveredButton.getDisplayTooltip().getString())));
-                } else {
-
                 }
             }
             renderer.renderTooltip(getTypeface(), tooltip, mouseX, mouseY);
         }
+    }
+
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
     }
 
     private boolean inTriangle(double x1, double y1, double x2, double y2,
@@ -502,9 +511,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     private void cycleBuildMode(Player player, boolean reverse) {
-        // TODO: 23/5/23
-//        setBuildMode(player, BuildMode.values()[(getBuildMode(player).ordinal() + 1) % BuildMode.values().length]);
-//        Constructor.getInstance().reset(player);
+        getEntrance().getStructureBuilder().setBuildMode(player, BuildMode.values()[(getEntrance().getStructureBuilder().getContext(player).buildMode().ordinal() + (reverse ? -1 : 1 + BuildMode.values().length)) % BuildMode.values().length]);
     }
 
     private void playRadialMenuSound() {

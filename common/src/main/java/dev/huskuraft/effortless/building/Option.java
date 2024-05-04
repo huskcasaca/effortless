@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.building;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.api.text.Text;
 
 public interface Option {
@@ -11,15 +12,15 @@ public interface Option {
     String getCategory();
 
     default String getNameKey() {
-        return "effortless.action.%s".formatted(getName());
+        return Lang.asKey("action.%s".formatted(getName()));
     }
 
     default String getCategoryKey() {
-        return "effortless.option.%s".formatted(getCategory());
+        return Lang.asKey("option.%s".formatted(getCategory()));
     }
 
     default String getTooltipKey() {
-        return "effortless.action.%s.tooltip".formatted(getName());
+        return Lang.asKey("action.%s.tooltip".formatted(getName()));
     }
 
     default Text getNameText() {
