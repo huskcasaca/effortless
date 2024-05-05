@@ -32,15 +32,15 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
         this.entrance = entrance;
         this.listener = new ClientPacketListener();
 
+        registerPacket(SessionPacket.class, new SessionPacket.Serializer());
+        registerPacket(SessionConfigPacket.class, new SessionConfigPacket.Serializer());
+
         registerPacket(PlayerCommandPacket.class, new PlayerCommandPacket.Serializer());
         registerPacket(PlayerSettingsPacket.class, new PlayerSettingsPacket.Serializer());
         registerPacket(PlayerBuildPacket.class, new PlayerBuildPacket.Serializer());
         registerPacket(PlayerBuildPreviewPacket.class, new PlayerBuildPreviewPacket.Serializer());
         registerPacket(PlayerOperatorCheckPacket.class, new PlayerOperatorCheckPacket.Serializer());
         registerPacket(PlayerHistoryResultPacket.class, new PlayerHistoryResultPacket.Serializer());
-
-        registerPacket(SessionPacket.class, new SessionPacket.Serializer());
-        registerPacket(SessionConfigPacket.class, new SessionConfigPacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
     }
