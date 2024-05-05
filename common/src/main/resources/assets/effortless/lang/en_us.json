@@ -325,7 +325,7 @@
   "effortless.option.passive_mode": "Passive Mode",
   "effortless.action.passive_mode_disabled": "Disabled",
   "effortless.action.passive_mode_enabled": "Enabled",
-  "effortless.option.passive_mode.tooltip": "If enabled, you can start to build only when pressed and hold the [%s] key. Make sure you have assigned the hotkey in key binds settings.",
+  "effortless.option.passive_mode.tooltip": "If enabled, you can start to build only when pressed and hold the [%s] key. \nMake sure you have assigned the hotkey in key binds settings.",
   "effortless.option.misc": "Misc",
   "effortless.tooltip.hold_for_summary": "Hold [%s] for Summary",
   "key.effortless.passive_build_modifier.desc": "Passive Build Modifier",

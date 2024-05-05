@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.building.replace;
 import dev.huskuraft.effortless.EffortlessKeys;
 import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 
 public enum PassiveMode implements SingleSelectFeature {
@@ -33,6 +34,6 @@ public enum PassiveMode implements SingleSelectFeature {
 
     @Override
     public Text getTooltipText() {
-        return Text.translate(getTooltipKey(), Text.translate(EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().getName()));
+        return Text.translate(getTooltipKey(), Text.translate(EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().getName()).withStyle(TextStyle.GRAY)).withStyle(TextStyle.DARK_GRAY);
     }
 }

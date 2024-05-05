@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.api.text;
 
+import java.util.Collection;
+
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 
@@ -63,8 +65,14 @@ public interface Text extends PlatformReference {
 
     String getString();
 
-    default String getEncodedString() {
-        return getStyle().getPrefixString() + getString() + getStyle().getSuffixString();
+    Collection<Text> getSiblings();
+
+    Text append(Text text);
+
+    void decompose(Sink sink);
+
+    interface Sink {
+        boolean accept(int index, String text, Style style);
     }
 
 }

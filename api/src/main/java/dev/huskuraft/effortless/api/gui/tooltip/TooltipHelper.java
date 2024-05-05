@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.gui.Typeface;
+import dev.huskuraft.effortless.api.text.Style;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.text.TextStyle;
 
@@ -25,53 +26,72 @@ public class TooltipHelper {
     }
 
     public static List<Text> wrapLines(Typeface typeface, Text text) {
-        return wrapLines(typeface, text.getString()).stream().map(Text::text).toList();
+        return wrapLines(typeface, text, MAX_WIDTH_PER_LINE);
     }
 
+    public static List<Text> wrapLines(Typeface typeface, Text text, int lineWidth) {
+        var letters = new StringBuilder();
+        var styles = new LinkedList<Style>();
 
-    public static List<String> wrapLines(Typeface typeface, String text) {
-        var words = new LinkedList<String>();
+        text.decompose((index, chr, style) -> {
+            for (int i = 0; i < chr.length(); i++) {
+                letters.append(chr.charAt(i));
+                styles.add(style);
+            }
+            return true;
+        });
+
         var iterator = BreakIterator.getLineInstance();
-        iterator.setText(text);
+        iterator.setText(letters.toString());
         int start = iterator.first();
+        var words = new LinkedList<Text>();
 
         for (var end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
-            var word = text.substring(start, end);
-            words.add(word);
+
+            var word = letters.substring(start, end);
+            var worldStyle = styles.subList(start, end);
+
+            var wrapLine = false;
+            if (word.endsWith("\n")) {
+                word = word.substring(0, word.length() - 1);
+                wrapLine = true;
+            }
+
+            var result = Text.empty();
+            for (var i = 0; i < word.length(); i++) {
+                result = result.append(Text.text(word.substring(i, i + 1)).withStyle(worldStyle.get(i)));
+            }
+            words.add(result);
+
+            if (wrapLine) {
+                words.add(Text.text("\n"));
+            }
         }
 
-        var lines = new LinkedList<String>();
-        var currentLine = new StringBuilder();
-        var newLine = false;
+        var lines = new LinkedList<Text>();
+        var lastLine = Text.empty();
         var width = 0;
         for (var word : words) {
-            var newWidth = typeface.measureWidth(word.replaceAll("_", ""));
-            if (width + newWidth > MAX_WIDTH_PER_LINE) {
-                if (width > 0) {
-                    var line = currentLine.toString();
-                    lines.add(line);
-                    currentLine = new StringBuilder();
-                    newLine = true;
-                    width = 0;
-                } else {
-                    lines.add(word);
-                    continue;
-                }
+            if (word.getString().equals("\n")) {
+                lines.add(lastLine);
+                lastLine = Text.empty();
+                width = 0;
+                continue;
             }
-            if (newLine) {
-                newLine = false;
-                var style = getLastTextStyle(lines.get(lines.size() - 1));
-                if (style != null) {
-                    currentLine.append(style);
-                }
+            var newWidth = typeface.measureWidth(word);
+            if (width + newWidth > lineWidth) {
+                lines.add(lastLine);
+                lastLine = Text.empty();
+                width = 0;
             }
-            currentLine.append(word);
+            lastLine = lastLine.append(word);
             width += newWidth;
         }
         if (width > 0) {
-            lines.add(currentLine.toString());
+            lines.add(lastLine);
         }
 
         return lines;
     }
+
 }

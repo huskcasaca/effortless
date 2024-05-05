@@ -490,7 +490,8 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
                 } else {
                     tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(TextStyle.GRAY)).withStyle(TextStyle.DARK_GRAY));
                     tooltip.add(Text.empty());
-                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text(TextStyle.GRAY + hoveredButton.getTooltip().getString())));
+//                    tooltip.add(hoveredButton.getTooltip());
+                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), hoveredButton.getTooltip()));
                 }
             }
             renderer.renderTooltip(getTypeface(), tooltip, mouseX, mouseY);

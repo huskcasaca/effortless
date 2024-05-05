@@ -1,5 +1,9 @@
 package dev.huskuraft.effortless.vanilla.core;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import dev.huskuraft.effortless.api.text.Style;
 import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -75,5 +79,21 @@ public record MinecraftText(Component referenceValue) implements Text {
     public String getString() {
         return referenceValue().getString();
     }
+
+    @Override
+    public Collection<Text> getSiblings() {
+        return referenceValue().getSiblings().stream().map(MinecraftText::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public Text append(Text text) {
+        return new MinecraftText(referenceValue().copy().append((Component) text.reference()));
+    }
+
+    @Override
+    public void decompose(Sink sink) {
+        referenceValue().getVisualOrderText().accept((i, style, i1) -> sink.accept(i, Character.toString(i1), new Style(style.getColor() == null ? null : style.getColor().getValue(), style.isBold(), style.isItalic(), style.isUnderlined(), style.isStrikethrough(), style.isObfuscated())));
+    }
+
 
 }
