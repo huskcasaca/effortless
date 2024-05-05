@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building;
+package dev.huskuraft.effortless.building.session;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -8,6 +8,8 @@ import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.OperationFilter;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;

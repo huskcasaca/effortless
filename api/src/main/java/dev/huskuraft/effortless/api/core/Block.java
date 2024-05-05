@@ -8,6 +8,8 @@ public interface Block extends PlatformReference {
 
     BlockState getDefaultBlockState();
 
+    BlockState getBlockState(Player player, BlockInteraction interaction);
+
     BucketCollectable getBucketCollectable();
 
     LiquidPlaceable getLiquidPlaceable();

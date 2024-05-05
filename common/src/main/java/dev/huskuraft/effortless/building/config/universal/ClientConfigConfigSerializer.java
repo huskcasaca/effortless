@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
 
-public class RootSettingsConfigSerializer implements ConfigSerializer<ClientConfig> {
+public class ClientConfigConfigSerializer implements ConfigSerializer<ClientConfig> {
 
     private static final String KEY_RENDER = "render";
 

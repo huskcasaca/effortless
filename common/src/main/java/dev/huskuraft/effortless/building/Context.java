@@ -19,6 +19,8 @@ import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
+import dev.huskuraft.effortless.building.session.BatchBuildSession;
+import dev.huskuraft.effortless.building.session.BuildSession;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.CubeFilling;
@@ -220,10 +222,6 @@ public record Context(
 
     public Context withEmptyInteractions() {
         return new Context(getId, state, type, BuildInteractions.EMPTY, structureParams, patternParams, customParams);
-    }
-
-    public Context withNextInteractionTraced(Player player) {
-        return withNextInteraction(trace(player));
     }
 
     public Context withBuildMode(BuildMode buildMode) {

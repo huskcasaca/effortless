@@ -120,7 +120,7 @@ public interface Storage {
                     return Optional.of(last);
                 }
                 for (var itemStack : itemStacks) {
-                    if (itemStack.isItem(item) && !itemStack.isEmpty()) {
+                    if (itemStack.getItem().equals(item) && !itemStack.isEmpty()) {
                         cache.put(item, itemStack);
                         return Optional.of(itemStack);
                     }
@@ -132,7 +132,7 @@ public interface Storage {
             @Override
             public Optional<ItemStack> searchTag(ItemStack itemStack) {
                 var result = search(itemStack.getItem());
-                if (result.isPresent() && result.get().tagEquals(itemStack)) {
+                if (result.isPresent() && result.get().getTag().equals(itemStack.getTag())) {
                     return result;
                 } else {
                     return Optional.empty();
@@ -145,10 +145,10 @@ public interface Storage {
                 if (found.isEmpty()) {
                     return false;
                 }
-                if (itemStack.getStackSize() > found.get().getStackSize()) {
+                if (itemStack.getCount() > found.get().getCount()) {
                     return false;
                 }
-                found.get().decrease(itemStack.getStackSize());
+                found.get().decrease(itemStack.getCount());
                 return true;
             }
 

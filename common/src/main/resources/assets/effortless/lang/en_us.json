@@ -51,8 +51,8 @@
   "effortless.message.building.cannot_break_blocks_no_permission": "No Block Break Permission",
   "effortless.message.building.cannot_place_blocks_box_volume_too_large": "Cannot Place Blocks! Box Volume is Too Large",
   "effortless.message.building.cannot_break_blocks_box_volume_too_large": "Cannot Break Blocks! Box Volume is Too Large",
-  "effortless.message.building.cannot_place_blocks_box_side_length_too_large": "Cannot Place Blocks! Box side Length is Too Large",
-  "effortless.message.building.cannot_break_blocks_box_side_length_too_large": "Cannot Break Blocks! Box side Length is Too Large",
+  "effortless.message.building.cannot_place_blocks_box_side_length_too_large": "Cannot Place Blocks! Box Side Length is Too Large",
+  "effortless.message.building.cannot_break_blocks_box_side_length_too_large": "Cannot Break Blocks! Box Side Length is Too Large",
   "effortless.settings.toggle.on": "§aON§r",
   "effortless.settings.toggle.off": "§cOFF§r",
   "effortless.settings.category.config.title": "Config",
@@ -332,5 +332,7 @@
   "key.effortless.left_shift.desc": "Left Shift",
   "key.effortless.left_control.desc": "Left Control",
   "key.effortless.shift.desc": "Shift",
-  "key.effortless.control.desc": "Control"
+  "key.effortless.control.desc": "Control",
+  "effortless.build.summary.no_item_summary": "No Item Summary",
+  "effortless.build.summary.pending_item_summary": "Pending Item Summary"
 }

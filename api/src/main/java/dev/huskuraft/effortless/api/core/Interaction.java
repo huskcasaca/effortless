@@ -2,24 +2,16 @@ package dev.huskuraft.effortless.api.core;
 
 import dev.huskuraft.effortless.api.math.Vector3d;
 
-public abstract class Interaction {
-    protected final Vector3d position;
+public interface Interaction {
+    Target getTarget();
 
-    protected Interaction(Vector3d vector) {
-        this.position = vector;
-    }
+    Vector3d getPosition();
 
-    public abstract Target getTarget();
-
-    public InteractionHand getHand() {
+    default InteractionHand getHand() {
         return InteractionHand.MAIN;
     }
 
-    public Vector3d getPosition() {
-        return this.position;
-    }
-
-    public enum Target {
+    enum Target {
         MISS,
         BLOCK,
         ENTITY

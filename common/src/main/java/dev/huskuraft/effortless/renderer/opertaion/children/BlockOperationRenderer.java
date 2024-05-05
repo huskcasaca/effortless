@@ -62,7 +62,8 @@ public class BlockOperationRenderer implements OperationRenderer {
                 BLOCK_PLACE_FAIL_COLOR,
                 BLOCK_BREAK_SUCCESS_COLOR,
                 BLOCK_BREAK_FAIL_COLOR,
-                Color.YELLOW
+                Color.YELLOW,
+                Color.GRAY
         );
     }
 
