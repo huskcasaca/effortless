@@ -504,13 +504,13 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         var texts = new ArrayList<Tuple2<Text, Text>>();
         texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
-        texts.add(new Tuple2<>(AbstractWheelScreen.button(context.replaceMode()).getDisplayCategory().withStyle(TextStyle.WHITE), AbstractWheelScreen.button(context.replaceMode()).getDisplayName().withStyle(TextStyle.GOLD)));
+        texts.add(new Tuple2<>(AbstractWheelScreen.button(context.replaceMode()).getCategory().withStyle(TextStyle.WHITE), AbstractWheelScreen.button(context.replaceMode()).getName().withStyle(TextStyle.GOLD)));
 
         for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
             if (option.isEmpty()) continue;
             var button = AbstractWheelScreen.button(option.get());
-            texts.add(new Tuple2<>(button.getDisplayCategory().withStyle(TextStyle.WHITE), button.getDisplayName().withStyle(TextStyle.GOLD)));
+            texts.add(new Tuple2<>(button.getCategory().withStyle(TextStyle.WHITE), button.getName().withStyle(TextStyle.GOLD)));
         }
         if (!context.pattern().equals(Pattern.DISABLED)) {
             texts.add(new Tuple2<>(Text.translate("effortless.build.summary.pattern").withStyle(TextStyle.WHITE), (context.pattern().equals(Pattern.DISABLED) ? Text.translate("effortless.build.summary.pattern_disabled") : Text.translate("effortless.build.summary.pattern_enabled")).withStyle(TextStyle.GOLD)));

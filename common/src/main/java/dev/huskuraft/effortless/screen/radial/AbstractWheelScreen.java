@@ -116,17 +116,17 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
             }
 
             @Override
-            public Text getDisplayName() {
+            public Text getName() {
                 return name;
             }
 
             @Override
-            public Text getDisplayCategory() {
+            public Text getCategory() {
                 return category;
             }
 
             @Override
-            public Text getDisplayTooltip() {
+            public Text getTooltip() {
                 return tooltip;
             }
 
@@ -184,18 +184,18 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
             }
 
             @Override
-            public Text getDisplayName() {
-                return supplier.get().getDisplayName();
+            public Text getName() {
+                return supplier.get().getName();
             }
 
             @Override
-            public Text getDisplayCategory() {
-                return supplier.get().getDisplayCategory();
+            public Text getCategory() {
+                return supplier.get().getCategory();
             }
 
             @Override
-            public Text getDisplayTooltip() {
-                return supplier.get().getDisplayTooltip();
+            public Text getTooltip() {
+                return supplier.get().getTooltip();
             }
 
             @Override
@@ -481,16 +481,16 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
         if (hoveredButton != null) {
             var tooltip = new ArrayList<Text>();
-            tooltip.add(hoveredButton.getDisplayCategory().withStyle(TextStyle.WHITE));
-            tooltip.add(hoveredButton.getDisplayName().withStyle(TextStyle.GOLD));
-            if (!hoveredButton.getDisplayTooltip().getString().isBlank()) {
+            tooltip.add(hoveredButton.getCategory().withStyle(TextStyle.WHITE));
+            tooltip.add(hoveredButton.getName().withStyle(TextStyle.GOLD));
+            if (!hoveredButton.getTooltip().getString().isBlank()) {
                 tooltip.add(Text.empty());
                 if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
                     tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(TextStyle.DARK_GRAY)).withStyle(TextStyle.DARK_GRAY));
                 } else {
                     tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(TextStyle.GRAY)).withStyle(TextStyle.DARK_GRAY));
                     tooltip.add(Text.empty());
-                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text(TextStyle.GRAY + hoveredButton.getDisplayTooltip().getString())));
+                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text(TextStyle.GRAY + hoveredButton.getTooltip().getString())));
                 }
             }
             renderer.renderTooltip(getTypeface(), tooltip, mouseX, mouseY);
@@ -538,11 +538,11 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
         Object getId();
 
-        Text getDisplayName();
+        Text getName();
 
-        Text getDisplayCategory();
+        Text getCategory();
 
-        Text getDisplayTooltip();
+        Text getTooltip();
 
         ResourceLocation getIcon();
 
