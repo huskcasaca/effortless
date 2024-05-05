@@ -15,7 +15,6 @@ import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.api.sound.Sounds;
 import dev.huskuraft.effortless.api.tag.InputStreamTagReader;
 import dev.huskuraft.effortless.api.tag.OutputStreamTagWriter;
-import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
 
 public interface ContentFactory {
@@ -33,10 +32,6 @@ public interface ContentFactory {
     }
 
     ItemStack newItemStack();
-
-    ItemStack newItemStack(Item item, int count);
-
-    ItemStack newItemStack(Item item, int count, TagRecord tag);
 
     Text newText();
 

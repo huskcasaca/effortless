@@ -20,7 +20,7 @@ public class RefactorContext {
     }
 
     public BlockState refactor(Player player, BlockInteraction blockInteraction) {
-        return item.getDefaultStack().getBlockState(player, blockInteraction);
+        return item.getBlock().getBlockState(player, blockInteraction);
     }
 
 }

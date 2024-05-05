@@ -1342,7 +1342,7 @@ public enum Items implements Item {
     SNORT_POTTERY_SHERD,
     ;
 
-    private Item item() {
+    public Item item() {
         return ContentFactory.getInstance().getItem(this);
     }
 

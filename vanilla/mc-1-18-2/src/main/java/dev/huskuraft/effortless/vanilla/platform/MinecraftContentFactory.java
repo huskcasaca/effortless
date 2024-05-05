@@ -19,7 +19,6 @@ import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.api.sound.Sounds;
 import dev.huskuraft.effortless.api.tag.InputStreamTagReader;
 import dev.huskuraft.effortless.api.tag.OutputStreamTagWriter;
-import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftFluid;
 import dev.huskuraft.effortless.vanilla.core.MinecraftItem;
@@ -52,16 +51,6 @@ public class MinecraftContentFactory implements ContentFactory {
     @Override
     public ItemStack newItemStack() {
         return new MinecraftItemStack(net.minecraft.world.item.ItemStack.EMPTY);
-    }
-
-    @Override
-    public ItemStack newItemStack(Item item, int count) {
-        return new MinecraftItemStack(item.reference(), count);
-    }
-
-    @Override
-    public ItemStack newItemStack(Item item, int count, TagRecord tag) {
-        return new MinecraftItemStack(item.reference(), tag.reference(), count);
     }
 
     @Override

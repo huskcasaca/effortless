@@ -357,7 +357,7 @@ public class TooltipRenderer {
                 var x = getContentSide() == AxisDirection.NEGATIVE ? i * ITEM_SPACING_X : -(i + 1) * ITEM_SPACING_X + getContentWidth();
                 var y = j * ITEM_SPACING_Y - ITEM_SPACING_Y * (int) MathUtils.ceil(1f * itemStacks.size() / MAX_COLUMN);
 
-                var text = Text.text(String.valueOf(itemStack.getStackSize()));
+                var text = Text.text(String.valueOf(itemStack.getCount()));
                 var color = ItemStackUtils.getColorTag(itemStack);
 
                 renderer.pushPose();

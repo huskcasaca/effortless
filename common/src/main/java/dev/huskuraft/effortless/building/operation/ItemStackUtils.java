@@ -22,18 +22,18 @@ public class ItemStackUtils {
             var item = stack.getItem();
             var key = new Pair<>(item, stack.getTag());
             if (map.containsKey(key)) {
-                map.get(key).increase(stack.getStackSize());
+                map.get(key).increase(stack.getCount());
             } else {
                 map.put(key, stack.copy());
             }
         }
         var result = new ArrayList<ItemStack>();
         for (var stack : map.values()) {
-            var count = stack.getStackSize();
+            var count = stack.getCount();
             var maxStackSize = stack.getMaxStackSize();
             while (count > 0) {
                 var newStack = stack.copy();
-                newStack.setStackSize(MathUtils.min(count, maxStackSize));
+                newStack.setCount(MathUtils.min(count, maxStackSize));
                 result.add(newStack);
                 count -= maxStackSize;
             }

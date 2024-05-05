@@ -14,35 +14,17 @@ public interface ItemStack extends TagSerializable, PlatformReference {
         return ContentFactory.getInstance().newItemStack();
     }
 
-    static ItemStack of(Item item, int count) {
-        return ContentFactory.getInstance().newItemStack(item, count);
-    }
-
-    static ItemStack of(Item item, int count, TagRecord tag) {
-        return ContentFactory.getInstance().newItemStack(item, count, tag);
-    }
-
     List<Text> getTooltips(Player player, TooltipType flag);
-
-    boolean isEmpty();
-
-    boolean isAir();
-
-    boolean isBlock();
 
     Item getItem();
 
-    int getStackSize();
+    int getCount();
 
-    void setStackSize(int count);
+    void setCount(int count);
 
     int getMaxStackSize();
 
     Text getHoverName();
-
-    void increase(int count);
-
-    void decrease(int count);
 
     ItemStack copy();
 
@@ -50,13 +32,25 @@ public interface ItemStack extends TagSerializable, PlatformReference {
 
     void setTag(TagRecord tagRecord);
 
-    boolean isItem(Item item);
+    default void increase(int count) {
+        setCount(getCount() + count);
+    }
 
-    boolean itemEquals(ItemStack itemStack);
+    default void decrease(int count) {
+        setCount(getCount() - count);
+    }
 
-    boolean tagEquals(ItemStack itemStack);
+    default boolean isEmpty() {
+        return this == empty() || getItem().equals(Items.AIR.item()) || getCount() <= 0;
+    }
 
-    BlockState getBlockState(Player player, BlockInteraction interaction);
+    default boolean isAir() {
+        return getItem().equals(Items.AIR.item());
+    }
+
+    default boolean isBlock() {
+        return getItem() instanceof BlockItem;
+    }
 
     enum TooltipType {
         NORMAL,
