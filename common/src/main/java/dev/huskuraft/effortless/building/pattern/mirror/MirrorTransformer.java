@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
@@ -16,6 +15,7 @@ import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
+import dev.huskuraft.effortless.building.session.BatchBuildSession;
 
 public class MirrorTransformer extends Transformer {
 

@@ -332,5 +332,7 @@
   "key.effortless.left_shift.desc": "Left Shift",
   "key.effortless.left_control.desc": "Left Control",
   "key.effortless.shift.desc": "Shift",
-  "key.effortless.control.desc": "Control"
+  "key.effortless.control.desc": "Control",
+  "effortless.build.summary.no_item_summary": "No Item Summary",
+  "effortless.build.summary.pending_item_summary": "Pending Item Summary"
 }

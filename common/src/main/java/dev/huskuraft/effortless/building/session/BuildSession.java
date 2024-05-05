@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building;
+package dev.huskuraft.effortless.building.session;
 
 import dev.huskuraft.effortless.building.operation.Operation;
 

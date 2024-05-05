@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.InteractionType;
+import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.Tuple2;
@@ -28,7 +29,6 @@ import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.BuildState;
@@ -47,6 +47,7 @@ import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.session.BatchBuildSession;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
@@ -475,7 +476,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         } else {
             getEntrance().getClientManager().getOperationsRenderer().remove(uuid);
             for (var allColor : BlockOperationRenderer.getAllColors()) {
-                    getEntrance().getClientManager().getOutlineRenderer().remove(generateId(uuid, allColor));
+                getEntrance().getClientManager().getOutlineRenderer().remove(generateId(uuid, allColor));
             }
         }
     }
@@ -489,6 +490,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var entries = new ArrayList<>();
 
         if (result != null) {
+            var allProducts = new ArrayList<ItemStack>();
             for (var itemType : ItemSummaryType.values()) {
                 var products = result.getProducts(itemType);
                 if (!products.isEmpty()) {
@@ -506,10 +508,17 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                         case BLOCKS_PLACE_BLACKLISTED -> ChatFormatting.GRAY;
                         case BLOCKS_BREAK_BLACKLISTED -> ChatFormatting.GRAY;
                     };
-                    entries.add(products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList());
+                    products = products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
+                    entries.add(products);
                     entries.add(Text.translate("effortless.build.summary." + itemType.name().toLowerCase(Locale.ROOT)).withStyle(color));
+                    allProducts.addAll(products);
                 }
             }
+            if (allProducts.isEmpty()) {
+                entries.add(Text.translate("effortless.build.summary.no_item_summary").withStyle(ChatFormatting.GRAY));
+            }
+        } else {
+            entries.add(Text.translate("effortless.build.summary.pending_item_summary").withStyle(ChatFormatting.GRAY));
         }
 
 
