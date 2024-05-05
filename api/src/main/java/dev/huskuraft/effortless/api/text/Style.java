@@ -49,43 +49,33 @@ public record Style(
         return style;
     }
 
-//    public TextStyle recoveryColor(int color) {
-//        for (var value : TextStyle.values()) {
-//            if (value.getColor() != null && value.getColor().equals(color)) {
-//                return value;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public String getPrefixString() {
-//        var builder = new StringBuilder();
-//        if (Boolean.TRUE.equals(obfuscated)) {
-//            builder.append(TextStyle.OBFUSCATED);
-//        }
-//        if (Boolean.TRUE.equals(bold)) {
-//            builder.append(TextStyle.BOLD);
-//        }
-//        if (Boolean.TRUE.equals(italic)) {
-//            builder.append(TextStyle.ITALIC);
-//        }
-//        if (Boolean.TRUE.equals(underlined)) {
-//            builder.append(TextStyle.UNDERLINE);
-//        }
-//        if (Boolean.TRUE.equals(strikethrough)) {
-//            builder.append(TextStyle.STRIKETHROUGH);
-//        }
-//        if (color != null && recoveryColor(color) != null) {
-//            builder.append(recoveryColor(color));
-//        }
-//        return builder.toString();
-//    }
-//
-//    public String getSuffixString() {
-//        if (getPrefixString().isEmpty()) {
-//            return "";
-//        }
-//        return TextStyle.RESET.toString();
-//    }
+    public Style withColor(@Nullable Integer color) {
+        return new Style(color, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
+    }
+
+    public Style withColor(TextStyle color) {
+        return new Style(color.getColor(), this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
+    }
+
+    public Style withBold(@Nullable Boolean bold) {
+        return new Style(this.color, bold, this.italic, this.underlined, this.strikethrough, this.obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
+    }
+
+    public Style withItalic(@Nullable Boolean italic) {
+        return new Style(this.color, this.bold, italic, this.underlined, this.strikethrough, this.obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
+    }
+
+    public Style withUnderlined(@Nullable Boolean underlined) {
+        return new Style(this.color, this.bold, this.italic, underlined, this.strikethrough, this.obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
+    }
+
+    public Style withStrikethrough(@Nullable Boolean strikethrough) {
+        return new Style(this.color, this.bold, this.italic, this.underlined, strikethrough, this.obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
+    }
+
+    public Style withObfuscated(@Nullable Boolean obfuscated) {
+        return new Style(this.color, this.bold, this.italic, this.underlined, this.strikethrough, obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
+    }
+
 
 }
