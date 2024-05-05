@@ -16,8 +16,8 @@ import dev.huskuraft.effortless.api.gui.input.NumberField;
 import dev.huskuraft.effortless.api.gui.slot.TextSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.PositionType;
 
 public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Entry<?>> {
@@ -74,8 +74,8 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
 
     public SelectorEntry<Boolean> addSwitchEntry(Text title, Text symbol, Boolean value, Consumer<Boolean> consumer) {
         return addEntry(new SelectorEntry<>(getEntrance(), this, title, symbol, List.of(
-                Text.translate("effortless.option.on").withStyle(TextStyle.GREEN),
-                Text.translate("effortless.option.off").withStyle(TextStyle.RED)
+                Text.translate("effortless.option.on").withStyle(ChatFormatting.GREEN),
+                Text.translate("effortless.option.off").withStyle(ChatFormatting.RED)
         ), List.of(Boolean.TRUE, Boolean.FALSE), value, consumer));
     }
 

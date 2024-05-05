@@ -5,8 +5,8 @@ import com.google.auto.service.AutoService;
 import dev.huskuraft.effortless.api.events.CommonEventRegistry;
 import dev.huskuraft.effortless.api.events.EventRegister;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 
 @AutoService(Entrance.class)
 public class Effortless implements Entrance {
@@ -26,7 +26,7 @@ public class Effortless implements Entrance {
     }
 
     public static Text getSystemMessage(Text msg) {
-        var id = TextStyle.GRAY + "[" + Text.translate("effortless.name") + "]" + TextStyle.RESET + " ";
+        var id = ChatFormatting.GRAY + "[" + Text.translate("effortless.name") + "]" + ChatFormatting.RESET + " ";
         return Text.text(id + msg.getString());
     }
 

@@ -4,8 +4,8 @@ import java.awt.*;
 
 import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
 import dev.huskuraft.effortless.building.structure.builder.standard.Circle;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cone;
@@ -76,7 +76,7 @@ public enum BuildMode {
 
     public Text getDisplayName() {
         if (isDisabled()) {
-            return Text.translate("effortless.mode.%s".formatted(name)).withStyle(TextStyle.GRAY);
+            return Text.translate("effortless.mode.%s".formatted(name)).withStyle(ChatFormatting.GRAY);
         }
         return Text.translate("effortless.mode.%s".formatted(name));
     }

@@ -9,8 +9,8 @@ import dev.huskuraft.effortless.api.gui.slot.SlotContainer;
 import dev.huskuraft.effortless.api.gui.slot.SlotData;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
 
@@ -82,7 +82,7 @@ public final class PatternList extends EditableEntryList<Pattern> {
 
         private Text getDisplayName(Pattern pattern) {
             if (pattern.name().getString().isBlank()) {
-                return Text.translate("effortless.pattern.no_name").withStyle(TextStyle.GRAY);
+                return Text.translate("effortless.pattern.no_name").withStyle(ChatFormatting.GRAY);
             }
             return pattern.name();
         }

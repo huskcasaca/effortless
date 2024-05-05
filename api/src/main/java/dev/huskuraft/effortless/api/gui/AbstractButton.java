@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.api.gui;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
 
 public abstract class AbstractButton extends AbstractWidget {
@@ -64,7 +64,7 @@ public abstract class AbstractButton extends AbstractWidget {
         int k = this.getX() + x;
         int l = this.getX() + this.getWidth() - x;
         // FIXME: 22/3/24
-        renderer.renderScrollingText(typeface, isActive() ? this.getMessage() : this.getMessage().withStyle(TextStyle.RESET), k, this.getY(), l, this.getY() + this.getHeight(), y);
+        renderer.renderScrollingText(typeface, isActive() ? this.getMessage() : this.getMessage().withStyle(ChatFormatting.RESET), k, this.getY(), l, this.getY() + this.getHeight(), y);
     }
 
 

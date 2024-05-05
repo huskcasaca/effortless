@@ -10,8 +10,8 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.Platform;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.session.Session;
 import dev.huskuraft.effortless.session.SessionManager;
@@ -134,7 +134,7 @@ public final class EffortlessClientSessionManager implements SessionManager {
     }
 
     public void notifyPlayer() {
-        var id = TextStyle.GRAY + "[" + Text.translate("effortless.name") + "]" + TextStyle.RESET + " ";
+        var id = ChatFormatting.GRAY + "[" + Text.translate("effortless.name") + "]" + ChatFormatting.RESET + " ";
         var message = switch (getSessionStatus()) {
             case MOD_MISSING -> Text.translate("effortless.session_status.message.mod_missing");
             case SERVER_MOD_MISSING -> Text.translate("effortless.session_status.message.server_mod_missing");

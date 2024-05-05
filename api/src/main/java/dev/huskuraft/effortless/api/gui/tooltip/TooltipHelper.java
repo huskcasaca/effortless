@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.gui.Typeface;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Style;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 
 public class TooltipHelper {
 
@@ -17,10 +17,10 @@ public class TooltipHelper {
         return " " + "█".repeat(Math.max(0, filledLength)) + "▒".repeat(Math.max(0, length - filledLength)) + " ";
     }
 
-    private static TextStyle getLastTextStyle(String string) {
-        var index = string.lastIndexOf(TextStyle.PREFIX_CODE);
+    private static ChatFormatting getLastTextStyle(String string) {
+        var index = string.lastIndexOf(ChatFormatting.PREFIX_CODE);
         if (index != -1 && index + 1 != string.length()) {
-            return TextStyle.getByCode(string.charAt(index + 1));
+            return ChatFormatting.getByCode(string.charAt(index + 1));
         }
         return null;
     }

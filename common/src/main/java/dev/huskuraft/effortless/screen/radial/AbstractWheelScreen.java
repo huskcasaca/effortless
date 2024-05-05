@@ -22,8 +22,8 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
 import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.Option;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 
@@ -481,14 +481,14 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
         if (hoveredButton != null) {
             var tooltip = new ArrayList<Text>();
-            tooltip.add(hoveredButton.getCategory().withStyle(TextStyle.WHITE));
-            tooltip.add(hoveredButton.getName().withStyle(TextStyle.GOLD));
+            tooltip.add(hoveredButton.getCategory().withStyle(ChatFormatting.WHITE));
+            tooltip.add(hoveredButton.getName().withStyle(ChatFormatting.GOLD));
             if (!hoveredButton.getTooltip().getString().isBlank()) {
                 tooltip.add(Text.empty());
                 if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
-                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(TextStyle.DARK_GRAY)).withStyle(TextStyle.DARK_GRAY));
+                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
                 } else {
-                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(TextStyle.GRAY)).withStyle(TextStyle.DARK_GRAY));
+                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
                     tooltip.add(Text.empty());
 //                    tooltip.add(hoveredButton.getTooltip());
                     tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), hoveredButton.getTooltip()));

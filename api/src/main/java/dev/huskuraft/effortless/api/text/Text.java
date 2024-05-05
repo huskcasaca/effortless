@@ -35,7 +35,7 @@ public interface Text extends PlatformReference {
         return withBold(style.bold()).withItalic(style.italic()).withUnderlined(style.underlined()).withStrikethrough(style.strikethrough()).withObfuscated(style.obfuscated()).withColor(style.color());
     }
 
-    default Text withStyle(TextStyle... styles) {
+    default Text withStyle(ChatFormatting... styles) {
         return withStyle(getStyle().applyFormat(styles));
     }
 

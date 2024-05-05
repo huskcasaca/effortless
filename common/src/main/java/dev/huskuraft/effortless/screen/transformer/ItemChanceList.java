@@ -12,8 +12,8 @@ import dev.huskuraft.effortless.api.gui.input.NumberField;
 import dev.huskuraft.effortless.api.gui.slot.ItemSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 
 public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
@@ -50,7 +50,7 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
                     Text.empty()
             );
             components.add(
-                    Text.translate("effortless.randomizer.edit.total_probability", TextStyle.GOLD + percentage + TextStyle.DARK_GRAY + " (" + chance.chance() + "/" + totalCount + ")").withStyle(TextStyle.GRAY)
+                    Text.translate("effortless.randomizer.edit.total_probability", ChatFormatting.GOLD + percentage + ChatFormatting.DARK_GRAY + " (" + chance.chance() + "/" + totalCount + ")").withStyle(ChatFormatting.GRAY)
             );
             return components;
         }

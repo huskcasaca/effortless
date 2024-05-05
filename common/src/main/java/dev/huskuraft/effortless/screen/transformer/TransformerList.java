@@ -14,8 +14,8 @@ import dev.huskuraft.effortless.api.gui.slot.SlotData;
 import dev.huskuraft.effortless.api.gui.slot.TextSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
@@ -110,7 +110,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
 
         protected Text getDisplayName() {
             if (getItem().getName().getString().isBlank()) {
-                return Text.translate("effortless.transformer.no_name").withStyle(TextStyle.GRAY);
+                return Text.translate("effortless.transformer.no_name").withStyle(ChatFormatting.GRAY);
             }
             return getItem().getName();
         }

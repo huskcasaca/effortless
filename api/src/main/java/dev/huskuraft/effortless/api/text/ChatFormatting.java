@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-public enum TextStyle {
+public enum ChatFormatting {
     BLACK("BLACK", '0', 0, 0),
     DARK_BLUE("DARK_BLUE", '1', 1, 170),
     DARK_GREEN("DARK_GREEN", '2', 2, 43520),
@@ -38,7 +38,7 @@ public enum TextStyle {
 
     public static final char PREFIX_CODE = '§';
     private static final Pattern STRIP_FORMATTING_PATTERN = Pattern.compile("(?i)§[0-9A-FK-OR]");
-    private static final Map<String, TextStyle> FORMATTING_BY_NAME = Arrays.stream(values()).collect(Collectors.toMap((textStyle) -> cleanName(textStyle.name), (textStyle) -> textStyle));
+    private static final Map<String, ChatFormatting> FORMATTING_BY_NAME = Arrays.stream(values()).collect(Collectors.toMap((textStyle) -> cleanName(textStyle.name), (textStyle) -> textStyle));
     private final String name;
     private final char code;
     private final boolean isFormat;
@@ -47,15 +47,15 @@ public enum TextStyle {
     @Nullable
     private final Integer color;
 
-    TextStyle(String name, char code, int id, @Nullable Integer color) {
+    ChatFormatting(String name, char code, int id, @Nullable Integer color) {
         this(name, code, false, id, color);
     }
 
-    TextStyle(String name, char code, boolean isFormat) {
+    ChatFormatting(String name, char code, boolean isFormat) {
         this(name, code, isFormat, -1, null);
     }
 
-    TextStyle(String name, char code, boolean format, int id, @Nullable Integer color) {
+    ChatFormatting(String name, char code, boolean format, int id, @Nullable Integer color) {
         this.name = name;
         this.code = code;
         this.isFormat = format;
@@ -74,12 +74,12 @@ public enum TextStyle {
     }
 
     @Nullable
-    public static TextStyle getByName(@Nullable String friendlyName) {
+    public static ChatFormatting getByName(@Nullable String friendlyName) {
         return friendlyName == null ? null : FORMATTING_BY_NAME.get(cleanName(friendlyName));
     }
 
     @Nullable
-    public static TextStyle getById(int index) {
+    public static ChatFormatting getById(int index) {
         if (index < 0) {
             return RESET;
         } else {
@@ -94,7 +94,7 @@ public enum TextStyle {
     }
 
     @Nullable
-    public static TextStyle getByCode(char code) {
+    public static ChatFormatting getByCode(char code) {
         var c0 = Character.toLowerCase(code);
 
         for (var textStyle : values()) {

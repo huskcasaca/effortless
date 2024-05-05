@@ -6,8 +6,8 @@ import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.api.gui.player.PlayerAvatarIcon;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 
 public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
 
@@ -83,7 +83,7 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
         public void onCreate() {
             this.icon = addWidget(new PlayerAvatarIcon(getEntrance(), getX() + 1, getY() + 1, Dimens.Icon.SIZE_26, getItem()));
             this.textWidget = addWidget(new TextWidget(getEntrance(), getX() + 6 + Dimens.Icon.SIZE_26, getY() + 4, Text.text(getItem().getName())));
-            this.uuidTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 6 + Dimens.Icon.SIZE_26, getY() + 4 + 11, Text.text(getItem().getId().toString()).withStyle(TextStyle.GRAY)));
+            this.uuidTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 6 + Dimens.Icon.SIZE_26, getY() + 4 + 11, Text.text(getItem().getId().toString()).withStyle(ChatFormatting.GRAY)));
         }
 
         @Override

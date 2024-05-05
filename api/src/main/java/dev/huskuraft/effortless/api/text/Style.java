@@ -17,14 +17,14 @@ public record Style(
 
     public static Style EMPTY = new Style(null, null, null, null, null, null/*, null, null, null, null*/);
 
-    public Style applyFormat(TextStyle textStyle) {
+    public Style applyFormat(ChatFormatting chatFormatting) {
         var color = this.color;
         var bold = this.bold;
         var italic = this.italic;
         var strikethrough = this.strikethrough;
         var underlined = this.underlined;
         var obfuscated = this.obfuscated;
-        switch (textStyle) {
+        switch (chatFormatting) {
             case OBFUSCATED -> obfuscated = true;
             case BOLD -> bold = true;
             case STRIKETHROUGH -> strikethrough = true;
@@ -34,16 +34,16 @@ public record Style(
                 return EMPTY;
             }
             default -> {
-                color = textStyle.getColor();
+                color = chatFormatting.getColor();
             }
         }
 
         return new Style(color, bold, italic, underlined, strikethrough, obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
     }
 
-    public Style applyFormat(TextStyle... textStyle) {
+    public Style applyFormat(ChatFormatting... chatFormatting) {
         var style = this;
-        for (TextStyle style1 : textStyle) {
+        for (ChatFormatting style1 : chatFormatting) {
             style = style.applyFormat(style1);
         }
         return style;
@@ -53,7 +53,7 @@ public record Style(
         return new Style(color, this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
     }
 
-    public Style withColor(TextStyle color) {
+    public Style withColor(ChatFormatting color) {
         return new Style(color.getColor(), this.bold, this.italic, this.underlined, this.strikethrough, this.obfuscated/*, this.clickEvent, this.hoverEvent, this.insertion, this.font*/);
     }
 

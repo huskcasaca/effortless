@@ -27,8 +27,8 @@ import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.BuildStage;
@@ -266,7 +266,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
             if (interaction.getTarget() == Interaction.Target.MISS) {
                 var traced = player.raytrace(Short.MAX_VALUE, 0f, false);
-                var message = " (" + TextStyle.RED + MathUtils.round(traced.getPosition().distance(player.getEyePosition())) + TextStyle.RESET + "/" + context.customParams().generalConfig().maxReachDistance() + ")";
+                var message = " (" + ChatFormatting.RED + MathUtils.round(traced.getPosition().distance(player.getEyePosition())) + ChatFormatting.RESET + "/" + context.customParams().generalConfig().maxReachDistance() + ")";
                 player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_target").getString() + message, true);
                 return context.newInteraction();
             }
@@ -484,18 +484,18 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var products = result.getProducts(itemType);
             if (!products.isEmpty()) {
                 var color = switch (itemType) {
-                    case BLOCKS_PLACED -> TextStyle.WHITE;
-                    case BLOCKS_DESTROYED -> TextStyle.RED;
-                    case BLOCKS_INTERACTED -> TextStyle.YELLOW;
-                    case BLOCKS_PLACE_INSUFFICIENT -> TextStyle.RED;
-                    case BLOCKS_BREAK_INSUFFICIENT -> TextStyle.RED;
-                    case BLOCKS_NOT_PLACEABLE -> TextStyle.GRAY;
-                    case BLOCKS_NOT_BREAKABLE -> TextStyle.GRAY;
-                    case BLOCKS_NOT_INTERACTABLE -> TextStyle.GRAY;
-                    case BLOCKS_PLACE_NOT_WHITELISTED -> TextStyle.GRAY;
-                    case BLOCKS_BREAK_NOT_WHITELISTED -> TextStyle.GRAY;
-                    case BLOCKS_PLACE_BLACKLISTED -> TextStyle.GRAY;
-                    case BLOCKS_BREAK_BLACKLISTED -> TextStyle.GRAY;
+                    case BLOCKS_PLACED -> ChatFormatting.WHITE;
+                    case BLOCKS_DESTROYED -> ChatFormatting.RED;
+                    case BLOCKS_INTERACTED -> ChatFormatting.YELLOW;
+                    case BLOCKS_PLACE_INSUFFICIENT -> ChatFormatting.RED;
+                    case BLOCKS_BREAK_INSUFFICIENT -> ChatFormatting.RED;
+                    case BLOCKS_NOT_PLACEABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_NOT_BREAKABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_NOT_INTERACTABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_PLACE_NOT_WHITELISTED -> ChatFormatting.GRAY;
+                    case BLOCKS_BREAK_NOT_WHITELISTED -> ChatFormatting.GRAY;
+                    case BLOCKS_PLACE_BLACKLISTED -> ChatFormatting.GRAY;
+                    case BLOCKS_BREAK_BLACKLISTED -> ChatFormatting.GRAY;
                 };
                 entries.add(products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList());
                 entries.add(Text.translate("effortless.build.summary." + itemType.name().toLowerCase(Locale.ROOT)).withStyle(color));
@@ -503,17 +503,17 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
 
         var texts = new ArrayList<Tuple2<Text, Text>>();
-        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(TextStyle.WHITE), context.buildMode().getDisplayName().withStyle(TextStyle.GOLD)));
-        texts.add(new Tuple2<>(AbstractWheelScreen.button(context.replaceMode()).getCategory().withStyle(TextStyle.WHITE), AbstractWheelScreen.button(context.replaceMode()).getName().withStyle(TextStyle.GOLD)));
+        texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(ChatFormatting.WHITE), context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD)));
+        texts.add(new Tuple2<>(AbstractWheelScreen.button(context.replaceMode()).getCategory().withStyle(ChatFormatting.WHITE), AbstractWheelScreen.button(context.replaceMode()).getName().withStyle(ChatFormatting.GOLD)));
 
         for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
             if (option.isEmpty()) continue;
             var button = AbstractWheelScreen.button(option.get());
-            texts.add(new Tuple2<>(button.getCategory().withStyle(TextStyle.WHITE), button.getName().withStyle(TextStyle.GOLD)));
+            texts.add(new Tuple2<>(button.getCategory().withStyle(ChatFormatting.WHITE), button.getName().withStyle(ChatFormatting.GOLD)));
         }
         if (!context.pattern().equals(Pattern.DISABLED)) {
-            texts.add(new Tuple2<>(Text.translate("effortless.build.summary.pattern").withStyle(TextStyle.WHITE), (context.pattern().equals(Pattern.DISABLED) ? Text.translate("effortless.build.summary.pattern_disabled") : Text.translate("effortless.build.summary.pattern_enabled")).withStyle(TextStyle.GOLD)));
+            texts.add(new Tuple2<>(Text.translate("effortless.build.summary.pattern").withStyle(ChatFormatting.WHITE), (context.pattern().equals(Pattern.DISABLED) ? Text.translate("effortless.build.summary.pattern_disabled") : Text.translate("effortless.build.summary.pattern_enabled")).withStyle(ChatFormatting.GOLD)));
         }
 
         entries.add(texts);
@@ -534,7 +534,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 case PASS -> {
                 }
                 case FAILED -> {
-                    message = Text.translate("effortless.message.building.cannot_reach_target").withStyle(TextStyle.WHITE).getString();
+                    message = Text.translate("effortless.message.building.cannot_reach_target").withStyle(ChatFormatting.WHITE).getString();
                     var interaction = context.interactions().results().stream().filter(result -> result != null && result.getTarget() == Interaction.Target.MISS).findAny();
                     if (interaction.isPresent()) {
                         message += " (" + interaction.get().getBlockPosition().distance(player.getPosition().toVector3i()) + "/" + context.customParams().generalConfig().maxReachDistance() + ")";
@@ -543,15 +543,15 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
         } else {
             message = getStateComponent(context.state()) + " "
-                    + context.buildMode().getDisplayName().withStyle(TextStyle.GOLD).getString() + " "
+                    + context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD).getString() + " "
                     + "("
-                    + (context.getInteractionBox().x() > context.getMaxBoxSideLength() ? TextStyle.RED : TextStyle.WHITE) + context.getInteractionBox().x() + TextStyle.RESET
+                    + (context.getInteractionBox().x() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().x() + ChatFormatting.RESET
                     + "x"
-                    + (context.getInteractionBox().y() > context.getMaxBoxSideLength() ? TextStyle.RED : TextStyle.WHITE) + context.getInteractionBox().y() + TextStyle.RESET
+                    + (context.getInteractionBox().y() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().y() + ChatFormatting.RESET
                     + "x"
-                    + (context.getInteractionBox().z() > context.getMaxBoxSideLength() ? TextStyle.RED : TextStyle.WHITE) + context.getInteractionBox().z() + TextStyle.RESET
+                    + (context.getInteractionBox().z() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().z() + ChatFormatting.RESET
                     + "="
-                    + (context.getInteractionBox().volume() > context.getMaxBoxVolume() ? TextStyle.RED : TextStyle.WHITE) + context.getInteractionBox().volume() + TextStyle.RESET
+                    + (context.getInteractionBox().volume() > context.getMaxBoxVolume() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().volume() + ChatFormatting.RESET
                     + ")";
         }
 
