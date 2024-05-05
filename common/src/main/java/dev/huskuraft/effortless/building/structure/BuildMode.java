@@ -26,7 +26,7 @@ public enum BuildMode {
     DISABLED("disabled", new Disable(), Category.BASIC),
     SINGLE("single", new Single(), Category.BASIC /*, BuildOption.BUILD_SPEED*/),
 
-    LINE("line", new Line(), Category.SQUARE /*, OptionEnum.THICKNESS*/),
+    LINE("line", new Line(), Category.SQUARE, BuildFeature.LINE_DIRECTION /*, OptionEnum.THICKNESS*/),
     //    SQUARE("square", new Square(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
     WALL("wall", new Wall(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_LENGTH),
     FLOOR("floor", new Floor(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_LENGTH),

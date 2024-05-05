@@ -26,6 +26,7 @@ public class Line extends AbstractBlockStructure {
                         new NearestLineCriteria(Axis.Y, player, center, reach, skipRaytrace),
                         new NearestLineCriteria(Axis.Z, player, center, reach, skipRaytrace)
                 )
+                .filter(nearestLineCriteria -> context.lineDirection().isInRange(nearestLineCriteria.getAxis()))
                 .filter(AxisCriteria::isInRange)
                 .reduce((nearest, criteria) -> {
                     if (criteria.distanceToLineSqr() < 2.0 && nearest.distanceToLineSqr() < 2.0) {

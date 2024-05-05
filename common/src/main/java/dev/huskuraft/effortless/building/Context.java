@@ -24,6 +24,7 @@ import dev.huskuraft.effortless.building.session.BuildSession;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.CubeFilling;
+import dev.huskuraft.effortless.building.structure.LineDirection;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
@@ -55,7 +56,8 @@ public record Context(
                         PlaneFacing.BOTH,
                         RaisedEdge.RAISE_LONG_EDGE,
                         ReplaceMode.DISABLED,
-                        PlaneLength.VARIABLE
+                        PlaneLength.VARIABLE,
+                        LineDirection.ALL
                 ),
                 new PatternParams(
                         Pattern.DISABLED
@@ -168,6 +170,10 @@ public record Context(
 
     public ReplaceMode replaceMode() {
         return structureParams.replaceMode();
+    }
+
+    public LineDirection lineDirection() {
+        return structureParams.lineDirection();
     }
 
     public int axisLimitation() {
@@ -375,17 +381,18 @@ public record Context(
             PlaneFacing planeFacing,
             RaisedEdge raisedEdge,
             ReplaceMode replaceMode,
-            PlaneLength planeLength
+            PlaneLength planeLength,
+            LineDirection lineDirection
     ) {
 
         public Set<Feature> buildFeatures() {
             return Stream.of(
-                    Set.of(circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, planeLength)
+                    Set.of(circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, planeLength, lineDirection)
             ).flatMap(Set::stream).collect(Collectors.toSet());
         }
 
         public StructureParams withBuildMode(BuildMode buildMode) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength, lineDirection);
         }
 
         public StructureParams withBuildFeature(Feature feature) {
@@ -408,8 +415,12 @@ public record Context(
                 return withReplaceMode(replaceMode);
             }
             if (feature instanceof PlaneLength planeLength) {
-                return withUniformLength(planeLength);
+                return withPlaneLength(planeLength);
             }
+            if (feature instanceof LineDirection lineDirection) {
+                return withLineDirection(lineDirection);
+            }
+
             return this;
         }
 
@@ -421,31 +432,35 @@ public record Context(
         }
 
         public StructureParams withCircleStart(CircleStart circleStart) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength, lineDirection);
         }
 
         public StructureParams withCubeFilling(CubeFilling cubeFilling) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength, lineDirection);
         }
 
         public StructureParams withPlaneFilling(PlaneFilling planeFilling) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength, lineDirection);
         }
 
         public StructureParams withPlaneFacing(PlaneFacing planeFacing) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength, lineDirection);
         }
 
         public StructureParams withRaisedEdge(RaisedEdge raisedEdge) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength, lineDirection);
         }
 
         public StructureParams withReplaceMode(ReplaceMode replaceMode) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength, lineDirection);
         }
 
-        public StructureParams withUniformLength(PlaneLength planeLength) {
-            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength);
+        public StructureParams withPlaneLength(PlaneLength planeLength) {
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength, lineDirection);
+        }
+
+        public StructureParams withLineDirection(LineDirection lineDirection) {
+            return new StructureParams(buildMode, circleStart, cubeFilling, planeFilling, planeFacing, raisedEdge, replaceMode, planeLength, lineDirection);
         }
 
     }

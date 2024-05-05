@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.CubeFilling;
+import dev.huskuraft.effortless.building.structure.LineDirection;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
@@ -34,7 +35,8 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                         byteBuf.readEnum(PlaneFacing.class),
                         byteBuf.readEnum(RaisedEdge.class),
                         byteBuf.readEnum(ReplaceMode.class),
-                        byteBuf.readEnum(PlaneLength.class)),
+                        byteBuf.readEnum(PlaneLength.class),
+                        byteBuf.readEnum(LineDirection.class)),
                 new Context.PatternParams(
                         new Pattern(
                                 byteBuf.readUUID(),
@@ -63,6 +65,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.writeEnum(context.structureParams().raisedEdge());
         byteBuf.writeEnum(context.structureParams().replaceMode());
         byteBuf.writeEnum(context.structureParams().planeLength());
+        byteBuf.writeEnum(context.structureParams().lineDirection());
 
         byteBuf.writeUUID(context.patternParams().pattern().id());
         byteBuf.writeText(context.patternParams().pattern().name());
