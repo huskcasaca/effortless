@@ -59,6 +59,10 @@ public class OperationsRenderer {
         results.put(id, new RenderFadeEntry<>(createRenderer(result)));
     }
 
+    public void remove(Object id) {
+        results.remove(id);
+    }
+
     public void tick() {
         var iterator = results.values().iterator();
         while (iterator.hasNext()) {

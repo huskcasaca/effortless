@@ -8,7 +8,7 @@ import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
 
-public class RootSettingsTagSerializer implements TagSerializer<ClientConfig> {
+public class ClientConfigTagSerializer implements TagSerializer<ClientConfig> {
 
     private static final String TAG_RENDER_SETTINGS = "Render";
     private static final String TAG_PATTERN_SETTINGS = "Patterns";
