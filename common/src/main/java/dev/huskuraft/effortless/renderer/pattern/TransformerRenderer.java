@@ -2,9 +2,11 @@ package dev.huskuraft.effortless.renderer.pattern;
 
 import java.awt.*;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.renderer.RenderUtils;
 import dev.huskuraft.effortless.api.renderer.Renderer;
@@ -16,6 +18,16 @@ public abstract class TransformerRenderer {
     private static final Color COLOR_PLANE = new Color(0, 0, 0, 72);
     private static final Color COLOR_LINE = new Color(0, 0, 0, 200);
     private static final Vector3d EPSILON = new Vector3d(0.001, 0.001, 0.001);
+
+    private final ClientEntrance entrance;
+
+    public EffortlessClient getEntrance() {
+        return (EffortlessClient) entrance;
+    }
+
+    protected TransformerRenderer(ClientEntrance entrance) {
+        this.entrance = entrance;
+    }
 
     public abstract void render(Renderer renderer, float deltaTick);
 

@@ -222,10 +222,6 @@ public record Context(
         return new Context(getId, state, type, BuildInteractions.EMPTY, structureParams, patternParams, customParams);
     }
 
-    public Context withNextInteractionTraced(Player player) {
-        return withNextInteraction(trace(player));
-    }
-
     public Context withBuildMode(BuildMode buildMode) {
         return new Context(getId, state, type, interactions, structureParams.withBuildMode(buildMode), patternParams, customParams);
     }

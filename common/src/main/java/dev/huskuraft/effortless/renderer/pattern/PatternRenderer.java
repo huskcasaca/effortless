@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import dev.huskuraft.effortless.EffortlessClient;
+import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.api.renderer.RenderFadeEntry;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.Context;
@@ -15,9 +17,14 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 public class PatternRenderer {
 
     private final Map<UUID, RenderFadeEntry<Context>> entries = Collections.synchronizedMap(new LinkedHashMap<>());
+    private final ClientEntrance entrance;
 
-    public PatternRenderer() {
+    public PatternRenderer(ClientEntrance entrance) {
+        this.entrance = entrance;
+    }
 
+    public EffortlessClient getEntrance() {
+        return (EffortlessClient) entrance;
     }
 
     public void tick() {
@@ -39,13 +46,13 @@ public class PatternRenderer {
         entries.forEach((k, v) -> {
             for (var transformer : v.getValue().pattern().transformers()) {
                 if (transformer instanceof MirrorTransformer mirrorTransformer) {
-                    new MirrorTransformerRenderer(mirrorTransformer, true).render(renderer, deltaTick);
+                    new MirrorTransformerRenderer(getEntrance(), mirrorTransformer, true).render(renderer, deltaTick);
                 }
                 if (transformer instanceof ArrayTransformer arrayTransformer) {
-                    new ArrayTransformerRenderer(arrayTransformer).render(renderer, deltaTick);
+                    new ArrayTransformerRenderer(getEntrance(), arrayTransformer).render(renderer, deltaTick);
                 }
                 if (transformer instanceof RadialTransformer radialTransformer) {
-                    new RadialTransformerRenderer(radialTransformer, true).render(renderer, deltaTick);
+                    new RadialTransformerRenderer(getEntrance(), radialTransformer, true).render(renderer, deltaTick);
                 }
             }
         });

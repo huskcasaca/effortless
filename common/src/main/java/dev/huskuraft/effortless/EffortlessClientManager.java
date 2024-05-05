@@ -50,7 +50,7 @@ public final class EffortlessClientManager implements ClientManager {
 
         this.operationsRenderer = new OperationsRenderer(entrance);
         this.outlineRenderer = new OutlineRenderer();
-        this.patternRenderer = new PatternRenderer();
+        this.patternRenderer = new PatternRenderer(entrance);
 
         getEntrance().getEventRegistry().getRegisterKeysEvent().register(this::onRegisterKeys);
         getEntrance().getEventRegistry().getKeyInputEvent().register(this::onKeyInput);

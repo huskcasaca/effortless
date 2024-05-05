@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.renderer.pattern;
 import java.awt.*;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 
@@ -11,7 +12,8 @@ public class RadialTransformerRenderer extends TransformerRenderer {
     private final RadialTransformer transformer;
     private final boolean renderPlanes;
 
-    public RadialTransformerRenderer(RadialTransformer transformer, boolean renderPlanes) {
+    public RadialTransformerRenderer(ClientEntrance entrance, RadialTransformer transformer, boolean renderPlanes) {
+        super(entrance);
         this.transformer = transformer;
         this.renderPlanes = renderPlanes;
     }

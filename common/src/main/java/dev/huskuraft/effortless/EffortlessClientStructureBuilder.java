@@ -159,7 +159,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 context = context.withBuildState(BuildState.PLACE_BLOCK);
             }
         }
-        return context.withNextInteractionTraced(player);
+        return context.withNextInteraction(context.trace(player));
     }
 
     @Override
