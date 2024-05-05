@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.quilt.platform;
 
-import dev.huskuraft.effortless.api.platform.Mod;
-
 import org.quiltmc.loader.api.ModContainer;
+
+import dev.huskuraft.effortless.api.platform.Mod;
 
 record QuiltMod(ModContainer modContainer) implements Mod {
 

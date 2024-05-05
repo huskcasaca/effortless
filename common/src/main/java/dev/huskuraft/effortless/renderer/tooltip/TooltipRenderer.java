@@ -15,8 +15,8 @@ import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.core.Tuple2;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
-import dev.huskuraft.effortless.api.lang.Tuple2;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
@@ -87,7 +87,14 @@ public class TooltipRenderer {
                     entry1 = new LinkedHashMap<>();
                 }
                 entry1.compute(id, (k1, v1) -> {
-                    entry.ticksAlive = v1 != null ? v1.ticksAlive : 0;
+                    if (v1 != null && !immediate) {
+                        if (v1.ticksTillRemoval < Entry.FADE_TICKS) {
+                            entry.ticksAlive = (int) (Entry.FADE_TICKS * (MathUtils.lerp(1.0 * v1.ticksTillRemoval / Entry.FADE_TICKS, 0, 1) * MathUtils.lerp(1.0 * v1.ticksTillRemoval / Entry.FADE_TICKS, 0, 1)));
+                            entry.ticksTillRemoval = Entry.ALIVE_TICKS;
+                        } else {
+                            entry.ticksAlive = v1.ticksAlive;
+                        }
+                    }
                     if (immediate) {
                         entry.ticksAlive = Entry.FADE_TICKS;
                     }
@@ -398,7 +405,6 @@ public class TooltipRenderer {
     }
 
 
-
     public class IconEntry extends Entry {
 
         private static final int MAX_COLUMN = 9;
@@ -449,6 +455,7 @@ public class TooltipRenderer {
 
     private class GroupEntry extends Entry {
         private final List<Entry> entries;
+
         public GroupEntry(List<Entry> entries) {
             this.entries = entries;
         }
@@ -540,16 +547,19 @@ public class TooltipRenderer {
             super(entrance, Text.empty());
         }
 
-        public int getContentWidth(){
+        public int getContentWidth() {
             return 0;
         }
-        public int getContentHeight(){
+
+        public int getContentHeight() {
             return 0;
         }
-        public int getPaddingX(){
+
+        public int getPaddingX() {
             return 0;
         }
-        public int getPaddingY(){
+
+        public int getPaddingY() {
             return 0;
         }
 

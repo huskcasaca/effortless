@@ -1,269 +1,34 @@
 package dev.huskuraft.effortless.vanilla.tag;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import dev.huskuraft.effortless.api.tag.TagElement;
-import dev.huskuraft.effortless.api.tag.TagPrimitive;
-import dev.huskuraft.effortless.api.tag.TagReader;
 import dev.huskuraft.effortless.api.tag.TagRecord;
-import dev.huskuraft.effortless.api.tag.TagWriter;
-import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.vanilla.core.MinecraftText;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.Tag;
 
-public class MinecraftTagRecord implements TagRecord {
+public record MinecraftTagRecord(CompoundTag referenceValue) implements TagRecord {
 
-    private final MinecraftTagElement proxy;
-
-    public MinecraftTagRecord(MinecraftTagElement tag) {
-        this.proxy = tag;
-    }
-
-    public MinecraftTagRecord(CompoundTag tag) {
-        this(new MinecraftTagElement(tag == null ? new CompoundTag() : tag));
+    @Override
+    public byte getId() {
+        return new MinecraftTagElement(referenceValue()).getId();
     }
 
     @Override
-    public CompoundTag referenceValue() {
-        return (CompoundTag) proxy.referenceValue();
+    public String getAsString() {
+        return new MinecraftTagElement(referenceValue()).getAsString();
     }
 
     @Override
-    public TagRecord asRecord() {
-        return this;
+    public TagElement getTag(String key) {
+        return MinecraftTagElement.ofNullable(referenceValue().get(key));
     }
 
     @Override
-    public TagPrimitive asPrimitive() {
-        return new MinecraftTagPrimitive(proxy);
+    public TagElement putTag(String key, TagElement value) {
+        return MinecraftTagElement.ofNullable(referenceValue().put(key, (Tag) value.referenceValue()));
     }
 
     @Override
-    public String getString(String key) {
-        return referenceValue().getString(key);
+    public void remove(String key) {
+        referenceValue().remove(key);
     }
-
-    @Override
-    public void putString(String key, String value) {
-        referenceValue().putString(key, value);
-    }
-
-    @Override
-    public Text getText(String key) {
-        return new MinecraftText(Component.Serializer.fromJson(referenceValue().getString(key)));
-    }
-
-    @Override
-    public void putText(String key, Text value) {
-        referenceValue().putString(key, Component.Serializer.toJson(value.reference()));
-    }
-
-    @Override
-    public boolean getBoolean(String key) {
-        return referenceValue().getBoolean(key);
-    }
-
-    @Override
-    public void putBoolean(String key, boolean value) {
-        referenceValue().putBoolean(key, value);
-    }
-
-    @Override
-    public byte getByte(String key) {
-        return referenceValue().getByte(key);
-    }
-
-    @Override
-    public void putByte(String key, byte value) {
-        referenceValue().putByte(key, value);
-    }
-
-    @Override
-    public short getShort(String key) {
-        return referenceValue().getShort(key);
-    }
-
-    @Override
-    public void putShort(String key, short value) {
-        referenceValue().putShort(key, value);
-    }
-
-    @Override
-    public int getInt(String key) {
-        return referenceValue().getInt(key);
-    }
-
-    @Override
-    public void putInt(String key, int value) {
-        referenceValue().putInt(key, value);
-    }
-
-    @Override
-    public long getLong(String key) {
-        return referenceValue().getLong(key);
-    }
-
-    @Override
-    public void putLong(String key, long value) {
-        referenceValue().putLong(key, value);
-    }
-
-    @Override
-    public float getFloat(String key) {
-        return referenceValue().getFloat(key);
-    }
-
-    @Override
-    public void putFloat(String key, float value) {
-        referenceValue().putFloat(key, value);
-    }
-
-    @Override
-    public double getDouble(String key) {
-        return referenceValue().getDouble(key);
-    }
-
-    @Override
-    public void putDouble(String key, double value) {
-        referenceValue().putDouble(key, value);
-    }
-
-    @Override
-    public boolean[] getBooleanArray(String key) {
-        throw new NotImplementedException("getBooleanArray is not implemented yet");
-    }
-
-    @Override
-    public void putBooleanArray(String key, boolean[] value) {
-        throw new NotImplementedException("putBooleanArray is not implemented yet");
-    }
-
-    @Override
-    public byte[] getByteArray(String key) {
-        return referenceValue().getByteArray(key);
-    }
-
-    @Override
-    public void putByteArray(String key, byte[] value) {
-        referenceValue().putByteArray(key, value);
-    }
-
-    @Override
-    public short[] getShortArray(String key) {
-        throw new NotImplementedException("getShortArray is not implemented yet");
-    }
-
-    @Override
-    public void putShortArray(String key, short[] value) {
-        throw new NotImplementedException("putShortArray is not implemented yet");
-    }
-
-    @Override
-    public int[] getIntArray(String key) {
-        return referenceValue().getIntArray(key);
-    }
-
-    @Override
-    public void putIntArray(String key, int[] value) {
-        referenceValue().putIntArray(key, value);
-    }
-
-    @Override
-    public long[] getLongArray(String key) {
-        return referenceValue().getLongArray(key);
-    }
-
-    @Override
-    public void putLongArray(String key, long[] value) {
-        referenceValue().putLongArray(key, value);
-    }
-
-    @Override
-    public float[] getFloatArray(String key) {
-        throw new NotImplementedException("getFloatArray is not implemented yet");
-    }
-
-    @Override
-    public void putFloatArray(String key, float[] value) {
-        throw new NotImplementedException("putFloatArray is not implemented yet");
-    }
-
-    @Override
-    public double[] getDoubleArray(String key) {
-        throw new NotImplementedException("getDoubleArray is not implemented yet");
-    }
-
-    @Override
-    public void putDoubleArray(String key, double[] value) {
-        throw new NotImplementedException("putDoubleArray is not implemented yet");
-    }
-
-    @Override
-    public TagElement getElement(String key) {
-        return new MinecraftTagElement(referenceValue().get(key));
-    }
-
-    @Override
-    public void putElement(String key, TagElement value) {
-        referenceValue().put(key, ((MinecraftTagElement) value).referenceValue());
-    }
-
-    @Override
-    public <T> T getElement(String key, TagReader<T> reader) {
-        return reader.read(new MinecraftTagElement(referenceValue().get(key)), true);
-    }
-
-    @Override
-    public <T> void putElement(String key, T value, TagWriter<T> writer) {
-        var tagElement = new MinecraftTagElement(null);
-        writer.write(tagElement, value, true);
-        referenceValue().put(key, tagElement.referenceValue());
-    }
-
-    @Override
-    public <T> List<T> getList(String key, TagReader<T> reader) {
-        var list = new ArrayList<T>();
-        var tag = (ListTag) referenceValue().get(key);
-        if (tag == null) {
-            return Collections.unmodifiableList(list);
-        }
-        for (var minecraftListTag : tag) {
-            list.add(reader.read(new MinecraftTagElement(minecraftListTag), true));
-        }
-        return Collections.unmodifiableList(list);
-    }
-
-    @Override
-    public <T> void putList(String key, Collection<T> collection, TagWriter<T> writer) {
-        var minecraftListTag = new ListTag();
-        for (var value : collection) {
-            var tagElement = new MinecraftTagElement(null);
-            writer.write(tagElement, value, true);
-            minecraftListTag.add(tagElement.referenceValue());
-        }
-        referenceValue().put(key, minecraftListTag);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftTagElement tagElement && referenceValue().equals(tagElement.reference) || obj instanceof MinecraftTagRecord tagRecord && referenceValue().equals(tagRecord.referenceValue());
-    }
-
-    @Override
-    public int hashCode() {
-        return referenceValue().hashCode();
-    }
-
-    static class NotImplementedException extends RuntimeException {
-
-        public NotImplementedException(String message) {
-            super(message);
-        }
-    }
-
 }

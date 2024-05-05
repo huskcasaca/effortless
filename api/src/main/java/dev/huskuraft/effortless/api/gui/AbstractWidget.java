@@ -274,8 +274,8 @@ public abstract class AbstractWidget implements Widget {
         this.tooltip = List.of(tooltip);
     }
 
-    public void setParent(Widget parent) {
-        this.parent = parent;
+    public void setTooltip(String... tooltip) {
+        this.tooltip = Stream.of(tooltip).map(Text::text).toList();
     }
 
     @Override
@@ -283,11 +283,11 @@ public abstract class AbstractWidget implements Widget {
         return parent;
     }
 
-    public boolean hasParent() {
-        return parent != null;
+    public void setParent(Widget parent) {
+        this.parent = parent;
     }
 
-    public void setTooltip(String... tooltip) {
-        this.tooltip = Stream.of(tooltip).map(Text::text).toList();
+    public boolean hasParent() {
+        return parent != null;
     }
 }

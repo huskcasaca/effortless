@@ -1,26 +1,26 @@
 package dev.huskuraft.effortless.networking.serializer;
 
 import dev.huskuraft.effortless.api.math.Vector3d;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 
-public class Vector3dSerializer implements BufferSerializer<Vector3d> {
+public class Vector3dSerializer implements NetByteBufSerializer<Vector3d> {
 
     @Override
-    public Vector3d read(Buffer buffer) {
+    public Vector3d read(NetByteBuf byteBuf) {
         return Vector3d.at(
-                buffer.readDouble(),
-                buffer.readDouble(),
-                buffer.readDouble()
+                byteBuf.readDouble(),
+                byteBuf.readDouble(),
+                byteBuf.readDouble()
         );
     }
 
 
     @Override
-    public void write(Buffer buffer, Vector3d vector) {
-        buffer.writeDouble(vector.x());
-        buffer.writeDouble(vector.y());
-        buffer.writeDouble(vector.z());
+    public void write(NetByteBuf byteBuf, Vector3d vector) {
+        byteBuf.writeDouble(vector.x());
+        byteBuf.writeDouble(vector.y());
+        byteBuf.writeDouble(vector.z());
     }
 
 }

@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.networking.serializer;
 
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
@@ -15,61 +15,61 @@ import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
 
-public class ContextSerializer implements BufferSerializer<Context> {
+public class ContextSerializer implements NetByteBufSerializer<Context> {
 
     @Override
-    public Context read(Buffer buffer) {
+    public Context read(NetByteBuf byteBuf) {
         return new Context(
-                buffer.readUUID(),
-                buffer.readEnum(BuildState.class),
-                buffer.readEnum(BuildType.class),
+                byteBuf.readUUID(),
+                byteBuf.readEnum(BuildState.class),
+                byteBuf.readEnum(BuildType.class),
                 new Context.BuildInteractions(
-                        buffer.readList(buffer1 -> buffer1.readNullable(new BlockInteractionSerializer()))
+                        byteBuf.readList(buffer1 -> buffer1.readNullable(new BlockInteractionSerializer()))
                 ),
                 new Context.StructureParams(
-                        buffer.readEnum(BuildMode.class),
-                        buffer.readEnum(CircleStart.class),
-                        buffer.readEnum(CubeFilling.class),
-                        buffer.readEnum(PlaneFilling.class),
-                        buffer.readEnum(PlaneFacing.class),
-                        buffer.readEnum(RaisedEdge.class),
-                        buffer.readEnum(ReplaceMode.class),
-                        buffer.readEnum(PlaneLength.class)),
+                        byteBuf.readEnum(BuildMode.class),
+                        byteBuf.readEnum(CircleStart.class),
+                        byteBuf.readEnum(CubeFilling.class),
+                        byteBuf.readEnum(PlaneFilling.class),
+                        byteBuf.readEnum(PlaneFacing.class),
+                        byteBuf.readEnum(RaisedEdge.class),
+                        byteBuf.readEnum(ReplaceMode.class),
+                        byteBuf.readEnum(PlaneLength.class)),
                 new Context.PatternParams(
                         new Pattern(
-                                buffer.readUUID(),
-                                buffer.readText(),
-                                buffer.readList(new TransformerSerializer())
+                                byteBuf.readUUID(),
+                                byteBuf.readText(),
+                                byteBuf.readList(new TransformerSerializer())
                         ),
-                        buffer.readLong()),
+                        byteBuf.readLong()),
                 new Context.CustomParams(
-                        buffer.read(new GeneralConfigSerializer())
+                        byteBuf.read(new GeneralConfigSerializer())
                 )
         );
     }
 
     @Override
-    public void write(Buffer buffer, Context context) {
-        buffer.writeUUID(context.getId());
-        buffer.writeEnum(context.state());
-        buffer.writeEnum(context.type());
-        buffer.writeList(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
+    public void write(NetByteBuf byteBuf, Context context) {
+        byteBuf.writeUUID(context.getId());
+        byteBuf.writeEnum(context.state());
+        byteBuf.writeEnum(context.type());
+        byteBuf.writeList(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
 
-        buffer.writeEnum(context.structureParams().buildMode());
-        buffer.writeEnum(context.structureParams().circleStart());
-        buffer.writeEnum(context.structureParams().cubeFilling());
-        buffer.writeEnum(context.structureParams().planeFilling());
-        buffer.writeEnum(context.structureParams().planeFacing());
-        buffer.writeEnum(context.structureParams().raisedEdge());
-        buffer.writeEnum(context.structureParams().replaceMode());
-        buffer.writeEnum(context.structureParams().planeLength());
+        byteBuf.writeEnum(context.structureParams().buildMode());
+        byteBuf.writeEnum(context.structureParams().circleStart());
+        byteBuf.writeEnum(context.structureParams().cubeFilling());
+        byteBuf.writeEnum(context.structureParams().planeFilling());
+        byteBuf.writeEnum(context.structureParams().planeFacing());
+        byteBuf.writeEnum(context.structureParams().raisedEdge());
+        byteBuf.writeEnum(context.structureParams().replaceMode());
+        byteBuf.writeEnum(context.structureParams().planeLength());
 
-        buffer.writeUUID(context.patternParams().pattern().id());
-        buffer.writeText(context.patternParams().pattern().name());
-        buffer.writeList(context.patternParams().pattern().transformers(), new TransformerSerializer());
-        buffer.writeLong(context.patternParams().seed());
+        byteBuf.writeUUID(context.patternParams().pattern().id());
+        byteBuf.writeText(context.patternParams().pattern().name());
+        byteBuf.writeList(context.patternParams().pattern().transformers(), new TransformerSerializer());
+        byteBuf.writeLong(context.patternParams().seed());
 
-        buffer.write(context.customParams().generalConfig(), new GeneralConfigSerializer());
+        byteBuf.write(context.customParams().generalConfig(), new GeneralConfigSerializer());
     }
 
 }

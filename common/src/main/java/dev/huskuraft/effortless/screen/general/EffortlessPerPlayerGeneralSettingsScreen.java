@@ -13,8 +13,8 @@ import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.screen.item.EffortlessItemsScreen;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
@@ -22,11 +22,11 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
 
     private final PlayerInfo playerInfo;
+    private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
     private GeneralConfig defaultConfig;
     private GeneralConfig originalConfig;
     private GeneralConfig config;
     private GeneralConfig globalConfig;
-    private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
     private AbstractWidget resetButton;
     private AbstractWidget saveButton;
 
@@ -185,7 +185,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractScreen {
         var isGlobal = playerGetter.get() == null;
         entry.children().forEach(child -> child.setActive(!isGlobal));
         entry.getAltButton().setActive(true);
-        entry.getTitleTextWidget().setMessage(entry.getTitleTextWidget().getMessage().withStyle(isGlobal ? TextStyle.ITALIC : TextStyle.RESET, isGlobal ? TextStyle.GRAY : TextStyle.WHITE));
+        entry.getTitleTextWidget().setMessage(entry.getTitleTextWidget().getMessage().withStyle(isGlobal ? ChatFormatting.ITALIC : ChatFormatting.RESET, isGlobal ? ChatFormatting.GRAY : ChatFormatting.WHITE));
         entry.setConsumer(null);
         entry.setItem(isGlobal ? globalGetter.get() : playerGetter.get());
         entry.setConsumer(setter);

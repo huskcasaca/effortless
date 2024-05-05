@@ -12,29 +12,29 @@ public record PlayerSkin(
         PlayerSkin.Model model
 ) {
 
-   public enum Model {
-      SLIM("slim"),
-      WIDE("default");
+    public enum Model {
+        SLIM("slim"),
+        WIDE("default");
 
-      private final String id;
+        private final String id;
 
-      Model(String id) {
-         this.id = id;
-      }
+        Model(String id) {
+            this.id = id;
+        }
 
-      public String id() {
-         return this.id;
-      }
+        public static PlayerSkin.Model byName(@Nullable String name) {
+            if (name == null) {
+                return WIDE;
+            }
+            if (name.equals("slim")) {
+                return SLIM;
+            } else {
+                return WIDE;
+            }
+        }
 
-       public static PlayerSkin.Model byName(@Nullable String name) {
-           if (name == null) {
-               return WIDE;
-           }
-           if (name.equals("slim")) {
-               return SLIM;
-           } else {
-               return WIDE;
-           }
-       }
-   }
+        public String id() {
+            return this.id;
+        }
+    }
 }

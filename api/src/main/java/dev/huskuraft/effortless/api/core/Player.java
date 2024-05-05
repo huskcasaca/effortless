@@ -52,5 +52,4 @@ public interface Player extends Entity {
     void resetStat(Stat<?> stat);
 
 
-
 }

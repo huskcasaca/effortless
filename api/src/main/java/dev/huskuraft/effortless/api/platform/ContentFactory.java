@@ -11,7 +11,6 @@ import dev.huskuraft.effortless.api.core.StatType;
 import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.fluid.Fluid;
 import dev.huskuraft.effortless.api.core.fluid.Fluids;
-import dev.huskuraft.effortless.api.networking.Buffer;
 import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.api.sound.Sounds;
 import dev.huskuraft.effortless.api.tag.InputStreamTagReader;
@@ -26,10 +25,6 @@ public interface ContentFactory {
     }
 
     ResourceLocation newResourceLocation(String namespace, String path);
-
-    Buffer newBuffer();
-
-    TagRecord newTagRecord();
 
     Optional<Item> newOptionalItem(ResourceLocation location);
 
@@ -47,11 +42,7 @@ public interface ContentFactory {
 
     Text newText(String text);
 
-    Text newText(String text, Text... args);
-
     Text newTranslatableText(String text);
-
-    Text newTranslatableText(String text, Text... args);
 
     Text newTranslatableText(String text, Object... args);
 

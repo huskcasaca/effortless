@@ -212,11 +212,7 @@ public final class EffortlessClientManager implements ClientManager {
 
         return switch (type) {
             case ATTACK, USE_ITEM -> {
-                var result = getEntrance().getStructureBuilder().onPlayerInteract(getRunningClient().getPlayer(), type, hand);
-                if (result.isSuccess()) {
-                    getRunningClient().getPlayer().swing(hand);
-                }
-                yield EventResult.interrupt(result.isSuccess());
+                yield getEntrance().getStructureBuilder().onPlayerInteract(getRunningClient().getPlayer(), type, hand);
             }
             case UNKNOWN -> EventResult.pass();
         };

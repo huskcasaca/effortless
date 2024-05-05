@@ -1,25 +1,25 @@
 package dev.huskuraft.effortless.networking.serializer;
 
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.platform.Mod;
 
-public class ModSerializer implements BufferSerializer<Mod> {
+public class ModSerializer implements NetByteBufSerializer<Mod> {
 
     @Override
-    public Mod read(Buffer buffer) {
+    public Mod read(NetByteBuf byteBuf) {
         return Mod.create(
-                buffer.readNullable(Buffer::readString),
-                buffer.readNullable(Buffer::readString),
-                buffer.readNullable(Buffer::readString),
-                buffer.readNullable(Buffer::readString));
+                byteBuf.readNullable(NetByteBuf::readString),
+                byteBuf.readNullable(NetByteBuf::readString),
+                byteBuf.readNullable(NetByteBuf::readString),
+                byteBuf.readNullable(NetByteBuf::readString));
     }
 
     @Override
-    public void write(Buffer buffer, Mod mod) {
-        buffer.writeNullable(mod.getId(), Buffer::writeString);
-        buffer.writeNullable(mod.getVersionStr(), Buffer::writeString);
-        buffer.writeNullable(mod.getDescription(), Buffer::writeString);
-        buffer.writeNullable(mod.getName(), Buffer::writeString);
+    public void write(NetByteBuf byteBuf, Mod mod) {
+        byteBuf.writeNullable(mod.getId(), NetByteBuf::writeString);
+        byteBuf.writeNullable(mod.getVersionStr(), NetByteBuf::writeString);
+        byteBuf.writeNullable(mod.getDescription(), NetByteBuf::writeString);
+        byteBuf.writeNullable(mod.getName(), NetByteBuf::writeString);
     }
 }

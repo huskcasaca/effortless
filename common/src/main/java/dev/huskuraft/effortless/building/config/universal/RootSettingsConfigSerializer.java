@@ -11,8 +11,6 @@ import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
-import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.pattern.Transformer;
 
 public class RootSettingsConfigSerializer implements ConfigSerializer<ClientConfig> {
 
@@ -22,7 +20,7 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<ClientConf
     private static final String KEY_SHOW_OTHER_PLAYERS_BUILD_TOOLTIPS = "showOtherPlayersBuildTooltips";
     private static final String KEY_SHOW_BLOCK_PREVIEW = "showBlockPreview";
     private static final String KEY_MAX_RENDER_VOLUME = "maxRenderVolume";
-    private static final String KEY_MAX_RENDER_DISTANCE = "maxRenderDistance";
+    private static final String KEY_PASSIVE_MODE = "passiveMode";
 
     private static final String KEY_PATTERNS = "patterns";
     private static final String KEY_TRANSFORMERS = "transformers";
@@ -37,6 +35,8 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<ClientConf
 //        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), () -> getDefault().renderConfig().maxRenderDistance(), RenderConfig.MIN_MAX_RENDER_DISTANCE, RenderConfig.MAX_MAX_RENDER_DISTANCE);
         spec.defineList(KEY_PATTERNS, () -> getDefault().patternConfig().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
         spec.defineList(KEY_TRANSFORMERS, () -> getDefault().transformerPresets().arrayTransformers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
+        spec.define(KEY_PASSIVE_MODE, () -> getDefault().passiveMode(), Boolean.class::isInstance);
+
         return spec;
     }
 
@@ -57,7 +57,8 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<ClientConf
                 ),
                 new TransformerPresets(
                         config.<List<Config>>get(KEY_TRANSFORMERS).stream().map(TransformerConfigSerializer.INSTANCE::deserialize).toList()
-                )
+                ),
+                config.get(List.of(KEY_PASSIVE_MODE))
 
         );
     }
@@ -77,13 +78,7 @@ public class RootSettingsConfigSerializer implements ConfigSerializer<ClientConf
 
     @Override
     public ClientConfig getDefault() {
-        return new ClientConfig(
-                new RenderConfig(),
-                new PatternConfig(
-                        Pattern.getPatternPresets()),
-                new TransformerPresets(
-                        Transformer.getDefaultTransformers())
-        );
+        return ClientConfig.getDefault();
     }
 
 }

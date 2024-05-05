@@ -13,6 +13,7 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 
 public class PatternConfigSerializer implements ConfigSerializer<Pattern> {
 
+    public static final PatternConfigSerializer INSTANCE = new PatternConfigSerializer();
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_TRANSFORMERS = "transformers";
@@ -20,7 +21,18 @@ public class PatternConfigSerializer implements ConfigSerializer<Pattern> {
     private PatternConfigSerializer() {
     }
 
-    public static final PatternConfigSerializer INSTANCE = new PatternConfigSerializer();
+    public static String randomIdString() {
+        return UUID.randomUUID().toString();
+    }
+
+    public static boolean isIdCorrect(Object string) {
+        try {
+            UUID.fromString((String) string);
+            return true;
+        } catch (ClassCastException | IllegalArgumentException e) {
+            return false;
+        }
+    }
 
     @Override
     public ConfigSpec getSpec(Config config) {
@@ -54,19 +66,6 @@ public class PatternConfigSerializer implements ConfigSerializer<Pattern> {
     @Override
     public Pattern getDefault() {
         return Pattern.getDefaultPattern();
-    }
-
-    public static String randomIdString() {
-        return UUID.randomUUID().toString();
-    }
-
-    public static boolean isIdCorrect(Object string) {
-        try {
-            UUID.fromString((String) string);
-            return true;
-        } catch (ClassCastException | IllegalArgumentException e) {
-            return false;
-        }
     }
 
 

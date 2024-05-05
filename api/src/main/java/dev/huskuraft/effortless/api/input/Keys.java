@@ -1,9 +1,16 @@
 package dev.huskuraft.effortless.api.input;
 
+import java.util.Locale;
+
+import dev.huskuraft.effortless.api.lang.Lang;
+
 public enum Keys implements Key {
     KEY_ESCAPE(KeyCodes.KEY_ESCAPE),
     KEY_ENTER(KeyCodes.KEY_ENTER),
+    KEY_LEFT_SHIFT(KeyCodes.KEY_LEFT_SHIFT),
     KEY_LEFT_CONTROL(KeyCodes.KEY_LEFT_CONTROL),
+    KEY_RIGHT_SHIFT(KeyCodes.KEY_RIGHT_SHIFT),
+    KEY_RIGHT_CONTROL(KeyCodes.KEY_RIGHT_CONTROL),
     ;
 
     private final KeyBinding keyBinding;
@@ -12,7 +19,7 @@ public enum Keys implements Key {
         this.keyBinding = new KeyBinding() {
             @Override
             public String getName() {
-                return null;
+                return Lang.asKeyDesc(getName().toLowerCase(Locale.ROOT).replace("key_", ""));
             }
 
             @Override

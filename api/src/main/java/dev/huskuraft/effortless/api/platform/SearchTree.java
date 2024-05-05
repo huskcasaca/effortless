@@ -21,7 +21,7 @@ public interface SearchTree<T> {
         return of(list, keyExtractor, false);
     }
 
-    static  <T> SearchTree<T> ofText(List<T> list, Function<T, Stream<Text>> keyExtractor) {
+    static <T> SearchTree<T> ofText(List<T> list, Function<T, Stream<Text>> keyExtractor) {
         return of(list, item -> keyExtractor.apply(item).map(Text::getString));
     }
 

@@ -1,6 +1,5 @@
 {
   "effortless.name": "Effortless Structure",
-
   "effortless.settings.title": "Effortless Structure Settings",
   "effortless.build_settings.title": "Build Settings",
   "effortless.render_settings.title": "Render Settings",
@@ -9,7 +8,6 @@
   "effortless.general_settings.title": "General Settings",
   "effortless.global_general_settings.title": "Global General Settings",
   "effortless.per_player_general_settings.title": "Per-Player General Settings",
-
   "effortless.button.add": "Add",
   "effortless.button.cancel": "Cancel",
   "effortless.button.delete": "Delete",
@@ -19,16 +17,12 @@
   "effortless.button.select": "Select",
   "effortless.button.clear": "Clear",
   "effortless.button.reset": "Reset",
-
   "effortless.online_players.title": "Online Players",
   "effortless.online_players.search_hint": "Search Player",
-
   "effortless.option.on": "On",
   "effortless.option.off": "Off",
-
   "effortless.not_an_operator.title": "Not an Operator",
   "effortless.not_an_operator.message": "Cannot perform this action. You are not an operator of this server.",
-
   "effortless.global_general_settings.use_commands": "Use Commands",
   "effortless.global_general_settings.allow_use_mod": "Allow Use Mod",
   "effortless.global_general_settings.allow_break_blocks": "Allow Break Blocks",
@@ -41,14 +35,12 @@
   "effortless.global_general_settings.whitelisted_items": "Whitelisted Items",
   "effortless.global_general_settings.blacklisted_items": "Blacklisted Items",
   "effortless.global_general_settings.items": "%s Item(s)",
-
   "effortless.render_settings.show_other_players_build": "Show Other Players Build",
   "effortless.render_settings.show_other_players_build_tooltips": "Show Other Players Build Tooltips",
   "effortless.render_settings.show_block_preview": "Show Block Preview",
   "effortless.render_settings.max_render_blocks": "Max Render Blocks",
   "effortless.render_settings.max_render_volume": "Max Render Volume",
   "effortless.render_settings.max_render_distance": "Max Render Distance",
-
   "effortless.message.permissions.no_permission": "You are not allowed to use Effortless Structure! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Use Mod]§r!",
   "effortless.message.permissions.no_place_permission": "You are not allowed to place blocks! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Place Blocks]§r!",
   "effortless.message.permissions.no_break_permission": "You are not allowed to break blocks! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Break Blocks]§r!",
@@ -61,7 +53,6 @@
   "effortless.message.building.cannot_break_blocks_box_volume_too_large": "Cannot Break Blocks! Box Volume is Too Large",
   "effortless.message.building.cannot_place_blocks_box_side_length_too_large": "Cannot Place Blocks! Box side Length is Too Large",
   "effortless.message.building.cannot_break_blocks_box_side_length_too_large": "Cannot Break Blocks! Box side Length is Too Large",
-
   "effortless.settings.toggle.on": "§aON§r",
   "effortless.settings.toggle.off": "§cOFF§r",
   "effortless.settings.category.config.title": "Config",
@@ -127,7 +118,6 @@
   "effortless.mode.pyramid": "Pyramid",
   "effortless.mode.cone": "Cone",
   "effortless.mode.dome": "Dome",
-
   "effortless.option.history": "History",
   "effortless.option.transformer": "Transformer",
   "effortless.option.replace": "Replace",
@@ -140,7 +130,6 @@
   "effortless.option.raised_edge": "Raised Edge",
   "effortless.option.circle_start": "Circle Start",
   "effortless.option.plane_length": "Plane Length",
-
   "effortless.action.undo": "Undo",
   "effortless.action.redo": "Redo",
   "effortless.action.magnet": "Magnet",
@@ -162,45 +151,35 @@
   "effortless.action.face_horizontal": "Horizontal",
   "effortless.action.face_vertical": "Vertical",
   "effortless.action.face_both": "Both",
-
   "effortless.action.replace_disabled": "Off",
   "effortless.action.replace_normal": "Normal",
   "effortless.action.replace_quick": "Quick",
   "effortless.action.mode_settings": "Build Mode",
-
   "effortless.action.plane_length_variable": "Variable",
   "effortless.action.plane_length_equal": "Equal",
-
   "effortless.position.disabled": "Disabled",
   "effortless.position.left": "Left",
   "effortless.position.right": "Right",
-
   "effortless.state.idle": "Idle",
   "effortless.state.placing_block": "Placing Blocks",
   "effortless.state.breaking_block": "Breaking Blocks",
   "effortless.state.interacting_block": "Interacting Blocks",
-
   "effortless.tracing.success_fulfilled": "Success",
   "effortless.tracing.success_partial": "Pending",
   "effortless.tracing.pass": "Disabled",
   "effortless.tracing.failed": "Failed",
-
   "effortless.transformer.no_name": "No Name",
   "effortless.transformer.empty": "Empty",
-
   "effortless.transformer.array": "Array",
   "effortless.transformer.array.count": "Count",
   "effortless.transformer.array.offset": "Offset",
   "effortless.transformer.array.offset.x": "Offset X",
   "effortless.transformer.array.offset.y": "Offset Y",
   "effortless.transformer.array.offset.z": "Offset Z",
-
   "effortless.transformer.mirror": "Mirror",
   "effortless.transformer.mirror.axis": "Axis",
-
   "effortless.transformer.radial": "Radial",
   "effortless.transformer.radial.slices": "Slices",
-
   "effortless.transformer.item_rand": "Item Randomize",
   "effortless.transformer.randomize.example.empty": "Empty",
   "effortless.transformer.randomize.example.variant_cobblestone": "Cobblestone Variant",
@@ -218,13 +197,11 @@
   "effortless.transformer.randomize.example.colorful_shulker_box": "Colorful Shulker Box",
   "effortless.transformer.randomize.example.colorful_bed": "Colorful Bed",
   "effortless.transformer.randomize.example.colorful_banner": "Colorful Banner",
-
   "effortless.randomizer.order.sequence": "Sequence",
   "effortless.randomizer.order.random": "Random",
   "effortless.randomizer.target.single": "Single",
   "effortless.randomizer.target.group": "Group",
   "effortless.randomizer.category.item": "Item",
-
   "effortless.axis.undefined": "Undefined",
   "effortless.axis.x": "X",
   "effortless.axis.y": "Y",
@@ -232,7 +209,6 @@
   "effortless.axis.x_plane": "East West",
   "effortless.axis.y_plane": "Top Bottom",
   "effortless.axis.z_plane": "South North",
-
   "commands.effortless.max_reach_distance.success": "Set maxReachDistance of %s to %s",
   "commands.effortless.max_reach_distance.failure": "Failed to set maxReachDistance of %s",
   "commands.effortless.max_block_place_per_axis.success": "Set maxBlockPlacePerAxis of %s to %s",
@@ -246,11 +222,9 @@
   "commands.effortless.undo_stack_size.success": "Set undoStackSize of %s to %s",
   "commands.effortless.undo_stack_size.failure": "Failed to set undoStackSize of %s",
   "commands.reserved": "NIE",
-
   "effortless.building.title": "Effortless Structure",
   "effortless.building.radial.title": "Effortless Structure",
   "effortless.building.settings.title": "Build Mode Settings",
-
   "effortless.randomizer.settings.title": "Randomizer Settings",
   "effortless.randomizer.settings.edit": "Edit",
   "effortless.randomizer.settings.delete": "Delete",
@@ -259,7 +233,6 @@
   "effortless.randomizer.settings.reset": "Reset to Default",
   "effortless.randomizer.settings.done": "Done",
   "effortless.randomizer.settings.cancel": "Cancel",
-
   "effortless.randomizer.edit.title": "Edit Randomizer",
   "effortless.randomizer.edit.name_hint": "Randomizer Name",
   "effortless.randomizer.edit.order": "Order: %s",
@@ -271,20 +244,16 @@
   "effortless.randomizer.edit.save": "Save",
   "effortless.randomizer.edit.cancel": "Cancel",
   "effortless.randomizer.edit.total_probability": "Total Probability: %s",
-
   "effortless.item.picker.title": "Search Item",
   "effortless.item.picker.search": "Search",
   "effortless.item.picker.search_hint": "Search Item",
   "effortless.item.picker.add": "Add Item",
   "effortless.item.picker.cancel": "Cancel",
-
   "effortless.pattern.no_name": "No Name",
   "effortless.pattern.default": "New Pattern",
   "effortless.pattern.disabled": "Disabled",
   "effortless.pattern.empty": "Empty Pattern",
-
   "effortless.pattern.radial.title": "Effortless Building",
-
   "effortless.pattern.settings.title": "Pattern Settings",
   "effortless.pattern.settings.edit": "Edit",
   "effortless.pattern.settings.delete": "Delete",
@@ -293,7 +262,6 @@
   "effortless.pattern.settings.reset": "Reset to Default",
   "effortless.pattern.settings.done": "Done",
   "effortless.pattern.settings.cancel": "Cancel",
-
   "effortless.pattern.edit.title": "Edit Pattern",
   "effortless.pattern.edit.name_hint": "Pattern Name",
   "effortless.pattern.edit.edit": "Edit",
@@ -302,7 +270,6 @@
   "effortless.pattern.edit.add": "Add Transformer",
   "effortless.pattern.edit.save": "Save",
   "effortless.pattern.edit.cancel": "Cancel",
-
   "effortless.pattern.array_preset": "Array Preset Pattern",
   "effortless.pattern.mirror_x_preset": "Mirror X Preset Pattern",
   "effortless.pattern.mirror_y_preset": "Mirror Y Preset Pattern",
@@ -312,59 +279,58 @@
   "effortless.pattern.item_single_sequence_preset": "Item Single Sequence Preset Pattern",
   "effortless.pattern.item_group_random_preset": "Item Group Random Preset Pattern",
   "effortless.pattern.item_group_sequence_preset": "Item Group Sequence Preset Pattern",
-
   "effortless.transformer.template_select.title": "Select Transformer Template",
   "effortless.transformer.template_select.search": "Search",
   "effortless.transformer.template_select.search_hint": "Search Transformer",
   "effortless.transformer.template_select.use_template": "Use Template",
-
   "effortless.transformer.edit.title": "Edit Transformer",
   "effortless.transformer.edit.name_hint": "Transformer Name",
   "effortless.transformer.edit.save": "Save",
   "effortless.transformer.edit.cancel": "Cancel",
-
   "effortless.build.summary.structure": "Structure",
   "effortless.build.summary.state": "State",
   "effortless.build.summary.tracing": "Tracing",
   "effortless.build.summary.pattern": "Pattern",
   "effortless.build.summary.pattern_enabled": "Enabled",
   "effortless.build.summary.pattern_disabled": "Disabled",
-
   "effortless.build.summary.blocks_placed": "Placed",
   "effortless.build.summary.blocks_destroyed": "Destroyed",
   "effortless.build.summary.blocks_interacted": "Interacted",
-
   "effortless.build.summary.blocks_not_placeable": "Obstructed",
   "effortless.build.summary.blocks_not_breakable": "Obstructed",
   "effortless.build.summary.blocks_not_interactable": "Obstructed",
-
   "effortless.build.summary.blocks_place_insufficient": "Insufficient",
   "effortless.build.summary.blocks_break_insufficient": "Insufficient",
-
   "effortless.build.summary.blocks_place_not_whitelisted": "Blacklisted",
   "effortless.build.summary.blocks_break_not_whitelisted": "Blacklisted",
-
   "effortless.build.summary.blocks_place_blacklisted": "Not Whitelisted",
   "effortless.build.summary.blocks_break_blacklisted": "Not Whitelisted",
-
   "effortless.position.move_to_player": "Move To Player",
   "effortless.position": "Position %s",
   "effortless.position.absolute": "Absolute",
   "effortless.position.relative": "Relative Always",
   "effortless.position.relative_once": "Relative Once",
-
   "effortless.test.save": "Save",
   "effortless.test.cancel": "Cancel",
-
   "effortless.session_status.title": "Invalid Session",
   "effortless.session_status.message.success": "Mod found on server and client, running with loader type §6[%s]§r.",
   "effortless.session_status.message.mod_missing": "§cMod not found on server and client, it cannot happen.",
   "effortless.session_status.message.server_mod_missing": "§cMod not found on server side.§r",
   "effortless.session_status.message.client_mod_missing": "§cMod not found on client side.§r",
   "effortless.session_status.message.protocol_not_match": "§cMod protocol version not match! Server: §6[%s]§c, Client: §6[%s]§c.§r",
-
   "effortless.history.undo_success": "Undo Build",
   "effortless.history.redo_success": "Redo Build",
   "effortless.history.nothing_to_undo": "Nothing to Undo",
-  "effortless.history.nothing_to_redo": "Nothing to Redo"
+  "effortless.history.nothing_to_redo": "Nothing to Redo",
+  "effortless.option.passive_mode": "Passive Mode",
+  "effortless.action.passive_mode_disabled": "Disabled",
+  "effortless.action.passive_mode_enabled": "Enabled",
+  "effortless.option.passive_mode.tooltip": "If enabled, you can start to build only when pressed and hold the [%s] key. \nMake sure you have assigned the hotkey in key binds settings.",
+  "effortless.option.misc": "Misc",
+  "effortless.tooltip.hold_for_summary": "Hold [%s] for Summary",
+  "key.effortless.passive_build_modifier.desc": "Passive Build Modifier",
+  "key.effortless.left_shift.desc": "Left Shift",
+  "key.effortless.left_control.desc": "Left Control",
+  "key.effortless.shift.desc": "Shift",
+  "key.effortless.control.desc": "Control"
 }

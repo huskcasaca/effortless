@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.networking.serializer;
 import java.util.Arrays;
 
 import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
@@ -15,95 +15,95 @@ import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 
-public class TransformerSerializer implements BufferSerializer<Transformer> {
+public class TransformerSerializer implements NetByteBufSerializer<Transformer> {
 
     @Override
-    public Transformer read(Buffer buffer) {
-        return switch (buffer.readEnum(Transformers.class)) {
-            case ARRAY -> buffer.read(new ArrayTransformerSerializer());
-            case MIRROR -> buffer.read(new MirrorTransformerSerializer());
-            case RADIAL -> buffer.read(new RadialTransformerSerializer());
-            case ITEM_RAND -> buffer.read(new ItemRandomizerSerializer());
+    public Transformer read(NetByteBuf byteBuf) {
+        return switch (byteBuf.readEnum(Transformers.class)) {
+            case ARRAY -> byteBuf.read(new ArrayTransformerSerializer());
+            case MIRROR -> byteBuf.read(new MirrorTransformerSerializer());
+            case RADIAL -> byteBuf.read(new RadialTransformerSerializer());
+            case ITEM_RAND -> byteBuf.read(new ItemRandomizerSerializer());
         };
     }
 
     @Override
-    public void write(Buffer buffer, Transformer transformer) {
-        buffer.writeEnum(transformer.getType());
+    public void write(NetByteBuf byteBuf, Transformer transformer) {
+        byteBuf.writeEnum(transformer.getType());
         switch (transformer.getType()) {
-            case ARRAY -> buffer.write((ArrayTransformer) transformer, new ArrayTransformerSerializer());
-            case MIRROR -> buffer.write((MirrorTransformer) transformer, new MirrorTransformerSerializer());
-            case RADIAL -> buffer.write((RadialTransformer) transformer, new RadialTransformerSerializer());
-            case ITEM_RAND -> buffer.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
+            case ARRAY -> byteBuf.write((ArrayTransformer) transformer, new ArrayTransformerSerializer());
+            case MIRROR -> byteBuf.write((MirrorTransformer) transformer, new MirrorTransformerSerializer());
+            case RADIAL -> byteBuf.write((RadialTransformer) transformer, new RadialTransformerSerializer());
+            case ITEM_RAND -> byteBuf.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
         }
     }
 
-    static class ArrayTransformerSerializer implements BufferSerializer<ArrayTransformer> {
+    static class ArrayTransformerSerializer implements NetByteBufSerializer<ArrayTransformer> {
 
         @Override
-        public ArrayTransformer read(Buffer buffer) {
+        public ArrayTransformer read(NetByteBuf byteBuf) {
             return new ArrayTransformer(
-                    buffer.readUUID(),
-                    buffer.readText(),
-                    buffer.readVector3d(),
-                    buffer.readInt()
+                    byteBuf.readUUID(),
+                    byteBuf.readText(),
+                    byteBuf.readVector3d(),
+                    byteBuf.readInt()
             );
         }
 
         @Override
-        public void write(Buffer buffer, ArrayTransformer transformer) {
-            buffer.writeUUID(transformer.getId());
-            buffer.writeText(transformer.getName());
-            buffer.writeVector3d(transformer.offset());
-            buffer.writeInt(transformer.count());
+        public void write(NetByteBuf byteBuf, ArrayTransformer transformer) {
+            byteBuf.writeUUID(transformer.getId());
+            byteBuf.writeText(transformer.getName());
+            byteBuf.writeVector3d(transformer.offset());
+            byteBuf.writeInt(transformer.count());
         }
 
     }
 
-    static class MirrorTransformerSerializer implements BufferSerializer<MirrorTransformer> {
+    static class MirrorTransformerSerializer implements NetByteBufSerializer<MirrorTransformer> {
 
         @Override
-        public MirrorTransformer read(Buffer buffer) {
+        public MirrorTransformer read(NetByteBuf byteBuf) {
             return new MirrorTransformer(
-                    buffer.readUUID(),
-                    buffer.readText(),
-                    buffer.readVector3d(),
-                    buffer.readList(buffer1 -> buffer1.readEnum(PositionType.class)).toArray(PositionType[]::new),
-                    buffer.readEnum(Axis.class)
+                    byteBuf.readUUID(),
+                    byteBuf.readText(),
+                    byteBuf.readVector3d(),
+                    byteBuf.readList(buffer1 -> buffer1.readEnum(PositionType.class)).toArray(PositionType[]::new),
+                    byteBuf.readEnum(Axis.class)
             );
         }
 
         @Override
-        public void write(Buffer buffer, MirrorTransformer transformer) {
-            buffer.writeUUID(transformer.getId());
-            buffer.writeText(transformer.getName());
-            buffer.writeVector3d(transformer.position());
-            buffer.writeList(Arrays.asList(transformer.getPositionType()), Buffer::writeEnum);
-            buffer.writeEnum(transformer.axis());
+        public void write(NetByteBuf byteBuf, MirrorTransformer transformer) {
+            byteBuf.writeUUID(transformer.getId());
+            byteBuf.writeText(transformer.getName());
+            byteBuf.writeVector3d(transformer.position());
+            byteBuf.writeList(Arrays.asList(transformer.getPositionType()), NetByteBuf::writeEnum);
+            byteBuf.writeEnum(transformer.axis());
         }
 
     }
 
-    static class RadialTransformerSerializer implements BufferSerializer<RadialTransformer> {
+    static class RadialTransformerSerializer implements NetByteBufSerializer<RadialTransformer> {
 
         @Override
-        public RadialTransformer read(Buffer buffer) {
+        public RadialTransformer read(NetByteBuf byteBuf) {
             return new RadialTransformer(
-                    buffer.readUUID(),
-                    buffer.readText(),
-                    buffer.readVector3d(),
-                    buffer.readList(buffer1 -> buffer1.readEnum(PositionType.class)).toArray(PositionType[]::new),
-                    buffer.readInt()
+                    byteBuf.readUUID(),
+                    byteBuf.readText(),
+                    byteBuf.readVector3d(),
+                    byteBuf.readList(buffer1 -> buffer1.readEnum(PositionType.class)).toArray(PositionType[]::new),
+                    byteBuf.readInt()
             );
         }
 
         @Override
-        public void write(Buffer buffer, RadialTransformer transformer) {
-            buffer.writeUUID(transformer.getId());
-            buffer.writeText(transformer.getName());
-            buffer.writeVector3d(transformer.position());
-            buffer.writeList(Arrays.asList(transformer.getPositionType()), Buffer::writeEnum);
-            buffer.writeInt(transformer.slices());
+        public void write(NetByteBuf byteBuf, RadialTransformer transformer) {
+            byteBuf.writeUUID(transformer.getId());
+            byteBuf.writeText(transformer.getName());
+            byteBuf.writeVector3d(transformer.position());
+            byteBuf.writeList(Arrays.asList(transformer.getPositionType()), NetByteBuf::writeEnum);
+            byteBuf.writeInt(transformer.slices());
         }
 
     }
@@ -128,30 +128,30 @@ public class TransformerSerializer implements BufferSerializer<Transformer> {
 //        }
 //    }
 
-    static class ItemRandomizerSerializer implements BufferSerializer<ItemRandomizer> {
+    static class ItemRandomizerSerializer implements NetByteBufSerializer<ItemRandomizer> {
 
         @Override
-        public ItemRandomizer read(Buffer buffer) {
+        public ItemRandomizer read(NetByteBuf byteBuf) {
             return new ItemRandomizer(
-                    buffer.readUUID(),
-                    buffer.readText(),
-                    buffer.readEnum(Randomizer.Order.class),
-                    buffer.readEnum(Randomizer.Target.class),
-                    buffer.readEnum(Randomizer.Category.class),
-                    buffer.readList(buffer1 -> {
+                    byteBuf.readUUID(),
+                    byteBuf.readText(),
+                    byteBuf.readEnum(Randomizer.Order.class),
+                    byteBuf.readEnum(Randomizer.Target.class),
+                    byteBuf.readEnum(Randomizer.Category.class),
+                    byteBuf.readList(buffer1 -> {
                         return Chance.of(buffer1.readItem(), buffer1.readVarInt());
                     })
             );
         }
 
         @Override
-        public void write(Buffer buffer, ItemRandomizer transformer) {
-            buffer.writeUUID(transformer.getId());
-            buffer.writeText(transformer.getName());
-            buffer.writeEnum(transformer.getOrder());
-            buffer.writeEnum(transformer.getTarget());
-            buffer.writeEnum(transformer.getCategory());
-            buffer.writeList(transformer.getChances(), (buf, chance) -> {
+        public void write(NetByteBuf byteBuf, ItemRandomizer transformer) {
+            byteBuf.writeUUID(transformer.getId());
+            byteBuf.writeText(transformer.getName());
+            byteBuf.writeEnum(transformer.getOrder());
+            byteBuf.writeEnum(transformer.getTarget());
+            byteBuf.writeEnum(transformer.getCategory());
+            byteBuf.writeList(transformer.getChances(), (buf, chance) -> {
                 buf.writeItem(chance.content());
                 buf.writeVarInt(chance.chance());
             });

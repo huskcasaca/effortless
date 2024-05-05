@@ -12,8 +12,8 @@ import dev.huskuraft.effortless.api.gui.input.NumberField;
 import dev.huskuraft.effortless.api.gui.slot.ItemSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 
 public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
@@ -39,10 +39,6 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
         private TextWidget chanceTextWidget;
         private NumberField numberField;
 
-        public int totalCount() {
-            return getEntryList().items().stream().mapToInt(Chance::chance).sum();
-        }
-
         public Entry(Entrance entrance, ItemChanceList itemChanceList, Chance<Item> chance) {
             super(entrance, itemChanceList, chance);
         }
@@ -54,9 +50,13 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
                     Text.empty()
             );
             components.add(
-                    Text.translate("effortless.randomizer.edit.total_probability", Text.text(percentage).withStyle(TextStyle.GOLD).append(Text.text(" (" + chance.chance() + "/" + totalCount + ")").withStyle(TextStyle.DARK_GRAY))).withStyle(TextStyle.GRAY)
+                    Text.translate("effortless.randomizer.edit.total_probability", ChatFormatting.GOLD + percentage + ChatFormatting.DARK_GRAY + " (" + chance.chance() + "/" + totalCount + ")").withStyle(ChatFormatting.GRAY)
             );
             return components;
+        }
+
+        public int totalCount() {
+            return getEntryList().items().stream().mapToInt(Chance::chance).sum();
         }
 
         @Override

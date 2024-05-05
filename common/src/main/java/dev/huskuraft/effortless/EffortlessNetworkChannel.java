@@ -104,7 +104,7 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         @Override
         public void handle(PlayerOperatorCheckPacket packet, Player player) {
             getEntrance().getServer().execute(() -> {
-                var isOperator =  getEntrance().getServerManager().getRunningServer().getPlayerList().isOperator(player.getProfile());
+                var isOperator = getEntrance().getServerManager().getRunningServer().getPlayerList().isOperator(player.getProfile());
                 getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(packet.responseId(), packet.playerId(), isOperator), player);
             });
 

@@ -27,6 +27,7 @@ public record HistoryResult(
         );
 
     }
+
     public HistoryResult(
             Type type
     ) {

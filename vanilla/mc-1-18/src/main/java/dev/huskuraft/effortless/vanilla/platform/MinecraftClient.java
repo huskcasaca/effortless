@@ -1,6 +1,8 @@
 package dev.huskuraft.effortless.vanilla.platform;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
@@ -27,9 +29,6 @@ import dev.huskuraft.effortless.vanilla.renderer.MinecraftCamera;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftWindow;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSoundManager;
 import net.minecraft.client.Minecraft;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MinecraftClient implements Client {
 

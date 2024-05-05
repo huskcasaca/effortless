@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 
-public abstract class EffortlessScreen extends AbstractScreen  {
+public abstract class EffortlessScreen extends AbstractScreen {
     protected EffortlessScreen(Entrance entrance, Text title) {
         super(entrance, title);
     }

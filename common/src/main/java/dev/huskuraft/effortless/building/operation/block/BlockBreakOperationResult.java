@@ -47,7 +47,8 @@ public class BlockBreakOperationResult extends BlockOperationResult {
                 default -> Collections.emptyList();
             };
             case BLOCKS_NOT_BREAKABLE -> switch (result) {
-                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> outputs();
+                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT ->
+                        outputs();
                 default -> List.of();
             };
             case BLOCKS_BREAK_NOT_WHITELISTED -> switch (result) {

@@ -7,6 +7,10 @@ public enum InteractionResult {
     PASS,
     FAIL;
 
+    public static InteractionResult sidedSuccess(boolean isClientSide) {
+        return isClientSide ? SUCCESS : CONSUME;
+    }
+
     public boolean consumesAction() {
         return this == SUCCESS || this == CONSUME || this == CONSUME_PARTIAL;
     }
@@ -17,9 +21,5 @@ public enum InteractionResult {
 
     public boolean shouldAwardStats() {
         return this == SUCCESS || this == CONSUME;
-    }
-
-    public static InteractionResult sidedSuccess(boolean isClientSide) {
-        return isClientSide ? SUCCESS : CONSUME;
     }
 }

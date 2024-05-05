@@ -28,7 +28,6 @@ public class MirrorTransformer extends Transformer {
     public static final MirrorTransformer DEFAULT_Z = new MirrorTransformer(new Vector3d(0, 0, 0), Axis.Z);
 
 
-
     //    private final boolean enabled;
 
     private final Vector3d position;

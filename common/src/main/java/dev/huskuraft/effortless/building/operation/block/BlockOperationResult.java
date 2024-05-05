@@ -66,7 +66,7 @@ public abstract class BlockOperationResult extends OperationResult {
         FAIL_UNKNOWN;
 
         public boolean consumesAction() {
-            return this == SUCCESS || this == SUCCESS_PARTIAL|| this == CONSUME;
+            return this == SUCCESS || this == SUCCESS_PARTIAL || this == CONSUME;
         }
 
         public boolean success() {

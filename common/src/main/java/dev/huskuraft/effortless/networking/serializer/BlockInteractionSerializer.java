@@ -2,27 +2,27 @@ package dev.huskuraft.effortless.networking.serializer;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Orientation;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 
-public class BlockInteractionSerializer implements BufferSerializer<BlockInteraction> {
+public class BlockInteractionSerializer implements NetByteBufSerializer<BlockInteraction> {
 
     @Override
-    public BlockInteraction read(Buffer buffer) {
+    public BlockInteraction read(NetByteBuf byteBuf) {
         return new BlockInteraction(
-                buffer.read(new Vector3dSerializer()),
-                buffer.readEnum(Orientation.class),
-                buffer.read(new BlockPositionSerializer()),
-                buffer.readBoolean()
+                byteBuf.read(new Vector3dSerializer()),
+                byteBuf.readEnum(Orientation.class),
+                byteBuf.read(new BlockPositionSerializer()),
+                byteBuf.readBoolean()
         );
     }
 
     @Override
-    public void write(Buffer buffer, BlockInteraction blockInteraction) {
-        buffer.write(blockInteraction.getPosition(), new Vector3dSerializer());
-        buffer.writeEnum(blockInteraction.getDirection());
-        buffer.write(blockInteraction.getBlockPosition(), new BlockPositionSerializer());
-        buffer.writeBoolean(blockInteraction.isInside());
+    public void write(NetByteBuf byteBuf, BlockInteraction blockInteraction) {
+        byteBuf.write(blockInteraction.getPosition(), new Vector3dSerializer());
+        byteBuf.writeEnum(blockInteraction.getDirection());
+        byteBuf.write(blockInteraction.getBlockPosition(), new BlockPositionSerializer());
+        byteBuf.writeBoolean(blockInteraction.isInside());
     }
 
 }

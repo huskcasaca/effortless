@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.networking.packets.player;
 import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.networking.Buffer;
-import dev.huskuraft.effortless.api.networking.BufferSerializer;
+import dev.huskuraft.effortless.api.networking.NetByteBuf;
+import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.ResponsiblePacket;
 import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
@@ -25,17 +25,17 @@ public record PlayerCommandPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer implements BufferSerializer<PlayerCommandPacket> {
+    public static class Serializer implements NetByteBufSerializer<PlayerCommandPacket> {
 
         @Override
-        public PlayerCommandPacket read(Buffer buffer) {
-            return new PlayerCommandPacket(buffer.readUUID(), buffer.readEnum(SingleCommand.class));
+        public PlayerCommandPacket read(NetByteBuf byteBuf) {
+            return new PlayerCommandPacket(byteBuf.readUUID(), byteBuf.readEnum(SingleCommand.class));
         }
 
         @Override
-        public void write(Buffer buffer, PlayerCommandPacket packet) {
-            buffer.writeUUID(packet.responseId());
-            buffer.writeEnum(packet.action());
+        public void write(NetByteBuf byteBuf, PlayerCommandPacket packet) {
+            byteBuf.writeUUID(packet.responseId());
+            byteBuf.writeEnum(packet.action());
         }
 
     }

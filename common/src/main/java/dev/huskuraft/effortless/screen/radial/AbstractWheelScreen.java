@@ -1,24 +1,31 @@
 package dev.huskuraft.effortless.screen.radial;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
+import dev.huskuraft.effortless.api.input.Keys;
+import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
 import dev.huskuraft.effortless.api.renderer.Renderer;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.Option;
+import dev.huskuraft.effortless.building.structure.BuildMode;
 
 public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
@@ -56,7 +63,6 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     private Slot<S> hoveredSlot;
     private Button<B> hoveredButton;
     private Collection<? extends Slot<S>> selectedSlot = new HashSet<>();
-    private Collection<? extends Button<B>> selectedButton = new HashSet<>();
     private float lastScrollOffset = 0;
     // TODO: 20/2/23 rename
     private float visibility = 1;
@@ -101,7 +107,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         };
     }
 
-    protected static <T> Button<T> button(Object id, Text name, Text category, ResourceLocation icon, T content) {
+    protected static <T> Button<T> button(Object id, Text name, Text category, ResourceLocation icon, Text tooltip, T content, boolean activated) {
         return new Button<>() {
 
             @Override
@@ -110,13 +116,18 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
             }
 
             @Override
-            public Text getDisplayName() {
+            public Text getName() {
                 return name;
             }
 
             @Override
-            public Text getDisplayCategory() {
+            public Text getCategory() {
                 return category;
+            }
+
+            @Override
+            public Text getTooltip() {
+                return tooltip;
             }
 
             @Override
@@ -134,6 +145,10 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
                 return content;
             }
 
+            @Override
+            public boolean isActivated() {
+                return activated;
+            }
         };
     }
 
@@ -157,12 +172,63 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     public static <T extends Option> Button<T> button(T option) {
+        return button(option, false);
+    }
+
+    public static <T extends Option> Button<T> lazyButton(Supplier<Button<T>> supplier) {
+        return new Button<>() {
+
+            @Override
+            public Object getId() {
+                return supplier.get().getId();
+            }
+
+            @Override
+            public Text getName() {
+                return supplier.get().getName();
+            }
+
+            @Override
+            public Text getCategory() {
+                return supplier.get().getCategory();
+            }
+
+            @Override
+            public Text getTooltip() {
+                return supplier.get().getTooltip();
+            }
+
+            @Override
+            public ResourceLocation getIcon() {
+                return supplier.get().getIcon();
+            }
+
+            @Override
+            public Color getTintColor() {
+                return supplier.get().getTintColor();
+            }
+
+            @Override
+            public T getContent() {
+                return supplier.get().getContent();
+            }
+
+            @Override
+            public boolean isActivated() {
+                return supplier.get().isActivated();
+            }
+        };
+    }
+
+    public static <T extends Option> Button<T> button(T option, boolean activated) {
         return button(
                 option,
-                option.getDisplayName(),
-                option.getDisplayCategory(),
+                option.getNameText(),
+                option.getCategoryText(),
                 option.getIcon(),
-                option);
+                option.getTooltipText(),
+                option,
+                activated);
     }
 
     @Override
@@ -261,10 +327,6 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     public final void setSelectedSlots(Collection<? extends Slot<S>> slots) {
         this.selectedSlot = slots;
-    }
-
-    public final void setSelectedButtons(Collection<? extends Button<B>> options) {
-        this.selectedButton = options;
     }
 
     private void renderRadialSlots(Renderer renderer, int mouseX, int mouseY, List<? extends Slot<S>> slots) {
@@ -386,7 +448,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
                 var x2 = x + BUTTON_WIDTH / 2d;
                 var y2 = y + BUTTON_HEIGHT / 2d;
 
-                var isActivated = selectedButton != null && selectedButton.stream().anyMatch(b -> Objects.equals(b.getId(), button.getId()));
+                var isActivated = button.isActivated();
                 var isHovered = x1 <= mouseCenterX && x2 >= mouseCenterX && y1 <= mouseCenterY && y2 >= mouseCenterY;
 
                 var color = RADIAL_BUTTON_COLOR_STATE.defaultColor();
@@ -418,13 +480,27 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         super.renderWidgetOverlay(renderer, mouseX, mouseY, deltaTick);
 
         if (hoveredButton != null) {
-            renderer.renderTooltip(
-                    getTypeface(),
-                    List.of(
-                            hoveredButton.getDisplayCategory().withStyle(TextStyle.WHITE),
-                            hoveredButton.getDisplayName().withStyle(TextStyle.GOLD)
-                    ), mouseX, mouseY);
+            var tooltip = new ArrayList<Text>();
+            tooltip.add(hoveredButton.getCategory().withStyle(ChatFormatting.WHITE));
+            tooltip.add(hoveredButton.getName().withStyle(ChatFormatting.GOLD));
+            if (!hoveredButton.getTooltip().getString().isBlank()) {
+                tooltip.add(Text.empty());
+                if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
+                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
+                } else {
+                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
+                    tooltip.add(Text.empty());
+//                    tooltip.add(hoveredButton.getTooltip());
+                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), hoveredButton.getTooltip()));
+                }
+            }
+            renderer.renderTooltip(getTypeface(), tooltip, mouseX, mouseY);
         }
+    }
+
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
     }
 
     private boolean inTriangle(double x1, double y1, double x2, double y2,
@@ -436,9 +512,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     private void cycleBuildMode(Player player, boolean reverse) {
-        // TODO: 23/5/23
-//        setBuildMode(player, BuildMode.values()[(getBuildMode(player).ordinal() + 1) % BuildMode.values().length]);
-//        Constructor.getInstance().reset(player);
+        getEntrance().getStructureBuilder().setBuildMode(player, BuildMode.values()[(getEntrance().getStructureBuilder().getContext(player).buildMode().ordinal() + (reverse ? -1 : 1 + BuildMode.values().length)) % BuildMode.values().length]);
     }
 
     private void playRadialMenuSound() {
@@ -465,15 +539,19 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
         Object getId();
 
-        Text getDisplayName();
+        Text getName();
 
-        Text getDisplayCategory();
+        Text getCategory();
+
+        Text getTooltip();
 
         ResourceLocation getIcon();
 
         Color getTintColor();
 
         T getContent();
+
+        boolean isActivated();
 
     }
 

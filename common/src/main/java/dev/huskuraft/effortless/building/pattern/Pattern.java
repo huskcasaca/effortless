@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.api.text.TextStyle;
 import dev.huskuraft.effortless.building.BatchBuildSession;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
@@ -15,8 +15,8 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public final class Pattern {
 
-    public static final Pattern DISABLED = new Pattern(Text.translate("effortless.pattern.disabled").withStyle(TextStyle.GRAY), List.of());
-    public static final Pattern EMPTY = new Pattern(Text.translate("effortless.pattern.empty").withStyle(TextStyle.GRAY), List.of());
+    public static final Pattern DISABLED = new Pattern(Text.translate("effortless.pattern.disabled").withStyle(ChatFormatting.GRAY), List.of());
+    public static final Pattern EMPTY = new Pattern(Text.translate("effortless.pattern.empty").withStyle(ChatFormatting.GRAY), List.of());
     public static final Pattern DEFAULT = new Pattern(Text.translate("effortless.pattern.default"), List.of());
 
     public static final int MAX_NAME_LENGTH = 255;

@@ -85,6 +85,20 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
 
     public record Loader<S>(Class<S> clazz, String className, ClassLoader loader) {
 
+        private static LoaderType getLoaderTypeByThread() {
+            var loader = Thread.currentThread().getContextClassLoader();
+            if (loader.getClass().getPackageName().equals("net.fabricmc.loader.impl.launch.knot")) {
+                return LoaderType.FABRIC;
+            }
+            if (loader.getClass().getPackageName().startsWith("org.quiltmc.")) {
+                return LoaderType.QUILT;
+            }
+            if (loader.getClass().getPackageName().equals("cpw.mods.modlauncher")) {
+                return LoaderType.FORGE;
+            }
+            throw new IllegalStateException("Unknown loader: " + loader.getClass().getPackageName());
+        }
+
         public LoaderType getLoaderTypeByName() {
             if (className.contains(".vanilla.")) {
                 return LoaderType.VANILLA;
@@ -111,7 +125,8 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
 
         public boolean isCompatible() {
             return switch (getLoaderTypeByName()) {
-                case FABRIC -> getLoaderTypeByThread() == LoaderType.FABRIC || getLoaderTypeByThread() == LoaderType.QUILT;
+                case FABRIC ->
+                        getLoaderTypeByThread() == LoaderType.FABRIC || getLoaderTypeByThread() == LoaderType.QUILT;
                 case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT;
                 case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
                 case VANILLA -> true;
@@ -139,20 +154,6 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
             }
         }
 
-        private static LoaderType getLoaderTypeByThread() {
-            var loader = Thread.currentThread().getContextClassLoader();
-            if (loader.getClass().getPackageName().equals("net.fabricmc.loader.impl.launch.knot")) {
-                return LoaderType.FABRIC;
-            }
-            if (loader.getClass().getPackageName().startsWith("org.quiltmc.")) {
-                return LoaderType.QUILT;
-            }
-            if (loader.getClass().getPackageName().equals("cpw.mods.modlauncher")) {
-                return LoaderType.FORGE;
-            }
-            throw new IllegalStateException("Unknown loader: " + loader.getClass().getPackageName());
-        }
-
     }
 
     private static class LazyIterator<S> implements Iterator<Loader<S>> {
@@ -166,40 +167,6 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
         private LazyIterator(Class<S> clazz, ClassLoader loader) {
             this.clazz = clazz;
             this.loader = loader;
-        }
-
-        public boolean hasNext() {
-            if (nextClassName != null) {
-                return true;
-            }
-            if (configs == null) {
-                try {
-                    String fullName = PREFIX + clazz.getName();
-                    if (loader == null) configs = ClassLoader.getSystemResources(fullName);
-                    else configs = loader.getResources(fullName);
-                } catch (IOException x) {
-                    fail(clazz, "Error locating configuration files", x);
-                }
-            }
-            while (pending == null || !pending.hasNext()) {
-                if (!configs.hasMoreElements()) {
-                    return false;
-                }
-                pending = parse(clazz, configs.nextElement());
-            }
-            nextClassName = pending.next();
-            return true;
-        }
-
-        public Loader<S> next() {
-            if (!hasNext()) throw new NoSuchElementException();
-            var className = nextClassName;
-            nextClassName = null;
-            return new Loader<>(clazz, className, loader);
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
         }
 
         private static int parseLine(Class<?> service, URL u, BufferedReader r, int lc, List<String> names) throws IOException, ServiceConfigurationError {
@@ -258,6 +225,40 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
 
         private static void fail(Class<?> service, URL u, int line, String msg) throws ServiceConfigurationError {
             fail(service, u + ":" + line + ": " + msg);
+        }
+
+        public boolean hasNext() {
+            if (nextClassName != null) {
+                return true;
+            }
+            if (configs == null) {
+                try {
+                    String fullName = PREFIX + clazz.getName();
+                    if (loader == null) configs = ClassLoader.getSystemResources(fullName);
+                    else configs = loader.getResources(fullName);
+                } catch (IOException x) {
+                    fail(clazz, "Error locating configuration files", x);
+                }
+            }
+            while (pending == null || !pending.hasNext()) {
+                if (!configs.hasMoreElements()) {
+                    return false;
+                }
+                pending = parse(clazz, configs.nextElement());
+            }
+            nextClassName = pending.next();
+            return true;
+        }
+
+        public Loader<S> next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            var className = nextClassName;
+            nextClassName = null;
+            return new Loader<>(clazz, className, loader);
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
 
     }

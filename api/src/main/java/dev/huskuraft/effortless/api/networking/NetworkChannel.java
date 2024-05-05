@@ -21,6 +21,7 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
 
     private final ResourceLocation channelId;
     private final Side side;
+    private final Map<UUID, Consumer<? extends ResponsiblePacket<?>>> responseMap = Collections.synchronizedMap(new HashMap<>());
     private PacketSet<P> packetSet = new PacketSet<>();
 
     protected NetworkChannel(ResourceLocation channelId, Side side) {
@@ -38,14 +39,12 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     }
 
     @Override
-    public void sendBuffer(Buffer buffer, Player player) {
+    public void sendBuffer(NetByteBuf byteBuf, Player player) {
         switch (side) {
-            case CLIENT -> getPlatformChannel().sendToServer(buffer, player);
-            case SERVER -> getPlatformChannel().sendToClient(buffer, player);
+            case CLIENT -> getPlatformChannel().sendToServer(byteBuf, player);
+            case SERVER -> getPlatformChannel().sendToClient(byteBuf, player);
         }
     }
-
-    private final Map<UUID, Consumer<? extends ResponsiblePacket<?>>> responseMap = Collections.synchronizedMap(new HashMap<>());
 
     public <T extends ResponsiblePacket<?>> void sendPacket(T packet, Consumer<T> callback) {
         responseMap.put(packet.responseId(), callback);
@@ -56,10 +55,10 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     public abstract void receivePacket(Packet packet, Player player);
 
     @Override
-    public void receiveBuffer(Buffer buffer, Player player) {
+    public void receiveBuffer(NetByteBuf byteBuf, Player player) {
         var packet = (Packet<P>) null;
         try {
-            packet = createPacket(buffer);
+            packet = createPacket(byteBuf);
             Objects.requireNonNull(packet);
         } catch (Exception e) {
             throw new RuntimeException("Could not create packet in channel '" + channelId + "'", e);
@@ -78,15 +77,15 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     }
 
     @SuppressWarnings("unchecked")
-    public Packet<P> createPacket(Buffer buffer) {
-        return (Packet<P>) packetSet.createPacket(buffer);
+    public Packet<P> createPacket(NetByteBuf byteBuf) {
+        return (Packet<P>) packetSet.createPacket(byteBuf);
     }
 
-    public Buffer createBuffer(Packet<P> packet) {
+    public NetByteBuf createBuffer(Packet<P> packet) {
         return packetSet.createBuffer(packet);
     }
 
-    public <T extends Packet<P>> void registerPacket(Class<T> clazz, BufferSerializer<T> serializer) {
+    public <T extends Packet<P>> void registerPacket(Class<T> clazz, NetByteBufSerializer<T> serializer) {
         try {
             packetSet.addPacket(clazz, serializer);
         } catch (Exception e) {
@@ -111,9 +110,9 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     private class PacketSet<T extends PacketListener> {
 
         private final Map<Class<?>, Integer> classToId = new LinkedHashMap<>();
-        private final List<BufferSerializer<? extends Packet<T>>> idToDeserializer = new ArrayList<>();
+        private final List<NetByteBufSerializer<? extends Packet<T>>> idToDeserializer = new ArrayList<>();
 
-        public <P extends Packet<T>> PacketSet<T> addPacket(Class<P> clazz, BufferSerializer<P> serializer) {
+        public <P extends Packet<T>> PacketSet<T> addPacket(Class<P> clazz, NetByteBufSerializer<P> serializer) {
 
             if (classToId.containsKey(clazz)) {
                 throw new IllegalArgumentException("Packet " + clazz + " is already registered to ID " + classToId.get(clazz));
@@ -129,23 +128,23 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
             return classToId.getOrDefault(clazz, null);
         }
 
-        public Buffer createBuffer(Packet<T> packet) {
+        public NetByteBuf createBuffer(Packet<T> packet) {
             var id = getId(packet.getClass());
             if (id == null) {
                 throw new IllegalArgumentException("Packet " + packet.getClass() + " is not registered");
             }
-            var buffer = Buffer.newBuffer();
-            var serializer = (BufferSerializer<Packet<T>>) idToDeserializer.get(getId(packet.getClass()));
+            var buffer = NetByteBuf.newBuffer();
+            var serializer = (NetByteBufSerializer<Packet<T>>) idToDeserializer.get(getId(packet.getClass()));
             buffer.writeInt(id);
             serializer.write(buffer, packet);
             return buffer;
         }
 
         @Nullable
-        public Packet<?> createPacket(Buffer buffer) {
-            var id = buffer.readInt();
+        public Packet<?> createPacket(NetByteBuf byteBuf) {
+            var id = byteBuf.readInt();
             var serializer = idToDeserializer.get(id);
-            if (serializer != null) return serializer.read(buffer);
+            if (serializer != null) return serializer.read(byteBuf);
             return null;
         }
     }
