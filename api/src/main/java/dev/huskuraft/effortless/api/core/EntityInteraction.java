@@ -2,18 +2,10 @@ package dev.huskuraft.effortless.api.core;
 
 import dev.huskuraft.effortless.api.math.Vector3d;
 
-public class EntityInteraction extends Interaction {
-
-    // FIXME: 15/10/23
-    private final Player entity;
+public record EntityInteraction(Vector3d position, Player entity) implements Interaction {
 
     public EntityInteraction(Player entity) {
         this(entity.getPosition(), entity);
-    }
-
-    public EntityInteraction(Vector3d vector, Player entity) {
-        super(vector);
-        this.entity = entity;
     }
 
     public Player getEntity() {
@@ -22,5 +14,10 @@ public class EntityInteraction extends Interaction {
 
     public Target getTarget() {
         return Target.ENTITY;
+    }
+
+    @Override
+    public Vector3d getPosition() {
+        return position;
     }
 }

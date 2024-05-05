@@ -2,23 +2,17 @@ package dev.huskuraft.effortless.api.core;
 
 import dev.huskuraft.effortless.api.math.Vector3d;
 
-public class BlockInteraction extends Interaction {
-    private final Orientation orientation;
-    private final BlockPosition blockPosition;
-    private final boolean inside;
-    private final boolean miss;
+public record BlockInteraction(
+        Vector3d position,
+        Orientation orientation,
+        BlockPosition blockPosition,
+        boolean inside,
+        boolean miss
+) implements Interaction {
 
     // FIXME: 15/10/23 check coustrcutor params order
     public BlockInteraction(Vector3d position, Orientation orientation, BlockPosition blockPosition, boolean inside) {
         this(position, orientation, blockPosition, inside, false);
-    }
-
-    public BlockInteraction(Vector3d position, Orientation orientation, BlockPosition blockPosition, boolean inside, boolean miss) {
-        super(position);
-        this.orientation = orientation;
-        this.blockPosition = blockPosition;
-        this.inside = inside;
-        this.miss = miss;
     }
 
     public BlockInteraction withDirection(Orientation orientation) {
@@ -31,6 +25,10 @@ public class BlockInteraction extends Interaction {
 
     public BlockInteraction withPosition(Vector3d position) {
         return new BlockInteraction(position, this.orientation, this.blockPosition, this.inside, this.miss);
+    }
+
+    public BlockInteraction withMiss(boolean miss) {
+        return new BlockInteraction(this.position, this.orientation, this.blockPosition, this.inside, miss);
     }
 
     public BlockPosition getBlockPosition() {
@@ -46,32 +44,12 @@ public class BlockInteraction extends Interaction {
         return this.miss ? Target.MISS : Target.BLOCK;
     }
 
+    @Override
+    public Vector3d getPosition() {
+        return position;
+    }
+
     public boolean isInside() {
         return this.inside;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (!(object instanceof BlockInteraction that)) return false;
-
-        if (inside != that.inside) return false;
-        if (miss != that.miss) return false;
-        if (orientation != that.orientation) return false;
-        return blockPosition.equals(that.blockPosition);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = orientation.hashCode();
-        result = 31 * result + blockPosition.hashCode();
-        result = 31 * result + (inside ? 1 : 0);
-        result = 31 * result + (miss ? 1 : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "BlockInteraction[" + this.position + ", " + this.orientation + ", " + this.blockPosition + ", " + this.inside + ", " + this.miss + "]";
     }
 }
