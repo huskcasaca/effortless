@@ -13,7 +13,12 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 
 public class Single extends AbstractBlockStructure {
 
-    public static BlockInteraction traceSingle(Player player, Context context) {
+    protected static BlockInteraction traceSingle(Player player, Context context) {
+        return traceSingle(player, context.buildState(), context.replaceMode(), context.maxReachDistance());
+    }
+
+
+    protected static BlockInteraction traceSingle(Player player, BuildState buildState, ReplaceMode replaceMode, int maxReachDistance) {
         var isHoldingEmptyBucket = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && bucketItem.isEmpty();
         var isHoldingNonBlockItem = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && !bucketItem.isEmpty();
 

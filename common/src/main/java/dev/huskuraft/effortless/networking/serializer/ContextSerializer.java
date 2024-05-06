@@ -52,10 +52,10 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
 
     @Override
     public void write(NetByteBuf byteBuf, Context context) {
-        byteBuf.writeUUID(context.getId());
-        byteBuf.writeEnum(context.state());
-        byteBuf.writeEnum(context.type());
-        byteBuf.writeList(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
+        byteBuf.writeUUID(context.id());
+        byteBuf.writeEnum(context.buildState());
+        byteBuf.writeEnum(context.buildType());
+        byteBuf.writeList(context.buildInteractions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
 
         byteBuf.writeEnum(context.structureParams().buildMode());
         byteBuf.writeEnum(context.structureParams().circleStart());

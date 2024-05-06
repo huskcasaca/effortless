@@ -105,7 +105,7 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
-//        if (context.type() == BuildType.COMMAND) {
+//        if (context.buildType() == BuildType.COMMAND) {
 //            CommandManager.dispatch(new SetBlockCommand(getBlockState(), getBlockPosition(), SetBlockCommand.Mode.REPLACE));
 //            return BlockOperationResult.Type.SUCCESS;
 //        }

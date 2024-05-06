@@ -27,7 +27,7 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
             return;
         }
         var typeface = EffortlessClient.getInstance().getClient().getTypeface();
-        for (var result : context.interactions().results()) {
+        for (var result : context.buildInteractions().results()) {
             if (result == null) {
                 break; // global check
             }

@@ -32,10 +32,10 @@ import dev.huskuraft.effortless.building.structure.RaisedEdge;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public record Context(
-        UUID getId,
-        BuildState state,
-        BuildType type,
-        BuildInteractions interactions,
+        UUID id,
+        BuildState buildState,
+        BuildType buildType,
+        BuildInteractions buildInteractions,
 
         StructureParams structureParams,
         PatternParams patternParams,
@@ -72,12 +72,12 @@ public record Context(
         return new BlockInteraction(blockInteraction.getPosition().add(blockPosition.sub(blockInteraction.getBlockPosition()).toVector3d()), blockInteraction.getDirection(), blockPosition, blockInteraction.isInside());
     }
 
-    public UUID getId() {
-        return getId;
+    public UUID id() {
+        return id;
     }
 
     public boolean isIdle() {
-        return state.isIdle();
+        return buildState.isIdle();
     }
 
     public boolean isDisabled() {
@@ -85,11 +85,11 @@ public record Context(
     }
 
     public boolean isPreview() {
-        return type() == BuildType.PREVIEW || type() == BuildType.PREVIEW_ONCE;
+        return buildType() == BuildType.PREVIEW || buildType() == BuildType.PREVIEW_ONCE;
     }
 
     public boolean isPreviewOnce() {
-        return type() == BuildType.PREVIEW_ONCE;
+        return buildType() == BuildType.PREVIEW_ONCE;
     }
 
     public BuildMode buildMode() {
@@ -97,11 +97,11 @@ public record Context(
     }
 
     public boolean isBuilding() {
-        return buildMode() != BuildMode.DISABLED && state() != BuildState.IDLE;
+        return buildMode() != BuildMode.DISABLED && buildState() != BuildState.IDLE;
     }
 
     public boolean isMissingHit() {
-        return interactions().isMissing();
+        return buildInteractions().isMissing();
     }
 
     public boolean skipRaytrace() {
@@ -113,23 +113,23 @@ public record Context(
     }
 
     public int interactionsSize() {
-        return interactions.size();
+        return buildInteractions.size();
     }
 
     public boolean isInteractionEmpty() {
-        return interactions.isEmpty();
+        return buildInteractions.isEmpty();
     }
 
     public BlockInteraction firstBlockInteraction() {
-        return interactions.get(0);
+        return buildInteractions.get(0);
     }
 
     public BlockInteraction secondBlockInteraction() {
-        return interactions.get(1);
+        return buildInteractions.get(1);
     }
 
     public BlockInteraction thirdBlockInteraction() {
-        return interactions.get(2);
+        return buildInteractions.get(2);
     }
 
     public BlockPosition firstBlockPosition() {
@@ -215,39 +215,39 @@ public record Context(
     }
 
     public Context withBuildState(BuildState state) {
-        return new Context(getId, state, type, interactions, structureParams, patternParams, customParams);
+        return new Context(id, state, buildType, buildInteractions, structureParams, patternParams, customParams);
     }
 
     public Context withBuildType(BuildType type) {
-        return new Context(getId, state, type, interactions, structureParams, patternParams, customParams);
+        return new Context(id, buildState, type, buildInteractions, structureParams, patternParams, customParams);
     }
 
     public Context withNextInteraction(BlockInteraction interaction) {
-        return new Context(getId, state, type, interactions.put(interaction), structureParams, patternParams, customParams);
+        return new Context(id, buildState, buildType, buildInteractions.put(interaction), structureParams, patternParams, customParams);
     }
 
     public Context withEmptyInteractions() {
-        return new Context(getId, state, type, BuildInteractions.EMPTY, structureParams, patternParams, customParams);
+        return new Context(id, buildState, buildType, BuildInteractions.EMPTY, structureParams, patternParams, customParams);
     }
 
     public Context withBuildMode(BuildMode buildMode) {
-        return new Context(getId, state, type, interactions, structureParams.withBuildMode(buildMode), patternParams, customParams);
+        return new Context(id, buildState, buildType, buildInteractions, structureParams.withBuildMode(buildMode), patternParams, customParams);
     }
 
     public Context withBuildFeature(Feature feature) {
-        return new Context(getId, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, customParams);
+        return new Context(id, buildState, buildType, buildInteractions, structureParams.withBuildFeature(feature), patternParams, customParams);
     }
 
     public Context withBuildFeature(Set<Feature> feature) {
-        return new Context(getId, state, type, interactions, structureParams.withBuildFeature(feature), patternParams, customParams);
+        return new Context(id, buildState, buildType, buildInteractions, structureParams.withBuildFeature(feature), patternParams, customParams);
     }
 
     public Context withPattern(Pattern pattern) {
-        return new Context(getId, state, type, interactions, structureParams, patternParams.withPattern(pattern), customParams);
+        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withPattern(pattern), customParams);
     }
 
     public Context withRandomPatternSeed() {
-        return new Context(getId, state, type, interactions, structureParams, patternParams.withRandomSeed(), customParams);
+        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withRandomSeed(), customParams);
     }
 
     public Context finalize(Player player, BuildStage stage) {
@@ -259,7 +259,7 @@ public record Context(
         return new Context(
                 UUID.randomUUID(),
                 BuildState.IDLE,
-                type,
+                buildType,
                 BuildInteractions.EMPTY,
                 structureParams,
                 patternParams,
@@ -287,7 +287,7 @@ public record Context(
     }
 
     public Context withReachParams(CustomParams customParams) {
-        return new Context(getId, state, type, interactions, structureParams, patternParams, customParams);
+        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams, customParams);
     }
 
     public Context withGeneralConfig(GeneralConfig config) {
@@ -296,10 +296,10 @@ public record Context(
     }
 
     public Vector3i getInteractionBox() {
-        if (interactions().isEmpty() || interactions().isMissing()) {
+        if (buildInteractions().isEmpty() || buildInteractions().isMissing()) {
             return Vector3i.ZERO;
         }
-        return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new)).getSize().toVector3i();
+        return BoundingBox3d.fromLowerCornersOf(buildInteractions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new)).getSize().toVector3i();
     }
 
     public int getBoxVolume() {
@@ -307,7 +307,7 @@ public record Context(
     }
 
     public int getMaxBoxVolume() {
-        return switch (state()) {
+        return switch (buildState()) {
             case IDLE -> 0;
             case PLACE_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
             case BREAK_BLOCK -> customParams().generalConfig().maxBoxVolumePerBreak();
@@ -320,7 +320,7 @@ public record Context(
     }
 
     public int getMaxBoxSideLength() {
-        return switch (state()) {
+        return switch (buildState()) {
             case IDLE -> 0;
             case PLACE_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
             case BREAK_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerBreak();
@@ -337,7 +337,7 @@ public record Context(
     }
 
     public boolean hasPermission() {
-        return switch (state()) {
+        return switch (buildState()) {
             case IDLE -> true;
             case PLACE_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
             case BREAK_BLOCK -> customParams().generalConfig().allowBreakBlocks();

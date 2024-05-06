@@ -78,7 +78,7 @@ public class BlockBreakOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
-//        if (context.type() == BuildType.COMMAND) {
+//        if (context.buildType() == BuildType.COMMAND) {
 //            CommandManager.dispatch(new SetBlockCommand(Items.AIR.item().getDefaultStack().getBlockState(getPlayer(), getInteraction()), getBlockPosition(), SetBlockCommand.Mode.REPLACE));
 //            return BlockOperationResult.Type.SUCCESS;
 //        }
