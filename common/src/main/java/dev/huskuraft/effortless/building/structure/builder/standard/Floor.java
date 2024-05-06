@@ -33,12 +33,12 @@ public class Floor extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectFloorBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().x();
-        var y1 = context.firstBlockPosition().y();
-        var z1 = context.firstBlockPosition().z();
-        var x2 = context.secondBlockPosition().x();
-        var y2 = context.secondBlockPosition().y();
-        var z2 = context.secondBlockPosition().z();
+        var x1 = context.firstBlockInteraction().getBlockPosition().x();
+        var y1 = context.firstBlockInteraction().getBlockPosition().y();
+        var z1 = context.firstBlockInteraction().getBlockPosition().z();
+        var x2 = context.secondBlockInteraction().getBlockPosition().x();
+        var y2 = context.secondBlockInteraction().getBlockPosition().y();
+        var z2 = context.secondBlockInteraction().getBlockPosition().z();
 
         if (y1 == y2) {
             switch (context.planeFilling()) {

@@ -37,7 +37,7 @@ public class Single extends AbstractBlockStructure {
     }
 
     public static Stream<BlockPosition> collectSingleBlocks(Context context) {
-        return Stream.of(context.firstBlockPosition());
+        return Stream.of(context.firstBlockInteraction().getBlockPosition());
     }
 
     @Override

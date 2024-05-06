@@ -16,15 +16,15 @@ public class DiagonalWall extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectDiagonalWallBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().x();
-        var y1 = context.firstBlockPosition().y();
-        var z1 = context.firstBlockPosition().z();
-        var x2 = context.secondBlockPosition().x();
-        var y2 = context.secondBlockPosition().y();
-        var z2 = context.secondBlockPosition().z();
-        var x3 = context.thirdBlockPosition().x();
-        var y3 = context.thirdBlockPosition().y();
-        var z3 = context.thirdBlockPosition().z();
+        var x1 = context.firstBlockInteraction().getBlockPosition().x();
+        var y1 = context.firstBlockInteraction().getBlockPosition().y();
+        var z1 = context.firstBlockInteraction().getBlockPosition().z();
+        var x2 = context.secondBlockInteraction().getBlockPosition().x();
+        var y2 = context.secondBlockInteraction().getBlockPosition().y();
+        var z2 = context.secondBlockInteraction().getBlockPosition().z();
+        var x3 = context.thirdBlockInteraction().getBlockPosition().x();
+        var y3 = context.thirdBlockInteraction().getBlockPosition().y();
+        var z3 = context.thirdBlockInteraction().getBlockPosition().z();
 
         // get diagonal line blocks
         var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context, 1).toList();

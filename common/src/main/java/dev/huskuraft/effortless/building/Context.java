@@ -132,18 +132,6 @@ public record Context(
         return buildInteractions.get(2);
     }
 
-    public BlockPosition firstBlockPosition() {
-        return firstBlockInteraction().getBlockPosition();
-    }
-
-    public BlockPosition secondBlockPosition() {
-        return secondBlockInteraction().getBlockPosition();
-    }
-
-    public BlockPosition thirdBlockPosition() {
-        return thirdBlockInteraction().getBlockPosition();
-    }
-
     public Set<Feature> buildFeatures() {
         return structureParams.buildFeatures();
     }

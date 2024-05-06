@@ -16,12 +16,12 @@ public class DiagonalLine extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectPlaneDiagonalLineBlocks(Context context, float sampleMultiplier) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().x();
-        var y1 = context.firstBlockPosition().y();
-        var z1 = context.firstBlockPosition().z();
-        var x2 = context.secondBlockPosition().x();
-        var y2 = context.secondBlockPosition().y();
-        var z2 = context.secondBlockPosition().z();
+        var x1 = context.firstBlockInteraction().getBlockPosition().x();
+        var y1 = context.firstBlockInteraction().getBlockPosition().y();
+        var z1 = context.firstBlockInteraction().getBlockPosition().z();
+        var x2 = context.secondBlockInteraction().getBlockPosition().x();
+        var y2 = context.secondBlockInteraction().getBlockPosition().y();
+        var z2 = context.secondBlockInteraction().getBlockPosition().z();
 
         var first = new Vector3d(x1, y1, z1).add(0.5, 0.5, 0.5);
         var second = new Vector3d(x2, y2, z2).add(0.5, 0.5, 0.5);
@@ -41,12 +41,12 @@ public class DiagonalLine extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectDiagonalLineBlocks(Context context, float sampleMultiplier) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockPosition().x();
-        var y1 = context.firstBlockPosition().y();
-        var z1 = context.firstBlockPosition().z();
-        var x2 = context.thirdBlockPosition().x();
-        var y2 = context.thirdBlockPosition().y();
-        var z2 = context.thirdBlockPosition().z();
+        var x1 = context.firstBlockInteraction().getBlockPosition().x();
+        var y1 = context.firstBlockInteraction().getBlockPosition().y();
+        var z1 = context.firstBlockInteraction().getBlockPosition().z();
+        var x2 = context.thirdBlockInteraction().getBlockPosition().x();
+        var y2 = context.thirdBlockInteraction().getBlockPosition().y();
+        var z2 = context.thirdBlockInteraction().getBlockPosition().z();
 
         var first = new Vector3d(x1, y1, z1).add(0.5, 0.5, 0.5);
         var second = new Vector3d(x2, y2, z2).add(0.5, 0.5, 0.5);
