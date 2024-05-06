@@ -268,15 +268,12 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             return new Vector3d(x, y, bound.z());
         }
 
-        protected static boolean isCriteriaValid(Vector3d start, Vector3d look, int reach, Player player, boolean skipRaytrace, Vector3d lineBound, Vector3d planeBound, double distToPlayerSq) {
-//            boolean intersects = false;
-//            if (!skipRaytrace) {
-//                // collision within a 1 block radius to selected is fine
-//                var rayTraceContext = new ClipContext(start, lineBound, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, entity);
-//                var rayTraceResult = entity.getLevel().clip(rayTraceContext);
-//                intersects = rayTraceResult != null && rayTraceResult.getType() == HitResult.Type.BLOCK && planeBound.subtract(rayTraceResult.getLocation()).lengthSqr() > 4;
-//            }
-            return planeBound.sub(start).dot(look) > 0 && distToPlayerSq > 2 && distToPlayerSq < reach * reach; // !intersects;
+        protected boolean isCriteriaValid(Vector3d start, Vector3d look, Vector3d lineBound, Vector3d planeBound, double distToPlayerSq, int reach) {
+            return planeBound.sub(start).dot(look) > 0 && distToPlayerSq > getDistToPlayerSqThreshold() && distToPlayerSq < reach * reach; // !intersects;
+        }
+
+        protected int getDistToPlayerSqThreshold() {
+            return 0;
         }
 
         public Axis getAxis() {
@@ -304,7 +301,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         }
 
         public boolean isInRange() {
-            return isCriteriaValid(eye, look, reach, player, skipRaytrace, lineVec(), planeVec(), distanceToEyeSqr());
+            return isCriteriaValid(eye, look, lineVec(), planeVec(), distanceToEyeSqr(), reach);
         }
 
         public BlockInteraction tracePlane() {

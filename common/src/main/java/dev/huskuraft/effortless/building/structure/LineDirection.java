@@ -27,10 +27,12 @@ public enum LineDirection implements SingleSelectFeature {
     }
 
     public boolean isInRange(Axis axis) {
-        return switch (axis) {
-            case X -> this == ALL || this == FLOOR || this == AXIS_X;
-            case Y -> this == ALL || this == AXIS_Y;
-            case Z -> this == ALL || this == FLOOR || this == AXIS_Z;
+        return switch (this) {
+            case ALL -> true;
+            case FLOOR -> axis == Axis.X || axis == Axis.Z;
+            case AXIS_Y -> axis == Axis.Y;
+            case AXIS_Z -> axis == Axis.Z;
+            case AXIS_X -> axis == Axis.X;
         };
     }
 }

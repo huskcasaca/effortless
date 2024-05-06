@@ -129,7 +129,15 @@ public class Line extends AbstractBlockStructure {
 
         @Override
         public double distanceToLineSqr() {
-            return planeVec().sub(lineVec()).lengthSq() * (axis == Axis.Y ? 2 : 1);
+            return planeVec().sub(lineVec()).lengthSq();
+        }
+
+        @Override
+        protected int getDistToPlayerSqThreshold() {
+            return switch (getAxis()) {
+                case X, Z -> 2;
+                case Y -> 0;
+            };
         }
     }
 }

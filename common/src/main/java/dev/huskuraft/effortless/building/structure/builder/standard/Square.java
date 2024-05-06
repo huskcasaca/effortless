@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.building.structure.builder.standard;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Axis;
@@ -12,7 +11,6 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
@@ -119,12 +117,12 @@ public class Square extends AbstractBlockStructure {
         var skipRaytrace = context.skipRaytrace();
 
         var result = Stream.of(
-                        context.planeFacing() != PlaneFacing.HORIZONTAL ? new NearestLineCriteria(Axis.X, player, center, reach, skipRaytrace) : null,
-                        context.planeFacing() != PlaneFacing.VERTICAL ? new NearestLineCriteria(Axis.Y, player, center, reach, skipRaytrace) : null,
-                        context.planeFacing() != PlaneFacing.HORIZONTAL ? new NearestLineCriteria(Axis.Z, player, center, reach, skipRaytrace) : null)
-                .filter(Objects::nonNull)
+                        new NearestLineCriteria(Axis.X, player, center, reach, skipRaytrace),
+                        new NearestLineCriteria(Axis.Y, player, center, reach, skipRaytrace),
+                        new NearestLineCriteria(Axis.Z, player, center, reach, skipRaytrace))
+                .filter(nearestLineCriteria -> context.planeFacing().isInRange(nearestLineCriteria.getAxis()))
                 .filter(AxisCriteria::isInRange)
-                .min(Comparator.comparing(NearestLineCriteria::distanceToLineSqr))
+                .min(Comparator.comparing(NearestLineCriteria::distanceToEyeSqr))
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
