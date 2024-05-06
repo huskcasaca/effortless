@@ -7,27 +7,30 @@ import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
 public class Floor extends AbstractBlockStructure {
 
-    public static BlockInteraction traceFloor(Player player, Context context) {
-        var center = context.firstBlockPosition().getCenter();
-        var reach = context.maxNextReachDistance();
-        var skipRaytrace = context.skipRaytrace();
+    protected static BlockInteraction traceFloor(Player player, Context context) {
+        return traceFloor(player, context.firstBlockInteraction(), context.structureParams().planeLength() == PlaneLength.EQUAL);
+    }
+
+    protected static BlockInteraction traceFloor(Player player, BlockInteraction start, boolean uniformLength) {
+        var center = start.getBlockPosition().getCenter();
+        var reach = 1024;
+        var skipRaytrace = false;
 
         var result = Stream.of(
-                        new FloorCriteria(Axis.Y, player, center, reach, skipRaytrace)
+                        new Line.NearestLineCriteria(Axis.Y, player, center, reach, skipRaytrace)
                 )
                 .filter(AxisCriteria::isInRange)
-                .findFirst()
+                .findAny()
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength() == PlaneLength.EQUAL);
+        return transformUniformLengthInteraction(start, result, uniformLength);
     }
 
     public static Stream<BlockPosition> collectFloorBlocks(Context context) {
@@ -68,13 +71,6 @@ public class Floor extends AbstractBlockStructure {
     @Override
     public int totalClicks(Context context) {
         return 2;
-    }
-
-    public static class FloorCriteria extends Line.NearestLineCriteria {
-
-        public FloorCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
-            super(axis, player, center, reach, skipRaytrace);
-        }
     }
 
 }

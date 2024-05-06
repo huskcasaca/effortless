@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building.structure;
 
+import java.util.Set;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 
@@ -24,12 +26,11 @@ public enum PlaneFacing implements SingleSelectFeature {
         return BuildFeature.PLANE_FACING.getName();
     }
 
-
-    public boolean isInRange(Axis axis) {
+    public Set<Axis> getAxes() {
         return switch (this) {
-            case BOTH -> true;
-            case VERTICAL -> axis == Axis.X || axis == Axis.Z;
-            case HORIZONTAL -> axis == Axis.Y;
+            case BOTH -> Set.of(Axis.X, Axis.Y, Axis.Z);
+            case VERTICAL -> Set.of(Axis.X, Axis.Z);
+            case HORIZONTAL -> Set.of(Axis.Y);
         };
     }
 }

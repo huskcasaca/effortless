@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
@@ -15,21 +16,25 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 
 public class Wall extends AbstractBlockStructure {
 
-    public static BlockInteraction traceWall(Player player, Context context) {
-        var center = context.firstBlockPosition().getCenter();
-        var reach = context.maxNextReachDistance();
-        var skipRaytrace = context.skipRaytrace();
+    protected static BlockInteraction traceWall(Player player, Context context) {
+        return traceWall(player, context.firstBlockInteraction(), context.structureParams().planeLength() == PlaneLength.EQUAL);
+    }
+
+    protected static BlockInteraction traceWall(Player player, BlockInteraction start, boolean uniformLength) {
+        var center = start.getBlockPosition().getCenter();
+        var reach = 1024;
+        var skipRaytrace = false;
 
         var result = Stream.of(
                         new WallCriteria(Axis.X, player, center, reach, skipRaytrace),
                         new WallCriteria(Axis.Z, player, center, reach, skipRaytrace)
                 )
                 .filter(AxisCriteria::isInRange)
-                .min(Comparator.comparing(WallCriteria::distanceAngle))
+                .min(Comparator.comparing(WallCriteria::angle))
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength() == PlaneLength.EQUAL);
+        return transformUniformLengthInteraction(start, result, uniformLength);
     }
 
 
@@ -91,7 +96,7 @@ public class Wall extends AbstractBlockStructure {
         return 2;
     }
 
-    public static class WallCriteria extends AxisCriteria {
+    protected static class WallCriteria extends AxisCriteria {
 
         public WallCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
             super(axis, player, center, reach, skipRaytrace);
@@ -99,7 +104,7 @@ public class Wall extends AbstractBlockStructure {
 
         public double angle() {
             var wall = planeVec().sub(startVec());
-            return wall.x() * look.x() + wall.z() * look.z();
+            return MathUtils.abs(wall.x() * look.x()) + Math.abs(wall.z() * look.z());
         }
 
         public double distanceAngle() {

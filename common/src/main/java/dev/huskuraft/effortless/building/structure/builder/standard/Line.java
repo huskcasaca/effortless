@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -8,9 +9,6 @@ import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.math.MathUtils;
-import dev.huskuraft.effortless.api.math.Vector3d;
-import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
@@ -22,21 +20,12 @@ public class Line extends AbstractBlockStructure {
         var skipRaytrace = context.skipRaytrace();
 
         return Stream.of(
-                        new NearestLineCriteria(Axis.X, player, center, reach, skipRaytrace),
-                        new NearestLineCriteria(Axis.Y, player, center, reach, skipRaytrace),
-                        new NearestLineCriteria(Axis.Z, player, center, reach, skipRaytrace)
+                        new NearestAxisLineCriteria(context.lineDirection().getAxes(), Axis.X, player, center, reach, skipRaytrace),
+                        new NearestAxisLineCriteria(context.lineDirection().getAxes(), Axis.Y, player, center, reach, skipRaytrace),
+                        new NearestAxisLineCriteria(context.lineDirection().getAxes(), Axis.Z, player, center, reach, skipRaytrace)
                 )
-                .filter(nearestLineCriteria -> context.lineDirection().isInRange(nearestLineCriteria.getAxis()))
                 .filter(AxisCriteria::isInRange)
-                .reduce((nearest, criteria) -> {
-                    if (criteria.distanceToLineSqr() < 2.0 && nearest.distanceToLineSqr() < 2.0) {
-                        if (criteria.distanceToEyeSqr() < nearest.distanceToEyeSqr()) return criteria;
-                    } else {
-                        if (criteria.distanceToLineSqr() < nearest.distanceToLineSqr()) return criteria;
-                    }
-                    return nearest;
-                })
-//                .min(Comparator.comparing(NearestLineCriteria::distanceToLineSqr))
+                .min(Comparator.comparing(NearestLineCriteria::distanceToLineSqr))
                 .map(AxisCriteria::traceLine)
                 .orElse(null);
     }
@@ -100,44 +89,4 @@ public class Line extends AbstractBlockStructure {
         return 2;
     }
 
-    static class NearestLineCriteria extends AxisCriteria {
-
-
-        public NearestLineCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
-            super(axis, player, center, reach, skipRaytrace);
-        }
-
-        @Override
-        public Vector3d lineVec() {
-            var pos = Vector3i.at(center);
-            var bound = Vector3i.at(planeVec());
-            var size = bound.sub(pos);
-
-            size = Vector3i.at(MathUtils.abs(size.x()), MathUtils.abs(size.y()), MathUtils.abs(size.z()));
-            int longest = MathUtils.max(size.x(), MathUtils.max(size.y(), size.z()));
-            if (longest == size.x()) {
-                return new Vector3d(bound.x(), pos.y(), pos.z());
-            }
-            if (longest == size.y()) {
-                return new Vector3d(pos.x(), bound.y(), pos.z());
-            }
-            if (longest == size.z()) {
-                return new Vector3d(pos.x(), pos.y(), bound.z());
-            }
-            return null;
-        }
-
-        @Override
-        public double distanceToLineSqr() {
-            return planeVec().sub(lineVec()).lengthSq();
-        }
-
-        @Override
-        protected int getDistToPlayerSqThreshold() {
-            return switch (getAxis()) {
-                case X, Z -> 2;
-                case Y -> 0;
-            };
-        }
-    }
 }

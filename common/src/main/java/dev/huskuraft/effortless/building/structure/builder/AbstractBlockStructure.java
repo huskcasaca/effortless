@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.structure.builder;
 
 import java.util.Comparator;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Axis;
@@ -188,18 +189,16 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return new BuildFeature[]{};
     }
 
-    public abstract static class AxisCriteria {
-        protected final Player player;
+
+    protected abstract static class Criteria {
+
         protected final Vector3d center;
         protected final Vector3d eye;
         protected final Vector3d look;
         protected final int reach;
         protected final boolean skipRaytrace;
-        protected final Axis axis;
 
-        public AxisCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
-            this.axis = axis;
-            this.player = player;
+        Criteria(Player player, Vector3d center, int reach, boolean skipRaytrace) {
             this.look = getEntityLookAngleGap(player);
             this.eye = player.getEyePosition();
             this.center = center;
@@ -207,15 +206,27 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             this.skipRaytrace = skipRaytrace;
         }
 
-        protected static Vector3d getBound(Vector3d start, Vector3d eye, Vector3d look) {
+        public abstract boolean isInRange();
+
+    }
+
+    protected abstract static class AxisCriteria extends Criteria {
+        protected final Axis axis;
+
+        public AxisCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
+            super(player, center, reach, skipRaytrace);
+            this.axis = axis;
+        }
+
+        protected static Vector3d getStartVec(Vector3d start, Vector3d eye, Vector3d look) {
             return new Vector3d(
-                    MathUtils.round(getAxisBound(start.x(), eye.x(), look.x())),
-                    MathUtils.round(getAxisBound(start.y(), eye.y(), look.y())),
-                    MathUtils.round(getAxisBound(start.z(), eye.z(), look.z()))
+                    MathUtils.round(snapToGrid(start.x(), eye.x(), look.x())),
+                    MathUtils.round(snapToGrid(start.y(), eye.y(), look.y())),
+                    MathUtils.round(snapToGrid(start.z(), eye.z(), look.z()))
             );
         }
 
-        protected static double getAxisBound(double start, double eye, double look) {
+        protected static double snapToGrid(double start, double eye, double look) {
             if (eye >= start + 0.5) {
                 return start + 0.5;
             }
@@ -242,30 +253,30 @@ public abstract class AbstractBlockStructure implements BlockStructure {
 
         // find coordinates on a line bound by a plane
         protected static Vector3d findXBound(Vector3d start, Vector3d eye, Vector3d look) {
-            var bound = getBound(start, eye, look);
+            var center = getStartVec(start, eye, look);
             // then y and z are
-            double y = (bound.x() - eye.x()) / look.x() * look.y() + eye.y();
-            double z = (bound.x() - eye.x()) / look.x() * look.z() + eye.z();
+            double y = (center.x() - eye.x()) / look.x() * look.y() + eye.y();
+            double z = (center.x() - eye.x()) / look.x() * look.z() + eye.z();
 
-            return new Vector3d(bound.x(), y, z);
+            return new Vector3d(center.x(), y, z);
         }
 
         protected static Vector3d findYBound(Vector3d start, Vector3d eye, Vector3d look) {
-            var bound = getBound(start, eye, look);
+            var center = getStartVec(start, eye, look);
             // then x and z are
-            double x = (bound.y() - eye.y()) / look.y() * look.x() + eye.x();
-            double z = (bound.y() - eye.y()) / look.y() * look.z() + eye.z();
+            double x = (center.y() - eye.y()) / look.y() * look.x() + eye.x();
+            double z = (center.y() - eye.y()) / look.y() * look.z() + eye.z();
 
-            return new Vector3d(x, bound.y(), z);
+            return new Vector3d(x, center.y(), z);
         }
 
         protected static Vector3d findZBound(Vector3d start, Vector3d eye, Vector3d look) {
-            var bound = getBound(start, eye, look);
+            var center = getStartVec(start, eye, look);
             // then x and y are
-            double x = (bound.z() - eye.z()) / look.z() * look.x() + eye.x();
-            double y = (bound.z() - eye.z()) / look.z() * look.y() + eye.y();
+            double x = (center.z() - eye.z()) / look.z() * look.x() + eye.x();
+            double y = (center.z() - eye.z()) / look.z() * look.y() + eye.y();
 
-            return new Vector3d(x, y, bound.z());
+            return new Vector3d(x, y, center.z());
         }
 
         protected boolean isCriteriaValid(Vector3d start, Vector3d look, Vector3d lineBound, Vector3d planeBound, double distToPlayerSq, int reach) {
@@ -281,7 +292,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         }
 
         public Vector3d startVec() {
-            return getBound(center, eye, look);
+            return getStartVec(center, eye, look);
         }
 
         public Vector3d planeVec() {
@@ -315,8 +326,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         }
 
         protected BlockInteraction convert(BlockPosition blockPosition) {
-            var look = getEntityLookAngleGap(player);
-            var vec3 = player.getEyePosition().add(look.mul(0.001));
+            var vec3 = eye.add(look.mul(0.001));
             return new BlockInteraction(vec3, Orientation.getNearest(look.x(), look.y(), look.z()).getOpposite(), blockPosition, true);
         }
 
@@ -348,6 +358,83 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             return convert(found);
         }
 
+    }
+
+
+
+    protected static class NearestAxisLineCriteria extends NearestLineCriteria {
+
+        private final Set<Axis> axes;
+
+        public NearestAxisLineCriteria(Set<Axis> axes, Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
+            super(axis, player, center, reach, skipRaytrace);
+            this.axes = axes;
+        }
+
+        @Override
+        public Vector3d lineVec() {
+            var pos = center;
+            var bound = planeVec();
+            var size = bound.sub(pos);
+
+            size = Vector3d.at(MathUtils.abs(size.x()), MathUtils.abs(size.y()), MathUtils.abs(size.z()));
+            if (axes.isEmpty()) {
+                return pos;
+            }
+            var longest = MathUtils.max(axes.contains(Axis.X) ? size.x() : Double.MIN_VALUE, MathUtils.max(axes.contains(Axis.Y) ? size.y() : Double.MIN_VALUE, axes.contains(Axis.Z) ? size.z() : Double.MIN_VALUE));
+            if (longest == size.x() && axes.contains(Axis.X)) {
+                return new Vector3d(bound.x(), pos.y(), pos.z());
+            }
+            if (longest == size.y() && axes.contains(Axis.Y)) {
+                return new Vector3d(pos.x(), bound.y(), pos.z());
+            }
+            if (longest == size.z() && axes.contains(Axis.Z)) {
+                return new Vector3d(pos.x(), pos.y(), bound.z());
+            }
+            return pos;
+        }
+
+    }
+
+
+    protected static class NearestLineCriteria extends AxisCriteria {
+
+        public NearestLineCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
+            super(axis, player, center, reach, skipRaytrace);
+        }
+
+        @Override
+        public Vector3d lineVec() {
+            var pos = center;
+            var bound = planeVec();
+            var size = bound.sub(pos);
+
+            size = Vector3d.at(MathUtils.abs(size.x()), MathUtils.abs(size.y()), MathUtils.abs(size.z()));
+            var longest = MathUtils.max(size.x(), MathUtils.max(size.y(), size.z()));
+            if (longest == size.x()) {
+                return new Vector3d(bound.x(), pos.y(), pos.z());
+            }
+            if (longest == size.y()) {
+                return new Vector3d(pos.x(), bound.y(), pos.z());
+            }
+            if (longest == size.z()) {
+                return new Vector3d(pos.x(), pos.y(), bound.z());
+            }
+            return pos;
+        }
+
+        @Override
+        public double distanceToLineSqr() {
+            return planeVec().sub(lineVec()).lengthSq();
+        }
+
+        @Override
+        protected int getDistToPlayerSqThreshold() {
+            return switch (getAxis()) {
+                case X, Z -> 2;
+                case Y -> 0;
+            };
+        }
     }
 
 }

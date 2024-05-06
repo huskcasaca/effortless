@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building.structure;
 
+import java.util.Set;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 
@@ -25,14 +27,14 @@ public enum LineDirection implements SingleSelectFeature {
     public String getCategory() {
         return BuildFeature.PLANE_FACING.getName();
     }
-
-    public boolean isInRange(Axis axis) {
+    
+    public Set<Axis> getAxes() {
         return switch (this) {
-            case ALL -> true;
-            case FLOOR -> axis == Axis.X || axis == Axis.Z;
-            case AXIS_Y -> axis == Axis.Y;
-            case AXIS_Z -> axis == Axis.Z;
-            case AXIS_X -> axis == Axis.X;
+            case ALL -> Set.of(Axis.X, Axis.Y, Axis.Z);
+            case FLOOR -> Set.of(Axis.X, Axis.Z);
+            case AXIS_Y -> Set.of(Axis.Y);
+            case AXIS_Z -> Set.of(Axis.Z);
+            case AXIS_X -> Set.of(Axis.X);
         };
     }
 }

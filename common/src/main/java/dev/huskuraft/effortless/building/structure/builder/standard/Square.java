@@ -3,13 +3,13 @@ package dev.huskuraft.effortless.building.structure.builder.standard;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
@@ -111,22 +111,26 @@ public class Square extends AbstractBlockStructure {
         return list.stream();
     }
 
-    public static BlockInteraction traceSquare(Player player, Context context) {
-        var center = context.firstBlockPosition().getCenter();
-        var reach = context.maxNextReachDistance();
-        var skipRaytrace = context.skipRaytrace();
+    protected static BlockInteraction traceSquare(Player player, Context context) {
+        return traceSquare(player, context.firstBlockInteraction(), context.planeFacing().getAxes(), context.structureParams().planeLength() == PlaneLength.EQUAL);
+    }
+
+    protected static BlockInteraction traceSquare(Player player, BlockInteraction start, Set<Axis> axes, boolean uniformLength) {
+        var center = start.getBlockPosition().getCenter();
+        var reach = 1024;
+        var skipRaytrace = false;
 
         var result = Stream.of(
                         new NearestLineCriteria(Axis.X, player, center, reach, skipRaytrace),
                         new NearestLineCriteria(Axis.Y, player, center, reach, skipRaytrace),
                         new NearestLineCriteria(Axis.Z, player, center, reach, skipRaytrace))
-                .filter(nearestLineCriteria -> context.planeFacing().isInRange(nearestLineCriteria.getAxis()))
+                .filter(nearestLineCriteria -> axes.contains(nearestLineCriteria.getAxis()))
                 .filter(AxisCriteria::isInRange)
                 .min(Comparator.comparing(NearestLineCriteria::distanceToEyeSqr))
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength() == PlaneLength.EQUAL);
+        return transformUniformLengthInteraction(start, result, uniformLength);
     }
 
     @Override
@@ -147,13 +151,6 @@ public class Square extends AbstractBlockStructure {
     @Override
     public int totalClicks(Context context) {
         return 2;
-    }
-
-    public static class NearestLineCriteria extends Line.NearestLineCriteria {
-
-        public NearestLineCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
-            super(axis, player, center, reach, skipRaytrace);
-        }
     }
 
 }

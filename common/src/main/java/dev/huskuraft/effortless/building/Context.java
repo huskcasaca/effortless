@@ -266,7 +266,7 @@ public record Context(
     }
 
     // for build mode only
-    public Stream<BlockInteraction> collect() {
+    public Stream<BlockInteraction> collectInteractions() {
         if (tracingResult().isSuccess()) {
             return buildMode().getInstance().collect(this).map(blockPosition -> withPosition(firstBlockInteraction(), blockPosition));
         } else {

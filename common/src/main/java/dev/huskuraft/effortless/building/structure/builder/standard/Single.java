@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
 public class Single extends AbstractBlockStructure {
@@ -22,14 +23,14 @@ public class Single extends AbstractBlockStructure {
         var isHoldingEmptyBucket = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && bucketItem.isEmpty();
         var isHoldingNonBlockItem = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && !bucketItem.isEmpty();
 
-        var interaction = player.raytrace(context.maxReachDistance(), 0, isHoldingEmptyBucket);
+        var interaction = player.raytrace(maxReachDistance, 0, isHoldingEmptyBucket);
 
         var startBlockPosition = interaction.getBlockPosition();
 
-        var isTracingTarget = context.state() == BuildState.BREAK_BLOCK || context.state() == BuildState.INTERACT_BLOCK;
-        var isReplaceBlock = context.replaceMode().isQuick() || player.getWorld().getBlockState(startBlockPosition).isReplaceable(player, interaction);
+        var isTracingTarget = buildState == BuildState.BREAK_BLOCK || buildState == BuildState.INTERACT_BLOCK;
+        var isReplaceBlock = replaceMode.isQuick() || player.getWorld().getBlockState(startBlockPosition).isReplaceable(player, interaction);
 
-        if ((isHoldingNonBlockItem && context.state() == BuildState.INTERACT_BLOCK || !isTracingTarget) && !isReplaceBlock) {
+        if ((isHoldingNonBlockItem && buildState == BuildState.INTERACT_BLOCK || !isTracingTarget) && !isReplaceBlock) {
             startBlockPosition = startBlockPosition.relative(interaction.getDirection());
         }
 
