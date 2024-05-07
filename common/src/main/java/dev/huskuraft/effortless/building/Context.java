@@ -109,7 +109,7 @@ public record Context(
     }
 
     public boolean isFulfilled() {
-        return isBuilding() && structureParams().buildMode().getInstance().totalInteractions(this) == interactionsSize();
+        return isBuilding() && structureParams().buildMode().getInstance().traceSize(this) == interactionsSize();
     }
 
     public int interactionsSize() {

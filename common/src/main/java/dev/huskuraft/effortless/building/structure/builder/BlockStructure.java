@@ -11,7 +11,7 @@ public interface BlockStructure {
 
     int volume(Context context);
 
-    int totalInteractions(Context context);
+    int traceSize(Context context);
 
     BlockInteraction trace(Player player, Context context);
 

@@ -10,18 +10,16 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 
 public class Disable extends AbstractBlockStructure {
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return player.raytrace(10, 1f, false);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return null;
     }
 
-    @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
+    protected Stream<BlockPosition> collect(Context context, int index) {
         return Stream.empty();
     }
 
     @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 1;
     }
 

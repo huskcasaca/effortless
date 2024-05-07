@@ -87,9 +87,9 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         if (!limit) {
             return end;
         }
-        var firstBlockPos = start.getBlockPosition();
-        var secondBlockPos = end.getBlockPosition();
-        var diff = secondBlockPos.sub(firstBlockPos);
+        var p0 = start.getBlockPosition();
+        var p1 = end.getBlockPosition();
+        var diff = p1.sub(p0);
 
         if (diff.x() == 0 && diff.y() == 0 && diff.z() == 0) {
             return end;
@@ -98,13 +98,13 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             return end;
         }
         if (diff.x() == 0) {
-            return end.withBlockPosition(firstBlockPos.add(diff.withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z())))));
+            return end.withBlockPosition(p0.add(diff.withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.y()), MathUtils.abs(diff.z())))));
         }
         if (diff.z() == 0) {
-            return end.withBlockPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y()))).withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y())))));
+            return end.withBlockPosition(p0.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y()))).withY(axisSign(diff.y()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.y())))));
         }
         if (diff.y() == 0) {
-            return end.withBlockPosition(firstBlockPos.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z())))));
+            return end.withBlockPosition(p0.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z())))));
         }
         return end;
     }
@@ -189,60 +189,27 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return new Vector3d(x, y, z).normalize();
     }
 
-    protected BlockInteraction traceInteraction(Player player, Context context, int index) {
-        return switch (index) {
-            case 0 -> traceFirstInteraction(player, context);
-            case 1 -> traceSecondInteraction(player, context);
-            case 2 -> traceThirdInteraction(player, context);
-            default -> null;
-        };
-    }
+    protected abstract BlockInteraction trace(Player player, Context context, int index);
 
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return null;
-    }
-
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return null;
-    }
-
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        return null;
-    }
-
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Stream.of(context.getPosition(0));
-    }
-
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return Stream.of();
-    }
-
-    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
-        return Stream.of();
-    }
+    protected abstract Stream<BlockPosition> collect(Context context, int index);
 
     @Override
-    public BlockInteraction trace(Player player, Context context) {
+    public final BlockInteraction trace(Player player, Context context) {
         var interactionsSize = context.interactionsSize();
-        if (interactionsSize >= totalInteractions(context)) {
+        if (interactionsSize >= traceSize(context)) {
             return null;
         }
-        return traceInteraction(player, context, interactionsSize);
+        return trace(player, context, interactionsSize);
     }
 
+
     @Override
-    public Stream<BlockPosition> collect(Context context) {
+    public final Stream<BlockPosition> collect(Context context) {
         var interactionsSize = context.interactionsSize();
-        if (interactionsSize > totalInteractions(context)) {
+        if (interactionsSize > traceSize(context)) {
             return null;
         }
-        return switch (interactionsSize) {
-            case 1 -> collectFirstBlocks(context);
-            case 2 -> collectSecondBlocks(context);
-            case 3 -> collectThirdBlocks(context);
-            default -> Stream.empty();
-        };
+        return collect(context, interactionsSize);
     }
 
     public BuildFeature[] getSupportedFeatures() {

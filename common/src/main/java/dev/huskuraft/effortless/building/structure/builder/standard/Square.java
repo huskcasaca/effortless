@@ -133,23 +133,25 @@ public class Square extends AbstractBlockStructure {
         return transformUniformLengthInteraction(start, result, uniformLength);
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Square.traceSquare(player, context);
+            default -> null;
+        };
     }
 
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return traceSquare(player, context);
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Square.collectSquareBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return collectSquareBlocks(context);
-    }
 
     @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 2;
     }
 

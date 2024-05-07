@@ -125,38 +125,28 @@ public class DiagonalLine extends AbstractBlockStructure {
         return result;
     }
 
-    @Override
-    public int volume(Context context) {
-        return collect(context).toList().size();
-    }
-
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        return traceLineY(player, context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Single.collectSingleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
+    protected static Stream<BlockPosition> collectDiagonalLine(Context context) {
         return getDiagonalLine(context.getPositions(), 0, false).stream();
     }
 
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Single.traceSingle(player, context);
+            default -> null;
+        };
+    }
+
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> DiagonalLine.collectDiagonalLine(context);
+            default -> Stream.empty();
+        };
+    }
+
     @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 2;
     }
 }

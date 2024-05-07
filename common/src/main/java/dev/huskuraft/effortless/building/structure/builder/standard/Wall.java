@@ -67,32 +67,25 @@ public class Wall extends AbstractBlockStructure {
         return list.stream();
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Wall.traceWall(player, context);
+            default -> null;
+        };
     }
 
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return traceWall(player, context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return collectWallBlocks(context);
-    }
-
-    @Override
-    public Stream<BlockPosition> collect(Context context) {
-        return switch (context.interactionsSize()) {
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
             case 2 -> Wall.collectWallBlocks(context);
             default -> Stream.empty();
         };
     }
 
+
     @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 2;
     }
 

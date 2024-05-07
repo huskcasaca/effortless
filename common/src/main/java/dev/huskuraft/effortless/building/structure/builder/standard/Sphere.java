@@ -97,50 +97,39 @@ public class Sphere extends AbstractBlockStructure {
         return list.stream();
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> switch (context.planeFacing()) {
+                case BOTH -> Square.traceSquare(player, context);
+                case VERTICAL -> Wall.traceWall(player, context);
+                case HORIZONTAL -> Floor.traceFloor(player, context);
+            };
+            case 2 -> switch (context.planeFacing()) {
+                case BOTH, VERTICAL -> {
+                    if (context.getPosition(0).x() == context.getPosition(1).x()) {
+                        yield tracePlaneZ(player, context);
+                    } else {
+                        yield tracePlaneX(player, context);
+                    }
+                }
+                case HORIZONTAL -> traceLineY(player, context);
+            };
+            default -> null;
+        };
+    }
+
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Circle.collectCircleBlocks(context);
+            case 3 -> Sphere.collectSphereBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
     @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        if (context.planeFacing() == PlaneFacing.HORIZONTAL) {
-            return Floor.traceFloor(player, context);
-        } else {
-            return Wall.traceWall(player, context);
-        }
-    }
-
-    @Override
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        if (context.planeFacing() == PlaneFacing.HORIZONTAL) {
-            return traceLineY(player, context);
-        } else {
-            if (context.getPosition(0).x() == context.getPosition(1).x()) {
-                return tracePlaneZ(player, context);
-            } else {
-                return tracePlaneX(player, context);
-            }
-        }
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Single.collectSingleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return Circle.collectCircleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
-        return collectSphereBlocks(context);
-    }
-
-    @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 3;
     }
 }

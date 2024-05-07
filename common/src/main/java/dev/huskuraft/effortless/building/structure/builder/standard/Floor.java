@@ -53,23 +53,24 @@ public class Floor extends AbstractBlockStructure {
         return list.stream();
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Floor.traceFloor(player, context);
+            default -> null;
+        };
+    }
+
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Floor.collectFloorBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
     @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return traceFloor(player, context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return collectFloorBlocks(context);
-    }
-
-    @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 2;
     }
 

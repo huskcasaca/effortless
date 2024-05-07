@@ -69,23 +69,24 @@ public class Line extends AbstractBlockStructure {
         }
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Line.traceLine(player, context);
+            default -> null;
+        };
+    }
+
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Line.collectLineBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
     @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return traceLine(player, context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return collectLineBlocks(context);
-    }
-
-    @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 2;
     }
 

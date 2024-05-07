@@ -44,53 +44,42 @@ public class Cylinder extends AbstractBlockStructure {
         return list.stream();
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Square.traceSquare(player, context);
+            case 2 -> {
+                var x1 = context.getPosition(0).x();
+                var y1 = context.getPosition(0).y();
+                var z1 = context.getPosition(0).z();
+                var x2 = context.getPosition(1).x();
+                var y2 = context.getPosition(1).y();
+                var z2 = context.getPosition(1).z();
+                if (y1 == y2) {
+                    yield traceLineY(player, context);
+                } else if (x1 == x2) {
+                    yield traceLineX(player, context);
+                } else if (z1 == z2) {
+                    yield traceLineZ(player, context);
+                }
+                yield null;
+            }
+            default -> null;
+        };
+    }
+
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Circle.collectCircleBlocks(context);
+            case 3 -> Cylinder.collectCylinderBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
     @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return Square.traceSquare(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-
-        var x1 = context.getPosition(0).x();
-        var y1 = context.getPosition(0).y();
-        var z1 = context.getPosition(0).z();
-        var x2 = context.getPosition(1).x();
-        var y2 = context.getPosition(1).y();
-        var z2 = context.getPosition(1).z();
-
-        if (y1 == y2) {
-            return traceLineY(player, context);
-        } else if (x1 == x2) {
-            return traceLineX(player, context);
-        } else if (z1 == z2) {
-            return traceLineZ(player, context);
-        }
-        return null;
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Single.collectSingleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return Circle.collectCircleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
-        return collectCylinderBlocks(context);
-    }
-
-    @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 3;
     }
 }

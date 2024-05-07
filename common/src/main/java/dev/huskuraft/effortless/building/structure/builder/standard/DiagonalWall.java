@@ -42,38 +42,27 @@ public class DiagonalWall extends AbstractBlockStructure {
         return list.stream();
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Floor.traceFloor(player, context);
+            case 2 -> DiagonalWall.traceLineY(player, context);
+            default -> null;
+        };
     }
 
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return Floor.traceFloor(player, context);
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> DiagonalLine.collectPlaneDiagonalLineBlocks(context, 1);
+            case 3 -> DiagonalWall.collectDiagonalWallBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
-    @Override
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        return traceLineY(player, context);
-    }
 
     @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Single.collectSingleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return DiagonalLine.collectPlaneDiagonalLineBlocks(context, 1);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
-        return collectDiagonalWallBlocks(context);
-    }
-
-    @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 3;
     }
 }

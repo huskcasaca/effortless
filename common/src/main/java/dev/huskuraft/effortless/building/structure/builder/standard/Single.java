@@ -45,18 +45,22 @@ public class Single extends AbstractBlockStructure {
         return Stream.of(context.getPosition(0));
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            default -> null;
+        };
+    }
+
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
     @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return collectSingleBlocks(context);
-    }
-
-    @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 1;
     }
 

@@ -107,23 +107,25 @@ public class Circle extends AbstractBlockStructure {
         return collect(context).toList().size();
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Square.traceSquare(player, context);
+            default -> null;
+        };
     }
 
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return Square.traceSquare(player, context);
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Circle.collectCircleBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return collectCircleBlocks(context);
-    }
 
     @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 2;
     }
 }

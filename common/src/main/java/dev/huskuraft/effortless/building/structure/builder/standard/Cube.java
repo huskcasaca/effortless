@@ -118,18 +118,7 @@ public class Cube extends AbstractBlockStructure {
                 .orElse(null);
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return Square.traceSquare(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
+    protected static BlockInteraction traceCube(Player player, Context context) {
         var x1 = context.getPosition(0).x();
         var y1 = context.getPosition(0).y();
         var z1 = context.getPosition(0).z();
@@ -170,23 +159,26 @@ public class Cube extends AbstractBlockStructure {
     }
 
 
-    @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Single.collectSingleBlocks(context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Square.traceSquare(player, context);
+            case 2 -> Cube.traceCube(player, context);
+            default -> null;
+        };
+    }
+
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Cube.collectCubePlaneBlocks(context);
+            case 3 -> Cube.collectCubeBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
     @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return collectCubePlaneBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
-        return collectCubeBlocks(context);
-    }
-
-    @Override
-    public int totalInteractions(Context context) {
+    public int traceSize(Context context) {
         return 3;
     }
 }
