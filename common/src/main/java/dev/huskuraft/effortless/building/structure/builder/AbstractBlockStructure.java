@@ -21,9 +21,17 @@ public abstract class AbstractBlockStructure implements BlockStructure {
 
     private static final double LOOK_VEC_TOLERANCE = 0.01;
 
+    @Override
+    public int volume(Context context) {
+        return context.getInteractionBox().volume();
+    }
 
     protected static double lengthSq(double x, double y, double z) {
         return (x * x) + (y * y) + (z * z);
+    }
+
+    protected static double lengthSq(double x, double z) {
+        return (x * x) + (z * z);
     }
 
     protected static Set<BlockPosition> getBallooned(Set<BlockPosition> set, double radius) {

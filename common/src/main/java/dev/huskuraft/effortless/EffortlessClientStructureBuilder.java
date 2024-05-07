@@ -571,7 +571,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     + "x"
                     + (context.getInteractionBox().z() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().z() + ChatFormatting.RESET
                     + "="
-                    + (context.getInteractionBox().volume() > context.getMaxBoxVolume() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().volume() + ChatFormatting.RESET
+                    + (!context.isBoxVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getBoxVolume() + ChatFormatting.RESET
                     + ")";
         }
 

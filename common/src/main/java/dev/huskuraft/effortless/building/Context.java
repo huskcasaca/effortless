@@ -292,7 +292,7 @@ public record Context(
     }
 
     public int getBoxVolume() {
-        return getInteractionBox().volume();
+        return buildMode().getInstance().volume(this);
     }
 
     public int getMaxBoxVolume() {

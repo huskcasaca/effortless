@@ -34,10 +34,6 @@ public class Circle extends AbstractBlockStructure {
 
     }
 
-    private static double lengthSq(double x, double z) {
-        return (x * x) + (z * z);
-    }
-
     public static void addFullCircleBlocksX(List<BlockPosition> list, int x1, int y1, int z1, int x2, int y2, int z2, float centerY, float centerZ, float radiusY, float radiusZ, boolean fill) {
         for (int y = y1; y1 < y2 ? y <= y2 : y >= y2; y += y1 < y2 ? 1 : -1) {
             for (int z = z1; z1 < z2 ? z <= z2 : z >= z2; z += z1 < z2 ? 1 : -1) {
@@ -104,6 +100,11 @@ public class Circle extends AbstractBlockStructure {
         }
 
         return list.stream();
+    }
+
+    @Override
+    public int volume(Context context) {
+        return collect(context).toList().size();
     }
 
     @Override

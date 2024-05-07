@@ -125,6 +125,10 @@ public class DiagonalLine extends AbstractBlockStructure {
         return result;
     }
 
+    @Override
+    public int volume(Context context) {
+        return collect(context).toList().size();
+    }
 
     @Override
     protected BlockInteraction traceFirstInteraction(Player player, Context context) {
