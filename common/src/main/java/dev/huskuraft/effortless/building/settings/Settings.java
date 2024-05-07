@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.building.settings;
 import dev.huskuraft.effortless.building.Option;
 
 public enum Settings implements Option {
-    GENERAL("settings"),
+    SETTINGS("settings"),
     MODE_SETTINGS("mode_settings"),
     PATTERN_SETTINGS("pattern_settings"),
     ;

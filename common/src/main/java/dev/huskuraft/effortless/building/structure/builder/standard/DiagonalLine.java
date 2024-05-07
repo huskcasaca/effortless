@@ -22,15 +22,15 @@ public class DiagonalLine extends AbstractBlockStructure {
         var x1 = context.getPosition(0).x();
         var y1 = context.getPosition(0).y();
         var z1 = context.getPosition(0).z();
-        var x2 = context.getPosition(2).x();
-        var y2 = context.getPosition(2).y();
-        var z2 = context.getPosition(2).z();
+        var x2 = context.getPosition(1).x();
+        var y2 = context.getPosition(1).y();
+        var z2 = context.getPosition(1).z();
 
         var first = new Vector3d(x1, y1, z1).add(0.5, 0.5, 0.5);
         var second = new Vector3d(x2, y2, z2).add(0.5, 0.5, 0.5);
 
         var iterations = (int) MathUtils.ceil(first.distance(second) * sampleMultiplier);
-        for (var t = 0; t <= 1.0; t += 1.0 / iterations) {
+        for (var t = 0.0; t <= 1.0; t += 1.0 / iterations) {
             var lerp = first.add(second.sub(first).mul(t));
             var candidate = BlockPosition.at(lerp);
             // only add if not equal to the last in the list
@@ -40,6 +40,32 @@ public class DiagonalLine extends AbstractBlockStructure {
 
         return list.stream();
     }
+
+    public static Stream<BlockPosition> collectDiagonalLineBlocks(Context context, float sampleMultiplier) {
+        var list = new ArrayList<BlockPosition>();
+
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
+        var x2 = context.getPosition(2).x();
+        var y2 = context.getPosition(2).y();
+        var z2 = context.getPosition(2).z();
+
+        var first = new Vector3d(x1, y1, z1).add(0.5, 0.5, 0.5);
+        var second = new Vector3d(x2, y2, z2).add(0.5, 0.5, 0.5);
+
+        int iterations = (int) MathUtils.ceil(first.distance(second) * sampleMultiplier);
+        for (var t = 0.0; t <= 1.0; t += 1.0 / iterations) {
+            var lerp = first.add(second.sub(first).mul(t));
+            var candidate = BlockPosition.at(lerp);
+            // only add if not equal to the last in the list
+            if (list.isEmpty() || !list.get(list.size() - 1).equals(candidate))
+                list.add(candidate);
+        }
+
+        return list.stream();
+    }
+
 
     public static Set<BlockPosition> getDiagonalLine(List<BlockPosition> positions, int radius, boolean hollow) {
         Set<BlockPosition> result = new LinkedHashSet<>();

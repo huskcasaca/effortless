@@ -27,7 +27,7 @@ public class EffortlessPatternWheelScreen extends AbstractWheelScreen<Pattern, O
 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
-    private static final Button<Option> SETTING_OPTION = button(Settings.GENERAL);
+    private static final Button<Option> SETTING_OPTION = button(Settings.SETTINGS);
     private static final Button<Option> REPLACE_OPTION = button(ReplaceMode.DISABLED);
 
     private final Key assignedKey;
@@ -120,7 +120,7 @@ public class EffortlessPatternWheelScreen extends AbstractWheelScreen<Pattern, O
         setRadialOptionSelectResponder(entry -> {
             if (entry.getContent() instanceof Settings settings) {
                 switch (settings) {
-                    case GENERAL -> {
+                    case SETTINGS -> {
                         new EffortlessSettingsScreen(getEntrance()).attach();
                         detach();
                     }
