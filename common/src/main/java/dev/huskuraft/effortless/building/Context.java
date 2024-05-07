@@ -120,16 +120,11 @@ public record Context(
         return buildInteractions.isEmpty();
     }
 
-    public BlockInteraction firstBlockInteraction() {
-        return buildInteractions.get(0);
+    public BlockPosition getPosition(int index) {
+        return buildInteractions.get(index).getBlockPosition();
     }
-
-    public BlockInteraction secondBlockInteraction() {
-        return buildInteractions.get(1);
-    }
-
-    public BlockInteraction thirdBlockInteraction() {
-        return buildInteractions.get(2);
+    public BlockInteraction getInteraction(int index) {
+        return buildInteractions.get(index);
     }
 
     public Set<Feature> buildFeatures() {
@@ -268,7 +263,7 @@ public record Context(
     // for build mode only
     public Stream<BlockInteraction> collectInteractions() {
         if (tracingResult().isSuccess()) {
-            return buildMode().getInstance().collect(this).map(blockPosition -> withPosition(firstBlockInteraction(), blockPosition));
+            return buildMode().getInstance().collect(this).map(blockPosition -> withPosition(getInteraction(0), blockPosition));
         } else {
             return Stream.empty();
         }

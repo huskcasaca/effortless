@@ -52,7 +52,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
     }
 
     private static BlockInteraction traceLineByAxis(Player player, Context context, Axis axis) {
-        var center = context.secondBlockInteraction().getBlockPosition().getCenter();
+        var center = context.getPosition(1).getCenter();
         var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
@@ -81,7 +81,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
     }
 
     protected static BlockInteraction tracePlaneByAxis(Player player, Context context, Axis axis) {
-        var center = context.secondBlockInteraction().getBlockPosition().getCenter();
+        var center = context.getPosition(1).getCenter();
         var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
@@ -153,7 +153,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
     }
 
     protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Stream.of(context.firstBlockInteraction().getBlockPosition());
+        return Stream.of(context.getPosition(0));
     }
 
     protected Stream<BlockPosition> collectSecondBlocks(Context context) {

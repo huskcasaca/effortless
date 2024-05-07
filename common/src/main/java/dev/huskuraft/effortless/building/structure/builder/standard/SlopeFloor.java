@@ -17,17 +17,17 @@ public class SlopeFloor extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectSlopeFloorBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockInteraction().getBlockPosition().x();
-        var y1 = context.firstBlockInteraction().getBlockPosition().y();
-        var z1 = context.firstBlockInteraction().getBlockPosition().z();
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
 
-        var x2 = context.secondBlockInteraction().getBlockPosition().x();
-        var y2 = context.secondBlockInteraction().getBlockPosition().y();
-        var z2 = context.secondBlockInteraction().getBlockPosition().z();
+        var x2 = context.getPosition(1).x();
+        var y2 = context.getPosition(1).y();
+        var z2 = context.getPosition(1).z();
 
-        var x3 = context.thirdBlockInteraction().getBlockPosition().x();
-        var y3 = context.thirdBlockInteraction().getBlockPosition().y();
-        var z3 = context.thirdBlockInteraction().getBlockPosition().z();
+        var x3 = context.getPosition(2).x();
+        var y3 = context.getPosition(2).y();
+        var z3 = context.getPosition(2).z();
 
         int axisLimit = context.axisLimitation();
 
@@ -50,7 +50,7 @@ public class SlopeFloor extends AbstractBlockStructure {
 
             // get diagonal line blocks
             // FIXME: 8/8/23 block hit location is not correct
-            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.firstBlockInteraction().withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.firstBlockInteraction().withBlockPosition(new BlockPosition(x2, y3, z1))), 1f).toList();
+            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x2, y3, z1))), 1f).toList();
 
             // limit amount of blocks we can place
             int lowest = MathUtils.min(z1, z2);
@@ -70,7 +70,7 @@ public class SlopeFloor extends AbstractBlockStructure {
 
             // get diagonal line blocks
             // FIXME: 8/8/23 block hit location is not correct
-            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.firstBlockInteraction().withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.firstBlockInteraction().withBlockPosition(new BlockPosition(x1, y3, z2))), 1f).toList();
+            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x1, y3, z2))), 1f).toList();
 
             // limit amount of blocks we can place
             int lowest = MathUtils.min(x1, x2);

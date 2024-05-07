@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 public class Line extends AbstractBlockStructure {
 
     public static BlockInteraction traceLine(Player player, Context context) {
-        var center = context.firstBlockInteraction().getBlockPosition().getCenter();
+        var center = context.getPosition(0).getCenter();
         var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
 
@@ -33,12 +33,12 @@ public class Line extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectLineBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockInteraction().getBlockPosition().x();
-        var y1 = context.firstBlockInteraction().getBlockPosition().y();
-        var z1 = context.firstBlockInteraction().getBlockPosition().z();
-        var x2 = context.secondBlockInteraction().getBlockPosition().x();
-        var y2 = context.secondBlockInteraction().getBlockPosition().y();
-        var z2 = context.secondBlockInteraction().getBlockPosition().z();
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
+        var x2 = context.getPosition(1).x();
+        var y2 = context.getPosition(1).y();
+        var z2 = context.getPosition(1).z();
 
         if (x1 != x2) {
             addXLineBlocks(list, x1, x2, y1, z1);

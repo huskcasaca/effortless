@@ -84,12 +84,12 @@ public class Square extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectSquareBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockInteraction().getBlockPosition().x();
-        var y1 = context.firstBlockInteraction().getBlockPosition().y();
-        var z1 = context.firstBlockInteraction().getBlockPosition().z();
-        var x2 = context.secondBlockInteraction().getBlockPosition().x();
-        var y2 = context.secondBlockInteraction().getBlockPosition().y();
-        var z2 = context.secondBlockInteraction().getBlockPosition().z();
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
+        var x2 = context.getPosition(1).x();
+        var y2 = context.getPosition(1).y();
+        var z2 = context.getPosition(1).z();
 
         if (y1 == y2) {
             switch (context.planeFilling()) {
@@ -112,7 +112,7 @@ public class Square extends AbstractBlockStructure {
     }
 
     protected static BlockInteraction traceSquare(Player player, Context context) {
-        return traceSquare(player, context.firstBlockInteraction(), context.planeFacing().getAxes(), context.structureParams().planeLength() == PlaneLength.EQUAL);
+        return traceSquare(player, context.getInteraction(0), context.planeFacing().getAxes(), context.structureParams().planeLength() == PlaneLength.EQUAL);
     }
 
     protected static BlockInteraction traceSquare(Player player, BlockInteraction start, Set<Axis> axes, boolean uniformLength) {

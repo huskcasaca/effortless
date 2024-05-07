@@ -41,17 +41,17 @@ public class Pyramid extends AbstractBlockStructure {
 
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockInteraction().getBlockPosition().x();
-        var y1 = context.firstBlockInteraction().getBlockPosition().y();
-        var z1 = context.firstBlockInteraction().getBlockPosition().z();
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
 
-        var x2 = context.secondBlockInteraction().getBlockPosition().x();
-        var y2 = context.secondBlockInteraction().getBlockPosition().y();
-        var z2 = context.secondBlockInteraction().getBlockPosition().z();
+        var x2 = context.getPosition(1).x();
+        var y2 = context.getPosition(1).y();
+        var z2 = context.getPosition(1).z();
 
-        var x3 = context.thirdBlockInteraction().getBlockPosition().x();
-        var y3 = context.thirdBlockInteraction().getBlockPosition().y();
-        var z3 = context.thirdBlockInteraction().getBlockPosition().z();
+        var x3 = context.getPosition(2).x();
+        var y3 = context.getPosition(2).y();
+        var z3 = context.getPosition(2).z();
 
         var minX = Math.min(x1, x2);
         var minZ = Math.min(z1, z2);

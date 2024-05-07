@@ -14,7 +14,7 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 public class Floor extends AbstractBlockStructure {
 
     protected static BlockInteraction traceFloor(Player player, Context context) {
-        return traceFloor(player, context.firstBlockInteraction(), context.structureParams().planeLength() == PlaneLength.EQUAL);
+        return traceFloor(player, context.getInteraction(0), context.structureParams().planeLength() == PlaneLength.EQUAL);
     }
 
     protected static BlockInteraction traceFloor(Player player, BlockInteraction start, boolean uniformLength) {
@@ -36,12 +36,12 @@ public class Floor extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectFloorBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockInteraction().getBlockPosition().x();
-        var y1 = context.firstBlockInteraction().getBlockPosition().y();
-        var z1 = context.firstBlockInteraction().getBlockPosition().z();
-        var x2 = context.secondBlockInteraction().getBlockPosition().x();
-        var y2 = context.secondBlockInteraction().getBlockPosition().y();
-        var z2 = context.secondBlockInteraction().getBlockPosition().z();
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
+        var x2 = context.getPosition(1).x();
+        var y2 = context.getPosition(1).y();
+        var z2 = context.getPosition(1).z();
 
         if (y1 == y2) {
             switch (context.planeFilling()) {

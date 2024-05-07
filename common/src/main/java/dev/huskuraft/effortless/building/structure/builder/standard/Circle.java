@@ -74,12 +74,12 @@ public class Circle extends AbstractBlockStructure {
         var isCenter = context.circleStart() == CircleStart.CIRCLE_START_CENTER;
         var isFill = context.planeFilling() == PlaneFilling.PLANE_FULL;
 
-        var x1 = context.firstBlockInteraction().getBlockPosition().x();
-        var y1 = context.firstBlockInteraction().getBlockPosition().y();
-        var z1 = context.firstBlockInteraction().getBlockPosition().z();
-        var x2 = context.secondBlockInteraction().getBlockPosition().x();
-        var y2 = context.secondBlockInteraction().getBlockPosition().y();
-        var z2 = context.secondBlockInteraction().getBlockPosition().z();
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
+        var x2 = context.getPosition(1).x();
+        var y2 = context.getPosition(1).y();
+        var z2 = context.getPosition(1).z();
 
         if (isCenter) {
             x1 = (x1 - x2) * 2 + x1;

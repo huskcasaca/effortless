@@ -56,12 +56,12 @@ public class Cube extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectCubePlaneBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockInteraction().getBlockPosition().x();
-        var y1 = context.firstBlockInteraction().getBlockPosition().y();
-        var z1 = context.firstBlockInteraction().getBlockPosition().z();
-        var x2 = context.secondBlockInteraction().getBlockPosition().x();
-        var y2 = context.secondBlockInteraction().getBlockPosition().y();
-        var z2 = context.secondBlockInteraction().getBlockPosition().z();
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
+        var x2 = context.getPosition(1).x();
+        var y2 = context.getPosition(1).y();
+        var z2 = context.getPosition(1).z();
 
         switch (context.cubeFilling()) {
             case CUBE_SKELETON -> Square.addHollowSquareBlocks(list, x1, x2, y1, y2, z1, z2);
@@ -75,12 +75,12 @@ public class Cube extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectCubeBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.firstBlockInteraction().getBlockPosition().x();
-        var y1 = context.firstBlockInteraction().getBlockPosition().y();
-        var z1 = context.firstBlockInteraction().getBlockPosition().z();
-        var x3 = context.thirdBlockInteraction().getBlockPosition().x();
-        var y3 = context.thirdBlockInteraction().getBlockPosition().y();
-        var z3 = context.thirdBlockInteraction().getBlockPosition().z();
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
+        var x3 = context.getPosition(2).x();
+        var y3 = context.getPosition(2).y();
+        var z3 = context.getPosition(2).z();
 
         switch (context.cubeFilling()) {
             case CUBE_FULL -> addFullCubeBlocks(list, x1, x3, y1, y3, z1, z3);
@@ -92,8 +92,8 @@ public class Cube extends AbstractBlockStructure {
     }
 
     public static BlockInteraction traceCube(Player player, Context context, Axis axis) {
-        var center = context.firstBlockInteraction().getBlockPosition().getCenter().add(context.secondBlockInteraction().getBlockPosition().getCenter()).div(2);
-        var radius = context.firstBlockInteraction().getBlockPosition().getCenter().sub(context.secondBlockInteraction().getBlockPosition().getCenter()).div(2);
+        var center = context.getPosition(0).getCenter().add(context.getPosition(1).getCenter()).div(2);
+        var radius = context.getPosition(0).getCenter().sub(context.getPosition(1).getCenter()).div(2);
 
         var reach = context.maxNextReachDistance();
         var skipRaytrace = context.skipRaytrace();
@@ -111,9 +111,9 @@ public class Cube extends AbstractBlockStructure {
                 .min(Comparator.comparing(axisLineCriteria -> axisLineCriteria.distanceToLineSqr()))
                 .map(criteria -> criteria.tracePlane())
                 .map(interaction -> interaction.withBlockPosition(switch (axis) {
-                    case X -> context.secondBlockInteraction().getBlockPosition().withX(interaction.getBlockPosition().x());
-                    case Y -> context.secondBlockInteraction().getBlockPosition().withY(interaction.getBlockPosition().y());
-                    case Z -> context.secondBlockInteraction().getBlockPosition().withZ(interaction.getBlockPosition().z());
+                    case X -> context.getPosition(1).withX(interaction.getBlockPosition().x());
+                    case Y -> context.getPosition(1).withY(interaction.getBlockPosition().y());
+                    case Z -> context.getPosition(1).withZ(interaction.getBlockPosition().z());
                 }))
                 .orElse(null);
     }
@@ -130,12 +130,12 @@ public class Cube extends AbstractBlockStructure {
 
     @Override
     protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        var x1 = context.firstBlockInteraction().getBlockPosition().x();
-        var y1 = context.firstBlockInteraction().getBlockPosition().y();
-        var z1 = context.firstBlockInteraction().getBlockPosition().z();
-        var x2 = context.secondBlockInteraction().getBlockPosition().x();
-        var y2 = context.secondBlockInteraction().getBlockPosition().y();
-        var z2 = context.secondBlockInteraction().getBlockPosition().z();
+        var x1 = context.getPosition(0).x();
+        var y1 = context.getPosition(0).y();
+        var z1 = context.getPosition(0).z();
+        var x2 = context.getPosition(1).x();
+        var y2 = context.getPosition(1).y();
+        var z2 = context.getPosition(1).z();
 
         if (x1 == x2 && y1 == y2 && z1 == z2) {
             return Single.traceSingle(player, context);
