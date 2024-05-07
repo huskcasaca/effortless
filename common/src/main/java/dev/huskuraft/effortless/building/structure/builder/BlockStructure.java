@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.building.Context;
 
 public interface BlockStructure {
 
-    int totalClicks(Context context);
+    int totalInteractions(Context context);
 
     BlockInteraction trace(Player player, Context context);
 

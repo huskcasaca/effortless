@@ -166,18 +166,20 @@ public abstract class AbstractBlockStructure implements BlockStructure {
 
     @Override
     public BlockInteraction trace(Player player, Context context) {
-        if (context.interactionsSize() >= totalClicks(context)) {
+        var interactionsSize = context.interactionsSize();
+        if (interactionsSize >= totalInteractions(context)) {
             return null;
         }
-        return traceInteraction(player, context, context.interactionsSize());
+        return traceInteraction(player, context, interactionsSize);
     }
 
     @Override
     public Stream<BlockPosition> collect(Context context) {
-        if (context.interactionsSize() > totalClicks(context)) {
+        var interactionsSize = context.interactionsSize();
+        if (interactionsSize > totalInteractions(context)) {
             return null;
         }
-        return switch (context.interactionsSize()) {
+        return switch (interactionsSize) {
             case 1 -> collectFirstBlocks(context);
             case 2 -> collectSecondBlocks(context);
             case 3 -> collectThirdBlocks(context);

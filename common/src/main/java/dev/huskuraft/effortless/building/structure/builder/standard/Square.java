@@ -149,7 +149,7 @@ public class Square extends AbstractBlockStructure {
     }
 
     @Override
-    public int totalClicks(Context context) {
+    public int totalInteractions(Context context) {
         return 2;
     }
 

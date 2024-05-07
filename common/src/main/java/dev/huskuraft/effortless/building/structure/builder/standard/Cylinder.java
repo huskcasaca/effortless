@@ -90,7 +90,7 @@ public class Cylinder extends AbstractBlockStructure {
     }
 
     @Override
-    public int totalClicks(Context context) {
+    public int totalInteractions(Context context) {
         return 3;
     }
 }
