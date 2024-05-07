@@ -37,10 +37,6 @@ public class Sphere extends AbstractBlockStructure {
 
     }
 
-    private static double lengthSq(double x, double y, double z) {
-        return (x * x) + (y * y) + (z * z);
-    }
-
     public static void addSphereBlocks(List<BlockPosition> list, int x1, int y1, int z1, int x2, int y2, int z2,
                                        float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, boolean fill) {
 

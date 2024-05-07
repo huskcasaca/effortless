@@ -1,8 +1,11 @@
 package dev.huskuraft.effortless.building.structure.builder;
 
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
@@ -17,6 +20,53 @@ import dev.huskuraft.effortless.building.structure.BuildFeature;
 public abstract class AbstractBlockStructure implements BlockStructure {
 
     private static final double LOOK_VEC_TOLERANCE = 0.01;
+
+
+    protected static double lengthSq(double x, double y, double z) {
+        return (x * x) + (y * y) + (z * z);
+    }
+
+    protected static Set<BlockPosition> getBallooned(Set<BlockPosition> set, double radius) {
+        Set<BlockPosition> result = Sets.newLinkedHashSet();
+        var ceilRadius = (int) Math.ceil(radius);
+        var radiusSquare = Math.pow(radius, 2);
+
+        for (var v : set) {
+            int tipx = v.x();
+            int tipy = v.y();
+            int tipz = v.z();
+
+            for (var loopx = tipx - ceilRadius; loopx <= tipx + ceilRadius; loopx++) {
+                for (var loopy = tipy - ceilRadius; loopy <= tipy + ceilRadius; loopy++) {
+                    for (var loopz = tipz - ceilRadius; loopz <= tipz + ceilRadius; loopz++) {
+                        if (lengthSq(loopx - tipx, loopy - tipy, loopz - tipz) <= radiusSquare) {
+                            result.add(BlockPosition.at(loopx, loopy, loopz));
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
+    protected static Set<BlockPosition> getHollowed(Set<BlockPosition> set) {
+        Set<BlockPosition> result = new LinkedHashSet<>();
+        for (var v : set) {
+            var x = v.x();
+            var y = v.y();
+            var z = v.z();
+            if (!(set.contains(BlockPosition.at(x + 1, y, z))
+                    && set.contains(BlockPosition.at(x - 1, y, z))
+                    && set.contains(BlockPosition.at(x, y + 1, z))
+                    && set.contains(BlockPosition.at(x, y - 1, z))
+                    && set.contains(BlockPosition.at(x, y, z + 1))
+                    && set.contains(BlockPosition.at(x, y, z - 1)))) {
+                result.add(v);
+            }
+        }
+        return result;
+    }
 
     public static int axisSign(int value) {
         return MathUtils.sign(value) == 0 ? 1 : (int) MathUtils.sign(value);

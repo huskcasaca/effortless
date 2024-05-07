@@ -123,8 +123,14 @@ public record Context(
     public BlockPosition getPosition(int index) {
         return buildInteractions.get(index).getBlockPosition();
     }
+    public List<BlockPosition> getPositions() {
+        return buildInteractions.results().stream().map(BlockInteraction::getBlockPosition).toList();
+    }
     public BlockInteraction getInteraction(int index) {
         return buildInteractions.get(index);
+    }
+    public List<BlockInteraction> getInteractions() {
+        return buildInteractions.results();
     }
 
     public Set<Feature> buildFeatures() {

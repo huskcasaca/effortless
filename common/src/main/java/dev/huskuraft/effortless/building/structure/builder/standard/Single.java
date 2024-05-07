@@ -18,6 +18,10 @@ public class Single extends AbstractBlockStructure {
         return traceSingle(player, context.buildState(), context.replaceMode(), context.maxReachDistance());
     }
 
+    protected static BlockInteraction traceSingle(Player player, Context context, int maxReachDistance) {
+        return traceSingle(player, context.buildState(), context.replaceMode(), maxReachDistance);
+    }
+
 
     protected static BlockInteraction traceSingle(Player player, BuildState buildState, ReplaceMode replaceMode, int maxReachDistance) {
         var isHoldingEmptyBucket = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && bucketItem.isEmpty();
