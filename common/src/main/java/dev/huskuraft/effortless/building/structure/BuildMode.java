@@ -33,8 +33,8 @@ public enum BuildMode {
     CUBE("cube", new Cube(), Category.SQUARE, BuildFeature.CUBE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
 
     DIAGONAL_LINE("diagonal_line", new DiagonalLine(), Category.DIAGONAL),
-    DIAGONAL_WALL("diagonal_wall", new DiagonalWall(), Category.DIAGONAL),
-    SLOPE_FLOOR("slope_floor", new SlopeFloor(), Category.DIAGONAL, BuildFeature.RAISED_EDGE),
+    DIAGONAL_WALL("diagonal_wall", new DiagonalWall(), Category.DIAGONAL, BuildFeature.PLANE_LENGTH),
+    SLOPE_FLOOR("slope_floor", new SlopeFloor(), Category.DIAGONAL, BuildFeature.RAISED_EDGE, BuildFeature.PLANE_LENGTH),
 
     CIRCLE("circle", new Circle(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
     CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),

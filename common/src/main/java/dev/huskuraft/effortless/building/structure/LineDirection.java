@@ -25,9 +25,9 @@ public enum LineDirection implements SingleSelectFeature {
 
     @Override
     public String getCategory() {
-        return BuildFeature.PLANE_FACING.getName();
+        return BuildFeature.LINE_DIRECTION.getName();
     }
-    
+
     public Set<Axis> getAxes() {
         return switch (this) {
             case ALL -> Set.of(Axis.X, Axis.Y, Axis.Z);
