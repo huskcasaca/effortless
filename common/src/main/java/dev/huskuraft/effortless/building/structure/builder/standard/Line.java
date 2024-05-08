@@ -94,10 +94,17 @@ public class Line extends AbstractBlockStructure {
         var pos0 = context.getPosition(0);
         var pos1 = context.getPosition(1);
 
+        var x1 = pos0.x();
+        var y1 = pos0.y();
+        var z1 = pos0.z();
+        var x2 = pos1.x();
+        var y2 = pos1.y();
+        var z2 = pos1.z();
+
         switch (getShape(pos0, pos1)) {
-            case LINE_X -> addXLineBlocks(list, pos0.x(), pos1.x(), pos0.y(), pos0.z());
-            case LINE_Y -> addYLineBlocks(list, pos0.y(), pos1.y(), pos0.x(), pos0.z());
-            case LINE_Z -> addZLineBlocks(list, pos0.z(), pos1.z(), pos0.x(), pos0.y());
+            case LINE_X -> addXLineBlocks(list, x1, x2, y1, z1);
+            case LINE_Y -> addYLineBlocks(list, y1, y2, x1, z1);
+            case LINE_Z -> addZLineBlocks(list, z1, z2, x1, y1);
         }
 
         return list.stream();

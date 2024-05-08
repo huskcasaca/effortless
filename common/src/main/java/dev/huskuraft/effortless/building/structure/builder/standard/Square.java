@@ -84,27 +84,34 @@ public class Square extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectSquareBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.getPosition(0).x();
-        var y1 = context.getPosition(0).y();
-        var z1 = context.getPosition(0).z();
-        var x2 = context.getPosition(1).x();
-        var y2 = context.getPosition(1).y();
-        var z2 = context.getPosition(1).z();
+        var pos0 = context.getPosition(0);
+        var pos1 = context.getPosition(1);
 
-        if (y1 == y2) {
-            switch (context.planeFilling()) {
-                case PLANE_FULL -> addFullSquareBlocksY(list, x1, x2, y1, z1, z2);
-                case PLANE_HOLLOW -> addHollowSquareBlocksY(list, x1, x2, y1, z1, z2);
+        var x1 = pos0.x();
+        var y1 = pos0.y();
+        var z1 = pos0.z();
+        var x2 = pos1.x();
+        var y2 = pos1.y();
+        var z2 = pos1.z();
+
+        switch (getShape(pos0, pos1)) {
+            case PLANE_X -> {
+                switch (context.planeFilling()) {
+                    case PLANE_FULL -> addFullSquareBlocksX(list, x1, y1, y2, z1, z2);
+                    case PLANE_HOLLOW -> addHollowSquareBlocksX(list, x1, y1, y2, z1, z2);
+                };
             }
-        } else if (x1 == x2) {
-            switch (context.planeFilling()) {
-                case PLANE_FULL -> addFullSquareBlocksX(list, x1, y1, y2, z1, z2);
-                case PLANE_HOLLOW -> addHollowSquareBlocksX(list, x1, y1, y2, z1, z2);
+            case PLANE_Y -> {
+                switch (context.planeFilling()) {
+                    case PLANE_FULL -> addFullSquareBlocksY(list, x1, x2, y1, z1, z2);
+                    case PLANE_HOLLOW -> addHollowSquareBlocksY(list, x1, x2, y1, z1, z2);
+                }
             }
-        } else if (z1 == z2) {
-            switch (context.planeFilling()) {
-                case PLANE_FULL -> addFullSquareBlocksZ(list, x1, x2, y1, y2, z1);
-                case PLANE_HOLLOW -> addHollowSquareBlocksZ(list, x1, x2, y1, y2, z1);
+            case PLANE_Z -> {
+                switch (context.planeFilling()) {
+                    case PLANE_FULL -> addFullSquareBlocksZ(list, x1, x2, y1, y2, z1);
+                    case PLANE_HOLLOW -> addHollowSquareBlocksZ(list, x1, x2, y1, y2, z1);
+                }
             }
         }
 
