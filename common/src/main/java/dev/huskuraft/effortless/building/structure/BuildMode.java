@@ -26,15 +26,15 @@ public enum BuildMode {
     DISABLED("disabled", new Disable(), Category.BASIC),
     SINGLE("single", new Single(), Category.BASIC /*, BuildOption.BUILD_SPEED*/),
 
-    LINE("line", new Line(), Category.SQUARE /*, OptionEnum.THICKNESS*/),
+    LINE("line", new Line(), Category.SQUARE, BuildFeature.LINE_DIRECTION /*, OptionEnum.THICKNESS*/),
     //    SQUARE("square", new Square(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
     WALL("wall", new Wall(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_LENGTH),
     FLOOR("floor", new Floor(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_LENGTH),
     CUBE("cube", new Cube(), Category.SQUARE, BuildFeature.CUBE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
 
     DIAGONAL_LINE("diagonal_line", new DiagonalLine(), Category.DIAGONAL),
-    DIAGONAL_WALL("diagonal_wall", new DiagonalWall(), Category.DIAGONAL),
-    SLOPE_FLOOR("slope_floor", new SlopeFloor(), Category.DIAGONAL, BuildFeature.RAISED_EDGE),
+    DIAGONAL_WALL("diagonal_wall", new DiagonalWall(), Category.DIAGONAL, BuildFeature.PLANE_LENGTH),
+    SLOPE_FLOOR("slope_floor", new SlopeFloor(), Category.DIAGONAL, BuildFeature.RAISED_EDGE, BuildFeature.PLANE_LENGTH),
 
     CIRCLE("circle", new Circle(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
     CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),

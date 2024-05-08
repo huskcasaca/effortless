@@ -512,7 +512,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     private void cycleBuildMode(Player player, boolean reverse) {
-        getEntrance().getStructureBuilder().setBuildMode(player, BuildMode.values()[(getEntrance().getStructureBuilder().getContext(player).buildMode().ordinal() + (reverse ? -1 : 1 + BuildMode.values().length)) % BuildMode.values().length]);
+        getEntrance().getStructureBuilder().setBuildMode(player, BuildMode.values()[(getEntrance().getStructureBuilder().getContext(player).buildMode().ordinal() + (reverse ? -1 : 1) + BuildMode.values().length) % BuildMode.values().length]);
     }
 
     private void playRadialMenuSound() {

@@ -1,7 +1,9 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
@@ -12,20 +14,23 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 public class Cone extends AbstractBlockStructure {
 
     protected static Stream<BlockPosition> collectConeBlocks(Context context) {
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
-        var list = new ArrayList<BlockPosition>();
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
+        var pos3 = context.getPosition(2);
 
-        var x1 = context.firstBlockPosition().x();
-        var y1 = context.firstBlockPosition().y();
-        var z1 = context.firstBlockPosition().z();
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
 
-        var x2 = context.secondBlockPosition().x();
-        var y2 = context.secondBlockPosition().y();
-        var z2 = context.secondBlockPosition().z();
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
 
-        var x3 = context.thirdBlockPosition().x();
-        var y3 = context.thirdBlockPosition().y();
-        var z3 = context.thirdBlockPosition().z();
+        var x3 = pos3.x();
+        var y3 = pos3.y();
+        var z3 = pos3.z();
 
         var minX = Math.min(x1, x2);
         var minZ = Math.min(z1, z2);
@@ -51,46 +56,35 @@ public class Cone extends AbstractBlockStructure {
             for (int x = minX; x <= maxX; ++x) {
                 for (int z = minZ; z <= maxZ; ++z) {
                     if (Circle.isPosInCircle(centerX, centerZ, radiusX1, radiusZ1, x, z, true)) {
-                        list.add(new BlockPosition(x, y, z));
+                        set.add(new BlockPosition(x, y, z));
                     }
                 }
             }
         }
-        return list.stream();
+        return set.stream();
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Floor.traceFloor(player, context);
+            case 2 -> Line.traceLineY(player, context.getPosition(1));
+            default -> null;
+        };
     }
 
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return Floor.traceFloor(player, context);
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Circle.collectCircleBlocks(context);
+            case 3 -> Cone.collectConeBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
-    @Override
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        return traceLineY(player, context);
-    }
 
     @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Single.collectSingleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return Circle.collectCircleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
-        return Cone.collectConeBlocks(context);
-    }
-
-    @Override
-    public int totalClicks(Context context) {
+    public int traceSize(Context context) {
         return 3;
     }
 }

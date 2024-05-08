@@ -15,9 +15,9 @@ import dev.huskuraft.effortless.building.Feature;
 import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.Option;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
+import dev.huskuraft.effortless.building.config.PassiveMode;
 import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.replace.PassiveMode;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
@@ -27,7 +27,7 @@ public class EffortlessPatternWheelScreen extends AbstractWheelScreen<Pattern, O
 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
-    private static final Button<Option> SETTING_OPTION = button(Settings.GENERAL);
+    private static final Button<Option> SETTING_OPTION = button(Settings.SETTINGS);
     private static final Button<Option> REPLACE_OPTION = button(ReplaceMode.DISABLED);
 
     private final Key assignedKey;
@@ -120,7 +120,7 @@ public class EffortlessPatternWheelScreen extends AbstractWheelScreen<Pattern, O
         setRadialOptionSelectResponder(entry -> {
             if (entry.getContent() instanceof Settings settings) {
                 switch (settings) {
-                    case GENERAL -> {
+                    case SETTINGS -> {
                         new EffortlessSettingsScreen(getEntrance()).attach();
                         detach();
                     }

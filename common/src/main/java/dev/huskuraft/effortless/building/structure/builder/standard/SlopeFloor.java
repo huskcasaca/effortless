@@ -1,126 +1,111 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.stream.Stream;
 
+import com.google.common.collect.Sets;
+
+import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.RaisedEdge;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
 public class SlopeFloor extends AbstractBlockStructure {
 
-    // add slope floor from first to second
     public static Stream<BlockPosition> collectSlopeFloorBlocks(Context context) {
-        var list = new ArrayList<BlockPosition>();
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
-        var x1 = context.firstBlockPosition().x();
-        var y1 = context.firstBlockPosition().y();
-        var z1 = context.firstBlockPosition().z();
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
+        var pos3 = context.getPosition(2);
 
-        var x2 = context.secondBlockPosition().x();
-        var y2 = context.secondBlockPosition().y();
-        var z2 = context.secondBlockPosition().z();
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
 
-        var x3 = context.thirdBlockPosition().x();
-        var y3 = context.thirdBlockPosition().y();
-        var z3 = context.thirdBlockPosition().z();
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
 
-        int axisLimit = context.axisLimitation();
+        var x3 = pos3.x();
+        var y3 = pos3.y();
+        var z3 = pos3.z();
 
-        // determine whether to use x or z axis to slope up
-        boolean onXAxis = true;
+        var axisLimit = context.axisLimitation();
 
-        int xLength = MathUtils.abs(x2 - x1);
-        int zLength = MathUtils.abs(z2 - z1);
+        var xLength = MathUtils.abs(x2 - x1);
+        var zLength = MathUtils.abs(z2 - z1);
 
-        if (context.raisedEdge() == RaisedEdge.RAISE_SHORT_EDGE) {
-            // slope along short edge
-            if (zLength > xLength) onXAxis = false;
-        } else {
-            // slope along long edge
-            if (zLength <= xLength) onXAxis = false;
-        }
-
-        if (onXAxis) {
-            // along X goes up
-
-            // get diagonal line blocks
-            // FIXME: 8/8/23 block hit location is not correct
-            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.firstBlockInteraction().withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.firstBlockInteraction().withBlockPosition(new BlockPosition(x2, y3, z1))), 1f).toList();
-
-            // limit amount of blocks we can place
-            int lowest = MathUtils.min(z1, z2);
-            int highest = MathUtils.max(z1, z2);
-
-            if (highest - lowest >= axisLimit) highest = lowest + axisLimit - 1;
-
-            // copy diagonal line on x axis
-            for (int z = lowest; z <= highest; z++) {
-                for (BlockPosition blockPosition : diagonalLineBlocks) {
-                    list.add(new BlockPosition(blockPosition.x(), blockPosition.y(), z));
+        var axis = switch (context.raisedEdge()) {
+            case RAISE_SHORT_EDGE -> {
+                if (zLength > xLength) {
+                    yield Axis.Z;
+                } else {
+                    yield Axis.X;
                 }
             }
+            case RAISE_LONG_EDGE -> {
+                if (zLength > xLength) {
+                    yield Axis.X;
+                } else {
+                    yield Axis.Z;
+                }
+            }
+        };
 
-        } else {
-            // along Z goes up
+        switch (axis) {
+            case X -> {
+                var line = DiagonalLine.collectDiagonalLine(new BlockPosition(x1, y1, z1), new BlockPosition(x2, y3, z1), 0, false).toList();
+                var lowest = MathUtils.min(z1, z2);
+                var highest = MathUtils.max(z1, z2);
+                if (highest - lowest >= axisLimit) highest = lowest + axisLimit - 1;
 
-            // get diagonal line blocks
-            // FIXME: 8/8/23 block hit location is not correct
-            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.firstBlockInteraction().withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.firstBlockInteraction().withBlockPosition(new BlockPosition(x1, y3, z2))), 1f).toList();
+                for (var z = lowest; z <= highest; z++) {
+                    for (var blockPosition : line) {
+                        set.add(new BlockPosition(blockPosition.x(), blockPosition.y(), z));
+                    }
+                }
+            }
+            case Z -> {
+                var line = DiagonalLine.collectDiagonalLine(new BlockPosition(x1, y1, z1), new BlockPosition(x1, y3, z2), 0, false).toList();
+                var lowest = MathUtils.min(x1, x2);
+                var highest = MathUtils.max(x1, x2);
+                if (highest - lowest >= axisLimit) highest = lowest + axisLimit - 1;
 
-            // limit amount of blocks we can place
-            int lowest = MathUtils.min(x1, x2);
-            int highest = MathUtils.max(x1, x2);
-
-            if (highest - lowest >= axisLimit) highest = lowest + axisLimit - 1;
-
-            // copy diagonal line on x axis
-            for (int x = lowest; x <= highest; x++) {
-                for (BlockPosition blockPosition : diagonalLineBlocks) {
-                    list.add(new BlockPosition(x, blockPosition.y(), blockPosition.z()));
+                for (var x = lowest; x <= highest; x++) {
+                    for (var blockPosition : line) {
+                        set.add(new BlockPosition(x, blockPosition.y(), blockPosition.z()));
+                    }
                 }
             }
         }
 
-        return list.stream();
+        return set.stream();
+    }
+
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Floor.traceFloor(player, context);
+            case 2 -> Line.traceLineY(player, context.getPosition(1));
+            default -> null;
+        };
+    }
+
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Floor.collectFloorBlocks(context);
+            case 3 -> SlopeFloor.collectSlopeFloorBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
     @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return Floor.traceFloor(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        return traceLineY(player, context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Single.collectSingleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return Floor.collectFloorBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
-        return collectSlopeFloorBlocks(context);
-    }
-
-    @Override
-    public int totalClicks(Context context) {
+    public int traceSize(Context context) {
         return 3;
     }
 }

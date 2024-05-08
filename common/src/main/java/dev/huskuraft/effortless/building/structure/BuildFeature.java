@@ -9,6 +9,7 @@ public enum BuildFeature {
     PLANE_FACING("plane_facing", PlaneFacing.values()),
     PLANE_FILLING("plane_filling", PlaneFilling.values()),
     PLANE_LENGTH("plane_length", PlaneLength.values()),
+    LINE_DIRECTION("line_direction", LineDirection.values()),
     RAISED_EDGE("raised_edge", RaisedEdge.values()),
     ;
 

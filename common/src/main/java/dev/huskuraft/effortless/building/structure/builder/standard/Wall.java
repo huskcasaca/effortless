@@ -1,13 +1,16 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
@@ -15,21 +18,25 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 
 public class Wall extends AbstractBlockStructure {
 
-    public static BlockInteraction traceWall(Player player, Context context) {
-        var center = context.firstBlockPosition().getCenter();
-        var reach = context.maxNextReachDistance();
-        var skipRaytrace = context.skipRaytrace();
+    protected static BlockInteraction traceWall(Player player, Context context) {
+        return traceWall(player, context.getInteraction(0), context.structureParams().planeLength() == PlaneLength.EQUAL);
+    }
+
+    protected static BlockInteraction traceWall(Player player, BlockInteraction start, boolean uniformLength) {
+        var center = start.getBlockPosition().getCenter();
+        var reach = 1024;
+        var skipRaytrace = false;
 
         var result = Stream.of(
                         new WallCriteria(Axis.X, player, center, reach, skipRaytrace),
                         new WallCriteria(Axis.Z, player, center, reach, skipRaytrace)
                 )
                 .filter(AxisCriteria::isInRange)
-                .min(Comparator.comparing(WallCriteria::distanceAngle))
+                .min(Comparator.comparing(WallCriteria::angle))
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return transformUniformLengthInteraction(context.firstBlockInteraction(), result, context.structureParams().planeLength() == PlaneLength.EQUAL);
+        return transformUniformLengthInteraction(start, result, uniformLength);
     }
 
 
@@ -38,60 +45,59 @@ public class Wall extends AbstractBlockStructure {
     }
 
     public static Stream<BlockPosition> collectWallBlocks(Context context) {
-        var list = new ArrayList<BlockPosition>();
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
-        var x1 = context.firstBlockPosition().x();
-        var y1 = context.firstBlockPosition().y();
-        var z1 = context.firstBlockPosition().z();
-        var x2 = context.secondBlockPosition().x();
-        var y2 = context.secondBlockPosition().y();
-        var z2 = context.secondBlockPosition().z();
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
 
-        if (x1 == x2) {
-            switch (context.planeFilling()) {
-                case PLANE_FULL -> Square.addFullSquareBlocksX(list, x1, y1, y2, z1, z2);
-                case PLANE_HOLLOW -> Square.addHollowSquareBlocksX(list, x1, y1, y2, z1, z2);
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
+
+        switch (getShape(pos1, pos2)) {
+            case PLANE_Z -> {
+                switch (context.planeFilling()) {
+                    case PLANE_FULL -> Square.addFullSquareBlocksZ(set, x1, x2, y1, y2, z1);
+                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksZ(set, x1, x2, y1, y2, z1);
+                }
             }
-        } else if (z1 == z2) {
-            switch (context.planeFilling()) {
-                case PLANE_FULL -> Square.addFullSquareBlocksZ(list, x1, x2, y1, y2, z1);
-                case PLANE_HOLLOW -> Square.addHollowSquareBlocksZ(list, x1, x2, y1, y2, z1);
+            case PLANE_X -> {
+                switch (context.planeFilling()) {
+                    case PLANE_FULL -> Square.addFullSquareBlocksX(set, x1, y1, y2, z1, z2);
+                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksX(set, x1, y1, y2, z1, z2);
+                }
             }
         }
 
-        return list.stream();
+        return set.stream();
     }
 
-    @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> Wall.traceWall(player, context);
+            default -> null;
+        };
     }
 
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        return traceWall(player, context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return collectWallBlocks(context);
-    }
-
-    @Override
-    public Stream<BlockPosition> collect(Context context) {
-        return switch (context.interactionsSize()) {
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
             case 2 -> Wall.collectWallBlocks(context);
             default -> Stream.empty();
         };
     }
 
+
     @Override
-    public int totalClicks(Context context) {
+    public int traceSize(Context context) {
         return 2;
     }
 
-    public static class WallCriteria extends AxisCriteria {
+    protected static class WallCriteria extends AxisCriteria {
 
         public WallCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
             super(axis, player, center, reach, skipRaytrace);
@@ -99,7 +105,7 @@ public class Wall extends AbstractBlockStructure {
 
         public double angle() {
             var wall = planeVec().sub(startVec());
-            return wall.x() * look.x() + wall.z() * look.z();
+            return MathUtils.abs(wall.x() * look.x()) + Math.abs(wall.z() * look.z());
         }
 
         public double distanceAngle() {

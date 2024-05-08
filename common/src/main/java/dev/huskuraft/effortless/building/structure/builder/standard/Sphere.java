@@ -1,15 +1,16 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.CircleStart;
-import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
@@ -37,56 +38,53 @@ public class Sphere extends AbstractBlockStructure {
 
     }
 
-    private static double lengthSq(double x, double y, double z) {
-        return (x * x) + (y * y) + (z * z);
-    }
-
-    public static void addSphereBlocks(List<BlockPosition> list, int x1, int y1, int z1, int x2, int y2, int z2,
-                                       float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, boolean fill) {
-
+    public static void addSphereBlocks(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, boolean fill) {
         for (int x11 = x1; x1 < x2 ? x11 <= x2 : x11 >= x2; x11 += x1 < x2 ? 1 : -1) {
             for (int z11 = z1; z1 < z2 ? z11 <= z2 : z11 >= z2; z11 += z1 < z2 ? 1 : -1) {
                 for (int y11 = y1; y1 < y2 ? y11 <= y2 : y11 >= y2; y11 += y1 < y2 ? 1 : -1) {
                     if (isPosInSphere(centerX, centerY, centerZ, radiusX, radiusY, radiusZ, x11, y11, z11, fill))
-                        list.add(new BlockPosition(x11, y11, z11));
+                        set.add(new BlockPosition(x11, y11, z11));
                 }
             }
         }
     }
 
     public static Stream<BlockPosition> collectSphereBlocks(Context context) {
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
-        var list = new ArrayList<BlockPosition>();
-
-        var isHorizontal = context.buildFeatures().contains(PlaneFacing.HORIZONTAL);
         var isCenter = context.circleStart() == CircleStart.CIRCLE_START_CENTER;
         var isFull = context.planeFilling() == PlaneFilling.PLANE_FULL;
 
-        var x1 = context.firstBlockPosition().x();
-        var y1 = context.firstBlockPosition().y();
-        var z1 = context.firstBlockPosition().z();
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
+        var pos3 = context.getPosition(2);
 
-        var x2 = context.secondBlockPosition().x();
-        var y2 = context.secondBlockPosition().y();
-        var z2 = context.secondBlockPosition().z();
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
 
-        var x3 = context.thirdBlockPosition().x();
-        var y3 = context.thirdBlockPosition().y();
-        var z3 = context.thirdBlockPosition().z();
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
+
+        var x3 = pos3.x();
+        var y3 = pos3.y();
+        var z3 = pos3.z();
 
         if (isCenter) {
+            // FIXME: 8/5/24 3
             x1 = (x1 - x2) * 2 + x1;
             y1 = (y1 - y2) * 2 + y1;
             z1 = (z1 - z2) * 2 + z1;
         }
 
-        var minX = isHorizontal ? Math.min(x1, x2) : Math.min(x1, Math.min(x2, x3));
-        var minY = isHorizontal ? Math.min(y3, Math.min(y1, y2)) : Math.min(y1, y2);
-        var minZ = isHorizontal ? Math.min(z1, z2) : Math.min(z1, Math.min(z2, z3));
+        var minX = MathUtils.min(x1, MathUtils.min(x2, x3));
+        var minY = MathUtils.min(y1, MathUtils.min(y2, y3));
+        var minZ = MathUtils.min(z1, MathUtils.min(z2, z3));
 
-        var maxX = isHorizontal ? Math.max(x1, x2) : Math.max(x1, Math.max(x2, x3));
-        var maxY = isHorizontal ? Math.max(y3, Math.max(y1, y2)) : Math.max(y1, y2);
-        var maxZ = isHorizontal ? Math.max(z1, z2) : Math.max(z1, Math.max(z2, z3));
+        var maxX = MathUtils.max(x1, MathUtils.max(x2, x3));
+        var maxY = MathUtils.max(y1, MathUtils.max(y2, y3));
+        var maxZ = MathUtils.max(z1, MathUtils.max(z2, z3));
 
         var centerX = (minX + maxX) / 2f;
         var centerY = (minY + maxY) / 2f;
@@ -96,55 +94,39 @@ public class Sphere extends AbstractBlockStructure {
         var radiusY = (maxY - minY) / 2f;
         var radiusZ = (maxZ - minZ) / 2f;
 
-        addSphereBlocks(list, minX, minY, minZ, maxX, maxY, maxZ, centerX, centerY, centerZ, radiusX, radiusY, radiusZ, isFull);
+        addSphereBlocks(set, minX, minY, minZ, maxX, maxY, maxZ, centerX, centerY, centerZ, radiusX, radiusY, radiusZ, isFull);
 
-        return list.stream();
+        return set.stream();
+    }
+
+    protected BlockInteraction trace(Player player, Context context, int index) {
+        return switch (index) {
+            case 0 -> Single.traceSingle(player, context);
+            case 1 -> switch (context.planeFacing()) {
+                case BOTH -> Square.traceSquare(player, context);
+                case VERTICAL -> Wall.traceWall(player, context);
+                case HORIZONTAL -> Floor.traceFloor(player, context);
+            };
+            case 2 -> switch (context.planeFacing()) {
+                case BOTH -> Line.traceLineOnPlane(player, context.getPosition(0), context.getPosition(1));
+                case VERTICAL -> Line.traceLineOnVerticalPlane(player, context.getPosition(0), context.getPosition(1));
+                case HORIZONTAL -> Line.traceLineOnHorizontalPlane(player, context.getPosition(0), context.getPosition(1));
+            };
+            default -> null;
+        };
+    }
+
+    protected Stream<BlockPosition> collect(Context context, int index) {
+        return switch (index) {
+            case 1 -> Single.collectSingleBlocks(context);
+            case 2 -> Circle.collectCircleBlocks(context);
+            case 3 -> Sphere.collectSphereBlocks(context);
+            default -> Stream.empty();
+        };
     }
 
     @Override
-    protected BlockInteraction traceFirstInteraction(Player player, Context context) {
-        return Single.traceSingle(player, context);
-    }
-
-    @Override
-    protected BlockInteraction traceSecondInteraction(Player player, Context context) {
-        if (context.planeFacing() == PlaneFacing.HORIZONTAL) {
-            return Floor.traceFloor(player, context);
-        } else {
-            return Wall.traceWall(player, context);
-        }
-    }
-
-    @Override
-    protected BlockInteraction traceThirdInteraction(Player player, Context context) {
-        if (context.planeFacing() == PlaneFacing.HORIZONTAL) {
-            return traceLineY(player, context);
-        } else {
-            if (context.firstBlockPosition().x() == context.secondBlockPosition().x()) {
-                return tracePlaneZ(player, context);
-            } else {
-                return tracePlaneX(player, context);
-            }
-        }
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectFirstBlocks(Context context) {
-        return Single.collectSingleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectSecondBlocks(Context context) {
-        return Circle.collectCircleBlocks(context);
-    }
-
-    @Override
-    protected Stream<BlockPosition> collectThirdBlocks(Context context) {
-        return collectSphereBlocks(context);
-    }
-
-    @Override
-    public int totalClicks(Context context) {
+    public int traceSize(Context context) {
         return 3;
     }
 }

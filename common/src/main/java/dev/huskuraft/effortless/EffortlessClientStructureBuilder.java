@@ -107,12 +107,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_ONCE);
             var result = new BatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
 
-//            if (finalizedContext.type() != BuildType.COMMAND) {
+//            if (finalizedContext.buildType() != BuildType.COMMAND) {
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
 //            }
 
-            showBuildContextResult(context.getId(), 1024, player, context, result);
-            showBuildTooltip(context.getId(), 1024, player, context, result);
+            showBuildContextResult(context.id(), 1024, player, context, result);
+            showBuildTooltip(context.id(), 1024, player, context, result);
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
             setContext(player, context.newInteraction());
 
@@ -274,7 +274,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_entity"), true);
                 return context.newInteraction();
             }
-            if (context.isBuilding() && context.state() != state) {
+            if (context.isBuilding() && context.buildState() != state) {
                 player.sendClientMessage(Text.translate("effortless.message.building.build_canceled"), true);
                 return context.newInteraction();
             }
@@ -292,20 +292,20 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
 
             if (!nextContext.isBoxVolumeInBounds()) {
-                if (nextContext.state() == BuildState.PLACE_BLOCK) {
+                if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large").getString() + " (" + nextContext.getBoxVolume() + "/" + nextContext.getMaxBoxVolume() + ")", true);
                 }
-                if (nextContext.state() == BuildState.BREAK_BLOCK) {
+                if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large").getString() + " (" + nextContext.getBoxVolume() + "/" + nextContext.getMaxBoxVolume() + ")", true);
                 }
                 return context.newInteraction();
             }
 
             if (!nextContext.isBoxSideLengthInBounds()) {
-                if (nextContext.state() == BuildState.PLACE_BLOCK) {
+                if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_side_length_too_large").getString() + " (" + nextContext.getBoxSideLength() + "/" + nextContext.getMaxBoxSideLength() + ")", true);
                 }
-                if (nextContext.state() == BuildState.BREAK_BLOCK) {
+                if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_side_length_too_large").getString() + " (" + nextContext.getBoxSideLength() + "/" + nextContext.getMaxBoxSideLength() + ")", true);
                 }
                 return context.newInteraction();
@@ -326,7 +326,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
 
         showBuildContextResult(player.getId(), 1, player, context, result);
-        showBuildTooltip(context.getId(), 1, player, context, result);
+        showBuildTooltip(context.id(), 1, player, context, result);
     }
 
     public void onHistoryResultReceived(Player player, HistoryResult historyResult) {
@@ -443,10 +443,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
         getEntrance().getClientManager().getPatternRenderer().showPattern(uuid, context);
 
-        if (context.interactions().isEmpty()) {
+        if (context.buildInteractions().isEmpty()) {
             getEntrance().getClientManager().getOutlineRenderer().remove(generateId(uuid, BoundingBox3d.class));
         } else {
-            var box = BoundingBox3d.fromLowerCornersOf(context.interactions().results().stream().filter(Objects::nonNull).map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new));
+            var box = BoundingBox3d.fromLowerCornersOf(context.buildInteractions().results().stream().filter(Objects::nonNull).map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new));
             getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(generateId(uuid, BoundingBox3d.class), box)
                     .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                     .lightMap(LightTexture.FULL_BLOCK)
@@ -539,7 +539,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         entries.add(texts);
 
         entries.add(context.buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries, context.type() == BuildType.BUILD);
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries, context.buildType() == BuildType.BUILD);
 
     }
 
@@ -555,14 +555,14 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 }
                 case FAILED -> {
                     message = Text.translate("effortless.message.building.cannot_reach_target").withStyle(ChatFormatting.WHITE).getString();
-                    var interaction = context.interactions().results().stream().filter(result -> result != null && result.getTarget() == Interaction.Target.MISS).findAny();
+                    var interaction = context.buildInteractions().results().stream().filter(result -> result != null && result.getTarget() == Interaction.Target.MISS).findAny();
                     if (interaction.isPresent()) {
                         message += " (" + interaction.get().getBlockPosition().distance(player.getPosition().toVector3i()) + "/" + context.customParams().generalConfig().maxReachDistance() + ")";
                     }
                 }
             }
         } else {
-            message = getStateComponent(context.state()) + " "
+            message = getStateComponent(context.buildState()) + " "
                     + context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD).getString() + " "
                     + "("
                     + (context.getInteractionBox().x() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().x() + ChatFormatting.RESET
@@ -571,7 +571,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     + "x"
                     + (context.getInteractionBox().z() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().z() + ChatFormatting.RESET
                     + "="
-                    + (context.getInteractionBox().volume() > context.getMaxBoxVolume() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().volume() + ChatFormatting.RESET
+                    + (!context.isBoxVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getBoxVolume() + ChatFormatting.RESET
                     + ")";
         }
 
