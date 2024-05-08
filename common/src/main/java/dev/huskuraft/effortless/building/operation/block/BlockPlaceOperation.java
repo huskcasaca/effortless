@@ -16,7 +16,6 @@ import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
-import dev.huskuraft.effortless.building.replace.ReplaceMode;
 
 public class BlockPlaceOperation extends BlockOperation {
 
@@ -101,7 +100,7 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
-        if (context.replaceMode() == ReplaceMode.QUICK && !player.destroyBlock(getInteraction())) {
+        if (context.replaceMode().isReplace() && !player.destroyBlock(getInteraction())) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 
