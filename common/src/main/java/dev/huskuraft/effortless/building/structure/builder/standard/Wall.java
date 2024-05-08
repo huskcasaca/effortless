@@ -1,8 +1,10 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
@@ -43,7 +45,7 @@ public class Wall extends AbstractBlockStructure {
     }
 
     public static Stream<BlockPosition> collectWallBlocks(Context context) {
-        var list = new ArrayList<BlockPosition>();
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
         var pos2 = context.getPosition(1);
@@ -58,19 +60,19 @@ public class Wall extends AbstractBlockStructure {
         switch (getShape(pos1, pos2)) {
             case PLANE_Z -> {
                 switch (context.planeFilling()) {
-                    case PLANE_FULL -> Square.addFullSquareBlocksZ(list, x1, x2, y1, y2, z1);
-                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksZ(list, x1, x2, y1, y2, z1);
+                    case PLANE_FULL -> Square.addFullSquareBlocksZ(set, x1, x2, y1, y2, z1);
+                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksZ(set, x1, x2, y1, y2, z1);
                 }
             }
             case PLANE_X -> {
                 switch (context.planeFilling()) {
-                    case PLANE_FULL -> Square.addFullSquareBlocksX(list, x1, y1, y2, z1, z2);
-                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksX(list, x1, y1, y2, z1, z2);
+                    case PLANE_FULL -> Square.addFullSquareBlocksX(set, x1, y1, y2, z1, z2);
+                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksX(set, x1, y1, y2, z1, z2);
                 }
             }
         }
 
-        return list.stream();
+        return set.stream();
     }
 
     protected BlockInteraction trace(Player player, Context context, int index) {

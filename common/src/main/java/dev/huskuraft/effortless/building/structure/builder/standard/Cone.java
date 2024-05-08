@@ -1,7 +1,9 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
@@ -12,8 +14,7 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 public class Cone extends AbstractBlockStructure {
 
     protected static Stream<BlockPosition> collectConeBlocks(Context context) {
-
-        var list = new ArrayList<BlockPosition>();
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
         var pos2 = context.getPosition(1);
@@ -55,12 +56,12 @@ public class Cone extends AbstractBlockStructure {
             for (int x = minX; x <= maxX; ++x) {
                 for (int z = minZ; z <= maxZ; ++z) {
                     if (Circle.isPosInCircle(centerX, centerZ, radiusX1, radiusZ1, x, z, true)) {
-                        list.add(new BlockPosition(x, y, z));
+                        set.add(new BlockPosition(x, y, z));
                     }
                 }
             }
         }
-        return list.stream();
+        return set.stream();
     }
 
     protected BlockInteraction trace(Player player, Context context, int index) {

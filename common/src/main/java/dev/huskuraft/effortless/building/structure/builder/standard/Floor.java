@@ -1,7 +1,9 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
@@ -34,7 +36,7 @@ public class Floor extends AbstractBlockStructure {
     }
 
     public static Stream<BlockPosition> collectFloorBlocks(Context context) {
-        var list = new ArrayList<BlockPosition>();
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
         var pos2 = context.getPosition(1);
@@ -49,13 +51,13 @@ public class Floor extends AbstractBlockStructure {
         switch (getShape(pos1, pos2)) {
             case PLANE_Y -> {
                 switch (context.planeFilling()) {
-                    case PLANE_FULL -> Square.addFullSquareBlocksY(list, x1, x2, y1, z1, z2);
-                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksY(list, x1, x2, y1, z1, z2);
+                    case PLANE_FULL -> Square.addFullSquareBlocksY(set, x1, x2, y1, z1, z2);
+                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksY(set, x1, x2, y1, z1, z2);
                 }
             }
         }
 
-        return list.stream();
+        return set.stream();
     }
 
     protected BlockInteraction trace(Player player, Context context, int index) {

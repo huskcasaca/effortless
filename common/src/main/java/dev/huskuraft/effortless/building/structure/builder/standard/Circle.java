@@ -1,8 +1,9 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
@@ -34,38 +35,38 @@ public class Circle extends AbstractBlockStructure {
 
     }
 
-    public static void addFullCircleBlocksX(List<BlockPosition> list, int x1, int y1, int z1, int x2, int y2, int z2, float centerY, float centerZ, float radiusY, float radiusZ, boolean fill) {
+    public static void addFullCircleBlocksX(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerY, float centerZ, float radiusY, float radiusZ, boolean fill) {
         for (int y = y1; y1 < y2 ? y <= y2 : y >= y2; y += y1 < y2 ? 1 : -1) {
             for (int z = z1; z1 < z2 ? z <= z2 : z >= z2; z += z1 < z2 ? 1 : -1) {
                 var radius = isPosInCircle(centerY, centerZ, radiusY, radiusZ, y, z, fill);
                 if (radius)
-                    list.add(new BlockPosition(x1, y, z));
+                    set.add(new BlockPosition(x1, y, z));
             }
         }
     }
 
-    public static void addFullCircleBlocksY(List<BlockPosition> list, int x1, int y1, int z1, int x2, int y2, int z2, float centerX, float centerZ, float radiusX, float radiusZ, boolean fill) {
+    public static void addFullCircleBlocksY(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerX, float centerZ, float radiusX, float radiusZ, boolean fill) {
         for (int l = x1; x1 < x2 ? l <= x2 : l >= x2; l += x1 < x2 ? 1 : -1) {
             for (int n = z1; z1 < z2 ? n <= z2 : n >= z2; n += z1 < z2 ? 1 : -1) {
                 var radius = isPosInCircle(centerX, centerZ, radiusX, radiusZ, l, n, fill);
                 if (radius)
-                    list.add(new BlockPosition(l, y1, n));
+                    set.add(new BlockPosition(l, y1, n));
             }
         }
     }
 
-    public static void addFullCircleBlocksZ(List<BlockPosition> list, int x1, int y1, int z1, int x2, int y2, int z2, float centerY, float centerX, float radiusY, float radiusX, boolean fill) {
+    public static void addFullCircleBlocksZ(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerY, float centerX, float radiusY, float radiusX, boolean fill) {
         for (int y = y1; y1 < y2 ? y <= y2 : y >= y2; y += y1 < y2 ? 1 : -1) {
             for (int x = x1; x1 < x2 ? x <= x2 : x >= x2; x += x1 < x2 ? 1 : -1) {
                 var radius = isPosInCircle(centerY, centerX, radiusY, radiusX, y, x, fill);
                 if (radius)
-                    list.add(new BlockPosition(x, y, z1));
+                    set.add(new BlockPosition(x, y, z1));
             }
         }
     }
 
     public static Stream<BlockPosition> collectCircleBlocks(Context context) {
-        var list = new ArrayList<BlockPosition>();
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var isCenter = context.circleStart() == CircleStart.CIRCLE_START_CENTER;
         var isFill = context.planeFilling() == PlaneFilling.PLANE_FULL;
@@ -95,12 +96,12 @@ public class Circle extends AbstractBlockStructure {
         var radiusZ = MathUtils.abs(z2 - centerZ);
 
         switch (getShape(pos1, pos2)) {
-            case PLANE_X -> addFullCircleBlocksX(list, x1, y1, z1, x2, y2, z2, centerY, centerZ, radiusY, radiusZ, isFill);
-            case PLANE_Y -> addFullCircleBlocksY(list, x1, y1, z1, x2, y2, z2, centerX, centerZ, radiusX, radiusZ, isFill);
-            case PLANE_Z -> addFullCircleBlocksZ(list, x1, y1, z1, x2, y2, z2, centerY, centerX, radiusY, radiusX, isFill);
+            case PLANE_X -> addFullCircleBlocksX(set, x1, y1, z1, x2, y2, z2, centerY, centerZ, radiusY, radiusZ, isFill);
+            case PLANE_Y -> addFullCircleBlocksY(set, x1, y1, z1, x2, y2, z2, centerX, centerZ, radiusX, radiusZ, isFill);
+            case PLANE_Z -> addFullCircleBlocksZ(set, x1, y1, z1, x2, y2, z2, centerY, centerX, radiusY, radiusX, isFill);
         }
 
-        return list.stream();
+        return set.stream();
     }
 
     @Override

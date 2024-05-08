@@ -1,8 +1,9 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
@@ -37,21 +38,19 @@ public class Sphere extends AbstractBlockStructure {
 
     }
 
-    public static void addSphereBlocks(List<BlockPosition> list, int x1, int y1, int z1, int x2, int y2, int z2,
-                                       float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, boolean fill) {
-
+    public static void addSphereBlocks(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, boolean fill) {
         for (int x11 = x1; x1 < x2 ? x11 <= x2 : x11 >= x2; x11 += x1 < x2 ? 1 : -1) {
             for (int z11 = z1; z1 < z2 ? z11 <= z2 : z11 >= z2; z11 += z1 < z2 ? 1 : -1) {
                 for (int y11 = y1; y1 < y2 ? y11 <= y2 : y11 >= y2; y11 += y1 < y2 ? 1 : -1) {
                     if (isPosInSphere(centerX, centerY, centerZ, radiusX, radiusY, radiusZ, x11, y11, z11, fill))
-                        list.add(new BlockPosition(x11, y11, z11));
+                        set.add(new BlockPosition(x11, y11, z11));
                 }
             }
         }
     }
 
     public static Stream<BlockPosition> collectSphereBlocks(Context context) {
-        var list = new ArrayList<BlockPosition>();
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var isCenter = context.circleStart() == CircleStart.CIRCLE_START_CENTER;
         var isFull = context.planeFilling() == PlaneFilling.PLANE_FULL;
@@ -95,9 +94,9 @@ public class Sphere extends AbstractBlockStructure {
         var radiusY = (maxY - minY) / 2f;
         var radiusZ = (maxZ - minZ) / 2f;
 
-        addSphereBlocks(list, minX, minY, minZ, maxX, maxY, maxZ, centerX, centerY, centerZ, radiusX, radiusY, radiusZ, isFull);
+        addSphereBlocks(set, minX, minY, minZ, maxX, maxY, maxZ, centerX, centerY, centerZ, radiusX, radiusY, radiusZ, isFull);
 
-        return list.stream();
+        return set.stream();
     }
 
     protected BlockInteraction trace(Player player, Context context, int index) {

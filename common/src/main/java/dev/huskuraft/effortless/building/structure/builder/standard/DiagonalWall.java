@@ -1,7 +1,9 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
@@ -14,7 +16,7 @@ public class DiagonalWall extends AbstractBlockStructure {
 
     // add diagonal wall from first to second
     public static Stream<BlockPosition> collectDiagonalWallBlocks(Context context) {
-        var list = new ArrayList<BlockPosition>();
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
         var pos2 = context.getPosition(1);
@@ -41,11 +43,11 @@ public class DiagonalWall extends AbstractBlockStructure {
         // copy diagonal line on y axis
         for (int y = lowest; y <= highest; y++) {
             for (BlockPosition blockPosition : diagonalLineBlocks) {
-                list.add(new BlockPosition(blockPosition.x(), y, blockPosition.z()));
+                set.add(new BlockPosition(blockPosition.x(), y, blockPosition.z()));
             }
         }
 
-        return list.stream();
+        return set.stream();
     }
 
     protected BlockInteraction trace(Player player, Context context, int index) {

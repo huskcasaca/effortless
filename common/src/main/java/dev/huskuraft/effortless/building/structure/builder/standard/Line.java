@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
@@ -111,7 +111,7 @@ public class Line extends AbstractBlockStructure {
     }
 
     public static Stream<BlockPosition> collectLineBlocks(Context context) {
-        var list = new ArrayList<BlockPosition>();
+        Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
         var pos2 = context.getPosition(1);
@@ -124,29 +124,29 @@ public class Line extends AbstractBlockStructure {
         var z2 = pos2.z();
 
         switch (getShape(pos1, pos2)) {
-            case LINE_X -> addXLineBlocks(list, x1, x2, y1, z1);
-            case LINE_Y -> addYLineBlocks(list, y1, y2, x1, z1);
-            case LINE_Z -> addZLineBlocks(list, z1, z2, x1, y1);
+            case LINE_X -> addXLineBlocks(set, x1, x2, y1, z1);
+            case LINE_Y -> addYLineBlocks(set, y1, y2, x1, z1);
+            case LINE_Z -> addZLineBlocks(set, z1, z2, x1, y1);
         }
 
-        return list.stream();
+        return set.stream();
     }
 
-    public static void addXLineBlocks(List<BlockPosition> list, int x1, int x2, int y, int z) {
+    public static void addXLineBlocks(Set<BlockPosition> set, int x1, int x2, int y, int z) {
         for (int x = x1; x1 < x2 ? x <= x2 : x >= x2; x += x1 < x2 ? 1 : -1) {
-            list.add(new BlockPosition(x, y, z));
+            set.add(new BlockPosition(x, y, z));
         }
     }
 
-    public static void addYLineBlocks(List<BlockPosition> list, int y1, int y2, int x, int z) {
+    public static void addYLineBlocks(Set<BlockPosition> set, int y1, int y2, int x, int z) {
         for (int y = y1; y1 < y2 ? y <= y2 : y >= y2; y += y1 < y2 ? 1 : -1) {
-            list.add(new BlockPosition(x, y, z));
+            set.add(new BlockPosition(x, y, z));
         }
     }
 
-    public static void addZLineBlocks(List<BlockPosition> list, int z1, int z2, int x, int y) {
+    public static void addZLineBlocks(Set<BlockPosition> set, int z1, int z2, int x, int y) {
         for (int z = z1; z1 < z2 ? z <= z2 : z >= z2; z += z1 < z2 ? 1 : -1) {
-            list.add(new BlockPosition(x, y, z));
+            set.add(new BlockPosition(x, y, z));
         }
     }
 
