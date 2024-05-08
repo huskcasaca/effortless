@@ -33,7 +33,7 @@ public class DiagonalWall extends AbstractBlockStructure {
         var z3 = pos3.z();
 
         // get diagonal line blocks
-        var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context).toList();
+        var diagonalLineBlocks = DiagonalLine.collectDiagonalLine(context).toList();
 
         int lowest = MathUtils.min(y1, y3);
         int highest = MathUtils.max(y1, y3);
@@ -60,7 +60,7 @@ public class DiagonalWall extends AbstractBlockStructure {
     protected Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> DiagonalLine.collectPlaneDiagonalLineBlocks(context);
+            case 2 -> DiagonalLine.collectDiagonalLine(context);
             case 3 -> DiagonalWall.collectDiagonalWallBlocks(context);
             default -> Stream.empty();
         };

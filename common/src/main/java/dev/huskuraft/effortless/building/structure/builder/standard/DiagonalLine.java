@@ -15,10 +15,6 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 
 public class DiagonalLine extends AbstractBlockStructure {
 
-    public static Stream<BlockPosition> collectPlaneDiagonalLineBlocks(Context context) {
-        return collectDiagonalLine(context);
-    }
-
     private static Set<BlockPosition> getDiagonalLine(List<BlockPosition> positions, int radius, boolean hollow) {
         Set<BlockPosition> result = Sets.newLinkedHashSet();
 
