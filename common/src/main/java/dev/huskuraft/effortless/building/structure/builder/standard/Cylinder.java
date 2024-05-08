@@ -49,22 +49,11 @@ public class Cylinder extends AbstractBlockStructure {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
             case 1 -> Square.traceSquare(player, context);
-            case 2 -> {
-                var x1 = context.getPosition(0).x();
-                var y1 = context.getPosition(0).y();
-                var z1 = context.getPosition(0).z();
-                var x2 = context.getPosition(1).x();
-                var y2 = context.getPosition(1).y();
-                var z2 = context.getPosition(1).z();
-                if (y1 == y2) {
-                    yield traceLineY(player, context);
-                } else if (x1 == x2) {
-                    yield traceLineX(player, context);
-                } else if (z1 == z2) {
-                    yield traceLineZ(player, context);
-                }
-                yield null;
-            }
+            case 2 -> switch (context.planeFacing()) {
+                case BOTH -> Line.traceLineOnPlane(player, context.getPosition(0), context.getPosition(1));
+                case VERTICAL -> Line.traceLineOnVerticalPlane(player, context.getPosition(0), context.getPosition(1));
+                case HORIZONTAL -> Line.traceLineOnHorizontalPlane(player, context.getPosition(0), context.getPosition(1));
+            };
             default -> null;
         };
     }

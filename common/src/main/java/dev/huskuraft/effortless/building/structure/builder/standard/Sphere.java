@@ -7,9 +7,9 @@ import java.util.stream.Stream;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.CircleStart;
-import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
@@ -51,10 +51,8 @@ public class Sphere extends AbstractBlockStructure {
     }
 
     public static Stream<BlockPosition> collectSphereBlocks(Context context) {
-
         var list = new ArrayList<BlockPosition>();
 
-        var isHorizontal = context.buildFeatures().contains(PlaneFacing.HORIZONTAL);
         var isCenter = context.circleStart() == CircleStart.CIRCLE_START_CENTER;
         var isFull = context.planeFilling() == PlaneFilling.PLANE_FULL;
 
@@ -71,18 +69,19 @@ public class Sphere extends AbstractBlockStructure {
         var z3 = context.getPosition(2).z();
 
         if (isCenter) {
+            // FIXME: 8/5/24 3
             x1 = (x1 - x2) * 2 + x1;
             y1 = (y1 - y2) * 2 + y1;
             z1 = (z1 - z2) * 2 + z1;
         }
 
-        var minX = isHorizontal ? Math.min(x1, x2) : Math.min(x1, Math.min(x2, x3));
-        var minY = isHorizontal ? Math.min(y3, Math.min(y1, y2)) : Math.min(y1, y2);
-        var minZ = isHorizontal ? Math.min(z1, z2) : Math.min(z1, Math.min(z2, z3));
+        var minX = MathUtils.min(x1, MathUtils.min(x2, x3));
+        var minY = MathUtils.min(y1, MathUtils.min(y2, y3));
+        var minZ = MathUtils.min(z1, MathUtils.min(z2, z3));
 
-        var maxX = isHorizontal ? Math.max(x1, x2) : Math.max(x1, Math.max(x2, x3));
-        var maxY = isHorizontal ? Math.max(y3, Math.max(y1, y2)) : Math.max(y1, y2);
-        var maxZ = isHorizontal ? Math.max(z1, z2) : Math.max(z1, Math.max(z2, z3));
+        var maxX = MathUtils.max(x1, MathUtils.max(x2, x3));
+        var maxY = MathUtils.max(y1, MathUtils.max(y2, y3));
+        var maxZ = MathUtils.max(z1, MathUtils.max(z2, z3));
 
         var centerX = (minX + maxX) / 2f;
         var centerY = (minY + maxY) / 2f;
@@ -106,14 +105,9 @@ public class Sphere extends AbstractBlockStructure {
                 case HORIZONTAL -> Floor.traceFloor(player, context);
             };
             case 2 -> switch (context.planeFacing()) {
-                case BOTH, VERTICAL -> {
-                    if (context.getPosition(0).x() == context.getPosition(1).x()) {
-                        yield tracePlaneZ(player, context);
-                    } else {
-                        yield tracePlaneX(player, context);
-                    }
-                }
-                case HORIZONTAL -> traceLineY(player, context);
+                case BOTH -> Line.traceLineOnPlane(player, context.getPosition(0), context.getPosition(1));
+                case VERTICAL -> Line.traceLineOnVerticalPlane(player, context.getPosition(0), context.getPosition(1));
+                case HORIZONTAL -> Line.traceLineOnHorizontalPlane(player, context.getPosition(0), context.getPosition(1));
             };
             default -> null;
         };

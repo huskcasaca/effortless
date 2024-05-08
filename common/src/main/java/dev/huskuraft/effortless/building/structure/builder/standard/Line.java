@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.building.structure.builder.standard;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Axis;
@@ -14,15 +15,94 @@ import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructur
 
 public class Line extends AbstractBlockStructure {
 
+
+    public static BlockInteraction traceLineOnPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
+        if (pos0.x() == pos1.x() && pos0.y() == pos1.y() && pos0.z() == pos1.z()) {
+            return null;
+        }
+        if (pos0.x() == pos1.x() && pos0.z() == pos1.z()) {
+            return null;
+        }
+        if (pos0.y() == pos1.y() && pos0.z() == pos1.z()) {
+            return null;
+        }
+        if (pos0.x() == pos1.x() && pos0.y() == pos1.y()) {
+            return null;
+        }
+        if (pos0.x() == pos1.x()) {
+            return Line.traceLineX(player, BlockPosition.at(pos1.add(pos0).div(2)));
+        }
+        if (pos0.y() == pos1.y()) {
+            return Line.traceLineY(player, BlockPosition.at(pos1.add(pos0).div(2)));
+        }
+        if (pos0.z() == pos1.z()) {
+            return Line.traceLineZ(player, BlockPosition.at(pos1.add(pos0).div(2)));
+        }
+
+        return null;
+    }
+
+    public static BlockInteraction traceLineOnVerticalPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
+        if (pos0.x() == pos1.x() && pos0.z() == pos1.z()) {
+            return null;
+        }
+        if (pos0.x() == pos1.x()) {
+            return Line.traceLineX(player, BlockPosition.at(pos1.add(pos0).div(2)));
+        }
+        if (pos0.z() == pos1.z()) {
+            return Line.traceLineZ(player, BlockPosition.at(pos1.add(pos0).div(2)));
+        }
+        return null;
+    }
+
+    public static BlockInteraction traceLineOnHorizontalPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
+        if (pos0.y() == pos1.y()) {
+            return Line.traceLineY(player, BlockPosition.at(pos1.add(pos0).div(2)));
+        }
+        return null;
+    }
+
     public static BlockInteraction traceLine(Player player, Context context) {
-        var center = context.getPosition(0).getCenter();
-        var reach = context.maxNextReachDistance();
-        var skipRaytrace = context.skipRaytrace();
+        return traceLine(player, context.getPosition(0), context.lineDirection().getAxes());
+    }
+
+    public static BlockInteraction traceLineX(Player player, BlockPosition start) {
+        return traceLine(player, start, Set.of(Axis.X));
+    }
+
+    public static BlockInteraction traceLineY(Player player, BlockPosition start) {
+        return traceLine(player, start, Set.of(Axis.Y));
+    }
+
+    public static BlockInteraction traceLineZ(Player player, BlockPosition start) {
+        return traceLine(player, start, Set.of(Axis.Z));
+    }
+
+    public static BlockInteraction traceLineXZ(Player player, BlockPosition start) {
+        return traceLine(player, start, Set.of(Axis.X, Axis.Z));
+    }
+
+    public static BlockInteraction traceLineYZ(Player player, BlockPosition start) {
+        return traceLine(player, start, Set.of(Axis.Y, Axis.Z));
+    }
+
+    public static BlockInteraction traceLineXY(Player player, BlockPosition start) {
+        return traceLine(player, start, Set.of(Axis.X, Axis.Y));
+    }
+
+    public static BlockInteraction traceLine(Player player, BlockPosition start) {
+        return traceLine(player, start, Set.of(Axis.X, Axis.Y, Axis.Z));
+    }
+
+    public static BlockInteraction traceLine(Player player, BlockPosition start, Set<Axis> axes) {
+        var center = start.getCenter();
+        var reach = 1024;
+        var skipRaytrace = false;
 
         return Stream.of(
-                        new NearestAxisLineCriteria(context.lineDirection().getAxes(), Axis.X, player, center, reach, skipRaytrace),
-                        new NearestAxisLineCriteria(context.lineDirection().getAxes(), Axis.Y, player, center, reach, skipRaytrace),
-                        new NearestAxisLineCriteria(context.lineDirection().getAxes(), Axis.Z, player, center, reach, skipRaytrace)
+                        new NearestAxisLineCriteria(axes, Axis.X, player, center, reach, skipRaytrace),
+                        new NearestAxisLineCriteria(axes, Axis.Y, player, center, reach, skipRaytrace),
+                        new NearestAxisLineCriteria(axes, Axis.Z, player, center, reach, skipRaytrace)
                 )
                 .filter(AxisCriteria::isInRange)
                 .min(Comparator.comparing(NearestLineCriteria::distanceToLineSqr))
