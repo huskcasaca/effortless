@@ -53,7 +53,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         }
     }
 
-    enum TraceShape {
+    protected enum TraceShape {
         SINGLE,
         LINE_X(Axis.X),
         LINE_Y(Axis.Y),
@@ -73,7 +73,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             this.axis = axis;
         }
 
-        public static TraceShape fromPosition(BlockPosition pos0, BlockPosition pos1) {
+        private static TraceShape fromPosition(BlockPosition pos0, BlockPosition pos1) {
             if (pos0.x() == pos1.x() && pos0.y() == pos1.y() && pos0.z() == pos1.z()) {
                 return TraceShape.SINGLE;
             }
@@ -102,6 +102,10 @@ public abstract class AbstractBlockStructure implements BlockStructure {
     @Override
     public int volume(Context context) {
         return context.getInteractionBox().volume();
+    }
+
+    protected static TraceShape getShape(BlockPosition pos0, BlockPosition pos1) {
+        return TraceShape.fromPosition(pos0, pos1);
     }
 
     protected static double lengthSq(double x, double y, double z) {

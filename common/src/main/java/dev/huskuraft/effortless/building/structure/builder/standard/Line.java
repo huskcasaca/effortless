@@ -17,49 +17,27 @@ public class Line extends AbstractBlockStructure {
 
 
     public static BlockInteraction traceLineOnPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
-        if (pos0.x() == pos1.x() && pos0.y() == pos1.y() && pos0.z() == pos1.z()) {
-            return null;
-        }
-        if (pos0.x() == pos1.x() && pos0.z() == pos1.z()) {
-            return null;
-        }
-        if (pos0.y() == pos1.y() && pos0.z() == pos1.z()) {
-            return null;
-        }
-        if (pos0.x() == pos1.x() && pos0.y() == pos1.y()) {
-            return null;
-        }
-        if (pos0.x() == pos1.x()) {
-            return Line.traceLineX(player, BlockPosition.at(pos1.add(pos0).div(2)));
-        }
-        if (pos0.y() == pos1.y()) {
-            return Line.traceLineY(player, BlockPosition.at(pos1.add(pos0).div(2)));
-        }
-        if (pos0.z() == pos1.z()) {
-            return Line.traceLineZ(player, BlockPosition.at(pos1.add(pos0).div(2)));
-        }
-
-        return null;
+        return switch (getShape(pos0, pos1)) {
+            case PLANE_X -> Line.traceLineX(player, BlockPosition.at(pos1.add(pos0).div(2)));
+            case PLANE_Y -> Line.traceLineY(player, BlockPosition.at(pos1.add(pos0).div(2)));
+            case PLANE_Z -> Line.traceLineZ(player, BlockPosition.at(pos1.add(pos0).div(2)));
+            default -> null;
+        };
     }
 
     public static BlockInteraction traceLineOnVerticalPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
-        if (pos0.x() == pos1.x() && pos0.z() == pos1.z()) {
-            return null;
-        }
-        if (pos0.x() == pos1.x()) {
-            return Line.traceLineX(player, BlockPosition.at(pos1.add(pos0).div(2)));
-        }
-        if (pos0.z() == pos1.z()) {
-            return Line.traceLineZ(player, BlockPosition.at(pos1.add(pos0).div(2)));
-        }
-        return null;
+        return switch (getShape(pos0, pos1)) {
+            case PLANE_X -> Line.traceLineX(player, BlockPosition.at(pos1.add(pos0).div(2)));
+            case PLANE_Z -> Line.traceLineZ(player, BlockPosition.at(pos1.add(pos0).div(2)));
+            default -> null;
+        };
     }
 
     public static BlockInteraction traceLineOnHorizontalPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
-        if (pos0.y() == pos1.y()) {
-            return Line.traceLineY(player, BlockPosition.at(pos1.add(pos0).div(2)));
-        }
-        return null;
+        return switch (getShape(pos0, pos1)) {
+            case PLANE_Y -> Line.traceLineY(player, BlockPosition.at(pos1.add(pos0).div(2)));
+            default -> null;
+        };
     }
 
     public static BlockInteraction traceLine(Player player, Context context) {
@@ -113,19 +91,13 @@ public class Line extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectLineBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.getPosition(0).x();
-        var y1 = context.getPosition(0).y();
-        var z1 = context.getPosition(0).z();
-        var x2 = context.getPosition(1).x();
-        var y2 = context.getPosition(1).y();
-        var z2 = context.getPosition(1).z();
+        var pos0 = context.getPosition(0);
+        var pos1 = context.getPosition(1);
 
-        if (x1 != x2) {
-            addXLineBlocks(list, x1, x2, y1, z1);
-        } else if (y1 != y2) {
-            addYLineBlocks(list, y1, y2, x1, z1);
-        } else {
-            addZLineBlocks(list, z1, z2, x1, y1);
+        switch (getShape(pos0, pos1)) {
+            case LINE_X -> addXLineBlocks(list, pos0.x(), pos1.x(), pos0.y(), pos0.z());
+            case LINE_Y -> addYLineBlocks(list, pos0.y(), pos1.y(), pos0.x(), pos0.z());
+            case LINE_Z -> addZLineBlocks(list, pos0.z(), pos1.z(), pos0.x(), pos0.y());
         }
 
         return list.stream();
