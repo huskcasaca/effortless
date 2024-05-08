@@ -18,24 +18,24 @@ public class Line extends AbstractBlockStructure {
 
     public static BlockInteraction traceLineOnPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
         return switch (getShape(pos0, pos1)) {
-            case PLANE_X -> Line.traceLineX(player, BlockPosition.at(pos1.add(pos0).div(2)));
-            case PLANE_Y -> Line.traceLineY(player, BlockPosition.at(pos1.add(pos0).div(2)));
-            case PLANE_Z -> Line.traceLineZ(player, BlockPosition.at(pos1.add(pos0).div(2)));
+            case PLANE_X -> Line.traceLineX(player, pos1);
+            case PLANE_Y -> Line.traceLineY(player, pos1);
+            case PLANE_Z -> Line.traceLineZ(player, pos1);
             default -> null;
         };
     }
 
     public static BlockInteraction traceLineOnVerticalPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
         return switch (getShape(pos0, pos1)) {
-            case PLANE_X -> Line.traceLineX(player, BlockPosition.at(pos1.add(pos0).div(2)));
-            case PLANE_Z -> Line.traceLineZ(player, BlockPosition.at(pos1.add(pos0).div(2)));
+            case PLANE_X -> Line.traceLineX(player, pos1);
+            case PLANE_Z -> Line.traceLineZ(player, pos1);
             default -> null;
         };
     }
 
     public static BlockInteraction traceLineOnHorizontalPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
         return switch (getShape(pos0, pos1)) {
-            case PLANE_Y -> Line.traceLineY(player, BlockPosition.at(pos1.add(pos0).div(2)));
+            case PLANE_Y -> Line.traceLineY(player, pos1);
             default -> null;
         };
     }
