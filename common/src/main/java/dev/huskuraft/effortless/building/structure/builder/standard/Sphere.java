@@ -56,17 +56,21 @@ public class Sphere extends AbstractBlockStructure {
         var isCenter = context.circleStart() == CircleStart.CIRCLE_START_CENTER;
         var isFull = context.planeFilling() == PlaneFilling.PLANE_FULL;
 
-        var x1 = context.getPosition(0).x();
-        var y1 = context.getPosition(0).y();
-        var z1 = context.getPosition(0).z();
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
+        var pos3 = context.getPosition(2);
 
-        var x2 = context.getPosition(1).x();
-        var y2 = context.getPosition(1).y();
-        var z2 = context.getPosition(1).z();
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
 
-        var x3 = context.getPosition(2).x();
-        var y3 = context.getPosition(2).y();
-        var z3 = context.getPosition(2).z();
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
+
+        var x3 = pos3.x();
+        var y3 = pos3.y();
+        var z3 = pos3.z();
 
         if (isCenter) {
             // FIXME: 8/5/24 3

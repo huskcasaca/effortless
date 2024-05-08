@@ -54,12 +54,17 @@ public class Cube extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectCubePlaneBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.getPosition(0).x();
-        var y1 = context.getPosition(0).y();
-        var z1 = context.getPosition(0).z();
-        var x2 = context.getPosition(1).x();
-        var y2 = context.getPosition(1).y();
-        var z2 = context.getPosition(1).z();
+
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
+
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
+
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
 
         switch (context.cubeFilling()) {
             case CUBE_SKELETON -> Square.addHollowSquareBlocks(list, x1, x2, y1, y2, z1, z2);
@@ -73,12 +78,15 @@ public class Cube extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectCubeBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.getPosition(0).x();
-        var y1 = context.getPosition(0).y();
-        var z1 = context.getPosition(0).z();
-        var x3 = context.getPosition(2).x();
-        var y3 = context.getPosition(2).y();
-        var z3 = context.getPosition(2).z();
+        var pos1 = context.getPosition(0);
+        var pos3 = context.getPosition(2);
+
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
+        var x3 = pos3.x();
+        var y3 = pos3.y();
+        var z3 = pos3.z();
 
         switch (context.cubeFilling()) {
             case CUBE_FULL -> addFullCubeBlocks(list, x1, x3, y1, y3, z1, z3);
