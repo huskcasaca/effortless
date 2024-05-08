@@ -230,7 +230,16 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
 
             this.typeButton = addWidget(new Button(getEntrance(), getInnerRight() - 72, getTop(), 72, 20, getItem().value1().getDisplayName()));
             this.typeButton.setOnPressListener(button -> {
-                setItem(getItem().withValue1(PositionType.values()[(getItem().value1().ordinal() + 1) % PositionType.values().length]).withValue2(0d));
+                var newPositionType = PositionType.values()[(getItem().value1().ordinal() + 1) % PositionType.values().length];
+                setItem(getItem().withValue1(newPositionType).withValue2(switch (newPositionType) {
+                    case ABSOLUTE -> switch (axis) {
+                        case X -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().x();
+                        case Y -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().y();
+                        case Z -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().z();
+                    };
+                    case RELATIVE -> 0d;
+                    case RELATIVE_ONCE -> 0d;
+                }));
                 numberField.setValue(getItem().value2());
                 typeButton.setMessage(getItem().value1().getDisplayName());
                 teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
