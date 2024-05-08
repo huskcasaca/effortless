@@ -187,6 +187,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return end;
     }
 
+    @Deprecated
     private static BlockInteraction traceLineByAxis(Player player, Context context, Axis axis) {
         var center = context.getPosition(1).getCenter();
         var reach = context.maxNextReachDistance();
@@ -204,6 +205,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
                 .orElse(null);
     }
 
+    @Deprecated
     public static BlockInteraction traceLineY(Player player, Context context) {
         return traceLineByAxis(player, context, Axis.Y);
     }
@@ -437,6 +439,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
 
     }
 
+    @Deprecated
     public static class AxisLineCriteria extends AxisCriteria {
 
         public AxisLineCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
