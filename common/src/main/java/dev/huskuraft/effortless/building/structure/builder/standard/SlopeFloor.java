@@ -54,7 +54,7 @@ public class SlopeFloor extends AbstractBlockStructure {
 
             // get diagonal line blocks
             // FIXME: 8/8/23 block hit location is not correct
-            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x2, y3, z1))), 1f).toList();
+            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x2, y3, z1)))).toList();
 
             // limit amount of blocks we can place
             int lowest = MathUtils.min(z1, z2);
@@ -74,7 +74,7 @@ public class SlopeFloor extends AbstractBlockStructure {
 
             // get diagonal line blocks
             // FIXME: 8/8/23 block hit location is not correct
-            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x1, y3, z2))), 1f).toList();
+            var diagonalLineBlocks = DiagonalLine.collectPlaneDiagonalLineBlocks(context.withEmptyInteractions().withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x1, y1, z1))).withNextInteraction(context.getInteraction(0).withBlockPosition(new BlockPosition(x1, y3, z2)))).toList();
 
             // limit amount of blocks we can place
             int lowest = MathUtils.min(x1, x2);

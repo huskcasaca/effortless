@@ -1,52 +1,26 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
+
+import com.google.common.collect.Sets;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
-import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
 public class DiagonalLine extends AbstractBlockStructure {
 
-    public static Stream<BlockPosition> collectPlaneDiagonalLineBlocks(Context context, float sampleMultiplier) {
-        var list = new ArrayList<BlockPosition>();
-
-        var pos1 = context.getPosition(0);
-        var pos2 = context.getPosition(1);
-
-        var x1 = pos1.x();
-        var y1 = pos1.y();
-        var z1 = pos1.z();
-
-        var x2 = pos2.x();
-        var y2 = pos2.y();
-        var z2 = pos2.z();
-
-        var first = new Vector3d(x1, y1, z1).add(0.5, 0.5, 0.5);
-        var second = new Vector3d(x2, y2, z2).add(0.5, 0.5, 0.5);
-
-        var iterations = (int) MathUtils.ceil(first.distance(second) * sampleMultiplier);
-        for (var t = 0.0; t <= 1.0; t += 1.0 / iterations) {
-            var lerp = first.add(second.sub(first).mul(t));
-            var candidate = BlockPosition.at(lerp);
-            // only add if not equal to the last in the list
-            if (list.isEmpty() || !list.get(list.size() - 1).equals(candidate))
-                list.add(candidate);
-        }
-
-        return list.stream();
+    public static Stream<BlockPosition> collectPlaneDiagonalLineBlocks(Context context) {
+        return collectDiagonalLine(context);
     }
 
-    public static Set<BlockPosition> getDiagonalLine(List<BlockPosition> positions, int radius, boolean hollow) {
-        Set<BlockPosition> result = new LinkedHashSet<>();
+    private static Set<BlockPosition> getDiagonalLine(List<BlockPosition> positions, int radius, boolean hollow) {
+        Set<BlockPosition> result = Sets.newLinkedHashSet();
 
         for (int i = 0; !positions.isEmpty() && i < positions.size() - 1; i++) {
             var pos1 = positions.get(i);
@@ -105,6 +79,14 @@ public class DiagonalLine extends AbstractBlockStructure {
 
     protected static Stream<BlockPosition> collectDiagonalLine(Context context) {
         return getDiagonalLine(context.getPositions(), 0, false).stream();
+    }
+
+    public static Stream<BlockPosition> collectDiagonalLine(List<BlockPosition> positions, int radius, boolean hollow) {
+        return getDiagonalLine(positions, 0, false).stream();
+    }
+
+    public static Stream<BlockPosition> collectDiagonalLine(BlockPosition pos1, BlockPosition pos2, int radius, boolean hollow) {
+        return getDiagonalLine(List.of(pos1, pos2), 0, false).stream();
     }
 
     protected BlockInteraction trace(Player player, Context context, int index) {
