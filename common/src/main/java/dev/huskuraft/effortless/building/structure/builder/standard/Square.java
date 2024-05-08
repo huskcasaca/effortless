@@ -84,17 +84,17 @@ public class Square extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectSquareBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var pos0 = context.getPosition(0);
-        var pos1 = context.getPosition(1);
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
 
-        var x1 = pos0.x();
-        var y1 = pos0.y();
-        var z1 = pos0.z();
-        var x2 = pos1.x();
-        var y2 = pos1.y();
-        var z2 = pos1.z();
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
 
-        switch (getShape(pos0, pos1)) {
+        switch (getShape(pos1, pos2)) {
             case PLANE_X -> {
                 switch (context.planeFilling()) {
                     case PLANE_FULL -> addFullSquareBlocksX(list, x1, y1, y2, z1, z2);

@@ -70,12 +70,15 @@ public class Circle extends AbstractBlockStructure {
         var isCenter = context.circleStart() == CircleStart.CIRCLE_START_CENTER;
         var isFill = context.planeFilling() == PlaneFilling.PLANE_FULL;
 
-        var x1 = context.getPosition(0).x();
-        var y1 = context.getPosition(0).y();
-        var z1 = context.getPosition(0).z();
-        var x2 = context.getPosition(1).x();
-        var y2 = context.getPosition(1).y();
-        var z2 = context.getPosition(1).z();
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
+
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
 
         if (isCenter) {
             x1 = (x1 - x2) * 2 + x1;
@@ -91,12 +94,10 @@ public class Circle extends AbstractBlockStructure {
         var radiusY = MathUtils.abs(y2 - centerY);
         var radiusZ = MathUtils.abs(z2 - centerZ);
 
-        if (y1 == y2) {
-            addFullCircleBlocksY(list, x1, y1, z1, x2, y2, z2, centerX, centerZ, radiusX, radiusZ, isFill);
-        } else if (x1 == x2) {
-            addFullCircleBlocksX(list, x1, y1, z1, x2, y2, z2, centerY, centerZ, radiusY, radiusZ, isFill);
-        } else if (z1 == z2) {
-            addFullCircleBlocksZ(list, x1, y1, z1, x2, y2, z2, centerY, centerX, radiusY, radiusX, isFill);
+        switch (getShape(pos1, pos2)) {
+            case PLANE_X -> addFullCircleBlocksX(list, x1, y1, z1, x2, y2, z2, centerY, centerZ, radiusY, radiusZ, isFill);
+            case PLANE_Y -> addFullCircleBlocksY(list, x1, y1, z1, x2, y2, z2, centerX, centerZ, radiusX, radiusZ, isFill);
+            case PLANE_Z -> addFullCircleBlocksZ(list, x1, y1, z1, x2, y2, z2, centerY, centerX, radiusY, radiusX, isFill);
         }
 
         return list.stream();

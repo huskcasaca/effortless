@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.building.structure.builder;
 
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -73,26 +72,26 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             this.axis = axis;
         }
 
-        private static TraceShape fromPosition(BlockPosition pos0, BlockPosition pos1) {
-            if (pos0.x() == pos1.x() && pos0.y() == pos1.y() && pos0.z() == pos1.z()) {
+        private static TraceShape fromPosition(BlockPosition pos1, BlockPosition pos2) {
+            if (pos1.x() == pos2.x() && pos1.y() == pos2.y() && pos1.z() == pos2.z()) {
                 return TraceShape.SINGLE;
             }
-            if (pos0.x() == pos1.x() && pos0.z() == pos1.z()) {
+            if (pos1.x() == pos2.x() && pos1.z() == pos2.z()) {
                 return TraceShape.LINE_Y;
             }
-            if (pos0.y() == pos1.y() && pos0.z() == pos1.z()) {
+            if (pos1.y() == pos2.y() && pos1.z() == pos2.z()) {
                 return TraceShape.LINE_X;
             }
-            if (pos0.x() == pos1.x() && pos0.y() == pos1.y()) {
+            if (pos1.x() == pos2.x() && pos1.y() == pos2.y()) {
                 return TraceShape.LINE_Z;
             }
-            if (pos0.x() == pos1.x()) {
+            if (pos1.x() == pos2.x()) {
                 return PLANE_X;
             }
-            if (pos0.y() == pos1.y()) {
+            if (pos1.y() == pos2.y()) {
                 return PLANE_Y;
             }
-            if (pos0.z() == pos1.z()) {
+            if (pos1.z() == pos2.z()) {
                 return PLANE_Z;
             }
             return TraceShape.CUBE;
@@ -189,66 +188,6 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             return end.withBlockPosition(p0.add(diff.withX(axisSign(diff.x()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z()))).withZ(axisSign(diff.z()) * MathUtils.max(MathUtils.abs(diff.x()), MathUtils.abs(diff.z())))));
         }
         return end;
-    }
-
-    @Deprecated
-    private static BlockInteraction traceLineByAxis(Player player, Context context, Axis axis) {
-        var center = context.getPosition(1).getCenter();
-        var reach = context.maxNextReachDistance();
-        var skipRaytrace = context.skipRaytrace();
-
-        return Stream.of(
-                        new AxisLineCriteria(Axis.X, player, center, reach, skipRaytrace),
-                        new AxisLineCriteria(Axis.Y, player, center, reach, skipRaytrace),
-                        new AxisLineCriteria(Axis.Z, player, center, reach, skipRaytrace)
-                )
-                .filter(criteria -> criteria.axis != axis)
-                .filter(criteria -> criteria.isInRange())
-                .min(Comparator.comparing(axisLineCriteria -> axisLineCriteria.distanceToLineSqr()))
-                .map(criteria -> criteria.traceLine(axis))
-                .orElse(null);
-    }
-
-    @Deprecated
-    public static BlockInteraction traceLineY(Player player, Context context) {
-        return traceLineByAxis(player, context, Axis.Y);
-    }
-
-    public static BlockInteraction traceLineX(Player player, Context context) {
-        return traceLineByAxis(player, context, Axis.X);
-    }
-
-    public static BlockInteraction traceLineZ(Player player, Context context) {
-        return traceLineByAxis(player, context, Axis.Z);
-    }
-
-    protected static BlockInteraction tracePlaneByAxis(Player player, Context context, Axis axis) {
-        var center = context.getPosition(1).getCenter();
-        var reach = context.maxNextReachDistance();
-        var skipRaytrace = context.skipRaytrace();
-
-        return Stream.of(
-                        new AxisLineCriteria(Axis.X, player, center, reach, skipRaytrace),
-                        new AxisLineCriteria(Axis.Y, player, center, reach, skipRaytrace),
-                        new AxisLineCriteria(Axis.Z, player, center, reach, skipRaytrace)
-                )
-                .filter(criteria -> criteria.axis == axis)
-                .filter(criteria -> criteria.isInRange())
-                .min(Comparator.comparing(axisLineCriteria -> axisLineCriteria.distanceToLineSqr()))
-                .map(criteria -> criteria.tracePlane())
-                .orElse(null);
-    }
-
-    public static BlockInteraction tracePlaneY(Player player, Context context) {
-        return tracePlaneByAxis(player, context, Axis.Y);
-    }
-
-    public static BlockInteraction tracePlaneX(Player player, Context context) {
-        return tracePlaneByAxis(player, context, Axis.X);
-    }
-
-    public static BlockInteraction tracePlaneZ(Player player, Context context) {
-        return tracePlaneByAxis(player, context, Axis.Z);
     }
 
     // TODO: 13/10/23 entity

@@ -11,31 +11,53 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
 
 public class Line extends AbstractBlockStructure {
 
+    public static BlockInteraction traceLineOnPlane(Player player, Context context) {
+        return traceLineOnPlane(player, context.getPosition(0), context.getPosition(1), context.planeFacing());
+    }
 
-    public static BlockInteraction traceLineOnPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
-        return switch (getShape(pos0, pos1)) {
-            case PLANE_X -> Line.traceLineX(player, pos1);
-            case PLANE_Y -> Line.traceLineY(player, pos1);
-            case PLANE_Z -> Line.traceLineZ(player, pos1);
+    public static BlockInteraction traceLineOnPlane(Player player, BlockPosition pos1, BlockPosition pos2, PlaneFacing planeFacing) {
+        return switch (getShape(pos1, pos2)) {
+            case PLANE_X -> switch (planeFacing) {
+                case BOTH, VERTICAL -> Line.traceLineX(player, pos2);
+                case HORIZONTAL -> null;
+            };
+            case PLANE_Y -> switch (planeFacing) {
+                case BOTH, HORIZONTAL -> Line.traceLineY(player, pos2);
+                case VERTICAL -> null;
+            };
+            case PLANE_Z -> switch (planeFacing) {
+                case BOTH, VERTICAL -> Line.traceLineZ(player, pos2);
+                case HORIZONTAL -> null;
+            };
             default -> null;
         };
     }
 
-    public static BlockInteraction traceLineOnVerticalPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
-        return switch (getShape(pos0, pos1)) {
-            case PLANE_X -> Line.traceLineX(player, pos1);
-            case PLANE_Z -> Line.traceLineZ(player, pos1);
+    public static BlockInteraction traceLineOnPlane(Player player, BlockPosition pos1, BlockPosition pos2) {
+        return switch (getShape(pos1, pos2)) {
+            case PLANE_X -> Line.traceLineX(player, pos2);
+            case PLANE_Y -> Line.traceLineY(player, pos2);
+            case PLANE_Z -> Line.traceLineZ(player, pos2);
             default -> null;
         };
     }
 
-    public static BlockInteraction traceLineOnHorizontalPlane(Player player, BlockPosition pos0, BlockPosition pos1) {
-        return switch (getShape(pos0, pos1)) {
-            case PLANE_Y -> Line.traceLineY(player, pos1);
+    public static BlockInteraction traceLineOnVerticalPlane(Player player, BlockPosition pos1, BlockPosition pos2) {
+        return switch (getShape(pos1, pos2)) {
+            case PLANE_X -> Line.traceLineX(player, pos2);
+            case PLANE_Z -> Line.traceLineZ(player, pos2);
+            default -> null;
+        };
+    }
+
+    public static BlockInteraction traceLineOnHorizontalPlane(Player player, BlockPosition pos1, BlockPosition pos2) {
+        return switch (getShape(pos1, pos2)) {
+            case PLANE_Y -> Line.traceLineY(player, pos2);
             default -> null;
         };
     }
@@ -91,17 +113,17 @@ public class Line extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectLineBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var pos0 = context.getPosition(0);
-        var pos1 = context.getPosition(1);
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
 
-        var x1 = pos0.x();
-        var y1 = pos0.y();
-        var z1 = pos0.z();
-        var x2 = pos1.x();
-        var y2 = pos1.y();
-        var z2 = pos1.z();
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
 
-        switch (getShape(pos0, pos1)) {
+        switch (getShape(pos1, pos2)) {
             case LINE_X -> addXLineBlocks(list, x1, x2, y1, z1);
             case LINE_Y -> addYLineBlocks(list, y1, y2, x1, z1);
             case LINE_Z -> addZLineBlocks(list, z1, z2, x1, y1);

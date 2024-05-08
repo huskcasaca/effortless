@@ -36,17 +36,22 @@ public class Floor extends AbstractBlockStructure {
     public static Stream<BlockPosition> collectFloorBlocks(Context context) {
         var list = new ArrayList<BlockPosition>();
 
-        var x1 = context.getPosition(0).x();
-        var y1 = context.getPosition(0).y();
-        var z1 = context.getPosition(0).z();
-        var x2 = context.getPosition(1).x();
-        var y2 = context.getPosition(1).y();
-        var z2 = context.getPosition(1).z();
+        var pos1 = context.getPosition(0);
+        var pos2 = context.getPosition(1);
 
-        if (y1 == y2) {
-            switch (context.planeFilling()) {
-                case PLANE_FULL -> Square.addFullSquareBlocksY(list, x1, x2, y1, z1, z2);
-                case PLANE_HOLLOW -> Square.addHollowSquareBlocksY(list, x1, x2, y1, z1, z2);
+        var x1 = pos1.x();
+        var y1 = pos1.y();
+        var z1 = pos1.z();
+        var x2 = pos2.x();
+        var y2 = pos2.y();
+        var z2 = pos2.z();
+
+        switch (getShape(pos1, pos2)) {
+            case PLANE_Y -> {
+                switch (context.planeFilling()) {
+                    case PLANE_FULL -> Square.addFullSquareBlocksY(list, x1, x2, y1, z1, z2);
+                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksY(list, x1, x2, y1, z1, z2);
+                }
             }
         }
 

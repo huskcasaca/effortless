@@ -93,7 +93,7 @@ public class SlopeFloor extends AbstractBlockStructure {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
             case 1 -> Floor.traceFloor(player, context);
-            case 2 -> SlopeFloor.traceLineY(player, context);
+            case 2 -> Line.traceLineY(player, context.getPosition(1));
             default -> null;
         };
     }
