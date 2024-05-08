@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.building.replace;
+package dev.huskuraft.effortless.building.config;
 
 import dev.huskuraft.effortless.EffortlessKeys;
 import dev.huskuraft.effortless.api.gui.tooltip.Palette;
