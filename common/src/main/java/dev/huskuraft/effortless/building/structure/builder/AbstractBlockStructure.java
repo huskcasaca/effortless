@@ -21,6 +21,84 @@ public abstract class AbstractBlockStructure implements BlockStructure {
 
     private static final double LOOK_VEC_TOLERANCE = 0.01;
 
+    enum DirectionTraceShape {
+        SINGLE,
+        LINE_DOWN(Orientation.DOWN),
+        LINE_UP(Orientation.UP),
+        LINE_NORTH(Orientation.NORTH),
+        LINE_SOUTH(Orientation.SOUTH),
+        LINE_WEST(Orientation.WEST),
+        LINE_EAST(Orientation.EAST),
+        PLANE_X(Axis.X),
+        PLANE_Y(Axis.Y),
+        PLANE_Z(Axis.Z),
+        CUBE;
+
+        private final Axis axis;
+        private final Orientation orientation;
+
+        DirectionTraceShape() {
+            this.axis = null;
+            this.orientation = null;
+        }
+
+        DirectionTraceShape(Axis axis) {
+            this.axis = axis;
+            this.orientation = null;
+        }
+
+        DirectionTraceShape(Orientation orientation) {
+            this.axis = orientation.getAxis();
+            this.orientation = orientation;
+        }
+    }
+
+    enum TraceShape {
+        SINGLE,
+        LINE_X(Axis.X),
+        LINE_Y(Axis.Y),
+        LINE_Z(Axis.Z),
+        PLANE_X(Axis.X),
+        PLANE_Y(Axis.Y),
+        PLANE_Z(Axis.Z),
+        CUBE;
+
+        private final Axis axis;
+
+        TraceShape() {
+            this.axis = null;
+        }
+
+        TraceShape(Axis axis) {
+            this.axis = axis;
+        }
+
+        public static TraceShape fromPosition(BlockPosition pos0, BlockPosition pos1) {
+            if (pos0.x() == pos1.x() && pos0.y() == pos1.y() && pos0.z() == pos1.z()) {
+                return TraceShape.SINGLE;
+            }
+            if (pos0.x() == pos1.x() && pos0.z() == pos1.z()) {
+                return TraceShape.LINE_Y;
+            }
+            if (pos0.y() == pos1.y() && pos0.z() == pos1.z()) {
+                return TraceShape.LINE_X;
+            }
+            if (pos0.x() == pos1.x() && pos0.y() == pos1.y()) {
+                return TraceShape.LINE_Z;
+            }
+            if (pos0.x() == pos1.x()) {
+                return PLANE_X;
+            }
+            if (pos0.y() == pos1.y()) {
+                return PLANE_Y;
+            }
+            if (pos0.z() == pos1.z()) {
+                return PLANE_Z;
+            }
+            return TraceShape.CUBE;
+        }
+    }
+
     @Override
     public int volume(Context context) {
         return context.getInteractionBox().volume();
