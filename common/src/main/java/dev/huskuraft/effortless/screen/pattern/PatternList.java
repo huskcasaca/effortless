@@ -61,7 +61,7 @@ public final class PatternList extends EditableEntryList<Pattern> {
 
         @Override
         public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
+            return Math.min(Dimens.Entry.ROW_WIDTH, getParent().getWidth() - 8);
         }
 
         @Override

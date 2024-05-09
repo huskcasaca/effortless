@@ -61,8 +61,8 @@ public abstract class AbstractButton extends AbstractWidget {
     }
 
     protected void renderScrollingString(Renderer renderer, Typeface typeface, int x, int y) {
-        int k = this.getX() + x;
-        int l = this.getX() + this.getWidth() - x;
+        var k = this.getX() + x;
+        var l = this.getX() + this.getWidth() - x;
         // FIXME: 22/3/24
         renderer.renderScrollingText(typeface, isActive() ? this.getMessage() : this.getMessage().withStyle(ChatFormatting.RESET), k, this.getY(), l, this.getY() + this.getHeight(), y);
     }

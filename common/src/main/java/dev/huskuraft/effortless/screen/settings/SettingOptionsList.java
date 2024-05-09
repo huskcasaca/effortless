@@ -186,7 +186,7 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         @Override
         public void onCreate() {
             super.onCreate();
-            this.button = addWidget(new Button(getEntrance(), getInnerRight() - Button.QUARTER_WIDTH, getTop(), Button.QUARTER_WIDTH, Button.DEFAULT_HEIGHT, Text.empty()));
+            this.button = addWidget(new Button(getEntrance(), getInnerRight() - Button.BUTTON_WIDTH_1, getTop(), Button.BUTTON_WIDTH_1, Button.DEFAULT_HEIGHT, Text.empty()));
             this.entryConsumer.accept(this, getItem());
         }
 
@@ -362,7 +362,7 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         public void onCreate() {
             super.onCreate();
 
-            this.button = addWidget(new Button(getEntrance(), getInnerRight() - Button.QUARTER_WIDTH, getTop(), Button.QUARTER_WIDTH, Button.DEFAULT_HEIGHT, getButtonMessage()));
+            this.button = addWidget(new Button(getEntrance(), getInnerRight() - Button.BUTTON_WIDTH_1, getTop(), Button.BUTTON_WIDTH_1, Button.DEFAULT_HEIGHT, getButtonMessage()));
             this.button.setOnPressListener(button -> {
                 setItem(getNextItem());
             });

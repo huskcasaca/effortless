@@ -290,4 +290,24 @@ public abstract class AbstractWidget implements Widget {
     public boolean hasParent() {
         return parent != null;
     }
+
+    @Override
+    public final int getLeft() {
+        return Widget.super.getLeft();
+    }
+
+    @Override
+    public final int getRight() {
+        return Widget.super.getRight();
+    }
+
+    @Override
+    public final int getTop() {
+        return Widget.super.getTop();
+    }
+
+    @Override
+    public final int getBottom() {
+        return Widget.super.getBottom();
+    }
 }

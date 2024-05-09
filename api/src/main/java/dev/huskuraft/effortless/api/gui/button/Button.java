@@ -12,9 +12,9 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public class Button extends AbstractButton {
 
-    public static final int QUARTER_WIDTH = Dimens.Buttons.QUARTER_WIDTH;
-    public static final int HALF_WIDTH = Dimens.Buttons.HALF_WIDTH;
-    public static final int FULL_WIDTH = Dimens.Buttons.FULL_WIDTH;
+    public static final int BUTTON_WIDTH_1 = Dimens.Buttons.QUARTER_WIDTH;
+    public static final int BUTTON_WIDTH_2 = Dimens.Buttons.HALF_WIDTH;
+    public static final int BUTTON_WIDTH_4 = Dimens.Buttons.FULL_WIDTH;
 
     public static final int TAB_WIDTH = Dimens.Buttons.TAB_WIDTH;
 
@@ -22,6 +22,8 @@ public class Button extends AbstractButton {
 
     public static final int VERTICAL_PADDING = Dimens.Buttons.VERTICAL_SPACING;
     public static final int HORIZONTAL_PADDING = Dimens.Buttons.HORIZONTAL_SPACING;
+
+    public static final int COMPAT_PADDING = 4;
 
     public static final int MARGIN = Dimens.Buttons.VERTICAL_PADDING;
 
@@ -105,7 +107,21 @@ public class Button extends AbstractButton {
         }
 
         public Builder setBoundsGrid(int width, int height, float row, float col, float size) {
-            return setBounds((int) (width / 2 - Button.QUARTER_WIDTH * 2 - HORIZONTAL_PADDING * 3 / 2 + col * 4 * (Button.QUARTER_WIDTH + HORIZONTAL_PADDING)), (int) (height - Button.DEFAULT_HEIGHT - Button.MARGIN - row * (DEFAULT_HEIGHT + VERTICAL_PADDING)), (int) (Button.QUARTER_WIDTH * size * 4 + HORIZONTAL_PADDING * (size * 4 - 1)), DEFAULT_HEIGHT);
+            return setBounds(
+                    (int) (width / 2 - Button.BUTTON_WIDTH_1 * 2 - HORIZONTAL_PADDING * 3 / 2 + col * 4 * (Button.BUTTON_WIDTH_1 + HORIZONTAL_PADDING)),
+                    (int) (height - Button.DEFAULT_HEIGHT - Button.MARGIN - row * (DEFAULT_HEIGHT + VERTICAL_PADDING)),
+                    (int) (Button.BUTTON_WIDTH_1 * size * 4 + HORIZONTAL_PADDING * (size * 4 - 1)),
+                    DEFAULT_HEIGHT);
+        }
+
+        public Builder setBoundsGrid(int x, int y, int width, int height, float row, float col, float size) {
+            var innerWidth = width - COMPAT_PADDING * 6;
+            var buttonWidth = innerWidth / 4;
+            return setBounds(
+                    (int) (x + COMPAT_PADDING * 3f + (innerWidth / 2 - buttonWidth * 2 - COMPAT_PADDING * 3 / 2 + col * 4 * (buttonWidth + COMPAT_PADDING))),
+                    (int) (y + (height - Button.DEFAULT_HEIGHT - Button.MARGIN - row * (DEFAULT_HEIGHT + COMPAT_PADDING))) + 2,
+                    (int) (buttonWidth * size * 4 + COMPAT_PADDING * (size * 4 - 1)),
+                    DEFAULT_HEIGHT);
         }
 
         public Builder setTooltip(Text tooltip) {

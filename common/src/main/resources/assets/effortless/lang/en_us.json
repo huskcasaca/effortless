@@ -341,5 +341,9 @@
   "effortless.action.line_direction_axis_y": "Y Axis",
   "effortless.action.line_direction_axis_z": "Z Axis",
   "effortless.action.line_direction_axis_x": "X Axis",
-  "effortless.action.pattern_settings": "Pattern Settings"
+  "effortless.action.pattern_settings": "Pattern Settings",
+  "effortless.button.up": "Move Up",
+  "effortless.button.down": "Move Down",
+  "effortless.button.new": "New",
+  "effortless.button.duplicate": "Duplicate"
 }

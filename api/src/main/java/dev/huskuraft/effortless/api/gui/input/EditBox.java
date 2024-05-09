@@ -451,16 +451,6 @@ public class EditBox extends AbstractWidget {
 
     }
 
-    @Override
-    public int getTop() {
-        return super.getTop();
-    }
-
-    @Override
-    public int getBottom() {
-        return super.getBottom();
-    }
-
     private void renderHighlight(Renderer renderer, int i, int j, int k, int l) {
         int m;
         if (i < k) {

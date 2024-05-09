@@ -14,10 +14,10 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
         super(entrance, x, y, width, height);
     }
 
-    @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
-    }
+//    @Override
+//    protected int getScrollbarPosition() {
+//        return this.getWidth() / 2 + 160;
+//    }
 
     protected abstract Entry<T> createHolder(T item);
 

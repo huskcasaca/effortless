@@ -330,6 +330,7 @@ public abstract class Renderer {
             var e = MathUtils.max(extraWidth * 0.5, 3.0);
             var f = MathUtils.sin(1.5707963267948966 * MathUtils.cos(6.283185307179586 * d / e)) / 2.0 + 0.5;
             var x = MathUtils.lerp(f, 0.0, extraWidth);
+            this.flush();
             this.enableScissor(x1, y1, x2, y2);
             this.renderText(typeface, text, x1 - (int) x + paddingWidth / 2, containerHeight, color, true);
             this.disableScissor();

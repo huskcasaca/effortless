@@ -92,7 +92,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
                 var rowCenterX = x0 + getWidth() / 2;
                 var rowLeft = rowCenterX - rowHalfWidth;
                 var rowRight = rowCenterX + rowHalfWidth;
-                if (mouseX < this.getScrollbarPosition() && mouseX >= rowLeft && mouseX <= rowRight && index >= 0 && mouseRelativeY >= 0 && index < this.getEntrySize()) {
+                if (mouseX < this.x0 + this.getScrollbarPosition() && mouseX >= rowLeft && mouseX <= rowRight && index >= 0 && mouseRelativeY >= 0 && index < this.getEntrySize()) {
                     return child;
                 } else {
                     return null;
@@ -265,12 +265,12 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     protected void updateScrollingState(double d, double e, int i) {
-        this.scrolling = i == 0 && d >= (double) this.getScrollbarPosition() && d < (double) (this.getScrollbarPosition() + 6);
+        this.scrolling = i == 0 && d >= (double) this.x0 + this.getScrollbarPosition() && d < (double) (this.x0 + this.getScrollbarPosition() + 6);
     }
 
     // TODO: 12/9/23
     protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 300 / 2 + 20;
+        return this.getWidth() + 2;
     }
 
     protected void moveSelection(SelectionDirection selectionDirection) {
@@ -374,19 +374,24 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         renderer.popPose();
     }
 
-    public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-
-        setHovered(isMouseOver(mouseX, mouseY) ? getWidgetAt(mouseX, mouseY) : null);
-
-        var k = this.getScrollbarPosition();
-        var l = k + 6;
+    public void renderBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         if (isBackgroundTransparent() && getEntrance().getClient().isLoaded()) {
-            renderer.renderGradientRect(x0, y0, x1, y1, 0xa1101010, 0x8c101010);
+            renderer.renderGradientRect(x0, y0, x1, y1, 0xdc000000, 0xdc000000);
+//            renderer.renderGradientRect(x0, y0, x1, y1, 0xa1101010, 0x8c101010);
         } else {
             renderer.setRsShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
             renderer.renderPanelBackgroundTexture(x0, y0, (float) x1, (float) (y1 + (int) this.getScrollAmount()), x1 - x0, y1 - y0);
             renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
+    }
+
+    public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+
+        setHovered(isMouseOver(mouseX, mouseY) ? getWidgetAt(mouseX, mouseY) : null);
+
+        var left = this.x0 + this.getScrollbarPosition();
+        var width = 6;
+        renderBackground(renderer, mouseX, mouseY, deltaTick);
         renderer.pushPose();
         renderer.enableScissor(this.x0, this.y0, this.x1, this.y1);
         this.renderList(renderer, mouseX, mouseY, deltaTick);
@@ -394,25 +399,27 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         renderer.popPose();
 
         if (this.renderShadow) {
-            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0, 0);
-            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216, 0);
+            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y0, this.x1, this.y0 + 4, 0xff000000, 0, 0);
+            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y1 - 4, this.x1, this.y1, 0, 0xff000000, 0);
         }
 
         var renderScrollBar = this.getMaxScroll();
-        if (renderScrollBar > 0) {
-            int p = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
-            p = MathUtils.clamp(p, 32, this.y1 - this.y0 - 8);
-            int q = (int) this.getScrollAmount() * (this.y1 - this.y0 - p) / renderScrollBar + this.y0;
-            if (q < this.y0) {
-                q = this.y0;
+        if (renderScrollBar > 0 || alwaysShowScrollbar) {
+            var size = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
+            size = MathUtils.clamp(size, 32, this.y1 - this.y0);
+            var top = renderScrollBar == 0 ? 0 : ((int) this.getScrollAmount() * (this.y1 - this.y0 - size) / renderScrollBar) + this.y0;
+            if (top < this.y0) {
+                top = this.y0;
             }
 
-            renderer.renderRect(k, this.y0, l, this.y1, -16777216);
-            renderer.renderRect(k, q, l, q + p, -8355712);
-            renderer.renderRect(k, q, l - 1, q + p - 1, -4144960);
+            renderer.renderRect(left, this.y0, left + width, this.y1, 0xff000000);
+            renderer.renderRect(left, top, left + width, top + size, 0xff808080);
+            renderer.renderRect(left, top, left + width - 1, top + size - 1, 0xffc0c0c0);
         }
 
     }
+
+    public boolean alwaysShowScrollbar = true;
 
     @Override
     public void renderWidgetOverlay(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
