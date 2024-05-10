@@ -61,6 +61,7 @@ public class EffortlessPatternSimpleSettingsScreen extends AbstractPanelScreen {
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), 24 - 2, -1f, 0f, 1f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
+            this.lastSettings = lastSettings.withEnabled(!lastSettings.transformers().isEmpty() && lastSettings.enabled());
             applySettings.accept(lastSettings);
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 1f).build());
@@ -140,6 +141,7 @@ public class EffortlessPatternSimpleSettingsScreen extends AbstractPanelScreen {
         downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
         editButton.setActive(entries.hasSelected());
         deleteButton.setActive(entries.hasSelected());
+        addButton.setActive(entries.items().size() < 4);
 
         upButton.setVisible(getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
         downButton.setVisible(getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
