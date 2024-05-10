@@ -12,7 +12,7 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
     private final Screen proxy;
 
     public MinecraftProxyScreen(Screen screen) {
-        super(Component.nullToEmpty(null));
+        super(screen.getScreenTitle().reference());
         this.proxy = screen;
     }
 
@@ -27,9 +27,7 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
 
     @Override
     protected void init() {
-        proxy.setWidth(width);
-        proxy.setHeight(height);
-        proxy.recreate();
+        proxy.init(width, height);
     }
 
 //    @Override

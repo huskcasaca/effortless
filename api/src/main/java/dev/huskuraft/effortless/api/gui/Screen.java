@@ -6,6 +6,8 @@ public interface Screen extends ContainerWidget {
 
     Text getScreenTitle();
 
+    void init(int width, int height);
+
     void onAttach();
 
     void onDetach();

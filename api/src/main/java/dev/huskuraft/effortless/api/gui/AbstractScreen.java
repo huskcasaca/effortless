@@ -22,6 +22,13 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
     }
 
     @Override
+    public void init(int width, int height) {
+        setWidth(width);
+        setHeight(height);
+        recreate();
+    }
+
+    @Override
     public void onCreate() {
     }
 
