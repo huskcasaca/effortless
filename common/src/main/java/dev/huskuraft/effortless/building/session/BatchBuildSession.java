@@ -60,9 +60,11 @@ public class BatchBuildSession implements BuildSession {
         var storage = Storage.create(player, context.isPreview());
         var operations = createDeferredOperations(world, player, context, storage);
 
-        for (var transformer : context.pattern().transformers()) {
-            if (transformer.isValid()) {
-                operations = transformer.transform(operations);
+        if (context.pattern().enabled()) {
+            for (var transformer : context.pattern().transformers()) {
+                if (transformer.isValid()) {
+                    operations = transformer.transform(operations);
+                }
             }
         }
         operations = operations.flatten().filter(Objects::nonNull);

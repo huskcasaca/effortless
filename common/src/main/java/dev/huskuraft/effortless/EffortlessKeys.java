@@ -11,11 +11,9 @@ public enum EffortlessKeys implements Key {
     PATTERN_SETTINGS("pattern_settings", KeyCodes.KEY_UNKNOWN),
 
     BUILD_MODE_RADIAL("build_mode_radial", KeyCodes.KEY_LEFT_ALT),
-    PATTERN_RADIAL("pattern_radial", KeyCodes.KEY_LEFT_SUPER),
 
     UNDO("undo", KeyCodes.KEY_LEFT_BRACKET),
     REDO("redo", KeyCodes.KEY_RIGHT_BRACKET),
-    //    CYCLE_REPLACE_MODE("cycle_replace", KeyCodes.KEY_UNKNOWN),
     TOGGLE_REPLACE("toggle_replace", KeyCodes.KEY_UNKNOWN),
     PASSIVE_BUILD_MODIFIER("passive_build_modifier", KeyCodes.KEY_UNKNOWN),
 

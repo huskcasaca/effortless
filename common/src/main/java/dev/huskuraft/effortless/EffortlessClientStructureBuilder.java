@@ -186,7 +186,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
         if (buildMode.isDisabled()) {
             getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
-            updateContext(player, context -> context.withPattern(Pattern.DISABLED));
+            updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
         }
     }
 
@@ -532,8 +532,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var button = AbstractWheelScreen.button(option.get());
             texts.add(new Tuple2<>(button.getCategory().withStyle(ChatFormatting.WHITE), button.getName().withStyle(ChatFormatting.GOLD)));
         }
-        if (!context.pattern().equals(Pattern.DISABLED)) {
-            texts.add(new Tuple2<>(Text.translate("effortless.build.summary.pattern").withStyle(ChatFormatting.WHITE), (context.pattern().equals(Pattern.DISABLED) ? Text.translate("effortless.build.summary.pattern_disabled") : Text.translate("effortless.build.summary.pattern_enabled")).withStyle(ChatFormatting.GOLD)));
+        if (context.pattern().enabled()) {
+            texts.add(new Tuple2<>(Text.translate("effortless.build.summary.pattern").withStyle(ChatFormatting.WHITE), (context.pattern().enabled() ? Text.translate("effortless.build.summary.pattern_enabled") : Text.translate("effortless.build.summary.pattern_disabled")).withStyle(ChatFormatting.GOLD)));
         }
 
         entries.add(texts);

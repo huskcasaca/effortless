@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSimpleSettingsScreen;
 import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 
@@ -54,7 +54,7 @@ public class EffortlessSettingsScreen extends AbstractScreen {
             new EffortlessRenderSettingsScreen(getEntrance()).attach();
         });
         entries.addTab(Text.translate("effortless.pattern_settings.title"), (button) -> {
-            new EffortlessPatternSettingsScreen(getEntrance()).attach();
+            new EffortlessPatternSimpleSettingsScreen(getEntrance()).attach();
         });
         entries.addTab(Text.translate("effortless.transformer_presets.title"), (button) -> {
             new EffortlessTransformerTemplateSelectScreen(

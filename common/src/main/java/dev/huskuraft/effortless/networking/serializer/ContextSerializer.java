@@ -40,7 +40,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                 new Context.PatternParams(
                         new Pattern(
                                 byteBuf.readUUID(),
-                                byteBuf.readText(),
+                                byteBuf.readBoolean(),
                                 byteBuf.readList(new TransformerSerializer())
                         ),
                         byteBuf.readLong()),
@@ -68,7 +68,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.writeEnum(context.structureParams().lineDirection());
 
         byteBuf.writeUUID(context.patternParams().pattern().id());
-        byteBuf.writeText(context.patternParams().pattern().name());
+        byteBuf.writeBoolean(context.patternParams().pattern().enabled());
         byteBuf.writeList(context.patternParams().pattern().transformers(), new TransformerSerializer());
         byteBuf.writeLong(context.patternParams().seed());
 

@@ -345,5 +345,8 @@
   "effortless.button.up": "Move Up",
   "effortless.button.down": "Move Down",
   "effortless.button.new": "New",
-  "effortless.button.duplicate": "Duplicate"
+  "effortless.button.duplicate": "Duplicate",
+  "effortless.pattern.button.enable": "Enable Pattern",
+  "effortless.pattern.button.disable": "Disable Pattern",
+  "effortless.pattern.simple.title": "Pattern Settings"
 }

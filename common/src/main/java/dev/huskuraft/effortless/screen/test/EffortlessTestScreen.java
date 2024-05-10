@@ -27,7 +27,7 @@ import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSimpleSettingsScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
@@ -65,7 +65,7 @@ public class EffortlessTestScreen extends AbstractScreen {
                                 new PatternConfig(
                                         List.of(
                                                 new Pattern(
-                                                        Text.text("" + new Random().nextDouble()),
+                                                        true,
                                                         List.of(
                                                                 new ArrayTransformer(new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), new Random().nextInt()),
                                                                 new ArrayTransformer(new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), new Random().nextInt()),
@@ -103,8 +103,8 @@ public class EffortlessTestScreen extends AbstractScreen {
             }));
         });
         entries.addSimpleEntry(entry -> {
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessPatternSettingsScreen"), (button) -> {
-                new EffortlessPatternSettingsScreen(getEntrance()).attach();
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessPatternSimpleSettingsScreen"), (button) -> {
+                new EffortlessPatternSimpleSettingsScreen(getEntrance()).attach();
             }));
         });
     }

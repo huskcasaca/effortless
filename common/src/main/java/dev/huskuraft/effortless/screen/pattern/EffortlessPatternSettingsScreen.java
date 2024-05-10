@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.screen.pattern;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.EffortlessClient;
@@ -97,13 +98,13 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
                         entries.insertSelected(pattern);
                         onReload();
                     },
-                    Pattern.getDefaultPattern(),
+                    Pattern.DISABLED,
                     entries.indexOfSelected() == -1 ? entries.children().size() : entries.indexOfSelected() + 1
             ).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.reset"), button -> {
-            entries.reset(Pattern.getPatternPresets());
+            entries.reset(List.of());
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.5f).build());
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
