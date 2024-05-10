@@ -19,11 +19,6 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
     }
 
     @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
-    }
-
-    @Override
     protected Entry createHolder(PlayerInfo item) {
         if (this.isLargeIcon) {
             return new LargeEntry(getEntrance(), item);

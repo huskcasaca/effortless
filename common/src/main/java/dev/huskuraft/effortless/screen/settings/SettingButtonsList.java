@@ -2,10 +2,12 @@ package dev.huskuraft.effortless.screen.settings;
 
 import java.util.function.Consumer;
 
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.container.AbstractEntryList;
 import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 
@@ -18,11 +20,6 @@ public class SettingButtonsList extends AbstractEntryList<SettingButtonsList.Ent
     @Override
     public boolean isRenderSelection() {
         return false;
-    }
-
-    @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
     }
 
     public Button addTab(Text title, Consumer<Button> consumer) {
@@ -77,7 +74,11 @@ public class SettingButtonsList extends AbstractEntryList<SettingButtonsList.Ent
         protected Entry(Entrance entrance, EntryList entryList, T item) {
             super(entrance, entryList, item);
         }
-    }
 
+        @Override
+        public int getWidth() {
+            return MathUtils.min(Dimens.Entry.ROW_WIDTH, getParent().getWidth() - Button.COMPAT_OUTER_SPACING * 2);
+        }
+    }
 
 }

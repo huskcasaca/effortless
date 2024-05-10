@@ -23,11 +23,6 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
     }
 
     @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
-    }
-
-    @Override
     protected EditableEntryList.Entry<Chance<Item>> createHolder(Chance<Item> item) {
         return new Entry(getEntrance(), this, item);
     }

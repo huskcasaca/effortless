@@ -1,11 +1,12 @@
 package dev.huskuraft.effortless.screen.settings;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.pattern.Transformer;
@@ -15,10 +16,10 @@ import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSimpleSettingsSc
 import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 
-public class EffortlessSettingsScreen extends AbstractScreen {
+public class EffortlessSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.settings.title"));
+        super(entrance, Text.translate("effortless.settings.title"), Dimens.Screen.CONTAINER_WIDTH_THIN, Dimens.Screen.CONTAINER_HEIGHT_THIN);
     }
 
     @Override
@@ -28,9 +29,9 @@ public class EffortlessSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + Dimens.Screen.TITLE_CONTAINER - 12, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1));
+        var entries = addWidget(new SettingButtonsList(getEntrance(), getLeft(), getTop() + Dimens.Screen.TITLE_CONTAINER, getWidth(), getHeight() - Dimens.Screen.TITLE_CONTAINER - Dimens.Screen.BUTTON_CONTAINER_ROW_1));
         entries.addTab(Text.translate("effortless.general_settings.title"), (button) -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {
                 getEntrance().getClient().execute(() -> {
@@ -68,10 +69,12 @@ public class EffortlessSettingsScreen extends AbstractScreen {
             getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig(), config.transformerPresets(), !config.passiveMode()));
             button.setMessage(Text.translate("effortless.settings.passive_mode").getString() + getEntrance().getConfigStorage().get().passiveMode());
         });
+        entries.setBackgroundTransparent(true);
+        entries.setShowScrollBar(false);
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
             detach();
-        }).setBounds(getWidth() / 2 - Button.TAB_WIDTH / 2, getHeight() - Button.DEFAULT_HEIGHT - Button.MARGIN, Button.TAB_WIDTH, Button.DEFAULT_HEIGHT).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 1f).build());
 
     }
 

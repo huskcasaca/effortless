@@ -32,7 +32,7 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
     private Button cancelButton;
 
     public EffortlessPatternSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.pattern.settings.title"), 240, 240);
+        super(entrance, Text.translate("effortless.pattern.settings.title"), Dimens.Screen.CONTAINER_WIDTH_NORMAL, Dimens.Screen.CONTAINER_HEIGHT_NORMAL);
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
             getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), this.config, config.transformerPresets(), config.passiveMode()));
@@ -49,9 +49,9 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + 20 - 12, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + Dimens.Screen.TITLE_CONTAINER - 12, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        this.entries = addWidget(new PatternList(getEntrance(), getLeft() + 6, getTop() + 20, getWidth() - 20, getHeight() - 20 - Dimens.Screen.BUTTON_CONTAINER_ROW_2));
+        this.entries = addWidget(new PatternList(getEntrance(), getLeft() + 6, getTop() + 20, getWidth() - 20, getHeight() - Dimens.Screen.TITLE_CONTAINER - Dimens.Screen.BUTTON_CONTAINER_ROW_2));
         this.entries.reset(config.patterns());
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.up"), button -> {

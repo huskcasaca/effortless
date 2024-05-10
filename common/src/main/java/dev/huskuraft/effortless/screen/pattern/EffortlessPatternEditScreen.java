@@ -37,7 +37,7 @@ public class EffortlessPatternEditScreen extends AbstractPanelScreen {
     private RadialTextIcon radialTextIcon;
 
     public EffortlessPatternEditScreen(Entrance entrance, Consumer<Pattern> consumer, Pattern pattern, int index) {
-        super(entrance, Text.translate("effortless.pattern.edit.title"), 240, 240);
+        super(entrance, Text.translate("effortless.pattern.edit.title"), Dimens.Screen.CONTAINER_WIDTH_NORMAL, Dimens.Screen.CONTAINER_HEIGHT_NORMAL);
         this.applySettings = consumer;
         this.defaultSettings = pattern;
         this.lastSettings = pattern;

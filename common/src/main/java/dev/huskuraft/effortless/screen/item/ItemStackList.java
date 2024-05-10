@@ -15,11 +15,6 @@ public final class ItemStackList extends EditableEntryList<ItemStack> {
     }
 
     @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
-    }
-
-    @Override
     protected Entry createHolder(ItemStack item) {
         return new Entry(getEntrance(), item);
     }

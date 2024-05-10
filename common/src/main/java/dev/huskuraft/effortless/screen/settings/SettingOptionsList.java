@@ -37,11 +37,6 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         this.showButton = showButton;
     }
 
-    @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
-    }
-
     public boolean isShowIcon() {
         return showIcon;
     }

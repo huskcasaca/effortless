@@ -4,10 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
-import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 
 public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEntryList.Entry<T>> {
@@ -164,11 +162,6 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
 
         public EntryList getEntryList() {
             return entryList;
-        }
-
-        @Override
-        public int getWidth() {
-            return MathUtils.min(Dimens.Entry.ROW_WIDTH, getParent().getWidth() - 8);
         }
 
     }

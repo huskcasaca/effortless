@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.gui.AbstractContainerWidget;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
 import dev.huskuraft.effortless.api.math.MathUtils;
@@ -18,15 +19,21 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> extends AbstractContainerWidget implements EntryList {
 
-    private final boolean backgroundTransparent = true;
-    private final boolean renderShadow = true;
+    private static final int DEFAULT_VERTICAL_PADDING = 4;
+
+    protected boolean backgroundTransparent = false;
+    protected boolean renderShadow = true;
+    protected boolean renderSelection = true;
+    protected boolean isAlwaysShowScrollbar = false;
+    protected boolean isShowScrollBar = true;
+
+    protected boolean scrolling;
+
     protected int x0;
     protected int x1;
     protected int y0;
     protected int y1;
-    protected boolean scrolling;
     private double scrollAmount;
-    private boolean renderSelection = true;
 
     protected AbstractEntryList(Entrance entrance, int x, int y, int width, int height) {
         super(entrance, x, y, width, height, Text.empty());
@@ -38,6 +45,10 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
     public boolean isBackgroundTransparent() {
         return backgroundTransparent;
+    }
+
+    public void setBackgroundTransparent(boolean backgroundTransparent) {
+        this.backgroundTransparent = backgroundTransparent;
     }
 
     @Nullable
@@ -375,13 +386,13 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     public void renderBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-        if (isBackgroundTransparent() && getEntrance().getClient().isLoaded()) {
+        if (getEntrance().getClient().isLoaded() && !isBackgroundTransparent()) {
             renderer.renderGradientRect(x0, y0, x1, y1, 0xdc000000, 0xdc000000);
 //            renderer.renderGradientRect(x0, y0, x1, y1, 0xa1101010, 0x8c101010);
         } else {
-            renderer.setRsShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
-            renderer.renderPanelBackgroundTexture(x0, y0, (float) x1, (float) (y1 + (int) this.getScrollAmount()), x1 - x0, y1 - y0);
-            renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//            renderer.setRsShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
+//            renderer.renderPanelBackgroundTexture(x0, y0, (float) x1, (float) (y1 + (int) this.getScrollAmount()), x1 - x0, y1 - y0);
+//            renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
@@ -404,7 +415,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         }
 
         var renderScrollBar = this.getMaxScroll();
-        if (renderScrollBar > 0 || alwaysShowScrollbar) {
+        if (isShowScrollBar && (renderScrollBar > 0 || isAlwaysShowScrollbar)) {
             var size = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
             size = MathUtils.clamp(size, 32, this.y1 - this.y0);
             var top = renderScrollBar == 0 ? 0 : ((int) this.getScrollAmount() * (this.y1 - this.y0 - size) / renderScrollBar) + this.y0;
@@ -416,10 +427,15 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
             renderer.renderRect(left, top, left + width, top + size, 0xff808080);
             renderer.renderRect(left, top, left + width - 1, top + size - 1, 0xffc0c0c0);
         }
-
     }
 
-    public boolean alwaysShowScrollbar = true;
+    public void setAlwaysShowScrollbar(boolean alwaysShowScrollbar) {
+        this.isAlwaysShowScrollbar = alwaysShowScrollbar;
+    }
+
+    public void setShowScrollBar(boolean showScrollBar) {
+        this.isShowScrollBar = showScrollBar;
+    }
 
     @Override
     public void renderWidgetOverlay(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
@@ -529,6 +545,8 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         DOWN
     }
 
+
+
     public abstract static class Entry extends AbstractContainerWidget implements EntryList.Entry {
 
         protected Entry(Entrance entrance) {
@@ -560,6 +578,11 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
             renderer.enableScissor(getX(), getY(), getX() + getWidth(), getY() + getHeight());
             super.render(renderer, mouseX, mouseY, deltaTick);
             renderer.disableScissor();
+        }
+
+        @Override
+        public int getWidth() {
+            return MathUtils.min(Dimens.Entry.ROW_WIDTH, getParent().getWidth() - DEFAULT_VERTICAL_PADDING * 2);
         }
     }
 }

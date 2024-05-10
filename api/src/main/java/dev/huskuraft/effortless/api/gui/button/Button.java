@@ -23,7 +23,9 @@ public class Button extends AbstractButton {
     public static final int VERTICAL_PADDING = Dimens.Buttons.VERTICAL_SPACING;
     public static final int HORIZONTAL_PADDING = Dimens.Buttons.HORIZONTAL_SPACING;
 
-    public static final int COMPAT_PADDING = 4;
+    public static final int COMPAT_INNER_SPACING = 3;
+    public static final int COMPAT_INNER_SPACING_V = 3;
+    public static final int COMPAT_OUTER_SPACING = 6;
 
     public static final int MARGIN = Dimens.Buttons.VERTICAL_PADDING;
 
@@ -115,12 +117,14 @@ public class Button extends AbstractButton {
         }
 
         public Builder setBoundsGrid(int x, int y, int width, int height, float row, float col, float size) {
-            var innerWidth = width - COMPAT_PADDING * 6;
-            var buttonWidth = innerWidth / 4;
+            var innerSize = 1 / size;
+            var innerWidth = width - (innerSize - 1) * COMPAT_INNER_SPACING_V - 2 * COMPAT_OUTER_SPACING;
+            var index = col / size;
+            var buttonWidth = innerWidth / innerSize;
             return setBounds(
-                    (int) (x + COMPAT_PADDING * 3f + (innerWidth / 2 - buttonWidth * 2 - COMPAT_PADDING * 3 / 2 + col * 4 * (buttonWidth + COMPAT_PADDING))),
-                    (int) (y + (height - Button.DEFAULT_HEIGHT - Button.MARGIN - row * (DEFAULT_HEIGHT + COMPAT_PADDING))) + 2,
-                    (int) (buttonWidth * size * 4 + COMPAT_PADDING * (size * 4 - 1)),
+                    (int) (x + index * (buttonWidth + COMPAT_INNER_SPACING_V) + COMPAT_OUTER_SPACING),
+                    (int) (y + (height - row * (Button.DEFAULT_HEIGHT + COMPAT_INNER_SPACING) - Button.DEFAULT_HEIGHT - COMPAT_OUTER_SPACING)),
+                    (int) buttonWidth,
                     DEFAULT_HEIGHT);
         }
 
