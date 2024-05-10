@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.screen.pattern;
 import java.util.List;
 import java.util.function.Consumer;
 
-import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
@@ -20,7 +20,7 @@ import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScre
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
 
-public class EffortlessPatternEditScreen extends AbstractScreen {
+public class EffortlessPatternEditScreen extends AbstractPanelScreen {
 
     private final Consumer<Pattern> applySettings;
     private final Pattern defaultSettings;
@@ -40,7 +40,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
     private RadialTextIcon radialTextIcon;
 
     public EffortlessPatternEditScreen(Entrance entrance, Consumer<Pattern> consumer, Pattern pattern, int index) {
-        super(entrance, Text.translate("effortless.pattern.edit.title"));
+        super(entrance, Text.translate("effortless.pattern.edit.title"), 240, 240);
         this.applySettings = consumer;
         this.defaultSettings = pattern;
         this.lastSettings = pattern;
@@ -53,27 +53,27 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, index, Text.text(String.valueOf(index + 1))));
+        this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getLeft() + getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, getTop() + 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, index, Text.text(String.valueOf(index + 1))));
 
         this.nameEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2 + 40, 24, Dimens.Entry.ROW_WIDTH - 40, 20, null)
+                new EditBox(getEntrance(), getLeft() + getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2 + 40, getTop() + 24, Dimens.Entry.ROW_WIDTH - 40, 20, null)
         );
         this.nameEditBox.setMaxLength(Pattern.MAX_NAME_LENGTH);
         this.nameEditBox.setHint(Text.translate("effortless.pattern.edit.name_hint"));
         this.nameEditBox.setValue(lastSettings.name().getString());
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
             if (entries.hasSelected()) {
                 entries.moveUpSelected();
             }
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 0.25f).build());
         this.downButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.down"), button -> {
             if (entries.hasSelected()) {
                 entries.moveDownSelected();
             }
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.edit"), button -> {
             if (entries.hasSelected()) {
@@ -102,19 +102,19 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
                 }
 
             }
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 0.25f).build());
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.settings.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
             }
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem().withRandomId());
             }
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.add"), button -> {
             new EffortlessTransformerTemplateSelectScreen(
@@ -125,17 +125,17 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
                     },
                     Transformer.getDefaultTransformers()
             ).attach();
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.cancel"), button -> {
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern.edit.save"), button -> {
             applySettings.accept(lastSettings);
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new TransformerList(getEntrance(), 0, 54, getWidth(), getHeight() - 54 - 60));
+        this.entries = addWidget(new TransformerList(getEntrance(), getLeft(), getTop() + 54, getWidth(), getHeight() - 54 - 60));
         this.entries.reset(lastSettings.transformers());
     }
 

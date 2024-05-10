@@ -7,8 +7,13 @@ import dev.huskuraft.effortless.api.texture.TextureFactory;
 
 public abstract class AbstractPanelScreen extends AbstractScreen {
 
-    protected AbstractPanelScreen(Entrance entrance, Text title) {
+    private final int width;
+    private final int height;
+
+    protected AbstractPanelScreen(Entrance entrance, Text title, int width, int height) {
         super(entrance, title);
+        this.width = width;
+        this.height = height;
     }
 
     @Override
@@ -19,12 +24,12 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
 
     @Override
     public final int getWidth() {
-        return getContainerWidth();
+        return width;
     }
 
     @Override
     public final int getHeight() {
-        return getContainerHeight();
+        return height;
     }
 
     @Override
@@ -37,7 +42,4 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
         return super.getY() + super.getHeight() / 2 - getHeight() / 2;
     }
 
-    protected abstract int getContainerWidth();
-
-    protected abstract int getContainerHeight();
 }

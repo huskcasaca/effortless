@@ -31,7 +31,7 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
     private Button cancelButton;
 
     public EffortlessPatternSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.pattern.settings.title"));
+        super(entrance, Text.translate("effortless.pattern.settings.title"), 240, 240);
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
             getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), this.config, config.transformerPresets(), config.passiveMode()));
@@ -48,21 +48,21 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getX() + getWidth() / 2, getY() + 20 - 12, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + 20 - 12, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        this.entries = addWidget(new PatternList(getEntrance(), getX() + 6, getY() + 20, getWidth() - 20, getHeight() - 20 - Dimens.Screen.BUTTON_CONTAINER_ROW_2));
+        this.entries = addWidget(new PatternList(getEntrance(), getLeft() + 6, getTop() + 20, getWidth() - 20, getHeight() - 20 - Dimens.Screen.BUTTON_CONTAINER_ROW_2));
         this.entries.reset(config.patterns());
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.up"), button -> {
             if (entries.hasSelected()) {
                 entries.moveUpSelected();
             }
-        }).setBoundsGrid(getX(), getY(), getWidth(), getHeight(), 1f, 0f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 0.25f).build());
         this.downButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.down"), button -> {
             if (entries.hasSelected()) {
                 entries.moveDownSelected();
             }
-        }).setBoundsGrid(getX(), getY(), getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.hasSelected()) {
@@ -76,19 +76,19 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
                         entries.indexOfSelected()
                 ).attach();
             }
-        }).setBoundsGrid(getX(), getY(), getWidth(), getHeight(), 1f, 0f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 0.25f).build());
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
             }
-        }).setBoundsGrid(getX(), getY(), getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
         this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.duplicate"), button -> {
             if (entries.hasSelected()) {
                 entries.insertSelected(entries.getSelected().getItem().withRandomId());
             }
-        }).setBoundsGrid(getX(), getY(), getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
         this.newButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.new"), button -> {
             new EffortlessPatternEditScreen(
@@ -100,19 +100,19 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
                     Pattern.getDefaultPattern(),
                     entries.indexOfSelected() == -1 ? entries.children().size() : entries.indexOfSelected() + 1
             ).attach();
-        }).setBoundsGrid(getX(), getY(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
         this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.reset"), button -> {
             entries.reset(Pattern.getPatternPresets());
-        }).setBoundsGrid(getX(), getY(), getWidth(), getHeight(), 1f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.5f).build());
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
-        }).setBoundsGrid(getX(), getY(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             consumer.accept(config);
             detach();
-        }).setBoundsGrid(getX(), getY(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
     }
 
     @Override
@@ -135,15 +135,5 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
         this.config = new PatternConfig(entries.items());
     }
 
-    @Override
-    protected int getContainerWidth() {
-        return 240;
-    }
-
-
-    @Override
-    protected int getContainerHeight() {
-        return 240;
-    }
 
 }
