@@ -141,11 +141,6 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         }
 
         @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
-        }
-
-        @Override
         public int getHeight() {
             return 24;
         }

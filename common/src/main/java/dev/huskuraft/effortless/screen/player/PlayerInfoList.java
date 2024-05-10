@@ -58,11 +58,6 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
         }
 
         @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
-        }
-
-        @Override
         public int getHeight() {
             return Dimens.Icon.SIZE_18 + 6;
         }
@@ -95,11 +90,6 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
         @Override
         public Text getNarration() {
             return Text.translate("narrator.select", getItem().getDisplayName());
-        }
-
-        @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

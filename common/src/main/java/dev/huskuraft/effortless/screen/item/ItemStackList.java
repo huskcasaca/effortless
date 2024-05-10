@@ -51,11 +51,6 @@ public final class ItemStackList extends EditableEntryList<ItemStack> {
         }
 
         @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
-        }
-
-        @Override
         public int getHeight() {
             return 24;
         }

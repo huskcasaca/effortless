@@ -28,11 +28,6 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         super(entrance, x, y, width, height);
     }
 
-    @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     protected EditableEntryList.Entry<Transformer> createHolder(Transformer transformer) {
@@ -96,11 +91,6 @@ public final class TransformerList extends EditableEntryList<Transformer> {
 
         protected Text getSymbol() {
             return getSymbol(getItem());
-        }
-
-        @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

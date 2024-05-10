@@ -164,5 +164,10 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
             return entryList;
         }
 
+        @Override
+        public int getWidth() {
+            return getParent().getWidth() - 8;
+        }
+
     }
 }

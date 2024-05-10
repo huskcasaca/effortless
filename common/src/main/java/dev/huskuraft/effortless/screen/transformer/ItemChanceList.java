@@ -105,11 +105,6 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
         }
 
         @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
-        }
-
-        @Override
         public int getHeight() {
             return 24;
         }

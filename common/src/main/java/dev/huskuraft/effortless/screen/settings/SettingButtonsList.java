@@ -62,11 +62,6 @@ public class SettingButtonsList extends AbstractEntryList<SettingButtonsList.Ent
         }
 
         @Override
-        public int getWidth() {
-            return width;
-        }
-
-        @Override
         public int getHeight() {
             return 24;
         }

@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.screen.pattern;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
@@ -8,7 +7,6 @@ import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
 import dev.huskuraft.effortless.api.gui.icon.RadialTextIcon;
-import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
@@ -27,7 +25,6 @@ public class EffortlessPatternEditScreen extends AbstractPanelScreen {
     private final int index;
     private Pattern lastSettings;
     private TextWidget titleTextWidget;
-    private EditBox nameEditBox;
     private TransformerList entries;
     private Button upButton;
     private Button downButton;
@@ -47,21 +44,8 @@ public class EffortlessPatternEditScreen extends AbstractPanelScreen {
         this.index = index;
     }
 
-    public static List<Text> getTransformerEntryTooltip(Transformer transformer) {
-        return List.of();
-    }
-
     @Override
     public void onCreate() {
-        this.radialTextIcon = addWidget(new RadialTextIcon(getEntrance(), getLeft() + getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, getTop() + 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, index, Text.text(String.valueOf(index + 1))));
-
-        this.nameEditBox = addWidget(
-                new EditBox(getEntrance(), getLeft() + getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2 + 40, getTop() + 24, Dimens.Entry.ROW_WIDTH - 40, 20, null)
-        );
-        this.nameEditBox.setMaxLength(Pattern.MAX_NAME_LENGTH);
-        this.nameEditBox.setHint(Text.translate("effortless.pattern.edit.name_hint"));
-        this.nameEditBox.setValue(lastSettings.name().getString());
-
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
@@ -135,7 +119,7 @@ public class EffortlessPatternEditScreen extends AbstractPanelScreen {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new TransformerList(getEntrance(), getLeft(), getTop() + 54, getWidth(), getHeight() - 54 - 60));
+        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + 6, getTop() + 20, getWidth() - 20, getHeight() - 20 - Dimens.Screen.BUTTON_CONTAINER_ROW_2));
         this.entries.reset(lastSettings.transformers());
     }
 
@@ -153,7 +137,7 @@ public class EffortlessPatternEditScreen extends AbstractPanelScreen {
         editButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
         deleteButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
 
-        lastSettings = new Pattern(lastSettings.id(), Text.text(nameEditBox.getValue()), entries.items());
+        lastSettings = new Pattern(lastSettings.id(), Text.empty(), entries.items());
     }
 
     private boolean isContentValid() {

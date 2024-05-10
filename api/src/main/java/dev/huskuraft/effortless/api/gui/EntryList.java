@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.gui;
 
-public interface EntryList {
+public interface EntryList extends Widget {
 
     void moveUp(Widget widget);
 
@@ -14,7 +14,7 @@ public interface EntryList {
 
     Entry getSelected();
 
-    interface Entry {
+    interface Entry extends Widget {
 
         void onPositionChange(int from, int to);
 
