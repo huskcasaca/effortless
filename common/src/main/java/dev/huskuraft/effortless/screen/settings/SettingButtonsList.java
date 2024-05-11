@@ -77,7 +77,7 @@ public class SettingButtonsList extends AbstractEntryList<SettingButtonsList.Ent
 
         @Override
         public int getWidth() {
-            return MathUtils.min(Dimens.Entry.ROW_WIDTH, getParent().getWidth() - Button.COMPAT_OUTER_SPACING * 2);
+            return MathUtils.min(Dimens.Entry.ROW_WIDTH, getParent().getWidth() - Button.PADDINGS * 2);
         }
     }
 

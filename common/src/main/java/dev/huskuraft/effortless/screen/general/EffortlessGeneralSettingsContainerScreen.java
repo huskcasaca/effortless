@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 public class EffortlessGeneralSettingsContainerScreen extends AbstractContainerScreen {
 
     public EffortlessGeneralSettingsContainerScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.general_settings.title"), Dimens.Screen.CONTAINER_WIDTH_THIN, Dimens.Screen.TITLE_CONTAINER + Dimens.Screen.BUTTON_CONTAINER_ROW_3);
+        super(entrance, Text.translate("effortless.general_settings.title"), AbstractContainerScreen.CONTAINER_WIDTH_THIN, Dimens.Screen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_3);
     }
 
     @Override

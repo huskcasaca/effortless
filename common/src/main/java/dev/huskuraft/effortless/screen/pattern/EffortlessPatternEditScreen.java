@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.screen.pattern;
 
 import java.util.function.Consumer;
 
+import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
@@ -119,7 +120,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + 6, getTop() + 20, getWidth() - 20, getHeight() - 20 - Dimens.Screen.BUTTON_CONTAINER_ROW_2));
+        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + 6, getTop() + 20, getWidth() - 20, getHeight() - 20 - AbstractContainerScreen.BUTTON_CONTAINER_ROW_2));
         this.entries.reset(lastSettings.transformers());
     }
 

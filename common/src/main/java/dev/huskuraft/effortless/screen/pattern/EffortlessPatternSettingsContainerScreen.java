@@ -35,7 +35,7 @@ public class EffortlessPatternSettingsContainerScreen extends AbstractContainerS
     private Button saveButton;
 
     public EffortlessPatternSettingsContainerScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.pattern.simple.title").withStyle(ChatFormatting.DARK_GRAY), Dimens.Screen.CONTAINER_WIDTH_NORMAL, Dimens.Screen.CONTAINER_HEIGHT_NORMAL);
+        super(entrance, Text.translate("effortless.pattern.simple.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_NORMAL, AbstractContainerScreen.CONTAINER_HEIGHT_NORMAL);
         this.applySettings = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer() , lastSettings);
         };
@@ -50,15 +50,15 @@ public class EffortlessPatternSettingsContainerScreen extends AbstractContainerS
 
     @Override
     public void onCreate() {
-        setContainerHeight(lastSettings.enabled() ? Dimens.Screen.CONTAINER_HEIGHT_NORMAL : Dimens.Screen.TITLE_CONTAINER + Dimens.Screen.BUTTON_CONTAINER_ROW_2);
-        setContainerWidth(lastSettings.enabled() ? Dimens.Screen.CONTAINER_WIDTH_NORMAL : Dimens.Screen.CONTAINER_WIDTH_THIN);
+        setContainerHeight(lastSettings.enabled() ? AbstractContainerScreen.CONTAINER_HEIGHT_NORMAL : Dimens.Screen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_2);
+        setContainerWidth(lastSettings.enabled() ? AbstractContainerScreen.CONTAINER_WIDTH_NORMAL : AbstractContainerScreen.CONTAINER_WIDTH_THIN);
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + Dimens.Screen.TITLE_CONTAINER - 10, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.enableButton = addWidget(Button.builder(getEntrance(), lastSettings.enabled() ? Text.translate("effortless.pattern.button.disable") : Text.translate("effortless.pattern.button.enable"), button -> {
             this.lastSettings = lastSettings.withEnabled(!lastSettings.enabled());
             recreate();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), Dimens.Screen.TITLE_CONTAINER + Dimens.Screen.BUTTON_CONTAINER_ROW_1, 0f, 0f, 1f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), Dimens.Screen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_1, 0f, 0f, 1f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
             this.lastSettings = lastSettings.withEnabled(!lastSettings.transformers().isEmpty() && lastSettings.enabled());
@@ -66,7 +66,7 @@ public class EffortlessPatternSettingsContainerScreen extends AbstractContainerS
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 1f).build());
 
-        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + 6, getTop() + Dimens.Screen.TITLE_CONTAINER + Dimens.Screen.BUTTON_CONTAINER_ROW_C1, getWidth() - 20, getHeight() - Dimens.Screen.TITLE_CONTAINER - Dimens.Screen.BUTTON_CONTAINER_ROW_C1 - Dimens.Screen.BUTTON_CONTAINER_ROW_2));
+        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + 6, getTop() + Dimens.Screen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_C1, getWidth() - 20, getHeight() - Dimens.Screen.TITLE_CONTAINER - AbstractContainerScreen.BUTTON_CONTAINER_ROW_C1 - AbstractContainerScreen.BUTTON_CONTAINER_ROW_2));
         this.entries.reset(lastSettings.transformers());
         this.entries.setAlwaysShowScrollbar(true);
 

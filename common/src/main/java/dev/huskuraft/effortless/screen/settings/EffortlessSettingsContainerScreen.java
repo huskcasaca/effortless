@@ -18,7 +18,7 @@ import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplate
 public class EffortlessSettingsContainerScreen extends AbstractContainerScreen {
 
     public EffortlessSettingsContainerScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.settings.title"), Dimens.Screen.CONTAINER_WIDTH_THIN, Dimens.Screen.TITLE_CONTAINER + Dimens.Screen.BUTTON_CONTAINER_ROW_5);
+        super(entrance, Text.translate("effortless.settings.title"), AbstractContainerScreen.CONTAINER_WIDTH_THIN, Dimens.Screen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_5);
     }
 
     @Override

@@ -2,8 +2,6 @@ package dev.huskuraft.effortless.api.gui;
 
 import java.awt.*;
 
-import dev.huskuraft.effortless.api.gui.button.Button;
-
 public class Dimens {
 
     public static final int SLOT_OFFSET_X = 20;
@@ -66,24 +64,6 @@ public class Dimens {
         public static final int BUTTON_ROW_1 = Buttons.HEIGHT * 1 + Buttons.VERTICAL_SPACING * 0 + Buttons.VERTICAL_PADDING * 2;
         public static final int BUTTON_ROW_2 = Buttons.HEIGHT * 2 + Buttons.VERTICAL_SPACING * 1 + Buttons.VERTICAL_PADDING * 2;
         public static final int BUTTON_ROW_3 = Buttons.HEIGHT * 3 + Buttons.VERTICAL_SPACING * 2 + Buttons.VERTICAL_PADDING * 2;
-
-        public static final int BUTTON_CONTAINER_ROW_1 = Buttons.HEIGHT * 1 + Button.COMPAT_INNER_SPACING * 1 + Button.COMPAT_OUTER_SPACING;
-        public static final int BUTTON_CONTAINER_ROW_2 = Buttons.HEIGHT * 2 + Button.COMPAT_INNER_SPACING * 2 + Button.COMPAT_OUTER_SPACING;
-        public static final int BUTTON_CONTAINER_ROW_3 = Buttons.HEIGHT * 3 + Button.COMPAT_INNER_SPACING * 3 + Button.COMPAT_OUTER_SPACING;
-        public static final int BUTTON_CONTAINER_ROW_4 = Buttons.HEIGHT * 4 + Button.COMPAT_INNER_SPACING * 4 + Button.COMPAT_OUTER_SPACING;
-        public static final int BUTTON_CONTAINER_ROW_5 = Buttons.HEIGHT * 5 + Button.COMPAT_INNER_SPACING * 5 + Button.COMPAT_OUTER_SPACING;
-        public static final int BUTTON_CONTAINER_ROW_6 = Buttons.HEIGHT * 6 + Button.COMPAT_INNER_SPACING * 6 + Button.COMPAT_OUTER_SPACING;
-
-
-        public static final int BUTTON_CONTAINER_ROW_C1 = Buttons.HEIGHT * 1 + Button.COMPAT_INNER_SPACING * 1 + Button.COMPAT_INNER_SPACING;
-        public static final int BUTTON_CONTAINER_ROW_C2 = Buttons.HEIGHT * 2 + Button.COMPAT_INNER_SPACING * 2 + Button.COMPAT_INNER_SPACING;
-        public static final int BUTTON_CONTAINER_ROW_C3 = Buttons.HEIGHT * 3 + Button.COMPAT_INNER_SPACING * 3 + Button.COMPAT_INNER_SPACING;
-
-        public static final int CONTAINER_WIDTH_NORMAL = 56 * 4 + 3 * Button.COMPAT_INNER_SPACING_V + 2 * Button.COMPAT_OUTER_SPACING;
-        public static final int CONTAINER_WIDTH_THIN = 42 * 4 + 3 * Button.COMPAT_INNER_SPACING_V + 2 * Button.COMPAT_OUTER_SPACING;
-
-        public static final int CONTAINER_HEIGHT_NORMAL = 260;
-        public static final int CONTAINER_HEIGHT_THIN = 180;
 
     }
 

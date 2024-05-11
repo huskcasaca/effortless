@@ -70,7 +70,7 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
             detach();
-        }).setBounds(getWidth() / 2 - Button.TAB_WIDTH / 2, getHeight() - Button.DEFAULT_HEIGHT - Button.MARGIN, Button.TAB_WIDTH, Button.DEFAULT_HEIGHT).build());
+        }).setBounds(getWidth() / 2 - Button.TAB_WIDTH / 2, getHeight() - Button.DEFAULT_HEIGHT - Dimens.Buttons.VERTICAL_PADDING, Button.TAB_WIDTH, Button.DEFAULT_HEIGHT).build());
 
     }
 

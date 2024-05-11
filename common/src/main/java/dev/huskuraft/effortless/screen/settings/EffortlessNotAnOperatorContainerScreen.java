@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless.screen.settings;
 
 import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -10,7 +9,7 @@ import dev.huskuraft.effortless.api.text.Text;
 public class EffortlessNotAnOperatorContainerScreen extends AbstractContainerScreen {
 
     public EffortlessNotAnOperatorContainerScreen(Entrance entrance) {
-        super(entrance, Text.empty(), Dimens.Screen.CONTAINER_WIDTH_THIN, Dimens.Screen.CONTAINER_HEIGHT_THIN);
+        super(entrance, Text.empty(), AbstractContainerScreen.CONTAINER_WIDTH_THIN, AbstractContainerScreen.CONTAINER_HEIGHT_THIN);
     }
 
     @Override

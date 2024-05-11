@@ -23,12 +23,9 @@ public class Button extends AbstractButton {
     public static final int VERTICAL_PADDING = Dimens.Buttons.VERTICAL_SPACING;
     public static final int HORIZONTAL_PADDING = Dimens.Buttons.HORIZONTAL_SPACING;
 
-    public static final int COMPAT_INNER_SPACING = 4;
-    public static final int COMPAT_INNER_SPACING_V = 4;
-    public static final int COMPAT_OUTER_SPACING = 6;
-
-    public static final int MARGIN = Dimens.Buttons.VERTICAL_PADDING;
-
+    public static final int COMPAT_SPACING_H = 4;
+    public static final int COMPAT_SPACING_V = 4;
+    public static final int PADDINGS = 6;
 
     private OnPress onPress;
 
@@ -54,16 +51,6 @@ public class Button extends AbstractButton {
     public void setOnPressListener(OnPress onPress) {
         this.onPress = onPress;
     }
-
-    //	protected MutableComponent createNarrationMessage() {
-//		return this.createNarration.createNarrationMessage(() -> {
-//			return super.createNarrationMessage();
-//		});
-//	}
-//
-//	public void updateWidgetNarration(NarrationElementOutput narrationElementOutput) {
-//		this.defaultButtonNarrationText(narrationElementOutput);x
-//	}
 
     public interface OnPress {
         void onPress(Button button);
@@ -111,19 +98,19 @@ public class Button extends AbstractButton {
         public Builder setBoundsGrid(int width, int height, float row, float col, float size) {
             return setBounds(
                     (int) (width / 2 - Button.BUTTON_WIDTH_1 * 2 - HORIZONTAL_PADDING * 3 / 2 + col * 4 * (Button.BUTTON_WIDTH_1 + HORIZONTAL_PADDING)),
-                    (int) (height - Button.DEFAULT_HEIGHT - Button.MARGIN - row * (DEFAULT_HEIGHT + VERTICAL_PADDING)),
+                    (int) (height - Button.DEFAULT_HEIGHT - Dimens.Buttons.VERTICAL_PADDING - row * (DEFAULT_HEIGHT + VERTICAL_PADDING)),
                     (int) (Button.BUTTON_WIDTH_1 * size * 4 + HORIZONTAL_PADDING * (size * 4 - 1)),
                     DEFAULT_HEIGHT);
         }
 
         public Builder setBoundsGrid(int x, int y, int width, int height, float row, float col, float size) {
             var innerSize = 1 / size;
-            var innerWidth = width - (innerSize - 1) * COMPAT_INNER_SPACING_V - 2 * COMPAT_OUTER_SPACING;
+            var innerWidth = width - (innerSize - 1) * COMPAT_SPACING_V - 2 * PADDINGS;
             var index = col / size;
             var buttonWidth = innerWidth / innerSize;
             return setBounds(
-                    (int) (x + index * (buttonWidth + COMPAT_INNER_SPACING_V) + COMPAT_OUTER_SPACING),
-                    (int) (y + (height - row * (Button.DEFAULT_HEIGHT + COMPAT_INNER_SPACING) - Button.DEFAULT_HEIGHT - COMPAT_OUTER_SPACING)),
+                    (int) (x + index * (buttonWidth + COMPAT_SPACING_V) + PADDINGS),
+                    (int) (y + (height - row * (Button.DEFAULT_HEIGHT + COMPAT_SPACING_H) - Button.DEFAULT_HEIGHT - PADDINGS)),
                     (int) buttonWidth,
                     DEFAULT_HEIGHT);
         }
