@@ -6,7 +6,6 @@ import java.util.function.Consumer;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -50,9 +49,9 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + Dimens.Screen.TITLE_CONTAINER - 12, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 12, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        this.entries = addWidget(new PatternList(getEntrance(), getLeft() + 6, getTop() + 20, getWidth() - 20, getHeight() - Dimens.Screen.TITLE_CONTAINER - AbstractContainerScreen.BUTTON_CONTAINER_ROW_2));
+        this.entries = addWidget(new PatternList(getEntrance(), getLeft() + 6, getTop() + 20, getWidth() - 20, getHeight() - AbstractContainerScreen.TITLE_CONTAINER - AbstractContainerScreen.BUTTON_CONTAINER_ROW_2));
         this.entries.reset(config.patterns());
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.up"), button -> {

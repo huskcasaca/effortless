@@ -8,10 +8,13 @@ import dev.huskuraft.effortless.api.texture.TextureFactory;
 
 public abstract class AbstractContainerScreen extends AbstractScreen {
 
-    public static final int CONTAINER_WIDTH_NORMAL = 56 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
-    public static final int CONTAINER_WIDTH_THIN = 42 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
-    public static final int CONTAINER_HEIGHT_NORMAL = 260;
-    public static final int CONTAINER_HEIGHT_THIN = 180;
+    public static final int CONTAINER_WIDTH_EXPANDED = 56 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
+    public static final int CONTAINER_WIDTH = 42 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
+
+    public static final int CONTAINER_HEIGHT_270 = 270;
+    public static final int CONTAINER_HEIGHT_180 = 180;
+    public static final int CONTAINER_HEIGHT_90 = 90;
+    public static final int CONTAINER_HEIGHT_45 = 45;
 
     public static final int BUTTON_CONTAINER_ROW_1 = Dimens.Buttons.HEIGHT * 1 + Button.COMPAT_SPACING_H * 1 + Button.PADDINGS;
     public static final int BUTTON_CONTAINER_ROW_2 = Dimens.Buttons.HEIGHT * 2 + Button.COMPAT_SPACING_H * 2 + Button.PADDINGS;
@@ -20,9 +23,17 @@ public abstract class AbstractContainerScreen extends AbstractScreen {
     public static final int BUTTON_CONTAINER_ROW_5 = Dimens.Buttons.HEIGHT * 5 + Button.COMPAT_SPACING_H * 5 + Button.PADDINGS;
     public static final int BUTTON_CONTAINER_ROW_6 = Dimens.Buttons.HEIGHT * 6 + Button.COMPAT_SPACING_H * 6 + Button.PADDINGS;
 
-    public static final int BUTTON_CONTAINER_ROW_C1 = Dimens.Buttons.HEIGHT * 1 + Button.COMPAT_SPACING_H * 1 + Button.COMPAT_SPACING_H;
-    public static final int BUTTON_CONTAINER_ROW_C2 = Dimens.Buttons.HEIGHT * 2 + Button.COMPAT_SPACING_H * 2 + Button.COMPAT_SPACING_H;
-    public static final int BUTTON_CONTAINER_ROW_C3 = Dimens.Buttons.HEIGHT * 3 + Button.COMPAT_SPACING_H * 3 + Button.COMPAT_SPACING_H;
+    public static final int BUTTON_CONTAINER_ROW_1N = Dimens.Buttons.HEIGHT * 1 + Button.COMPAT_SPACING_H * 1 + Button.COMPAT_SPACING_H;
+    public static final int BUTTON_CONTAINER_ROW_2N = Dimens.Buttons.HEIGHT * 2 + Button.COMPAT_SPACING_H * 2 + Button.COMPAT_SPACING_H;
+    public static final int BUTTON_CONTAINER_ROW_3N = Dimens.Buttons.HEIGHT * 3 + Button.COMPAT_SPACING_H * 3 + Button.COMPAT_SPACING_H;
+    public static final int BUTTON_CONTAINER_ROW_4N = Dimens.Buttons.HEIGHT * 4 + Button.COMPAT_SPACING_H * 4 + Button.COMPAT_SPACING_H;
+    public static final int BUTTON_CONTAINER_ROW_5N = Dimens.Buttons.HEIGHT * 5 + Button.COMPAT_SPACING_H * 5 + Button.COMPAT_SPACING_H;
+    public static final int BUTTON_CONTAINER_ROW_6N = Dimens.Buttons.HEIGHT * 6 + Button.COMPAT_SPACING_H * 6 + Button.COMPAT_SPACING_H;
+
+    public static final int UNSPECIFIC = 0;
+
+    public static final int PADDINGS = 6;
+    public static final int TITLE_CONTAINER = 18;
 
     private int containerWidth;
     private int containerHeight;
@@ -33,6 +44,14 @@ public abstract class AbstractContainerScreen extends AbstractScreen {
         this.containerHeight = containerHeight;
     }
 
+    protected AbstractContainerScreen(Entrance entrance, Text title) {
+        this(entrance, title, UNSPECIFIC, UNSPECIFIC);
+    }
+
+    protected AbstractContainerScreen(Entrance entrance) {
+        this(entrance, Text.empty(), UNSPECIFIC, UNSPECIFIC);
+    }
+
     @Override
     public void renderBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         super.renderBackground(renderer, mouseX, mouseY, deltaTick);
@@ -40,12 +59,12 @@ public abstract class AbstractContainerScreen extends AbstractScreen {
     }
 
     @Override
-    public final int getWidth() {
+    public int getWidth() {
         return containerWidth;
     }
 
     @Override
-    public final int getHeight() {
+    public int getHeight() {
         return containerHeight;
     }
 

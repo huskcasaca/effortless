@@ -59,8 +59,6 @@ public class Dimens {
         public static final int TITLE_24 = 24;
         public static final int TITLE_36 = 32;
 
-        public static final int TITLE_CONTAINER = 18;
-
         public static final int BUTTON_ROW_1 = Buttons.HEIGHT * 1 + Buttons.VERTICAL_SPACING * 0 + Buttons.VERTICAL_PADDING * 2;
         public static final int BUTTON_ROW_2 = Buttons.HEIGHT * 2 + Buttons.VERTICAL_SPACING * 1 + Buttons.VERTICAL_PADDING * 2;
         public static final int BUTTON_ROW_3 = Buttons.HEIGHT * 3 + Buttons.VERTICAL_SPACING * 2 + Buttons.VERTICAL_PADDING * 2;

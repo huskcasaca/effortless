@@ -319,6 +319,10 @@ public abstract class Renderer {
         return this.renderText(typeface, text, x - typeface.measureWidth(text), y, color, shadow);
     }
 
+    public final void renderScrollingText(Typeface typeface, Text text, int x1, int y1, int width, int height) {
+        renderScrollingText(typeface, text, x1, y1, x1 + width, y1 + height, 0xFFFFFFFF);
+    }
+
     public final void renderScrollingText(Typeface typeface, Text text, int x1, int y1, int x2, int y2, int color) {
         var textWidth = typeface.measureWidth(text);
         int containerHeight = (y1 + y2 - 9) / 2 + 1;
@@ -326,13 +330,14 @@ public abstract class Renderer {
         if (textWidth > containerWidth) {
             var paddingWidth = 8;
             int extraWidth = textWidth - containerWidth + paddingWidth;
-            var d = System.currentTimeMillis() / 1000.0;
-            var e = MathUtils.max(extraWidth * 0.5, 3.0);
-            var f = MathUtils.sin(1.5707963267948966 * MathUtils.cos(6.283185307179586 * d / e)) / 2.0 + 0.5;
-            var x = MathUtils.lerp(f, 0.0, extraWidth);
+            var speed = 2f;
+            var sec = System.currentTimeMillis() / 1000.0 * speed;
+            var e = MathUtils.max(MathUtils.min(extraWidth * 0.5, 30.0), 3.0);
+            var f = MathUtils.sin(1.5707963267948966 * MathUtils.cos(6.283185307179586 * sec / e)) / 2.0 + 0.5;
+            var offset = MathUtils.lerp(f, 0.0, extraWidth);
             this.flush();
             this.enableScissor(x1, y1, x2, y2);
-            this.renderText(typeface, text, x1 - (int) x + paddingWidth / 2, containerHeight, color, true);
+            this.renderText(typeface, text, x1 - (int) offset + paddingWidth / 2, containerHeight, color, true);
             this.disableScissor();
         } else {
             this.renderTextFromCenter(typeface, text, (x1 + x2) / 2, containerHeight, color, true);

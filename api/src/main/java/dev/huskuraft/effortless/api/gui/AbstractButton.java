@@ -56,15 +56,15 @@ public abstract class AbstractButton extends AbstractWidget {
         renderString(renderer, getTypeface(), (isActive() ? 16777215 : 10526880) | (int) MathUtils.ceil(this.getAlpha() * 255.0F) << 24);
     }
 
-    public void renderString(Renderer renderer, Typeface typeface, int i) {
-        this.renderScrollingString(renderer, typeface, 2, i);
+    public void renderString(Renderer renderer, Typeface typeface, int color) {
+        this.renderScrollingString(renderer, typeface, 2, color);
     }
 
-    protected void renderScrollingString(Renderer renderer, Typeface typeface, int x, int y) {
-        var k = this.getX() + x;
-        var l = this.getX() + this.getWidth() - x;
-        // FIXME: 22/3/24
-        renderer.renderScrollingText(typeface, isActive() ? this.getMessage() : this.getMessage().withStyle(ChatFormatting.RESET), k, this.getY(), l, this.getY() + this.getHeight(), y);
+    protected void renderScrollingString(Renderer renderer, Typeface typeface, int padding, int color) {
+        var left = this.getX() + padding;
+        var right = this.getX() + this.getWidth() - padding;
+        var message = isActive() ? this.getMessage() : this.getMessage().withStyle(ChatFormatting.RESET);
+        renderer.renderScrollingText(typeface, message, left, this.getY(), right, this.getY() + this.getHeight(), color);
     }
 
 

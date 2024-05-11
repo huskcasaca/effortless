@@ -2,7 +2,6 @@ package dev.huskuraft.effortless.screen.general;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -15,12 +14,12 @@ import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 public class EffortlessGeneralSettingsContainerScreen extends AbstractContainerScreen {
 
     public EffortlessGeneralSettingsContainerScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.general_settings.title"), AbstractContainerScreen.CONTAINER_WIDTH_THIN, Dimens.Screen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_3);
+        super(entrance, Text.translate("effortless.general_settings.title"), AbstractContainerScreen.CONTAINER_WIDTH, AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_3);
     }
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + Dimens.Screen.TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.global_general_settings.title"), button -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {

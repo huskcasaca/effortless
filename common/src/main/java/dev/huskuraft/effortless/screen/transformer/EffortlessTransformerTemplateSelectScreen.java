@@ -2,35 +2,31 @@ package dev.huskuraft.effortless.screen.transformer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
-import dev.huskuraft.effortless.api.gui.AbstractScreen;
-import dev.huskuraft.effortless.api.gui.Dimens;
+import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
-import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
-import dev.huskuraft.effortless.api.platform.SearchTree;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
-public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
+public class EffortlessTransformerTemplateSelectScreen extends AbstractContainerScreen {
 
     private final Consumer<Transformer> applySettings;
     private final List<Button> tabButtons = new ArrayList<>();
     private final List<Transformer> transformers;
     private TransformerList entries;
     private TextWidget titleTextWidget;
-    private EditBox searchEditBox;
     private Button useTemplateButton;
     private Button cancelButton;
-    private Transformers selectedType;
+    private Transformers selectedType = Transformers.ARRAY;
 
     public EffortlessTransformerTemplateSelectScreen(Entrance entrance, Consumer<Transformer> consumer, List<Transformer> transformers) {
-        super(entrance, Text.translate("effortless.transformer.template_select.title"));
+        super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_180);
         this.applySettings = consumer;
         this.transformers = transformers;
     }
@@ -38,16 +34,11 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 10, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH - 2) / 2, Dimens.Screen.TITLE_24, Dimens.Entry.ROW_WIDTH - 2, 20, Text.translate("effortless.transformer.template_select.search"))
-        );
-
-        // FIXME: 21/10/23
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.useTemplateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.template_select.use_template"), button -> {
             if (entries.hasSelected()) {
                 var item = entries.getSelected().getItem();
@@ -75,24 +66,19 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
                 }
             }
 
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.searchEditBox.setValue("");
 
         for (var type : Transformers.values()) {
             tabButtons.add(
                     addWidget(Button.builder(getEntrance(), type.getDisplayName(), button -> {
                         setSelectedType(type);
-                    }).setBoundsGrid(getWidth(), 78, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
+                    }).setBoundsGrid(getLeft(), getTop(), getWidth(), AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_1, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
             );
         }
 
-        this.entries = addWidget(new TransformerList(getEntrance(), 0, 78, getWidth(), getHeight() - 78 - 36));
-        this.searchEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
-        this.searchEditBox.setHint(Text.translate("effortless.transformer.template_select.search_hint"));
-        this.searchEditBox.setResponder(text -> {
-            setSearchResult(text);
-        });
+        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractContainerScreen.PADDINGS, getTop() + AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_1N, getWidth() - AbstractContainerScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - AbstractContainerScreen.TITLE_CONTAINER - AbstractContainerScreen.BUTTON_CONTAINER_ROW_1N - AbstractContainerScreen.BUTTON_CONTAINER_ROW_1));
+        this.entries.setAlwaysShowScrollbar(true);
 
         setSelectedType(Transformers.ARRAY);
     }
@@ -103,20 +89,14 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractScreen {
         for (var tabButton : tabButtons) {
             tabButton.setActive(!tabButton.getMessage().equals(selectedType.getDisplayName()));
         }
+        entries.reset(transformers.stream().filter(transformer -> transformer.getType() == selectedType).toList());
     }
 
     private void setSelectedType(Transformers type) {
-        selectedType = type;
-        setSearchResult(searchEditBox.getValue());
-    }
-
-    private void setSearchResult(String string) {
-        var searchTree = SearchTree.ofText(transformers, Transformer::getSearchableTags);
-        entries.reset(searchTree.search(string.toLowerCase(Locale.ROOT)).stream().filter(transformer -> transformer.getType() == selectedType).toList());
+        this.selectedType = type;
         entries.setSelected(null);
         entries.setScrollAmount(0);
     }
-
 
 }
 
