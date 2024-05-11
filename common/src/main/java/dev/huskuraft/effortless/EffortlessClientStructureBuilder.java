@@ -38,6 +38,7 @@ import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
+import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.HistoryResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
@@ -238,6 +239,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         lastClientPlayerLevel.set(null);
         contexts.clear();
         undoRedoStacks.clear();
+        getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.transformerPresets(), false));
     }
 
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {

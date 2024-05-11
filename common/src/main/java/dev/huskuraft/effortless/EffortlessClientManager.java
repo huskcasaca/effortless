@@ -215,11 +215,6 @@ public final class EffortlessClientManager implements ClientManager {
 
     public synchronized void onClientStart(Client client) {
         setRunningClient(client);
-        getEntrance().getStructureBuilder();
-    }
-
-    public synchronized void onClientStopping(Client client) {
-        setRunningClient(null);
     }
 
     public void onClientTick(Client client, ClientTick.Phase phase) {
@@ -244,17 +239,6 @@ public final class EffortlessClientManager implements ClientManager {
         }
 
         getTooltipRenderer().renderGuiOverlay(renderer, deltaTick);
-//
-//        var centerX = renderer.window().getGuiScaledWidth() / 2 - 1;
-//        var centerY = renderer.window().getGuiScaledHeight() / 2 - 1;
-//        renderer.renderRect(centerX, centerY, centerX + 1, centerY + 1, 0xffffffff);
-//
-//
-//        var size = 6;
-//        var gap = 2;
-//        renderer.renderRect(centerX - size, centerY - size, centerX + 1 - size, centerY - gap, 0xffffffff);
-//        renderer.renderRect(centerX - size, centerY + size, centerX + 1 - size, centerY + gap, 0xffffffff);
-
     }
 
     public void onRenderEnd(Renderer renderer, float deltaTick) {

@@ -35,7 +35,7 @@ public class ClientConfigConfigSerializer implements ConfigSerializer<ClientConf
 //        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), () -> getDefault().renderConfig().maxRenderDistance(), RenderConfig.MIN_MAX_RENDER_DISTANCE, RenderConfig.MAX_MAX_RENDER_DISTANCE);
         spec.defineList(KEY_PATTERNS, () -> getDefault().patternConfig().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
         spec.defineList(KEY_TRANSFORMERS, () -> getDefault().transformerPresets().arrayTransformers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
-        spec.define(KEY_PASSIVE_MODE, () -> getDefault().passiveMode(), Boolean.class::isInstance);
+//        spec.define(KEY_PASSIVE_MODE, () -> getDefault().passiveMode(), Boolean.class::isInstance);
 
         return spec;
     }
@@ -58,8 +58,7 @@ public class ClientConfigConfigSerializer implements ConfigSerializer<ClientConf
                 new TransformerPresets(
                         config.<List<Config>>get(KEY_TRANSFORMERS).stream().map(TransformerConfigSerializer.INSTANCE::deserialize).toList()
                 ),
-                config.get(List.of(KEY_PASSIVE_MODE))
-
+                getDefault().passiveMode()
         );
     }
 

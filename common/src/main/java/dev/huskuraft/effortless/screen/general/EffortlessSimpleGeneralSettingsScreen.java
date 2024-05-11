@@ -15,13 +15,12 @@ import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 public class EffortlessSimpleGeneralSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessSimpleGeneralSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.general_settings.title"), Dimens.Screen.CONTAINER_WIDTH_THIN, Dimens.Screen.CONTAINER_HEIGHT_THIN);
+        super(entrance, Text.translate("effortless.general_settings.title"), Dimens.Screen.CONTAINER_WIDTH_THIN, Dimens.Screen.TITLE_CONTAINER + Dimens.Screen.BUTTON_CONTAINER_ROW_3);
     }
 
     @Override
     public void onCreate() {
-        setContainerHeight(Dimens.Screen.TITLE_CONTAINER + Dimens.Screen.BUTTON_CONTAINER_ROW_3);
-        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + Dimens.Screen.TITLE_CONTAINER - 12, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + Dimens.Screen.TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.global_general_settings.title"), button -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {

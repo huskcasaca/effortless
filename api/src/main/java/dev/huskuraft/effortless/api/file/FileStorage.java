@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.api.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 import java.util.logging.Logger;
 
@@ -86,6 +87,9 @@ abstract class FileStorage<T> implements Storage<T> {
     @Override
     public void set(T config) {
         synchronized (this) {
+            if (Objects.equals(this.target, config)) {
+                return;
+            }
             this.target = config;
             write();
         }
