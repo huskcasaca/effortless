@@ -5,12 +5,12 @@ import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
 
-public abstract class AbstractPanelScreen extends AbstractScreen {
+public abstract class AbstractContainerScreen extends AbstractScreen {
 
     private int containerWidth;
     private int containerHeight;
 
-    protected AbstractPanelScreen(Entrance entrance, Text title, int containerWidth, int containerHeight) {
+    protected AbstractContainerScreen(Entrance entrance, Text title, int containerWidth, int containerHeight) {
         super(entrance, title);
         this.containerWidth = containerWidth;
         this.containerHeight = containerHeight;

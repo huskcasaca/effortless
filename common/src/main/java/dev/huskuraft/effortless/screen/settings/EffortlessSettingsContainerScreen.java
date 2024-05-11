@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.screen.settings;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
+import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -10,14 +10,14 @@ import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
-import dev.huskuraft.effortless.screen.general.EffortlessSimpleGeneralSettingsScreen;
-import dev.huskuraft.effortless.screen.pattern.EffortlessSimplePatternSettingsScreen;
+import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsContainerScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsContainerScreen;
 import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 
-public class EffortlessSimpleSettingsScreen extends AbstractPanelScreen {
+public class EffortlessSettingsContainerScreen extends AbstractContainerScreen {
 
-    public EffortlessSimpleSettingsScreen(Entrance entrance) {
+    public EffortlessSettingsContainerScreen(Entrance entrance) {
         super(entrance, Text.translate("effortless.settings.title"), Dimens.Screen.CONTAINER_WIDTH_THIN, Dimens.Screen.TITLE_CONTAINER + Dimens.Screen.BUTTON_CONTAINER_ROW_5);
     }
 
@@ -39,7 +39,7 @@ public class EffortlessSimpleSettingsScreen extends AbstractPanelScreen {
                 getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                     if (packet.isOperator()) {
                         getEntrance().getClient().execute(() -> {
-                            new EffortlessSimpleGeneralSettingsScreen(getEntrance()).attach();
+                            new EffortlessGeneralSettingsContainerScreen(getEntrance()).attach();
                         });
                     } else {
                         getEntrance().getClient().execute(() -> {
@@ -53,7 +53,7 @@ public class EffortlessSimpleSettingsScreen extends AbstractPanelScreen {
             new EffortlessRenderSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 3f, 0f, 1f).build());
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern_settings.title"), button -> {
-            new EffortlessSimplePatternSettingsScreen(getEntrance()).attach();
+            new EffortlessPatternSettingsContainerScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer_presets.title"), button -> {
             new EffortlessTransformerTemplateSelectScreen(

@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.screen.pattern;
 
 import java.util.function.Consumer;
 
-import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
+import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
@@ -18,7 +18,7 @@ import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScre
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
 
-public class EffortlessPatternEditScreen extends AbstractPanelScreen {
+public class EffortlessPatternEditScreen extends AbstractScreen {
 
     private final Consumer<Pattern> applySettings;
     private final Pattern defaultSettings;
@@ -37,7 +37,7 @@ public class EffortlessPatternEditScreen extends AbstractPanelScreen {
     private RadialTextIcon radialTextIcon;
 
     public EffortlessPatternEditScreen(Entrance entrance, Consumer<Pattern> consumer, Pattern pattern, int index) {
-        super(entrance, Text.translate("effortless.pattern.edit.title"), Dimens.Screen.CONTAINER_WIDTH_NORMAL, Dimens.Screen.CONTAINER_HEIGHT_NORMAL);
+        super(entrance, Text.translate("effortless.pattern.edit.title"));
         this.applySettings = consumer;
         this.defaultSettings = pattern;
         this.lastSettings = pattern;

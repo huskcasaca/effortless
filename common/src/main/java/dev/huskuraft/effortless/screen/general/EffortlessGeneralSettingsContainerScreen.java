@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.screen.general;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
+import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -12,9 +12,9 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPac
 import dev.huskuraft.effortless.screen.settings.EffortlessNotAnOperatorScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 
-public class EffortlessSimpleGeneralSettingsScreen extends AbstractPanelScreen {
+public class EffortlessGeneralSettingsContainerScreen extends AbstractContainerScreen {
 
-    public EffortlessSimpleGeneralSettingsScreen(Entrance entrance) {
+    public EffortlessGeneralSettingsContainerScreen(Entrance entrance) {
         super(entrance, Text.translate("effortless.general_settings.title"), Dimens.Screen.CONTAINER_WIDTH_THIN, Dimens.Screen.TITLE_CONTAINER + Dimens.Screen.BUTTON_CONTAINER_ROW_3);
     }
 

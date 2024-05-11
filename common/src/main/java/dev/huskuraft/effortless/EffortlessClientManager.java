@@ -23,8 +23,8 @@ import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
 import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
 import dev.huskuraft.effortless.renderer.tooltip.TooltipRenderer;
-import dev.huskuraft.effortless.screen.pattern.EffortlessSimplePatternSettingsScreen;
-import dev.huskuraft.effortless.screen.settings.EffortlessSimpleSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsContainerScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSettingsContainerScreen;
 import dev.huskuraft.effortless.screen.structure.EffortlessBuildModeWheelScreen;
 import dev.huskuraft.effortless.screen.test.EffortlessTestScreen;
 
@@ -165,7 +165,7 @@ public final class EffortlessClientManager implements ClientManager {
 
         }
         if (EffortlessKeys.PATTERN_SETTINGS.getBinding().consumeClick()) {
-            new EffortlessSimplePatternSettingsScreen(getEntrance()).attach();
+            new EffortlessPatternSettingsContainerScreen(getEntrance()).attach();
         }
         if (EffortlessKeys.UNDO.getBinding().consumeClick()) {
             getEntrance().getStructureBuilder().undo(getRunningClient().getPlayer());
@@ -174,7 +174,7 @@ public final class EffortlessClientManager implements ClientManager {
             getEntrance().getStructureBuilder().redo(getRunningClient().getPlayer());
         }
         if (EffortlessKeys.SETTINGS.getBinding().consumeClick()) {
-            new EffortlessSimpleSettingsScreen(getEntrance()).attach();
+            new EffortlessSettingsContainerScreen(getEntrance()).attach();
         }
         if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
             getEntrance().getStructureBuilder().setBuildFeature(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
+import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 
-public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
+public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
     private final Consumer<PatternConfig> consumer;
     private PatternConfig config;
@@ -32,7 +32,7 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
     private Button cancelButton;
 
     public EffortlessPatternSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.pattern.settings.title"), Dimens.Screen.CONTAINER_WIDTH_NORMAL, Dimens.Screen.CONTAINER_HEIGHT_NORMAL);
+        super(entrance, Text.translate("effortless.pattern.settings.title"));
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
             getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), this.config, config.transformerPresets(), config.passiveMode()));

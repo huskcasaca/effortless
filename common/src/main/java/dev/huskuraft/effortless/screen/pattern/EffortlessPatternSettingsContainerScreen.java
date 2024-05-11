@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.screen.pattern;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
+import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -18,7 +18,7 @@ import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScre
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
 
-public class EffortlessSimplePatternSettingsScreen extends AbstractPanelScreen {
+public class EffortlessPatternSettingsContainerScreen extends AbstractContainerScreen {
 
     private final Consumer<Pattern> applySettings;
     private final Pattern defaultSettings;
@@ -34,7 +34,7 @@ public class EffortlessSimplePatternSettingsScreen extends AbstractPanelScreen {
     private Button enableButton;
     private Button saveButton;
 
-    public EffortlessSimplePatternSettingsScreen(Entrance entrance) {
+    public EffortlessPatternSettingsContainerScreen(Entrance entrance) {
         super(entrance, Text.translate("effortless.pattern.simple.title").withStyle(ChatFormatting.DARK_GRAY), Dimens.Screen.CONTAINER_WIDTH_NORMAL, Dimens.Screen.CONTAINER_HEIGHT_NORMAL);
         this.applySettings = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer() , lastSettings);
