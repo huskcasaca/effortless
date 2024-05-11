@@ -16,9 +16,9 @@ import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSimpleSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessSimplePatternSettingsScreen;
 import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
-import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSimpleSettingsScreen;
 
 public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMode, Option> {
 
@@ -103,11 +103,11 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
                 switch (settings) {
                     case SETTINGS -> {
                         detach();
-                        new EffortlessSettingsScreen(getEntrance()).attach();
+                        new EffortlessSimpleSettingsScreen(getEntrance()).attach();
                     }
                     case PATTERN_SETTINGS -> {
                         detach();
-                        new EffortlessPatternSimpleSettingsScreen(getEntrance()).attach();
+                        new EffortlessSimplePatternSettingsScreen(getEntrance()).attach();
                     }
                 }
                 return;

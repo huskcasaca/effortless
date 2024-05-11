@@ -67,10 +67,13 @@ public class Dimens {
         public static final int BUTTON_ROW_2 = Buttons.HEIGHT * 2 + Buttons.VERTICAL_SPACING * 1 + Buttons.VERTICAL_PADDING * 2;
         public static final int BUTTON_ROW_3 = Buttons.HEIGHT * 3 + Buttons.VERTICAL_SPACING * 2 + Buttons.VERTICAL_PADDING * 2;
 
-
         public static final int BUTTON_CONTAINER_ROW_1 = Buttons.HEIGHT * 1 + Button.COMPAT_INNER_SPACING * 1 + Button.COMPAT_OUTER_SPACING;
         public static final int BUTTON_CONTAINER_ROW_2 = Buttons.HEIGHT * 2 + Button.COMPAT_INNER_SPACING * 2 + Button.COMPAT_OUTER_SPACING;
         public static final int BUTTON_CONTAINER_ROW_3 = Buttons.HEIGHT * 3 + Button.COMPAT_INNER_SPACING * 3 + Button.COMPAT_OUTER_SPACING;
+        public static final int BUTTON_CONTAINER_ROW_4 = Buttons.HEIGHT * 4 + Button.COMPAT_INNER_SPACING * 4 + Button.COMPAT_OUTER_SPACING;
+        public static final int BUTTON_CONTAINER_ROW_5 = Buttons.HEIGHT * 5 + Button.COMPAT_INNER_SPACING * 5 + Button.COMPAT_OUTER_SPACING;
+        public static final int BUTTON_CONTAINER_ROW_6 = Buttons.HEIGHT * 6 + Button.COMPAT_INNER_SPACING * 6 + Button.COMPAT_OUTER_SPACING;
+
 
         public static final int BUTTON_CONTAINER_ROW_C1 = Buttons.HEIGHT * 1 + Button.COMPAT_INNER_SPACING * 1 + Button.COMPAT_INNER_SPACING;
         public static final int BUTTON_CONTAINER_ROW_C2 = Buttons.HEIGHT * 2 + Button.COMPAT_INNER_SPACING * 2 + Button.COMPAT_INNER_SPACING;

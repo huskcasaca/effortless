@@ -23,7 +23,7 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
         addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         var entries = addWidget(new SettingButtonsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1));
-        entries.addTab(Text.translate("effortless.global_general_settings.title"), (button) -> {
+        entries.addTab(Text.translate("effortless.global_general_settings.title"), button -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {
                 getEntrance().getClient().execute(() -> {
                     new EffortlessSessionStatusScreen(getEntrance()).attach();
@@ -45,7 +45,7 @@ public class EffortlessGeneralSettingsScreen extends AbstractScreen {
             }
 
         });
-        entries.addTab(Text.translate("effortless.per_player_general_settings.title"), (button) -> {
+        entries.addTab(Text.translate("effortless.per_player_general_settings.title"), button -> {
             getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
 
                 if (!getEntrance().getSessionManager().isSessionValid()) {

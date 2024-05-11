@@ -27,9 +27,9 @@ import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSimpleSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessSimplePatternSettingsScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
-import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSimpleSettingsScreen;
 
 public class EffortlessTestScreen extends AbstractScreen {
 
@@ -50,15 +50,15 @@ public class EffortlessTestScreen extends AbstractScreen {
 
         entries.addSimpleEntry(entry -> {
             var editBox = entry.addWidget(new EditBox(getEntrance(), entry.getX() + entry.getWidth() / 2 - 100 - 38, entry.getY(), 210, 20, Text.empty()));
-            entry.addWidget(new Button(getEntrance(), entry.getCenterX() + 100 - 26, entry.getY(), 64, 20, Text.text("Execute"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getCenterX() + 100 - 26, entry.getY(), 64, 20, Text.text("Execute"), button -> {
                 getEntrance().getClient().sendCommand(editBox.getValue());
             }));
         });
         entries.addSimpleEntry(entry -> {
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getTop(), entry.getWidth() / 2, 20, Text.text("Load Toml Config"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getTop(), entry.getWidth() / 2, 20, Text.text("Load Toml Config"), button -> {
                 Logger.getAnonymousLogger().info("" + getEntrance().getConfigStorage().get());
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft() + entry.getWidth() / 2, entry.getTop(), entry.getWidth() / 2, 20, Text.text("Save Toml Config"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft() + entry.getWidth() / 2, entry.getTop(), entry.getWidth() / 2, 20, Text.text("Save Toml Config"), button -> {
                 getEntrance().getConfigStorage().set(
                         new ClientConfig(
                                 new RenderConfig(),
@@ -90,21 +90,21 @@ public class EffortlessTestScreen extends AbstractScreen {
             }));
         });
         entries.addSimpleEntry(entry -> {
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessSettingsScreen"), (button) -> {
-                new EffortlessSettingsScreen(getEntrance()).attach();
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessSettingsScreen"), button -> {
+                new EffortlessSimpleSettingsScreen(getEntrance()).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 20, Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessGeneralSettingsScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 20, Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessGeneralSettingsScreen"), button -> {
                 new EffortlessGeneralSettingsScreen(getEntrance()).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 80, Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessOnlinePlayersScreen"), (button) -> {
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 80, Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessOnlinePlayersScreen"), button -> {
                 new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
 
                 }).attach();
             }));
         });
         entries.addSimpleEntry(entry -> {
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessPatternSimpleSettingsScreen"), (button) -> {
-                new EffortlessPatternSimpleSettingsScreen(getEntrance()).attach();
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessPatternSimpleSettingsScreen"), button -> {
+                new EffortlessSimplePatternSettingsScreen(getEntrance()).attach();
             }));
         });
     }
