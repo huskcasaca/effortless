@@ -14,65 +14,32 @@ public record MinecraftText(Component referenceValue) implements Text {
         return reference == null ? null : new MinecraftText(reference);
     }
 
-
     @Override
-    public Text withBold(Boolean bold) {
-        return new MinecraftText(referenceValue().copy().withStyle(referenceValue().getStyle().withBold(bold)));
+    public Style getStyle() {
+        var style = referenceValue().getStyle();
+        return new Style(
+                style.getColor() == null ? null : style.getColor().getValue(),
+                style.isBold(),
+                style.isItalic(),
+                style.isUnderlined(),
+                style.isStrikethrough(),
+                style.isObfuscated()
+        );
     }
 
     @Override
-    public Text withItalic(Boolean italic) {
-        return new MinecraftText(referenceValue().copy().withStyle(referenceValue().getStyle().withItalic(italic)));
-    }
-
-    @Override
-    public Text withUnderlined(Boolean underlined) {
-        return new MinecraftText(referenceValue().copy().withStyle(referenceValue().getStyle().withUnderlined(underlined)));
-    }
-
-    @Override
-    public Text withStrikethrough(Boolean strikethrough) {
-        return new MinecraftText(referenceValue().copy().withStyle(referenceValue().getStyle().withStrikethrough(strikethrough)));
-    }
-
-    @Override
-    public Text withObfuscated(Boolean obfuscated) {
-        return new MinecraftText(referenceValue().copy().withStyle(referenceValue().getStyle().withObfuscated(obfuscated)));
-    }
-
-    @Override
-    public Text withColor(Integer color) {
-        return new MinecraftText(referenceValue().copy().withStyle(referenceValue().getStyle().withColor(color == null ? null : TextColor.fromRgb(color))));
-    }
-
-    @Override
-    public Boolean isBold() {
-        return referenceValue().getStyle().isBold();
-    }
-
-    @Override
-    public Boolean isItalic() {
-        return referenceValue().getStyle().isItalic();
-    }
-
-    @Override
-    public Boolean isUnderlined() {
-        return referenceValue().getStyle().isUnderlined();
-    }
-
-    @Override
-    public Boolean isStrikethrough() {
-        return referenceValue().getStyle().isStrikethrough();
-    }
-
-    @Override
-    public Boolean isObfuscated() {
-        return referenceValue().getStyle().isObfuscated();
-    }
-
-    @Override
-    public Integer getColor() {
-        return referenceValue().getStyle().getColor() == null ? null : referenceValue().getStyle().getColor().getValue();
+    public Text withStyle(Style style) {
+        return new MinecraftText(
+                referenceValue().copy().setStyle(
+                        referenceValue().getStyle()
+                                .withColor(style.color() == null ? null : TextColor.fromRgb(style.color()))
+                                .withBold(style.bold())
+                                .withItalic(style.italic())
+                                .withUnderlined(style.underlined())
+                                .withStrikethrough(style.strikethrough())
+                                .withObfuscated(style.obfuscated())
+                )
+        );
     }
 
     @Override
@@ -86,8 +53,16 @@ public record MinecraftText(Component referenceValue) implements Text {
     }
 
     @Override
-    public Text append(Text text) {
-        return new MinecraftText(referenceValue().copy().append((Component) text.reference()));
+    public Text withSiblings(Collection<Text> siblings) {
+        var minecraftText = referenceValue().copy();
+        minecraftText.getSiblings().clear();
+        siblings.stream().map(sibling -> (Component) sibling.reference()).forEach(minecraftText::append);
+        return new MinecraftText(minecraftText);
+    }
+
+    @Override
+    public Text copy() {
+        return new MinecraftText(referenceValue().copy());
     }
 
     @Override

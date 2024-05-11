@@ -43,7 +43,7 @@ public record Style(
 
     public Style applyFormat(ChatFormatting... chatFormatting) {
         var style = this;
-        for (ChatFormatting style1 : chatFormatting) {
+        for (var style1 : chatFormatting) {
             style = style.applyFormat(style1);
         }
         return style;

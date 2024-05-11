@@ -49,12 +49,13 @@ public class EffortlessGeneralSettingsContainerScreen extends AbstractContainerS
 
                 if (!getEntrance().getSessionManager().isSessionValid()) {
                     getEntrance().getClient().execute(() -> {
+                        detach();
                         new EffortlessSessionStatusScreen(getEntrance()).attach();
                     });
                 } else {
                     if (packet.isOperator()) {
-                        detach();
                         getEntrance().getClient().execute(() -> {
+                            detach();
                             new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().playerConfigs(), playerConfigs -> {
                                 getEntrance().getSessionManager().updatePlayerConfig(playerConfigs);
                             }).attach();

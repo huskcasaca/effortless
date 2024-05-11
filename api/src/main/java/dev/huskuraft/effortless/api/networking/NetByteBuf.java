@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.api.text.Style;
 import dev.huskuraft.effortless.api.text.Text;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -48,13 +49,17 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public Text readText() {
-        return Text.text(readString())
-                .withBold(readNullable(NetByteBuf::readBoolean))
-                .withItalic(readNullable(NetByteBuf::readBoolean))
-                .withUnderlined(readNullable(NetByteBuf::readBoolean))
-                .withStrikethrough(readNullable(NetByteBuf::readBoolean))
-                .withObfuscated(readNullable(NetByteBuf::readBoolean))
-                .withColor(readNullable(NetByteBuf::readInt));
+        return Text.text(readString()).withStyle(
+                new Style(
+                        readNullable(NetByteBuf::readInt),
+                        readNullable(NetByteBuf::readBoolean),
+                        readNullable(NetByteBuf::readBoolean),
+                        readNullable(NetByteBuf::readBoolean),
+                        readNullable(NetByteBuf::readBoolean),
+                        readNullable(NetByteBuf::readBoolean)
+                )
+        ).withSiblings(readList(NetByteBuf::readText));
+
     }
 
     public int readVarInt() {
@@ -119,12 +124,13 @@ public final class NetByteBuf extends WrappedByteBuf {
 
     public void writeText(Text value) {
         writeString(value.getString());
-        writeNullable(value.isBold(), NetByteBuf::writeBoolean);
-        writeNullable(value.isItalic(), NetByteBuf::writeBoolean);
-        writeNullable(value.isUnderlined(), NetByteBuf::writeBoolean);
-        writeNullable(value.isStrikethrough(), NetByteBuf::writeBoolean);
-        writeNullable(value.isObfuscated(), NetByteBuf::writeBoolean);
-        writeNullable(value.getColor(), NetByteBuf::writeInt);
+        writeNullable(value.getStyle().color(), NetByteBuf::writeInt);
+        writeNullable(value.getStyle().bold(), NetByteBuf::writeBoolean);
+        writeNullable(value.getStyle().italic(), NetByteBuf::writeBoolean);
+        writeNullable(value.getStyle().underlined(), NetByteBuf::writeBoolean);
+        writeNullable(value.getStyle().strikethrough(), NetByteBuf::writeBoolean);
+        writeNullable(value.getStyle().obfuscated(), NetByteBuf::writeBoolean);
+        writeList(value.getSiblings(), NetByteBuf::writeText);
     }
 
     public void writeVarInt(int value) {

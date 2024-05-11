@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.api.text;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
@@ -27,47 +28,25 @@ public interface Text extends PlatformReference {
         return ContentFactory.getInstance().newTranslatableText(text, args);
     }
 
-    default Style getStyle() {
-        return new Style(getColor(), isBold(), isItalic(), isUnderlined(), isStrikethrough(), isObfuscated());
-    }
+    Style getStyle();
 
-    default Text withStyle(Style style) {
-        return withBold(style.bold()).withItalic(style.italic()).withUnderlined(style.underlined()).withStrikethrough(style.strikethrough()).withObfuscated(style.obfuscated()).withColor(style.color());
-    }
+    Text withStyle(Style style);
 
     default Text withStyle(ChatFormatting... styles) {
         return withStyle(getStyle().applyFormat(styles));
     }
 
-    Text withBold(Boolean bold);
-
-    Text withItalic(Boolean italic);
-
-    Text withUnderlined(Boolean underlined);
-
-    Text withStrikethrough(Boolean strikethrough);
-
-    Text withObfuscated(Boolean obfuscated);
-
-    Text withColor(Integer color);
-
-    Boolean isBold();
-
-    Boolean isItalic();
-
-    Boolean isUnderlined();
-
-    Boolean isStrikethrough();
-
-    Boolean isObfuscated();
-
-    Integer getColor();
-
     String getString();
 
     Collection<Text> getSiblings();
 
-    Text append(Text text);
+    Text withSiblings(Collection<Text> siblings);
+
+    default Text append(Text text) {
+        return withSiblings(Stream.concat(getSiblings().stream(), Stream.of(text)).toList());
+    }
+
+    Text copy();
 
     void decompose(Sink sink);
 

@@ -11,17 +11,17 @@ import java.util.stream.Collectors;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.OfflinePlayerInfo;
 import dev.huskuraft.effortless.api.core.PlayerInfo;
-import dev.huskuraft.effortless.api.gui.AbstractScreen;
-import dev.huskuraft.effortless.api.gui.Dimens;
+import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.player.PlayerInfoList;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
-public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen {
+public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContainerScreen {
 
     private final Consumer<Map<UUID, GeneralConfig>> consumer;
     private Map<UUID, GeneralConfig> originalData;
@@ -34,7 +34,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
     private Button cancelButton;
 
     public EffortlessPerPlayerGeneralSettingsListScreen(Entrance entrance, Map<UUID, GeneralConfig> data, Consumer<Map<UUID, GeneralConfig>> editConsumer) {
-        super(entrance, Text.translate("effortless.per_player_general_settings.title"));
+        super(entrance, Text.translate("effortless.per_player_general_settings.title"), CONTAINER_WIDTH, CONTAINER_HEIGHT_180);
         this.originalData = new LinkedHashMap<>(data);
         this.data = new LinkedHashMap<>(data);
         this.consumer = editConsumer;
@@ -48,14 +48,14 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
     @Override
     public void onCreate() {
 
-        var titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        var titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.delete"), button -> {
             if (entries.hasSelected()) {
                 entries.deleteSelected();
                 onReload();
             }
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 0f, 1 / 3f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1 / 3f).build());
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.hasSelected()) {
@@ -66,7 +66,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
                 }).attach();
 
             }
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 1 / 3f, 1 / 3f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 1 / 3f, 1 / 3f).build());
 
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.add"), button -> {
             new EffortlessOnlinePlayersScreen(
@@ -79,19 +79,20 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractScreen
                         }).attach();
                     }
             ).attach();
-        }).setBoundsGrid(getWidth(), getHeight(), 1f, 2 / 3f, 1 / 3f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 2 / 3f, 1 / 3f).build());
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             consumer.accept(data);
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new PlayerInfoList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_2, true));
+        this.entries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS - 8, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_2, true));
         this.entries.reset(getConfigurablePlayers());
+        this.entries.setAlwaysShowScrollbar(true);
     }
 
     @Override
