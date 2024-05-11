@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.api.text.Text;
 public class EffortlessNotAnOperatorScreen extends AbstractContainerScreen {
 
     public EffortlessNotAnOperatorScreen(Entrance entrance) {
-        super(entrance, Text.empty(), AbstractContainerScreen.CONTAINER_WIDTH, AbstractContainerScreen.CONTAINER_HEIGHT_90);
+        super(entrance, Text.empty(), AbstractContainerScreen.CONTAINER_WIDTH, 0);
     }
 
     @Override

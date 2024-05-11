@@ -30,7 +30,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractContainerS
     private AbstractWidget saveButton;
 
     public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig config, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
-        super(entrance, Text.translate("effortless.general_settings.title"), CONTAINER_WIDTH, CONTAINER_HEIGHT_180);
+        super(entrance, Text.translate("effortless.general_settings.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
         this.playerInfo = playerInfo;
         this.defaultConfig = GeneralConfig.NULL;
         this.originalConfig = config;
@@ -43,10 +43,8 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractContainerS
     public void onCreate() {
         var titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
         var playerNameTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER * 2 - 10, Text.text(playerInfo.getName()).withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
-        playerNameTextWidget.setColor(0xffaaaaaa);
 
         var entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER * 2, getWidth() - PADDINGS * 2 - 8, getHeight() - TITLE_CONTAINER * 2 - BUTTON_CONTAINER_ROW_1, false, true));
-        entries.setRenderSelection(false);
         entries.setAlwaysShowScrollbar(true);
 //        bindEntry(
 //                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
@@ -168,12 +166,14 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractContainerS
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 2 / 3f, 1 / 3f).build());
 
+        this.resetButton.setActive(false);
+        this.saveButton.setActive(false);
     }
 
     @Override
     public void onReload() {
         this.resetButton.setActive(!config.equals(defaultConfig));
-        this.saveButton.setActive(!config.equals(originalConfig));
+        this.saveButton.setActive(!config.equals(originalConfig) || this.saveButton.isActive());
     }
 
     @Override

@@ -47,7 +47,12 @@ public class TextWidget extends AbstractWidget {
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
 
         if (getTypeface().measureWidth(getMessage()) > getWidth()) {
-            renderer.renderScrollingText(getTypeface(), getMessage(), getX() - getWidth() / 2, getY(), getWidth(), getHeight());
+
+            switch (gravity) {
+                case START -> renderer.renderScrollingText(getTypeface(), getMessage(), getX(), getY(), getWidth(), getHeight());
+                case CENTER -> renderer.renderScrollingText(getTypeface(), getMessage(), getX() - getWidth() / 2, getY(), getWidth(), getHeight());
+                case END -> renderer.renderScrollingText(getTypeface(), getMessage(), getX() + getWidth() / 2, getY(), getWidth(), getHeight());
+            }
             return;
         }
 

@@ -18,7 +18,7 @@ import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsContainerScreen;
 import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
-import dev.huskuraft.effortless.screen.settings.EffortlessSettingsContainerScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
 public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMode, Option> {
 
@@ -103,7 +103,7 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
                 switch (settings) {
                     case SETTINGS -> {
                         detach();
-                        new EffortlessSettingsContainerScreen(getEntrance()).attach();
+                        new EffortlessSettingsScreen(getEntrance()).attach();
                     }
                     case PATTERN_SETTINGS -> {
                         detach();

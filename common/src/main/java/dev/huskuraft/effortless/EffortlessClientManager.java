@@ -24,7 +24,7 @@ import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
 import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
 import dev.huskuraft.effortless.renderer.tooltip.TooltipRenderer;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsContainerScreen;
-import dev.huskuraft.effortless.screen.settings.EffortlessSettingsContainerScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 import dev.huskuraft.effortless.screen.structure.EffortlessBuildModeWheelScreen;
 import dev.huskuraft.effortless.screen.test.EffortlessTestScreen;
 
@@ -174,7 +174,7 @@ public final class EffortlessClientManager implements ClientManager {
             getEntrance().getStructureBuilder().redo(getRunningClient().getPlayer());
         }
         if (EffortlessKeys.SETTINGS.getBinding().consumeClick()) {
-            new EffortlessSettingsContainerScreen(getEntrance()).attach();
+            new EffortlessSettingsScreen(getEntrance()).attach();
         }
         if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
             getEntrance().getStructureBuilder().setBuildFeature(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());

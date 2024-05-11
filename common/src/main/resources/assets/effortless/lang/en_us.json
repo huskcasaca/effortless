@@ -348,5 +348,6 @@
   "effortless.button.duplicate": "Duplicate",
   "effortless.pattern.button.enable": "Enable Pattern",
   "effortless.pattern.button.disable": "Disable Pattern",
-  "effortless.pattern.simple.title": "Pattern Settings"
+  "effortless.pattern.simple.title": "Pattern Settings",
+  "effortless.gui.transformer_presets.title": "Transformer Presets"
 }

@@ -29,7 +29,7 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsContainerScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
-import dev.huskuraft.effortless.screen.settings.EffortlessSettingsContainerScreen;
+import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
 public class EffortlessTestScreen extends AbstractScreen {
 
@@ -91,7 +91,7 @@ public class EffortlessTestScreen extends AbstractScreen {
         });
         entries.addSimpleEntry(entry -> {
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY(), Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessSettingsScreen"), button -> {
-                new EffortlessSettingsContainerScreen(getEntrance()).attach();
+                new EffortlessSettingsScreen(getEntrance()).attach();
             }));
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getY() + 20, Dimens.Buttons.ROW_WIDTH, 20, Text.text("Open EffortlessGeneralSettingsScreen"), button -> {
                 new EffortlessGeneralSettingsScreen(getEntrance()).attach();

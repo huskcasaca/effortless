@@ -4,18 +4,18 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Item;
-import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.screen.item.EffortlessItemsScreen;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
-public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
+public class EffortlessGlobalGeneralSettingsScreen extends AbstractContainerScreen {
 
     private final Consumer<GeneralConfig> consumer;
     private GeneralConfig defaultConfig;
@@ -25,7 +25,7 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
     private AbstractWidget saveButton;
 
     public EffortlessGlobalGeneralSettingsScreen(Entrance entrance, GeneralConfig config, Consumer<GeneralConfig> consumer) {
-        super(entrance, Text.translate("effortless.global_general_settings.title"));
+        super(entrance, Text.translate("effortless.global_general_settings.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
         this.defaultConfig = GeneralConfig.DEFAULT;
         this.originalConfig = config;
         this.config = config;
@@ -34,9 +34,9 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1, false, false));
+        var entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS * 2 - 8, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_1, false, false));
 //        entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, config.useCommands(), (value) -> {
 //            this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
 //        });
@@ -87,23 +87,26 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractScreen {
         });
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 1 / 3f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 1 / 3f).build());
 
         this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.reset"), button -> {
             config = defaultConfig;
             recreate();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 1 / 3f, 1 / 3f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 1 / 3f, 1 / 3f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             consumer.accept(config);
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 2 / 3f, 1 / 3f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 2 / 3f, 1 / 3f).build());
 
+
+        this.resetButton.setActive(false);
+        this.saveButton.setActive(false);
     }
 
     @Override
     public void onReload() {
         this.resetButton.setActive(!config.equals(defaultConfig));
-        this.saveButton.setActive(!config.equals(originalConfig));
+        this.saveButton.setActive(!config.equals(originalConfig) || this.saveButton.isActive());
     }
 }

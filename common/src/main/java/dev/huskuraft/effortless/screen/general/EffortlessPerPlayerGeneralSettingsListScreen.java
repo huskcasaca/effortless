@@ -24,8 +24,9 @@ import dev.huskuraft.effortless.session.config.GeneralConfig;
 public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContainerScreen {
 
     private final Consumer<Map<UUID, GeneralConfig>> consumer;
-    private Map<UUID, GeneralConfig> originalData;
-    private Map<UUID, GeneralConfig> data;
+    private Map<UUID, GeneralConfig> defaultConfig;
+    private Map<UUID, GeneralConfig> originalConfig;
+    private Map<UUID, GeneralConfig> config;
     private PlayerInfoList entries;
     private Button deleteButton;
     private Button editButton;
@@ -33,10 +34,11 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContai
     private Button saveButton;
     private Button cancelButton;
 
-    public EffortlessPerPlayerGeneralSettingsListScreen(Entrance entrance, Map<UUID, GeneralConfig> data, Consumer<Map<UUID, GeneralConfig>> editConsumer) {
-        super(entrance, Text.translate("effortless.per_player_general_settings.title"), CONTAINER_WIDTH, CONTAINER_HEIGHT_180);
-        this.originalData = new LinkedHashMap<>(data);
-        this.data = new LinkedHashMap<>(data);
+    public EffortlessPerPlayerGeneralSettingsListScreen(Entrance entrance, Map<UUID, GeneralConfig> config, Consumer<Map<UUID, GeneralConfig>> editConsumer) {
+        super(entrance, Text.translate("effortless.per_player_general_settings.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
+        this.defaultConfig = new LinkedHashMap<>();
+        this.originalConfig = new LinkedHashMap<>(config);
+        this.config = new LinkedHashMap<>(config);
         this.consumer = editConsumer;
     }
 
@@ -59,9 +61,9 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContai
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.hasSelected()) {
-                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), entries.getSelected().getItem(), data.getOrDefault(entries.getSelected().getItem().getId(), GeneralConfig.NULL), (playerInfo1, config) -> {
+                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), GeneralConfig.NULL), (playerInfo1, config) -> {
                     this.entries.insertSelected(playerInfo1);
-                    this.data.put(playerInfo1.getId(), config);
+                    this.config.put(playerInfo1.getId(), config);
                     onReload();
                 }).attach();
 
@@ -72,9 +74,9 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContai
             new EffortlessOnlinePlayersScreen(
                     getEntrance(),
                     playerInfo -> {
-                        new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, data.getOrDefault(playerInfo.getId(), GeneralConfig.NULL), (playerInfo1, config) -> {
+                        new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, config.getOrDefault(playerInfo.getId(), GeneralConfig.NULL), (playerInfo1, config) -> {
                             this.entries.insertSelected(playerInfo1);
-                            this.data.put(playerInfo1.getId(), config);
+                            this.config.put(playerInfo1.getId(), config);
                             onReload();
                         }).attach();
                     }
@@ -86,11 +88,11 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContai
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
-            consumer.accept(data);
+            consumer.accept(config);
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS - 8, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_2, true));
+        this.entries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS * 2 - 8, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_2, true));
         this.entries.reset(getConfigurablePlayers());
         this.entries.setAlwaysShowScrollbar(true);
     }
@@ -99,13 +101,13 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContai
     public void onReload() {
         this.deleteButton.setActive(entries.hasSelected());
         this.editButton.setActive(entries.hasSelected());
-        this.saveButton.setActive(!data.equals(originalData));
-        this.data = this.entries.items().stream().map(PlayerInfo::getId).collect(Collectors.toMap(Function.identity(), data::get, (x, y) -> y, LinkedHashMap::new));
+        this.saveButton.setActive(!config.equals(originalConfig));
+        this.config = this.entries.items().stream().map(PlayerInfo::getId).collect(Collectors.toMap(Function.identity(), config::get, (x, y) -> y, LinkedHashMap::new));
     }
 
     public List<PlayerInfo> getConfigurablePlayers() {
         var id2Players = getEntrance().getClient().getOnlinePlayers().stream().collect(Collectors.toMap(PlayerInfo::getId, Function.identity()));
-        return data.keySet().stream().map(id -> id2Players.computeIfAbsent(id, OfflinePlayerInfo::new)).collect(Collectors.toList());
+        return config.keySet().stream().map(id -> id2Players.computeIfAbsent(id, OfflinePlayerInfo::new)).collect(Collectors.toList());
     }
 
 

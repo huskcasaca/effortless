@@ -12,11 +12,10 @@ import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
-import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
-public class EffortlessTransformerTemplateSelectScreen extends AbstractContainerScreen {
+public class EffortlessTransformerPresetSelectScreen extends AbstractContainerScreen {
 
-    private final Consumer<Transformer> applySettings;
+    private final Consumer<Transformer> consumer;
     private final List<Button> tabButtons = new ArrayList<>();
     private final List<Transformer> transformers;
     private TransformerList entries;
@@ -25,10 +24,10 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractContainer
     private Button cancelButton;
     private Transformers selectedType = Transformers.ARRAY;
 
-    public EffortlessTransformerTemplateSelectScreen(Entrance entrance, Consumer<Transformer> consumer, List<Transformer> transformers) {
+    public EffortlessTransformerPresetSelectScreen(Entrance entrance, Consumer<Transformer> consumer) {
         super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_180);
-        this.applySettings = consumer;
-        this.transformers = transformers;
+        this.consumer = consumer;
+        this.transformers = Transformer.getDefaultTransformers();
     }
 
     @Override
@@ -41,31 +40,9 @@ public class EffortlessTransformerTemplateSelectScreen extends AbstractContainer
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.useTemplateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.template_select.use_template"), button -> {
             if (entries.hasSelected()) {
-                var item = entries.getSelected().getItem();
-                switch (item.getType()) {
-                    case ARRAY, MIRROR, RADIAL -> {
-                        detach();
-                        new EffortlessTransformerEditScreen(
-                                getEntrance(),
-                                settings -> {
-                                    applySettings.accept(settings);
-                                },
-                                item
-                        ).attach();
-                    }
-                    case ITEM_RAND -> {
-                        detach();
-                        new EffortlessRandomizerEditScreen(
-                                getEntrance(),
-                                settings -> {
-                                    applySettings.accept(settings);
-                                },
-                                (ItemRandomizer) item
-                        ).attach();
-                    }
-                }
+                detach();
+                consumer.accept(entries.getSelected().getItem());
             }
-
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
 

@@ -3,19 +3,19 @@ package dev.huskuraft.effortless.screen.preview;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
 
-public class EffortlessRenderSettingsScreen extends AbstractScreen {
+public class EffortlessRenderSettingsScreen extends AbstractContainerScreen {
 
     private final Consumer<RenderConfig> consumer;
     private RenderConfig originalConfig;
@@ -24,7 +24,7 @@ public class EffortlessRenderSettingsScreen extends AbstractScreen {
     private AbstractWidget saveButton;
 
     public EffortlessRenderSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.render_settings.title"));
+        super(entrance, Text.translate("effortless.render_settings.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
             getEntrance().getConfigStorage().update(config -> new ClientConfig(this.lastConfig, config.patternConfig(), config.transformerPresets(), config.passiveMode()));
@@ -35,9 +35,9 @@ public class EffortlessRenderSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_36 - 12, getScreenTitle(), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new SettingOptionsList(getEntrance(), 0, Dimens.Screen.TITLE_36, getWidth(), getHeight() - Dimens.Screen.TITLE_36 - Dimens.Screen.BUTTON_ROW_1, false, false));
+        var entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS * 2 - 8, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_1, false, false));
         entries.addSwitchEntry(Text.translate("effortless.render_settings.show_other_players_build"), null, lastConfig.showOtherPlayersBuild(), (value) -> {
             this.lastConfig = new RenderConfig(value, lastConfig.showOtherPlayersBuildTooltips(), lastConfig.showBlockPreview(), lastConfig.maxRenderVolume(), lastConfig.maxRenderDistance());
         });
@@ -57,18 +57,19 @@ public class EffortlessRenderSettingsScreen extends AbstractScreen {
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             consumer.accept(lastConfig);
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
+        this.saveButton.setActive(false);
     }
 
     @Override
     public void onReload() {
-        this.saveButton.setActive(!originalConfig.equals(lastConfig));
+        this.saveButton.setActive(!originalConfig.equals(lastConfig) || this.saveButton.isActive());
     }
 
     @Override

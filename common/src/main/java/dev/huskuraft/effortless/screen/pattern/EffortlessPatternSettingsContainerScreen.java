@@ -10,11 +10,10 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
-import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
+import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerPresetSelectScreen;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
 
 public class EffortlessPatternSettingsContainerScreen extends AbstractContainerScreen {
@@ -34,7 +33,7 @@ public class EffortlessPatternSettingsContainerScreen extends AbstractContainerS
     private Button saveButton;
 
     public EffortlessPatternSettingsContainerScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.pattern.simple.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_180);
+        super(entrance, Text.translate("effortless.pattern.simple.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_270);
         this.applySettings = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer() , lastSettings);
         };
@@ -49,7 +48,7 @@ public class EffortlessPatternSettingsContainerScreen extends AbstractContainerS
 
     @Override
     public void onCreate() {
-        setContainerHeight(lastSettings.enabled() ? AbstractContainerScreen.CONTAINER_HEIGHT_180 : AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_2);
+        setContainerHeight(lastSettings.enabled() ? AbstractContainerScreen.CONTAINER_HEIGHT_270 : AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_2);
         setContainerWidth(lastSettings.enabled() ? AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED : AbstractContainerScreen.CONTAINER_WIDTH);
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 10, getScreenTitle(), TextWidget.Gravity.CENTER));
@@ -120,13 +119,12 @@ public class EffortlessPatternSettingsContainerScreen extends AbstractContainerS
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.add"), button -> {
-            new EffortlessTransformerTemplateSelectScreen(
+            new EffortlessTransformerPresetSelectScreen(
                     getEntrance(),
                     transformer -> {
                         entries.insertSelected(transformer);
                         onReload();
-                    },
-                    Transformer.getDefaultTransformers()
+                    }
             ).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
