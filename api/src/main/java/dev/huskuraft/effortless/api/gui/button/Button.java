@@ -23,8 +23,8 @@ public class Button extends AbstractButton {
     public static final int VERTICAL_PADDING = Dimens.Buttons.VERTICAL_SPACING;
     public static final int HORIZONTAL_PADDING = Dimens.Buttons.HORIZONTAL_SPACING;
 
-    public static final int COMPAT_INNER_SPACING = 3;
-    public static final int COMPAT_INNER_SPACING_V = 3;
+    public static final int COMPAT_INNER_SPACING = 4;
+    public static final int COMPAT_INNER_SPACING_V = 4;
     public static final int COMPAT_OUTER_SPACING = 6;
 
     public static final int MARGIN = Dimens.Buttons.VERTICAL_PADDING;

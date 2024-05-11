@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
-import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
+import dev.huskuraft.effortless.screen.general.EffortlessSimpleGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessSimplePatternSettingsScreen;
 import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerTemplateSelectScreen;
@@ -41,7 +41,7 @@ public class EffortlessSimpleSettingsScreen extends AbstractPanelScreen {
                 getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                     if (packet.isOperator()) {
                         getEntrance().getClient().execute(() -> {
-                            new EffortlessGeneralSettingsScreen(getEntrance()).attach();
+                            new EffortlessSimpleGeneralSettingsScreen(getEntrance()).attach();
                         });
                     } else {
                         getEntrance().getClient().execute(() -> {
