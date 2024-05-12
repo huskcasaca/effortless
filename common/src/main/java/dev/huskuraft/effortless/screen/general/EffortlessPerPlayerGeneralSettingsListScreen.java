@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.OfflinePlayerInfo;
 import dev.huskuraft.effortless.api.core.PlayerInfo;
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -21,7 +21,7 @@ import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.player.PlayerInfoList;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
-public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContainerScreen {
+public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelScreen {
 
     private final Consumer<Map<UUID, GeneralConfig>> consumer;
     private Map<UUID, GeneralConfig> defaultConfig;
@@ -35,7 +35,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContai
     private Button cancelButton;
 
     public EffortlessPerPlayerGeneralSettingsListScreen(Entrance entrance, Map<UUID, GeneralConfig> config, Consumer<Map<UUID, GeneralConfig>> editConsumer) {
-        super(entrance, Text.translate("effortless.per_player_general_settings.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
+        super(entrance, Text.translate("effortless.per_player_general_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.defaultConfig = new LinkedHashMap<>();
         this.originalConfig = new LinkedHashMap<>(config);
         this.config = new LinkedHashMap<>(config);
@@ -50,7 +50,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContai
     @Override
     public void onCreate() {
 
-        var titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        var titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.delete"), button -> {
             if (entries.hasSelected()) {
@@ -92,7 +92,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContai
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS * 2 - 8, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_2, true));
+        this.entries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_2, true));
         this.entries.reset(getConfigurablePlayers());
         this.entries.setAlwaysShowScrollbar(true);
     }

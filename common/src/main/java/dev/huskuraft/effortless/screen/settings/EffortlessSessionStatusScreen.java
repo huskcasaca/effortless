@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -13,10 +13,10 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 
-public class EffortlessSessionStatusScreen extends AbstractContainerScreen {
+public class EffortlessSessionStatusScreen extends AbstractPanelScreen {
 
     public EffortlessSessionStatusScreen(Entrance entrance) {
-        super(entrance, Text.empty(), AbstractContainerScreen.CONTAINER_WIDTH, 0);
+        super(entrance, Text.empty(), AbstractPanelScreen.PANEL_WIDTH, 0);
     }
 
     @Override
@@ -26,9 +26,9 @@ public class EffortlessSessionStatusScreen extends AbstractContainerScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 10, Text.translate("effortless.session_status.title").withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - 10, Text.translate("effortless.session_status.title").withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new TextList(getEntrance(), getLeft() + PADDINGS, getTop() + AbstractContainerScreen.TITLE_CONTAINER, getWidth() - PADDINGS * 2, getHeight() - AbstractContainerScreen.TITLE_CONTAINER - AbstractContainerScreen.BUTTON_CONTAINER_ROW_1));
+        var entries = addWidget(new TextList(getEntrance(), getLeft() + PADDINGS, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2, getHeight() - AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_1));
         entries.reset(Stream.of(List.of(Text.empty()), getMessages(), List.of(Text.empty())).flatMap(List::stream).toList());
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
@@ -50,6 +50,6 @@ public class EffortlessSessionStatusScreen extends AbstractContainerScreen {
 
     @Override
     public int getHeight() {
-        return AbstractContainerScreen.TITLE_CONTAINER + (getMessages().size() + 2) * 10 + 4 + Dimens.Screen.BUTTON_ROW_1;
+        return AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 + (getMessages().size() + 2) * 10 + 4 + Dimens.Screen.BUTTON_ROW_1;
     }
 }

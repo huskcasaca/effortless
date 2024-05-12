@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.screen.general;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -11,15 +11,15 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPac
 import dev.huskuraft.effortless.screen.settings.EffortlessNotAnOperatorScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 
-public class EffortlessGeneralSettingsScreen extends AbstractContainerScreen {
+public class EffortlessGeneralSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessGeneralSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.general_settings.title"), AbstractContainerScreen.CONTAINER_WIDTH, AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_3);
+        super(entrance, Text.translate("effortless.general_settings.title"), AbstractPanelScreen.PANEL_WIDTH, AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 + AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_3);
     }
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.global_general_settings.title"), button -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {

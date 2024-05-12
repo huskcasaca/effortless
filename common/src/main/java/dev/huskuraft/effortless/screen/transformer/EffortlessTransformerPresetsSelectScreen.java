@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -17,7 +17,7 @@ import dev.huskuraft.effortless.building.config.TransformerPresets;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 
-public class EffortlessTransformerPresetsSelectScreen extends AbstractContainerScreen {
+public class EffortlessTransformerPresetsSelectScreen extends AbstractPanelScreen {
 
     private final Consumer<Transformer> consumer;
     private final List<Button> tabButtons = new ArrayList<>();
@@ -30,7 +30,7 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractContainerS
     private Transformers selectedType = Transformers.ARRAY;
 
     public EffortlessTransformerPresetsSelectScreen(Entrance entrance, Consumer<Transformer> consumer) {
-        super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_270);
+        super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), AbstractPanelScreen.PANEL_WIDTH_EXPANDED, AbstractPanelScreen.PANEL_HEIGHT_270);
         this.consumer = consumer;
         this.builtInTransformers = TransformerPresets.getBuiltInPresets().getByType();
         this.transformers = getEntrance().getConfigStorage().get().transformerPresets().getByType();
@@ -44,7 +44,7 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractContainerS
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 10, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle(), TextWidget.Gravity.CENTER));
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
@@ -61,11 +61,11 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractContainerS
             tabButtons.add(
                     addWidget(Button.builder(getEntrance(), type.getDisplayName(), button -> {
                         setSelectedType(type);
-                    }).setBoundsGrid(getLeft(), getTop(), getWidth(), AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_1, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
+                    }).setBoundsGrid(getLeft(), getTop(), getWidth(), AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 + AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_1, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
             );
         }
 
-        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractContainerScreen.PADDINGS, getTop() + AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_1N, getWidth() - AbstractContainerScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - AbstractContainerScreen.TITLE_CONTAINER - AbstractContainerScreen.BUTTON_CONTAINER_ROW_1N - AbstractContainerScreen.BUTTON_CONTAINER_ROW_1));
+        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 + AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_1N - AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_1));
         this.entries.setAlwaysShowScrollbar(true);
 
         setSelectedType(selectedType);

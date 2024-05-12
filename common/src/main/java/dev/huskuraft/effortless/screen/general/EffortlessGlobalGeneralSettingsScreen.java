@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Item;
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.screen.item.EffortlessItemsScreen;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
-public class EffortlessGlobalGeneralSettingsScreen extends AbstractContainerScreen {
+public class EffortlessGlobalGeneralSettingsScreen extends AbstractPanelScreen {
 
     private final Consumer<GeneralConfig> consumer;
     private GeneralConfig defaultConfig;
@@ -25,7 +25,7 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractContainerScre
     private AbstractWidget saveButton;
 
     public EffortlessGlobalGeneralSettingsScreen(Entrance entrance, GeneralConfig config, Consumer<GeneralConfig> consumer) {
-        super(entrance, Text.translate("effortless.global_general_settings.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
+        super(entrance, Text.translate("effortless.global_general_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.defaultConfig = GeneralConfig.DEFAULT;
         this.originalConfig = config;
         this.config = config;
@@ -34,9 +34,9 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractContainerScre
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS * 2 - 8, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_1, false, false));
+        var entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1, false, false));
 //        entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, config.useCommands(), (value) -> {
 //            this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
 //        });

@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.screen.test;
 import java.util.logging.Logger;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.container.SimpleEntryList;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
@@ -20,22 +20,22 @@ import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
-public class EffortlessTestScreen extends AbstractContainerScreen {
+public class EffortlessTestScreen extends AbstractPanelScreen {
 
     public EffortlessTestScreen(Entrance entrance) {
-        super(entrance, Text.text("Test"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
+        super(entrance, Text.text("Test"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
     }
 
     @Override
     public void onCreate() {
 
-        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.test.cancel"), button -> {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 1f).build());
 
-        var entries = addWidget(new SimpleEntryList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS * 2, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_1));
+        var entries = addWidget(new SimpleEntryList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1));
 
         entries.addSimpleEntry(entry -> {
             var editBox = entry.addWidget(new EditBox(getEntrance(), entry.getLeft(), entry.getY(), entry.getWidth() - 64, 20, Text.empty()));

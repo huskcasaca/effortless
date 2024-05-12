@@ -5,14 +5,14 @@ import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 
-public class EffortlessItemsScreen extends AbstractContainerScreen {
+public class EffortlessItemsScreen extends AbstractPanelScreen {
 
     private final Consumer<List<Item>> consumer;
     private TextWidget titleTextWidget;
@@ -27,7 +27,7 @@ public class EffortlessItemsScreen extends AbstractContainerScreen {
     private List<Item> items;
 
     public EffortlessItemsScreen(Entrance entrance, Text title, List<Item> items, Consumer<List<Item>> consumer) {
-        super(entrance, title, CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
+        super(entrance, title, PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.consumer = consumer;
         this.originalItems = items.stream().distinct().toList();
         this.items = items.stream().distinct().toList();
@@ -36,9 +36,9 @@ public class EffortlessItemsScreen extends AbstractContainerScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        this.entries = addWidget(new ItemStackList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS * 2 - 8, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_2));
+        this.entries = addWidget(new ItemStackList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_2));
         this.entries.setAlwaysShowScrollbar(true);
 
         this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.delete"), button -> {

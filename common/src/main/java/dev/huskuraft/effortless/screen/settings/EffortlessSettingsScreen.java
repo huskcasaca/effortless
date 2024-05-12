@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.screen.settings;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -13,10 +13,10 @@ import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerPresetsScreen;
 
-public class EffortlessSettingsScreen extends AbstractContainerScreen {
+public class EffortlessSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.settings.title"), AbstractContainerScreen.CONTAINER_WIDTH, AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_5);
+        super(entrance, Text.translate("effortless.settings.title"), AbstractPanelScreen.PANEL_WIDTH, AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 + AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_5);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class EffortlessSettingsScreen extends AbstractContainerScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.general_settings.title"), button -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {

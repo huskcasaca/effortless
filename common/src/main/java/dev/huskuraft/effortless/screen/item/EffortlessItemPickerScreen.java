@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Item;
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
-public class EffortlessItemPickerScreen extends AbstractContainerScreen {
+public class EffortlessItemPickerScreen extends AbstractPanelScreen {
 
     private final Consumer<Item> applySettings;
     private TextWidget titleTextWidget;
@@ -25,16 +25,16 @@ public class EffortlessItemPickerScreen extends AbstractContainerScreen {
     private Button cancelButton;
 
     public EffortlessItemPickerScreen(Entrance entrance, Consumer<Item> consumer) {
-        super(entrance, Text.translate("effortless.item.picker.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
+        super(entrance, Text.translate("effortless.item.picker.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.applySettings = consumer;
     }
 
     @Override
     public void onCreate() {
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
-                new EditBox(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER, getWidth() - PADDINGS * 2, TITLE_CONTAINER_2 - Button.COMPAT_SPACING_V, Text.translate("effortless.item.picker.search"))
+                new EditBox(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2, PANEL_TITLE_HEIGHT_2 - Button.COMPAT_SPACING_V, Text.translate("effortless.item.picker.search"))
         );
         this.searchEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
         this.searchEditBox.setHint(Text.translate("effortless.item.picker.search_hint"));
@@ -42,7 +42,7 @@ public class EffortlessItemPickerScreen extends AbstractContainerScreen {
             setSearchResult(text);
         });
 
-        this.entries = addWidget(new ItemStackList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER + TITLE_CONTAINER_2, getWidth() - PADDINGS * 2 - 8, getHeight() - TITLE_CONTAINER - TITLE_CONTAINER_2 - BUTTON_CONTAINER_ROW_1));
+        this.entries = addWidget(new ItemStackList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_TITLE_HEIGHT_2, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_TITLE_HEIGHT_2 - PANEL_BUTTON_ROW_HEIGHT_1));
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.item.picker.cancel"), button -> {
             detach();

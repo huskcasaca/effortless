@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.screen.transformer;
 
 import java.util.function.Consumer;
 
-import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 import dev.huskuraft.effortless.screen.item.EffortlessItemPickerScreen;
 
-public class EffortlessItemRandomizerEditScreen extends AbstractContainerScreen {
+public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
 
     private final Consumer<ItemRandomizer> applySettings;
     private final ItemRandomizer defaultSettings;
@@ -33,7 +33,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractContainerScreen 
     private Randomizer.Target lastTarget;
 
     public EffortlessItemRandomizerEditScreen(Entrance entrance, Consumer<ItemRandomizer> consumer, ItemRandomizer randomizer) {
-        super(entrance, Text.translate("effortless.randomizer.edit.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
+        super(entrance, Text.translate("effortless.randomizer.edit.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.applySettings = consumer;
         this.defaultSettings = randomizer;
         this.lastSettings = randomizer;
@@ -44,18 +44,18 @@ public class EffortlessItemRandomizerEditScreen extends AbstractContainerScreen 
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + TITLE_CONTAINER - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.order", lastSettings.getOrder().getDisplayName()), button -> {
             lastOrder = Randomizer.Order.values()[(lastOrder.ordinal() + 1) % Randomizer.Order.values().length];
             orderButton.setMessage(Text.translate("effortless.randomizer.edit.order", lastOrder.getDisplayName()));
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), TITLE_CONTAINER + BUTTON_CONTAINER_ROW_1, 0f, 0f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1, 0f, 0f, 0.5f).build());
         this.supplierButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.target", lastTarget.getDisplayName()), button -> {
             lastTarget = Randomizer.Target.values()[(lastTarget.ordinal() + 1) % Randomizer.Target.values().length];
             supplierButton.setMessage(Text.translate("effortless.randomizer.edit.target", lastTarget.getDisplayName()));
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), TITLE_CONTAINER + BUTTON_CONTAINER_ROW_1, 0f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1, 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new ItemChanceList(getEntrance(), getLeft() + PADDINGS, getTop() + TITLE_CONTAINER + BUTTON_CONTAINER_ROW_1N, getWidth() - PADDINGS * 2 - 8, getHeight() - TITLE_CONTAINER - BUTTON_CONTAINER_ROW_2 - BUTTON_CONTAINER_ROW_1N));
+        this.entries = addWidget(new ItemChanceList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_2 - PANEL_BUTTON_ROW_HEIGHT_1N));
         this.entries.setAlwaysShowScrollbar(true);
         this.entries.reset(lastSettings.getChances());
 
