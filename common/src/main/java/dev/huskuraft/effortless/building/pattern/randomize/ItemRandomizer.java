@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.building.pattern.randomize;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,25 +16,11 @@ import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 
-public class ItemRandomizer extends Randomizer<Item> {
+public record ItemRandomizer(UUID id, Text name, Order order, Target target, Category category, Collection<Chance<Item>> chances) implements Randomizer<Item> {
 
     public static final int MAX_CHANCE_SIZE = 36; // Inventory.INVENTORY_SIZE // FIXME: 23/10/23 move
 
     public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.empty"), Order.SEQUENCE, Target.SINGLE, Category.ITEM, Collections.emptyList());
-
-    private final Order order;
-    private final Target target;
-    private final Category category;
-
-    private final Collection<Chance<Item>> chances;
-
-    public ItemRandomizer(UUID uuid, Text name, Order order, Target target, Category category, Collection<Chance<Item>> chances) {
-        super(uuid, name);
-        this.order = order;
-        this.target = target;
-        this.category = category;
-        this.chances = chances;
-    }
 
     public static ItemRandomizer create(Text name, Order order, Target target, Category category, Collection<Chance<Item>> chances) {
         for (var chance : chances) {
@@ -416,27 +401,5 @@ public class ItemRandomizer extends Randomizer<Item> {
     @Override
     public ItemRandomizer withId(UUID id) {
         return new ItemRandomizer(id, name, order, target, category, chances);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ItemRandomizer that)) return false;
-        if (!super.equals(o)) return false;
-
-        if (order != that.order) return false;
-        if (target != that.target) return false;
-        if (category != that.category) return false;
-        return Objects.equals(chances, that.chances);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (order != null ? order.hashCode() : 0);
-        result = 31 * result + (target != null ? target.hashCode() : 0);
-        result = 31 * result + (category != null ? category.hashCode() : 0);
-        result = 31 * result + (chances != null ? chances.hashCode() : 0);
-        return result;
     }
 }

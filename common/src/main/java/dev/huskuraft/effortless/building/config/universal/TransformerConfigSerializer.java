@@ -273,7 +273,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 
         private static final String KEY_POSITION = "position";
         private static final String KEY_POSITION_TYPE = "positionType";
-        private static final String KEY_SLICE = "slice";
+        private static final String KEY_SLICE = "slices";
         public static RadialTransformerConfigSerializer INSTANCE = new RadialTransformerConfigSerializer();
 
         private RadialTransformerConfigSerializer() {

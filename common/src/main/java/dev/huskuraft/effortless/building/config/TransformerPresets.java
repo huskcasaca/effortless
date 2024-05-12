@@ -20,7 +20,6 @@ public record TransformerPresets(
             List<ItemRandomizer> itemRandomizers
     ) {
         this(Stream.of(arrayTransformers, mirrorTransformers, radialTransformers, itemRandomizers).flatMap(List::stream).collect(Collectors.toList()));
-
     }
 
     public List<ArrayTransformer> arrayTransformers() {

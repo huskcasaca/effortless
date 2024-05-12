@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.building.pattern.array;
 
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -16,11 +15,10 @@ import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 
-public class ArrayTransformer extends Transformer {
+public record ArrayTransformer(UUID id, Text name, Vector3d offset, int count) implements Transformer {
 
     public static final ArrayTransformer ZERO = new ArrayTransformer(new Vector3d(0, 0, 0), 0);
     public static final ArrayTransformer DEFAULT = new ArrayTransformer(new Vector3d(1, 1, 1), 4);
-
 
     public static final BoundingBox3d OFFSET_BOUND = new BoundingBox3d(
             Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE,
@@ -32,17 +30,8 @@ public class ArrayTransformer extends Transformer {
     public static final int MIN_COUNT = 0;
     public static final int MAX_COUNT = Short.MAX_VALUE;
 
-    private final Vector3d offset;
-    private final int count;
-
     public ArrayTransformer(Vector3d offset, int count) {
         this(UUID.randomUUID(), Text.translate("effortless.transformer.array"), offset, count);
-    }
-
-    public ArrayTransformer(UUID id, Text name, Vector3d offset, int count) {
-        super(id, name);
-        this.offset = offset;
-        this.count = count;
     }
 
     @Override
@@ -86,7 +75,7 @@ public class ArrayTransformer extends Transformer {
         return offset;
     }
 
-    public Integer count() {
+    public int count() {
         return count;
     }
 
@@ -114,22 +103,5 @@ public class ArrayTransformer extends Transformer {
         return new ArrayTransformer(id, name, offset, count);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ArrayTransformer that)) return false;
-        if (!super.equals(o)) return false;
-
-        if (count != that.count) return false;
-        return Objects.equals(offset, that.offset);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (offset != null ? offset.hashCode() : 0);
-        result = 31 * result + count;
-        return result;
-    }
 
 }

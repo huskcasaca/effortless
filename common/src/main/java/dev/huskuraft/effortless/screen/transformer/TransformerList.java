@@ -29,9 +29,10 @@ public final class TransformerList extends EditableEntryList<Transformer> {
     }
 
     @SuppressWarnings("unchecked")
+    // FIXME: 12/5/24 
     @Override
     protected EditableEntryList.Entry<Transformer> createHolder(Transformer transformer) {
-        return (EditableEntryList.Entry<Transformer>) switch (transformer.getType()) {
+        return (EditableEntryList.Entry) switch (transformer.getType()) {
             case ARRAY -> new ArrayEntry(getEntrance(), this, (ArrayTransformer) transformer);
             case MIRROR -> new MirrorEntry(getEntrance(), this, (MirrorTransformer) transformer);
             case RADIAL -> new RadialEntry(getEntrance(), this, (RadialTransformer) transformer);
