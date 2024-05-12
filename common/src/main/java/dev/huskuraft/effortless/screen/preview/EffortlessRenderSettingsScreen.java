@@ -64,12 +64,10 @@ public class EffortlessRenderSettingsScreen extends AbstractContainerScreen {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.saveButton.setActive(false);
     }
 
     @Override
     public void onReload() {
-        this.saveButton.setActive(!originalConfig.equals(lastConfig) || this.saveButton.isActive());
     }
 
     @Override

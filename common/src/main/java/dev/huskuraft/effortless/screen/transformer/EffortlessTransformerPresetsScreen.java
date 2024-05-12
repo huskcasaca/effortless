@@ -76,7 +76,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractContainerScreen 
                         ).attach();
                     }
                     case ITEM_RAND -> {
-                        new EffortlessRandomizerEditScreen(
+                        new EffortlessItemRandomizerEditScreen(
                                 getEntrance(),
                                 transformer -> {
                                     entries.replaceSelect(transformer);
@@ -122,7 +122,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractContainerScreen 
                     ).attach();
                 }
                 case ITEM_RAND -> {
-                    new EffortlessRandomizerEditScreen(
+                    new EffortlessItemRandomizerEditScreen(
                             getEntrance(),
                             transformer -> {
                                 entries.insertSelected(transformer);
@@ -170,7 +170,6 @@ public class EffortlessTransformerPresetsScreen extends AbstractContainerScreen 
         this.editButton.setActive(entries.getSelected() != null && !entries.getSelected().getItem().isBuiltIn());
         this.deleteButton.setActive(entries.getSelected() != null && !entries.getSelected().getItem().isBuiltIn());
         this.config.put(selectedType, this.entries.items().stream().filter(transformer1 -> !transformer1.isBuiltIn()).filter(transformer1 -> transformer1.getType() == selectedType).toList());
-        this.saveButton.setActive(this.config.equals(originalConfig) || this.saveButton.isActive());
 
         if (entries.getSelected() != null && entries.getSelected().getItem().isBuiltIn()) {
             this.editButton.setTooltip(

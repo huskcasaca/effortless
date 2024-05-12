@@ -101,7 +101,6 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractContai
     public void onReload() {
         this.deleteButton.setActive(entries.hasSelected());
         this.editButton.setActive(entries.hasSelected());
-        this.saveButton.setActive(!config.equals(originalConfig));
         this.config = this.entries.items().stream().map(PlayerInfo::getId).collect(Collectors.toMap(Function.identity(), config::get, (x, y) -> y, LinkedHashMap::new));
     }
 

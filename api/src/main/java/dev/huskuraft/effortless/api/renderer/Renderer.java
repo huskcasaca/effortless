@@ -337,10 +337,10 @@ public abstract class Renderer {
             var offset = MathUtils.lerp(f, 0.0, extraWidth);
             this.flush();
             this.enableScissor(x1 - 1, y1, x2 + 1, y2);
-            this.renderText(typeface, text, (int) Math.round(x1 - offset), containerHeight, color, true);
+            this.renderText(typeface, text, (int) Math.round(x1 - offset), y1, color, true);
             this.disableScissor();
         } else {
-            this.renderTextFromCenter(typeface, text, (x1 + x2) / 2, containerHeight, color, true);
+            this.renderTextFromCenter(typeface, text, (x1 + x2) / 2, y1, color, true);
         }
     }
 

@@ -8,8 +8,8 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
-import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsContainerScreen;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsContainerScreen;
+import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerPresetsScreen;
 
@@ -37,7 +37,7 @@ public class EffortlessSettingsScreen extends AbstractContainerScreen {
                 getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                     if (packet.isOperator()) {
                         getEntrance().getClient().execute(() -> {
-                            new EffortlessGeneralSettingsContainerScreen(getEntrance()).attach();
+                            new EffortlessGeneralSettingsScreen(getEntrance()).attach();
                         });
                     } else {
                         getEntrance().getClient().execute(() -> {
@@ -51,7 +51,7 @@ public class EffortlessSettingsScreen extends AbstractContainerScreen {
             new EffortlessRenderSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 3f, 0f, 1f).build());
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern_settings.title"), button -> {
-            new EffortlessPatternSettingsContainerScreen(getEntrance()).attach();
+            new EffortlessPatternSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer_presets.title"), button -> {
             new EffortlessTransformerPresetsScreen(getEntrance()).attach();

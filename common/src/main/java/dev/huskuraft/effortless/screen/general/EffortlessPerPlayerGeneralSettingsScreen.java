@@ -167,13 +167,11 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractContainerS
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 2 / 3f, 1 / 3f).build());
 
         this.resetButton.setActive(false);
-        this.saveButton.setActive(false);
     }
 
     @Override
     public void onReload() {
         this.resetButton.setActive(!config.equals(defaultConfig));
-        this.saveButton.setActive(!config.equals(originalConfig) || this.saveButton.isActive());
     }
 
     @Override

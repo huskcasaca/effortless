@@ -70,15 +70,15 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
 
         @Override
         public void onCreate() {
-            this.numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 72, getY() + 1, 72, 18, NumberField.TYPE_INTEGER));
+            this.numberField = addWidget(new NumberField(getEntrance(), getX() + getWidth() - 48, getY() + 1, 48, 18, NumberField.TYPE_INTEGER));
             this.numberField.setValueRange(Chance.MIN_ITEM_COUNT, Chance.MAX_ITEM_COUNT);
             this.numberField.setValue(getItem().chance());
             this.numberField.setValueChangeListener(value -> {
                 this.setItem(Chance.of(getItem().content(), value.intValue()));
             });
             this.itemSlot = addWidget(new ItemSlot(getEntrance(), getX() + 1, getY() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getItem().content(), Text.text(String.valueOf(getItem().chance()))));
-            this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getDisplayName(getItem())));
-            this.chanceTextWidget = addWidget(new TextWidget(getEntrance(), getX() + getWidth() - 76, getY() + 6, Text.empty(), TextWidget.Gravity.END));
+            this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getWidth() - 48 - 4 - Dimens.SLOT_WIDTH - 4 - 20, 0, getDisplayName(getItem()), TextWidget.Gravity.START));
+            this.chanceTextWidget = addWidget(new TextWidget(getEntrance(), getX() + getWidth() - 48 - 4, getY() + 6, Text.empty(), TextWidget.Gravity.END));
         }
 
         @Override

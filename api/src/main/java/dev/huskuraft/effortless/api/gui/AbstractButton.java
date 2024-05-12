@@ -64,7 +64,7 @@ public abstract class AbstractButton extends AbstractWidget {
         var left = this.getX() + padding;
         var right = this.getX() + this.getWidth() - padding;
         var message = isActive() ? this.getMessage() : this.getMessage().withStyle(ChatFormatting.RESET);
-        renderer.renderScrollingText(typeface, message, left, this.getY(), right, this.getY() + this.getHeight(), color);
+        renderer.renderScrollingText(typeface, message, left, this.getY() + (getHeight() - getTypeface().measureHeight(message)) / 2 + 1, right, this.getY() + this.getHeight(), color);
     }
 
 

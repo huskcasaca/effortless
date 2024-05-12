@@ -1,44 +1,44 @@
 package dev.huskuraft.effortless.screen.pattern;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
-import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.config.ClientConfig;
-import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
+import dev.huskuraft.effortless.screen.transformer.EffortlessItemRandomizerEditScreen;
+import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
+import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerPresetsSelectScreen;
+import dev.huskuraft.effortless.screen.transformer.TransformerList;
 
-public class EffortlessPatternSettingsScreen extends AbstractScreen {
+public class EffortlessPatternSettingsScreen extends AbstractContainerScreen {
 
-    private final Consumer<PatternConfig> consumer;
-    private PatternConfig config;
+    private final Consumer<Pattern> applySettings;
+    private final Pattern defaultSettings;
+    private Pattern lastSettings;
     private TextWidget titleTextWidget;
-    private PatternList entries;
+    private TransformerList entries;
     private Button upButton;
     private Button downButton;
     private Button editButton;
     private Button deleteButton;
-    private Button duplicateButton;
-    private Button newButton;
-    private Button resetButton;
-    private Button doneButton;
-    private Button cancelButton;
+    private Button clearButton;
+    private Button addButton;
+    private Button enableButton;
+    private Button saveButton;
 
     public EffortlessPatternSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.pattern.settings.title"));
-        this.consumer = pattern -> {
-            getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-            getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), this.config, config.transformerPresets(), config.passiveMode()));
-
+        super(entrance, Text.translate("effortless.pattern.simple.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_270);
+        this.applySettings = pattern -> {
+            getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer() , lastSettings);
         };
-        this.config = getEntrance().getConfigStorage().get().patternConfig();
+        this.defaultSettings = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer()).pattern();
+        this.lastSettings = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer()).pattern();
     }
 
     @Override
@@ -48,11 +48,25 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
     @Override
     public void onCreate() {
+        setContainerHeight(lastSettings.enabled() ? AbstractContainerScreen.CONTAINER_HEIGHT_270 : AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_2);
+        setContainerWidth(lastSettings.enabled() ? AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED : AbstractContainerScreen.CONTAINER_WIDTH);
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 12, getScreenTitle().withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractContainerScreen.TITLE_CONTAINER - 10, getScreenTitle(), TextWidget.Gravity.CENTER));
 
-        this.entries = addWidget(new PatternList(getEntrance(), getLeft() + 6, getTop() + 20, getWidth() - 20, getHeight() - AbstractContainerScreen.TITLE_CONTAINER - AbstractContainerScreen.BUTTON_CONTAINER_ROW_2));
-        this.entries.reset(config.patterns());
+        this.enableButton = addWidget(Button.builder(getEntrance(), lastSettings.enabled() ? Text.translate("effortless.pattern.button.disable") : Text.translate("effortless.pattern.button.enable"), button -> {
+            this.lastSettings = lastSettings.withEnabled(!lastSettings.enabled());
+            recreate();
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_1, 0f, 0f, 1f).build());
+
+        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
+            this.lastSettings = lastSettings.withEnabled(!lastSettings.transformers().isEmpty() && lastSettings.enabled());
+            applySettings.accept(lastSettings);
+            detach();
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 1f).build());
+
+        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractContainerScreen.PADDINGS, getTop() + AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_1N, getWidth() - AbstractContainerScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - AbstractContainerScreen.TITLE_CONTAINER - AbstractContainerScreen.BUTTON_CONTAINER_ROW_1N - AbstractContainerScreen.BUTTON_CONTAINER_ROW_2));
+        this.entries.reset(lastSettings.transformers());
+        this.entries.setAlwaysShowScrollbar(true);
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.up"), button -> {
             if (entries.hasSelected()) {
@@ -67,15 +81,30 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.hasSelected()) {
-                new EffortlessPatternEditScreen(
-                        getEntrance(),
-                        pattern -> {
-                            entries.replaceSelect(pattern);
-                            onReload();
-                        },
-                        entries.getSelected().getItem(),
-                        entries.indexOfSelected()
-                ).attach();
+                var item = entries.getSelected().getItem();
+                switch (item.getType()) {
+                    case ARRAY, MIRROR, RADIAL -> {
+                        new EffortlessTransformerEditScreen(
+                                getEntrance(),
+                                transformer -> {
+                                    entries.replaceSelect(transformer);
+                                    onReload();
+                                },
+                                item
+                        ).attach();
+                    }
+                    case ITEM_RAND -> {
+                        new EffortlessItemRandomizerEditScreen(
+                                getEntrance(),
+                                transformer -> {
+                                    entries.replaceSelect(transformer);
+                                    onReload();
+                                },
+                                (ItemRandomizer) item
+                        ).attach();
+                    }
+                }
+
             }
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 0.25f).build());
 
@@ -85,56 +114,40 @@ public class EffortlessPatternSettingsScreen extends AbstractScreen {
             }
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.25f, 0.25f).build());
 
-        this.duplicateButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.duplicate"), button -> {
-            if (entries.hasSelected()) {
-                entries.insertSelected(entries.getSelected().getItem().withRandomId());
-            }
+        this.clearButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.clear"), button -> {
+            entries.clear();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
-        this.newButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.new"), button -> {
-            new EffortlessPatternEditScreen(
+        this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.add"), button -> {
+            new EffortlessTransformerPresetsSelectScreen(
                     getEntrance(),
-                    pattern -> {
-                        entries.insertSelected(pattern);
+                    transformer -> {
+                        entries.insertSelected(transformer.withRandomId().withName(Text.empty()));
                         onReload();
-                    },
-                    Pattern.DISABLED,
-                    entries.indexOfSelected() == -1 ? entries.children().size() : entries.indexOfSelected() + 1
+                    }
             ).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
-        this.resetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.reset"), button -> {
-            entries.reset(List.of());
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.5f).build());
-
-        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
-            detach();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
-        this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
-            consumer.accept(config);
-            detach();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
     }
 
     @Override
     public void onReload() {
-        super.onReload();
-        this.upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
-        this.downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
-        this.editButton.setActive(entries.hasSelected());
-        this.deleteButton.setActive(entries.hasSelected());
-        this.duplicateButton.setActive(entries.hasSelected());
+        lastSettings = new Pattern(lastSettings.id(), lastSettings.enabled(), entries.items());
+        entries.setVisible(lastSettings.enabled());
 
-        this.upButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
-        this.downButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
-        this.editButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
-        this.deleteButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
-        this.duplicateButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
-        this.newButton.setVisible(!getEntrance().getClient().getWindow().isAltDown());
-        this.resetButton.setVisible(getEntrance().getClient().getWindow().isAltDown());
+        upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
+        downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
+        editButton.setActive(entries.hasSelected());
+        deleteButton.setActive(entries.hasSelected());
+        addButton.setActive(entries.items().size() < 4);
 
-        this.config = new PatternConfig(entries.items());
+        upButton.setVisible(getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
+        downButton.setVisible(getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
+        editButton.setVisible(!getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
+        deleteButton.setVisible(!getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
+        clearButton.setVisible(lastSettings.enabled());
+        addButton.setVisible(lastSettings.enabled());
+
     }
-
 
 }

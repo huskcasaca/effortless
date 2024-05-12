@@ -101,12 +101,10 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractContainerScre
 
 
         this.resetButton.setActive(false);
-        this.saveButton.setActive(false);
     }
 
     @Override
     public void onReload() {
         this.resetButton.setActive(!config.equals(defaultConfig));
-        this.saveButton.setActive(!config.equals(originalConfig) || this.saveButton.isActive());
     }
 }

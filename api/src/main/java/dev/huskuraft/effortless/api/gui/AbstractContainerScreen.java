@@ -34,6 +34,7 @@ public abstract class AbstractContainerScreen extends AbstractScreen {
 
     public static final int PADDINGS = 6;
     public static final int TITLE_CONTAINER = 18;
+    public static final int TITLE_CONTAINER_2 = 24;
 
     private int containerWidth;
     private int containerHeight;

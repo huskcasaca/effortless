@@ -103,7 +103,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
                 var rowCenterX = x0 + getWidth() / 2;
                 var rowLeft = rowCenterX - rowHalfWidth;
                 var rowRight = rowCenterX + rowHalfWidth;
-                if (mouseX < this.x0 + this.getScrollbarPosition() && mouseX >= rowLeft && mouseX <= rowRight && index >= 0 && mouseRelativeY >= 0 && index < this.getEntrySize()) {
+                if (mouseX < this.getScrollbarPosition() && mouseX >= rowLeft && mouseX <= rowRight && index >= 0 && mouseRelativeY >= 0 && index < this.getEntrySize()) {
                     return child;
                 } else {
                     return null;
@@ -276,12 +276,16 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     protected void updateScrollingState(double d, double e, int i) {
-        this.scrolling = i == 0 && d >= (double) this.x0 + this.getScrollbarPosition() && d < (double) (this.x0 + this.getScrollbarPosition() + 6);
+        this.scrolling = i == 0 && d >= (double) this.getScrollbarPosition() && d < (double) (this.x0 + this.getScrollbarPosition() + 6);
     }
 
     // TODO: 12/9/23
     protected int getScrollbarPosition() {
-        return this.getWidth() + 2;
+        return this.x0 + this.getWidth() + 2;
+    }
+
+    protected int getScrollbarWidth() {
+        return 6;
     }
 
     protected void moveSelection(SelectionDirection selectionDirection) {
@@ -400,8 +404,8 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
         setHovered(isMouseOver(mouseX, mouseY) ? getWidgetAt(mouseX, mouseY) : null);
 
-        var left = this.x0 + this.getScrollbarPosition();
-        var width = 6;
+        var left = getScrollbarPosition();
+        var width = getScrollbarWidth();
         renderBackground(renderer, mouseX, mouseY, deltaTick);
         renderer.pushPose();
         renderer.enableScissor(this.x0, this.y0, this.x1, this.y1);
@@ -427,6 +431,11 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
             renderer.renderRect(left, top, left + width, top + size, 0xff808080);
             renderer.renderRect(left, top, left + width - 1, top + size - 1, 0xffc0c0c0);
         }
+    }
+
+    public boolean isScrollbarVisible() {
+        var renderScrollBar = this.getMaxScroll();
+        return isShowScrollBar && (renderScrollBar > 0 || isAlwaysShowScrollbar);
     }
 
     public void setAlwaysShowScrollbar(boolean alwaysShowScrollbar) {
@@ -512,7 +521,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     public boolean isMouseOver(double mouseX, double mouseY) {
-        return mouseY >= this.y0 && mouseY <= this.y1 && mouseX >= this.x0 && mouseX <= this.x1;
+        return mouseY >= this.getTop() && mouseY <= this.getBottom() && ( (mouseX >= this.getLeft() && mouseX <= this.getRight()) || (mouseX >= this.getScrollbarPosition() && mouseX <= this.getScrollbarPosition() + this.getScrollbarWidth()));
     }
 
     @Override
