@@ -349,5 +349,20 @@
   "effortless.pattern.button.enable": "Enable Pattern",
   "effortless.pattern.button.disable": "Disable Pattern",
   "effortless.pattern.simple.title": "Pattern Settings",
-  "effortless.gui.transformer_presets.title": "Transformer Presets"
+  "effortless.transformer.custom_array": "Custom Array",
+  "effortless.transformer.custom_mirror": "Custom Mirror",
+  "effortless.transformer.custom_radial": "Custom Radial",
+  "effortless.transformer.custom_random": "Custom Item Randomizer",
+  "effortless.transformer.tooltip.cannot_edit_built_in.title": "Cannot Edit",
+  "effortless.transformer.tooltip.cannot_edit_built_in.message": "You cannot edit a built-in transformer!",
+  "effortless.transformer.tooltip.cannot_delete_built_in.title": "Cannot Delete",
+  "effortless.transformer.tooltip.cannot_delete_built_in.message": "You cannot delete a built-in transformer!",
+  "effortless.transformer.tooltip.add_new_transformer.array.title": "Add Array Preset",
+  "effortless.transformer.tooltip.add_new_transformer.array.message": "You can add some array transformer presets here and use it in your patterns later.",
+  "effortless.transformer.tooltip.add_new_transformer.mirror.title": "Add Mirror Preset",
+  "effortless.transformer.tooltip.add_new_transformer.mirror.message": "You can add some mirror transformer presets here and use it in your patterns later.",
+  "effortless.transformer.tooltip.add_new_transformer.radial.title": "Add Radial Preset",
+  "effortless.transformer.tooltip.add_new_transformer.radial.message": "You can add some radial transformer presets here and use it in your patterns later.",
+  "effortless.transformer.tooltip.add_new_transformer.random.title": "Add Item Randomizer Preset",
+  "effortless.transformer.tooltip.add_new_transformer.random.message": "You can add some item randomizer presets here and use it in your patterns later."
 }

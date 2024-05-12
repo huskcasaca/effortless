@@ -16,7 +16,7 @@ import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.transformer.EffortlessRandomizerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
-import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerPresetSelectScreen;
+import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerPresetsSelectScreen;
 import dev.huskuraft.effortless.screen.transformer.TransformerList;
 
 public class EffortlessPatternEditScreen extends AbstractScreen {
@@ -102,7 +102,7 @@ public class EffortlessPatternEditScreen extends AbstractScreen {
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
 
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.add"), button -> {
-            new EffortlessTransformerPresetSelectScreen(
+            new EffortlessTransformerPresetsSelectScreen(
                     getEntrance(),
                     transformer -> {
                         entries.insertSelected(transformer);

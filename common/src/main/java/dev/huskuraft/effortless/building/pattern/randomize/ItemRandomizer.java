@@ -397,6 +397,11 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Cat
     }
 
     @Override
+    public ItemRandomizer withRandomId() {
+        return withId(UUID.randomUUID());
+    }
+
+    @Override
     public ItemRandomizer withName(Text name) {
         return new ItemRandomizer(id, name, order, target, category, chances);
     }

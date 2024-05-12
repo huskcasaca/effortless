@@ -61,7 +61,7 @@ public interface Transformer {
     Transformer withId(UUID id);
 
     default boolean isBuiltIn() {
-        return name().getString().isEmpty();
+        return !name().getString().isEmpty();
     }
 
     default Transformer withRandomId() {

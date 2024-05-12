@@ -2,32 +2,43 @@ package dev.huskuraft.effortless.screen.transformer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
+import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.config.TransformerPresets;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 
-public class EffortlessTransformerPresetSelectScreen extends AbstractContainerScreen {
+public class EffortlessTransformerPresetsSelectScreen extends AbstractContainerScreen {
 
     private final Consumer<Transformer> consumer;
     private final List<Button> tabButtons = new ArrayList<>();
-    private final List<Transformer> transformers;
+    private Map<Transformers, List<Transformer>> builtInTransformers;
+    private Map<Transformers, List<Transformer>> transformers;
     private TransformerList entries;
     private TextWidget titleTextWidget;
     private Button useTemplateButton;
     private Button cancelButton;
     private Transformers selectedType = Transformers.ARRAY;
 
-    public EffortlessTransformerPresetSelectScreen(Entrance entrance, Consumer<Transformer> consumer) {
+    public EffortlessTransformerPresetsSelectScreen(Entrance entrance, Consumer<Transformer> consumer) {
         super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_270);
         this.consumer = consumer;
-        this.transformers = Transformer.getDefaultTransformers();
+        this.builtInTransformers = TransformerPresets.getBuiltInPresets().getByType();
+        this.transformers = getEntrance().getConfigStorage().get().transformerPresets().getByType();
+    }
+
+    @Override
+    protected EffortlessClient getEntrance() {
+        return (EffortlessClient) super.getEntrance();
     }
 
     @Override
@@ -57,7 +68,7 @@ public class EffortlessTransformerPresetSelectScreen extends AbstractContainerSc
         this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractContainerScreen.PADDINGS, getTop() + AbstractContainerScreen.TITLE_CONTAINER + AbstractContainerScreen.BUTTON_CONTAINER_ROW_1N, getWidth() - AbstractContainerScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - AbstractContainerScreen.TITLE_CONTAINER - AbstractContainerScreen.BUTTON_CONTAINER_ROW_1N - AbstractContainerScreen.BUTTON_CONTAINER_ROW_1));
         this.entries.setAlwaysShowScrollbar(true);
 
-        setSelectedType(Transformers.ARRAY);
+        setSelectedType(selectedType);
     }
 
     @Override
@@ -66,7 +77,7 @@ public class EffortlessTransformerPresetSelectScreen extends AbstractContainerSc
         for (var tabButton : tabButtons) {
             tabButton.setActive(!tabButton.getMessage().equals(selectedType.getDisplayName()));
         }
-        entries.reset(transformers.stream().filter(transformer -> transformer.getType() == selectedType).toList());
+        this.entries.reset(Stream.concat(this.builtInTransformers.get(selectedType).stream(), this.transformers.get(selectedType).stream()).toList());
     }
 
     private void setSelectedType(Transformers type) {

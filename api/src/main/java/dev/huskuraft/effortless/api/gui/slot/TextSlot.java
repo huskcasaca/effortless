@@ -7,14 +7,24 @@ import dev.huskuraft.effortless.api.text.Text;
 public class TextSlot extends Slot {
 
     private final Text symbol;
+    private final int color;
 
     public TextSlot(Entrance entrance, int x, int y, int width, int height, Text message) {
-        this(entrance, x, y, width, height, message, null);
+        this(entrance, x, y, width, height, message, 0x9f6c6c6c);
+    }
+
+    public TextSlot(Entrance entrance, int x, int y, int width, int height, Text message, int color) {
+        this(entrance, x, y, width, height, message, null, color);
     }
 
     public TextSlot(Entrance entrance, int x, int y, int width, int height, Text message, Text symbol) {
+        this(entrance, x, y, width, height, message, symbol, 0x9f6c6c6c);
+    }
+
+    public TextSlot(Entrance entrance, int x, int y, int width, int height, Text message, Text symbol, int color) {
         super(entrance, x, y, width, height, message);
         this.symbol = symbol == null ? null : Text.text(symbol.getString().substring(0, Math.min(symbol.getString().length(), 1)).toUpperCase());
+        this.color = color;
     }
 
     public Text getSymbol() {
@@ -35,7 +45,7 @@ public class TextSlot extends Slot {
         renderer.pushPose();
         renderer.translate(getFullWidth() - getWidth(), 0, 0);
 
-        renderer.renderRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), 0x9f6c6c6c);
+        renderer.renderRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), color);
 
         if (symbol != null) {
             renderer.enableScissor(getX() + getFullWidth() - getWidth(), getY(), getX() + getFullWidth(), getY() + getHeight());

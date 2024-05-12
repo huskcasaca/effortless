@@ -1,10 +1,14 @@
 package dev.huskuraft.effortless.building.config;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.building.pattern.Transformer;
+import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
@@ -14,7 +18,7 @@ public record TransformerPresets(
         List<Transformer> transformers
 ) {
 
-    public TransformerPresets getDefault() {
+    public static TransformerPresets getDefault() {
         return new TransformerPresets();
     }
 
@@ -46,5 +50,19 @@ public record TransformerPresets(
 
     public List<ItemRandomizer> itemRandomizers() {
         return transformers().stream().filter(ItemRandomizer.class::isInstance).map(ItemRandomizer.class::cast).collect(Collectors.toList());
+    }
+
+    public List<Transformer> getByType(Transformers type) {
+        return transformers().stream().filter(t -> t.getType() == type).toList();
+    }
+
+    public Map<Transformers, List<Transformer>> getByType() {
+        return Arrays.stream(Transformers.values()).collect(Collectors.toMap(Function.identity(), this::getByType));
+    }
+
+    public static TransformerPresets getBuiltInPresets() {
+        return new TransformerPresets(
+            Transformer.getDefaultTransformers()
+        );
     }
 }

@@ -100,8 +100,13 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         }
 
         protected Text getDisplayName() {
-            if (getItem().getName().getString().isBlank()) {
-                return Text.translate("effortless.transformer.no_name").withStyle(ChatFormatting.GRAY);
+            if (getItem().getName().getString().isEmpty()) {
+                return switch (getItem().getType()) {
+                    case ARRAY -> Text.translate("effortless.transformer.custom_array").withStyle(ChatFormatting.GRAY);
+                    case MIRROR -> Text.translate("effortless.transformer.custom_mirror").withStyle(ChatFormatting.GRAY);
+                    case RADIAL -> Text.translate("effortless.transformer.custom_radial").withStyle(ChatFormatting.GRAY);
+                    case ITEM_RAND -> Text.translate("effortless.transformer.custom_random").withStyle(ChatFormatting.GRAY);
+                };
             }
             return getItem().getName();
         }
