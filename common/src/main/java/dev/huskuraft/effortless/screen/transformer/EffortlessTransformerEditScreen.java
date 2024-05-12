@@ -32,7 +32,7 @@ public class EffortlessTransformerEditScreen extends AbstractContainerScreen {
 //    private EditBox nameEditBox;
 
     public EffortlessTransformerEditScreen(Entrance entrance, Consumer<Transformer> consumer, Transformer transformer) {
-        super(entrance, Text.translate("effortless.gui.transformer_presets.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_180);
+        super(entrance, Text.translate("effortless.gui.transformer_presets.title"), CONTAINER_WIDTH_EXPANDED, CONTAINER_HEIGHT_270);
         this.applySettings = consumer;
         this.lastSettings = transformer;
     }

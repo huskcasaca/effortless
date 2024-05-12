@@ -22,6 +22,9 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Cat
 
     public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.empty"), Order.SEQUENCE, Target.SINGLE, Category.ITEM, Collections.emptyList());
 
+    public static ItemRandomizer create(Order order, Target target, Category category, Collection<Chance<Item>> chances) {
+        return create(Text.empty(), order, target, category, chances);
+    }
     public static ItemRandomizer create(Text name, Order order, Target target, Category category, Collection<Chance<Item>> chances) {
         for (var chance : chances) {
             if (category != Randomizer.extract(chance.content())) {

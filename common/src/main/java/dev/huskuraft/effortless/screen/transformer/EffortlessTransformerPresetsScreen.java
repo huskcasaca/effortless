@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.screen.transformer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractContainerScreen;
@@ -20,6 +21,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractContainerScreen 
 
     private final Consumer<List<Transformer>> applySettings;
     private final List<Button> tabButtons = new ArrayList<>();
+    private List<Transformer> builtInTransformers;
     private List<Transformer> defaultConfig;
     private List<Transformer> originalConfig;
     private List<Transformer> config;
@@ -30,7 +32,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractContainerScreen 
     private Transformers selectedType = Transformers.ARRAY;
 
     public EffortlessTransformerPresetsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_180);
+        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_270);
         this.applySettings = transformers -> {
             getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), new TransformerPresets(transformers), config.passiveMode()));
         };
@@ -79,8 +81,8 @@ public class EffortlessTransformerPresetsScreen extends AbstractContainerScreen 
         for (var tabButton : tabButtons) {
             tabButton.setActive(!tabButton.getMessage().equals(selectedType.getDisplayName()));
         }
-        this.entries.reset(config.stream().filter(transformer -> transformer.getType() == selectedType).toList());
-        this.saveButton.setActive(config.equals(originalConfig) || this.saveButton.isActive());
+        this.entries.reset(Stream.concat(this.builtInTransformers.stream(), this.defaultConfig.stream()).toList().stream().filter(transformer -> transformer.getType() == selectedType).toList());
+        this.saveButton.setActive(this.config.equals(originalConfig) || this.saveButton.isActive());
     }
 
     private void setSelectedType(Transformers type) {

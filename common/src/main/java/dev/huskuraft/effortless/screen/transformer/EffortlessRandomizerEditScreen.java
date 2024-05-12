@@ -114,7 +114,6 @@ public class EffortlessRandomizerEditScreen extends AbstractScreen {
         addButton.setActive(entries.children().size() <= ItemRandomizer.MAX_CHANCE_SIZE);
 
         lastSettings = ItemRandomizer.create(
-                Text.text(nameEditBox.getValue()), // TODO: 6/12/23 use default if no changes
                 lastOrder,
                 lastTarget,
                 Randomizer.Category.ITEM,

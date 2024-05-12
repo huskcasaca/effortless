@@ -29,7 +29,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
     }
 
     @SuppressWarnings("unchecked")
-    // FIXME: 12/5/24 
+    // FIXME: 12/5/24
     @Override
     protected EditableEntryList.Entry<Transformer> createHolder(Transformer transformer) {
         return (EditableEntryList.Entry) switch (transformer.getType()) {

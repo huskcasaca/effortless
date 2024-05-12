@@ -1,31 +1,20 @@
 package dev.huskuraft.effortless.screen.test;
 
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import dev.huskuraft.effortless.EffortlessClient;
-import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.container.SimpleEntryList;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
-import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
-import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
-import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
-import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
-import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsContainerScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
@@ -62,28 +51,8 @@ public class EffortlessTestScreen extends AbstractScreen {
                 getEntrance().getConfigStorage().set(
                         new ClientConfig(
                                 new RenderConfig(),
-                                new PatternConfig(
-                                        List.of(
-                                                new Pattern(
-                                                        true,
-                                                        List.of(
-                                                                new ArrayTransformer(new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), new Random().nextInt()),
-                                                                new ArrayTransformer(new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), new Random().nextInt()),
-                                                                new MirrorTransformer(UUID.randomUUID(), Text.text("" + new Random().nextDouble()), new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], Axis.values()[new Random().nextInt(Axis.values().length)]),
-                                                                new MirrorTransformer(UUID.randomUUID(), Text.text("" + new Random().nextDouble()), new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], Axis.values()[new Random().nextInt(Axis.values().length)]),
-                                                                new MirrorTransformer(UUID.randomUUID(), Text.text("" + new Random().nextDouble()), new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], Axis.values()[new Random().nextInt(Axis.values().length)]),
-                                                                new RadialTransformer(UUID.randomUUID(), Text.text("" + new Random().nextDouble()), new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], new Random().nextInt(100)),
-                                                                new RadialTransformer(UUID.randomUUID(), Text.text("" + new Random().nextDouble()), new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], new Random().nextInt(100)),
-                                                                new RadialTransformer(UUID.randomUUID(), Text.text("" + new Random().nextDouble()), new Vector3d(new Random().nextDouble(), new Random().nextDouble(), new Random().nextDouble()), PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], PositionType.values()[new Random().nextInt(PositionType.values().length)], new Random().nextInt(100))
-                                                        )
-                                                )
-                                        )
-                                ),
-                                new TransformerPresets(
-                                        List.of(),
-                                        List.of(),
-                                        List.of(),
-                                        ItemRandomizer.getDefaultItemRandomizers()),
+                                new PatternConfig(),
+                                new TransformerPresets(),
                                 false
                         )
                 );

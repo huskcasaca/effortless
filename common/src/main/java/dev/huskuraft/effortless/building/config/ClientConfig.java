@@ -2,8 +2,6 @@ package dev.huskuraft.effortless.building.config;
 
 import java.util.List;
 
-import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-
 public record ClientConfig(
         RenderConfig renderConfig,
         TransformerPresets transformerPresets,
@@ -12,11 +10,7 @@ public record ClientConfig(
     public static ClientConfig getDefault() {
         return new ClientConfig(
                 new RenderConfig(),
-                new TransformerPresets(
-                        List.of(),
-                        List.of(),
-                        List.of(),
-                        ItemRandomizer.getDefaultItemRandomizers()),
+                new TransformerPresets(),
                 false
         );
     }

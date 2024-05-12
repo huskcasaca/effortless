@@ -13,6 +13,16 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 public record TransformerPresets(
         List<Transformer> transformers
 ) {
+
+    public TransformerPresets getDefault() {
+        return new TransformerPresets();
+    }
+
+    public TransformerPresets() {
+        this(List.of());
+    }
+
+
     public TransformerPresets(
             List<ArrayTransformer> arrayTransformers,
             List<MirrorTransformer> mirrorTransformers,

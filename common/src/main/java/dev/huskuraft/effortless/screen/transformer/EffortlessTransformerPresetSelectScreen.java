@@ -25,7 +25,7 @@ public class EffortlessTransformerPresetSelectScreen extends AbstractContainerSc
     private Transformers selectedType = Transformers.ARRAY;
 
     public EffortlessTransformerPresetSelectScreen(Entrance entrance, Consumer<Transformer> consumer) {
-        super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_180);
+        super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), AbstractContainerScreen.CONTAINER_WIDTH_EXPANDED, AbstractContainerScreen.CONTAINER_HEIGHT_270);
         this.consumer = consumer;
         this.transformers = Transformer.getDefaultTransformers();
     }
