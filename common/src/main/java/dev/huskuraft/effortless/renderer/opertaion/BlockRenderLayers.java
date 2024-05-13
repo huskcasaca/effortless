@@ -5,7 +5,6 @@ import java.util.Map;
 
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
-import dev.huskuraft.effortless.api.renderer.Shaders;
 import dev.huskuraft.effortless.api.renderer.VertexFormats;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
 import dev.huskuraft.effortless.renderer.BlockShaders;
@@ -52,8 +51,6 @@ public abstract class BlockRenderLayers extends RenderLayers {
     public static RenderLayer block(int color) {
         return BLOCK_RENDER_TYPES.computeIfAbsent(Integer.toString(color), k -> {
             var texture = RenderState.TexturingState.create("block_texturing_" + k, () -> {
-                Shaders.GUI.getUniform("test");
-
                 var colorUniform = BlockShaders.TINTED_OUTLINE.getUniform("TintColor");
                 if (colorUniform != null) {
                     colorUniform.set((color >> 16 & 255) / 255f, (color >> 8 & 255) / 255f, (color & 255) / 255f, (color >>> 24) / 255f);

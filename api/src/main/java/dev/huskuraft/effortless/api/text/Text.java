@@ -36,6 +36,10 @@ public interface Text extends PlatformReference {
         return withStyle(getStyle().applyFormat(styles));
     }
 
+    default Text withColor(Integer color) {
+        return withStyle(getStyle().withColor(color));
+    }
+
     String getString();
 
     Collection<Text> getSiblings();

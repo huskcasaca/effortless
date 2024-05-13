@@ -51,7 +51,7 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
         setPanelHeight(lastSettings.enabled() ? AbstractPanelScreen.PANEL_HEIGHT_270 : AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 + AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_2);
         setPanelWidth(lastSettings.enabled() ? AbstractPanelScreen.PANEL_WIDTH_EXPANDED : AbstractPanelScreen.PANEL_WIDTH);
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 
         this.enableButton = addWidget(Button.builder(getEntrance(), lastSettings.enabled() ? Text.translate("effortless.pattern.button.disable") : Text.translate("effortless.pattern.button.enable"), button -> {
             this.lastSettings = lastSettings.withEnabled(!lastSettings.enabled());
