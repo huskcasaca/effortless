@@ -16,7 +16,7 @@ import dev.huskuraft.effortless.api.text.Text;
 public class EffortlessSessionStatusScreen extends AbstractPanelScreen {
 
     public EffortlessSessionStatusScreen(Entrance entrance) {
-        super(entrance, Text.empty(), AbstractPanelScreen.PANEL_WIDTH, 0);
+        super(entrance, Text.empty(), PANEL_WIDTH, 0);
     }
 
     @Override
@@ -26,9 +26,9 @@ public class EffortlessSessionStatusScreen extends AbstractPanelScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - 10, Text.translate("effortless.session_status.title").withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, Text.translate("effortless.session_status.title").withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new TextList(getEntrance(), getLeft() + PADDINGS, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2, getHeight() - AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_1));
+        var entries = addWidget(new TextList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1));
         entries.reset(Stream.of(List.of(Text.empty()), getMessages(), List.of(Text.empty())).flatMap(List::stream).toList());
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
@@ -50,6 +50,6 @@ public class EffortlessSessionStatusScreen extends AbstractPanelScreen {
 
     @Override
     public int getHeight() {
-        return AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 + (getMessages().size() + 2) * 10 + 4 + Dimens.Screen.BUTTON_ROW_1;
+        return PANEL_TITLE_HEIGHT_1 + (getMessages().size() + 2) * 10 + 4 + Dimens.Screen.BUTTON_ROW_1;
     }
 }

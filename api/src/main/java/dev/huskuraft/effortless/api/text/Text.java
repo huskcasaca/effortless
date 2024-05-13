@@ -50,6 +50,10 @@ public interface Text extends PlatformReference {
         return withSiblings(Stream.concat(getSiblings().stream(), Stream.of(text)).toList());
     }
 
+    default Text append(String text) {
+        return append(Text.text(text));
+    }
+
     Text copy();
 
     void decompose(Sink sink);

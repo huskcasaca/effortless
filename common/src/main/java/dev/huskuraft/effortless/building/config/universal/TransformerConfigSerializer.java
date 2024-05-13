@@ -327,8 +327,9 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
     public static class ItemRandomizerConfigSerializer implements ConfigSerializer<ItemRandomizer> {
 
         private static final String KEY_ORDER = "order";
-        private static final String KEY_SUPPLIER = "supplier";
         private static final String KEY_TARGET = "target";
+        private static final String KEY_CATEGORY = "category";
+        private static final String KEY_SOURCE = "source";
         private static final String KEY_CHANCES = "chances";
         public static ItemRandomizerConfigSerializer INSTANCE = new ItemRandomizerConfigSerializer();
 
@@ -342,8 +343,9 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 //            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineEnum(spec, KEY_ORDER, getDefault().getOrder());
-            defineEnum(spec, KEY_SUPPLIER, getDefault().getTarget());
-            defineEnum(spec, KEY_TARGET, getDefault().getCategory());
+            defineEnum(spec, KEY_TARGET, getDefault().getTarget());
+            defineEnum(spec, KEY_CATEGORY, getDefault().getCategory());
+            defineEnum(spec, KEY_SOURCE, getDefault().getSource());
             spec.defineList(KEY_CHANCES, () -> getDefault().getChances().stream().map(ItemChanceConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
             return spec;
         }
@@ -360,8 +362,9 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
                     UUID.fromString(config.get(KEY_ID)),
                     Text.empty(),
                     getEnum(config, KEY_ORDER),
-                    getEnum(config, KEY_SUPPLIER),
                     getEnum(config, KEY_TARGET),
+                    getEnum(config, KEY_CATEGORY),
+                    getEnum(config, KEY_SOURCE),
                     config.<List<Config>>get(KEY_CHANCES).stream().map(ItemChanceConfigSerializer.INSTANCE::deserialize).toList()
             );
         }
@@ -373,8 +376,8 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 //            config.set(KEY_NAME, transformer.getName().getString());
             setEnum(config, KEY_TYPE, transformer.getType());
             setEnum(config, KEY_ORDER, transformer.getOrder());
-            setEnum(config, KEY_SUPPLIER, transformer.getTarget());
-            setEnum(config, KEY_TARGET, transformer.getCategory());
+            setEnum(config, KEY_TARGET, transformer.getTarget());
+            setEnum(config, KEY_CATEGORY, transformer.getCategory());
             config.set(KEY_CHANCES, transformer.getChances().stream().map(ItemChanceConfigSerializer.INSTANCE::serialize).toList());
             validate(config);
             return config;

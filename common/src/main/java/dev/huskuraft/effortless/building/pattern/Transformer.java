@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
@@ -14,7 +15,6 @@ import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.building.session.BatchBuildSession;
 
 public interface Transformer {
 
@@ -68,7 +68,7 @@ public interface Transformer {
         return withId(UUID.randomUUID());
     }
 
-    default Transformer finalize(BatchBuildSession session, BuildStage stage) {
+    default Transformer finalize(Player player, BuildStage stage) {
         return this;
     }
 

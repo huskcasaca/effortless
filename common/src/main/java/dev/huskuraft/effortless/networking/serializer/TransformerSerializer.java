@@ -13,7 +13,6 @@ import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 
 public class TransformerSerializer implements NetByteBufSerializer<Transformer> {
 
@@ -135,9 +134,10 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             return new ItemRandomizer(
                     byteBuf.readUUID(),
                     byteBuf.readText(),
-                    byteBuf.readEnum(Randomizer.Order.class),
-                    byteBuf.readEnum(Randomizer.Target.class),
-                    byteBuf.readEnum(Randomizer.Category.class),
+                    byteBuf.readEnum(ItemRandomizer.Order.class),
+                    byteBuf.readEnum(ItemRandomizer.Target.class),
+                    byteBuf.readEnum(ItemRandomizer.Category.class),
+                    byteBuf.readEnum(ItemRandomizer.Source.class),
                     byteBuf.readList(buffer1 -> {
                         return Chance.of(buffer1.readItem(), buffer1.readVarInt());
                     })
@@ -151,6 +151,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeEnum(transformer.getOrder());
             byteBuf.writeEnum(transformer.getTarget());
             byteBuf.writeEnum(transformer.getCategory());
+            byteBuf.writeEnum(transformer.getSource());
             byteBuf.writeList(transformer.getChances(), (buf, chance) -> {
                 buf.writeItem(chance.content());
                 buf.writeVarInt(chance.chance());

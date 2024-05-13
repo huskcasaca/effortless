@@ -53,7 +53,7 @@ public class BatchBuildSession implements BuildSession {
             case INTERACT_BLOCK ->
                     context.collectInteractions().map(interaction -> createBlockInteractOperationFromHit(world, player, context, storage, interaction));
         });
-        return ItemRandomizer.create(null, player.getItemStack(InteractionHand.MAIN).getItem()).transform(operations);
+        return ItemRandomizer.single(null, player.getItemStack(InteractionHand.MAIN).getItem()).transform(operations);
     }
 
     protected BatchOperation create(World world, Player player, Context context) {

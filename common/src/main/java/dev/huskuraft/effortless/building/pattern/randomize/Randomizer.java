@@ -1,10 +1,13 @@
 package dev.huskuraft.effortless.building.pattern.randomize;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 
 public interface Randomizer<T> extends Transformer {
@@ -24,7 +27,7 @@ public interface Randomizer<T> extends Transformer {
 
     Collection<Chance<T>> getChances();
 
-    Source<T> asSource(long seed);
+    Producer<T> asProducer(long seed);
 
     enum Order {
         SEQUENCE("sequence"),
@@ -84,4 +87,14 @@ public interface Randomizer<T> extends Transformer {
         }
     }
 
+    @Override
+    Randomizer<T> withId(UUID id);
+
+    @Override
+    Randomizer<T> withName(Text name);
+
+    @Override
+    default Randomizer<T> finalize(Player player, BuildStage stage) {
+        return this;
+    }
 }

@@ -417,7 +417,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     private void reloadContext(Player player) {
-        setContext(player, getContext(player).withRandomPatternSeed());
+        setContext(player, getContext(player).finalize(player, BuildStage.TICK));
+
+
 //        if (Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown()) {
 //            setContext(player, getContext(player).withBuildFeature(PlaneLength.EQUAL));
 //        } else {

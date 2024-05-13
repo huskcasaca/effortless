@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.building.pattern;
 import java.util.List;
 import java.util.UUID;
 
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.BuildStage;
-import dev.huskuraft.effortless.building.session.BatchBuildSession;
 
 public record Pattern(
         UUID id,
@@ -31,9 +31,9 @@ public record Pattern(
         return new Pattern(id, enabled, transformers);
     }
 
-    public Pattern finalize(BatchBuildSession session, BuildStage stage) {
+    public Pattern finalize(Player player, BuildStage stage) {
         return withTransformers(
-                transformers().stream().map(transformer -> transformer.finalize(session, stage)).toList()
+                transformers().stream().map(transformer -> transformer.finalize(player, stage)).toList()
         );
     }
 

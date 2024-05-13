@@ -41,7 +41,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
     private Transformers selectedType = Transformers.ARRAY;
 
     public EffortlessTransformerPresetsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), AbstractPanelScreen.PANEL_WIDTH_EXPANDED, AbstractPanelScreen.PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.applySettings = transformers -> {
             getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), new TransformerPresets(transformers), config.passiveMode()));
         };
@@ -59,7 +59,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.getSelected() != null && !entries.getSelected().getItem().isBuiltIn()) {
@@ -152,11 +152,11 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
             tabButtons.add(
                     addWidget(Button.builder(getEntrance(), type.getDisplayName(), button -> {
                         setSelectedType(type);
-                    }).setBoundsGrid(getLeft(), getTop(), getWidth(), AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 + AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_1, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
+                    }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
             );
         }
 
-        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS, getTop() + AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 + AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - AbstractPanelScreen.PANEL_TITLE_HEIGHT_1 - AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_1N - AbstractPanelScreen.PANEL_BUTTON_ROW_HEIGHT_2));
+        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1N - PANEL_BUTTON_ROW_HEIGHT_2));
         this.entries.setAlwaysShowScrollbar(true);
 
         setSelectedType(selectedType);
@@ -174,8 +174,8 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
         if (entries.getSelected() != null && entries.getSelected().getItem().isBuiltIn()) {
             this.editButton.setTooltip(
                     Stream.concat(
-                            Stream.of(Text.translate("effortless.transformer.tooltip.cannot_edit_built_in.title")),
-                            TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.tooltip.cannot_edit_built_in.message").withStyle(ChatFormatting.GRAY)).stream()
+                            Stream.of(Text.translate("effortless.transformer.edit.tooltip.cannot_edit_built_in.title")),
+                            TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.edit.tooltip.cannot_edit_built_in.message").withStyle(ChatFormatting.GRAY)).stream()
                     ).toList()
             );
         } else {
@@ -184,8 +184,8 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
         if (entries.getSelected() != null && entries.getSelected().getItem().isBuiltIn()) {
             this.deleteButton.setTooltip(
                     Stream.concat(
-                            Stream.of(Text.translate("effortless.transformer.tooltip.cannot_delete_built_in.title")),
-                            TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.tooltip.cannot_delete_built_in.message").withStyle(ChatFormatting.GRAY)).stream()
+                            Stream.of(Text.translate("effortless.transformer.delete.tooltip.cannot_delete_built_in.title")),
+                            TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.delete.tooltip.cannot_delete_built_in.message").withStyle(ChatFormatting.GRAY)).stream()
                     ).toList()
             );
         } else {
@@ -194,16 +194,16 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
         this.addButton.setTooltip(
                 Stream.concat(
                         switch (selectedType) {
-                            case ARRAY -> Stream.of(Text.translate("effortless.transformer.tooltip.add_new_transformer.array.title"));
-                            case MIRROR -> Stream.of(Text.translate("effortless.transformer.tooltip.add_new_transformer.mirror.title"));
-                            case RADIAL -> Stream.of(Text.translate("effortless.transformer.tooltip.add_new_transformer.radial.title"));
-                            case ITEM_RAND -> Stream.of(Text.translate("effortless.transformer.tooltip.add_new_transformer.random.title"));
+                            case ARRAY -> Stream.of(Text.translate("effortless.transformer.add.tooltip.array.title"));
+                            case MIRROR -> Stream.of(Text.translate("effortless.transformer.add.tooltip.mirror.title"));
+                            case RADIAL -> Stream.of(Text.translate("effortless.transformer.add.tooltip.radial.title"));
+                            case ITEM_RAND -> Stream.of(Text.translate("effortless.transformer.add.tooltip.random.title"));
                         },
                         TooltipHelper.wrapLines(getTypeface(), (switch (selectedType) {
-                            case ARRAY -> Text.translate("effortless.transformer.tooltip.add_new_transformer.array.message");
-                            case MIRROR -> Text.translate("effortless.transformer.tooltip.add_new_transformer.mirror.message");
-                            case RADIAL -> Text.translate("effortless.transformer.tooltip.add_new_transformer.radial.message");
-                            case ITEM_RAND -> Text.translate("effortless.transformer.tooltip.add_new_transformer.random.message");
+                            case ARRAY -> Text.translate("effortless.transformer.add.tooltip.array.message");
+                            case MIRROR -> Text.translate("effortless.transformer.add.tooltip.mirror.message");
+                            case RADIAL -> Text.translate("effortless.transformer.add.tooltip.radial.message");
+                            case ITEM_RAND -> Text.translate("effortless.transformer.add.tooltip.random.message");
                         }).withStyle(ChatFormatting.GRAY)).stream()
                 ).toList()
         );

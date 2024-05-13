@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
@@ -14,7 +15,6 @@ import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
-import dev.huskuraft.effortless.building.session.BatchBuildSession;
 
 public record MirrorTransformer(
         UUID id, Text name, Vector3d position, PositionType[] positionType, Axis axis
@@ -66,13 +66,13 @@ public record MirrorTransformer(
     }
 
     @Override
-    public MirrorTransformer finalize(BatchBuildSession session, BuildStage stage) {
+    public MirrorTransformer finalize(Player player, BuildStage stage) {
         return switch (stage) {
-            case NONE -> this;
+            case TICK -> this;
             case UPDATE_CONTEXT, INTERACT -> new MirrorTransformer(id, name, new Vector3d(
-                    positionType[0].getStage() == stage ? position.x() + session.getPlayer().getPosition().toVector3i().x() : position.x(),
-                    positionType[1].getStage() == stage ? position.y() + session.getPlayer().getPosition().toVector3i().y() : position.y(),
-                    positionType[2].getStage() == stage ? position.z() + session.getPlayer().getPosition().toVector3i().z() : position.z()
+                    positionType[0].getStage() == stage ? position.x() + player.getPosition().toVector3i().x() : position.x(),
+                    positionType[1].getStage() == stage ? position.y() + player.getPosition().toVector3i().y() : position.y(),
+                    positionType[2].getStage() == stage ? position.z() + player.getPosition().toVector3i().z() : position.z()
             ), new PositionType[]{
                     positionType[0].getStage() == stage ? PositionType.ABSOLUTE : positionType[0],
                     positionType[1].getStage() == stage ? PositionType.ABSOLUTE : positionType[1],

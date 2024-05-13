@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.building;
 
 public enum BuildStage {
-    NONE,
+    TICK,
     UPDATE_CONTEXT,
     INTERACT
 }

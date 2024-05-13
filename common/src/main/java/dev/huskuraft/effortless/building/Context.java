@@ -240,7 +240,16 @@ public record Context(
     }
 
     public Context finalize(Player player, BuildStage stage) {
-        return withPattern(pattern().finalize(new BatchBuildSession(player.getWorld(), player, this), stage));
+        switch (stage) {
+            case TICK -> {
+                return withRandomPatternSeed().withPattern(pattern().finalize(player, stage));
+            }
+            case UPDATE_CONTEXT -> {
+            }
+            case INTERACT -> {
+            }
+        }
+        return withPattern(pattern().finalize(player, stage));
     }
 
     // new context for idle
