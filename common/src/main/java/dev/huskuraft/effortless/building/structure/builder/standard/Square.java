@@ -95,6 +95,8 @@ public class Square extends AbstractBlockStructure {
         var z2 = pos2.z();
 
         switch (getShape(pos1, pos2)) {
+            case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
+            case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_X -> {
                 switch (context.planeFilling()) {
                     case PLANE_FULL -> addFullSquareBlocksX(set, x1, y1, y2, z1, z2);

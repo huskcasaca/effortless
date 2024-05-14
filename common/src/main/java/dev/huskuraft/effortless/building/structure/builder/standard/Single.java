@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.structure.builder.standard;
 
+import java.util.Set;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
@@ -43,6 +44,14 @@ public class Single extends AbstractBlockStructure {
 
     public static Stream<BlockPosition> collectSingleBlocks(Context context) {
         return Stream.of(context.getPosition(0));
+    }
+
+    public static void addSingleBlock(Set<BlockPosition> set, BlockPosition pos1) {
+        set.add(pos1);
+    }
+
+    public static void addSingleBlock(Set<BlockPosition> set, int x1, int y1, int z1) {
+        set.add(new BlockPosition(x1, y1, z1));
     }
 
     protected BlockInteraction trace(Player player, Context context, int index) {

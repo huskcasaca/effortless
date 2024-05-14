@@ -123,13 +123,17 @@ public class Line extends AbstractBlockStructure {
         var y2 = pos2.y();
         var z2 = pos2.z();
 
-        switch (getShape(pos1, pos2)) {
+        addLineBlocks(set, x1, y1, z1, x2, y2, z2);
+
+        return set.stream();
+    }
+
+    public static void addLineBlocks(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2) {
+        switch (getShape(x1, y1, z1, x2, y2, z2)) {
             case LINE_X -> addXLineBlocks(set, x1, x2, y1, z1);
             case LINE_Y -> addYLineBlocks(set, y1, y2, x1, z1);
             case LINE_Z -> addZLineBlocks(set, z1, z2, x1, y1);
         }
-
-        return set.stream();
     }
 
     public static void addXLineBlocks(Set<BlockPosition> set, int x1, int x2, int y, int z) {

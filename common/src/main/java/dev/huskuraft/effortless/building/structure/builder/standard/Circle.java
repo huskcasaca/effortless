@@ -35,7 +35,7 @@ public class Circle extends AbstractBlockStructure {
 
     }
 
-    public static void addFullCircleBlocksX(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerY, float centerZ, float radiusY, float radiusZ, boolean fill) {
+    public static void addCircleBlocksX(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerY, float centerZ, float radiusY, float radiusZ, boolean fill) {
         for (int y = y1; y1 < y2 ? y <= y2 : y >= y2; y += y1 < y2 ? 1 : -1) {
             for (int z = z1; z1 < z2 ? z <= z2 : z >= z2; z += z1 < z2 ? 1 : -1) {
                 var radius = isPosInCircle(centerY, centerZ, radiusY, radiusZ, y, z, fill);
@@ -45,7 +45,7 @@ public class Circle extends AbstractBlockStructure {
         }
     }
 
-    public static void addFullCircleBlocksY(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerX, float centerZ, float radiusX, float radiusZ, boolean fill) {
+    public static void addCircleBlocksY(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerX, float centerZ, float radiusX, float radiusZ, boolean fill) {
         for (int l = x1; x1 < x2 ? l <= x2 : l >= x2; l += x1 < x2 ? 1 : -1) {
             for (int n = z1; z1 < z2 ? n <= z2 : n >= z2; n += z1 < z2 ? 1 : -1) {
                 var radius = isPosInCircle(centerX, centerZ, radiusX, radiusZ, l, n, fill);
@@ -55,7 +55,7 @@ public class Circle extends AbstractBlockStructure {
         }
     }
 
-    public static void addFullCircleBlocksZ(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerY, float centerX, float radiusY, float radiusX, boolean fill) {
+    public static void addCircleBlocksZ(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2, float centerY, float centerX, float radiusY, float radiusX, boolean fill) {
         for (int y = y1; y1 < y2 ? y <= y2 : y >= y2; y += y1 < y2 ? 1 : -1) {
             for (int x = x1; x1 < x2 ? x <= x2 : x >= x2; x += x1 < x2 ? 1 : -1) {
                 var radius = isPosInCircle(centerY, centerX, radiusY, radiusX, y, x, fill);
@@ -96,9 +96,11 @@ public class Circle extends AbstractBlockStructure {
         var radiusZ = MathUtils.abs(z2 - centerZ);
 
         switch (getShape(pos1, pos2)) {
-            case PLANE_X -> addFullCircleBlocksX(set, x1, y1, z1, x2, y2, z2, centerY, centerZ, radiusY, radiusZ, isFill);
-            case PLANE_Y -> addFullCircleBlocksY(set, x1, y1, z1, x2, y2, z2, centerX, centerZ, radiusX, radiusZ, isFill);
-            case PLANE_Z -> addFullCircleBlocksZ(set, x1, y1, z1, x2, y2, z2, centerY, centerX, radiusY, radiusX, isFill);
+            case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
+            case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
+            case PLANE_X -> addCircleBlocksX(set, x1, y1, z1, x2, y2, z2, centerY, centerZ, radiusY, radiusZ, isFill);
+            case PLANE_Y -> addCircleBlocksY(set, x1, y1, z1, x2, y2, z2, centerX, centerZ, radiusX, radiusZ, isFill);
+            case PLANE_Z -> addCircleBlocksZ(set, x1, y1, z1, x2, y2, z2, centerY, centerX, radiusY, radiusX, isFill);
         }
 
         return set.stream();

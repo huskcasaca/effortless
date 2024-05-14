@@ -58,6 +58,8 @@ public class Wall extends AbstractBlockStructure {
         var z2 = pos2.z();
 
         switch (getShape(pos1, pos2)) {
+            case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
+            case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_Z -> {
                 switch (context.planeFilling()) {
                     case PLANE_FULL -> Square.addFullSquareBlocksZ(set, x1, x2, y1, y2, z1);

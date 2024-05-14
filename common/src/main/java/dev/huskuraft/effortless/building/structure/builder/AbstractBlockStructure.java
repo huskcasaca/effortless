@@ -72,26 +72,26 @@ public abstract class AbstractBlockStructure implements BlockStructure {
             this.axis = axis;
         }
 
-        private static TraceShape fromPosition(BlockPosition pos1, BlockPosition pos2) {
-            if (pos1.x() == pos2.x() && pos1.y() == pos2.y() && pos1.z() == pos2.z()) {
+        private static TraceShape fromPosition(int x1, int y1, int z1, int x2, int y2, int z2) {
+            if (x1 == x2 && y1 == y2 && z1 == z2) {
                 return TraceShape.SINGLE;
             }
-            if (pos1.x() == pos2.x() && pos1.z() == pos2.z()) {
+            if (x1 == x2 && z1 == z2) {
                 return TraceShape.LINE_Y;
             }
-            if (pos1.y() == pos2.y() && pos1.z() == pos2.z()) {
+            if (y1 == y2 && z1 == z2) {
                 return TraceShape.LINE_X;
             }
-            if (pos1.x() == pos2.x() && pos1.y() == pos2.y()) {
+            if (x1 == x2 && y1 == y2) {
                 return TraceShape.LINE_Z;
             }
-            if (pos1.x() == pos2.x()) {
+            if (x1 == x2) {
                 return PLANE_X;
             }
-            if (pos1.y() == pos2.y()) {
+            if (y1 == y2) {
                 return PLANE_Y;
             }
-            if (pos1.z() == pos2.z()) {
+            if (z1 == z2) {
                 return PLANE_Z;
             }
             return TraceShape.CUBE;
@@ -103,8 +103,12 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return context.getInteractionBox().volume();
     }
 
-    protected static TraceShape getShape(BlockPosition pos0, BlockPosition pos1) {
-        return TraceShape.fromPosition(pos0, pos1);
+    protected static TraceShape getShape(int x1, int y1, int z1, int x2, int y2, int z2) {
+        return TraceShape.fromPosition(x1, y1, z1, x2, y2, z2);
+    }
+
+    protected static TraceShape getShape(BlockPosition pos1, BlockPosition pos2) {
+        return TraceShape.fromPosition(pos1.x(), pos1.y(), pos1.z(), pos2.x(), pos2.y(), pos2.z());
     }
 
     protected static double lengthSq(double x, double y, double z) {
