@@ -23,8 +23,6 @@ public interface Registry<T extends PlatformReference> extends Iterable<T>, Plat
         }
     }
 
-    int size();
-
     Registry<Item> ITEM = RegistryFactory.getInstance().getRegistry();
 
 }

@@ -27,11 +27,6 @@ public record MinecraftRegistry<T extends PlatformReference, R>(
     }
 
     @Override
-    public int size() {
-        return referenceValue().size();
-    }
-
-    @Override
     public Iterator<T> iterator() {
         return Iterators.transform(referenceValue().iterator(), typeConvertor());
     }
