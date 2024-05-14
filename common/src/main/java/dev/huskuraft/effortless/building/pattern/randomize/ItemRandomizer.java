@@ -442,8 +442,8 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Cat
                 if (getSource() != Source.CUSTOMIZE) {
                     var itemStacks = switch (getSource()) {
                         case INVENTORY -> player.getInventory().getItems();
-                        case HOTBAR -> player.getInventory().getItems();
-                        case HANDS -> player.getInventory().getItems();
+                        case HOTBAR -> player.getInventory().getHotbarItems();
+                        case HANDS -> List.of(player.getInventory().getSelectedItem(), player.getInventory().getOffhandItem());
                         case CUSTOMIZE -> List.of(ItemStack.empty());
                     };
                     return withChances(itemStacks.stream().filter(itemStack -> !itemStack.isAir()).map(itemStack -> Chance.of(itemStack.getItem(), itemStack.getCount())).toList());

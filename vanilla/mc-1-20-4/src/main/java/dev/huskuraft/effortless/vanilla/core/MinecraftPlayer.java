@@ -91,16 +91,6 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
     }
 
     @Override
-    public ItemStack getItemStack(InteractionHand hand) {
-        return new MinecraftItemStack(reference.getItemInHand(MinecraftConvertor.toPlatformInteractionHand(hand)));
-    }
-
-    @Override
-    public void setItemStack(InteractionHand hand, ItemStack itemStack) {
-        reference.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, itemStack.reference());
-    }
-
-    @Override
     public void drop(ItemStack itemStack, boolean dropAround, boolean includeThrowerName) {
         reference.drop(itemStack.reference(), dropAround, includeThrowerName);
     }
