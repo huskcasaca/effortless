@@ -13,10 +13,11 @@ import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PassiveMode;
 import dev.huskuraft.effortless.building.history.UndoRedo;
+import dev.huskuraft.effortless.building.pattern.Patterns;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
 import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
@@ -25,7 +26,17 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO, false);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
     private static final Button<Option> SETTING_OPTION = button(Settings.SETTINGS);
-    private static final Button<Option> PATTERN_SETTINGS_OPTION = button(Settings.PATTERN_SETTINGS);
+    private static final Button<Option> PATTERN_DISABLED_OPTION = button(Patterns.DISABLED, false);
+    private static final Button<Option> PATTERN_ENABLED_OPTION = button(Patterns.ENABLED, true);
+    private static final Button<Option> PATTERN_OPTION = lazyButton(() -> {
+        var entrance = EffortlessClient.getInstance();
+        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+        if (context.pattern().enabled()) {
+            return PATTERN_ENABLED_OPTION;
+        } else {
+            return PATTERN_DISABLED_OPTION;
+        }
+    });
 
     private static final Button<Option> REPLACE_DISABLED_OPTION = button(ReplaceMode.DISABLED, false);
     private static final Button<Option> REPLACE_NORMAL_OPTION = button(ReplaceMode.NORMAL, true);
@@ -107,9 +118,14 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
                     }
                     case PATTERN_SETTINGS -> {
                         detach();
-                        new EffortlessPatternSettingsScreen(getEntrance()).attach();
+                        new EffortlessPatternScreen(getEntrance()).attach();
                     }
                 }
+                return;
+            }
+            if (entry.getContent() instanceof Patterns patterns) {
+                detach();
+                new EffortlessPatternScreen(getEntrance()).attach();
                 return;
             }
             if (entry.getContent() instanceof UndoRedo undoRedo) {
@@ -149,7 +165,7 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
         setSelectedSlots(slot(context.buildMode()));
         setLeftButtons(
                 buttonSet(REPLACE_OPTION, REDO_OPTION, UNDO_OPTION),
-                buttonSet(PASSIVE_MODE_OPTION, PATTERN_SETTINGS_OPTION, SETTING_OPTION)
+                buttonSet(PASSIVE_MODE_OPTION, PATTERN_OPTION, SETTING_OPTION)
         );
         setRightButtons(
                 Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, context.buildFeatures().contains(option))).toList())).toList()

@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
 import dev.huskuraft.effortless.building.config.TransformerPresets;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
-import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
@@ -71,8 +71,8 @@ public class EffortlessTestScreen extends AbstractPanelScreen {
             }));
         });
         entries.addSimpleEntry(entry -> {
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getTop(), entry.getWidth(), 20, Text.text("Open EffortlessPatternSimpleSettingsScreen"), button -> {
-                new EffortlessPatternSettingsScreen(getEntrance()).attach();
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getTop(), entry.getWidth(), 20, Text.text("Open EffortlessPatternScreen"), button -> {
+                new EffortlessPatternScreen(getEntrance()).attach();
             }));
         });
     }
