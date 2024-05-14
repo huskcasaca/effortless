@@ -348,7 +348,6 @@
   "effortless.button.duplicate": "Duplicate",
   "effortless.pattern.button.enable": "Enable Pattern",
   "effortless.pattern.button.disable": "Disable Pattern",
-  "effortless.pattern.simple.title": "Pattern Settings",
   "effortless.transformer.custom_array": "Custom Array Transformer",
   "effortless.transformer.custom_mirror": "Custom Mirror Transformer",
   "effortless.transformer.custom_radial": "Custom Radial Transformer",
@@ -395,5 +394,7 @@
   "effortless.randomizer.item.empty": "Item Randomizer (Empty)",
   "effortless.transformer.array.no_name": "Array Transformer",
   "effortless.transformer.mirror.no_name": "Mirror Transformer",
-  "effortless.transformer.radial.no_name": "Radial Transformer"
+  "effortless.transformer.radial.no_name": "Radial Transformer",
+  "effortless.pattern.settings.empty_transformer": "There is no transformer in your pattern. Patterns will not take effect."
+
 }

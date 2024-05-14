@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
+import dev.huskuraft.effortless.api.gui.text.MultiLineTextWidget;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
@@ -23,6 +24,7 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
     private Pattern lastSettings;
     private TextWidget titleTextWidget;
     private TransformerList entries;
+    private MultiLineTextWidget textWidget;
     private Button upButton;
     private Button downButton;
     private Button editButton;
@@ -33,7 +35,7 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
     private Button saveButton;
 
     public EffortlessPatternSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.pattern.simple.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.pattern.settings.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.applySettings = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer() , lastSettings);
         };
@@ -67,6 +69,8 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
         this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1N - PANEL_BUTTON_ROW_HEIGHT_2));
         this.entries.reset(lastSettings.transformers());
         this.entries.setAlwaysShowScrollbar(true);
+
+        this.textWidget = addWidget(new MultiLineTextWidget(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1N - PANEL_BUTTON_ROW_HEIGHT_2, Text.translate("effortless.pattern.settings.empty_transformer"), MultiLineTextWidget.Gravity.CENTER));
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.up"), button -> {
             if (entries.hasSelected()) {
@@ -132,21 +136,23 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
 
     @Override
     public void onReload() {
-        lastSettings = new Pattern(lastSettings.id(), lastSettings.enabled(), entries.items());
-        entries.setVisible(lastSettings.enabled());
+        this.lastSettings = new Pattern(lastSettings.id(), lastSettings.enabled(), entries.items());
+        this.entries.setVisible(lastSettings.enabled());
 
-        upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
-        downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
-        editButton.setActive(entries.hasSelected());
-        deleteButton.setActive(entries.hasSelected());
-        addButton.setActive(entries.items().size() < 4);
+        this.upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);
+        this.downButton.setActive(entries.hasSelected() && entries.indexOfSelected() < entries.children().size() - 1);
+        this.editButton.setActive(entries.hasSelected());
+        this.deleteButton.setActive(entries.hasSelected());
+        this.addButton.setActive(entries.items().size() < 4);
 
-        upButton.setVisible(getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
-        downButton.setVisible(getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
-        editButton.setVisible(!getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
-        deleteButton.setVisible(!getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
-        clearButton.setVisible(lastSettings.enabled());
-        addButton.setVisible(lastSettings.enabled());
+        this.upButton.setVisible(getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
+        this.downButton.setVisible(getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
+        this.editButton.setVisible(!getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
+        this.deleteButton.setVisible(!getEntrance().getClient().getWindow().isAltDown() && lastSettings.enabled());
+        this.clearButton.setVisible(lastSettings.enabled());
+        this.addButton.setVisible(lastSettings.enabled());
+
+        this.textWidget.setVisible(this.entries.isVisible() && this.entries.items().isEmpty());
 
     }
 
