@@ -371,7 +371,7 @@
   "effortless.randomizer.edit.source.tooltip.inventory": "Select items from player's inventory.",
   "effortless.randomizer.edit.source.tooltip.hotbar": "Select items from player's hotbar.",
   "effortless.randomizer.edit.source.tooltip.hands": "Select items from player's main hand and off hand.",
-  "effortless.randomizer.edit.source.tooltip.customize": "Select items from a customized list below.",
+  "effortless.randomizer.edit.source.tooltip.customize": "Select items from a customized list.",
   "effortless.randomizer.edit.order.tooltip.title": "Order",
   "effortless.randomizer.edit.order.tooltip.message": "This option specifies the order from which the randomizer select items.",
   "effortless.randomizer.edit.order.tooltip.sequence": "Items will be selected in a sequential order from the source.",
