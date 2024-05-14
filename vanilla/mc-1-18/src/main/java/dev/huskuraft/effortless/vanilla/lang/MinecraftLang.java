@@ -9,8 +9,8 @@ import net.minecraft.locale.Language;
 public class MinecraftLang implements Lang {
 
     @Override
-    public String getOrDefault(String id, String defaultValue) {
-        return Language.getInstance().getOrDefault(id, defaultValue);
+    public String getOrDefault(String id) {
+        return Language.getInstance().getOrDefault(id);
     }
 
     @Override

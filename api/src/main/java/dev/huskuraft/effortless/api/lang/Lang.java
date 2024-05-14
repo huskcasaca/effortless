@@ -27,12 +27,7 @@ public interface Lang {
         return "key.%s.%s.desc".formatted(Entrance.getInstance().getId(), key);
     }
 
-
-    default String getOrDefault(String id) {
-        return this.getOrDefault(id, id);
-    }
-
-    String getOrDefault(String id, String defaultValue);
+    String getOrDefault(String id);
 
     boolean has(String id);
 
