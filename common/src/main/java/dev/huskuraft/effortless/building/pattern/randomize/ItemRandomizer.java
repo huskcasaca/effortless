@@ -441,7 +441,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Cat
             case TICK, UPDATE_CONTEXT, INTERACT -> {
                 if (getSource() != Source.CUSTOMIZE) {
                     var itemStacks = switch (getSource()) {
-                        case INVENTORY -> player.getInventory().getItems();
+                        case INVENTORY -> Stream.of(player.getInventory().getItems(), player.getInventory().getOffhandItems()).flatMap(List::stream).toList();
                         case HOTBAR -> player.getInventory().getHotbarItems();
                         case HANDS -> List.of(player.getInventory().getSelectedItem(), player.getInventory().getOffhandItem());
                         case CUSTOMIZE -> List.of(ItemStack.empty());

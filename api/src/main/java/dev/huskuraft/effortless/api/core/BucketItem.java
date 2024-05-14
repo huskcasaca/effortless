@@ -8,7 +8,7 @@ public interface BucketItem extends Item {
     static ItemStack createFilledResult(Player player, ItemStack emptyItemStack, ItemStack filledItemStack, boolean preventDuplicates) {
         var isCreative = player.getGameType().isCreative(); // player.getAbilities().instabuild;
         if (preventDuplicates && isCreative) {
-            if (!player.getInventory().getItems().contains(filledItemStack)) {
+            if (!player.getInventory().contains(filledItemStack)) {
                 player.getInventory().addItem(filledItemStack);
             }
             return emptyItemStack;

@@ -21,8 +21,8 @@ public interface Player extends Entity {
 
     default void setItemStack(InteractionHand hand, ItemStack itemStack) {
         switch (hand) {
-            case MAIN -> getInventory().setItem(getInventory().getSelected(), itemStack);
-            case OFF -> getInventory().setOffhandItem(0, itemStack);
+            case MAIN -> getInventory().setSelectedItem(itemStack);
+            case OFF -> getInventory().setOffhandItem(itemStack);
         }
     }
 

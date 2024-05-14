@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.api.core;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 
@@ -45,7 +46,7 @@ public interface Inventory extends PlatformReference {
     }
 
     default boolean contains(ItemStack itemStack) {
-        return getItems().contains(itemStack);
+        return getItems().contains(itemStack) || getArmorItems().contains(itemStack) || getOffhandItems().contains(itemStack);
     }
 
     default boolean isHotbarSlot(int index) {
@@ -60,13 +61,24 @@ public interface Inventory extends PlatformReference {
         }
     }
 
-
     default ItemStack getOffhandItem() {
         return getOffhandItems().get(0);
     }
 
+    default void setSelectedItem(ItemStack itemStack) {
+        setItem(getSelected(), itemStack);
+    }
+
+    default void setOffhandItem(ItemStack itemStack) {
+        setOffhandItem(0, itemStack);
+    }
+
     default List<ItemStack> getHotbarItems() {
         return getItems().subList(0, getHotbarSize());
+    }
+
+    default List<ItemStack> getAllItems() {
+        return Stream.of(getItems(), getArmorItems(), getOffhandItems()).flatMap(List::stream).toList();
     }
 
 
