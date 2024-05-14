@@ -27,7 +27,7 @@ public interface Randomizer<T> extends Transformer {
 
     Collection<Chance<T>> getChances();
 
-    Producer<T> asProducer(long seed);
+    Producer<T> asProducer(long seed, boolean limitedProducer);
 
     enum Order {
         SEQUENCE("sequence"),

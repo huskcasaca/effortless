@@ -239,10 +239,14 @@ public record Context(
         return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withRandomSeed(), customParams);
     }
 
+    public Context withLimitedPatternProducer(boolean limitedProducer) {
+        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withLimitProducer(limitedProducer), customParams);
+    }
+
     public Context finalize(Player player, BuildStage stage) {
         switch (stage) {
             case TICK -> {
-                return withRandomPatternSeed().withPattern(pattern().finalize(player, stage));
+                return withPattern(pattern().finalize(player, stage)).withRandomPatternSeed().withLimitedPatternProducer(player.getGameType().isSurvival());
             }
             case UPDATE_CONTEXT -> {
             }
@@ -465,19 +469,24 @@ public record Context(
 
     public record PatternParams(
             Pattern pattern,
+            boolean limitedProducer,
             long seed
     ) {
 
         public PatternParams(Pattern pattern) {
-            this(pattern, new Random().nextLong());
+            this(pattern, false, new Random().nextLong());
         }
 
         public PatternParams withPattern(Pattern pattern) {
-            return new PatternParams(pattern, seed);
+            return new PatternParams(pattern, limitedProducer, seed);
         }
 
         public PatternParams withRandomSeed() {
-            return new PatternParams(pattern, new Random().nextLong());
+            return new PatternParams(pattern, limitedProducer, new Random().nextLong());
+        }
+
+        public PatternParams withLimitProducer(boolean limitedProducer) {
+            return new PatternParams(pattern, limitedProducer, new Random().nextLong());
         }
     }
 

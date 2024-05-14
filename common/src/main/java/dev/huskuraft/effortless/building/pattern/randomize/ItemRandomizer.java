@@ -361,10 +361,10 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Cat
     }
 
     @Override
-    public Producer<Item> asProducer(long seed) {
+    public Producer<Item> asProducer(long seed, boolean limitedProducer) {
         return switch (order) {
-            case SEQUENCE -> Producer.createSequence(this, seed, getSource() != Source.CUSTOMIZE);
-            case RANDOM -> Producer.createUnordered(this, seed, getSource() != Source.CUSTOMIZE);
+            case SEQUENCE -> Producer.createSequence(this, seed, limitedProducer && getSource() != Source.CUSTOMIZE);
+            case RANDOM -> Producer.createUnordered(this, seed, limitedProducer && getSource() != Source.CUSTOMIZE);
         };
     }
 
@@ -373,7 +373,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Cat
         if (!isValid()) {
             return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation));
         }
-        var source = asProducer(operation.getContext().patternSeed());
+        var source = asProducer(operation.getContext().patternParams().seed(), operation.getContext().patternParams().limitedProducer());
         if (operation instanceof DeferredBatchOperation deferredBatchOperation) {
             return switch (target) {
                 case SINGLE -> deferredBatchOperation.mapEach(o -> o.refactor(RefactorContext.of(source.next())));
