@@ -70,7 +70,7 @@ public class MinecraftClient implements Client {
             return;
         }
         if (screen instanceof MinecraftScreen minecraftScreen) {
-            reference.setScreen(minecraftScreen.getReference());
+            reference.setScreen(minecraftScreen.referenceValue());
             return;
         }
         reference.setScreen(new MinecraftProxyScreen(screen));

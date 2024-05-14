@@ -31,14 +31,23 @@ public class MinecraftTextureFactory implements TextureFactory {
 
     @Override
     public TextureSprite getButtonTextureSprite(boolean enabled, boolean focused) {
-        return createSprite(AbstractButton.SPRITES.get(enabled, focused));
+        return createTextureSprite(AbstractButton.SPRITES.get(enabled, focused));
     }
 
-    public TextureSprite createSprite(ResourceLocation name) {
-        return createSprite(Minecraft.getInstance().getGuiSprites().getSprite(name));
+    @Override
+    public TextureSprite getDemoBackgroundTextureSprite() {
+        return createTextureSprite(new ResourceLocation("textures/gui/demo_background.png"), null, 248, 166, 0, 0, 256, 256, new SpriteScaling.NineSlice(248, 166, 6));
     }
 
-    public TextureSprite createSprite(TextureAtlasSprite sprite) {
+    public TextureSprite createTextureSprite(ResourceLocation texture, ResourceLocation name, int width, int height, int x, int y, int textureWidth, int textureHeight, SpriteScaling scaling) {
+        return new SimpleTextureSprite(MinecraftResourceLocation.ofNullable(texture), MinecraftResourceLocation.ofNullable(name), width, height, x, y, textureWidth, textureHeight, scaling);
+    }
+
+    public TextureSprite createTextureSprite(ResourceLocation name) {
+        return createTextureSprite(Minecraft.getInstance().getGuiSprites().getSprite(name));
+    }
+
+    public TextureSprite createTextureSprite(TextureAtlasSprite sprite) {
         return new SimpleTextureSprite(
                 new MinecraftResourceLocation(sprite.atlasLocation()),
                 new MinecraftResourceLocation(sprite.contents().name()),

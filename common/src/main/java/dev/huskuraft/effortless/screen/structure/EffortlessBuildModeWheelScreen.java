@@ -102,12 +102,12 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
             if (entry.getContent() instanceof Settings settings) {
                 switch (settings) {
                     case SETTINGS -> {
-                        new EffortlessSettingsScreen(getEntrance()).attach();
                         detach();
+                        new EffortlessSettingsScreen(getEntrance()).attach();
                     }
                     case PATTERN_SETTINGS -> {
-                        new EffortlessPatternSettingsScreen(getEntrance()).attach();
                         detach();
+                        new EffortlessPatternSettingsScreen(getEntrance()).attach();
                     }
                 }
                 return;

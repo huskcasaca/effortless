@@ -8,4 +8,8 @@ public record PatternConfig(
         List<Pattern> patterns
 ) {
 
+    public PatternConfig() {
+        this(List.of());
+    }
+
 }

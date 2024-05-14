@@ -14,7 +14,6 @@ import dev.huskuraft.effortless.api.gui.slot.SlotData;
 import dev.huskuraft.effortless.api.gui.slot.TextSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
-import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
@@ -28,15 +27,11 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         super(entrance, x, y, width, height);
     }
 
-    @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
-    }
-
     @SuppressWarnings("unchecked")
+    // FIXME: 12/5/24
     @Override
     protected EditableEntryList.Entry<Transformer> createHolder(Transformer transformer) {
-        return (EditableEntryList.Entry<Transformer>) switch (transformer.getType()) {
+        return (EditableEntryList.Entry) switch (transformer.getType()) {
             case ARRAY -> new ArrayEntry(getEntrance(), this, (ArrayTransformer) transformer);
             case MIRROR -> new MirrorEntry(getEntrance(), this, (MirrorTransformer) transformer);
             case RADIAL -> new RadialEntry(getEntrance(), this, (RadialTransformer) transformer);
@@ -99,18 +94,66 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         }
 
         @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
-        }
-
-        @Override
         public int getHeight() {
             return Dimens.ICON_HEIGHT + 4;
         }
 
         protected Text getDisplayName() {
-            if (getItem().getName().getString().isBlank()) {
-                return Text.translate("effortless.transformer.no_name").withStyle(ChatFormatting.GRAY);
+            if (getItem().getName().getString().isEmpty()) {
+                if (getItem() instanceof ItemRandomizer itemRandomizer) {
+                    switch (itemRandomizer.getSource()) {
+                        case INVENTORY -> {
+                            switch (itemRandomizer.getOrder()) {
+                                case SEQUENCE -> {
+                                    return Text.translate("effortless.randomizer.item.sequence_inventory");
+                                }
+                                case RANDOM -> {
+                                    return Text.translate("effortless.randomizer.item.random_inventory");
+                                }
+                            }
+                        }
+                        case HOTBAR -> {
+                            switch (itemRandomizer.getOrder()) {
+                                case SEQUENCE -> {
+                                    return Text.translate("effortless.randomizer.item.sequence_hotbar");
+                                }
+                                case RANDOM -> {
+                                    return Text.translate("effortless.randomizer.item.random_hotbar");
+                                }
+                            }
+                        }
+                        case HANDS -> {
+                            switch (itemRandomizer.getOrder()) {
+                                case SEQUENCE -> {
+                                    return Text.translate("effortless.randomizer.item.sequence_hands");
+                                }
+                                case RANDOM -> {
+                                    return Text.translate("effortless.randomizer.item.random_hands");
+                                }
+                            }
+                        }
+                        case CUSTOMIZE -> {
+                            if (itemRandomizer.getChances().isEmpty()) {
+                                return Text.translate("effortless.randomizer.item.empty");
+                            }
+                            switch (itemRandomizer.getOrder()) {
+                                case SEQUENCE -> {
+                                    return Text.translate("effortless.randomizer.item.sequence_customized");
+                                }
+                                case RANDOM -> {
+                                    return Text.translate("effortless.randomizer.item.random_customized");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return switch (getItem().getType()) {
+                    case ARRAY -> Text.translate("effortless.transformer.array.no_name");
+                    case MIRROR -> Text.translate("effortless.transformer.mirror.no_name");
+                    case RADIAL -> Text.translate("effortless.transformer.radial.no_name");
+                    case ITEM_RAND -> Text.empty();
+                };
             }
             return getItem().getName();
         }
@@ -143,7 +186,10 @@ public final class TransformerList extends EditableEntryList<Transformer> {
 
         @Override
         protected List<SlotData> getData() {
-            return getItem().getChances().stream().map(chance -> new SlotData.ItemStackSymbol(chance.content().getDefaultStack(), Text.text(String.valueOf(chance.chance())))).collect(Collectors.toList());
+            if (getItem().getSource() == ItemRandomizer.Source.CUSTOMIZE) {
+                return getItem().getChances().stream().map(chance -> new SlotData.ItemStackSymbol(chance.content().getDefaultStack(), Text.text(String.valueOf(chance.chance())))).collect(Collectors.toList());
+            }
+            return List.of();
         }
 
     }

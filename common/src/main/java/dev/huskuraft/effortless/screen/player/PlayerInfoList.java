@@ -19,11 +19,6 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
     }
 
     @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
-    }
-
-    @Override
     protected Entry createHolder(PlayerInfo item) {
         if (this.isLargeIcon) {
             return new LargeEntry(getEntrance(), item);
@@ -55,11 +50,6 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
         @Override
         public Text getNarration() {
             return Text.translate("narrator.select", getItem().getDisplayName());
-        }
-
-        @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override
@@ -95,11 +85,6 @@ public final class PlayerInfoList extends EditableEntryList<PlayerInfo> {
         @Override
         public Text getNarration() {
             return Text.translate("narrator.select", getItem().getDisplayName());
-        }
-
-        @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

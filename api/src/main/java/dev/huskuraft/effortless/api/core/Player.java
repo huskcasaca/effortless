@@ -12,9 +12,27 @@ public interface Player extends Entity {
         return getServer().getPlayerList().isOperator(getProfile());
     }
 
-    ItemStack getItemStack(InteractionHand hand);
+    default ItemStack getItemStack(InteractionHand hand) {
+        return switch (hand) {
+            case MAIN -> getItemBySlot(EquipmentSlot.MAINHAND);
+            case OFF -> getItemBySlot(EquipmentSlot.OFFHAND);
+        };
+    }
 
-    void setItemStack(InteractionHand hand, ItemStack itemStack);
+    default void setItemStack(InteractionHand hand, ItemStack itemStack) {
+        switch (hand) {
+            case MAIN -> getInventory().setSelectedItem(itemStack);
+            case OFF -> getInventory().setOffhandItem(itemStack);
+        }
+    }
+
+    default ItemStack getItemBySlot(EquipmentSlot slot) {
+        return switch (slot) {
+            case MAINHAND -> getInventory().getSelectedItem();
+            case OFFHAND -> getInventory().getOffhandItem();
+            case FEET, LEGS, CHEST, HEAD -> getInventory().getArmorItems().get(slot.getIndex());
+        };
+    }
 
     void drop(ItemStack itemStack, boolean dropAround, boolean includeThrowerName);
 

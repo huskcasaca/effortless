@@ -29,7 +29,7 @@ public enum PositionType implements BuildModifier {
     @Override
     public BuildStage getStage() {
         return switch (this) {
-            case ABSOLUTE -> BuildStage.NONE;
+            case ABSOLUTE -> BuildStage.TICK;
             case RELATIVE -> BuildStage.INTERACT;
             case RELATIVE_ONCE -> BuildStage.UPDATE_CONTEXT;
         };

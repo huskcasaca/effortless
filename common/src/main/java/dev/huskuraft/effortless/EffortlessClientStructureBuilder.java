@@ -38,6 +38,7 @@ import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
+import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.HistoryResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
@@ -186,7 +187,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
         if (buildMode.isDisabled()) {
             getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
-            updateContext(player, context -> context.withPattern(Pattern.DISABLED));
+            updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
         }
     }
 
@@ -238,6 +239,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         lastClientPlayerLevel.set(null);
         contexts.clear();
         undoRedoStacks.clear();
+        getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.transformerPresets(), false));
     }
 
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
@@ -415,7 +417,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     private void reloadContext(Player player) {
-        setContext(player, getContext(player).withRandomPatternSeed());
+        setContext(player, getContext(player).finalize(player, BuildStage.TICK));
+
+
 //        if (Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown()) {
 //            setContext(player, getContext(player).withBuildFeature(PlaneLength.EQUAL));
 //        } else {
@@ -532,8 +536,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var button = AbstractWheelScreen.button(option.get());
             texts.add(new Tuple2<>(button.getCategory().withStyle(ChatFormatting.WHITE), button.getName().withStyle(ChatFormatting.GOLD)));
         }
-        if (!context.pattern().equals(Pattern.DISABLED)) {
-            texts.add(new Tuple2<>(Text.translate("effortless.build.summary.pattern").withStyle(ChatFormatting.WHITE), (context.pattern().equals(Pattern.DISABLED) ? Text.translate("effortless.build.summary.pattern_disabled") : Text.translate("effortless.build.summary.pattern_enabled")).withStyle(ChatFormatting.GOLD)));
+        if (context.pattern().enabled()) {
+            texts.add(new Tuple2<>(Text.translate("effortless.build.summary.pattern").withStyle(ChatFormatting.WHITE), (context.pattern().enabled() ? Text.translate("effortless.build.summary.pattern_enabled") : Text.translate("effortless.build.summary.pattern_disabled")).withStyle(ChatFormatting.GOLD)));
         }
 
         entries.add(texts);

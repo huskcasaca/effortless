@@ -17,16 +17,16 @@ import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 
 public class EditBox extends AbstractWidget {
-    public static final int BACKWARDS = -1;
-    public static final int FORWARDS = 1;
-    public static final int DEFAULT_TEXT_COLOR = 14737632;
+    private static final int BACKWARDS = -1;
+    private static final int FORWARDS = 1;
+    private static final int DEFAULT_TEXT_COLOR = 0x00e0e0e0;
     private static final int CURSOR_INSERT_WIDTH = 1;
-    private static final int CURSOR_INSERT_COLOR = -3092272;
+    private static final int CURSOR_INSERT_COLOR = 0xffd0d0d0;
     private static final String CURSOR_APPEND_CHARACTER = "_";
-    private static final int BORDER_COLOR_FOCUSED = -1;
-    private static final int BORDER_COLOR_INACTIVE = 0xFF4f4f4f;
-    private static final int BORDER_COLOR = 0xFFA0A0A0;
-    private static final int BACKGROUND_COLOR = -16777216;
+    private static final int BORDER_COLOR_FOCUSED = 0xffffffff;
+    private static final int BORDER_COLOR_INACTIVE = 0xff4f4f4f;
+    private static final int BORDER_COLOR = 0xffa0a0a0;
+    private static final int BACKGROUND_COLOR = 0xff000000;
     private String value;
     private int maxLength;
     private int frame;
@@ -451,16 +451,6 @@ public class EditBox extends AbstractWidget {
 
     }
 
-    @Override
-    public int getTop() {
-        return super.getTop();
-    }
-
-    @Override
-    public int getBottom() {
-        return super.getBottom();
-    }
-
     private void renderHighlight(Renderer renderer, int i, int j, int k, int l) {
         int m;
         if (i < k) {
@@ -483,7 +473,7 @@ public class EditBox extends AbstractWidget {
             i = this.getX() + this.getWidth();
         }
 
-        renderer.renderRect(RenderLayers.GUI_TEXT_HIGHLIGHT, i, j, k, l, -16776961);
+        renderer.renderRect(RenderLayers.GUI_TEXT_HIGHLIGHT, i, j, k, l, 0xFF0000FF);
     }
 
     private int getMaxLength() {

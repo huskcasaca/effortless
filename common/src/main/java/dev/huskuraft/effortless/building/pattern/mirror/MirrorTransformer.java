@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.building.pattern.mirror;
 
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
@@ -15,9 +15,10 @@ import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
-import dev.huskuraft.effortless.building.session.BatchBuildSession;
 
-public class MirrorTransformer extends Transformer {
+public record MirrorTransformer(
+        UUID id, Text name, Vector3d position, PositionType[] positionType, Axis axis
+) implements Transformer {
 
     public static final MirrorTransformer ZERO_X = new MirrorTransformer(Vector3d.ZERO, Axis.X);
     public static final MirrorTransformer ZERO_Y = new MirrorTransformer(Vector3d.ZERO, Axis.Y);
@@ -28,32 +29,12 @@ public class MirrorTransformer extends Transformer {
     public static final MirrorTransformer DEFAULT_Z = new MirrorTransformer(new Vector3d(0, 0, 0), Axis.Z);
 
 
-    //    private final boolean enabled;
-
-    private final Vector3d position;
-    private final PositionType[] positionType;
-
-    //    private final boolean drawLines;
-//    private final boolean drawPlanes;
-//    private final int radius;
-    private final Axis axis;
-
     public MirrorTransformer(Vector3d position, Axis axis) {
         this(UUID.randomUUID(), Text.translate("effortless.transformer.mirror"), position, new PositionType[]{PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE}, axis);
     }
 
-    public MirrorTransformer(UUID id, Text name, Vector3d position, PositionType[] positionType, Axis axis) {
-        super(id, name);
-        this.position = position;
-        this.positionType = positionType;
-        this.axis = axis;
-    }
-
     public MirrorTransformer(UUID id, Text name, Vector3d position, PositionType positionTypeX, PositionType positionTypeY, PositionType positionTypeZ, Axis axis) {
-        super(id, name);
-        this.position = position;
-        this.positionType = new PositionType[]{positionTypeX, positionTypeY, positionTypeZ};
-        this.axis = axis;
+        this(id, name, position, new PositionType[]{positionTypeX, positionTypeY, positionTypeZ}, axis);
     }
 
     @Override
@@ -85,13 +66,13 @@ public class MirrorTransformer extends Transformer {
     }
 
     @Override
-    public MirrorTransformer finalize(BatchBuildSession session, BuildStage stage) {
+    public MirrorTransformer finalize(Player player, BuildStage stage) {
         return switch (stage) {
-            case NONE -> this;
+            case TICK -> this;
             case UPDATE_CONTEXT, INTERACT -> new MirrorTransformer(id, name, new Vector3d(
-                    positionType[0].getStage() == stage ? position.x() + session.getPlayer().getPosition().toVector3i().x() : position.x(),
-                    positionType[1].getStage() == stage ? position.y() + session.getPlayer().getPosition().toVector3i().y() : position.y(),
-                    positionType[2].getStage() == stage ? position.z() + session.getPlayer().getPosition().toVector3i().z() : position.z()
+                    positionType[0].getStage() == stage ? position.x() + player.getPosition().toVector3i().x() : position.x(),
+                    positionType[1].getStage() == stage ? position.y() + player.getPosition().toVector3i().y() : position.y(),
+                    positionType[2].getStage() == stage ? position.z() + player.getPosition().toVector3i().z() : position.z()
             ), new PositionType[]{
                     positionType[0].getStage() == stage ? PositionType.ABSOLUTE : positionType[0],
                     positionType[1].getStage() == stage ? PositionType.ABSOLUTE : positionType[1],
@@ -186,21 +167,4 @@ public class MirrorTransformer extends Transformer {
         return new MirrorTransformer(id, name, position, positionType, axis);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MirrorTransformer that)) return false;
-        if (!super.equals(o)) return false;
-
-        if (!Objects.equals(position, that.position)) return false;
-        return axis == that.axis;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (position != null ? position.hashCode() : 0);
-        result = 31 * result + (axis != null ? axis.hashCode() : 0);
-        return result;
-    }
 }

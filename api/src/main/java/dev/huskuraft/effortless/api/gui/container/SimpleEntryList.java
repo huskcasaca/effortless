@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.api.gui.container;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.Widget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 
@@ -26,11 +25,6 @@ public class SimpleEntryList extends AbstractEntryList<SimpleEntryList.Entry> {
 
         protected Entry(Entrance entrance) {
             super(entrance);
-        }
-
-        @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

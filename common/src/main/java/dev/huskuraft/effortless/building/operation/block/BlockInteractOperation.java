@@ -59,7 +59,7 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         // action permission
-        var selectedItemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.getDefaultStack());
+        var selectedItemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
 
 //        if (selectedItemStack == null) {
 //            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;

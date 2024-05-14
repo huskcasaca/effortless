@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.building.pattern;
 
-import java.util.Objects;
-
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Item;
@@ -16,10 +14,13 @@ public class RefactorContext {
     }
 
     public static RefactorContext of(Item item) {
-        return new RefactorContext(Objects.requireNonNull(item));
+        return new RefactorContext(item);
     }
 
     public BlockState refactor(Player player, BlockInteraction blockInteraction) {
+        if (item == null) {
+            return null;
+        }
         return item.getBlock().getBlockState(player, blockInteraction);
     }
 

@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.core.fluid;
 
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 
-public enum Fluids implements Fluid {
+public enum Fluids {
     EMPTY,
     FLOWING_WATER,
     WATER,
@@ -10,8 +10,8 @@ public enum Fluids implements Fluid {
     LAVA,
     ;
 
-    @Override
-    public Object referenceValue() {
-        return ContentFactory.getInstance().getFluid(this).referenceValue();
+    public Fluid fluid() {
+        return ContentFactory.getInstance().getFluid(this);
     }
+
 }

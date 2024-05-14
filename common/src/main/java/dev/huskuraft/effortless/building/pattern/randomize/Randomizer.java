@@ -5,34 +5,31 @@ import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 
-public abstract class Randomizer<T> extends Transformer {
+public interface Randomizer<T> extends Transformer {
 
-    public Randomizer(UUID id, Text name) {
-        super(id, name);
-    }
-
-    public static Category extract(Object object) {
+    static Category extract(Object object) {
         if (object instanceof Item) {
             return Category.ITEM;
         }
         throw new IllegalArgumentException("Invalid object: " + object);
-
     }
 
-    public abstract Order getOrder();
+    Order getOrder();
 
-    public abstract Target getTarget();
+    Target getTarget();
 
-    public abstract Category getCategory();
+    Category getCategory();
 
-    public abstract Collection<Chance<T>> getChances();
+    Collection<Chance<T>> getChances();
 
-    public abstract Source<T> asSource(long seed);
+    Producer<T> asProducer(long seed, boolean limitedProducer);
 
-    public enum Order {
+    enum Order {
         SEQUENCE("sequence"),
         RANDOM("random");
 
@@ -51,7 +48,7 @@ public abstract class Randomizer<T> extends Transformer {
         }
     }
 
-    public enum Target {
+    enum Target {
         SINGLE("single"),
         GROUP("group");
 
@@ -70,7 +67,7 @@ public abstract class Randomizer<T> extends Transformer {
         }
     }
 
-    public enum Category {
+    enum Category {
         ITEM("item", ItemStack.class);
 
         private final String name;
@@ -90,4 +87,14 @@ public abstract class Randomizer<T> extends Transformer {
         }
     }
 
+    @Override
+    Randomizer<T> withId(UUID id);
+
+    @Override
+    Randomizer<T> withName(Text name);
+
+    @Override
+    default Randomizer<T> finalize(Player player, BuildStage stage) {
+        return this;
+    }
 }

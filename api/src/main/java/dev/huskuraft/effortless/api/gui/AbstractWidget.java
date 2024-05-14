@@ -196,7 +196,7 @@ public abstract class AbstractWidget implements Widget {
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
-        return (hasParent() && getParent().isMouseOver(mouseX, mouseY) || !hasParent()) && this.isActive() && this.isVisible() && mouseX >= this.getX() && mouseY >= this.getY() && mouseX < (this.getX() + this.getWidth()) && mouseY < (this.getY() + this.getHeight());
+        return (hasParent() && getParent().isMouseOver(mouseX, mouseY) || !hasParent()) && this.isVisible() && mouseX >= this.getX() && mouseY >= this.getY() && mouseX < (this.getX() + this.getWidth()) && mouseY < (this.getY() + this.getHeight());
     }
 
     @Override
@@ -262,6 +262,11 @@ public abstract class AbstractWidget implements Widget {
         return tooltip;
     }
 
+
+    public void clearTooltip() {
+        this.tooltip = List.of();
+    }
+
     public void setTooltip(Text tooltip) {
         this.tooltip = Collections.singletonList(tooltip);
     }
@@ -289,5 +294,25 @@ public abstract class AbstractWidget implements Widget {
 
     public boolean hasParent() {
         return parent != null;
+    }
+
+    @Override
+    public final int getLeft() {
+        return Widget.super.getLeft();
+    }
+
+    @Override
+    public final int getRight() {
+        return Widget.super.getRight();
+    }
+
+    @Override
+    public final int getTop() {
+        return Widget.super.getTop();
+    }
+
+    @Override
+    public final int getBottom() {
+        return Widget.super.getBottom();
     }
 }

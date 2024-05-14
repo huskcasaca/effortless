@@ -15,11 +15,6 @@ public final class ItemStackList extends EditableEntryList<ItemStack> {
     }
 
     @Override
-    protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 160;
-    }
-
-    @Override
     protected Entry createHolder(ItemStack item) {
         return new Entry(getEntrance(), item);
     }
@@ -48,11 +43,6 @@ public final class ItemStackList extends EditableEntryList<ItemStack> {
         @Override
         public Text getNarration() {
             return Text.translate("narrator.select", getDisplayName(getItem()));
-        }
-
-        @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
         }
 
         @Override

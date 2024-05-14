@@ -32,7 +32,7 @@ public class BatchBuildSession implements BuildSession {
     }
 
     protected BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockPlaceOperation(world, player, context, storage, interaction, Items.AIR.getBlock().getDefaultBlockState());
+        return new BlockPlaceOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState());
     }
 
     protected BlockBreakOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
@@ -53,16 +53,18 @@ public class BatchBuildSession implements BuildSession {
             case INTERACT_BLOCK ->
                     context.collectInteractions().map(interaction -> createBlockInteractOperationFromHit(world, player, context, storage, interaction));
         });
-        return ItemRandomizer.create(null, player.getItemStack(InteractionHand.MAIN).getItem()).transform(operations);
+        return ItemRandomizer.single(null, player.getItemStack(InteractionHand.MAIN).getItem()).transform(operations);
     }
 
     protected BatchOperation create(World world, Player player, Context context) {
         var storage = Storage.create(player, context.isPreview());
         var operations = createDeferredOperations(world, player, context, storage);
 
-        for (var transformer : context.pattern().transformers()) {
-            if (transformer.isValid()) {
-                operations = transformer.transform(operations);
+        if (context.pattern().enabled()) {
+            for (var transformer : context.pattern().transformers()) {
+                if (transformer.isValid()) {
+                    operations = transformer.transform(operations);
+                }
             }
         }
         operations = operations.flatten().filter(Objects::nonNull);

@@ -19,7 +19,6 @@ import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
-import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
 
 public class TransformerTagSerializer implements TagSerializer<Transformer> {
 
@@ -210,8 +209,9 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         private static final String TAG_ID = "id";
         private static final String TAG_NAME = "Name";
         private static final String TAG_ORDER = "Order";
-        private static final String TAG_SUPPLIER = "Supplier";
+        private static final String TAG_TARGET = "Supplier";
         private static final String TAG_CATEGORY = "Category";
+        private static final String TAG_SOURCE = "Source";
         private static final String TAG_CHANCES = "Chances";
 
         @Override
@@ -219,9 +219,10 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             return new ItemRandomizer(
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
-                    tag.asRecord().getEnum(TAG_ORDER, Randomizer.Order.class),
-                    tag.asRecord().getEnum(TAG_SUPPLIER, Randomizer.Target.class),
-                    tag.asRecord().getEnum(TAG_CATEGORY, Randomizer.Category.class),
+                    tag.asRecord().getEnum(TAG_ORDER, ItemRandomizer.Order.class),
+                    tag.asRecord().getEnum(TAG_TARGET, ItemRandomizer.Target.class),
+                    tag.asRecord().getEnum(TAG_CATEGORY, ItemRandomizer.Category.class),
+                    tag.asRecord().getEnum(TAG_SOURCE, ItemRandomizer.Source.class),
                     tag.asRecord().getList(TAG_CHANCES, new ItemChanceTagSerializer())
             );
         }
@@ -232,8 +233,9 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             tag.asRecord().putUUID(TAG_ID, randomizer.getId());
             tag.asRecord().putText(TAG_NAME, randomizer.getName());
             tag.asRecord().putEnum(TAG_ORDER, randomizer.getOrder());
-            tag.asRecord().putEnum(TAG_SUPPLIER, randomizer.getTarget());
+            tag.asRecord().putEnum(TAG_TARGET, randomizer.getTarget());
             tag.asRecord().putEnum(TAG_CATEGORY, randomizer.getCategory());
+            tag.asRecord().putEnum(TAG_SOURCE, randomizer.getSource());
             tag.asRecord().putList(TAG_CHANCES, randomizer.getChances(), new ItemChanceTagSerializer());
             return tag;
         }
@@ -248,6 +250,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     value.getOrder() != null ? value.getOrder() : ItemRandomizer.EMPTY.getOrder(),
                     value.getTarget() != null ? value.getTarget() : ItemRandomizer.EMPTY.getTarget(),
                     value.getCategory() != null ? value.getCategory() : ItemRandomizer.EMPTY.getCategory(),
+                    value.getSource() != null ? value.getSource() : ItemRandomizer.EMPTY.getSource(),
                     value.getChances() != null ? value.getChances() : ItemRandomizer.EMPTY.getChances()
             );
         }
@@ -273,7 +276,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
 
         @Override
         public Chance<Item> validate(Chance<Item> value) {
-            if (value == null || value.content() == null) return Chance.of(Items.AIR, (byte) 0);
+            if (value == null || value.content() == null) return Chance.of(Items.AIR.item(), (byte) 0);
             return value;
         }
     }

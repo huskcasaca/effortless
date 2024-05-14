@@ -14,23 +14,28 @@ public record MinecraftInventory(net.minecraft.world.entity.player.Inventory ref
     }
 
     @Override
-    public List<ItemStack> getArmors() {
+    public List<ItemStack> getArmorItems() {
         return referenceValue().armor.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<ItemStack> getOffhand() {
+    public List<ItemStack> getOffhandItems() {
         return referenceValue().offhand.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
     }
 
     @Override
     public void setItem(int index, ItemStack itemStack) {
-        referenceValue().setItem(index, itemStack.reference());
+        referenceValue().items.set(index, itemStack.reference());
     }
 
     @Override
-    public ItemStack getItem(int index) {
-        return new MinecraftItemStack(referenceValue().getItem(index));
+    public void setArmorItem(int index, ItemStack itemStack) {
+        referenceValue().armor.set(index, itemStack.reference());
+    }
+
+    @Override
+    public void setOffhandItem(int index, ItemStack itemStack) {
+        referenceValue().offhand.set(index, itemStack.reference());
     }
 
     @Override
@@ -39,8 +44,13 @@ public record MinecraftInventory(net.minecraft.world.entity.player.Inventory ref
     }
 
     @Override
-    public boolean addItem(int index, ItemStack itemStack) {
-        return referenceValue().add(index, itemStack.reference());
+    public int getSelected() {
+        return referenceValue().selected;
+    }
+
+    @Override
+    public int getHotbarSize() {
+        return referenceValue().getSelectionSize();
     }
 
 }

@@ -4,10 +4,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.gui.AbstractContainerWidget;
+import dev.huskuraft.effortless.api.gui.AbstractWidget;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.EntryList;
 import dev.huskuraft.effortless.api.gui.Widget;
 import dev.huskuraft.effortless.api.math.MathUtils;
@@ -18,15 +21,21 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> extends AbstractContainerWidget implements EntryList {
 
-    private final boolean backgroundTransparent = true;
-    private final boolean renderShadow = true;
+    private static final int DEFAULT_VERTICAL_PADDING = 4;
+
+    protected boolean backgroundTransparent = false;
+    protected boolean renderShadow = true;
+    protected boolean renderSelection = true;
+    protected boolean isAlwaysShowScrollbar = false;
+    protected boolean isShowScrollBar = true;
+
+    protected boolean scrolling;
+
     protected int x0;
     protected int x1;
     protected int y0;
     protected int y1;
-    protected boolean scrolling;
     private double scrollAmount;
-    private boolean renderSelection = true;
 
     protected AbstractEntryList(Entrance entrance, int x, int y, int width, int height) {
         super(entrance, x, y, width, height, Text.empty());
@@ -38,6 +47,10 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
     public boolean isBackgroundTransparent() {
         return backgroundTransparent;
+    }
+
+    public void setBackgroundTransparent(boolean backgroundTransparent) {
+        this.backgroundTransparent = backgroundTransparent;
     }
 
     @Nullable
@@ -129,19 +142,19 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     public <C extends E> C addEntry(C entry) {
+        entry.setParent(this);
         entry.onCreate();
         entry.onReload();
 
-        entry.setParent(this);
         children().add(entry);
         entry.onPositionChange(-1, children().size() - 1);
         return entry;
     }
 
     public <C extends E> C addEntry(int index, C entry) {
+        entry.setParent(this);
         entry.onCreate();
         entry.onReload();
-        entry.setParent(this);
         children().add(index, entry);
         entry.onPositionChange(-1, index);
         // FIXME: 24/9/23
@@ -208,7 +221,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     protected void clickedHeader(int i, int j) {
     }
 
-    protected int getEntryAtPosition(E entry) {
+    protected int getEntryPosition(E entry) {
         var i = 0;
         for (E child : children()) {
             if (entry == child) {
@@ -219,12 +232,12 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         throw new NoSuchElementException("Entry not found in list");
     }
 
-    protected int getEntryAtPosition(int i) {
-        return getEntryAtPosition(getOrThrow(i));
+    protected int getEntryPosition(int i) {
+        return getEntryPosition(getOrThrow(i));
     }
 
     protected void centerScrollOn(E entry) {
-        this.setScrollAmount(getEntryAtPosition(entry) + (double) entry.getHeight() / 2 - (double) (this.y1 - this.y0) / 2);
+        this.setScrollAmount(getEntryPosition(entry) + (double) entry.getHeight() / 2 - (double) (this.y1 - this.y0) / 2);
     }
 
     protected void ensureVisible(E entry) {
@@ -239,7 +252,6 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
             this.scroll(-k);
         }
     }
-
     protected void scroll(int i) {
         this.setScrollAmount(this.getScrollAmount() + (double) i);
     }
@@ -248,11 +260,58 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         return this.scrollAmount;
     }
 
+    private int firstVisibleIndex = 0;
+    private double firstVisibleOffset = 0d;
+
     public void setScrollAmount(double d) {
-        this.scrollAmount = MathUtils.clamp(d, 0.0, this.getMaxScroll());
+        var scrollAmountClamped = MathUtils.clamp(d, 0.0, this.getMaxScroll());
+        scrollBy(scrollAmountClamped - scrollAmount);
+        this.scrollAmount = scrollAmountClamped;
+    }
+
+    private void scrollBy(double scrolledAmount) {
+        this.firstVisibleOffset -= scrolledAmount;
+        if (children().isEmpty()) {
+            this.firstVisibleIndex = 0;
+            this.firstVisibleOffset = 0d;
+        }
+        if (children().size() <= firstVisibleIndex) {
+            this.firstVisibleIndex = 0;
+            this.firstVisibleOffset = 0d;
+            return;
+        }
+        var height = children().get(firstVisibleIndex).getHeight();
+
+        if (height + this.firstVisibleOffset < 0) {
+            for (var index = firstVisibleIndex; index < children().size(); index++) {
+                var height1 = children().get(index).getHeight();
+                if (this.firstVisibleOffset + height1 >= 0) {
+                    break;
+                }
+                this.firstVisibleIndex += 1;
+                this.firstVisibleOffset += height1;
+                if (this.firstVisibleOffset >= 0) {
+                    break;
+                }
+            }
+            return;
+        }
+
+        if (this.firstVisibleOffset > 0) {
+            for (var index = firstVisibleIndex - 1; index >= 0; index--) {
+                var height1 = children().get(index).getHeight();
+                this.firstVisibleIndex -= 1;
+                this.firstVisibleOffset -= height1;
+                if (this.firstVisibleOffset <= 0) {
+                    break;
+                }
+            }
+            return;
+        }
     }
 
     protected void setScrollAmountNoClamp(double d) {
+        scrollBy(d - scrollAmount);
         this.scrollAmount = d;
     }
 
@@ -265,12 +324,16 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     protected void updateScrollingState(double d, double e, int i) {
-        this.scrolling = i == 0 && d >= (double) this.getScrollbarPosition() && d < (double) (this.getScrollbarPosition() + 6);
+        this.scrolling = i == 0 && d >= (double) this.getScrollbarPosition() && d < (double) (this.x0 + this.getScrollbarPosition() + 6);
     }
 
     // TODO: 12/9/23
     protected int getScrollbarPosition() {
-        return this.getWidth() / 2 + 300 / 2 + 20;
+        return this.x0 + this.getWidth() + 2;
+    }
+
+    protected int getScrollbarWidth() {
+        return 6;
     }
 
     protected void moveSelection(SelectionDirection selectionDirection) {
@@ -315,11 +378,13 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     protected int getRowTop(int i) {
-        return this.y0 + 4 - (int) this.getScrollAmount() + getEntryAtPosition(i);
+        var relativeIndex = firstVisibleIndex;
+        return (int) (this.y0 + 4 + IntStream.range(Math.min(i, relativeIndex), Math.max(i, relativeIndex)).mapToObj(children()::get).mapToInt(AbstractWidget::getHeight).sum() + firstVisibleOffset);
     }
 
     protected int getRowTop(E entry) {
-        return this.y0 + 4 - (int) this.getScrollAmount() + getEntryAtPosition(entry);
+        return getRowTop(children().indexOf(entry));
+//        return this.y0 + 4 - (int) this.getScrollAmount() + getEntryPosition(entry);
     }
 
     protected int getRowBottom(int i) {
@@ -341,26 +406,39 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     // renders
     private void renderList(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         if (isRenderSelection() && getHovered() != null) {
-            renderSelection(renderer, getHovered(), -8355712, -16777216);
+            renderSelection(renderer, getHovered(), 0xff808080, 0xff000000);
         }
-        for (var index = 0; index < getEntrySize(); ++index) {
-            var entry = getWidget(index);
-            var left = getRowLeft(index);
-            var top = getRowTop(index);
-            var bottom = getRowBottom(index);
+        for (var i = 0; i < getEntrySize(); ++i) {
+            var entry = getWidget(i);
+            if (i < firstVisibleIndex) {
+                entry.setVisible(false);
+                continue;
+            }
+            var left = getRowLeft(i);
+            var top = getRowTop(i);
+            var bottom = getRowBottom(i);
 
             entry.moveX(left - entry.getX());
             entry.moveY(top - entry.getY());
 
-            if (bottom >= this.y0 && top <= this.y1) {
-                renderer.pushPose();
-                if (isRenderSelection() && getSelected() == entry) {
-                    var p = isFocused() ? -1 : -8355712;
-                    renderSelection(renderer, entry, p, -16777216);
-                }
-                renderer.popPose();
-                entry.render(renderer, mouseX, mouseY, deltaTick);
+            if (bottom < this.y0) {
+                entry.setVisible(false);
+                continue;
             }
+
+            if (top > this.y1) {
+                for (int j = i; j < getEntrySize(); j++) {
+                    getWidget(j).setVisible(false);
+                }
+                break;
+            }
+            entry.setVisible(true);
+            renderer.pushPose();
+            if (isRenderSelection() && getSelected() == entry) {
+                renderSelection(renderer, entry, isFocused() ? 0xffffffff : 0xff808080, 0xff000000);
+            }
+            renderer.popPose();
+            entry.render(renderer, mouseX, mouseY, deltaTick);
         }
     }
 
@@ -374,19 +452,24 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         renderer.popPose();
     }
 
+    public void renderBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+        if (getEntrance().getClient().isLoaded() && !isBackgroundTransparent()) {
+            renderer.renderGradientRect(x0, y0, x1, y1, 0xdc000000, 0xdc000000);
+//            renderer.renderGradientRect(x0, y0, x1, y1, 0xa1101010, 0x8c101010);
+        } else {
+//            renderer.setRsShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
+//            renderer.renderPanelBackgroundTexture(x0, y0, (float) x1, (float) (y1 + (int) this.getScrollAmount()), x1 - x0, y1 - y0);
+//            renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
+    }
+
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
 
         setHovered(isMouseOver(mouseX, mouseY) ? getWidgetAt(mouseX, mouseY) : null);
 
-        var k = this.getScrollbarPosition();
-        var l = k + 6;
-        if (isBackgroundTransparent() && getEntrance().getClient().isLoaded()) {
-            renderer.renderGradientRect(x0, y0, x1, y1, 0xa1101010, 0x8c101010);
-        } else {
-            renderer.setRsShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
-            renderer.renderPanelBackgroundTexture(x0, y0, (float) x1, (float) (y1 + (int) this.getScrollAmount()), x1 - x0, y1 - y0);
-            renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        }
+        var left = getScrollbarPosition();
+        var width = getScrollbarWidth();
+        renderBackground(renderer, mouseX, mouseY, deltaTick);
         renderer.pushPose();
         renderer.enableScissor(this.x0, this.y0, this.x1, this.y1);
         this.renderList(renderer, mouseX, mouseY, deltaTick);
@@ -394,24 +477,36 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         renderer.popPose();
 
         if (this.renderShadow) {
-            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0, 0);
-            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216, 0);
+            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y0, this.x1, this.y0 + 4, 0xff000000, 0x00000000, 0);
+            renderer.renderGradientRect(RenderLayers.GUI_OVERLAY, this.x0, this.y1 - 4, this.x1, this.y1, 0x00000000, 0xff000000, 0);
         }
 
         var renderScrollBar = this.getMaxScroll();
-        if (renderScrollBar > 0) {
-            int p = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
-            p = MathUtils.clamp(p, 32, this.y1 - this.y0 - 8);
-            int q = (int) this.getScrollAmount() * (this.y1 - this.y0 - p) / renderScrollBar + this.y0;
-            if (q < this.y0) {
-                q = this.y0;
+        if (isShowScrollBar && (renderScrollBar > 0 || isAlwaysShowScrollbar)) {
+            var size = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
+            size = MathUtils.clamp(size, 32, this.y1 - this.y0);
+            var top = renderScrollBar == 0 ? 0 : ((int) this.getScrollAmount() * (this.y1 - this.y0 - size) / renderScrollBar) + this.y0;
+            if (top < this.y0) {
+                top = this.y0;
             }
 
-            renderer.renderRect(k, this.y0, l, this.y1, -16777216);
-            renderer.renderRect(k, q, l, q + p, -8355712);
-            renderer.renderRect(k, q, l - 1, q + p - 1, -4144960);
+            renderer.renderRect(left, this.y0, left + width, this.y1, 0xff000000);
+            renderer.renderRect(left, top, left + width, top + size, 0xff808080);
+            renderer.renderRect(left, top, left + width - 1, top + size - 1, 0xffc0c0c0);
         }
+    }
 
+    public boolean isScrollbarVisible() {
+        var renderScrollBar = this.getMaxScroll();
+        return isShowScrollBar && (renderScrollBar > 0 || isAlwaysShowScrollbar);
+    }
+
+    public void setAlwaysShowScrollbar(boolean alwaysShowScrollbar) {
+        this.isAlwaysShowScrollbar = alwaysShowScrollbar;
+    }
+
+    public void setShowScrollBar(boolean showScrollBar) {
+        this.isShowScrollBar = showScrollBar;
     }
 
     @Override
@@ -489,7 +584,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     public boolean isMouseOver(double mouseX, double mouseY) {
-        return mouseY >= this.y0 && mouseY <= this.y1 && mouseX >= this.x0 && mouseX <= this.x1;
+        return mouseY >= this.getTop() && mouseY <= this.getBottom() && ((mouseX >= this.getLeft() && mouseX <= this.getRight()) || (mouseX >= this.getScrollbarPosition() && mouseX <= this.getScrollbarPosition() + this.getScrollbarWidth()));
     }
 
     @Override
@@ -553,6 +648,11 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
             renderer.enableScissor(getX(), getY(), getX() + getWidth(), getY() + getHeight());
             super.render(renderer, mouseX, mouseY, deltaTick);
             renderer.disableScissor();
+        }
+
+        @Override
+        public int getWidth() {
+            return MathUtils.min(Dimens.Entry.ROW_WIDTH, getParent().getWidth() - DEFAULT_VERTICAL_PADDING * 2);
         }
     }
 }

@@ -33,7 +33,7 @@ public class Dimens {
     }
 
     public static class Entry {
-        public static final int ROW_WIDTH = 278;
+        public static final int ROW_WIDTH = 282;
         public static final int MAX_SLOT_COUNT = (ROW_WIDTH - ICON_WIDTH) / SLOT_OFFSET_X;
     }
 
@@ -62,6 +62,7 @@ public class Dimens {
         public static final int BUTTON_ROW_1 = Buttons.HEIGHT * 1 + Buttons.VERTICAL_SPACING * 0 + Buttons.VERTICAL_PADDING * 2;
         public static final int BUTTON_ROW_2 = Buttons.HEIGHT * 2 + Buttons.VERTICAL_SPACING * 1 + Buttons.VERTICAL_PADDING * 2;
         public static final int BUTTON_ROW_3 = Buttons.HEIGHT * 3 + Buttons.VERTICAL_SPACING * 2 + Buttons.VERTICAL_PADDING * 2;
+
     }
 
 }

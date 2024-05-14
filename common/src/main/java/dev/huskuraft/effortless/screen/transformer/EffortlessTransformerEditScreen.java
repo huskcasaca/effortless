@@ -5,11 +5,9 @@ import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.Tuple2;
-import dev.huskuraft.effortless.api.gui.AbstractScreen;
+import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
-import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
-import dev.huskuraft.effortless.api.gui.input.EditBox;
 import dev.huskuraft.effortless.api.gui.slot.TextSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.math.Vector3d;
@@ -19,10 +17,9 @@ import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
-import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
 
-public class EffortlessTransformerEditScreen extends AbstractScreen {
+public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
 
     private final Consumer<Transformer> applySettings;
     private Transformer lastSettings;
@@ -31,35 +28,36 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
     private Button saveButton;
     private Button cancelButton;
     private TextSlot textSlot;
-    private EditBox nameEditBox;
+//    private EditBox nameEditBox;
 
     public EffortlessTransformerEditScreen(Entrance entrance, Consumer<Transformer> consumer, Transformer transformer) {
-        super(entrance, Text.translate("effortless.transformer.edit.title"));
+        super(entrance, Text.translate("effortless.transformer_presets.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.applySettings = consumer;
         this.lastSettings = transformer;
     }
 
     @Override
     public void onCreate() {
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getWidth() / 2, Dimens.Screen.TITLE_24 - 16, getScreenTitle(), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 
-        this.textSlot = addWidget(new TextSlot(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, Text.empty()));
+//        this.textSlot = addWidget(new TextSlot(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2, 16 + 2, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, Text.empty()));
 
-        this.nameEditBox = addWidget(
-                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2 + 40, Dimens.Screen.TITLE_24, Dimens.Entry.ROW_WIDTH - 40, 20, null)
-        );
-        this.nameEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
-        this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
+//        this.nameEditBox = addWidget(
+//                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2 + 40, Dimens.Screen.TITLE_24, Dimens.Entry.ROW_WIDTH - 40, 20, null)
+//        );
+//        this.nameEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
+//        this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
 
-        this.entries = addWidget(new SettingOptionsList(getEntrance(), 0, 54, getWidth(), getHeight() - 54 - 36, true, false));
+        this.entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1, true, false));
+        this.entries.setAlwaysShowScrollbar(true);
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.cancel"), button -> {
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.save"), button -> {
             applySettings.accept(lastSettings);
             detach();
-        }).setBoundsGrid(getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
         switch (lastSettings.getType()) {
             case ARRAY -> {
@@ -92,7 +90,7 @@ public class EffortlessTransformerEditScreen extends AbstractScreen {
 
     @Override
     public void onReload() {
-        textSlot.setMessage(TransformerList.Entry.getSymbol(lastSettings));
+//        textSlot.setMessage(TransformerList.Entry.getSymbol(lastSettings));
     }
 
 }

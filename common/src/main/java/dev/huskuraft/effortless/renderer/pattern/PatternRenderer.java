@@ -44,6 +44,7 @@ public class PatternRenderer {
 
     public void render(Renderer renderer, float deltaTick) {
         entries.forEach((k, v) -> {
+            if (!v.getValue().pattern().enabled()) return;
             for (var transformer : v.getValue().pattern().transformers()) {
                 if (transformer instanceof MirrorTransformer mirrorTransformer) {
                     new MirrorTransformerRenderer(getEntrance(), mirrorTransformer, true).render(renderer, deltaTick);

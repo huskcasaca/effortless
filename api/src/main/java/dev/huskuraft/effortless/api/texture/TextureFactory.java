@@ -14,4 +14,6 @@ public interface TextureFactory {
 
     TextureSprite getButtonTextureSprite(boolean enabled, boolean focused);
 
+    TextureSprite getDemoBackgroundTextureSprite();
+
 }

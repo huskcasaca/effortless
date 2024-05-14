@@ -60,31 +60,12 @@ public final class PatternList extends EditableEntryList<Pattern> {
         }
 
         @Override
-        public int getWidth() {
-            return Dimens.Entry.ROW_WIDTH;
-        }
-
-        @Override
         public int getHeight() {
             return Dimens.ICON_HEIGHT + 4;
         }
 
-        private void updateSlots() {
-            //        this.slots.clear();
-            //        var index = 0;
-            //        for (var transformer : getItem().transformers()) {
-            //            slots.add(addWidget(new TextSlot(getEntrance(), getX() + index * Dimens.SLOT_OFFSET_X + Dimens.ICON_WIDTH + 3, getY() + 13, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, TransformerInfoEntry.getSymbol(transformer))));
-            //            if (index++ == MAX_SLOT_COUNT) {
-            //                break;
-            //            }
-            //        }
-        }
-
         private Text getDisplayName(Pattern pattern) {
-            if (pattern.name().getString().isBlank()) {
-                return Text.translate("effortless.pattern.no_name").withStyle(ChatFormatting.GRAY);
-            }
-            return pattern.name();
+            return Text.translate("effortless.pattern.no_name").withStyle(ChatFormatting.GRAY);
         }
 
 
