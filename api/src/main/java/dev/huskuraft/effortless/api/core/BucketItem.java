@@ -39,7 +39,7 @@ public interface BucketItem extends Item {
     void useExtraContent(World world, Player player, BlockPosition blockPosition, ItemStack itemStack);
 
     default boolean isEmpty() {
-        return getContent().referenceValue().equals(Fluids.EMPTY.referenceValue());
+        return getContent().referenceValue().equals(Fluids.EMPTY.fluid().referenceValue());
     }
 
     @Override

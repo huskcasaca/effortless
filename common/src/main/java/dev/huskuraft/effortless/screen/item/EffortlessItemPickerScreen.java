@@ -16,12 +16,12 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public class EffortlessItemPickerScreen extends AbstractPanelScreen {
 
-    private final Consumer<Item> applySettings;
-    private TextWidget titleTextWidget;
-    private ItemStackList entries;
-    private EditBox searchEditBox;
-    private Button addButton;
-    private Button cancelButton;
+    protected final Consumer<Item> applySettings;
+    protected TextWidget titleTextWidget;
+    protected ItemStackList entries;
+    protected EditBox searchEditBox;
+    protected Button addButton;
+    protected Button cancelButton;
 
     public EffortlessItemPickerScreen(Entrance entrance, Consumer<Item> consumer) {
         super(entrance, Text.translate("effortless.item.picker.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
@@ -59,7 +59,7 @@ public class EffortlessItemPickerScreen extends AbstractPanelScreen {
         addButton.setActive(entries.hasSelected());
     }
 
-    private void setSearchResult(String string) {
+    protected void setSearchResult(String string) {
         if (string.startsWith("#")) {
             var searchTree = ClientContentFactory.getInstance().searchItemStack(SearchBy.TAG);
             entries.reset(searchTree.search(string.substring(1).toLowerCase(Locale.ROOT)));

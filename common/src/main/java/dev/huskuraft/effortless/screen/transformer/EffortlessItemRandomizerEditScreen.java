@@ -16,7 +16,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
-import dev.huskuraft.effortless.screen.item.EffortlessItemPickerScreen;
+import dev.huskuraft.effortless.screen.item.EffortlessBlockItemPickerScreen;
 
 public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
 
@@ -93,7 +93,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
             entries.deleteSelected();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.add"), button -> {
-            new EffortlessItemPickerScreen(
+            new EffortlessBlockItemPickerScreen(
                     getEntrance(),
                     item -> {
                         entries.insertSelected(Chance.of(item, (byte) 1));

@@ -276,7 +276,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
 
         @Override
         public Chance<Item> validate(Chance<Item> value) {
-            if (value == null || value.content() == null) return Chance.of(Items.AIR, (byte) 0);
+            if (value == null || value.content() == null) return Chance.of(Items.AIR.item(), (byte) 0);
             return value;
         }
     }

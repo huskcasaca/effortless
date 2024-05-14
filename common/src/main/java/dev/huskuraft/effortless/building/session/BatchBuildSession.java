@@ -32,7 +32,7 @@ public class BatchBuildSession implements BuildSession {
     }
 
     protected BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockPlaceOperation(world, player, context, storage, interaction, Items.AIR.getBlock().getDefaultBlockState());
+        return new BlockPlaceOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState());
     }
 
     protected BlockBreakOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
