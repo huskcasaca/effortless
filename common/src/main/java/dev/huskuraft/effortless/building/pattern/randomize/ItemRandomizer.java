@@ -392,8 +392,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
                 Stream.of(
                         getName(),
                         order.getDisplayName(),
-                        target.getDisplayName(),
-                        category.getDisplayName()),
+                        target.getDisplayName()),
                 chances.stream().map(Chance::content).map(item -> item.getDefaultStack().getHoverName())
         );
     }
