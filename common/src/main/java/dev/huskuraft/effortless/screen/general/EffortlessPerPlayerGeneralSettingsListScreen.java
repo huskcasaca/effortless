@@ -100,7 +100,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
     public void onReload() {
         this.deleteButton.setActive(entries.hasSelected());
         this.editButton.setActive(entries.hasSelected());
-        this.config = this.entries.items().stream().map(PlayerInfo::getId).collect(Collectors.toMap(Function.identity(), config::get, (x, y) -> y, LinkedHashMap::new));
+        this.config = this.entries.items().stream().map(PlayerInfo::getId).collect(Collectors.toMap(Function.identity(), config::get, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     public List<PlayerInfo> getConfigurablePlayers() {

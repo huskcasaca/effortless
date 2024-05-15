@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
@@ -26,13 +27,12 @@ public record Floor(
     }
 
     @Override
-    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
-        return new Floor(planeFilling, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new Floor(planeFilling, planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case PLANE_FILLING -> new Floor((PlaneFilling) feature, planeLength);
+            case PLANE_LENGTH -> new Floor(planeFilling, (PlaneLength) feature);
+            default -> this;
+        };
     }
 
     protected static BlockInteraction traceFloor(Player player, Context context, PlaneLength planeLength) {
@@ -69,6 +69,8 @@ public record Floor(
         var z2 = pos2.z();
 
         switch (BlockBuildStructure.getShape(pos1, pos2)) {
+            case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
+            case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_Y -> {
                 switch (planeFilling) {
                     case PLANE_FULL -> Square.addFullSquareBlocksY(set, x1, x2, y1, z1, z2);

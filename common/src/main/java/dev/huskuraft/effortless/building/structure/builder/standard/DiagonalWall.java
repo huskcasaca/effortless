@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
@@ -24,8 +25,11 @@ public record DiagonalWall(
     }
 
     @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new DiagonalWall(planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case PLANE_LENGTH -> new DiagonalWall((PlaneLength) feature);
+            default -> this;
+        };
     }
 
     // add diagonal wall from first to second

@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CubeFilling;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
@@ -27,18 +28,13 @@ public record Cube(
     }
 
     @Override
-    public BuildStructure withCubeFilling(CubeFilling cubeFilling) {
-        return new Cube(cubeFilling, planeFacing, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
-        return new Cube(cubeFilling, planeFacing, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new Cube(cubeFilling, planeFacing, planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case CUBE_FILLING -> new Cube((CubeFilling) feature, planeFacing, planeLength);
+            case PLANE_FACING -> new Cube(cubeFilling, (PlaneFacing) feature, planeLength);
+            case PLANE_LENGTH -> new Cube(cubeFilling, planeFacing, (PlaneLength) feature);
+            default -> this;
+        };
     }
 
     public static void addFullCubeBlocks(Set<BlockPosition> set, int x1, int x2, int y1, int y2, int z1, int z2) {

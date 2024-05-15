@@ -203,7 +203,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (!checkPermission(player)) {
             return;
         }
-
         updateContext(player, context -> context.withBuildStructure(buildStructure));
     }
 
@@ -231,7 +230,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         lastClientPlayerLevel.set(null);
         contexts.clear();
         undoRedoStacks.clear();
-        getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.transformerPresets(), false));
+        getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig()));
     }
 
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {

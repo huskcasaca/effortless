@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.config.TransformerPresets;
+import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 
@@ -32,8 +32,8 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractPanelScree
     public EffortlessTransformerPresetsSelectScreen(Entrance entrance, Consumer<Transformer> consumer) {
         super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.consumer = consumer;
-        this.builtInTransformers = TransformerPresets.getBuiltInPresets().getByType();
-        this.transformers = getEntrance().getConfigStorage().get().transformerPresets().getByType();
+        this.builtInTransformers = PatternConfig.getBuiltInPresets().getByType();
+        this.transformers = getEntrance().getConfigStorage().get().patternConfig().getByType();
     }
 
     @Override

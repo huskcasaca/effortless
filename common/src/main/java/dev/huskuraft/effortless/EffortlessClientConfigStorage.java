@@ -4,6 +4,7 @@ import dev.huskuraft.effortless.api.file.ConfigFileStorage;
 import dev.huskuraft.effortless.api.file.FileType;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.universal.ClientConfigConfigSerializer;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public final class EffortlessClientConfigStorage extends ConfigFileStorage<ClientConfig> {
 
@@ -11,6 +12,15 @@ public final class EffortlessClientConfigStorage extends ConfigFileStorage<Clien
 
     public EffortlessClientConfigStorage(EffortlessClient entrance) {
         super(CONFIG_NAME, FileType.TOML, new ClientConfigConfigSerializer());
+    }
+
+
+    public void setSelectedBuildStructure(BuildStructure buildStructure) {
+        set(get().withBuildStructure(buildStructure));
+    }
+
+    public BuildStructure getSelectedBuildStructure() {
+        return get().buildStructure();
     }
 
 }

@@ -9,7 +9,6 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
@@ -26,7 +25,7 @@ public class EffortlessRenderSettingsScreen extends AbstractPanelScreen {
         super(entrance, Text.translate("effortless.render_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-            getEntrance().getConfigStorage().update(config -> new ClientConfig(this.lastConfig, config.patternConfig(), config.transformerPresets(), config.passiveMode()));
+            getEntrance().getConfigStorage().update(config -> config.withRenderConfig(lastConfig));
         };
         this.lastConfig = getEntrance().getConfigStorage().get().renderConfig();
         this.originalConfig = lastConfig;

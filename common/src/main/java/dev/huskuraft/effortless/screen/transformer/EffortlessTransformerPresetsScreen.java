@@ -14,8 +14,7 @@ import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.config.ClientConfig;
-import dev.huskuraft.effortless.building.config.TransformerPresets;
+import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
@@ -43,12 +42,12 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
     public EffortlessTransformerPresetsScreen(Entrance entrance) {
         super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.applySettings = transformers -> {
-            getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), new TransformerPresets(transformers), config.passiveMode()));
+            getEntrance().getConfigStorage().update(config -> config.withPatternConfig(new PatternConfig(transformers)));
         };
-        this.builtInTransformers = TransformerPresets.getBuiltInPresets().getByType();
-        this.defaultConfig = getEntrance().getConfigStorage().get().transformerPresets().getByType();
-        this.originalConfig = getEntrance().getConfigStorage().get().transformerPresets().getByType();
-        this.config = getEntrance().getConfigStorage().get().transformerPresets().getByType();
+        this.builtInTransformers = PatternConfig.getBuiltInPresets().getByType();
+        this.defaultConfig = getEntrance().getConfigStorage().get().patternConfig().getByType();
+        this.originalConfig = getEntrance().getConfigStorage().get().patternConfig().getByType();
+        this.config = getEntrance().getConfigStorage().get().patternConfig().getByType();
     }
 
     @Override

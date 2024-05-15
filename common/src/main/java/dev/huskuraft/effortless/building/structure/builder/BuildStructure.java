@@ -1,7 +1,12 @@
 package dev.huskuraft.effortless.building.structure.builder;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,6 +31,8 @@ import dev.huskuraft.effortless.building.structure.builder.standard.Disable;
 public interface BuildStructure {
 
     BuildStructure DISABLED = new Disable();
+
+    Map<BuildMode, BuildStructure> DEFAULTS = Arrays.stream(BuildMode.values()).collect(Collectors.toMap(Function.identity(), BuildMode::getDefaultStructure, (e1, e2) -> e1, LinkedHashMap::new));
 
     int volume(Context context);
 
@@ -62,6 +69,11 @@ public interface BuildStructure {
     }
 
     @Deprecated
+    default PlaneLength planeLength() {
+        return null;
+    }
+
+    @Deprecated
     default RaisedEdge raisedEdge() {
         return null;
     }
@@ -72,41 +84,64 @@ public interface BuildStructure {
     }
 
     default Set<BuildFeature> getFeatures() {
-        return Stream.of(circleStart(), cubeFilling(), planeFilling(), planeFacing(), raisedEdge(), lineDirection()).filter(Objects::nonNull).collect(Collectors.toSet());
+        return Stream.of(circleStart(), cubeFilling(), planeFilling(), planeFacing(), planeLength(), raisedEdge(), lineDirection()).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
-    default BuildFeature getFeature(BuildFeatures buildFeatures) {
+    default BuildFeature getFeatureByType(BuildFeatures buildFeatures) {
         return getFeatures().stream().filter(f -> f.getType() == buildFeatures).findFirst().orElse(null);
     }
 
-    default BuildStructure withCircleStart(CircleStart circleStart) {
+    default BuildStructure withFeature(BuildFeature feature) {
         return this;
     }
 
-    default BuildStructure withCubeFilling(CubeFilling cubeFilling) {
-        return this;
+    default BuildStructure withFeatures(List<BuildFeature> features) {
+        var buildStructure = this;
+        for (var feature : features) {
+            buildStructure = buildStructure.withFeature(feature);
+        }
+        return buildStructure;
     }
 
-    default BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
-        return this;
-    }
 
-    default BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
-        return this;
-    }
-
-    default BuildStructure withRaisedEdge(RaisedEdge raisedEdge) {
-        return this;
-    }
-
-    default BuildStructure withLineDirection(LineDirection lineDirection) {
-        return this;
-    }
-
-    default BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return this;
-    }
-
-//    BuildStructure withFeature(BuildFeatures type, BuildFeature feature);
+//    default BuildStructure withCircleStart(CircleStart circleStart) {
+//        return this;
+//    }
+//
+//    default BuildStructure withCubeFilling(CubeFilling cubeFilling) {
+//        return this;
+//    }
+//
+//    default BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
+//        return this;
+//    }
+//
+//    default BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
+//        return this;
+//    }
+//
+//    default BuildStructure withRaisedEdge(RaisedEdge raisedEdge) {
+//        return this;
+//    }
+//
+//    default BuildStructure withLineDirection(LineDirection lineDirection) {
+//        return this;
+//    }
+//
+//    default BuildStructure withPlaneLength(PlaneLength planeLength) {
+//        return this;
+//    }
+//    default BuildStructure withFeature(BuildFeature feature) {
+//        return switch (feature.getType()) {
+//            case CIRCLE_START -> withCircleStart((CircleStart) feature);
+//            case CUBE_FILLING -> withCubeFilling((CubeFilling) feature);
+//            case CUBE_LENGTH -> this;
+//            case PLANE_FACING -> withPlaneFacing((PlaneFacing) feature);
+//            case PLANE_FILLING -> withPlaneFilling((PlaneFilling) feature);
+//            case PLANE_LENGTH -> withPlaneLength((PlaneLength) feature);
+//            case LINE_DIRECTION -> withLineDirection((LineDirection) feature);
+//            case RAISED_EDGE -> withRaisedEdge((RaisedEdge) feature);
+//        };
+//    }
 
 }

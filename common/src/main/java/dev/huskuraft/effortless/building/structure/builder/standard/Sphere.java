@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
@@ -20,33 +21,23 @@ import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record Sphere(
         CircleStart circleStart,
-        PlaneFilling planeFilling,
-        PlaneFacing planeFacing,
+        PlaneFacing planeFacing, PlaneFilling planeFilling,
         PlaneLength planeLength
 ) implements BlockBuildStructure {
 
     public Sphere() {
-        this(CircleStart.CIRCLE_START_CORNER, PlaneFilling.PLANE_FULL, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+        this(CircleStart.CIRCLE_START_CORNER, PlaneFacing.BOTH, PlaneFilling.PLANE_FULL, PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withCircleStart(CircleStart circleStart) {
-        return new Sphere(circleStart, planeFilling, planeFacing, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
-        return new Sphere(circleStart, planeFilling, planeFacing, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
-        return new Sphere(circleStart, planeFilling, planeFacing, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new Sphere(circleStart, planeFilling, planeFacing, planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case CIRCLE_START -> new Sphere((CircleStart) feature, planeFacing, planeFilling, planeLength);
+            case PLANE_FACING -> new Sphere(circleStart, (PlaneFacing) feature, planeFilling, planeLength);
+            case PLANE_FILLING -> new Sphere(circleStart, planeFacing, (PlaneFilling) feature, planeLength);
+            case PLANE_LENGTH -> new Sphere(circleStart, planeFacing, planeFilling, (PlaneLength) feature);
+            default -> this;
+        };
     }
 
     public static boolean isPosInSphere(float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, int x, int y, int z, boolean fill) {

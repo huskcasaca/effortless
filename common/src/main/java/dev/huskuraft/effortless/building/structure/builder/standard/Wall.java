@@ -13,6 +13,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
@@ -29,13 +30,12 @@ public record Wall(
     }
 
     @Override
-    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
-        return new Wall(planeFilling, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new Wall(planeFilling, planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case PLANE_FILLING -> new Wall((PlaneFilling) feature, planeLength);
+            case PLANE_LENGTH -> new Wall(planeFilling, (PlaneLength) feature);
+            default -> this;
+        };
     }
 
     protected static BlockInteraction traceWall(Player player, Context context, PlaneLength planeLength) {

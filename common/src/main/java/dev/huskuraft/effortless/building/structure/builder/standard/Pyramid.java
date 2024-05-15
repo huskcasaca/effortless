@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
@@ -25,13 +26,12 @@ public record Pyramid(
     }
 
     @Override
-    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
-        return new Pyramid(planeFilling, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new Pyramid(planeFilling, planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case PLANE_FILLING -> new Pyramid((PlaneFilling) feature, planeLength);
+            case PLANE_LENGTH -> new Pyramid(planeFilling, (PlaneLength) feature);
+            default -> this;
+        };
     }
 
     protected static Stream<BlockPosition> collectPyramidBlocks(Context context) {

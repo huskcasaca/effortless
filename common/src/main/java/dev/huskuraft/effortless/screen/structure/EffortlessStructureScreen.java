@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.screen.structure;
 import java.util.Arrays;
 
 import dev.huskuraft.effortless.EffortlessClient;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
@@ -14,12 +15,12 @@ import dev.huskuraft.effortless.building.pattern.Patterns;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
-import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
 import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
-public class EffortlessStructureScreen extends AbstractWheelScreen<BuildMode, Option> {
+public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructure, Option> {
 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO, false);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
@@ -70,18 +71,22 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildMode, Op
         this.assignedKey = assignedKey;
     }
 
-    public static Slot<BuildMode> slot(BuildMode mode) {
+    public static Slot<BuildStructure> slot(BuildStructure buildStructure) {
         return slot(
-                mode,
-                mode.getDisplayName(),
-                mode.getIcon(),
-                mode.getTintColor(),
-                mode);
+                buildStructure.getMode(),
+                buildStructure.getMode().getDisplayName(),
+                buildStructure.getMode().getIcon(),
+                buildStructure.getMode().getTintColor(),
+                buildStructure);
     }
 
     @Override
     protected EffortlessClient getEntrance() {
-        return (EffortlessClient) super.getEntrance();
+        return super.getEntrance();
+    }
+
+    protected Player getPlayer() {
+        return getEntrance().getClient().getPlayer();
     }
 
     public Key getAssignedKey() {
@@ -101,11 +106,9 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildMode, Op
     public void onCreate() {
         super.onCreate();
 
-        setRadialSlots(
-                Arrays.stream(BuildMode.values()).map(EffortlessStructureScreen::slot).toList()
-        );
         setRadialSelectResponder(slot -> {
-            getEntrance().getStructureBuilder().setBuildMode(getEntrance().getClient().getPlayer(), slot.getContent());
+            getEntrance().getConfigStorage().setSelectedBuildStructure(slot.getContent());
+            getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), slot.getContent());
         });
         setRadialOptionSelectResponder(entry -> {
             if (entry.getContent() instanceof Settings settings) {
@@ -129,16 +132,16 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildMode, Op
             if (entry.getContent() instanceof UndoRedo undoRedo) {
                 switch (undoRedo) {
                     case UNDO -> {
-                        getEntrance().getStructureBuilder().undo(getEntrance().getClient().getPlayer());
+                        getEntrance().getStructureBuilder().undo(getPlayer());
                     }
                     case REDO -> {
-                        getEntrance().getStructureBuilder().redo(getEntrance().getClient().getPlayer());
+                        getEntrance().getStructureBuilder().redo(getPlayer());
                     }
                 }
                 return;
             }
             if (entry.getContent() instanceof ReplaceMode replaceMode) {
-                getEntrance().getStructureBuilder().setReplaceMode(getEntrance().getClient().getPlayer(), replaceMode.next());
+                getEntrance().getStructureBuilder().setReplaceMode(getPlayer(), replaceMode.next());
                 return;
             }
             if (entry.getContent() instanceof PassiveMode passiveMode) {
@@ -146,8 +149,9 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildMode, Op
                 return;
             }
             if (entry.getContent() instanceof BuildFeature buildFeature) {
-
-//                getEntrance().getStructureBuilder().setBuildStructure(getEntrance().getClient().getPlayer(), buildFeature);
+                var buildStructure = getEntrance().getConfigStorage().getSelectedBuildStructure().withFeature(buildFeature);
+                getEntrance().getConfigStorage().setSelectedBuildStructure(buildStructure);
+                getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), buildStructure);
                 return;
             }
         });
@@ -155,15 +159,18 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildMode, Op
 
     @Override
     public void onReload() {
-        var context = getEntrance().getStructureBuilder().getContext(getEntrance().getClient().getPlayer());
 
-        setSelectedSlots(slot(context.buildMode()));
+        setRadialSlots(getEntrance().getConfigStorage().get().buildStructures().values().stream().map(EffortlessStructureScreen::slot).toList());
+
+        var buildStructure = getEntrance().getConfigStorage().get().buildStructure();
+//        var buildStructure = getEntrance().getStructureBuilder().getContext(getPlayer()).buildStructure();
+        setSelectedSlots(slot(buildStructure));
         setLeftButtons(
                 buttonSet(REPLACE_OPTION, REDO_OPTION, UNDO_OPTION),
                 buttonSet(PASSIVE_MODE_OPTION, PATTERN_OPTION, SETTING_OPTION)
         );
         setRightButtons(
-                Arrays.stream(context.buildMode().getSupportedFeatures()).map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, context.buildFeatures().contains(option))).toList())).toList()
+                buildStructure.getSupportedFeatures().stream().map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, buildStructure.getFeatures().contains(option))).toList())).toList()
         );
     }
 

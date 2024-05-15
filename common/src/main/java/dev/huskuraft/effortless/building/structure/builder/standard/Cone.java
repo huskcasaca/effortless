@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
@@ -26,13 +27,12 @@ public record Cone(
     }
 
     @Override
-    public BuildStructure withCircleStart(CircleStart circleStart) {
-        return new Cone(circleStart, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new Cone(circleStart, planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case CIRCLE_START -> new Cone((CircleStart) feature, planeLength);
+            case PLANE_LENGTH -> new Cone(circleStart, (PlaneLength) feature);
+            default -> this;
+        };
     }
 
     protected static Stream<BlockPosition> collectConeBlocks(Context context) {

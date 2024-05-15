@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
@@ -19,22 +20,20 @@ import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record SlopeFloor(
-    RaisedEdge raisedEdge,
-    PlaneLength planeLength
+        PlaneLength planeLength, RaisedEdge raisedEdge
 ) implements BlockBuildStructure {
 
     public SlopeFloor() {
-        this(RaisedEdge.RAISE_SHORT_EDGE, PlaneLength.VARIABLE);
+        this(PlaneLength.VARIABLE, RaisedEdge.RAISE_SHORT_EDGE);
     }
 
     @Override
-    public BuildStructure withRaisedEdge(RaisedEdge raisedEdge) {
-        return new SlopeFloor(raisedEdge, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new SlopeFloor(raisedEdge, planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case PLANE_LENGTH -> new SlopeFloor((PlaneLength) feature, raisedEdge);
+            case RAISED_EDGE -> new SlopeFloor(planeLength, (RaisedEdge) feature);
+            default -> this;
+        };
     }
 
     public static Stream<BlockPosition> collectSlopeFloorBlocks(Context context, RaisedEdge raisedEdge) {

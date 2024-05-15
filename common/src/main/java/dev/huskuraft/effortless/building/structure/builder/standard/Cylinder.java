@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
@@ -29,23 +30,14 @@ public record Cylinder(
     }
 
     @Override
-    public BuildStructure withCircleStart(CircleStart circleStart) {
-        return new Cylinder(circleStart, planeFilling, planeFacing, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
-        return new Cylinder(circleStart, planeFilling, planeFacing, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
-        return new Cylinder(circleStart, planeFilling, planeFacing, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new Cylinder(circleStart, planeFilling, planeFacing, planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case CIRCLE_START -> new Cylinder((CircleStart) feature, planeFilling, planeFacing, planeLength);
+            case PLANE_FILLING -> new Cylinder(circleStart, (PlaneFilling) feature, planeFacing, planeLength);
+            case PLANE_FACING -> new Cylinder(circleStart, planeFilling, (PlaneFacing) feature, planeLength);
+            case PLANE_LENGTH -> new Cylinder(circleStart, planeFilling, planeFacing, (PlaneLength) feature);
+            default -> this;
+        };
     }
 
     public static Stream<BlockPosition> collectCylinderBlocks(Context context,

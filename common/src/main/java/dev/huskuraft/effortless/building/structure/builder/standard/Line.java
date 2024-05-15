@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.LineDirection;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
@@ -26,8 +27,11 @@ public record Line(
     }
 
     @Override
-    public BuildStructure withLineDirection(LineDirection lineDirection) {
-        return new Line(lineDirection);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case LINE_DIRECTION -> new Line((LineDirection) feature);
+            default -> this;
+        };
     }
 
     public static BlockInteraction traceLineOnPlane(Player player, Context context, PlaneFacing planeFacing) {

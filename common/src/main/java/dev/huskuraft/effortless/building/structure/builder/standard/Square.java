@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
@@ -29,18 +30,13 @@ public record Square(
     }
 
     @Override
-    public BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
-        return new Square(planeFacing, planeFilling, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
-        return new Square(planeFacing, planeFilling, planeLength);
-    }
-
-    @Override
-    public BuildStructure withPlaneLength(PlaneLength planeLength) {
-        return new Square(planeFacing, planeFilling, planeLength);
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case PLANE_FACING -> new Square((PlaneFacing) feature, planeFilling, planeLength);
+            case PLANE_FILLING -> new Square(planeFacing, (PlaneFilling) feature, planeLength);
+            case PLANE_LENGTH -> new Square(planeFacing, planeFilling, (PlaneLength) feature);
+            default -> this;
+        };
     }
 
     public static void addFullSquareBlocksX(Set<BlockPosition> set, int x, int y1, int y2, int z1, int z2) {

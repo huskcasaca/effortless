@@ -13,7 +13,6 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
-import dev.huskuraft.effortless.building.config.TransformerPresets;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
@@ -50,9 +49,7 @@ public class EffortlessTestScreen extends AbstractPanelScreen {
                 getEntrance().getConfigStorage().set(
                         new ClientConfig(
                                 new RenderConfig(),
-                                new PatternConfig(),
-                                new TransformerPresets(),
-                                false
+                                new PatternConfig()
                         )
                 );
             }));
