@@ -14,6 +14,7 @@ import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record Cone(
         CircleStart circleStart,
@@ -22,6 +23,16 @@ public record Cone(
 
     public Cone() {
         this(CircleStart.CIRCLE_START_CORNER, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withCircleStart(CircleStart circleStart) {
+        return new Cone(circleStart, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneLength(PlaneLength planeLength) {
+        return new Cone(circleStart, planeLength);
     }
 
     protected static Stream<BlockPosition> collectConeBlocks(Context context) {

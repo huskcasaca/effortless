@@ -14,6 +14,7 @@ import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record Floor(
         PlaneFilling planeFilling,
@@ -22,6 +23,16 @@ public record Floor(
 
     public Floor() {
         this(PlaneFilling.PLANE_FULL, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
+        return new Floor(planeFilling, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneLength(PlaneLength planeLength) {
+        return new Floor(planeFilling, planeLength);
     }
 
     protected static BlockInteraction traceFloor(Player player, Context context, PlaneLength planeLength) {

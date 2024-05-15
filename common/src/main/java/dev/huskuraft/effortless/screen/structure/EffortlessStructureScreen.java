@@ -146,7 +146,8 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildMode, Op
                 return;
             }
             if (entry.getContent() instanceof BuildFeature buildFeature) {
-                getEntrance().getStructureBuilder().setBuildStructure(getEntrance().getClient().getPlayer(), buildFeature);
+
+//                getEntrance().getStructureBuilder().setBuildStructure(getEntrance().getClient().getPlayer(), buildFeature);
                 return;
             }
         });

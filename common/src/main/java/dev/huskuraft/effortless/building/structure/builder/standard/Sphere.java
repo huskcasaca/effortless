@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record Sphere(
         CircleStart circleStart,
@@ -26,6 +27,26 @@ public record Sphere(
 
     public Sphere() {
         this(CircleStart.CIRCLE_START_CORNER, PlaneFilling.PLANE_FULL, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withCircleStart(CircleStart circleStart) {
+        return new Sphere(circleStart, planeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
+        return new Sphere(circleStart, planeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
+        return new Sphere(circleStart, planeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneLength(PlaneLength planeLength) {
+        return new Sphere(circleStart, planeFilling, planeFacing, planeLength);
     }
 
     public static boolean isPosInSphere(float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, int x, int y, int z, boolean fill) {

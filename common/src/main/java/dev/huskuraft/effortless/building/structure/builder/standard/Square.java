@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record Square(
         PlaneFacing planeFacing,
@@ -25,6 +26,21 @@ public record Square(
 
     public Square() {
         this(PlaneFacing.BOTH, PlaneFilling.PLANE_FULL, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
+        return new Square(planeFacing, planeFilling, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
+        return new Square(planeFacing, planeFilling, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneLength(PlaneLength planeLength) {
+        return new Square(planeFacing, planeFilling, planeLength);
     }
 
     public static void addFullSquareBlocksX(Set<BlockPosition> set, int x, int y1, int y2, int z1, int z2) {

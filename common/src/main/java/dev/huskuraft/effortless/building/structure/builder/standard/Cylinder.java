@@ -15,6 +15,7 @@ import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record Cylinder(
         CircleStart circleStart,
@@ -25,6 +26,26 @@ public record Cylinder(
 
     public Cylinder() {
         this(CircleStart.CIRCLE_START_CORNER, PlaneFilling.PLANE_FULL, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withCircleStart(CircleStart circleStart) {
+        return new Cylinder(circleStart, planeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
+        return new Cylinder(circleStart, planeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
+        return new Cylinder(circleStart, planeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneLength(PlaneLength planeLength) {
+        return new Cylinder(circleStart, planeFilling, planeFacing, planeLength);
     }
 
     public static Stream<BlockPosition> collectCylinderBlocks(Context context,

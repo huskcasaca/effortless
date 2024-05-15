@@ -19,6 +19,7 @@ import dev.huskuraft.effortless.building.structure.CubeFilling;
 import dev.huskuraft.effortless.building.structure.LineDirection;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
 import dev.huskuraft.effortless.building.structure.builder.standard.Disable;
 
@@ -40,26 +41,32 @@ public interface BuildStructure {
         return Sets.newHashSet(getMode().getSupportedFeatures());
     }
 
+    @Deprecated
     default CircleStart circleStart() {
         return null;
     }
 
+    @Deprecated
     default CubeFilling cubeFilling() {
         return null;
     }
 
+    @Deprecated
     default PlaneFilling planeFilling() {
         return null;
     }
 
+    @Deprecated
     default PlaneFacing planeFacing() {
         return null;
     }
 
+    @Deprecated
     default RaisedEdge raisedEdge() {
         return null;
     }
 
+    @Deprecated
     default LineDirection lineDirection() {
         return null;
     }
@@ -67,5 +74,39 @@ public interface BuildStructure {
     default Set<BuildFeature> getFeatures() {
         return Stream.of(circleStart(), cubeFilling(), planeFilling(), planeFacing(), raisedEdge(), lineDirection()).filter(Objects::nonNull).collect(Collectors.toSet());
     }
+
+    default BuildFeature getFeature(BuildFeatures buildFeatures) {
+        return getFeatures().stream().filter(f -> f.getType() == buildFeatures).findFirst().orElse(null);
+    }
+
+    default BuildStructure withCircleStart(CircleStart circleStart) {
+        return this;
+    }
+
+    default BuildStructure withCubeFilling(CubeFilling cubeFilling) {
+        return this;
+    }
+
+    default BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
+        return this;
+    }
+
+    default BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
+        return this;
+    }
+
+    default BuildStructure withRaisedEdge(RaisedEdge raisedEdge) {
+        return this;
+    }
+
+    default BuildStructure withLineDirection(LineDirection lineDirection) {
+        return this;
+    }
+
+    default BuildStructure withPlaneLength(PlaneLength planeLength) {
+        return this;
+    }
+
+//    BuildStructure withFeature(BuildFeatures type, BuildFeature feature);
 
 }

@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record Circle(
         CircleStart circleStart,
@@ -26,6 +27,26 @@ public record Circle(
 
     public Circle() {
         this(CircleStart.CIRCLE_START_CORNER, PlaneFilling.PLANE_FULL, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withCircleStart(CircleStart circleStart) {
+        return new Circle(circleStart, planeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
+        return new Circle(circleStart, planeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
+        return new Circle(circleStart, planeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneLength(PlaneLength planeLength) {
+        return new Circle(circleStart, planeFilling, planeFacing, planeLength);
     }
 
     public static boolean isPosInCircle(float centerX, float centerY, float radiusX, float radiusY, int x, int y, boolean fill) {
@@ -139,7 +160,6 @@ public record Circle(
         };
     }
 
-
     @Override
     public int traceSize(Context context) {
         return 2;
@@ -149,4 +169,5 @@ public record Circle(
     public BuildMode getMode() {
         return BuildMode.CIRCLE;
     }
+
 }

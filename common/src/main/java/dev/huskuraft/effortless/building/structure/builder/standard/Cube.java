@@ -14,6 +14,7 @@ import dev.huskuraft.effortless.building.structure.CubeFilling;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record Cube(
         CubeFilling cubeFilling,
@@ -23,6 +24,21 @@ public record Cube(
 
     public Cube() {
         this(CubeFilling.CUBE_FULL, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withCubeFilling(CubeFilling cubeFilling) {
+        return new Cube(cubeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
+        return new Cube(cubeFilling, planeFacing, planeLength);
+    }
+
+    @Override
+    public BuildStructure withPlaneLength(PlaneLength planeLength) {
+        return new Cube(cubeFilling, planeFacing, planeLength);
     }
 
     public static void addFullCubeBlocks(Set<BlockPosition> set, int x1, int x2, int y1, int y2, int z1, int z2) {

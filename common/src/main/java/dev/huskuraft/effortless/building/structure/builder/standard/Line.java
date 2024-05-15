@@ -15,6 +15,7 @@ import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.LineDirection;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public record Line(
         LineDirection lineDirection
@@ -22,6 +23,11 @@ public record Line(
 
     public Line() {
         this(LineDirection.ALL);
+    }
+
+    @Override
+    public BuildStructure withLineDirection(LineDirection lineDirection) {
+        return new Line(lineDirection);
     }
 
     public static BlockInteraction traceLineOnPlane(Player player, Context context, PlaneFacing planeFacing) {
