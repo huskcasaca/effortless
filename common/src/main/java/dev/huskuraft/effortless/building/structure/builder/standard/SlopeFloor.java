@@ -119,7 +119,7 @@ public record SlopeFloor(
     public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Floor.collectFloorBlocks(context, PlaneFilling.PLANE_FULL);
+            case 2 -> Floor.collectFloorBlocks(context, PlaneFilling.FILLED);
             case 3 -> SlopeFloor.collectSlopeFloorBlocks(context, raisedEdge);
             default -> Stream.empty();
         };

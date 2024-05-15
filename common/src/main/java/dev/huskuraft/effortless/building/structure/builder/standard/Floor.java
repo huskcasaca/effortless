@@ -23,7 +23,7 @@ public record Floor(
 ) implements BlockBuildStructure {
 
     public Floor() {
-        this(PlaneFilling.PLANE_FULL, PlaneLength.VARIABLE);
+        this(PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override
@@ -73,8 +73,8 @@ public record Floor(
             case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_Y -> {
                 switch (planeFilling) {
-                    case PLANE_FULL -> Square.addFullSquareBlocksY(set, x1, x2, y1, z1, z2);
-                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksY(set, x1, x2, y1, z1, z2);
+                    case FILLED -> Square.addFullSquareBlocksY(set, x1, x2, y1, z1, z2);
+                    case HOLLOW -> Square.addHollowSquareBlocksY(set, x1, x2, y1, z1, z2);
                 }
             }
         }

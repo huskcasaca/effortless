@@ -22,7 +22,7 @@ public record Pyramid(
 ) implements BlockBuildStructure {
 
     public Pyramid() {
-        this(PlaneFilling.PLANE_FULL, PlaneLength.VARIABLE);
+        this(PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override

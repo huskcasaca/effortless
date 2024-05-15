@@ -26,7 +26,7 @@ public record Sphere(
 ) implements BlockBuildStructure {
 
     public Sphere() {
-        this(CircleStart.CIRCLE_START_CORNER, PlaneFacing.BOTH, PlaneFilling.PLANE_FULL, PlaneLength.VARIABLE);
+        this(CircleStart.CIRCLE_START_CORNER, PlaneFacing.BOTH, PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override
@@ -77,7 +77,7 @@ public record Sphere(
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var isCenter = circleStart == CircleStart.CIRCLE_START_CENTER;
-        var isFull = planeFilling == PlaneFilling.PLANE_FULL;
+        var isFull = planeFilling == PlaneFilling.FILLED;
 
         var pos1 = context.getPosition(0);
         var pos2 = context.getPosition(1);

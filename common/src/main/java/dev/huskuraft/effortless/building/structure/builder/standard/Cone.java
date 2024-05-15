@@ -98,7 +98,7 @@ public record Cone(
     public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Circle.collectCircleBlocks(context, circleStart, PlaneFilling.PLANE_FULL);
+            case 2 -> Circle.collectCircleBlocks(context, circleStart, PlaneFilling.FILLED);
             case 3 -> Cone.collectConeBlocks(context);
             default -> Stream.empty();
         };

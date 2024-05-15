@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.building.structure;
 
 public enum PlaneFilling implements BuildFeature {
-    PLANE_FULL("plane_full"),
-    PLANE_HOLLOW("plane_hollow");
+    FILLED("plane_filled"),
+    HOLLOW("plane_hollow");
 
     private final String name;
 

@@ -26,7 +26,7 @@ public record Wall(
 ) implements BlockBuildStructure {
 
     public Wall() {
-        this(PlaneFilling.PLANE_FULL, PlaneLength.VARIABLE);
+        this(PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override
@@ -82,14 +82,14 @@ public record Wall(
             case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_Z -> {
                 switch (planeFilling) {
-                    case PLANE_FULL -> Square.addFullSquareBlocksZ(set, x1, x2, y1, y2, z1);
-                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksZ(set, x1, x2, y1, y2, z1);
+                    case FILLED -> Square.addFullSquareBlocksZ(set, x1, x2, y1, y2, z1);
+                    case HOLLOW -> Square.addHollowSquareBlocksZ(set, x1, x2, y1, y2, z1);
                 }
             }
             case PLANE_X -> {
                 switch (planeFilling) {
-                    case PLANE_FULL -> Square.addFullSquareBlocksX(set, x1, y1, y2, z1, z2);
-                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksX(set, x1, y1, y2, z1, z2);
+                    case FILLED -> Square.addFullSquareBlocksX(set, x1, y1, y2, z1, z2);
+                    case HOLLOW -> Square.addHollowSquareBlocksX(set, x1, y1, y2, z1, z2);
                 }
             }
         }
