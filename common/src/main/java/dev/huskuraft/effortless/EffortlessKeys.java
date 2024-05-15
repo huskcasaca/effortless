@@ -7,8 +7,8 @@ import dev.huskuraft.effortless.api.input.KeyCodes;
 public enum EffortlessKeys implements Key {
 
     SETTINGS("settings", KeyCodes.KEY_UNKNOWN),
-    BUILD_MODE_SETTINGS("build_mode_settings", KeyCodes.KEY_UNKNOWN),
-    PATTERN_SETTINGS("pattern_settings", KeyCodes.KEY_UNKNOWN),
+//    BUILD_MODE_SETTINGS("build_mode_settings", KeyCodes.KEY_UNKNOWN),
+//    PATTERN_SETTINGS("pattern_settings", KeyCodes.KEY_UNKNOWN),
 
     BUILD_MODE_RADIAL("build_mode_radial", KeyCodes.KEY_LEFT_ALT),
 
