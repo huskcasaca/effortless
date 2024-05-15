@@ -10,9 +10,17 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 
-public class DiagonalWall extends AbstractBlockStructure {
+public record DiagonalWall(
+        PlaneLength planeLength
+) implements BlockBuildStructure {
+
+    public DiagonalWall() {
+        this(PlaneLength.EQUAL);
+    }
 
     // add diagonal wall from first to second
     public static Stream<BlockPosition> collectDiagonalWallBlocks(Context context) {
@@ -50,16 +58,16 @@ public class DiagonalWall extends AbstractBlockStructure {
         return set.stream();
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> Floor.traceFloor(player, context);
+            case 1 -> Floor.traceFloor(player, context, planeLength);
             case 2 -> Line.traceLineY(player, context.getPosition(1));
             default -> null;
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
             case 2 -> DiagonalLine.collectDiagonalLine(context);
@@ -72,5 +80,10 @@ public class DiagonalWall extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 3;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.DIAGONAL_WALL;
     }
 }

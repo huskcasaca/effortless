@@ -11,11 +11,22 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.PlaneFilling;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
+import dev.huskuraft.effortless.building.structure.RaisedEdge;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 
-public class SlopeFloor extends AbstractBlockStructure {
+public record SlopeFloor(
+    RaisedEdge raisedEdge,
+    PlaneLength planeLength
+) implements BlockBuildStructure {
 
-    public static Stream<BlockPosition> collectSlopeFloorBlocks(Context context) {
+    public SlopeFloor() {
+        this(RaisedEdge.RAISE_SHORT_EDGE, PlaneLength.VARIABLE);
+    }
+
+    public static Stream<BlockPosition> collectSlopeFloorBlocks(Context context, RaisedEdge raisedEdge) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
@@ -39,7 +50,7 @@ public class SlopeFloor extends AbstractBlockStructure {
         var xLength = MathUtils.abs(x2 - x1);
         var zLength = MathUtils.abs(z2 - z1);
 
-        var axis = switch (context.raisedEdge()) {
+        var axis = switch (raisedEdge) {
             case RAISE_SHORT_EDGE -> {
                 if (zLength > xLength) {
                     yield Axis.Z;
@@ -86,20 +97,20 @@ public class SlopeFloor extends AbstractBlockStructure {
         return set.stream();
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> Floor.traceFloor(player, context);
+            case 1 -> Floor.traceFloor(player, context, planeLength);
             case 2 -> Line.traceLineY(player, context.getPosition(1));
             default -> null;
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Floor.collectFloorBlocks(context);
-            case 3 -> SlopeFloor.collectSlopeFloorBlocks(context);
+            case 2 -> Floor.collectFloorBlocks(context, PlaneFilling.PLANE_FULL);
+            case 3 -> SlopeFloor.collectSlopeFloorBlocks(context, raisedEdge);
             default -> Stream.empty();
         };
     }
@@ -107,5 +118,10 @@ public class SlopeFloor extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 3;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.SLOPE_FLOOR;
     }
 }

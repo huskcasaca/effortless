@@ -9,9 +9,20 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.CircleStart;
+import dev.huskuraft.effortless.building.structure.PlaneFilling;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 
-public class Cone extends AbstractBlockStructure {
+public record Cone(
+        CircleStart circleStart,
+        PlaneLength planeLength
+) implements BlockBuildStructure {
+
+    public Cone() {
+        this(CircleStart.CIRCLE_START_CORNER, PlaneLength.VARIABLE);
+    }
 
     protected static Stream<BlockPosition> collectConeBlocks(Context context) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
@@ -64,19 +75,19 @@ public class Cone extends AbstractBlockStructure {
         return set.stream();
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> Floor.traceFloor(player, context);
+            case 1 -> Floor.traceFloor(player, context, planeLength);
             case 2 -> Line.traceLineY(player, context.getPosition(1));
             default -> null;
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Circle.collectCircleBlocks(context);
+            case 2 -> Circle.collectCircleBlocks(context, circleStart, PlaneFilling.PLANE_FULL);
             case 3 -> Cone.collectConeBlocks(context);
             default -> Stream.empty();
         };
@@ -86,5 +97,10 @@ public class Cone extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 3;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.CONE;
     }
 }

@@ -7,21 +7,19 @@ import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.Feature;
-import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.Option;
-import dev.huskuraft.effortless.building.SingleSelectFeature;
-import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PassiveMode;
 import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.pattern.Patterns;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
 import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
-public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMode, Option> {
+public class EffortlessStructureScreen extends AbstractWheelScreen<BuildMode, Option> {
 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO, false);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
@@ -67,7 +65,7 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
 
     private final Key assignedKey;
 
-    public EffortlessBuildModeWheelScreen(Entrance entrance, Key assignedKey) {
+    public EffortlessStructureScreen(Entrance entrance, Key assignedKey) {
         super(entrance, Text.translate("effortless.building.radial.title"));
         this.assignedKey = assignedKey;
     }
@@ -104,7 +102,7 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
         super.onCreate();
 
         setRadialSlots(
-                Arrays.stream(BuildMode.values()).map(EffortlessBuildModeWheelScreen::slot).toList()
+                Arrays.stream(BuildMode.values()).map(EffortlessStructureScreen::slot).toList()
         );
         setRadialSelectResponder(slot -> {
             getEntrance().getStructureBuilder().setBuildMode(getEntrance().getClient().getPlayer(), slot.getContent());
@@ -140,19 +138,15 @@ public class EffortlessBuildModeWheelScreen extends AbstractWheelScreen<BuildMod
                 return;
             }
             if (entry.getContent() instanceof ReplaceMode replaceMode) {
-                getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), replaceMode.next());
+                getEntrance().getStructureBuilder().setReplaceMode(getEntrance().getClient().getPlayer(), replaceMode.next());
                 return;
             }
             if (entry.getContent() instanceof PassiveMode passiveMode) {
-                getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig(), config.transformerPresets(), passiveMode != PassiveMode.ENABLED));
+                getEntrance().getConfigStorage().update(config -> config.withPassiveMode(passiveMode != PassiveMode.ENABLED));
                 return;
             }
-            if (entry.getContent() instanceof SingleSelectFeature singleSelectFeature) {
-                getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), singleSelectFeature);
-                return;
-            }
-            if (entry.getContent() instanceof MultiSelectFeature multiSelectFeature) {
-                getEntrance().getStructureBuilder().setBuildFeature(getEntrance().getClient().getPlayer(), multiSelectFeature);
+            if (entry.getContent() instanceof BuildFeature buildFeature) {
+                getEntrance().getStructureBuilder().setBuildStructure(getEntrance().getClient().getPlayer(), buildFeature);
                 return;
             }
         });

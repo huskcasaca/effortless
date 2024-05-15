@@ -25,7 +25,7 @@ import dev.huskuraft.effortless.renderer.pattern.PatternRenderer;
 import dev.huskuraft.effortless.renderer.tooltip.TooltipRenderer;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
-import dev.huskuraft.effortless.screen.structure.EffortlessBuildModeWheelScreen;
+import dev.huskuraft.effortless.screen.structure.EffortlessStructureScreen;
 import dev.huskuraft.effortless.screen.test.EffortlessTestScreen;
 
 public final class EffortlessClientManager implements ClientManager {
@@ -157,8 +157,8 @@ public final class EffortlessClientManager implements ClientManager {
         }
 
         if (EffortlessKeys.BUILD_MODE_RADIAL.getBinding().isDown()) {
-            if (!(getRunningClient().getPanel() instanceof EffortlessBuildModeWheelScreen)) {
-                new EffortlessBuildModeWheelScreen(getEntrance(), EffortlessKeys.BUILD_MODE_RADIAL).attach();
+            if (!(getRunningClient().getPanel() instanceof EffortlessStructureScreen)) {
+                new EffortlessStructureScreen(getEntrance(), EffortlessKeys.BUILD_MODE_RADIAL).attach();
             }
         }
         if (EffortlessKeys.BUILD_MODE_SETTINGS.getBinding().consumeClick()) {
@@ -177,7 +177,7 @@ public final class EffortlessClientManager implements ClientManager {
             new EffortlessSettingsScreen(getEntrance()).attach();
         }
         if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
-            getEntrance().getStructureBuilder().setBuildFeature(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());
+            getEntrance().getStructureBuilder().setReplaceMode(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());
         }
 
         if (Platform.getInstance().isDevelopment()) {
@@ -234,7 +234,7 @@ public final class EffortlessClientManager implements ClientManager {
     }
 
     public void onRenderGui(Renderer renderer, float deltaTick) {
-        if (getRunningClient().getPanel() != null && !(getRunningClient().getPanel() instanceof EffortlessBuildModeWheelScreen)) {
+        if (getRunningClient().getPanel() != null && !(getRunningClient().getPanel() instanceof EffortlessStructureScreen)) {
             return;
         }
 

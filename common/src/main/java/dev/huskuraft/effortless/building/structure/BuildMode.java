@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 import dev.huskuraft.effortless.building.structure.builder.standard.Circle;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cone;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cube;
@@ -27,7 +27,7 @@ public enum BuildMode {
     SINGLE("single", new Single(), Category.BASIC /*, BuildOption.BUILD_SPEED*/),
 
     LINE("line", new Line(), Category.SQUARE, BuildFeatures.LINE_DIRECTION /*, OptionEnum.THICKNESS*/),
-    //    SQUARE("square", new Square(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
+//    SQUARE("square", new Square(), Category.SQUARE, false, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_FACING),
     WALL("wall", new Wall(), Category.SQUARE, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_LENGTH),
     FLOOR("floor", new Floor(), Category.SQUARE, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_LENGTH),
     CUBE("cube", new Cube(), Category.SQUARE, BuildFeatures.CUBE_FILLING, BuildFeatures.PLANE_FACING, BuildFeatures.PLANE_LENGTH),
@@ -40,25 +40,35 @@ public enum BuildMode {
     CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeatures.CIRCLE_START, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_FACING, BuildFeatures.PLANE_LENGTH),
     SPHERE("sphere", new Sphere(), Category.CIRCULAR, BuildFeatures.CIRCLE_START, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_FACING, BuildFeatures.PLANE_LENGTH),
 
-    PYRAMID("pyramid", new Pyramid(), Category.ROOF),
-    CONE("cone", new Cone(), Category.ROOF),
+    PYRAMID("pyramid", new Pyramid(), Category.ROOF, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_LENGTH),
+    CONE("cone", new Cone(), Category.ROOF, BuildFeatures.CIRCLE_START),
     ;
 
 //    DOME("dome", new Dome(), Category.ROOF);
 
-    private final BlockStructure provider;
+    private final BuildStructure provider;
     private final Category category;
     private final BuildFeatures[] features;
     private final String name;
+    private final boolean enabled;
 
-    BuildMode(String name, BlockStructure instance, Category category, BuildFeatures... features) {
+    BuildMode(String name, BuildStructure instance, Category category, BuildFeatures... features) {
         this.name = name;
         this.provider = instance;
         this.category = category;
         this.features = features;
+        this.enabled = true;
     }
 
-    public BlockStructure getInstance() {
+    BuildMode(String name, BuildStructure instance, Category category, boolean enabled, BuildFeatures... features) {
+        this.name = name;
+        this.provider = instance;
+        this.category = category;
+        this.features = features;
+        this.enabled = enabled;
+    }
+
+    public BuildStructure getDefaultStructure() {
         return provider;
     }
 

@@ -10,11 +10,23 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CircleStart;
+import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 
-public class Sphere extends AbstractBlockStructure {
+public record Sphere(
+        CircleStart circleStart,
+        PlaneFilling planeFilling,
+        PlaneFacing planeFacing,
+        PlaneLength planeLength
+) implements BlockBuildStructure {
+
+    public Sphere() {
+        this(CircleStart.CIRCLE_START_CORNER, PlaneFilling.PLANE_FULL, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+    }
 
     public static boolean isPosInSphere(float centerX, float centerY, float centerZ, float radiusX, float radiusY, float radiusZ, int x, int y, int z, boolean fill) {
 
@@ -31,9 +43,9 @@ public class Sphere extends AbstractBlockStructure {
         var zn1 = (Math.abs(z - centerZ) + 1) / radiusZ;
 
         if (fill) {
-            return lengthSq(xn, yn, zn) < 1;
+            return BlockBuildStructure.lengthSq(xn, yn, zn) < 1;
         } else {
-            return lengthSq(xn, yn, zn) < 1 && !(lengthSq(xn1, yn, zn) <= 1 && lengthSq(xn, yn1, zn) <= 1 && lengthSq(xn, yn, zn1) <= 1);
+            return BlockBuildStructure.lengthSq(xn, yn, zn) < 1 && !(BlockBuildStructure.lengthSq(xn1, yn, zn) <= 1 && BlockBuildStructure.lengthSq(xn, yn1, zn) <= 1 && BlockBuildStructure.lengthSq(xn, yn, zn1) <= 1);
         }
 
     }
@@ -49,11 +61,11 @@ public class Sphere extends AbstractBlockStructure {
         }
     }
 
-    public static Stream<BlockPosition> collectSphereBlocks(Context context) {
+    public static Stream<BlockPosition> collectSphereBlocks(Context context, CircleStart circleStart, PlaneFilling planeFilling) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
-        var isCenter = context.circleStart() == CircleStart.CIRCLE_START_CENTER;
-        var isFull = context.planeFilling() == PlaneFilling.PLANE_FULL;
+        var isCenter = circleStart == CircleStart.CIRCLE_START_CENTER;
+        var isFull = planeFilling == PlaneFilling.PLANE_FULL;
 
         var pos1 = context.getPosition(0);
         var pos2 = context.getPosition(1);
@@ -99,15 +111,15 @@ public class Sphere extends AbstractBlockStructure {
         return set.stream();
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> switch (context.planeFacing()) {
-                case BOTH -> Square.traceSquare(player, context);
-                case VERTICAL -> Wall.traceWall(player, context);
-                case HORIZONTAL -> Floor.traceFloor(player, context);
+            case 1 -> switch (planeFacing()) {
+                case BOTH -> Square.traceSquare(player, context, planeFacing, planeLength);
+                case VERTICAL -> Wall.traceWall(player, context, planeLength);
+                case HORIZONTAL -> Floor.traceFloor(player, context, planeLength);
             };
-            case 2 -> switch (context.planeFacing()) {
+            case 2 -> switch (planeFacing()) {
                 case BOTH -> Line.traceLineOnPlane(player, context.getPosition(0), context.getPosition(1));
                 case VERTICAL -> Line.traceLineOnVerticalPlane(player, context.getPosition(0), context.getPosition(1));
                 case HORIZONTAL -> Line.traceLineOnHorizontalPlane(player, context.getPosition(0), context.getPosition(1));
@@ -116,11 +128,11 @@ public class Sphere extends AbstractBlockStructure {
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Circle.collectCircleBlocks(context);
-            case 3 -> Sphere.collectSphereBlocks(context);
+            case 2 -> Circle.collectCircleBlocks(context, circleStart, planeFilling);
+            case 3 -> Sphere.collectSphereBlocks(context, circleStart, planeFilling);
             default -> Stream.empty();
         };
     }
@@ -128,5 +140,10 @@ public class Sphere extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 3;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.SPHERE;
     }
 }

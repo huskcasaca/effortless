@@ -7,14 +7,6 @@ import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
-import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.building.structure.CircleStart;
-import dev.huskuraft.effortless.building.structure.CubeFilling;
-import dev.huskuraft.effortless.building.structure.LineDirection;
-import dev.huskuraft.effortless.building.structure.PlaneFacing;
-import dev.huskuraft.effortless.building.structure.PlaneFilling;
-import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.RaisedEdge;
 
 public class ContextSerializer implements NetByteBufSerializer<Context> {
 
@@ -28,15 +20,8 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                         byteBuf.readList(buffer1 -> buffer1.readNullable(new BlockInteractionSerializer()))
                 ),
                 new Context.StructureParams(
-                        byteBuf.readEnum(BuildMode.class),
-                        byteBuf.readEnum(CircleStart.class),
-                        byteBuf.readEnum(CubeFilling.class),
-                        byteBuf.readEnum(PlaneFilling.class),
-                        byteBuf.readEnum(PlaneFacing.class),
-                        byteBuf.readEnum(RaisedEdge.class),
-                        byteBuf.readEnum(ReplaceMode.class),
-                        byteBuf.readEnum(PlaneLength.class),
-                        byteBuf.readEnum(LineDirection.class)),
+                        byteBuf.read(new BuildStructureSerializer()),
+                        byteBuf.readEnum(ReplaceMode.class)),
                 new Context.PatternParams(
                         new Pattern(
                                 byteBuf.readUUID(),
@@ -58,15 +43,8 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.writeEnum(context.buildType());
         byteBuf.writeList(context.buildInteractions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
 
-        byteBuf.writeEnum(context.structureParams().buildMode());
-        byteBuf.writeEnum(context.structureParams().circleStart());
-        byteBuf.writeEnum(context.structureParams().cubeFilling());
-        byteBuf.writeEnum(context.structureParams().planeFilling());
-        byteBuf.writeEnum(context.structureParams().planeFacing());
-        byteBuf.writeEnum(context.structureParams().raisedEdge());
+        byteBuf.write(context.structureParams().buildStructure(), new BuildStructureSerializer());
         byteBuf.writeEnum(context.structureParams().replaceMode());
-        byteBuf.writeEnum(context.structureParams().planeLength());
-        byteBuf.writeEnum(context.structureParams().lineDirection());
 
         byteBuf.writeUUID(context.patternParams().pattern().id());
         byteBuf.writeBoolean(context.patternParams().pattern().enabled());

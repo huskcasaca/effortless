@@ -11,10 +11,21 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.PlaneFacing;
+import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 
-public class Square extends AbstractBlockStructure {
+public record Square(
+        PlaneFacing planeFacing,
+        PlaneFilling planeFilling,
+        PlaneLength planeLength
+) implements BlockBuildStructure {
+
+    public Square() {
+        this(PlaneFacing.BOTH, PlaneFilling.PLANE_FULL, PlaneLength.VARIABLE);
+    }
 
     public static void addFullSquareBlocksX(Set<BlockPosition> set, int x, int y1, int y2, int z1, int z2) {
         for (int z = z1; z1 < z2 ? z <= z2 : z >= z2; z += z1 < z2 ? 1 : -1) {
@@ -81,7 +92,7 @@ public class Square extends AbstractBlockStructure {
         }
     }
 
-    public static Stream<BlockPosition> collectSquareBlocks(Context context) {
+    public static Stream<BlockPosition> collectSquareBlocks(Context context, PlaneFilling planeFilling) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
@@ -94,23 +105,23 @@ public class Square extends AbstractBlockStructure {
         var y2 = pos2.y();
         var z2 = pos2.z();
 
-        switch (getShape(pos1, pos2)) {
+        switch (BlockBuildStructure.getShape(pos1, pos2)) {
             case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
             case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_X -> {
-                switch (context.planeFilling()) {
+                switch (planeFilling) {
                     case PLANE_FULL -> addFullSquareBlocksX(set, x1, y1, y2, z1, z2);
                     case PLANE_HOLLOW -> addHollowSquareBlocksX(set, x1, y1, y2, z1, z2);
                 };
             }
             case PLANE_Y -> {
-                switch (context.planeFilling()) {
+                switch (planeFilling) {
                     case PLANE_FULL -> addFullSquareBlocksY(set, x1, x2, y1, z1, z2);
                     case PLANE_HOLLOW -> addHollowSquareBlocksY(set, x1, x2, y1, z1, z2);
                 }
             }
             case PLANE_Z -> {
-                switch (context.planeFilling()) {
+                switch (planeFilling) {
                     case PLANE_FULL -> addFullSquareBlocksZ(set, x1, x2, y1, y2, z1);
                     case PLANE_HOLLOW -> addHollowSquareBlocksZ(set, x1, x2, y1, y2, z1);
                 }
@@ -120,8 +131,8 @@ public class Square extends AbstractBlockStructure {
         return set.stream();
     }
 
-    protected static BlockInteraction traceSquare(Player player, Context context) {
-        return traceSquare(player, context.getInteraction(0), context.planeFacing().getAxes(), context.structureParams().planeLength() == PlaneLength.EQUAL);
+    protected static BlockInteraction traceSquare(Player player, Context context, PlaneFacing planeFacing, PlaneLength planeLength) {
+        return traceSquare(player, context.getInteraction(0), planeFacing.getAxes(), planeLength == PlaneLength.EQUAL);
     }
 
     protected static BlockInteraction traceSquare(Player player, BlockInteraction start, Set<Axis> axes, boolean uniformLength) {
@@ -139,21 +150,21 @@ public class Square extends AbstractBlockStructure {
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return transformUniformLengthInteraction(start, result, uniformLength);
+        return BlockBuildStructure.transformUniformLengthInteraction(start, result, uniformLength);
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> Square.traceSquare(player, context);
+            case 1 -> Square.traceSquare(player, context, planeFacing, planeLength);
             default -> null;
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Square.collectSquareBlocks(context);
+            case 2 -> Square.collectSquareBlocks(context, planeFilling);
             default -> Stream.empty();
         };
     }
@@ -164,4 +175,8 @@ public class Square extends AbstractBlockStructure {
         return 2;
     }
 
+    @Override
+    public BuildMode getMode() {
+        return null;
+    }
 }

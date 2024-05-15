@@ -9,9 +9,19 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.PlaneFilling;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 
-public class Pyramid extends AbstractBlockStructure {
+public record Pyramid(
+        PlaneFilling planeFilling,
+        PlaneLength planeLength
+) implements BlockBuildStructure {
+
+    public Pyramid() {
+        this(PlaneFilling.PLANE_FULL, PlaneLength.VARIABLE);
+    }
 
     protected static Stream<BlockPosition> collectPyramidBlocks(Context context) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
@@ -65,19 +75,19 @@ public class Pyramid extends AbstractBlockStructure {
     }
 
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> Floor.traceFloor(player, context);
+            case 1 -> Floor.traceFloor(player, context, planeLength);
             case 2 -> Line.traceLineY(player, context.getPosition(1));
             default -> null;
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Floor.collectFloorBlocks(context);
+            case 2 -> Floor.collectFloorBlocks(context, planeFilling);
             case 3 -> Pyramid.collectPyramidBlocks(context);
             default -> Stream.empty();
         };
@@ -87,5 +97,10 @@ public class Pyramid extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 3;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.PYRAMID;
     }
 }
