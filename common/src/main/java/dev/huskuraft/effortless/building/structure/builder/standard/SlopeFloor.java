@@ -24,7 +24,7 @@ public record SlopeFloor(
 ) implements BlockBuildStructure {
 
     public SlopeFloor() {
-        this(PlaneLength.VARIABLE, RaisedEdge.RAISE_SHORT_EDGE);
+        this(PlaneLength.VARIABLE, RaisedEdge.SHORT);
     }
 
     @Override
@@ -61,14 +61,14 @@ public record SlopeFloor(
         var zLength = MathUtils.abs(z2 - z1);
 
         var axis = switch (raisedEdge) {
-            case RAISE_SHORT_EDGE -> {
+            case SHORT -> {
                 if (zLength > xLength) {
                     yield Axis.Z;
                 } else {
                     yield Axis.X;
                 }
             }
-            case RAISE_LONG_EDGE -> {
+            case LONG -> {
                 if (zLength > xLength) {
                     yield Axis.X;
                 } else {

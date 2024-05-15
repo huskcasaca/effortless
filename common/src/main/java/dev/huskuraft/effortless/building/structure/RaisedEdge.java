@@ -1,9 +1,8 @@
 package dev.huskuraft.effortless.building.structure;
 
 public enum RaisedEdge implements BuildFeature {
-
-    RAISE_SHORT_EDGE("raise_short_edge"),
-    RAISE_LONG_EDGE("raise_long_edge");
+    SHORT("raise_short_edge"),
+    LONG("raise_long_edge");
 
     private final String name;
 

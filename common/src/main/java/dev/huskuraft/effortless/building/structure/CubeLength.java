@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.building.structure;
 
 public enum CubeLength implements BuildFeature {
-    DISABLE("cube_length_disable"),
-    LIMIT_TO_MAX("cube_length_limit_to_max"),
+    VARIABLE("cube_length_variable"),
+    EQUAL("cube_length_equal"),
     ;
 
     private final String name;
@@ -18,6 +18,6 @@ public enum CubeLength implements BuildFeature {
 
     @Override
     public BuildFeatures getType() {
-        return BuildFeatures.PLANE_LENGTH;
+        return BuildFeatures.CUBE_LENGTH;
     }
 }
