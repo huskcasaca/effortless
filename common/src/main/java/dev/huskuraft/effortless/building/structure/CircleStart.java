@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.building.structure;
 
 public enum CircleStart implements BuildFeature {
-    CIRCLE_START_CORNER("circle_start_corner"),
-    CIRCLE_START_CENTER("circle_start_center"),
+    CORNER("circle_start_corner"),
+    CENTER("circle_start_center"),
     ;
 
     private final String name;

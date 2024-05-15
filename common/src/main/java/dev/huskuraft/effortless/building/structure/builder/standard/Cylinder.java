@@ -26,7 +26,7 @@ public record Cylinder(
 ) implements BlockBuildStructure {
 
     public Cylinder() {
-        this(CircleStart.CIRCLE_START_CORNER, PlaneFilling.FILLED, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+        this(CircleStart.CORNER, PlaneFilling.FILLED, PlaneFacing.BOTH, PlaneLength.VARIABLE);
     }
 
     @Override

@@ -26,7 +26,7 @@ public record Circle(
 ) implements BlockBuildStructure {
 
     public Circle() {
-        this(CircleStart.CIRCLE_START_CORNER, PlaneFacing.BOTH, PlaneFilling.FILLED, PlaneLength.VARIABLE);
+        this(CircleStart.CORNER, PlaneFacing.BOTH, PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override
@@ -92,7 +92,7 @@ public record Circle(
     public static Stream<BlockPosition> collectCircleBlocks(Context context, CircleStart circleStart, PlaneFilling planeFilling) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
-        var isCenter = circleStart == CircleStart.CIRCLE_START_CENTER;
+        var isCenter = circleStart == CircleStart.CENTER;
         var isFill = planeFilling == PlaneFilling.FILLED;
 
         var pos1 = context.getPosition(0);

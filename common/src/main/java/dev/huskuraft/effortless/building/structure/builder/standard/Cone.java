@@ -23,7 +23,7 @@ public record Cone(
 ) implements BlockBuildStructure {
 
     public Cone() {
-        this(CircleStart.CIRCLE_START_CORNER, PlaneLength.VARIABLE);
+        this(CircleStart.CORNER, PlaneLength.VARIABLE);
     }
 
     @Override
