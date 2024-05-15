@@ -24,7 +24,7 @@ public record Cube(
 ) implements BlockBuildStructure {
 
     public Cube() {
-        this(CubeFilling.CUBE_FULL, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+        this(CubeFilling.FILLED, PlaneFacing.BOTH, PlaneLength.VARIABLE);
     }
 
     @Override
@@ -91,9 +91,9 @@ public record Cube(
         var z2 = pos2.z();
 
         switch (cubeFilling) {
-            case CUBE_SKELETON -> Square.addHollowSquareBlocks(set, x1, x2, y1, y2, z1, z2);
-            case CUBE_FULL -> Square.addFullSquareBlocks(set, x1, x2, y1, y2, z1, z2);
-            case CUBE_HOLLOW -> Square.addFullSquareBlocks(set, x1, x2, y1, y2, z1, z2);
+            case SKELETON -> Square.addHollowSquareBlocks(set, x1, x2, y1, y2, z1, z2);
+            case FILLED -> Square.addFullSquareBlocks(set, x1, x2, y1, y2, z1, z2);
+            case HOLLOW -> Square.addFullSquareBlocks(set, x1, x2, y1, y2, z1, z2);
         }
 
         return set.stream();
@@ -113,9 +113,9 @@ public record Cube(
         var z3 = pos3.z();
 
         switch (cubeFilling) {
-            case CUBE_FULL -> addFullCubeBlocks(set, x1, x3, y1, y3, z1, z3);
-            case CUBE_HOLLOW -> addHollowCubeBlocks(set, x1, x3, y1, y3, z1, z3);
-            case CUBE_SKELETON -> addSkeletonCubeBlocks(set, x1, x3, y1, y3, z1, z3);
+            case FILLED -> addFullCubeBlocks(set, x1, x3, y1, y3, z1, z3);
+            case HOLLOW -> addHollowCubeBlocks(set, x1, x3, y1, y3, z1, z3);
+            case SKELETON -> addSkeletonCubeBlocks(set, x1, x3, y1, y3, z1, z3);
         }
 
         return set.stream();
