@@ -48,7 +48,6 @@ import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.session.BatchBuildSession;
-import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
@@ -185,25 +184,16 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         return true;
     }
 
-    // from settings screen
-    @Override
-    public void setBuildMode(Player player, BuildMode buildMode) {
-        if (!checkPermission(player)) {
-            return;
-        }
-        updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
-        if (buildMode.isDisabled()) {
-            getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
-            updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
-        }
-    }
-
     @Override
     public void setBuildStructure(Player player, BuildStructure buildStructure) {
         if (!checkPermission(player)) {
             return;
         }
         updateContext(player, context -> context.withBuildStructure(buildStructure));
+        if (buildStructure.getMode().isDisabled()) {
+            getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
+            updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
+        }
     }
 
     @Override

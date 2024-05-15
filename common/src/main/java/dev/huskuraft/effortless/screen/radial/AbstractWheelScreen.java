@@ -12,7 +12,6 @@ import java.util.function.Supplier;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.AxisDirection;
-import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
@@ -25,7 +24,6 @@ import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.Option;
-import dev.huskuraft.effortless.building.structure.BuildMode;
 
 public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
@@ -277,10 +275,12 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         }
         lastScrollOffset += amountY;
         if (lastScrollOffset > MOUSE_SCROLL_THRESHOLD) {
-            cycleBuildMode(getEntrance().getClient().getPlayer(), true);
+            getEntrance().getConfigStorage().setSelectedBuildStructure(getEntrance().getConfigStorage().getSelectedBuildStructure().getMode().previous());
+            getEntrance().getStructureBuilder().setBuildStructure(getEntrance().getClient().getPlayer(), getEntrance().getConfigStorage().getSelectedBuildStructure());
             lastScrollOffset = 0;
         } else if (lastScrollOffset < -MOUSE_SCROLL_THRESHOLD) {
-            cycleBuildMode(getEntrance().getClient().getPlayer(), false);
+            getEntrance().getConfigStorage().setSelectedBuildStructure(getEntrance().getConfigStorage().getSelectedBuildStructure().getMode().next());
+            getEntrance().getStructureBuilder().setBuildStructure(getEntrance().getClient().getPlayer(), getEntrance().getConfigStorage().getSelectedBuildStructure());
             lastScrollOffset = 0;
         }
         return true;
@@ -509,10 +509,6 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         var bc = (x2 - x) * (y3 - y) - (x3 - x) * (y2 - y);
         var ca = (x3 - x) * (y1 - y) - (x1 - x) * (y3 - y);
         return MathUtils.sign(ab) == MathUtils.sign(bc) && MathUtils.sign(bc) == MathUtils.sign(ca);
-    }
-
-    private void cycleBuildMode(Player player, boolean reverse) {
-        getEntrance().getStructureBuilder().setBuildMode(player, BuildMode.values()[(getEntrance().getStructureBuilder().getContext(player).buildMode().ordinal() + (reverse ? -1 : 1) + BuildMode.values().length) % BuildMode.values().length]);
     }
 
     private void playRadialMenuSound() {

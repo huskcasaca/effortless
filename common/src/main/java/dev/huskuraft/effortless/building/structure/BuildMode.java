@@ -46,7 +46,7 @@ public enum BuildMode {
 
 //    DOME("dome", new Dome(), Category.ROOF);
 
-    private final BuildStructure provider;
+    private final BuildStructure defaultStructure;
     private final Category category;
     private final BuildFeatures[] features;
     private final String name;
@@ -54,22 +54,22 @@ public enum BuildMode {
 
     BuildMode(String name, BuildStructure instance, Category category, BuildFeatures... features) {
         this.name = name;
-        this.provider = instance;
+        this.defaultStructure = instance;
         this.category = category;
         this.features = features;
         this.enabled = true;
     }
 
-    BuildMode(String name, BuildStructure instance, Category category, boolean enabled, BuildFeatures... features) {
+    BuildMode(String name, BuildStructure defaultStructure, Category category, boolean enabled, BuildFeatures... features) {
         this.name = name;
-        this.provider = instance;
+        this.defaultStructure = defaultStructure;
         this.category = category;
         this.features = features;
         this.enabled = enabled;
     }
 
     public BuildStructure getDefaultStructure() {
-        return provider;
+        return defaultStructure;
     }
 
     public Color getTintColor() {
@@ -119,6 +119,18 @@ public enum BuildMode {
         public Color getColor() {
             return color;
         }
+    }
+
+    public BuildMode next() {
+        return next(false);
+    }
+
+    public BuildMode previous() {
+        return next(true);
+    }
+
+    private BuildMode next(boolean reverse) {
+        return BuildMode.values()[(ordinal() + (reverse ? -1 : 1) + BuildMode.values().length) % BuildMode.values().length];
     }
 
 }

@@ -148,6 +148,7 @@ public record Line(
 
     public static void addLineBlocks(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2) {
         switch (BlockBuildStructure.getShape(x1, y1, z1, x2, y2, z2)) {
+            case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
             case LINE_X -> addXLineBlocks(set, x1, x2, y1, z1);
             case LINE_Y -> addYLineBlocks(set, y1, y2, x1, z1);
             case LINE_Z -> addZLineBlocks(set, z1, z2, x1, y1);

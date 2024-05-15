@@ -186,10 +186,6 @@ public record Context(
         return new Context(id, buildState, buildType, BuildInteractions.EMPTY, structureParams, patternParams, customParams);
     }
 
-    public Context withBuildMode(BuildMode buildMode) {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams.withBuildStructure(buildMode.getDefaultStructure()), patternParams, customParams);
-    }
-
     public Context withBuildStructure(BuildStructure buildStructure) {
         return new Context(id, buildState, buildType, buildInteractions, structureParams.withBuildStructure(buildStructure), patternParams, customParams);
     }
@@ -243,13 +239,13 @@ public record Context(
     // for build mode only
     @Nullable
     public BlockInteraction trace(Player player) {
-        return buildMode().getDefaultStructure().trace(player, this);
+        return buildStructure().trace(player, this);
     }
 
     // for build mode only
     public Stream<BlockInteraction> collectInteractions() {
         if (tracingResult().isSuccess()) {
-            return buildMode().getDefaultStructure().collect(this).map(blockPosition -> withPosition(getInteraction(0), blockPosition));
+            return buildStructure().collect(this).map(blockPosition -> withPosition(getInteraction(0), blockPosition));
         } else {
             return Stream.empty();
         }
@@ -272,7 +268,7 @@ public record Context(
     }
 
     public int getBoxVolume() {
-        return buildMode().getDefaultStructure().volume(this);
+        return buildStructure().volume(this);
     }
 
     public int getMaxBoxVolume() {
@@ -346,12 +342,6 @@ public record Context(
             BuildStructure buildStructure,
             ReplaceMode replaceMode
     ) {
-        public StructureParams(
-                BuildMode buildMode,
-                ReplaceMode replaceMode
-        ) {
-            this(buildMode.getDefaultStructure(), replaceMode);
-        }
 
         public StructureParams withBuildStructure(BuildStructure buildStructure) {
             return new StructureParams(buildStructure, replaceMode);

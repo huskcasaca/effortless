@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.config.universal;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.Config;
@@ -62,7 +63,7 @@ public class ClientConfigConfigSerializer implements ConfigSerializer<ClientConf
         config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_VOLUME), settings.renderConfig().maxRenderVolume());
 //        config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), settings.renderConfig().maxRenderDistance());
 //        config.set(KEY_PATTERNS, settings.patternConfig().patterns().stream().map(PatternConfigSerializer.INSTANCE::serialize).toList());
-        config.set(List.of(KEY_PATTERN, KEY_TRANSFORMER_PRESETS), settings.patternConfig().transformerPreset().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList());
+        config.set(List.of(KEY_PATTERN, KEY_TRANSFORMER_PRESETS), settings.patternConfig().transformerPreset().stream().map(TransformerConfigSerializer.INSTANCE::serialize).filter(Objects::nonNull).toList());
         validate(config);
         return config;
     }

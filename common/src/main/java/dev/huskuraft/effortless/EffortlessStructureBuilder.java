@@ -16,7 +16,6 @@ import dev.huskuraft.effortless.building.history.HistoryResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
-import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerHistoryResultPacket;
@@ -75,10 +74,6 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
 
     @Override
     public void setContext(Player player, Context context) {
-    }
-
-    @Override
-    public void setBuildMode(Player player, BuildMode buildMode) {
     }
 
     @Override
