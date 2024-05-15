@@ -180,7 +180,7 @@
   "effortless.transformer.mirror.axis": "Achse",
   "effortless.transformer.radial": "Radial",
   "effortless.transformer.radial.slices": "Scheiben",
-  "effortless.transformer.item_rand": "Gegenstand Zufällig",
+  "effortless.transformer.item_randomizer": "Gegenstand Zufällig",
   "effortless.transformer.randomize.example.empty": "Leer",
   "effortless.transformer.randomize.example.variant_cobblestone": "Kopfsteinpflaster Variante",
   "effortless.transformer.randomize.example.variant_stone_brick": "Steinziegel Variante",

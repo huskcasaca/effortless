@@ -82,7 +82,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
                 this.entries.addPositionNumberEntry(Axis.Z, new Tuple2<>(((RadialTransformer) lastSettings).getPositionTypeZ(), ((RadialTransformer) lastSettings).position().z()), value -> this.lastSettings = ((RadialTransformer) lastSettings).withPositionTypeZ(value.value1()).withPositionZ(value.value2()));
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.slices"), Text.text("S"), ((RadialTransformer) lastSettings).slices(), RadialTransformer.SLICE_RANGE.min(), RadialTransformer.SLICE_RANGE.max(), value -> this.lastSettings = ((RadialTransformer) lastSettings).withSlice(value));
             }
-            case ITEM_RAND -> {
+            case ITEM_RANDOMIZER -> {
             }
         }
 

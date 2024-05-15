@@ -180,7 +180,7 @@
   "effortless.transformer.mirror.axis": "Ось",
   "effortless.transformer.radial": "Радиальное",
   "effortless.transformer.radial.slices": "Сегменты",
-  "effortless.transformer.item_rand": "Случайный предмет",
+  "effortless.transformer.item_randomizer": "Случайный предмет",
   "effortless.transformer.randomize.example.empty": "Пусто",
   "effortless.transformer.randomize.example.variant_cobblestone": "Вариант булыжника",
   "effortless.transformer.randomize.example.variant_stone_brick": "Вариант каменного кирпича",

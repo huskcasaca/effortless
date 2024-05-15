@@ -74,7 +74,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
                                 item
                         ).attach();
                     }
-                    case ITEM_RAND -> {
+                    case ITEM_RANDOMIZER -> {
                         new EffortlessItemRandomizerEditScreen(
                                 getEntrance(),
                                 transformer -> {
@@ -120,7 +120,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
                             }
                     ).attach();
                 }
-                case ITEM_RAND -> {
+                case ITEM_RANDOMIZER -> {
                     new EffortlessItemRandomizerEditScreen(
                             getEntrance(),
                             transformer -> {
@@ -196,13 +196,13 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
                             case ARRAY -> Stream.of(Text.translate("effortless.transformer.add.tooltip.array.title"));
                             case MIRROR -> Stream.of(Text.translate("effortless.transformer.add.tooltip.mirror.title"));
                             case RADIAL -> Stream.of(Text.translate("effortless.transformer.add.tooltip.radial.title"));
-                            case ITEM_RAND -> Stream.of(Text.translate("effortless.transformer.add.tooltip.random.title"));
+                            case ITEM_RANDOMIZER -> Stream.of(Text.translate("effortless.transformer.add.tooltip.random.title"));
                         },
                         TooltipHelper.wrapLines(getTypeface(), (switch (selectedType) {
                             case ARRAY -> Text.translate("effortless.transformer.add.tooltip.array.message");
                             case MIRROR -> Text.translate("effortless.transformer.add.tooltip.mirror.message");
                             case RADIAL -> Text.translate("effortless.transformer.add.tooltip.radial.message");
-                            case ITEM_RAND -> Text.translate("effortless.transformer.add.tooltip.random.message");
+                            case ITEM_RANDOMIZER -> Text.translate("effortless.transformer.add.tooltip.random.message");
                         }).withStyle(ChatFormatting.GRAY)).stream()
                 ).toList()
         );

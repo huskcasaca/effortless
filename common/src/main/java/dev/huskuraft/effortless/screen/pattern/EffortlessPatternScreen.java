@@ -97,7 +97,7 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
                                 item
                         ).attach();
                     }
-                    case ITEM_RAND -> {
+                    case ITEM_RANDOMIZER -> {
                         new EffortlessItemRandomizerEditScreen(
                                 getEntrance(),
                                 transformer -> {

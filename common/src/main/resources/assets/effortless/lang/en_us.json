@@ -180,7 +180,7 @@
   "effortless.transformer.mirror.axis": "Axis",
   "effortless.transformer.radial": "Radial Transformer",
   "effortless.transformer.radial.slices": "Slices",
-  "effortless.transformer.item_rand": "Item Randomize",
+  "effortless.transformer.item_randomizer": "Item Randomize",
   "effortless.transformer.randomize.example.empty": "Empty",
   "effortless.transformer.randomize.example.variant_cobblestone": "Cobblestone Variant",
   "effortless.transformer.randomize.example.variant_stone_brick": "Stone Brick Variant",

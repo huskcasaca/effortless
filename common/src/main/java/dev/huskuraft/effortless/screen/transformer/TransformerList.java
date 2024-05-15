@@ -35,7 +35,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
             case ARRAY -> new ArrayEntry(getEntrance(), this, (ArrayTransformer) transformer);
             case MIRROR -> new MirrorEntry(getEntrance(), this, (MirrorTransformer) transformer);
             case RADIAL -> new RadialEntry(getEntrance(), this, (RadialTransformer) transformer);
-            case ITEM_RAND -> new ItemRandomizerEntry(getEntrance(), this, (ItemRandomizer) transformer);
+            case ITEM_RANDOMIZER -> new ItemRandomizerEntry(getEntrance(), this, (ItemRandomizer) transformer);
         };
     }
 
@@ -64,7 +64,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
                 case ARRAY -> Text.text("AT");
                 case MIRROR -> Text.text("MT");
                 case RADIAL -> Text.text("RT");
-                case ITEM_RAND -> Text.text("IR");
+                case ITEM_RANDOMIZER -> Text.text("IR");
             };
         }
 
@@ -152,7 +152,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
                     case ARRAY -> Text.translate("effortless.transformer.array.no_name");
                     case MIRROR -> Text.translate("effortless.transformer.mirror.no_name");
                     case RADIAL -> Text.translate("effortless.transformer.radial.no_name");
-                    case ITEM_RAND -> Text.empty();
+                    case ITEM_RANDOMIZER -> Text.empty();
                 };
             }
             return getItem().getName();

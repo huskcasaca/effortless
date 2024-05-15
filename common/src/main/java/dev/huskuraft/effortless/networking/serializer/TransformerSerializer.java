@@ -22,7 +22,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             case ARRAY -> byteBuf.read(new ArrayTransformerSerializer());
             case MIRROR -> byteBuf.read(new MirrorTransformerSerializer());
             case RADIAL -> byteBuf.read(new RadialTransformerSerializer());
-            case ITEM_RAND -> byteBuf.read(new ItemRandomizerSerializer());
+            case ITEM_RANDOMIZER -> byteBuf.read(new ItemRandomizerSerializer());
         };
     }
 
@@ -33,7 +33,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             case ARRAY -> byteBuf.write((ArrayTransformer) transformer, new ArrayTransformerSerializer());
             case MIRROR -> byteBuf.write((MirrorTransformer) transformer, new MirrorTransformerSerializer());
             case RADIAL -> byteBuf.write((RadialTransformer) transformer, new RadialTransformerSerializer());
-            case ITEM_RAND -> byteBuf.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
+            case ITEM_RANDOMIZER -> byteBuf.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
         }
     }
 
@@ -136,7 +136,6 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
                     byteBuf.readText(),
                     byteBuf.readEnum(ItemRandomizer.Order.class),
                     byteBuf.readEnum(ItemRandomizer.Target.class),
-                    byteBuf.readEnum(ItemRandomizer.Category.class),
                     byteBuf.readEnum(ItemRandomizer.Source.class),
                     byteBuf.readList(buffer1 -> {
                         return Chance.of(buffer1.readItem(), buffer1.readVarInt());
@@ -150,7 +149,6 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeText(transformer.getName());
             byteBuf.writeEnum(transformer.getOrder());
             byteBuf.writeEnum(transformer.getTarget());
-            byteBuf.writeEnum(transformer.getCategory());
             byteBuf.writeEnum(transformer.getSource());
             byteBuf.writeList(transformer.getChances(), (buf, chance) -> {
                 buf.writeItem(chance.content());

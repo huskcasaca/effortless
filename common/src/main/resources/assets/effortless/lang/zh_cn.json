@@ -180,7 +180,7 @@
   "effortless.transformer.mirror.axis": "坐标轴",
   "effortless.transformer.radial": "环状",
   "effortless.transformer.radial.slices": "切片数",
-  "effortless.transformer.item_rand": "物品随机变换",
+  "effortless.transformer.item_randomizer": "物品随机变换",
   "effortless.transformer.randomize.example.empty": "空",
   "effortless.transformer.randomize.example.variant_cobblestone": "变种鹅卵石",
   "effortless.transformer.randomize.example.variant_stone_brick": "变种石砖",
