@@ -3,9 +3,8 @@ package dev.huskuraft.effortless.building.structure;
 import java.util.Set;
 
 import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.building.SingleSelectFeature;
 
-public enum LineDirection implements SingleSelectFeature {
+public enum LineDirection implements BuildFeature {
     ALL("line_direction_all"),
     FLOOR("line_direction_floor"),
     AXIS_Y("line_direction_axis_y"),
@@ -24,8 +23,8 @@ public enum LineDirection implements SingleSelectFeature {
     }
 
     @Override
-    public String getCategory() {
-        return BuildFeature.LINE_DIRECTION.getName();
+    public BuildFeatures getType() {
+        return BuildFeatures.LINE_DIRECTION;
     }
 
     public Set<Axis> getAxes() {

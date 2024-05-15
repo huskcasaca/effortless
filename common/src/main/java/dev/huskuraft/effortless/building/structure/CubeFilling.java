@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.building.structure;
 
-import dev.huskuraft.effortless.building.SingleSelectFeature;
-
-public enum CubeFilling implements SingleSelectFeature {
+public enum CubeFilling implements BuildFeature {
     CUBE_FULL("cube_full"),
     CUBE_HOLLOW("cube_hollow"),
     CUBE_SKELETON("cube_skeleton");
@@ -19,7 +17,7 @@ public enum CubeFilling implements SingleSelectFeature {
     }
 
     @Override
-    public String getCategory() {
-        return BuildFeature.CUBE_FILLING.getName();
+    public BuildFeatures getType() {
+        return BuildFeatures.CUBE_FILLING;
     }
 }

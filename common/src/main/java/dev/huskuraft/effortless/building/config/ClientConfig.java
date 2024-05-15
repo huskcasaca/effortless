@@ -2,6 +2,8 @@ package dev.huskuraft.effortless.building.config;
 
 import java.util.List;
 
+import dev.huskuraft.effortless.building.structure.BuildMode;
+
 public record ClientConfig(
         RenderConfig renderConfig,
         TransformerPresets transformerPresets,
@@ -26,7 +28,11 @@ public record ClientConfig(
             TransformerPresets transformerPresets,
             Boolean passiveMode
     ) {
+
         this(renderConfig, transformerPresets, passiveMode);
     }
 
+    public record BuildModeConfig(
+            BuildMode buildMode
+    ) { }
 }

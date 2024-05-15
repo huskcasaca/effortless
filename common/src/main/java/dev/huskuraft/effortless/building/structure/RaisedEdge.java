@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.building.structure;
 
-import dev.huskuraft.effortless.building.SingleSelectFeature;
-
-public enum RaisedEdge implements SingleSelectFeature {
+public enum RaisedEdge implements BuildFeature {
 
     RAISE_SHORT_EDGE("raise_short_edge"),
     RAISE_LONG_EDGE("raise_long_edge");
@@ -19,7 +17,7 @@ public enum RaisedEdge implements SingleSelectFeature {
     }
 
     @Override
-    public String getCategory() {
-        return BuildFeature.RAISED_EDGE.getName();
+    public BuildFeatures getType() {
+        return BuildFeatures.RAISED_EDGE;
     }
 }

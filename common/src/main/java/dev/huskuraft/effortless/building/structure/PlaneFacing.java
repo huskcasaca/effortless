@@ -3,9 +3,8 @@ package dev.huskuraft.effortless.building.structure;
 import java.util.Set;
 
 import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.building.SingleSelectFeature;
 
-public enum PlaneFacing implements SingleSelectFeature {
+public enum PlaneFacing implements BuildFeature {
     BOTH("face_both"),
     VERTICAL("face_vertical"),
     HORIZONTAL("face_horizontal");
@@ -22,8 +21,8 @@ public enum PlaneFacing implements SingleSelectFeature {
     }
 
     @Override
-    public String getCategory() {
-        return BuildFeature.PLANE_FACING.getName();
+    public BuildFeatures getType() {
+        return BuildFeatures.PLANE_FACING;
     }
 
     public Set<Axis> getAxes() {

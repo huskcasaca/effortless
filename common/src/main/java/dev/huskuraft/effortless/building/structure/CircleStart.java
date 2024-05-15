@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.building.structure;
 
-import dev.huskuraft.effortless.building.SingleSelectFeature;
-
-public enum CircleStart implements SingleSelectFeature {
+public enum CircleStart implements BuildFeature {
     CIRCLE_START_CORNER("circle_start_corner"),
     CIRCLE_START_CENTER("circle_start_center"),
     ;
@@ -19,7 +17,7 @@ public enum CircleStart implements SingleSelectFeature {
     }
 
     @Override
-    public String getCategory() {
-        return BuildFeature.CIRCLE_START.getName();
+    public BuildFeatures getType() {
+        return BuildFeatures.CIRCLE_START;
     }
 }

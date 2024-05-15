@@ -26,19 +26,19 @@ public enum BuildMode {
     DISABLED("disabled", new Disable(), Category.BASIC),
     SINGLE("single", new Single(), Category.BASIC /*, BuildOption.BUILD_SPEED*/),
 
-    LINE("line", new Line(), Category.SQUARE, BuildFeature.LINE_DIRECTION /*, OptionEnum.THICKNESS*/),
+    LINE("line", new Line(), Category.SQUARE, BuildFeatures.LINE_DIRECTION /*, OptionEnum.THICKNESS*/),
     //    SQUARE("square", new Square(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING),
-    WALL("wall", new Wall(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_LENGTH),
-    FLOOR("floor", new Floor(), Category.SQUARE, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_LENGTH),
-    CUBE("cube", new Cube(), Category.SQUARE, BuildFeature.CUBE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
+    WALL("wall", new Wall(), Category.SQUARE, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_LENGTH),
+    FLOOR("floor", new Floor(), Category.SQUARE, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_LENGTH),
+    CUBE("cube", new Cube(), Category.SQUARE, BuildFeatures.CUBE_FILLING, BuildFeatures.PLANE_FACING, BuildFeatures.PLANE_LENGTH),
 
     DIAGONAL_LINE("diagonal_line", new DiagonalLine(), Category.DIAGONAL),
-    DIAGONAL_WALL("diagonal_wall", new DiagonalWall(), Category.DIAGONAL, BuildFeature.PLANE_LENGTH),
-    SLOPE_FLOOR("slope_floor", new SlopeFloor(), Category.DIAGONAL, BuildFeature.RAISED_EDGE, BuildFeature.PLANE_LENGTH),
+    DIAGONAL_WALL("diagonal_wall", new DiagonalWall(), Category.DIAGONAL, BuildFeatures.PLANE_LENGTH),
+    SLOPE_FLOOR("slope_floor", new SlopeFloor(), Category.DIAGONAL, BuildFeatures.RAISED_EDGE, BuildFeatures.PLANE_LENGTH),
 
-    CIRCLE("circle", new Circle(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
-    CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
-    SPHERE("sphere", new Sphere(), Category.CIRCULAR, BuildFeature.CIRCLE_START, BuildFeature.PLANE_FILLING, BuildFeature.PLANE_FACING, BuildFeature.PLANE_LENGTH),
+    CIRCLE("circle", new Circle(), Category.CIRCULAR, BuildFeatures.CIRCLE_START, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_FACING, BuildFeatures.PLANE_LENGTH),
+    CYLINDER("cylinder", new Cylinder(), Category.CIRCULAR, BuildFeatures.CIRCLE_START, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_FACING, BuildFeatures.PLANE_LENGTH),
+    SPHERE("sphere", new Sphere(), Category.CIRCULAR, BuildFeatures.CIRCLE_START, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_FACING, BuildFeatures.PLANE_LENGTH),
 
     PYRAMID("pyramid", new Pyramid(), Category.ROOF),
     CONE("cone", new Cone(), Category.ROOF),
@@ -48,10 +48,10 @@ public enum BuildMode {
 
     private final BlockStructure provider;
     private final Category category;
-    private final BuildFeature[] features;
+    private final BuildFeatures[] features;
     private final String name;
 
-    BuildMode(String name, BlockStructure instance, Category category, BuildFeature... features) {
+    BuildMode(String name, BlockStructure instance, Category category, BuildFeatures... features) {
         this.name = name;
         this.provider = instance;
         this.category = category;
@@ -66,7 +66,7 @@ public enum BuildMode {
         return category.getColor();
     }
 
-    public BuildFeature[] getSupportedFeatures() {
+    public BuildFeatures[] getSupportedFeatures() {
         return features;
     }
 

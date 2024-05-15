@@ -14,7 +14,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.BuildFeature;
+import dev.huskuraft.effortless.building.structure.BuildFeatures;
 
 public abstract class AbstractBlockStructure implements BlockStructure {
 
@@ -239,8 +239,8 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return collect(context, interactionsSize);
     }
 
-    public BuildFeature[] getSupportedFeatures() {
-        return new BuildFeature[]{};
+    public BuildFeatures[] getSupportedFeatures() {
+        return new BuildFeatures[]{};
     }
 
 
