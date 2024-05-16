@@ -1,10 +1,8 @@
 package dev.huskuraft.effortless.building.structure;
 
-import dev.huskuraft.effortless.building.SingleSelectFeature;
-
-public enum CubeLength implements SingleSelectFeature {
-    DISABLE("cube_length_disable"),
-    LIMIT_TO_MAX("cube_length_limit_to_max"),
+public enum CubeLength implements BuildFeature {
+    VARIABLE("cube_length_variable"),
+    EQUAL("cube_length_equal"),
     ;
 
     private final String name;
@@ -19,7 +17,7 @@ public enum CubeLength implements SingleSelectFeature {
     }
 
     @Override
-    public String getCategory() {
-        return BuildFeature.PLANE_LENGTH.getName();
+    public BuildFeatures getType() {
+        return BuildFeatures.CUBE_LENGTH;
     }
 }

@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.building.structure;
 
-import dev.huskuraft.effortless.building.SingleSelectFeature;
-
-public enum FillingSequence implements SingleSelectFeature {
+public enum FillingSequence implements BuildFeature {
     X_Y_Z,
     X_Z_Y,
     Y_X_Z,
@@ -16,7 +14,7 @@ public enum FillingSequence implements SingleSelectFeature {
     }
 
     @Override
-    public String getCategory() {
+    public BuildFeatures getType() {
         return null;
     }
 }

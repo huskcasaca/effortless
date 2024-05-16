@@ -136,9 +136,9 @@
   "effortless.action.settings": "Settings",
   "effortless.action.normal_speed": "Normal",
   "effortless.action.fast_speed": "Fast",
-  "effortless.action.plane_full": "Filled",
+  "effortless.action.plane_filled": "Filled",
   "effortless.action.plane_hollow": "Hollow",
-  "effortless.action.cube_full": "Filled",
+  "effortless.action.cube_filled": "Filled",
   "effortless.action.cube_hollow": "Hollow",
   "effortless.action.cube_skeleton": "Skeleton",
   "effortless.action.raise_short_edge": "Short",
@@ -180,7 +180,7 @@
   "effortless.transformer.mirror.axis": "Axis",
   "effortless.transformer.radial": "Radial Transformer",
   "effortless.transformer.radial.slices": "Slices",
-  "effortless.transformer.item_rand": "Item Randomize",
+  "effortless.transformer.item_randomizer": "Item Randomize",
   "effortless.transformer.randomize.example.empty": "Empty",
   "effortless.transformer.randomize.example.variant_cobblestone": "Cobblestone Variant",
   "effortless.transformer.randomize.example.variant_stone_brick": "Stone Brick Variant",
@@ -342,6 +342,7 @@
   "effortless.action.line_direction_axis_z": "Z Axis",
   "effortless.action.line_direction_axis_x": "X Axis",
   "effortless.action.pattern_settings": "Pattern Settings",
+  "effortless.action.pattern": "Build Pattern",
   "effortless.button.up": "Move Up",
   "effortless.button.down": "Move Down",
   "effortless.button.new": "New",
@@ -395,6 +396,11 @@
   "effortless.transformer.array.no_name": "Array Transformer",
   "effortless.transformer.mirror.no_name": "Mirror Transformer",
   "effortless.transformer.radial.no_name": "Radial Transformer",
-  "effortless.pattern.settings.empty_transformer": "There is no transformer in your pattern. Patterns will not take effect."
-
+  "effortless.pattern.no_transformer": "There is no transformer in your pattern. Patterns will not take effect.",
+  "effortless.pattern.title": "Pattern",
+  "effortless.option.pattern": "Build Pattern",
+  "effortless.action.pattern_disabled": "Disabled",
+  "effortless.action.pattern_enabled": "Enabled",
+  "effortless.option.pattern.tooltip": "Build Pattern is used to create complex shapes. You can combine different [%s] to achieve what your desired.",
+  "effortless.option.pattern.tooltip.build_transformers": "Build Transformers"
 }

@@ -145,7 +145,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             case ARRAY -> ArrayTransformerConfigSerializer.INSTANCE;
             case MIRROR -> MirrorTransformerConfigSerializer.INSTANCE;
             case RADIAL -> RadialTransformerConfigSerializer.INSTANCE;
-            case ITEM_RAND -> ItemRandomizerConfigSerializer.INSTANCE;
+            case ITEM_RANDOMIZER -> ItemRandomizerConfigSerializer.INSTANCE;
         }).deserialize(config);
     }
 
@@ -160,7 +160,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             case ARRAY -> ArrayTransformerConfigSerializer.INSTANCE.serialize((ArrayTransformer) transformer);
             case MIRROR -> MirrorTransformerConfigSerializer.INSTANCE.serialize((MirrorTransformer) transformer);
             case RADIAL -> RadialTransformerConfigSerializer.INSTANCE.serialize((RadialTransformer) transformer);
-            case ITEM_RAND -> ItemRandomizerConfigSerializer.INSTANCE.serialize((ItemRandomizer) transformer);
+            case ITEM_RANDOMIZER -> ItemRandomizerConfigSerializer.INSTANCE.serialize((ItemRandomizer) transformer);
         });
     }
 
@@ -344,7 +344,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineEnum(spec, KEY_ORDER, getDefault().getOrder());
             defineEnum(spec, KEY_TARGET, getDefault().getTarget());
-            defineEnum(spec, KEY_CATEGORY, getDefault().getCategory());
+//            defineEnum(spec, KEY_CATEGORY, getDefault().getCategory());
             defineEnum(spec, KEY_SOURCE, getDefault().getSource());
             spec.defineList(KEY_CHANCES, () -> getDefault().getChances().stream().map(ItemChanceConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
             return spec;
@@ -363,7 +363,6 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
                     Text.empty(),
                     getEnum(config, KEY_ORDER),
                     getEnum(config, KEY_TARGET),
-                    getEnum(config, KEY_CATEGORY),
                     getEnum(config, KEY_SOURCE),
                     config.<List<Config>>get(KEY_CHANCES).stream().map(ItemChanceConfigSerializer.INSTANCE::deserialize).toList()
             );
@@ -377,7 +376,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             setEnum(config, KEY_TYPE, transformer.getType());
             setEnum(config, KEY_ORDER, transformer.getOrder());
             setEnum(config, KEY_TARGET, transformer.getTarget());
-            setEnum(config, KEY_CATEGORY, transformer.getCategory());
+//            setEnum(config, KEY_CATEGORY, transformer.getCategory());
             config.set(KEY_CHANCES, transformer.getChances().stream().map(ItemChanceConfigSerializer.INSTANCE::serialize).toList());
             validate(config);
             return config;

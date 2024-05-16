@@ -6,15 +6,16 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 
-public class Disable extends AbstractBlockStructure {
+public record Disable() implements BlockBuildStructure {
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return null;
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return Stream.empty();
     }
 
@@ -23,4 +24,8 @@ public class Disable extends AbstractBlockStructure {
         return 1;
     }
 
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.DISABLED;
+    }
 }

@@ -11,13 +11,12 @@ import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.MultiSelectFeature;
-import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.history.HistoryResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.replace.ReplaceMode;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerHistoryResultPacket;
 
@@ -71,32 +70,22 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     public void onTick() {
-
     }
 
     @Override
     public void setContext(Player player, Context context) {
-
     }
 
     @Override
-    public void setBuildMode(Player player, BuildMode buildMode) {
-
+    public void setBuildStructure(Player player, BuildStructure buildStructure) {
     }
 
     @Override
-    public void setBuildFeature(Player player, SingleSelectFeature feature) {
-
-    }
-
-    @Override
-    public void setBuildFeature(Player player, MultiSelectFeature feature) {
-
+    public void setReplaceMode(Player player, ReplaceMode replaceMode) {
     }
 
     @Override
     public void setPattern(Player player, Pattern pattern) {
-
     }
 
     @Override

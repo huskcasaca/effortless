@@ -7,7 +7,8 @@ import java.util.function.UnaryOperator;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.replace.ReplaceMode;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
 public abstract class StructureBuilder {
 
@@ -23,11 +24,9 @@ public abstract class StructureBuilder {
 
     public abstract void setContext(Player player, Context context);
 
-    public abstract void setBuildMode(Player player, BuildMode buildMode);
+    public abstract void setBuildStructure(Player player, BuildStructure buildStructure);
 
-    public abstract void setBuildFeature(Player player, SingleSelectFeature feature);
-
-    public abstract void setBuildFeature(Player player, MultiSelectFeature feature);
+    public abstract void setReplaceMode(Player player, ReplaceMode replaceMode);
 
     public abstract void setPattern(Player player, Pattern pattern);
 

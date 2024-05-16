@@ -1,32 +1,14 @@
 package dev.huskuraft.effortless.building.structure;
 
-import dev.huskuraft.effortless.building.Feature;
+import dev.huskuraft.effortless.building.SingleSelectFeature;
 
-public enum BuildFeature {
-    CIRCLE_START("circle_start", CircleStart.values()),
-    CUBE_FILLING("cube_filling", CubeFilling.values()),
-    CUBE_LENGTH("cube_length", CubeLength.values()),
-    PLANE_FACING("plane_facing", PlaneFacing.values()),
-    PLANE_FILLING("plane_filling", PlaneFilling.values()),
-    PLANE_LENGTH("plane_length", PlaneLength.values()),
-    LINE_DIRECTION("line_direction", LineDirection.values()),
-    RAISED_EDGE("raised_edge", RaisedEdge.values()),
-    ;
+public interface BuildFeature extends SingleSelectFeature {
 
-    private final String name;
-    private final Feature[] entries;
-
-    BuildFeature(String name, Feature... defaultEntries) {
-        this.name = name;
-        this.entries = defaultEntries;
+    @Override
+    default String getCategory() {
+        return getType().getName();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Feature[] getEntries() {
-        return entries;
-    }
+    BuildFeatures getType();
 
 }

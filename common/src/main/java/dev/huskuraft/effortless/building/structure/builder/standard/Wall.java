@@ -13,13 +13,33 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
-public class Wall extends AbstractBlockStructure {
+public record Wall(
+        PlaneFilling planeFilling,
+        PlaneLength planeLength
+) implements BlockBuildStructure {
 
-    protected static BlockInteraction traceWall(Player player, Context context) {
-        return traceWall(player, context.getInteraction(0), context.structureParams().planeLength() == PlaneLength.EQUAL);
+    public Wall() {
+        this(PlaneFilling.FILLED, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case PLANE_FILLING -> new Wall((PlaneFilling) feature, planeLength);
+            case PLANE_LENGTH -> new Wall(planeFilling, (PlaneLength) feature);
+            default -> this;
+        };
+    }
+
+    protected static BlockInteraction traceWall(Player player, Context context, PlaneLength planeLength) {
+        return traceWall(player, context.getInteraction(0), planeLength == PlaneLength.EQUAL);
     }
 
     protected static BlockInteraction traceWall(Player player, BlockInteraction start, boolean uniformLength) {
@@ -36,7 +56,7 @@ public class Wall extends AbstractBlockStructure {
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return transformUniformLengthInteraction(start, result, uniformLength);
+        return BlockBuildStructure.transformUniformLengthInteraction(start, result, uniformLength);
     }
 
 
@@ -44,7 +64,7 @@ public class Wall extends AbstractBlockStructure {
         return ((int) Math.signum(a)) == 0 ? 1 : (int) Math.signum(a);
     }
 
-    public static Stream<BlockPosition> collectWallBlocks(Context context) {
+    public static Stream<BlockPosition> collectWallBlocks(Context context, PlaneFilling planeFilling) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
@@ -57,19 +77,19 @@ public class Wall extends AbstractBlockStructure {
         var y2 = pos2.y();
         var z2 = pos2.z();
 
-        switch (getShape(pos1, pos2)) {
+        switch (BlockBuildStructure.getShape(pos1, pos2)) {
             case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
             case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_Z -> {
-                switch (context.planeFilling()) {
-                    case PLANE_FULL -> Square.addFullSquareBlocksZ(set, x1, x2, y1, y2, z1);
-                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksZ(set, x1, x2, y1, y2, z1);
+                switch (planeFilling) {
+                    case FILLED -> Square.addFullSquareBlocksZ(set, x1, x2, y1, y2, z1);
+                    case HOLLOW -> Square.addHollowSquareBlocksZ(set, x1, x2, y1, y2, z1);
                 }
             }
             case PLANE_X -> {
-                switch (context.planeFilling()) {
-                    case PLANE_FULL -> Square.addFullSquareBlocksX(set, x1, y1, y2, z1, z2);
-                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksX(set, x1, y1, y2, z1, z2);
+                switch (planeFilling) {
+                    case FILLED -> Square.addFullSquareBlocksX(set, x1, y1, y2, z1, z2);
+                    case HOLLOW -> Square.addHollowSquareBlocksX(set, x1, y1, y2, z1, z2);
                 }
             }
         }
@@ -77,18 +97,18 @@ public class Wall extends AbstractBlockStructure {
         return set.stream();
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> Wall.traceWall(player, context);
+            case 1 -> Wall.traceWall(player, context, planeLength);
             default -> null;
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Wall.collectWallBlocks(context);
+            case 2 -> Wall.collectWallBlocks(context, planeFilling);
             default -> Stream.empty();
         };
     }
@@ -97,6 +117,11 @@ public class Wall extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 2;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.WALL;
     }
 
     protected static class WallCriteria extends AxisCriteria {

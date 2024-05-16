@@ -48,7 +48,6 @@ public class EffortlessGeneralSettingsScreen extends AbstractPanelScreen {
 
                 if (!getEntrance().getSessionManager().isSessionValid()) {
                     getEntrance().getClient().execute(() -> {
-                        detach();
                         new EffortlessSessionStatusScreen(getEntrance()).attach();
                     });
                 } else {

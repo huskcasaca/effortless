@@ -13,7 +13,7 @@ public final class EffortlessClientTagConfigStorage extends TagElementFileStorag
 
     @Override
     public ClientConfig getDefault() {
-        return ClientConfig.getDefault();
+        return ClientConfig.DEFAULT;
     }
 
 }

@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.building.structure;
 
-import dev.huskuraft.effortless.building.SingleSelectFeature;
-
-public enum PlaneLength implements SingleSelectFeature {
+public enum PlaneLength implements BuildFeature {
     VARIABLE("plane_length_variable"),
     EQUAL("plane_length_equal"),
     ;
@@ -19,7 +17,7 @@ public enum PlaneLength implements SingleSelectFeature {
     }
 
     @Override
-    public String getCategory() {
-        return BuildFeature.PLANE_LENGTH.getName();
+    public BuildFeatures getType() {
+        return BuildFeatures.PLANE_LENGTH;
     }
 }

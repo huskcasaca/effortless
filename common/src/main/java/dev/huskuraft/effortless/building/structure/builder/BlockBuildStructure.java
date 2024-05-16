@@ -14,11 +14,10 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.BuildFeature;
 
-public abstract class AbstractBlockStructure implements BlockStructure {
+public interface BlockBuildStructure extends BuildStructure {
 
-    private static final double LOOK_VEC_TOLERANCE = 0.01;
+    double LOOK_VEC_TOLERANCE = 0.01;
 
     enum DirectionTraceShape {
         SINGLE,
@@ -52,7 +51,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         }
     }
 
-    protected enum TraceShape {
+    enum TraceShape {
         SINGLE,
         LINE_X(Axis.X),
         LINE_Y(Axis.Y),
@@ -99,27 +98,27 @@ public abstract class AbstractBlockStructure implements BlockStructure {
     }
 
     @Override
-    public int volume(Context context) {
+    default int volume(Context context) {
         return context.getInteractionBox().volume();
     }
 
-    protected static TraceShape getShape(int x1, int y1, int z1, int x2, int y2, int z2) {
+    public static TraceShape getShape(int x1, int y1, int z1, int x2, int y2, int z2) {
         return TraceShape.fromPosition(x1, y1, z1, x2, y2, z2);
     }
 
-    protected static TraceShape getShape(BlockPosition pos1, BlockPosition pos2) {
+    public static TraceShape getShape(BlockPosition pos1, BlockPosition pos2) {
         return TraceShape.fromPosition(pos1.x(), pos1.y(), pos1.z(), pos2.x(), pos2.y(), pos2.z());
     }
 
-    protected static double lengthSq(double x, double y, double z) {
+    public static double lengthSq(double x, double y, double z) {
         return (x * x) + (y * y) + (z * z);
     }
 
-    protected static double lengthSq(double x, double z) {
+    public static double lengthSq(double x, double z) {
         return (x * x) + (z * z);
     }
 
-    protected static Set<BlockPosition> getBallooned(Set<BlockPosition> set, double radius) {
+    static Set<BlockPosition> getBallooned(Set<BlockPosition> set, double radius) {
         Set<BlockPosition> result = Sets.newLinkedHashSet();
         var ceilRadius = (int) Math.ceil(radius);
         var radiusSquare = Math.pow(radius, 2);
@@ -143,7 +142,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
     }
 
 
-    protected static Set<BlockPosition> getHollowed(Set<BlockPosition> set) {
+    static Set<BlockPosition> getHollowed(Set<BlockPosition> set) {
         Set<BlockPosition> result = new LinkedHashSet<>();
         for (var v : set) {
             var x = v.x();
@@ -195,7 +194,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
     }
 
     // TODO: 13/10/23 entity
-    protected static Vector3d getEntityLookAngleGap(Player player) {
+    static Vector3d getEntityLookAngleGap(Player player) {
         var look = player.getEyeDirection();
         var x = look.x();
         var y = look.y();
@@ -216,12 +215,12 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return new Vector3d(x, y, z).normalize();
     }
 
-    protected abstract BlockInteraction trace(Player player, Context context, int index);
+    abstract BlockInteraction trace(Player player, Context context, int index);
 
-    protected abstract Stream<BlockPosition> collect(Context context, int index);
+    abstract Stream<BlockPosition> collect(Context context, int index);
 
     @Override
-    public final BlockInteraction trace(Player player, Context context) {
+    default BlockInteraction trace(Player player, Context context) {
         var interactionsSize = context.interactionsSize();
         if (interactionsSize >= traceSize(context)) {
             return null;
@@ -231,7 +230,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
 
 
     @Override
-    public final Stream<BlockPosition> collect(Context context) {
+    default Stream<BlockPosition> collect(Context context) {
         var interactionsSize = context.interactionsSize();
         if (interactionsSize > traceSize(context)) {
             return null;
@@ -239,12 +238,8 @@ public abstract class AbstractBlockStructure implements BlockStructure {
         return collect(context, interactionsSize);
     }
 
-    public BuildFeature[] getSupportedFeatures() {
-        return new BuildFeature[]{};
-    }
 
-
-    protected abstract static class Criteria {
+    abstract static class Criteria {
 
         protected final Vector3d center;
         protected final Vector3d eye;
@@ -264,7 +259,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
 
     }
 
-    protected abstract static class AxisCriteria extends Criteria {
+    abstract static class AxisCriteria extends Criteria {
         protected final Axis axis;
 
         public AxisCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
@@ -417,7 +412,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
 
 
 
-    protected static class NearestAxisLineCriteria extends NearestLineCriteria {
+    class NearestAxisLineCriteria extends NearestLineCriteria {
 
         private final Set<Axis> axes;
 
@@ -452,7 +447,7 @@ public abstract class AbstractBlockStructure implements BlockStructure {
     }
 
 
-    protected static class NearestLineCriteria extends AxisCriteria {
+    class NearestLineCriteria extends AxisCriteria {
 
         public NearestLineCriteria(Axis axis, Player player, Vector3d center, int reach, boolean skipRaytrace) {
             super(axis, player, center, reach, skipRaytrace);

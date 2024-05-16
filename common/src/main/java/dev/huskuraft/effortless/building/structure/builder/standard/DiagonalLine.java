@@ -11,9 +11,10 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 
-public class DiagonalLine extends AbstractBlockStructure {
+public record DiagonalLine() implements BlockBuildStructure {
 
     private static Set<BlockPosition> getDiagonalLine(List<BlockPosition> positions, int radius, boolean hollow) {
         Set<BlockPosition> result = Sets.newLinkedHashSet();
@@ -68,8 +69,8 @@ public class DiagonalLine extends AbstractBlockStructure {
             }
         }
 
-        result = getBallooned(result, radius);
-        if (hollow) result = getHollowed(result);
+        result = BlockBuildStructure.getBallooned(result, radius);
+        if (hollow) result = BlockBuildStructure.getHollowed(result);
         return result;
     }
 
@@ -85,7 +86,7 @@ public class DiagonalLine extends AbstractBlockStructure {
         return getDiagonalLine(List.of(pos1, pos2), 0, false).stream();
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
             case 1 -> Single.traceSingle(player, context);
@@ -93,7 +94,7 @@ public class DiagonalLine extends AbstractBlockStructure {
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
             case 2 -> DiagonalLine.collectDiagonalLine(context);
@@ -104,5 +105,10 @@ public class DiagonalLine extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 2;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.DIAGONAL_LINE;
     }
 }

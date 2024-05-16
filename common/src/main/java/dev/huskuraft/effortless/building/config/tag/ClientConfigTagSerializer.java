@@ -6,32 +6,25 @@ import dev.huskuraft.effortless.api.tag.TagSerializer;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
-import dev.huskuraft.effortless.building.config.TransformerPresets;
 
 public class ClientConfigTagSerializer implements TagSerializer<ClientConfig> {
 
-    private static final String TAG_RENDER_SETTINGS = "Render";
-    private static final String TAG_PATTERN_SETTINGS = "Patterns";
-    private static final String TAG_TRANSFORMER_PRESETS = "Transformers";
-    private static final String TAG_PASSIVE_MODE = "PassiveMode";
+    private static final String TAG_RENDER_CONFIG = "RenderConfig";
+    private static final String TAG_PATTERN_CONFIG = "PatternConfig";
 
     @Override
     public ClientConfig decode(TagElement tag) {
         return new ClientConfig(
-                tag.asRecord().getTag(TAG_RENDER_SETTINGS, new RenderSettingsTagSerializer()),
-                tag.asRecord().getTag(TAG_PATTERN_SETTINGS, new PatternSettingsTagSerializer()),
-                tag.asRecord().getTag(TAG_TRANSFORMER_PRESETS, new TransformerPresetsTagSerializer()),
-                tag.asRecord().getBoolean(TAG_PASSIVE_MODE)
+                tag.asRecord().getTag(TAG_RENDER_CONFIG, new RenderSettingsTagSerializer()),
+                tag.asRecord().getTag(TAG_PATTERN_CONFIG, new PatternConfigTagSerializer())
         );
     }
 
     @Override
     public TagElement encode(ClientConfig config) {
         var tag = TagRecord.newRecord();
-        tag.asRecord().putTag(TAG_RENDER_SETTINGS, config.renderConfig(), new RenderSettingsTagSerializer());
-        tag.asRecord().putTag(TAG_PATTERN_SETTINGS, config.patternConfig(), new PatternSettingsTagSerializer());
-        tag.asRecord().putTag(TAG_TRANSFORMER_PRESETS, config.transformerPresets(), new TransformerPresetsTagSerializer());
-        tag.asRecord().putBoolean(TAG_PASSIVE_MODE, config.passiveMode());
+        tag.asRecord().putTag(TAG_RENDER_CONFIG, config.renderConfig(), new RenderSettingsTagSerializer());
+        tag.asRecord().putTag(TAG_PATTERN_CONFIG, config.patternConfig(), new PatternConfigTagSerializer());
         return tag;
     }
 
@@ -50,7 +43,7 @@ public class ClientConfigTagSerializer implements TagSerializer<ClientConfig> {
         }
     }
 
-    public static class TransformerPresetsTagSerializer implements TagSerializer<TransformerPresets> {
+    public static class PatternConfigTagSerializer implements TagSerializer<PatternConfig> {
 
         private static final String TAG_ARRAYS = "Arrays";
         private static final String TAG_MIRRORS = "Mirrors";
@@ -58,8 +51,8 @@ public class ClientConfigTagSerializer implements TagSerializer<ClientConfig> {
         private static final String TAG_ITEM_RANDOMIZERS = "ItemRandomizers";
 
         @Override
-        public TransformerPresets decode(TagElement tag) {
-            return new TransformerPresets(
+        public PatternConfig decode(TagElement tag) {
+            return new PatternConfig(
                     tag.asRecord().getList(TAG_ARRAYS, new TransformerTagSerializer.ArrayTransformerTagSerializer()),
                     tag.asRecord().getList(TAG_MIRRORS, new TransformerTagSerializer.MirrorTransformerTagSerializer()),
                     tag.asRecord().getList(TAG_RADIALS, new TransformerTagSerializer.RadialTransformerTagSerializer()),
@@ -67,7 +60,7 @@ public class ClientConfigTagSerializer implements TagSerializer<ClientConfig> {
         }
 
         @Override
-        public TagElement encode(TransformerPresets config) {
+        public TagElement encode(PatternConfig config) {
             var tag = TagRecord.newRecord();
             tag.asRecord().putList(TAG_ARRAYS, config.arrayTransformers(), new TransformerTagSerializer.ArrayTransformerTagSerializer());
             tag.asRecord().putList(TAG_MIRRORS, config.mirrorTransformers(), new TransformerTagSerializer.MirrorTransformerTagSerializer());
@@ -78,24 +71,6 @@ public class ClientConfigTagSerializer implements TagSerializer<ClientConfig> {
     }
 
 
-    public static class PatternSettingsTagSerializer implements TagSerializer<PatternConfig> {
-
-        private static final String TAG_PATTERNS = "Patterns";
-
-        @Override
-        public PatternConfig decode(TagElement tag) {
-            return new PatternConfig(
-                    tag.asRecord().getList(TAG_PATTERNS, new PatternTagSerializer())
-            );
-        }
-
-        @Override
-        public TagElement encode(PatternConfig Config) {
-            var tag = TagRecord.newRecord();
-            tag.asRecord().putList(TAG_PATTERNS, Config.patterns(), new PatternTagSerializer());
-            return tag;
-        }
-    }
 
 
 }

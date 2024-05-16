@@ -34,9 +34,7 @@ import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.MultiSelectFeature;
 import dev.huskuraft.effortless.building.SingleCommand;
-import dev.huskuraft.effortless.building.SingleSelectFeature;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.HistoryResult;
@@ -48,8 +46,9 @@ import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.session.BatchBuildSession;
-import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationRenderer;
@@ -173,54 +172,36 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         contexts.put(player.getId(), context);
     }
 
-    // from settings screen
-    @Override
-    public void setBuildMode(Player player, BuildMode buildMode) {
+    private boolean checkPermission(Player player) {
         if (!isSessionValid(player)) {
             getEntrance().getSessionManager().notifyPlayer();
-            return;
+            return false;
         }
         if (!isPermissionGranted(player)) {
             player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void setBuildStructure(Player player, BuildStructure buildStructure) {
+        if (!checkPermission(player)) {
             return;
         }
-        updateContext(player, context -> context.withEmptyInteractions().withBuildMode(buildMode));
-        if (buildMode.isDisabled()) {
+        updateContext(player, context -> context.withBuildStructure(buildStructure));
+        if (buildStructure.getMode().isDisabled()) {
             getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
             updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
         }
     }
 
     @Override
-    public void setBuildFeature(Player player, SingleSelectFeature feature) {
-        if (!isSessionValid(player)) {
-            getEntrance().getSessionManager().notifyPlayer();
+    public void setReplaceMode(Player player, ReplaceMode replaceMode) {
+        if (!checkPermission(player)) {
             return;
         }
-        if (!isPermissionGranted(player)) {
-            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
-            return;
-        }
-        updateContext(player, context -> context.withBuildFeature(feature));
-    }
-
-    @Override
-    public void setBuildFeature(Player player, MultiSelectFeature feature) {
-        if (!isPermissionGranted(player)) {
-            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
-            return;
-        }
-        updateContext(player, context -> {
-            var features = context.buildFeatures().stream().filter(f -> f.getClass().equals(feature.getClass())).collect(Collectors.toSet());
-            if (features.contains(feature)) {
-                if (features.size() > 1) {
-                    features.remove(feature);
-                }
-            } else {
-                features.add(feature);
-            }
-            return context.withBuildFeature(features);
-        });
+        updateContext(player, context -> context.withReplaceMode(replaceMode));
     }
 
     @Override
@@ -239,7 +220,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         lastClientPlayerLevel.set(null);
         contexts.clear();
         undoRedoStacks.clear();
-        getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.transformerPresets(), false));
+        getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig()));
     }
 
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
@@ -530,7 +511,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(ChatFormatting.WHITE), context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD)));
         texts.add(new Tuple2<>(AbstractWheelScreen.button(context.replaceMode()).getCategory().withStyle(ChatFormatting.WHITE), AbstractWheelScreen.button(context.replaceMode()).getName().withStyle(ChatFormatting.GOLD)));
 
-        for (var supportedFeature : context.buildMode().getSupportedFeatures()) {
+        for (var supportedFeature : context.buildStructure().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();
             if (option.isEmpty()) continue;
             var button = AbstractWheelScreen.button(option.get());

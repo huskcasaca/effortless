@@ -10,13 +10,33 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
-public class Floor extends AbstractBlockStructure {
+public record Floor(
+        PlaneFilling planeFilling,
+        PlaneLength planeLength
+) implements BlockBuildStructure {
 
-    protected static BlockInteraction traceFloor(Player player, Context context) {
-        return traceFloor(player, context.getInteraction(0), context.structureParams().planeLength() == PlaneLength.EQUAL);
+    public Floor() {
+        this(PlaneFilling.FILLED, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case PLANE_FILLING -> new Floor((PlaneFilling) feature, planeLength);
+            case PLANE_LENGTH -> new Floor(planeFilling, (PlaneLength) feature);
+            default -> this;
+        };
+    }
+
+    protected static BlockInteraction traceFloor(Player player, Context context, PlaneLength planeLength) {
+        return traceFloor(player, context.getInteraction(0), planeLength == PlaneLength.EQUAL);
     }
 
     protected static BlockInteraction traceFloor(Player player, BlockInteraction start, boolean uniformLength) {
@@ -32,10 +52,10 @@ public class Floor extends AbstractBlockStructure {
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return transformUniformLengthInteraction(start, result, uniformLength);
+        return BlockBuildStructure.transformUniformLengthInteraction(start, result, uniformLength);
     }
 
-    public static Stream<BlockPosition> collectFloorBlocks(Context context) {
+    public static Stream<BlockPosition> collectFloorBlocks(Context context, PlaneFilling planeFilling) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
@@ -48,11 +68,13 @@ public class Floor extends AbstractBlockStructure {
         var y2 = pos2.y();
         var z2 = pos2.z();
 
-        switch (getShape(pos1, pos2)) {
+        switch (BlockBuildStructure.getShape(pos1, pos2)) {
+            case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
+            case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_Y -> {
-                switch (context.planeFilling()) {
-                    case PLANE_FULL -> Square.addFullSquareBlocksY(set, x1, x2, y1, z1, z2);
-                    case PLANE_HOLLOW -> Square.addHollowSquareBlocksY(set, x1, x2, y1, z1, z2);
+                switch (planeFilling) {
+                    case FILLED -> Square.addFullSquareBlocksY(set, x1, x2, y1, z1, z2);
+                    case HOLLOW -> Square.addHollowSquareBlocksY(set, x1, x2, y1, z1, z2);
                 }
             }
         }
@@ -60,18 +82,18 @@ public class Floor extends AbstractBlockStructure {
         return set.stream();
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> Floor.traceFloor(player, context);
+            case 1 -> Floor.traceFloor(player, context, planeLength);
             default -> null;
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Floor.collectFloorBlocks(context);
+            case 2 -> Floor.collectFloorBlocks(context, planeFilling);
             default -> Stream.empty();
         };
     }
@@ -79,6 +101,11 @@ public class Floor extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 2;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.FLOOR;
     }
 
 }

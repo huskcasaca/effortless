@@ -10,12 +10,11 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPac
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
-import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerPresetsScreen;
 
 public class EffortlessSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.settings.title"), PANEL_WIDTH, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_5);
+        super(entrance, Text.translate("effortless.settings.title"), PANEL_WIDTH, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_4);
     }
 
     @Override
@@ -36,6 +35,7 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
                 getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                     if (packet.isOperator()) {
                         getEntrance().getClient().execute(() -> {
+                            detach();
                             new EffortlessGeneralSettingsScreen(getEntrance()).attach();
                         });
                     } else {
@@ -45,15 +45,14 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
                     }
                 });
             }
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 4f, 0f, 1f).build());
-        addWidget(Button.builder(getEntrance(), Text.translate("effortless.render_settings.title"), button -> {
-            new EffortlessRenderSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 3f, 0f, 1f).build());
-        addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern_settings.title"), button -> {
-            new EffortlessPatternSettingsScreen(getEntrance()).attach();
+        addWidget(Button.builder(getEntrance(), Text.translate("effortless.render_settings.title"), button -> {
+            detach();
+            new EffortlessRenderSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
-        addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer_presets.title"), button -> {
-            new EffortlessTransformerPresetsScreen(getEntrance()).attach();
+        addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern_settings.title"), button -> {
+            detach();
+            new EffortlessPatternSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {

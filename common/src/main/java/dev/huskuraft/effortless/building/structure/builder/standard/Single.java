@@ -11,9 +11,10 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
 
-public class Single extends AbstractBlockStructure {
+public record Single() implements BlockBuildStructure {
 
     protected static BlockInteraction traceSingle(Player player, Context context) {
         return traceSingle(player, context.buildState(), context.replaceMode(), context.maxReachDistance());
@@ -22,7 +23,6 @@ public class Single extends AbstractBlockStructure {
     protected static BlockInteraction traceSingle(Player player, Context context, int maxReachDistance) {
         return traceSingle(player, context.buildState(), context.replaceMode(), maxReachDistance);
     }
-
 
     protected static BlockInteraction traceSingle(Player player, BuildState buildState, ReplaceMode replaceMode, int maxReachDistance) {
         var isHoldingEmptyBucket = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && bucketItem.isEmpty();
@@ -54,14 +54,14 @@ public class Single extends AbstractBlockStructure {
         set.add(new BlockPosition(x1, y1, z1));
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
             default -> null;
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
             default -> Stream.empty();
@@ -73,4 +73,8 @@ public class Single extends AbstractBlockStructure {
         return 1;
     }
 
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.SINGLE;
+    }
 }

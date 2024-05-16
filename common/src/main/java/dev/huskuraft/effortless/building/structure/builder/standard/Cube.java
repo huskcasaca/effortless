@@ -9,9 +9,33 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.CubeFilling;
+import dev.huskuraft.effortless.building.structure.PlaneFacing;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
-public class Cube extends AbstractBlockStructure {
+public record Cube(
+        CubeFilling cubeFilling,
+        PlaneFacing planeFacing,
+        PlaneLength planeLength
+) implements BlockBuildStructure {
+
+    public Cube() {
+        this(CubeFilling.FILLED, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case CUBE_FILLING -> new Cube((CubeFilling) feature, planeFacing, planeLength);
+            case PLANE_FACING -> new Cube(cubeFilling, (PlaneFacing) feature, planeLength);
+            case PLANE_LENGTH -> new Cube(cubeFilling, planeFacing, (PlaneLength) feature);
+            default -> this;
+        };
+    }
 
     public static void addFullCubeBlocks(Set<BlockPosition> set, int x1, int x2, int y1, int y2, int z1, int z2) {
         for (int l = x1; x1 < x2 ? l <= x2 : l >= x2; l += x1 < x2 ? 1 : -1) {
@@ -52,7 +76,7 @@ public class Cube extends AbstractBlockStructure {
     }
 
 
-    public static Stream<BlockPosition> collectCubePlaneBlocks(Context context) {
+    public static Stream<BlockPosition> collectCubePlaneBlocks(Context context, CubeFilling cubeFilling) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
@@ -66,16 +90,16 @@ public class Cube extends AbstractBlockStructure {
         var y2 = pos2.y();
         var z2 = pos2.z();
 
-        switch (context.cubeFilling()) {
-            case CUBE_SKELETON -> Square.addHollowSquareBlocks(set, x1, x2, y1, y2, z1, z2);
-            case CUBE_FULL -> Square.addFullSquareBlocks(set, x1, x2, y1, y2, z1, z2);
-            case CUBE_HOLLOW -> Square.addFullSquareBlocks(set, x1, x2, y1, y2, z1, z2);
+        switch (cubeFilling) {
+            case SKELETON -> Square.addHollowSquareBlocks(set, x1, x2, y1, y2, z1, z2);
+            case FILLED -> Square.addFullSquareBlocks(set, x1, x2, y1, y2, z1, z2);
+            case HOLLOW -> Square.addFullSquareBlocks(set, x1, x2, y1, y2, z1, z2);
         }
 
         return set.stream();
     }
 
-    public static Stream<BlockPosition> collectCubeBlocks(Context context) {
+    public static Stream<BlockPosition> collectCubeBlocks(Context context, CubeFilling cubeFilling) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
@@ -88,29 +112,29 @@ public class Cube extends AbstractBlockStructure {
         var y3 = pos3.y();
         var z3 = pos3.z();
 
-        switch (context.cubeFilling()) {
-            case CUBE_FULL -> addFullCubeBlocks(set, x1, x3, y1, y3, z1, z3);
-            case CUBE_HOLLOW -> addHollowCubeBlocks(set, x1, x3, y1, y3, z1, z3);
-            case CUBE_SKELETON -> addSkeletonCubeBlocks(set, x1, x3, y1, y3, z1, z3);
+        switch (cubeFilling) {
+            case FILLED -> addFullCubeBlocks(set, x1, x3, y1, y3, z1, z3);
+            case HOLLOW -> addHollowCubeBlocks(set, x1, x3, y1, y3, z1, z3);
+            case SKELETON -> addSkeletonCubeBlocks(set, x1, x3, y1, y3, z1, z3);
         }
 
         return set.stream();
     }
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> Square.traceSquare(player, context);
-            case 2 -> Line.traceLineOnPlane(player, context);
+            case 1 -> Square.traceSquare(player, context, planeFacing, planeLength);
+            case 2 -> Line.traceLineOnPlane(player, context, planeFacing);
             default -> null;
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Cube.collectCubePlaneBlocks(context);
-            case 3 -> Cube.collectCubeBlocks(context);
+            case 2 -> Cube.collectCubePlaneBlocks(context, cubeFilling);
+            case 3 -> Cube.collectCubeBlocks(context, cubeFilling);
             default -> Stream.empty();
         };
     }
@@ -118,5 +142,10 @@ public class Cube extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 3;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.CUBE;
     }
 }

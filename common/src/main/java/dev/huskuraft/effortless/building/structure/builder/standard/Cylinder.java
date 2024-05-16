@@ -9,11 +9,40 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.structure.builder.AbstractBlockStructure;
+import dev.huskuraft.effortless.building.structure.BuildFeature;
+import dev.huskuraft.effortless.building.structure.BuildMode;
+import dev.huskuraft.effortless.building.structure.CircleStart;
+import dev.huskuraft.effortless.building.structure.PlaneFacing;
+import dev.huskuraft.effortless.building.structure.PlaneFilling;
+import dev.huskuraft.effortless.building.structure.PlaneLength;
+import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 
-public class Cylinder extends AbstractBlockStructure {
+public record Cylinder(
+        CircleStart circleStart,
+        PlaneFilling planeFilling,
+        PlaneFacing planeFacing,
+        PlaneLength planeLength
+) implements BlockBuildStructure {
 
-    public static Stream<BlockPosition> collectCylinderBlocks(Context context) {
+    public Cylinder() {
+        this(CircleStart.CORNER, PlaneFilling.FILLED, PlaneFacing.BOTH, PlaneLength.VARIABLE);
+    }
+
+    @Override
+    public BuildStructure withFeature(BuildFeature feature) {
+        return switch (feature.getType()) {
+            case CIRCLE_START -> new Cylinder((CircleStart) feature, planeFilling, planeFacing, planeLength);
+            case PLANE_FILLING -> new Cylinder(circleStart, (PlaneFilling) feature, planeFacing, planeLength);
+            case PLANE_FACING -> new Cylinder(circleStart, planeFilling, (PlaneFacing) feature, planeLength);
+            case PLANE_LENGTH -> new Cylinder(circleStart, planeFilling, planeFacing, (PlaneLength) feature);
+            default -> this;
+        };
+    }
+
+    public static Stream<BlockPosition> collectCylinderBlocks(Context context,
+                                                              CircleStart circleStart,
+                                                              PlaneFilling planeFilling) {
         Set<BlockPosition> set = Sets.newLinkedHashSet();
 
         var pos1 = context.getPosition(0);
@@ -27,23 +56,23 @@ public class Cylinder extends AbstractBlockStructure {
         var y3 = pos3.y();
         var z3 = pos3.z();
 
-        switch (getShape(pos1, pos2)) {
+        switch (BlockBuildStructure.getShape(pos1, pos2)) {
             case PLANE_X -> {
                 for (int x = x1; x1 < x3 ? x <= x3 : x >= x3; x += x1 < x3 ? 1 : -1) {
                     int x0 = x;
-                    set.addAll(Circle.collectCircleBlocks(context).map(blockPosition -> new BlockPosition(x0, blockPosition.y(), blockPosition.z())).toList());
+                    set.addAll(Circle.collectCircleBlocks(context, circleStart, planeFilling).map(blockPosition -> new BlockPosition(x0, blockPosition.y(), blockPosition.z())).toList());
                 }
             }
             case PLANE_Y -> {
                 for (int y = y1; y1 < y3 ? y <= y3 : y >= y3; y += y1 < y3 ? 1 : -1) {
                     int y0 = y;
-                    set.addAll(Circle.collectCircleBlocks(context).map(blockPosition -> new BlockPosition(blockPosition.x(), y0, blockPosition.z())).toList());
+                    set.addAll(Circle.collectCircleBlocks(context, circleStart, planeFilling).map(blockPosition -> new BlockPosition(blockPosition.x(), y0, blockPosition.z())).toList());
                 }
             }
             case PLANE_Z -> {
                 for (int z = z1; z1 < z3 ? z <= z3 : z >= z3; z += z1 < z3 ? 1 : -1) {
                     int z0 = z;
-                    set.addAll(Circle.collectCircleBlocks(context).map(blockPosition -> new BlockPosition(blockPosition.x(), blockPosition.y(), z0)).toList());
+                    set.addAll(Circle.collectCircleBlocks(context, circleStart, planeFilling).map(blockPosition -> new BlockPosition(blockPosition.x(), blockPosition.y(), z0)).toList());
                 }
             }
         }
@@ -52,11 +81,11 @@ public class Cylinder extends AbstractBlockStructure {
     }
 
 
-    protected BlockInteraction trace(Player player, Context context, int index) {
+    public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
-            case 1 -> Square.traceSquare(player, context);
-            case 2 -> switch (context.planeFacing()) {
+            case 1 -> Square.traceSquare(player, context, planeFacing, planeLength);
+            case 2 -> switch (planeFacing) {
                 case BOTH -> Line.traceLineOnPlane(player, context.getPosition(0), context.getPosition(1));
                 case VERTICAL -> Line.traceLineOnVerticalPlane(player, context.getPosition(0), context.getPosition(1));
                 case HORIZONTAL -> Line.traceLineOnHorizontalPlane(player, context.getPosition(0), context.getPosition(1));
@@ -65,11 +94,11 @@ public class Cylinder extends AbstractBlockStructure {
         };
     }
 
-    protected Stream<BlockPosition> collect(Context context, int index) {
+    public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Circle.collectCircleBlocks(context);
-            case 3 -> Cylinder.collectCylinderBlocks(context);
+            case 2 -> Circle.collectCircleBlocks(context, circleStart, planeFilling);
+            case 3 -> Cylinder.collectCylinderBlocks(context, circleStart, planeFilling);
             default -> Stream.empty();
         };
     }
@@ -77,5 +106,10 @@ public class Cylinder extends AbstractBlockStructure {
     @Override
     public int traceSize(Context context) {
         return 3;
+    }
+
+    @Override
+    public BuildMode getMode() {
+        return BuildMode.CYLINDER;
     }
 }

@@ -71,10 +71,10 @@ from a pre-defined list for random placement.
 - **Array**: Copies blocks and entities in a specific direction for a specified number of times.
 - **Radial**: Places blocks and entities in a circular pattern around a central point. The circle can be divided
   into sections, and each section will contain a copy of the block placements.
-- **Item Randomize**: Randomizes the placement of blocks and entities.
+- **Item Randomizer**: Randomizes the placement of blocks and entities.
 
 ### Build Patterns
-- Build patterns are containers of build transformers. You can combine different build transformers to create complex shapes. There are currently 9 presets of build patterns.
+- Build patterns are containers of build transformers. You can combine different build transformers to create complex shapes.
 
 
 ### Replace Modes

@@ -1,11 +1,8 @@
 package dev.huskuraft.effortless.building.structure;
 
-import dev.huskuraft.effortless.building.SingleSelectFeature;
-
-public enum PlaneFilling implements SingleSelectFeature {
-
-    PLANE_FULL("plane_full"),
-    PLANE_HOLLOW("plane_hollow");
+public enum PlaneFilling implements BuildFeature {
+    FILLED("plane_filled"),
+    HOLLOW("plane_hollow");
 
     private final String name;
 
@@ -19,7 +16,7 @@ public enum PlaneFilling implements SingleSelectFeature {
     }
 
     @Override
-    public String getCategory() {
-        return BuildFeature.PLANE_FILLING.getName();
+    public BuildFeatures getType() {
+        return BuildFeatures.PLANE_FILLING;
     }
 }
