@@ -48,7 +48,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
 //        this.nameEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
 //        this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
 
-        this.entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1, true, false));
+        this.entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1, true, false));
         this.entries.setAlwaysShowScrollbar(true);
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.cancel"), button -> {

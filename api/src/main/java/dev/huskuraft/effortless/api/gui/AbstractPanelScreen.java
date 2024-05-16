@@ -32,7 +32,10 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
 
     public static final int UNSPECIFIC = 0;
 
-    public static final int PADDINGS = 6;
+    public static final int PADDINGS_H = 6;
+    public static final int PADDINGS_V = 6;
+    public static final int INNER_PADDINGS_H = Button.COMPAT_SPACING_H;
+    public static final int INNER_PADDINGS_V = Button.COMPAT_SPACING_V;
     public static final int PANEL_TITLE_HEIGHT_1 = 18;
     public static final int PANEL_TITLE_HEIGHT_2 = 24;
 

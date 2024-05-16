@@ -74,7 +74,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
             targetButton.setMessage(Text.translate("effortless.randomizer.edit.target", this.itemRandomizer.target().getDisplayName()));
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3, 0f, 0f, 1f).build());
 
-        this.entries = addWidget(new ItemChanceList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_BUTTON_ROW_HEIGHT_3N + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_3N - PANEL_BUTTON_ROW_HEIGHT_2));
+        this.entries = addWidget(new ItemChanceList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_BUTTON_ROW_HEIGHT_3N + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_3N - PANEL_BUTTON_ROW_HEIGHT_2));
         this.entries.setAlwaysShowScrollbar(true);
         this.entries.reset(itemRandomizer.getChances());
 
