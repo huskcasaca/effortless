@@ -20,6 +20,7 @@ import dev.huskuraft.effortless.api.math.Matrix3f;
 import dev.huskuraft.effortless.api.math.Matrix4f;
 import dev.huskuraft.effortless.api.math.Quaternionf;
 import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector4f;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.texture.SpriteScaling;
@@ -115,26 +116,25 @@ public abstract class Renderer {
         this.matrixStack().multiply(matrix);
     }
 
-    protected abstract void enableScissorInternal(int x1, int y1, int x2, int y2);
+    protected abstract void enableScissor(int x, int y, int width, int height);
 
-    protected abstract void disableScissorInternal();
+    protected abstract void disableScissor();
 
-    public final void enableScissor(int x1, int y1, int x2, int y2) {
-        this.applyScissor(this.scissorStack.push(new ScreenRect(x1, y1, x2 - x1, y2 - y1)));
+    public final void pushScissor(int x, int y, int width, int height) {
+        var pose = lastMatrixPose();
+        var p1 = pose.mul(new Vector4f(x, y, 0F, 1.0F));
+        var p2 = pose.mul(new Vector4f(x + width, y + height, 0F, 1.0F));
+        this.applyScissor(scissorStack.push(new ScreenRect((int) p1.x(), (int) p1.y(), (int) (p2.x() - p1.x()), (int) (p2.y() - p1.y()))));
     }
 
-    public final void enableScissor(ScreenRect rect) {
-        this.applyScissor(this.scissorStack.push(rect));
-    }
-
-    public final void disableScissor() {
-        this.applyScissor(this.scissorStack.pop());
+    public final void popScissor() {
+        this.applyScissor(scissorStack.pop());
     }
 
     private void applyScissor(ScreenRect rect) {
 //        this.flushIfManaged();
         if (rect == null) {
-            disableScissorInternal();
+            disableScissor();
         } else {
             var height = window().getHeight();
             var scale = window().getGuiScaledFactor();
@@ -142,7 +142,7 @@ public abstract class Renderer {
             var d2 = height - rect.bottom() * scale;
             var d3 = rect.width() * scale;
             var d4 = rect.height() * scale;
-            enableScissorInternal((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
+            enableScissor((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
         }
     }
 
@@ -336,9 +336,9 @@ public abstract class Renderer {
             var f = MathUtils.sin(1.5707963267948966 * MathUtils.cos(6.283185307179586 * sec / e)) / 2.0 + 0.5;
             var offset = MathUtils.lerp(f, 0.0, extraWidth);
             this.flush();
-            this.enableScissor(x1 - 1, y1, x2 + 1, y2);
+            this.pushScissor(x1 - 1, y1, x2 + 1 - (x1 - 1), y2 - y1);
             this.renderText(typeface, text, (int) Math.round(x1 - offset), y1, color, true);
-            this.disableScissor();
+            this.popScissor();
         } else {
             this.renderTextFromCenter(typeface, text, (x1 + x2) / 2, y1, color, true);
         }

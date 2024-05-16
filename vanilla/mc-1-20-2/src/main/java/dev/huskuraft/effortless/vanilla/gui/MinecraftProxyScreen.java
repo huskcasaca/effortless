@@ -46,7 +46,6 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
     @Override
     public void render(GuiGraphics minecraftRenderer, int i, int j, float f) {
         var renderer = new MinecraftRenderer(minecraftRenderer.pose());
-        proxy.onReload();
         proxy.render(renderer, i, j, f);
         proxy.renderOverlay(renderer, i, j, f);
     }

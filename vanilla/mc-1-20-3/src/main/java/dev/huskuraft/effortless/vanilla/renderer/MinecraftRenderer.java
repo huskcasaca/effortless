@@ -55,12 +55,12 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    protected void enableScissorInternal(int x1, int y1, int x2, int y2) {
-        RenderSystem.enableScissor(x1, y1, x2, y2);
+    protected void enableScissor(int x, int y, int width, int height) {
+        RenderSystem.enableScissor(x, y, width, height);
     }
 
     @Override
-    protected void disableScissorInternal() {
+    protected void disableScissor() {
         RenderSystem.disableScissor();
     }
 

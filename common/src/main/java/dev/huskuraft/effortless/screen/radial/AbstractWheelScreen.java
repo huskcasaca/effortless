@@ -27,16 +27,12 @@ import dev.huskuraft.effortless.building.Option;
 
 public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
+    public static final int ANIMATION_OFFSET_Y = 12;
+    public static final int ANIMATION_TICKS = 4;
     private static final float FADE_SPEED = 0.5f;
     private static final int WATERMARK_TEXT_COLOR = 0x8d7f7f7f;
     private static final int DEFAULT_RADIAL_SLOTS = 12;
-    private static final ColorState RADIAL_SLOT_COLOR_STATE = new ColorState(
-            new Color(0f, 0f, 0f, 0.42f),
-            new Color(0f, 0f, 0f, 0.42f),
-            new Color(0.24f, 0.24f, 0.24f, 0.50f),
-            new Color(0.36f, 0.36f, 0.36f, 0.64f),
-            new Color(0.42f, 0.42f, 0.42f, 0.64f)
-    );
+    private static final ColorState RADIAL_SLOT_COLOR_STATE = new ColorState(new Color(0f, 0f, 0f, 0.42f), new Color(0f, 0f, 0f, 0.42f), new Color(0.24f, 0.24f, 0.24f, 0.50f), new Color(0.36f, 0.36f, 0.36f, 0.64f), new Color(0.42f, 0.42f, 0.42f, 0.64f));
     private static final ColorState RADIAL_BUTTON_COLOR_STATE = RADIAL_SLOT_COLOR_STATE;
     private static final int WHITE_TEXT_COLOR = 0xFFFFFF;
     private static final double RING_INNER_EDGE = 32;
@@ -64,6 +60,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     private float lastScrollOffset = 0;
     // TODO: 20/2/23 rename
     private float visibility = 1;
+    private int animationTicks = 0;
 
     public AbstractWheelScreen(Entrance entrance, Text text) {
         super(entrance, text);
@@ -219,14 +216,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     public static <T extends Option> Button<T> button(T option, boolean activated) {
-        return button(
-                option,
-                option.getNameText(),
-                option.getCategoryText(),
-                option.getIcon(),
-                option.getTooltipText(),
-                option,
-                activated);
+        return button(option, option.getNameText(), option.getCategoryText(), option.getIcon(), option.getTooltipText(), option, activated);
     }
 
     @Override
@@ -235,15 +225,19 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @Override
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+        renderer.pushPose();
+        renderer.translate(0, 0 * getAnimationFactor(deltaTick) * ANIMATION_OFFSET_Y, 0);
+        renderer.translate(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0);
+        renderer.scale(MathUtils.lerp(getAnimationFactor(deltaTick), 0.92, 1));
+        renderer.translate(-getX() - getWidth() / 2f, -getY() - getHeight() / 2f, 0);
+        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, getAnimationFactor(deltaTick));
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
-
         hoveredSlot = null;
         hoveredButton = null;
-
         renderRadialButtonSets(renderer, mouseX, mouseY, leftButtons, AxisDirection.NEGATIVE);
         renderRadialButtonSets(renderer, mouseX, mouseY, rightButtons, AxisDirection.POSITIVE);
         renderRadialSlots(renderer, mouseX, mouseY, radialSlots);
-
+        renderer.popPose();
     }
 
     public void setVisibility(float visibility) {
@@ -503,8 +497,20 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         return (EffortlessClient) super.getEntrance();
     }
 
-    private boolean inTriangle(double x1, double y1, double x2, double y2,
-                               double x3, double y3, double x, double y) {
+    private float getAnimationFactor(float deltaTick) {
+        var animationTicksF = animationTicks + deltaTick;
+        var fac = 1f - Math.min(animationTicksF, ANIMATION_TICKS) / ANIMATION_TICKS;
+        return 1 - MathUtils.lerp(fac * fac, 0f, 1f);
+    }
+
+
+    @Override
+    public void tick() {
+        super.tick();
+        animationTicks = Math.min(Math.max(animationTicks + 1, 0), ANIMATION_TICKS);
+    }
+
+    private boolean inTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double x, double y) {
         var ab = (x1 - x) * (y2 - y) - (x2 - x) * (y1 - y);
         var bc = (x2 - x) * (y3 - y) - (x3 - x) * (y2 - y);
         var ca = (x3 - x) * (y1 - y) - (x1 - x) * (y3 - y);
@@ -559,13 +565,8 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     }
 
-    record ColorState(
-            Color disabledColor,
-            Color defaultColor,
-            Color hoveredColor,
-            Color activedColor,
-            Color activedHoveredColor
-    ) {
+    record ColorState(Color disabledColor, Color defaultColor, Color hoveredColor, Color activedColor,
+                      Color activedHoveredColor) {
     }
 
 }

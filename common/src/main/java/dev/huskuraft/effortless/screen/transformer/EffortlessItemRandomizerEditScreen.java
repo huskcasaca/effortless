@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.screen.transformer;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
@@ -20,10 +21,11 @@ import dev.huskuraft.effortless.screen.item.EffortlessBlockItemPickerScreen;
 
 public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
 
-    private final Consumer<ItemRandomizer> applySettings;
-    private final ItemRandomizer defaultSettings;
-    private ItemRandomizer itemRandomizer;
+    private final Consumer<ItemRandomizer> consumer;
+    private final ItemRandomizer defaultRandomizer;
+    private ItemRandomizer randomizer;
     private TextWidget titleTextWidget;
+    private TransformerList transformerEntries;
     private ItemChanceList entries;
     private Button sourceButton;
     private Button orderButton;
@@ -35,48 +37,46 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
     private Button saveButton;
     private Button cancelButton;
 
-    private ItemRandomizer.Source lastSource;
-    private ItemRandomizer.Order lastOrder;
-    private ItemRandomizer.Target lastTarget;
-
     public EffortlessItemRandomizerEditScreen(Entrance entrance, Consumer<ItemRandomizer> consumer, ItemRandomizer randomizer) {
         super(entrance, Text.translate("effortless.randomizer.edit.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
-        this.applySettings = consumer;
-        this.defaultSettings = randomizer;
-        this.itemRandomizer = randomizer;
-        this.lastOrder = randomizer.getOrder();
-        this.lastTarget = randomizer.getTarget();
+        this.consumer = consumer;
+        this.defaultRandomizer = randomizer;
+        this.randomizer = randomizer;
     }
 
     @Override
     public void onCreate() {
-        setPanelHeight(itemRandomizer.getSource() == ItemRandomizer.Source.CUSTOMIZE ? PANEL_HEIGHT_270 : PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_4);
-        setPanelWidth(itemRandomizer.getSource() == ItemRandomizer.Source.CUSTOMIZE ? PANEL_WIDTH_EXPANDED : PANEL_WIDTH);
+        setPanelHeight(randomizer.getSource() == ItemRandomizer.Source.CUSTOMIZE ? PANEL_HEIGHT_270 : PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_3);
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 
-        this.sourceButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.source", itemRandomizer.getSource().getDisplayName()), button -> {
-            var newSource = ItemRandomizer.Source.values()[(this.itemRandomizer.source().ordinal() + 1) % ItemRandomizer.Source.values().length];
-            this.itemRandomizer = this.itemRandomizer.withSource(newSource);
-            sourceButton.setMessage(Text.translate("effortless.randomizer.edit.source", this.itemRandomizer.getSource().getDisplayName()));
+        this.transformerEntries = addWidget(new TransformerList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2, 38));
+        this.transformerEntries.setShowScrollBar(false);
+        this.transformerEntries.setRenderSelection(false);
+        this.transformerEntries.reset(List.of(randomizer));
+
+        this.sourceButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.source", randomizer.getSource().getDisplayName()), button -> {
+            var newSource = ItemRandomizer.Source.values()[(this.randomizer.source().ordinal() + 1) % ItemRandomizer.Source.values().length];
+            this.randomizer = this.randomizer.withSource(newSource);
+            sourceButton.setMessage(Text.translate("effortless.randomizer.edit.source", this.randomizer.getSource().getDisplayName()));
             recreate();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3, 2f, 0f, 1f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_2, 1f, 0f, 1f).build());
 
-        this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.order", itemRandomizer.getOrder().getDisplayName()), button -> {
-            var newOrder = ItemRandomizer.Order.values()[(this.itemRandomizer.getOrder().ordinal() + 1) % ItemRandomizer.Order.values().length];
-            this.itemRandomizer = this.itemRandomizer.withOrder(newOrder);
-            orderButton.setMessage(Text.translate("effortless.randomizer.edit.order", this.itemRandomizer.order().getDisplayName()));
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3, 1f, 0f, 1f).build());
+        this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.order", randomizer.getOrder().getDisplayName()), button -> {
+            var newOrder = ItemRandomizer.Order.values()[(this.randomizer.getOrder().ordinal() + 1) % ItemRandomizer.Order.values().length];
+            this.randomizer = this.randomizer.withOrder(newOrder);
+            orderButton.setMessage(Text.translate("effortless.randomizer.edit.order", this.randomizer.order().getDisplayName()));
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_2, 0f, 0f, 1 / 2f).build());
 
-        this.targetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.target", lastTarget.getDisplayName()), button -> {
-            var newTarget = ItemRandomizer.Target.values()[(this.itemRandomizer.getTarget().ordinal() + 1) % ItemRandomizer.Target.values().length];
-            this.itemRandomizer = this.itemRandomizer.withTarget(newTarget);
-            targetButton.setMessage(Text.translate("effortless.randomizer.edit.target", this.itemRandomizer.target().getDisplayName()));
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3, 0f, 0f, 1f).build());
+        this.targetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.target", randomizer.getTarget().getDisplayName()), button -> {
+            var newTarget = ItemRandomizer.Target.values()[(this.randomizer.getTarget().ordinal() + 1) % ItemRandomizer.Target.values().length];
+            this.randomizer = this.randomizer.withTarget(newTarget);
+            targetButton.setMessage(Text.translate("effortless.randomizer.edit.target", this.randomizer.target().getDisplayName()));
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_2, 0f, 1 / 2f, 1 / 2f).build());
 
-        this.entries = addWidget(new ItemChanceList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_BUTTON_ROW_HEIGHT_3N + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_3N - PANEL_BUTTON_ROW_HEIGHT_2));
+        this.entries = addWidget(new ItemChanceList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_BUTTON_ROW_HEIGHT_2N + 38 + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_2N - 38 - PANEL_BUTTON_ROW_HEIGHT_2));
         this.entries.setAlwaysShowScrollbar(true);
-        this.entries.reset(itemRandomizer.getChances());
+        this.entries.reset(randomizer.getChances());
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.up"), button -> {
             if (entries.hasSelected()) {
@@ -106,7 +106,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.save"), button -> {
-            applySettings.accept(itemRandomizer);
+            consumer.accept(randomizer);
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
     }
@@ -119,15 +119,15 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
         this.deleteButton.setActive(entries.hasSelected());
         this.addButton.setActive(entries.children().size() <= ItemRandomizer.MAX_CHANCE_SIZE);
 
-        this.entries.setVisible(itemRandomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
-        this.upButton.setVisible(itemRandomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
-        this.downButton.setVisible(itemRandomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
-        this.deleteButton.setVisible(itemRandomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
-        this.addButton.setVisible(itemRandomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
+        this.entries.setVisible(randomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
+        this.upButton.setVisible(randomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
+        this.downButton.setVisible(randomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
+        this.deleteButton.setVisible(randomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
+        this.addButton.setVisible(randomizer.source() == ItemRandomizer.Source.CUSTOMIZE);
 
         var sourceTooltip = new ArrayList<Text>();
         sourceTooltip.add(Text.translate("effortless.randomizer.edit.source.tooltip.title"));
-        sourceTooltip.add(this.itemRandomizer.getSource().getDisplayName().withStyle(ChatFormatting.GOLD));
+        sourceTooltip.add(this.randomizer.getSource().getDisplayName().withStyle(ChatFormatting.GOLD));
         sourceTooltip.add(Text.empty());
         if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
             sourceTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
@@ -144,7 +144,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
 
         var orderTooltip = new ArrayList<Text>();
         orderTooltip.add(Text.translate("effortless.randomizer.edit.order.tooltip.title"));
-        orderTooltip.add(this.itemRandomizer.getOrder().getDisplayName().withStyle(ChatFormatting.GOLD));
+        orderTooltip.add(this.randomizer.getOrder().getDisplayName().withStyle(ChatFormatting.GOLD));
         orderTooltip.add(Text.empty());
         if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
             orderTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
@@ -161,7 +161,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
 
         var targetTooltip = new ArrayList<Text>();
         targetTooltip.add(Text.translate("effortless.randomizer.edit.target.tooltip.title"));
-        targetTooltip.add(this.itemRandomizer.getTarget().getDisplayName().withStyle(ChatFormatting.GOLD));
+        targetTooltip.add(this.randomizer.getTarget().getDisplayName().withStyle(ChatFormatting.GOLD));
         targetTooltip.add(Text.empty());
         if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
             targetTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
@@ -176,7 +176,9 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
         }
         this.targetButton.setTooltip(targetTooltip);
 
-        this.itemRandomizer = this.itemRandomizer.withChances(entries.items());
+        this.randomizer = this.randomizer.withChances(entries.items());
+
+        this.transformerEntries.reset(List.of(randomizer));
 
 
     }

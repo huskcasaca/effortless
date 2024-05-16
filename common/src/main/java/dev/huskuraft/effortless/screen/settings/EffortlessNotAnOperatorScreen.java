@@ -22,7 +22,7 @@ public class EffortlessNotAnOperatorScreen extends AbstractPanelScreen {
     public void onCreate() {
         addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, Text.translate("effortless.not_an_operator.title").withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        var entries = addWidget(new TextList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1));
+        var entries = addWidget(new TextList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1));
         entries.reset(Stream.of(List.of(Text.empty()), getMessages(), List.of(Text.empty())).flatMap(List::stream).toList());
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
@@ -32,7 +32,7 @@ public class EffortlessNotAnOperatorScreen extends AbstractPanelScreen {
     }
 
     private List<Text> getMessages() {
-        return TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.not_an_operator.message"), getWidth() - PADDINGS * 2);
+        return TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.not_an_operator.message"), getWidth() - PADDINGS_H * 2);
     }
 
     @Override

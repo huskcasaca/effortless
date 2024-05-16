@@ -27,8 +27,8 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
     private Map<UUID, GeneralConfig> originalConfig;
     private Map<UUID, GeneralConfig> config;
     private PlayerInfoList entries;
-    private Button deleteButton;
     private Button editButton;
+    private Button deleteButton;
     private Button addButton;
     private Button saveButton;
     private Button cancelButton;
@@ -51,13 +51,6 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
 
         var titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 
-        this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.delete"), button -> {
-            if (entries.hasSelected()) {
-                entries.deleteSelected();
-                onReload();
-            }
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1 / 3f).build());
-
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.hasSelected()) {
                 new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), GeneralConfig.NULL), (playerInfo1, config) -> {
@@ -66,6 +59,13 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
                     onReload();
                 }).attach();
 
+            }
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1 / 3f).build());
+
+        this.deleteButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.delete"), button -> {
+            if (entries.hasSelected()) {
+                entries.deleteSelected();
+                onReload();
             }
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 1 / 3f, 1 / 3f).build());
 
@@ -91,7 +91,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-        this.entries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_2, true));
+        this.entries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_2, true));
         this.entries.reset(getConfigurablePlayers());
         this.entries.setAlwaysShowScrollbar(true);
     }
@@ -101,6 +101,14 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
         this.deleteButton.setActive(entries.hasSelected());
         this.editButton.setActive(entries.hasSelected());
         this.config = this.entries.items().stream().map(PlayerInfo::getId).collect(Collectors.toMap(Function.identity(), config::get, (e1, e2) -> e1, LinkedHashMap::new));
+
+        if (entries.consumeDoubleClick() && entries.hasSelected()) {
+            new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), GeneralConfig.NULL), (playerInfo1, config) -> {
+                this.entries.insertSelected(playerInfo1);
+                this.config.put(playerInfo1.getId(), config);
+                onReload();
+            }).attach();
+        }
     }
 
     public List<PlayerInfo> getConfigurablePlayers() {

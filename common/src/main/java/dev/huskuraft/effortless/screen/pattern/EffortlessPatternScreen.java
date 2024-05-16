@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.transformer.EffortlessItemRandomizerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
@@ -66,11 +67,11 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 1f).build());
 
-        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1N - PANEL_BUTTON_ROW_HEIGHT_2));
+        this.entries = addWidget(new TransformerList(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS_H * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1N - PANEL_BUTTON_ROW_HEIGHT_2));
         this.entries.reset(lastSettings.transformers());
         this.entries.setAlwaysShowScrollbar(true);
 
-        this.textWidget = addWidget(new MultiLineTextWidget(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1N - PANEL_BUTTON_ROW_HEIGHT_2, Text.translate("effortless.pattern.no_transformer"), MultiLineTextWidget.Gravity.CENTER));
+        this.textWidget = addWidget(new MultiLineTextWidget(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS_H * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1N - PANEL_BUTTON_ROW_HEIGHT_2, Text.translate("effortless.pattern.no_transformer"), MultiLineTextWidget.Gravity.CENTER));
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.up"), button -> {
             if (entries.hasSelected()) {
@@ -85,29 +86,7 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.hasSelected()) {
-                var item = entries.getSelected().getItem();
-                switch (item.getType()) {
-                    case ARRAY, MIRROR, RADIAL -> {
-                        new EffortlessTransformerEditScreen(
-                                getEntrance(),
-                                transformer -> {
-                                    entries.replaceSelect(transformer);
-                                    onReload();
-                                },
-                                item
-                        ).attach();
-                    }
-                    case ITEM_RANDOMIZER -> {
-                        new EffortlessItemRandomizerEditScreen(
-                                getEntrance(),
-                                transformer -> {
-                                    entries.replaceSelect(transformer);
-                                    onReload();
-                                },
-                                (ItemRandomizer) item
-                        ).attach();
-                    }
-                }
+                editTransformer(entries.getSelected().getItem());
 
             }
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 0.25f).build());
@@ -154,6 +133,43 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
 
         this.textWidget.setVisible(this.entries.isVisible() && this.entries.items().isEmpty());
 
+        if (entries.consumeDoubleClick() && entries.hasSelected()) {
+            editTransformer(entries.getSelected().getItem());
+        }
+
+    }
+
+    private void editTransformer(Transformer transformer) {
+        switch (transformer.getType()) {
+            case ARRAY, MIRROR, RADIAL -> {
+                new EffortlessTransformerEditScreen(
+                        getEntrance(),
+                        result -> {
+                            if (entries.hasSelected()) {
+                                entries.replaceSelect(result);
+                            } else {
+                                entries.insertSelected(result);
+                            }
+                            onReload();
+                        },
+                        transformer
+                ).attach();
+            }
+            case ITEM_RANDOMIZER -> {
+                new EffortlessItemRandomizerEditScreen(
+                        getEntrance(),
+                        result -> {
+                            if (entries.hasSelected()) {
+                                entries.replaceSelect(result);
+                            } else {
+                                entries.insertSelected(result);
+                            }
+                            onReload();
+                        },
+                        (ItemRandomizer) transformer
+                ).attach();
+            }
+        }
     }
 
 }
