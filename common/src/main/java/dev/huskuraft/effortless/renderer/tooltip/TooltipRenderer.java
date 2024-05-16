@@ -365,7 +365,7 @@ public class TooltipRenderer {
                 renderer.renderItem(itemStack, x + 1, y + 1);
                 renderer.pushPose();
                 renderer.translate(0, 0, 200F);
-                renderer.renderText(getTypeface(), text, x + 19 - 2 - getTypeface().measureWidth(text), y + 6 + 3, color == 0 ? 16777215 : color, true);
+                renderer.renderText(getTypeface(), text, x + 19 - 2 - getTypeface().measureWidth(text), y + 6 + 3, color == null ? 16777215 : color, true);
                 renderer.popPose();
                 renderer.popPose();
 

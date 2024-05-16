@@ -47,7 +47,11 @@ public class ItemStackUtils {
     }
 
     public static Integer getColorTag(ItemStack itemStack) {
-        return itemStack.getTag().getInt("RenderColor");
+        try {
+            return itemStack.getTag().getInt("RenderColor");
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
 }
