@@ -62,31 +62,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.getSelected() != null && !entries.getSelected().getItem().isBuiltIn()) {
-                var item = entries.getSelected().getItem();
-                switch (item.getType()) {
-                    case ARRAY, MIRROR, RADIAL -> {
-                        new EffortlessTransformerEditScreen(
-                                getEntrance(),
-                                transformer -> {
-                                    entries.replaceSelect(transformer);
-                                    onReload();
-                                },
-                                item
-                        ).attach();
-                    }
-                    case ITEM_RANDOMIZER -> {
-                        new EffortlessItemRandomizerEditScreen(
-                                getEntrance(),
-                                transformer -> {
-                                    entries.replaceSelect(transformer);
-                                    onReload();
-                                },
-                                (ItemRandomizer) item
-                        ).attach();
-                    }
-                }
-
-
+                editTransformer(entries.getSelected().getItem());
             }
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 0.25f).build());
 
@@ -103,36 +79,12 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
 
 
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.add"), button -> {
-            switch (selectedType) {
-                case ARRAY, MIRROR, RADIAL -> {
-                    new EffortlessTransformerEditScreen(
-                            getEntrance(),
-                            transformer -> {
-                                this.entries.insertSelected(transformer);
-                                onReload();
-//                                this.config.put(selectedType, this.entries.items().stream().filter(transformer1 -> !transformer1.isBuiltIn()).filter(transformer1 -> transformer1.getType() == selectedType).toList());
-                            },
-                            switch (selectedType) {
-                                case ARRAY -> ArrayTransformer.DEFAULT.withName(Text.empty()).withRandomId();
-                                case MIRROR -> MirrorTransformer.DEFAULT_X.withName(Text.empty()).withRandomId();
-                                case RADIAL -> RadialTransformer.DEFAULT.withName(Text.empty()).withRandomId();
-                                default -> null;
-                            }
-                    ).attach();
-                }
-                case ITEM_RANDOMIZER -> {
-                    new EffortlessItemRandomizerEditScreen(
-                            getEntrance(),
-                            transformer -> {
-                                entries.insertSelected(transformer);
-                                onReload();
-//                                this.config.put(selectedType, this.entries.items().stream().filter(transformer1 -> !transformer1.isBuiltIn()).filter(transformer1 -> transformer1.getType() == selectedType).toList());
-                            },
-                            ItemRandomizer.EMPTY.withName(Text.empty()).withRandomId()
-                    ).attach();
-
-                }
-            }
+            editTransformer(switch (selectedType) {
+                case ARRAY -> ArrayTransformer.DEFAULT.withName(Text.empty()).withRandomId();
+                case MIRROR -> MirrorTransformer.DEFAULT_X.withName(Text.empty()).withRandomId();
+                case RADIAL -> RadialTransformer.DEFAULT.withName(Text.empty()).withRandomId();
+                case ITEM_RANDOMIZER -> ItemRandomizer.EMPTY.withName(Text.empty()).withRandomId();
+            });
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
@@ -206,6 +158,12 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
                         }).withStyle(ChatFormatting.GRAY)).stream()
                 ).toList()
         );
+
+        if (entries.consumeDoubleClick() && entries.hasSelected()) {
+            detach();
+            editTransformer(entries.getSelected().getItem());
+        }
+
     }
 
     private void setSelectedType(Transformers type) {
@@ -213,6 +171,39 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
         this.entries.setSelected(null);
         this.entries.reset(Stream.concat(this.builtInTransformers.get(selectedType).stream(), this.config.get(selectedType).stream()).toList());
         this.entries.setScrollAmount(0);
+    }
+
+    private void editTransformer(Transformer transformer) {
+        switch (transformer.getType()) {
+            case ARRAY, MIRROR, RADIAL -> {
+                new EffortlessTransformerEditScreen(
+                        getEntrance(),
+                        result -> {
+                            if (entries.hasSelected()) {
+                                entries.replaceSelect(result);
+                            } else {
+                                entries.insertSelected(result);
+                            }
+                            onReload();
+                        },
+                        transformer
+                ).attach();
+            }
+            case ITEM_RANDOMIZER -> {
+                new EffortlessItemRandomizerEditScreen(
+                        getEntrance(),
+                        result -> {
+                            if (entries.hasSelected()) {
+                                entries.replaceSelect(result);
+                            } else {
+                                entries.insertSelected(result);
+                            }
+                            onReload();
+                        },
+                        (ItemRandomizer) transformer
+                ).attach();
+            }
+        }
     }
 
 }

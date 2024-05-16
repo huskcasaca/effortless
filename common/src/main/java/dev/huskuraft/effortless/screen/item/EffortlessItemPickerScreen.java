@@ -16,7 +16,7 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public class EffortlessItemPickerScreen extends AbstractPanelScreen {
 
-    protected final Consumer<Item> applySettings;
+    protected final Consumer<Item> consumer;
     protected TextWidget titleTextWidget;
     protected ItemStackList entries;
     protected EditBox searchEditBox;
@@ -25,7 +25,7 @@ public class EffortlessItemPickerScreen extends AbstractPanelScreen {
 
     public EffortlessItemPickerScreen(Entrance entrance, Consumer<Item> consumer) {
         super(entrance, Text.translate("effortless.item.picker.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
-        this.applySettings = consumer;
+        this.consumer = consumer;
     }
 
     @Override
@@ -47,8 +47,8 @@ public class EffortlessItemPickerScreen extends AbstractPanelScreen {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.item.picker.add"), button -> {
-            applySettings.accept(entries.getSelected().getItem().getItem());
             detach();
+            consumer.accept(entries.getSelected().getItem().getItem());
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
         setSearchResult("");
@@ -57,6 +57,10 @@ public class EffortlessItemPickerScreen extends AbstractPanelScreen {
     @Override
     public void onReload() {
         addButton.setActive(entries.hasSelected());
+        if (entries.consumeDoubleClick() && entries.hasSelected()) {
+            detach();
+            consumer.accept(entries.getSelected().getItem().getItem());
+        }
     }
 
     protected void setSearchResult(String string) {

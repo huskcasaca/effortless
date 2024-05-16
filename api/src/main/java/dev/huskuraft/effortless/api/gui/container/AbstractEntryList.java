@@ -22,6 +22,7 @@ import dev.huskuraft.effortless.api.text.Text;
 public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> extends AbstractContainerWidget implements EntryList {
 
     private static final int DEFAULT_VERTICAL_PADDING = 4;
+    public static final int DOUBLE_CLICK_THRESHOLD = 250;
 
     protected boolean backgroundTransparent = false;
     protected boolean renderShadow = true;
@@ -36,6 +37,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     protected int y0;
     protected int y1;
     private double scrollAmount;
+    private long lastClickTime = 0;
 
     protected AbstractEntryList(Entrance entrance, int x, int y, int width, int height) {
         super(entrance, x, y, width, height, Text.empty());
@@ -252,6 +254,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
             this.scroll(-k);
         }
     }
+
     protected void scroll(int i) {
         this.setScrollAmount(this.getScrollAmount() + (double) i);
     }
@@ -520,7 +523,23 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
     public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         updateScrollingState(mouseX, mouseY, button);
-        return super.onMouseClicked(mouseX, mouseY, button) || this.scrolling;
+        var result = super.onMouseClicked(mouseX, mouseY, button) || this.scrolling;
+        if (result && getFocused() != null && getFocused().isMouseOver(mouseX, mouseY)) {
+            if (System.currentTimeMillis() - lastClickTime > DOUBLE_CLICK_THRESHOLD) {
+                this.lastClickTime = System.currentTimeMillis();
+            } else {
+                this.lastClickTime = System.currentTimeMillis() - lastClickTime;
+            }
+        }
+        return result;
+    }
+
+    public boolean consumeDoubleClick() {
+        var clicked = lastClickTime > 0 && lastClickTime <= DOUBLE_CLICK_THRESHOLD;
+        if (clicked) {
+            lastClickTime = 0;
+        }
+        return clicked;
     }
 
     public boolean onMouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {

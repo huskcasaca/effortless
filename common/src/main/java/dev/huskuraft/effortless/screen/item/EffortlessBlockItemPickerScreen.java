@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.screen.item;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-import dev.huskuraft.effortless.api.core.Item;
+import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -11,13 +11,8 @@ import dev.huskuraft.effortless.api.platform.SearchBy;
 
 public class EffortlessBlockItemPickerScreen extends EffortlessItemPickerScreen {
 
-    public EffortlessBlockItemPickerScreen(Entrance entrance, Consumer<Item> consumer) {
-        super(entrance, consumer);
-    }
-
-    @Override
-    public void onReload() {
-        addButton.setActive(entries.hasSelected());
+    public EffortlessBlockItemPickerScreen(Entrance entrance, Consumer<BlockItem> consumer) {
+        super(entrance, item -> consumer.accept((BlockItem) item));
     }
 
     protected void setSearchResult(String string) {
@@ -30,6 +25,7 @@ public class EffortlessBlockItemPickerScreen extends EffortlessItemPickerScreen 
         }
         entries.setSelected(null);
         entries.setScrollAmount(0);
+
     }
 
 }

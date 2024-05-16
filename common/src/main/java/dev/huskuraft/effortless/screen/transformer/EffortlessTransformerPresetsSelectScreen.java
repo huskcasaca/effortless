@@ -78,6 +78,10 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractPanelScree
             tabButton.setActive(!tabButton.getMessage().equals(selectedType.getDisplayName()));
         }
         this.entries.reset(Stream.concat(this.builtInTransformers.get(selectedType).stream(), this.transformers.get(selectedType).stream()).toList());
+        if (entries.consumeDoubleClick() && entries.hasSelected()) {
+            detach();
+            consumer.accept(entries.getSelected().getItem());
+        }
     }
 
     private void setSelectedType(Transformers type) {
