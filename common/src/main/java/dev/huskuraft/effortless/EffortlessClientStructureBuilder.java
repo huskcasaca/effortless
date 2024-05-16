@@ -71,7 +71,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
     }
 
-    private static String getStateComponent(BuildState state) {
+    private static Text getStateComponent(BuildState state) {
         return Text.translate("effortless.state.%s".formatted(
                 switch (state) {
                     case IDLE -> "idle";
@@ -79,7 +79,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     case BREAK_BLOCK -> "breaking_block";
                     case INTERACT_BLOCK -> "interacting_block";
                 }
-        )).getString();
+        ));
     }
 
 //    private static String getTracingComponent(TracingResult result) {
@@ -190,7 +190,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (!checkPermission(player)) {
             return false;
         }
-        updateContext(player, context -> context.withBuildStructure(buildStructure));
+        updateContext(player, context -> context.withEmptyInteractions().withBuildStructure(buildStructure));
         if (buildStructure.getMode().isDisabled()) {
             getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
             updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
@@ -250,8 +250,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
             if (interaction.getTarget() == Interaction.Target.MISS) {
                 var traced = player.raytrace(Short.MAX_VALUE, 0f, false);
-                var message = " (" + ChatFormatting.RED + MathUtils.round(traced.getPosition().distance(player.getEyePosition())) + ChatFormatting.RESET + "/" + context.customParams().generalConfig().maxReachDistance() + ")";
-                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_target").getString() + message, true);
+                var message = Text.empty().append(" (").append(Text.text(String.valueOf(MathUtils.round(traced.getPosition().distance(player.getEyePosition())))).withStyle(ChatFormatting.RED)).append(Text.text("/")).append(Text.text(String.valueOf(context.customParams().generalConfig().maxReachDistance()))).append(Text.text(")"));
+                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_target").append(message), true);
                 return context.newInteraction();
             }
             if (interaction.getTarget() == Interaction.Target.ENTITY) {
@@ -277,20 +277,20 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             if (!nextContext.isBoxVolumeInBounds()) {
                 if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large").getString() + " (" + nextContext.getBoxVolume() + "/" + nextContext.getMaxBoxVolume() + ")", true);
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large").getString() + " (" + nextContext.getBoxVolume() + "/" + nextContext.getMaxBoxVolume() + ")", true);
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 return context.newInteraction();
             }
 
             if (!nextContext.isBoxSideLengthInBounds()) {
                 if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_side_length_too_large").getString() + " (" + nextContext.getBoxSideLength() + "/" + nextContext.getMaxBoxSideLength() + ")", true);
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_side_length_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxSideLength())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxSideLength())).append(")"), true);
                 }
                 if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_side_length_too_large").getString() + " (" + nextContext.getBoxSideLength() + "/" + nextContext.getMaxBoxSideLength() + ")", true);
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_side_length_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxSideLength())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxSideLength())).append(")"), true);
                 }
                 return context.newInteraction();
             }
@@ -536,8 +536,22 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildMessage(Player player, Context context) {
-        var message = "";
-        if (!context.tracingResult().isSuccess()) {
+        var message = Text.empty();
+        if (context.tracingResult().isSuccess()) {
+            message = message.append(getStateComponent(context.buildState()))
+                    .append(" ")
+                    .append(context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD))
+                    .append(" ")
+                    .append("(")
+                    .append(Text.text(String.valueOf(context.getInteractionBox().x())).withStyle(context.getInteractionBox().x() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE))
+                    .append("x")
+                    .append(Text.text(String.valueOf(context.getInteractionBox().y())).withStyle(context.getInteractionBox().y() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE))
+                    .append("x")
+                    .append(Text.text(String.valueOf(context.getInteractionBox().z())).withStyle(context.getInteractionBox().z() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE))
+                    .append("=")
+                    .append(Text.text(String.valueOf(context.getBoxVolume())).withStyle(!context.isBoxVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE))
+                    .append(")");
+        } else {
             switch (context.tracingResult()) {
                 case SUCCESS_FULFILLED -> {
                 }
@@ -546,25 +560,13 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 case PASS -> {
                 }
                 case FAILED -> {
-                    message = Text.translate("effortless.message.building.cannot_reach_target").withStyle(ChatFormatting.WHITE).getString();
+                    message = message.append(Text.translate("effortless.message.building.cannot_reach_target").withStyle(ChatFormatting.WHITE));
                     var interaction = context.buildInteractions().results().stream().filter(result -> result != null && result.getTarget() == Interaction.Target.MISS).findAny();
                     if (interaction.isPresent()) {
-                        message += " (" + interaction.get().getBlockPosition().distance(player.getPosition().toVector3i()) + "/" + context.customParams().generalConfig().maxReachDistance() + ")";
+                        message = message.append(" (").append(Text.text(String.valueOf(MathUtils.round(interaction.get().getBlockPosition().distance(player.getPosition().toVector3i())))).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(context.customParams().generalConfig().maxReachDistance())).append(")");
                     }
                 }
             }
-        } else {
-            message = getStateComponent(context.buildState()) + " "
-                    + context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD).getString() + " "
-                    + "("
-                    + (context.getInteractionBox().x() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().x() + ChatFormatting.RESET
-                    + "x"
-                    + (context.getInteractionBox().y() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().y() + ChatFormatting.RESET
-                    + "x"
-                    + (context.getInteractionBox().z() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getInteractionBox().z() + ChatFormatting.RESET
-                    + "="
-                    + (!context.isBoxVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE) + context.getBoxVolume() + ChatFormatting.RESET
-                    + ")";
         }
 
         player.sendClientMessage(message, true);
