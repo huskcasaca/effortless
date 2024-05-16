@@ -19,7 +19,6 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
         addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer_presets.title"), button -> {
-            detach();
             new EffortlessTransformerPresetsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
 

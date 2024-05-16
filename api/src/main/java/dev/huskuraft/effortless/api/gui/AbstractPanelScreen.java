@@ -1,10 +1,12 @@
 package dev.huskuraft.effortless.api.gui;
 
 import dev.huskuraft.effortless.api.gui.button.Button;
+import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.texture.TextureFactory;
+import dev.huskuraft.effortless.api.texture.TextureSprite;
 
 public abstract class AbstractPanelScreen extends AbstractScreen {
 
@@ -39,6 +41,8 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     public static final int PANEL_TITLE_HEIGHT_1 = 18;
     public static final int PANEL_TITLE_HEIGHT_2 = 24;
 
+    public static final TextureSprite DEMO_BACKGROUND_SPRITE = TextureFactory.getInstance().getDemoBackgroundTextureSprite();
+
     private int panelWidth;
     private int panelHeight;
 
@@ -54,12 +58,6 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
 
     protected AbstractPanelScreen(Entrance entrance) {
         this(entrance, Text.empty(), UNSPECIFIC, UNSPECIFIC);
-    }
-
-    @Override
-    public void renderBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-        super.renderBackground(renderer, mouseX, mouseY, deltaTick);
-        renderer.renderSprite(TextureFactory.getInstance().getDemoBackgroundTextureSprite(), getLeft(), getTop(), getWidth(), getHeight());
     }
 
     @Override
@@ -88,6 +86,70 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     @Override
     public int getY() {
         return super.getY() + super.getHeight() / 2 - getHeight() / 2;
+    }
+
+    public static final int ANIMATION_OFFSET_Y = 12;
+    public static final int ANIMATION_TICKS = 4;
+    private int animationTicks = 0;
+    private boolean detached = false;
+
+    private float getAnimationFactor(float deltaTick) {
+        var animationTicksF = animationTicks + deltaTick * (detached ? -1 : 1);
+        var fac = 1f - Math.min(animationTicksF, ANIMATION_TICKS) / ANIMATION_TICKS;
+        if (detached) {
+            return 1 - MathUtils.lerp((1 - fac) * (1 - fac), 1f, 0f);
+        }
+        return 1 - MathUtils.lerp(fac * fac, 0f, 1f);
+    }
+
+    @Override
+    public void init(int width, int height) {
+        super.init(width, height);
+//        animationTicks = 0f;
+    }
+
+    @Override
+    public void detach() {
+//        super.detach();
+        this.detached = true;
+    }
+
+    public void detachImmediately() {
+        super.detach();
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        animationTicks = Math.min(Math.max(animationTicks + (detached ? -1 : 1), 0), ANIMATION_TICKS) ;
+        if (detached && animationTicks == 0) {
+            detachImmediately();
+        }
+    }
+
+    @Override
+    public void renderBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+        super.renderBackground(renderer, mouseX, mouseY, deltaTick);
+        renderer.pushPose();
+        renderer.translate(0, 0 * getAnimationFactor(deltaTick) * ANIMATION_OFFSET_Y, 0);
+        renderer.translate(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0);
+        renderer.scale(MathUtils.lerp(getAnimationFactor(deltaTick), 0.92, 1));
+        renderer.translate(- getX()-getWidth() / 2f, - getY()-getHeight() / 2f, 0);
+        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, getAnimationFactor(deltaTick));
+        renderer.renderSprite(DEMO_BACKGROUND_SPRITE, getLeft(), getTop(), getWidth(), getHeight());
+        renderer.popPose();
+    }
+
+    @Override
+    public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+        renderer.pushPose();
+        renderer.translate(0, 0 * getAnimationFactor(deltaTick) * ANIMATION_OFFSET_Y, 0);
+        renderer.translate(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0);
+        renderer.scale(MathUtils.lerp(getAnimationFactor(deltaTick), 0.92, 1));
+        renderer.translate(- getX()-getWidth() / 2f, - getY()-getHeight() / 2f, 0);
+        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, getAnimationFactor(deltaTick));
+        super.renderWidget(renderer, mouseX, mouseY, deltaTick);
+        renderer.popPose();
     }
 
 }

@@ -65,9 +65,12 @@ public class EffortlessOnlinePlayersScreen extends AbstractPanelScreen {
 
     @Override
     public void onReload() {
-        super.onReload();
 
         addButton.setActive(entries.hasSelected());
+        if (entries.consumeDoubleClick() && entries.hasSelected()) {
+            detach();
+            consumer.accept(entries.getSelected().getItem());
+        }
     }
 
     private void setSearchResult(String string) {

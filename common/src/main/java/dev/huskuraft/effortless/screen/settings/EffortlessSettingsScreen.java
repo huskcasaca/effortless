@@ -35,7 +35,6 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
                 getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                     if (packet.isOperator()) {
                         getEntrance().getClient().execute(() -> {
-                            detach();
                             new EffortlessGeneralSettingsScreen(getEntrance()).attach();
                         });
                     } else {
@@ -47,11 +46,9 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
             }
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 3f, 0f, 1f).build());
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.render_settings.title"), button -> {
-            detach();
             new EffortlessRenderSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern_settings.title"), button -> {
-            detach();
             new EffortlessPatternSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
 

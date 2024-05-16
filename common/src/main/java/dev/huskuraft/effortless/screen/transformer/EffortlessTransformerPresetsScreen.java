@@ -36,6 +36,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
     private Button deleteButton;
     private Button clearButton;
     private Button addButton;
+    private Button cancelButton;
     private Button saveButton;
     private Transformers selectedType = Transformers.ARRAY;
 
@@ -85,10 +86,9 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
                 case RADIAL -> RadialTransformer.DEFAULT.withName(Text.empty()).withRandomId();
                 case ITEM_RANDOMIZER -> ItemRandomizer.EMPTY.withName(Text.empty()).withRandomId();
             });
-            detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
-        this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
+        this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.cancel"), button -> {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
@@ -160,7 +160,6 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
         );
 
         if (entries.consumeDoubleClick() && entries.hasSelected()) {
-            detach();
             editTransformer(entries.getSelected().getItem());
         }
 
