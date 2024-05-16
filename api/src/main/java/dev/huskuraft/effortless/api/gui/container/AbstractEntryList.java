@@ -474,9 +474,9 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         var width = getScrollbarWidth();
         renderBackground(renderer, mouseX, mouseY, deltaTick);
         renderer.pushPose();
-        renderer.enableScissor(this.x0, this.y0, this.x1, this.y1);
-        this.renderList(renderer, mouseX, mouseY, deltaTick);
-        renderer.disableScissor();
+        renderer.pushScissor(this.x0, this.y0, getWidth(), getHeight());
+        renderList(renderer, mouseX, mouseY, deltaTick);
+        renderer.popScissor();
         renderer.popPose();
 
         if (this.renderShadow) {
@@ -664,9 +664,9 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
         @Override
         public void render(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-            renderer.enableScissor(getX(), getY(), getX() + getWidth(), getY() + getHeight());
+            renderer.pushScissor(getX(), getY(), getWidth(), getHeight());
             super.render(renderer, mouseX, mouseY, deltaTick);
-            renderer.disableScissor();
+            renderer.popScissor();
         }
 
         @Override
