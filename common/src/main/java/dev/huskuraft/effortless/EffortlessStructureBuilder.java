@@ -73,19 +73,23 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public void setContext(Player player, Context context) {
+    public boolean setContext(Player player, Context context) {
+        return false;
     }
 
     @Override
-    public void setBuildStructure(Player player, BuildStructure buildStructure) {
+    public boolean setBuildStructure(Player player, BuildStructure buildStructure) {
+        return false;
     }
 
     @Override
-    public void setReplaceMode(Player player, ReplaceMode replaceMode) {
+    public boolean setReplaceMode(Player player, ReplaceMode replaceMode) {
+        return false;
     }
 
     @Override
-    public void setPattern(Player player, Pattern pattern) {
+    public boolean setPattern(Player player, Pattern pattern) {
+        return false;
     }
 
     @Override

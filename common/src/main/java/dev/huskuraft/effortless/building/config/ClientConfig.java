@@ -12,50 +12,44 @@ public record ClientConfig(
         RenderConfig renderConfig,
         PatternConfig patternConfig,
         Boolean passiveMode,
-        Map<BuildMode, BuildStructure> buildStructures,
-        BuildMode buildMode
+        Map<BuildMode, BuildStructure> buildStructures
 ) {
 
     public ClientConfig(
             RenderConfig renderConfig,
             PatternConfig patternConfig
     ) {
-        this(renderConfig, patternConfig, Boolean.FALSE, BuildStructure.DEFAULTS, BuildMode.DISABLED);
+        this(renderConfig, patternConfig, Boolean.FALSE, BuildStructure.DEFAULTS);
     }
 
     public static ClientConfig DEFAULT = new ClientConfig(
             RenderConfig.DEFAULT,
             PatternConfig.DEFAULT,
             Boolean.FALSE,
-            BuildStructure.DEFAULTS,
-            BuildMode.DISABLED
+            BuildStructure.DEFAULTS
     );
 
-    public BuildStructure buildStructure() {
-        return buildStructures.get(buildMode);
-    }
-
     public ClientConfig withRenderConfig(RenderConfig renderConfig) {
-        return new ClientConfig(renderConfig, patternConfig, passiveMode, buildStructures, buildMode);
+        return new ClientConfig(renderConfig, patternConfig, passiveMode, buildStructures);
     }
 
     public ClientConfig withPatternConfig(PatternConfig patternConfig) {
-        return new ClientConfig(renderConfig, patternConfig, passiveMode, buildStructures, buildMode);
+        return new ClientConfig(renderConfig, patternConfig, passiveMode, buildStructures);
     }
 
 
     public ClientConfig withPassiveMode(Boolean passiveMode) {
-        return new ClientConfig(renderConfig, patternConfig, passiveMode, buildStructures, buildMode);
+        return new ClientConfig(renderConfig, patternConfig, passiveMode, buildStructures);
     }
 
     public ClientConfig withBuildStructure(BuildStructure buildStructure) {
         var buildStructures = Maps.newLinkedHashMap(this.buildStructures);
         buildStructures.put(buildStructure.getMode(), buildStructure);
-        return new ClientConfig(renderConfig, patternConfig, passiveMode, Collections.unmodifiableMap(buildStructures), buildStructure.getMode());
+        return new ClientConfig(renderConfig, patternConfig, passiveMode, Collections.unmodifiableMap(buildStructures));
     }
 
-    public ClientConfig withBuildMode(BuildMode buildMode) {
-        return new ClientConfig(renderConfig, patternConfig, passiveMode, buildStructures, buildMode);
+    public BuildStructure getBuildStructure(BuildMode buildMode) {
+        return buildStructures.get(buildMode);
     }
 
 }

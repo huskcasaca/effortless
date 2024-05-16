@@ -15,17 +15,12 @@ public final class EffortlessClientConfigStorage extends ConfigFileStorage<Clien
         super(CONFIG_NAME, FileType.TOML, new ClientConfigConfigSerializer());
     }
 
-
-    public void setSelectedBuildStructure(BuildStructure buildStructure) {
+    public void setBuildStructure(BuildStructure buildStructure) {
         set(get().withBuildStructure(buildStructure));
     }
 
-    public void setSelectedBuildStructure(BuildMode buildMode) {
-        set(get().withBuildMode(buildMode));
-    }
-
-    public BuildStructure getSelectedBuildStructure() {
-        return get().buildStructure();
+    public BuildStructure getBuildStructure(BuildMode buildMode) {
+        return get().getBuildStructure(buildMode);
     }
 
 }

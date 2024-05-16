@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.AxisDirection;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
@@ -269,12 +270,10 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         }
         lastScrollOffset += amountY;
         if (lastScrollOffset > MOUSE_SCROLL_THRESHOLD) {
-            getEntrance().getConfigStorage().setSelectedBuildStructure(getEntrance().getConfigStorage().getSelectedBuildStructure().getMode().previous());
-            getEntrance().getStructureBuilder().setBuildStructure(getEntrance().getClient().getPlayer(), getEntrance().getConfigStorage().getSelectedBuildStructure());
+            getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), getEntrance().getConfigStorage().getBuildStructure(getEntrance().getStructureBuilder().getContext(getPlayer()).buildMode().previous()));
             lastScrollOffset = 0;
         } else if (lastScrollOffset < -MOUSE_SCROLL_THRESHOLD) {
-            getEntrance().getConfigStorage().setSelectedBuildStructure(getEntrance().getConfigStorage().getSelectedBuildStructure().getMode().next());
-            getEntrance().getStructureBuilder().setBuildStructure(getEntrance().getClient().getPlayer(), getEntrance().getConfigStorage().getSelectedBuildStructure());
+            getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), getEntrance().getConfigStorage().getBuildStructure(getEntrance().getStructureBuilder().getContext(getPlayer()).buildMode().next()));
             lastScrollOffset = 0;
         }
         return true;
@@ -495,6 +494,10 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     @Override
     protected EffortlessClient getEntrance() {
         return (EffortlessClient) super.getEntrance();
+    }
+
+    private Player getPlayer() {
+        return getEntrance().getClient().getPlayer();
     }
 
     private float getAnimationFactor(float deltaTick) {

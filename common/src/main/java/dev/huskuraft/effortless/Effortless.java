@@ -26,8 +26,7 @@ public class Effortless implements Entrance {
     }
 
     public static Text getSystemMessage(Text msg) {
-        var id = ChatFormatting.GRAY + "[" + Text.translate("effortless.name") + "]" + ChatFormatting.RESET + " ";
-        return Text.text(id + msg.getString());
+        return Text.text("[").append(Text.translate("effortless.name")).append("] ").withStyle(ChatFormatting.GRAY).append(msg.withStyle(ChatFormatting.WHITE));
     }
 
     public CommonEventRegistry getEventRegistry() {

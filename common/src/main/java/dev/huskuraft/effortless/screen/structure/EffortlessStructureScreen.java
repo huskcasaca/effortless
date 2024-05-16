@@ -107,7 +107,6 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
         super.onCreate();
 
         setRadialSelectResponder(slot -> {
-            getEntrance().getConfigStorage().setSelectedBuildStructure(slot.getContent());
             getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), slot.getContent());
         });
         setRadialOptionSelectResponder(entry -> {
@@ -125,8 +124,10 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
                 return;
             }
             if (entry.getContent() instanceof Patterns patterns) {
-                detach();
-                new EffortlessPatternScreen(getEntrance()).attach();
+                if (getEntrance().getStructureBuilder().checkPermission(getPlayer())) {
+                    detach();
+                    new EffortlessPatternScreen(getEntrance()).attach();
+                }
                 return;
             }
             if (entry.getContent() instanceof UndoRedo undoRedo) {
@@ -149,10 +150,10 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
                 return;
             }
             if (entry.getContent() instanceof BuildFeature buildFeature) {
-                var buildStructure = getEntrance().getConfigStorage().getSelectedBuildStructure().withFeature(buildFeature);
-                getEntrance().getConfigStorage().setSelectedBuildStructure(buildStructure);
-                getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), buildStructure);
-                return;
+                var buildStructure = getEntrance().getStructureBuilder().getContext(getPlayer()).buildStructure().withFeature(buildFeature);
+                if (getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), buildStructure)) {
+                    getEntrance().getConfigStorage().setBuildStructure(buildStructure);
+                }
             }
         });
     }
@@ -162,7 +163,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
 
         setRadialSlots(getEntrance().getConfigStorage().get().buildStructures().values().stream().map(EffortlessStructureScreen::slot).toList());
 
-        var buildStructure = getEntrance().getConfigStorage().get().buildStructure();
+        var buildStructure = getEntrance().getStructureBuilder().getContext(getPlayer()).buildStructure();
 //        var buildStructure = getEntrance().getStructureBuilder().getContext(getPlayer()).buildStructure();
         setSelectedSlots(slot(buildStructure));
         setLeftButtons(

@@ -134,7 +134,7 @@ public final class EffortlessClientSessionManager implements SessionManager {
     }
 
     public void notifyPlayer() {
-        var id = ChatFormatting.GRAY + "[" + Text.translate("effortless.name") + "]" + ChatFormatting.RESET + " ";
+        var id = Text.text("[").append(Text.translate("effortless.name")).append(Text.text("] ")).withStyle(ChatFormatting.GRAY);
         var message = switch (getSessionStatus()) {
             case MOD_MISSING -> Text.translate("effortless.session_status.message.mod_missing");
             case SERVER_MOD_MISSING -> Text.translate("effortless.session_status.message.server_mod_missing");
@@ -143,7 +143,7 @@ public final class EffortlessClientSessionManager implements SessionManager {
             case SUCCESS -> Text.translate("effortless.session_status.message.success", serverSession.get().loaderType().name());
         };
         if (getSessionStatus() != SessionStatus.SUCCESS) {
-            getEntrance().getClientManager().getRunningClient().getPlayer().sendMessage(id + message);
+            getEntrance().getClientManager().getRunningClient().getPlayer().sendMessage(id.append(message));
         }
     }
 

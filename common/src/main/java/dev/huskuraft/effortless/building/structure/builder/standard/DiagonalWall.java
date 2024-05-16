@@ -21,7 +21,7 @@ public record DiagonalWall(
 ) implements BlockBuildStructure {
 
     public DiagonalWall() {
-        this(PlaneLength.EQUAL);
+        this(PlaneLength.VARIABLE);
     }
 
     @Override

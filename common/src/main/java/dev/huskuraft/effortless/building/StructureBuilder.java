@@ -22,13 +22,13 @@ public abstract class StructureBuilder {
 
     public abstract Map<UUID, Context> getAllContexts();
 
-    public abstract void setContext(Player player, Context context);
+    public abstract boolean setContext(Player player, Context context);
 
-    public abstract void setBuildStructure(Player player, BuildStructure buildStructure);
+    public abstract boolean setBuildStructure(Player player, BuildStructure buildStructure);
 
-    public abstract void setReplaceMode(Player player, ReplaceMode replaceMode);
+    public abstract boolean setReplaceMode(Player player, ReplaceMode replaceMode);
 
-    public abstract void setPattern(Player player, Pattern pattern);
+    public abstract boolean setPattern(Player player, Pattern pattern);
 
     public abstract void resetAll();
 

@@ -168,11 +168,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public void setContext(Player player, Context context) {
+    public boolean setContext(Player player, Context context) {
         contexts.put(player.getId(), context);
+        return true;
     }
 
-    private boolean checkPermission(Player player) {
+    public boolean checkPermission(Player player) {
         if (!isSessionValid(player)) {
             getEntrance().getSessionManager().notifyPlayer();
             return false;
@@ -185,34 +186,34 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public void setBuildStructure(Player player, BuildStructure buildStructure) {
+    public boolean setBuildStructure(Player player, BuildStructure buildStructure) {
         if (!checkPermission(player)) {
-            return;
+            return false;
         }
         updateContext(player, context -> context.withBuildStructure(buildStructure));
         if (buildStructure.getMode().isDisabled()) {
             getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
             updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
         }
+        return true;
     }
 
     @Override
-    public void setReplaceMode(Player player, ReplaceMode replaceMode) {
+    public boolean setReplaceMode(Player player, ReplaceMode replaceMode) {
         if (!checkPermission(player)) {
-            return;
+            return false;
         }
         updateContext(player, context -> context.withReplaceMode(replaceMode));
+        return true;
     }
 
     @Override
-    public void setPattern(Player player, Pattern pattern) {
-        if (!isPermissionGranted(player)) {
-            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
-            return;
+    public boolean setPattern(Player player, Pattern pattern) {
+        if (!checkPermission(player)) {
+            return false;
         }
-        updateContext(player, context -> {
-            return context.withPattern(pattern).finalize(player, BuildStage.UPDATE_CONTEXT);
-        });
+        updateContext(player, context -> context.withPattern(pattern).finalize(player, BuildStage.UPDATE_CONTEXT));
+        return true;
     }
 
     @Override
@@ -327,11 +328,17 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void undo(Player player) {
+        if (checkPermission(player)) {
+            return;
+        }
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.UNDO));
     }
 
     @Override
     public void redo(Player player) {
+        if (checkPermission(player)) {
+            return;
+        }
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO));
     }
 
