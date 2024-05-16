@@ -134,7 +134,6 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
         this.textWidget.setVisible(this.entries.isVisible() && this.entries.items().isEmpty());
 
         if (entries.consumeDoubleClick() && entries.hasSelected()) {
-            detach();
             editTransformer(entries.getSelected().getItem());
         }
 

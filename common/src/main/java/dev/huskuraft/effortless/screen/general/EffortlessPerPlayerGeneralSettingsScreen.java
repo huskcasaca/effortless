@@ -46,12 +46,12 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
         var titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
         var playerNameTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 * 2 - 10, Text.text(playerInfo.getName()).withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
-        var playerEntries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2, 36, true));
+        var playerEntries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2, 38, true));
         playerEntries.setShowScrollBar(false);
         playerEntries.setRenderSelection(false);
         playerEntries.reset(List.of(playerInfo));
 
-        var entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + 36 + INNER_PADDINGS_H, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - 36 - INNER_PADDINGS_H - PANEL_BUTTON_ROW_HEIGHT_1, false, true));
+        var entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + 38 + INNER_PADDINGS_V, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - 38 - INNER_PADDINGS_V - PANEL_BUTTON_ROW_HEIGHT_1, false, true));
         entries.setAlwaysShowScrollbar(true);
 //        bindEntry(
 //                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
