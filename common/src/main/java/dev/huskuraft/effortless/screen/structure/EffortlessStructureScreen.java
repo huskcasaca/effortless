@@ -94,8 +94,8 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void onTick() {
+        super.onTick();
         Key key = getAssignedKey();
         if (!key.getBinding().isKeyDown()) {
             detach();

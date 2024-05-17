@@ -148,7 +148,7 @@ public record MinecraftScreen(
     }
 
     @Override
-    public void tick() {
+    public void onTick() {
 
     }
 

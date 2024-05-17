@@ -34,9 +34,9 @@ public abstract class AbstractContainerWidget extends AbstractWidget implements 
     }
 
     @Override
-    public void tick() {
+    public void onTick() {
         for (var child : children()) {
-            child.tick();
+            child.onTick();
         }
     }
 

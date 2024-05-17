@@ -129,7 +129,7 @@ public class EditBox extends AbstractWidget {
         this.formatter = biFunction;
     }
 
-    public void tick() {
+    public void onTick() {
         ++this.frame;
     }
 

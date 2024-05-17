@@ -21,7 +21,7 @@ public class MinecraftProxyScreen extends net.minecraft.client.gui.screens.Scree
 
     @Override
     public void tick() {
-        proxy.tick();
+        proxy.onTick();
     }
 
     @Override

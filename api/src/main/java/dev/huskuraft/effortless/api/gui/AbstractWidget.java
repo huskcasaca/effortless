@@ -50,10 +50,11 @@ public abstract class AbstractWidget implements Widget {
     }
 
     @Override
-    public void tick() {
+    public void onTick() {
 
     }
 
+    @Override
     public void onPartialTick(float partialTick) {
 
     }
