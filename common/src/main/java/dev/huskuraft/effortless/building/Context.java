@@ -75,11 +75,11 @@ public record Context(
     }
 
     public boolean isPreview() {
-        return buildType() == BuildType.PREVIEW || buildType() == BuildType.PREVIEW_ONCE;
+        return buildType() == BuildType.PREVIEW || buildType() == BuildType.PREVIEW_SOUND;
     }
 
-    public boolean isPreviewOnce() {
-        return buildType() == BuildType.PREVIEW_ONCE;
+    public boolean isPreviewSound() {
+        return buildType() == BuildType.PREVIEW_SOUND;
     }
 
     public BuildMode buildMode() {

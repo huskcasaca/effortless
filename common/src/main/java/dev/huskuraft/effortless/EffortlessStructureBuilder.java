@@ -102,17 +102,16 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     public void onContextReceived(Player player, Context context) {
 
         if (context.isPreview()) {
-            // FIXME: 13/10/23 add event for server manager
-            Server server = player.getServer();
-            for (var serverPlayer : server.getPlayerList().getPlayers()) {
-                if (serverPlayer.getId().equals(player.getId())) {
+            var server = player.getServer();
+            for (var otherPlayer : server.getPlayerList().getPlayers()) {
+                if (otherPlayer.getId().equals(player.getId()) || otherPlayer.getPosition().distance(player.getPosition()) > 128) {
                     continue;
                 }
-                getEntrance().getChannel().sendPacket(new PlayerBuildPreviewPacket(player.getId(), context), serverPlayer);
+                getEntrance().getChannel().sendPacket(new PlayerBuildPreviewPacket(player.getId(), context), otherPlayer);
             }
         } else {
-            // FIXME: 13/10/23 getCommandSenderWorld
             getOperationResultStack(player).push(context.createSession(player.getWorld(), player).build().commit());
+//            getEntrance().getChannel().sendPacket(new PlayerBuildPreviewPacket(player.getId(), context.withBuildType(BuildType.PREVIEW_SOUND)), player);
         }
     }
 
@@ -124,7 +123,6 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     @Override
     public void undo(Player player) {
         try {
-            ;
             getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.SUCCESS_UNDO, getOperationResultStack(player).undo())), player);
         } catch (EmptyStackException e) {
             getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.NOTHING_TO_UNDO)), player);

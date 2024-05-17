@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.Collections;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
@@ -74,9 +75,10 @@ public class BlockBreakOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
 
-        var tool = ItemStack.empty();
+        var blockState = world.getBlockState(getBlockPosition());
+        var correctTool = getStorage().contents().stream().filter(itemStack -> itemStack.getItem().isCorrectToolForDrops(blockState)).filter(itemStack -> true).findFirst();
 
-        if (context.useProperToolOnly() && world.getBlockState(getBlockPosition()).()) {
+        if (!player.getGameType().isCreative() && context.useProperToolOnly() && correctTool.isEmpty()) {
             return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
         }
 
@@ -89,8 +91,21 @@ public class BlockBreakOperation extends BlockOperation {
 //            return BlockOperationResult.Type.SUCCESS;
 //        }
 
+        if (world.isClient()) {
+            return BlockOperationResult.Type.CONSUME;
+        }
 
-        if (player.destroyBlock(getInteraction())) {
+        var oldItem = player.getItemStack(InteractionHand.MAIN);
+        if (!player.getGameType().isCreative() && context.useProperToolOnly()) {
+            player.setItemStack(InteractionHand.MAIN, correctTool.get());
+        }
+
+        var destroyed  = player.destroyBlock(getInteraction());
+
+        if (!player.getGameType().isCreative() && context.useProperToolOnly()) {
+            player.setItemStack(InteractionHand.MAIN, oldItem);
+        }
+        if (destroyed) {
             return BlockOperationResult.Type.SUCCESS;
         } else {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
@@ -103,7 +118,7 @@ public class BlockBreakOperation extends BlockOperation {
         var outputs = Collections.singletonList(getItemStack());
         var result = breakBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewOnce()) {
+        if (getWorld().isClient() && getContext().isPreviewSound()) {
             if (result.success()) {
                 var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
                 getPlayer().getClient().getSoundManager().play(sound);

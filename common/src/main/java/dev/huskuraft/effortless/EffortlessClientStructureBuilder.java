@@ -104,7 +104,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (context.isFulfilled()) {
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
-            var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_ONCE);
+//            var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_SOUND);
             var result = new BatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
 
 //            if (finalizedContext.buildType() != BuildType.COMMAND) {
@@ -299,8 +299,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void onContextReceived(Player player, Context context) {
         var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
 
-        showBuildContextResult(player.getId(), 1, player, context, result);
-        showBuildTooltip(context.id(), 1, player, context, result);
+        showBuildContextResult(player.getId(), 1024, player, context, result);
+        showBuildTooltip(context.id(), 1024, player, context, result);
     }
 
     public void onHistoryResultReceived(Player player, HistoryResult historyResult) {

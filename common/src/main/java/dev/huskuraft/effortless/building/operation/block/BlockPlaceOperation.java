@@ -138,7 +138,7 @@ public class BlockPlaceOperation extends BlockOperation {
         var outputs = Collections.<ItemStack>emptyList();
         var result = placeBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewOnce() && result.success()) {
+        if (getWorld().isClient() && getContext().isPreviewSound() && result.success()) {
             var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
             getPlayer().getClient().getSoundManager().play(sound);
         }
