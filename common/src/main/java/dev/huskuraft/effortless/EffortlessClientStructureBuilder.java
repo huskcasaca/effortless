@@ -331,7 +331,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void undo(Player player) {
-        if (checkPermission(player)) {
+        if (!checkPermission(player)) {
             return;
         }
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.UNDO));
@@ -339,7 +339,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void redo(Player player) {
-        if (checkPermission(player)) {
+        if (!checkPermission(player)) {
             return;
         }
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO));
