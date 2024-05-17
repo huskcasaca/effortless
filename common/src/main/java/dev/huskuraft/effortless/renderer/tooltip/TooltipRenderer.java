@@ -491,7 +491,15 @@ public class TooltipRenderer {
         }
 
         @Override
-        public void render(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+        public void tick() {
+            super.tick();
+            for (var entry : entries) {
+                entry.tick();
+            }
+        }
+
+        @Override
+        public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
             for (var entry : entries) {
                 if (!entry.isVisible()) {
                     continue;
@@ -503,14 +511,6 @@ public class TooltipRenderer {
                 renderer.popPose();
                 renderer.popPose();
                 renderer.translate(0, -entry.getHeight(), 0);
-            }
-        }
-
-        @Override
-        public void tick() {
-            super.tick();
-            for (var entry : entries) {
-                entry.tick();
             }
         }
 

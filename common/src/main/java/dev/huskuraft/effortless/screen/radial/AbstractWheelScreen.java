@@ -24,6 +24,7 @@ import dev.huskuraft.effortless.api.renderer.RenderLayers;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.api.utils.ColorUtils;
 import dev.huskuraft.effortless.building.Option;
 
 public class AbstractWheelScreen<S, B> extends AbstractScreen {
@@ -61,7 +62,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     private float lastScrollOffset = 0;
     // TODO: 20/2/23 rename
     private float visibility = 1;
-    private int animationTicks = 0;
+    private float animationTicks = 0;
 
     public AbstractWheelScreen(Entrance entrance, Text text) {
         super(entrance, text);
@@ -221,17 +222,39 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     @Override
+    public void onPartialTick(float partialTick) {
+        this.animationTicks += partialTick;
+    }
+
+    @Override
     public void onCreate() {
+    }
+
+    private static int pack(int r, int g, int b, int alpha)
+    {
+        return alpha << 24 | r << 16 | g << 8 | b;
+    }
+
+
+    @Override
+    public void renderWidgetBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+        if (isTransparentBackground() && getEntrance().getClient().isLoaded()) {
+            renderer.renderGradientRect(0, 0, super.getWidth(), super.getHeight(), ColorUtils.setAlpha(0x101010, (int) (0xC0 * getAnimationFactor())), ColorUtils.setAlpha(0x101010, (int) (0xD0 * getAnimationFactor())));
+        } else {
+            renderer.setRsShaderColor(0.25F, 0.25F, 0.25F, getAnimationFactor());
+            renderer.renderPanelBackgroundTexture(0, 0, 0F, 0F, getWidth(), getHeight());
+            renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
     }
 
     @Override
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         renderer.pushPose();
-        renderer.translate(0, 0 * getAnimationFactor(deltaTick) * ANIMATION_OFFSET_Y, 0);
+        renderer.translate(0, 0 * getAnimationFactor() * ANIMATION_OFFSET_Y, 0);
         renderer.translate(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0);
-        renderer.scale(MathUtils.lerp(getAnimationFactor(deltaTick), 0.92, 1));
+        renderer.scale(MathUtils.lerp(getAnimationFactor(), 0.92, 1));
         renderer.translate(-getX() - getWidth() / 2f, -getY() - getHeight() / 2f, 0);
-        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, getAnimationFactor(deltaTick));
+        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, getAnimationFactor());
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
         hoveredSlot = null;
         hoveredButton = null;
@@ -500,17 +523,9 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         return getEntrance().getClient().getPlayer();
     }
 
-    private float getAnimationFactor(float deltaTick) {
-        var animationTicksF = animationTicks + deltaTick;
-        var fac = 1f - Math.min(animationTicksF, ANIMATION_TICKS) / ANIMATION_TICKS;
+    private float getAnimationFactor() {
+        var fac = 1f - Math.min(animationTicks, ANIMATION_TICKS) / ANIMATION_TICKS;
         return 1 - MathUtils.lerp(fac * fac, 0f, 1f);
-    }
-
-
-    @Override
-    public void tick() {
-        super.tick();
-        animationTicks = Math.min(Math.max(animationTicks + 1, 0), ANIMATION_TICKS);
     }
 
     private boolean inTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double x, double y) {

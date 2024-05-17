@@ -42,8 +42,6 @@ public abstract class AbstractContainerWidget extends AbstractWidget implements 
 
     @Override
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-        super.renderWidget(renderer, mouseX, mouseY, deltaTick);
-
         for (var child : this.children()) {
             child.render(renderer, mouseX, mouseY, deltaTick);
         }

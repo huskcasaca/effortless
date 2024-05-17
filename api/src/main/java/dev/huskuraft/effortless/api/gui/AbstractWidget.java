@@ -51,6 +51,10 @@ public abstract class AbstractWidget implements Widget {
 
     }
 
+    public void onPartialTick(float partialTick) {
+
+    }
+
     @Override
     public void onCreate() {
 
@@ -68,10 +72,12 @@ public abstract class AbstractWidget implements Widget {
 
     @Override
     public void render(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+        onPartialTick(deltaTick);
         onReload();
         setHovered(isMouseOver(mouseX, mouseY));
 
         if (isVisible()) {
+            renderWidgetBackground(renderer, mouseX, mouseY, deltaTick);
             renderWidget(renderer, mouseX, mouseY, deltaTick);
         }
     }
@@ -81,6 +87,9 @@ public abstract class AbstractWidget implements Widget {
         if (isVisible()) {
             renderWidgetOverlay(renderer, mouseX, mouseY, deltaTick);
         }
+    }
+
+    public void renderWidgetBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
     }
 
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {

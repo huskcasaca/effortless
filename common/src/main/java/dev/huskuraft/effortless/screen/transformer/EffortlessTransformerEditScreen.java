@@ -55,7 +55,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
         this.transformerEntries.setRenderSelection(false);
         this.transformerEntries.reset(List.of(transformer));
 
-        this.entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + 38 + INNER_PADDINGS_V, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - 38 - INNER_PADDINGS_V - PANEL_BUTTON_ROW_HEIGHT_1, true, false));
+        this.entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + transformerEntries.getHeight() + INNER_PADDINGS_V, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - transformerEntries.getHeight() - INNER_PADDINGS_V - PANEL_BUTTON_ROW_HEIGHT_1, true, false));
         this.entries.setAlwaysShowScrollbar(true);
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.cancel"), button -> {

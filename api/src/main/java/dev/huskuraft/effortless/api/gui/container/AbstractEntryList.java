@@ -455,7 +455,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         renderer.popPose();
     }
 
-    public void renderBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+    public void renderWidgetBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         if (getEntrance().getClient().isLoaded() && !isBackgroundTransparent()) {
             renderer.renderGradientRect(x0, y0, x1, y1, 0xdc000000, 0xdc000000);
 //            renderer.renderGradientRect(x0, y0, x1, y1, 0xa1101010, 0x8c101010);
@@ -472,7 +472,6 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
         var left = getScrollbarPosition();
         var width = getScrollbarWidth();
-        renderBackground(renderer, mouseX, mouseY, deltaTick);
         renderer.pushPose();
         renderer.pushScissor(this.x0, this.y0, getWidth(), getHeight());
         renderList(renderer, mouseX, mouseY, deltaTick);

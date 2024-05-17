@@ -60,21 +60,21 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
             this.randomizer = this.randomizer.withSource(newSource);
             sourceButton.setMessage(Text.translate("effortless.randomizer.edit.source", this.randomizer.getSource().getDisplayName()));
             recreate();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_2, 1f, 0f, 1f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + transformerEntries.getHeight() + PANEL_BUTTON_ROW_HEIGHT_2, 1f, 0f, 1f).build());
 
         this.orderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.order", randomizer.getOrder().getDisplayName()), button -> {
             var newOrder = ItemRandomizer.Order.values()[(this.randomizer.getOrder().ordinal() + 1) % ItemRandomizer.Order.values().length];
             this.randomizer = this.randomizer.withOrder(newOrder);
             orderButton.setMessage(Text.translate("effortless.randomizer.edit.order", this.randomizer.order().getDisplayName()));
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_2, 0f, 0f, 1 / 2f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + transformerEntries.getHeight() + PANEL_BUTTON_ROW_HEIGHT_2, 0f, 0f, 1 / 2f).build());
 
         this.targetButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.randomizer.edit.target", randomizer.getTarget().getDisplayName()), button -> {
             var newTarget = ItemRandomizer.Target.values()[(this.randomizer.getTarget().ordinal() + 1) % ItemRandomizer.Target.values().length];
             this.randomizer = this.randomizer.withTarget(newTarget);
             targetButton.setMessage(Text.translate("effortless.randomizer.edit.target", this.randomizer.target().getDisplayName()));
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_2, 0f, 1 / 2f, 1 / 2f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + transformerEntries.getHeight() + PANEL_BUTTON_ROW_HEIGHT_2, 0f, 1 / 2f, 1 / 2f).build());
 
-        this.entries = addWidget(new ItemChanceList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_BUTTON_ROW_HEIGHT_2N + 38 + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_2N - 38 - PANEL_BUTTON_ROW_HEIGHT_2));
+        this.entries = addWidget(new ItemChanceList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_BUTTON_ROW_HEIGHT_2N + transformerEntries.getHeight() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_2N - transformerEntries.getHeight() - PANEL_BUTTON_ROW_HEIGHT_2));
         this.entries.setAlwaysShowScrollbar(true);
         this.entries.reset(randomizer.getChances());
 
