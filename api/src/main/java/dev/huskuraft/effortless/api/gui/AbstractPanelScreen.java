@@ -40,8 +40,7 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     public static final int PANEL_TITLE_HEIGHT_2 = 24;
 
     public static final TextureSprite DEMO_BACKGROUND_SPRITE = TextureFactory.getInstance().getDemoBackgroundTextureSprite();
-    public static final int ANIMATED_OFFSET_Y = 12;
-    public static final int MAX_ANIMATION_TICKS = 2;
+    public static final int MAX_ANIMATION_TICKS = 4;
     protected float animationTicks = 0;
     private boolean detached = false;
 
@@ -99,7 +98,6 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
             super.detach();
         }
         renderer.pushPose();
-        renderer.translate(0, 0 * getAnimationFactor() * ANIMATED_OFFSET_Y, 0);
         renderer.translate(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0);
         renderer.scale(MathUtils.lerp(getAnimationFactor(), 0.92, 1));
         renderer.translate(-getX() - getWidth() / 2f, -getY() - getHeight() / 2f, 0);
