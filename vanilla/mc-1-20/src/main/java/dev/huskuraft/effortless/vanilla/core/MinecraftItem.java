@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.vanilla.core;
 
 import dev.huskuraft.effortless.api.core.Block;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.InteractionResult;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
@@ -40,5 +41,10 @@ public record MinecraftItem(net.minecraft.world.item.Item referenceValue) implem
     @Override
     public InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction) {
         return MinecraftConvertor.toPlatformInteractionResult(referenceValue().useOn(new UseOnContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction))));
+    }
+
+    @Override
+    public boolean isCorrectToolForDrops(BlockState blockState) {
+        return referenceValue().isCorrectToolForDrops(blockState.reference());
     }
 }

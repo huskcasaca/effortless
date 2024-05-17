@@ -74,6 +74,12 @@ public class BlockBreakOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
 
+        var tool = ItemStack.empty();
+
+        if (context.useProperToolOnly() && world.getBlockState(getBlockPosition()).()) {
+            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
+        }
+
         if (context.isPreview() && world.isClient()) {
             return BlockOperationResult.Type.CONSUME;
         }

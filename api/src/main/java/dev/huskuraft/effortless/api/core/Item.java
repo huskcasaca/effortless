@@ -23,4 +23,6 @@ public interface Item extends PlatformReference {
 
     InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction);
 
+    boolean isCorrectToolForDrops(BlockState blockState);
+
 }
