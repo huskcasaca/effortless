@@ -56,6 +56,7 @@ public abstract class BlockOperationResult extends OperationResult {
 
         FAIL_ITEM_INSUFFICIENT,
         FAIL_ITEM_NOT_BLOCK,
+        FAIL_TOOL_INSUFFICIENT,
 
         FAIL_WHITELISTED,
         FAIL_BLACKLISTED,

@@ -79,7 +79,7 @@ public class BlockBreakOperation extends BlockOperation {
         var correctTool = getStorage().contents().stream().filter(itemStack -> itemStack.getItem().isCorrectToolForDrops(blockState)).filter(itemStack -> true).findFirst();
 
         if (!player.getGameType().isCreative() && context.useProperToolOnly() && correctTool.isEmpty()) {
-            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
+            return BlockOperationResult.Type.FAIL_TOOL_INSUFFICIENT;
         }
 
         if (context.isPreview() && world.isClient()) {
