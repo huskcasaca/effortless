@@ -25,4 +25,6 @@ public interface Item extends PlatformReference {
 
     boolean isCorrectToolForDrops(BlockState blockState);
 
+    int getMaxDamage();
+
 }

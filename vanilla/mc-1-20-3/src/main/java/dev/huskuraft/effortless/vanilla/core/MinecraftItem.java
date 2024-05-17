@@ -47,4 +47,9 @@ public record MinecraftItem(net.minecraft.world.item.Item referenceValue) implem
     public boolean isCorrectToolForDrops(BlockState blockState) {
         return referenceValue().isCorrectToolForDrops(blockState.reference());
     }
+
+    @Override
+    public int getMaxDamage() {
+        return referenceValue().getMaxDamage();
+    }
 }

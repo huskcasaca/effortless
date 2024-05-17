@@ -5,10 +5,12 @@ import java.util.List;
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.tag.TagRecord;
-import dev.huskuraft.effortless.api.tag.TagSerializable;
 import dev.huskuraft.effortless.api.text.Text;
 
-public interface ItemStack extends TagSerializable, PlatformReference {
+public interface ItemStack extends PlatformReference {
+
+    String DAMAGE_TAG = "Damage";
+    String UNBREAKABLE_TAG = "Unbreakable";
 
     static ItemStack empty() {
         return ContentFactory.getInstance().newItemStack();
@@ -50,6 +52,30 @@ public interface ItemStack extends TagSerializable, PlatformReference {
 
     default boolean isBlock() {
         return getItem() instanceof BlockItem;
+    }
+
+    default boolean isDamaged() {
+        return this.isDamageableItem() && this.getDamageValue() > 0;
+    }
+
+    default void setDamageValue(int damage) {
+        this.getTag().putInt(DAMAGE_TAG, Math.max(0, damage));
+    }
+
+    default int getDamageValue() {
+        return getTag().getIntOrElse(DAMAGE_TAG, 0);
+    }
+
+    default int getMaxDamage() {
+        return getItem().getMaxDamage();
+    }
+
+    default boolean isDamageableItem() {
+        if (!isEmpty() && getItem().getMaxDamage() > 0) {
+            return !getTag().getBooleanOrElse(UNBREAKABLE_TAG, false);
+        } else {
+            return false;
+        }
     }
 
     enum TooltipType {
