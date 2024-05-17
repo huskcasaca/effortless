@@ -11,12 +11,12 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.operation.ItemSummaryType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 
-public record HistoryResult(
+public record BuildTooltip(
         Type type,
         Context context,
         Map<ItemSummaryType, List<ItemStack>> itemSummary
 ) {
-    public HistoryResult(
+    public BuildTooltip(
             Type type,
             OperationResult result
     ) {
@@ -28,7 +28,7 @@ public record HistoryResult(
 
     }
 
-    public HistoryResult(
+    public BuildTooltip(
             Type type
     ) {
         this(
@@ -40,8 +40,9 @@ public record HistoryResult(
     }
 
     public enum Type {
-        SUCCESS_UNDO("undo_success"),
-        SUCCESS_REDO("redo_success"),
+        BUILD_SUCCESS("build_success"),
+        UNDO_SUCCESS("undo_success"),
+        REDO_SUCCESS("redo_success"),
         NOTHING_TO_UNDO("nothing_to_undo"),
         NOTHING_TO_REDO("nothing_to_redo"),
         ;
