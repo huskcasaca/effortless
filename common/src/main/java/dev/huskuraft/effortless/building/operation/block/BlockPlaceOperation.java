@@ -100,8 +100,10 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
-        if (context.replaceMode().isReplace() && !player.destroyBlock(getInteraction())) {
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
+        if (context.replaceMode().isReplace()) {
+            if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction()) && !player.destroyBlock(getInteraction())) {
+                return BlockOperationResult.Type.FAIL_UNKNOWN;
+            }
         }
 
 //        if (context.buildType() == BuildType.COMMAND) {
