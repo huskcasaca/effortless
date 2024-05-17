@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
+import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.api.math.MathUtils;
@@ -27,7 +28,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.utils.ColorUtils;
 import dev.huskuraft.effortless.building.Option;
 
-public class AbstractWheelScreen<S, B> extends AbstractScreen {
+public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     public static final int ANIMATION_OFFSET_Y = 12;
     public static final int ANIMATION_TICKS = 4;
@@ -63,6 +64,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
     // TODO: 20/2/23 rename
     private float visibility = 1;
     private float animationTicks = 0;
+    private boolean detached = false;
 
     public AbstractWheelScreen(Entrance entrance, Text text) {
         super(entrance, text);
@@ -221,17 +223,23 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         return button(option, option.getNameText(), option.getCategoryText(), option.getIcon(), option.getTooltipText(), option, activated);
     }
 
+    protected abstract Key getAssignedKey();
+
     @Override
     public void onPartialTick(float partialTick) {
-        this.animationTicks += partialTick;
+        this.detached = !getAssignedKey().getBinding().isKeyDown();
+        this.animationTicks = Math.min(Math.max(animationTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);
+        if (detached && animationTicks == 0) {
+            detach();
+        }
+
     }
 
     @Override
     public void onCreate() {
     }
 
-    private static int pack(int r, int g, int b, int alpha)
-    {
+    private static int pack(int r, int g, int b, int alpha) {
         return alpha << 24 | r << 16 | g << 8 | b;
     }
 
@@ -249,6 +257,7 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @Override
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
+
         renderer.pushPose();
         renderer.translate(0, 0 * getAnimationFactor() * ANIMATION_OFFSET_Y, 0);
         renderer.translate(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0);
@@ -523,8 +532,13 @@ public class AbstractWheelScreen<S, B> extends AbstractScreen {
         return getEntrance().getClient().getPlayer();
     }
 
+    public static final int MAX_ANIMATION_TICKS = 4;
+
     private float getAnimationFactor() {
-        var fac = 1f - Math.min(animationTicks, ANIMATION_TICKS) / ANIMATION_TICKS;
+        var fac = 1f - Math.min(animationTicks, MAX_ANIMATION_TICKS) / MAX_ANIMATION_TICKS;
+        if (detached) {
+            return 1 - MathUtils.lerp((1 - fac) * (1 - fac), 1f, 0f);
+        }
         return 1 - MathUtils.lerp(fac * fac, 0f, 1f);
     }
 

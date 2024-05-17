@@ -153,6 +153,11 @@ public record MinecraftScreen(
     }
 
     @Override
+    public void onPartialTick(float partialTick) {
+
+    }
+
+    @Override
     public void onCreate() {
 
     }
