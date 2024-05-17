@@ -26,10 +26,8 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
     private static final String KEY_ALLOW_BREAK_BLOCKS = "allowBreakBlocks";
     private static final String KEY_ALLOW_PLACE_BLOCKS = "allowPlaceBlocks";
     private static final String KEY_MAX_REACH_DISTANCE = "maxReachDistance";
-    private static final String KEY_MAX_BOX_VOLUME_PER_BREAK = "maxBoxVolumePerBreak";
-    private static final String KEY_MAX_BOX_VOLUME_PER_PLACE = "maxBoxVolumePerPlace";
-    private static final String KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK = "maxBoxSideLengthPerBreak";
-    private static final String KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE = "maxBoxSideLengthPerPlace";
+    private static final String KEY_MAX_BOX_VOLUME_PER_BREAK = "maxBlockBreakVolume";
+    private static final String KEY_MAX_BOX_VOLUME_PER_PLACE = "maxBlockPlaceVolume";
     private static final String KEY_WHITELISTED_ITEMS = "whitelistedItems";
     private static final String KEY_BLACKLISTED_ITEMS = "blacklistedItems";
 
@@ -89,8 +87,6 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             spec.defineInRange(KEY_MAX_REACH_DISTANCE, GeneralConfig.MAX_REACH_DISTANCE_DEFAULT, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_BREAK, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_DEFAULT, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_PLACE, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_DEFAULT, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
-            spec.defineInRange(KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_DEFAULT, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_END);
-            spec.defineInRange(KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_DEFAULT, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END);
             spec.defineList(KEY_WHITELISTED_ITEMS, () -> GeneralConfig.WHITELISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
             spec.defineList(KEY_BLACKLISTED_ITEMS, () -> GeneralConfig.BLACKLISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
             return spec;
@@ -112,8 +108,6 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
                     config.get(KEY_MAX_REACH_DISTANCE),
                     config.get(KEY_MAX_BOX_VOLUME_PER_BREAK),
                     config.get(KEY_MAX_BOX_VOLUME_PER_PLACE),
-                    config.get(KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK),
-                    config.get(KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE),
                     config.get(KEY_WHITELISTED_ITEMS) == null ? null : config.<List<String>>get(KEY_WHITELISTED_ITEMS).stream().map(ResourceLocation::decompose).toList(),
                     config.get(KEY_BLACKLISTED_ITEMS) == null ? null : config.<List<String>>get(KEY_BLACKLISTED_ITEMS).stream().map(ResourceLocation::decompose).toList());
         }
@@ -126,10 +120,8 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.set(KEY_ALLOW_BREAK_BLOCKS, generalConfig.allowBreakBlocks());
             config.set(KEY_ALLOW_PLACE_BLOCKS, generalConfig.allowPlaceBlocks());
             config.set(KEY_MAX_REACH_DISTANCE, generalConfig.maxReachDistance());
-            config.set(KEY_MAX_BOX_VOLUME_PER_BREAK, generalConfig.maxBoxVolumePerBreak());
-            config.set(KEY_MAX_BOX_VOLUME_PER_PLACE, generalConfig.maxBoxVolumePerPlace());
-            config.set(KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK, generalConfig.maxBoxSideLengthPerBreak());
-            config.set(KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE, generalConfig.maxBoxSideLengthPerPlace());
+            config.set(KEY_MAX_BOX_VOLUME_PER_BREAK, generalConfig.maxBlockBreakVolume());
+            config.set(KEY_MAX_BOX_VOLUME_PER_PLACE, generalConfig.maxBlockPlaceVolume());
             config.set(KEY_WHITELISTED_ITEMS, generalConfig.whitelistedItems() == null ? null : generalConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
             config.set(KEY_BLACKLISTED_ITEMS, generalConfig.blacklistedItems() == null ? null : generalConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
 
@@ -140,8 +132,6 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.setComment(KEY_MAX_REACH_DISTANCE, "The maximum distance a player can reach when building using this mod. \nRange: " + GeneralConfig.MAX_REACH_DISTANCE_RANGE_START + " ~ " + GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
             config.setComment(KEY_MAX_BOX_VOLUME_PER_BREAK, "The maximum box volume a player can break at once when building using this mod.. \nRange: " + GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
             config.setComment(KEY_MAX_BOX_VOLUME_PER_PLACE, "The maximum box volume a player can place at once  when building using this mod. \nRange: " + GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
-            config.setComment(KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK, "The maximum box side length a player can break at once when building using this mod. \nRange: " + GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_END);
-            config.setComment(KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE, "The maximum box side length a player can place at once when building using this mod. \nRange: " + GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END);
             config.setComment(KEY_WHITELISTED_ITEMS, "The list of items that players are allowed to use when building using this mod. \nIf the whitelist is empty, all items are allowed. \nIf the whitelist is not empty, only the items in the whitelist are allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
             config.setComment(KEY_BLACKLISTED_ITEMS, "The list of items that players are not allowed to use when building using this mod. \nIf the blacklist is empty, no items are not allowed. \nIf an item exists both in the blacklist and the whitelist, it will not be allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
             validate(config);
@@ -189,12 +179,6 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             if (config.contains(KEY_MAX_BOX_VOLUME_PER_PLACE)) {
                 spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_PLACE, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_DEFAULT, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
             }
-            if (config.contains(KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK)) {
-                spec.defineInRange(KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_DEFAULT, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_END);
-            }
-            if (config.contains(KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE)) {
-                spec.defineInRange(KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_DEFAULT, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END);
-            }
             if (config.contains(KEY_WHITELISTED_ITEMS)) {
                 spec.defineList(KEY_WHITELISTED_ITEMS, () -> GeneralConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
             }
@@ -220,8 +204,6 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
                     config.get(KEY_MAX_REACH_DISTANCE),
                     config.get(KEY_MAX_BOX_VOLUME_PER_BREAK),
                     config.get(KEY_MAX_BOX_VOLUME_PER_PLACE),
-                    config.get(KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK),
-                    config.get(KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE),
                     config.get(KEY_WHITELISTED_ITEMS) == null ? null : config.<List<String>>get(KEY_WHITELISTED_ITEMS).stream().map(ResourceLocation::decompose).toList(),
                     config.get(KEY_BLACKLISTED_ITEMS) == null ? null : config.<List<String>>get(KEY_BLACKLISTED_ITEMS).stream().map(ResourceLocation::decompose).toList());
         }
@@ -234,10 +216,8 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             addOrRemove(config, KEY_ALLOW_BREAK_BLOCKS, generalConfig.allowBreakBlocks());
             addOrRemove(config, KEY_ALLOW_PLACE_BLOCKS, generalConfig.allowPlaceBlocks());
             addOrRemove(config, KEY_MAX_REACH_DISTANCE, generalConfig.maxReachDistance());
-            addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_BREAK, generalConfig.maxBoxVolumePerBreak());
-            addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_PLACE, generalConfig.maxBoxVolumePerPlace());
-            addOrRemove(config, KEY_MAX_BOX_SIDE_LENGTH_PER_BREAK, generalConfig.maxBoxSideLengthPerBreak());
-            addOrRemove(config, KEY_MAX_BOX_SIDE_LENGTH_PER_PLACE, generalConfig.maxBoxSideLengthPerPlace());
+            addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_BREAK, generalConfig.maxBlockBreakVolume());
+            addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_PLACE, generalConfig.maxBlockPlaceVolume());
             addOrRemove(config, KEY_WHITELISTED_ITEMS, generalConfig.whitelistedItems() == null ? null : generalConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
             addOrRemove(config, KEY_BLACKLISTED_ITEMS, generalConfig.blacklistedItems() == null ? null : generalConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
             validate(config);

@@ -10,10 +10,8 @@ public record GeneralConfig(
         Boolean allowBreakBlocks,
         Boolean allowPlaceBlocks,
         Integer maxReachDistance,
-        Integer maxBoxVolumePerBreak,
-        Integer maxBoxVolumePerPlace,
-        Integer maxBoxSideLengthPerBreak,
-        Integer maxBoxSideLengthPerPlace,
+        Integer maxBlockBreakVolume,
+        Integer maxBlockPlaceVolume,
         List<ResourceLocation> whitelistedItems,
         List<ResourceLocation> blacklistedItems
 ) {
@@ -27,19 +25,11 @@ public record GeneralConfig(
     public static final int MAX_REACH_DISTANCE_RANGE_START = 0;
     public static final int MAX_REACH_DISTANCE_RANGE_END = Short.MAX_VALUE;
 
-    public static final int MAX_BOX_SIDE_LENGTH_PER_BREAK_DEFAULT = 1024;
-    public static final int MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_START = 0;
-    public static final int MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_END = Short.MAX_VALUE;
-
-    public static final int MAX_BOX_SIDE_LENGTH_PER_PLACE_DEFAULT = 1024;
-    public static final int MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START = 0;
-    public static final int MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END = Short.MAX_VALUE;
-
-    public static final int MAX_BOX_VOLUME_PER_BREAK_DEFAULT = 1024 * 1024;
+    public static final int MAX_BOX_VOLUME_PER_BREAK_DEFAULT = 1000 * 1000;
     public static final int MAX_BOX_VOLUME_PER_BREAK_RANGE_START = 0;
     public static final int MAX_BOX_VOLUME_PER_BREAK_RANGE_END = Integer.MAX_VALUE;
 
-    public static final int MAX_BOX_VOLUME_PER_PLACE_DEFAULT = 1024 * 1024;
+    public static final int MAX_BOX_VOLUME_PER_PLACE_DEFAULT = 1000 * 1000;
     public static final int MAX_BOX_VOLUME_PER_PLACE_RANGE_START = 0;
     public static final int MAX_BOX_VOLUME_PER_PLACE_RANGE_END = Integer.MAX_VALUE;
 
@@ -54,8 +44,6 @@ public record GeneralConfig(
             MAX_REACH_DISTANCE_DEFAULT,
             MAX_BOX_VOLUME_PER_BREAK_DEFAULT,
             MAX_BOX_VOLUME_PER_PLACE_DEFAULT,
-            MAX_BOX_SIDE_LENGTH_PER_BREAK_DEFAULT,
-            MAX_BOX_SIDE_LENGTH_PER_PLACE_DEFAULT,
             WHITELISTED_ITEMS_DEFAULT,
             BLACKLISTED_ITEMS_DEFAULT);
 
@@ -67,14 +55,10 @@ public record GeneralConfig(
             0,
             0,
             0,
-            0,
-            0,
             List.of(),
             List.of());
 
     public static final GeneralConfig NULL = new GeneralConfig(
-            null,
-            null,
             null,
             null,
             null,

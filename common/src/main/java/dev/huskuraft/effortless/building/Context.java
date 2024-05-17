@@ -274,22 +274,8 @@ public record Context(
     public int getMaxBoxVolume() {
         return switch (buildState()) {
             case IDLE -> 0;
-            case PLACE_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
-            case BREAK_BLOCK -> customParams().generalConfig().maxBoxVolumePerBreak();
-            case INTERACT_BLOCK -> customParams().generalConfig().maxBoxVolumePerPlace();
-        };
-    }
-
-    public int getBoxSideLength() {
-        return getInteractionBox().stream().max().orElse(0);
-    }
-
-    public int getMaxBoxSideLength() {
-        return switch (buildState()) {
-            case IDLE -> 0;
-            case PLACE_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
-            case BREAK_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerBreak();
-            case INTERACT_BLOCK -> customParams().generalConfig().maxBoxSideLengthPerPlace();
+            case PLACE_BLOCK, INTERACT_BLOCK -> customParams().generalConfig().maxBlockPlaceVolume();
+            case BREAK_BLOCK -> customParams().generalConfig().maxBlockBreakVolume();
         };
     }
 
@@ -297,16 +283,11 @@ public record Context(
         return getBoxVolume() <= getMaxBoxVolume();
     }
 
-    public boolean isBoxSideLengthInBounds() {
-        return getBoxSideLength() <= getMaxBoxSideLength();
-    }
-
     public boolean hasPermission() {
         return switch (buildState()) {
             case IDLE -> true;
-            case PLACE_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
+            case PLACE_BLOCK, INTERACT_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
             case BREAK_BLOCK -> customParams().generalConfig().allowBreakBlocks();
-            case INTERACT_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
         };
     }
 

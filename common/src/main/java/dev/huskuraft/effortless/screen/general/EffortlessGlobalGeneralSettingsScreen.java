@@ -37,35 +37,29 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractPanelScreen {
 
         var entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1, false, false));
 //        entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, config.useCommands(), (value) -> {
-//            this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+//            this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
 //        });
         entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_use_mod"), null, config.allowUseMod(), (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new GeneralConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_break_blocks"), null, config.allowBreakBlocks(), (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_place_blocks"), null, config.allowPlaceBlocks(), (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_reach_distance"), null, config.maxReachDistance(), GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END, (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         ;
-        entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_box_volume_per_break"), null, config.maxBoxVolumePerBreak(), GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END, (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), value, config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+        entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_block_break_volume"), null, config.maxBlockBreakVolume(), GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END, (value) -> {
+            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), value, config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
-        entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_box_volume_per_place"), null, config.maxBoxVolumePerPlace(), GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END, (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), value, config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
-        });
-        entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_box_side_length_per_break"), null, config.maxBoxSideLengthPerBreak(), GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_END, (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), value, config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
-        });
-        entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_box_side_length_per_place"), null, config.maxBoxSideLengthPerPlace(), GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END, (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), value, config.whitelistedItems(), config.blacklistedItems());
+        entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_block_place_volume"), null, config.maxBlockPlaceVolume(), GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END, (value) -> {
+            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), value, config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addTab(Text.translate("effortless.global_general_settings.whitelisted_items"), null, config.whitelistedItems(), (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), value, config.blacklistedItems());
+            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), value, config.blacklistedItems());
         }, (entry, value) -> {
             entry.getButton().setOnPressListener(button1 -> {
                 new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.whitelisted_items"), value.stream().map(Item::fromIdOptional).filter(Optional::isPresent).map(Optional::get).toList(), (value1) -> {
@@ -75,7 +69,7 @@ public class EffortlessGlobalGeneralSettingsScreen extends AbstractPanelScreen {
             entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value.size()));
         });
         entries.addTab(Text.translate("effortless.global_general_settings.blacklisted_items"), null, config.blacklistedItems(), (value) -> {
-            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), value);
+            this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), value);
         }, (entry, value) -> {
             entry.getButton().setOnPressListener(button1 -> {
                 new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.blacklisted_items"), value.stream().map(Item::fromIdOptional).filter(Optional::isPresent).map(Optional::get).toList(), (value1) -> {

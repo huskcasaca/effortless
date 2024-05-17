@@ -16,8 +16,6 @@ public class GeneralConfigSerializer implements NetByteBufSerializer<GeneralConf
                 byteBuf.readNullable(NetByteBuf::readVarInt),
                 byteBuf.readNullable(NetByteBuf::readVarInt),
                 byteBuf.readNullable(NetByteBuf::readVarInt),
-                byteBuf.readNullable(NetByteBuf::readVarInt),
-                byteBuf.readNullable(NetByteBuf::readVarInt),
                 byteBuf.readNullable(buffer1 -> buffer1.readList(NetByteBuf::readResourceLocation)),
                 byteBuf.readNullable(buffer1 -> buffer1.readList(NetByteBuf::readResourceLocation)));
     }
@@ -29,10 +27,8 @@ public class GeneralConfigSerializer implements NetByteBufSerializer<GeneralConf
         byteBuf.writeNullable(generalConfig.allowBreakBlocks(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(generalConfig.allowPlaceBlocks(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(generalConfig.maxReachDistance(), NetByteBuf::writeVarInt);
-        byteBuf.writeNullable(generalConfig.maxBoxVolumePerBreak(), NetByteBuf::writeVarInt);
-        byteBuf.writeNullable(generalConfig.maxBoxVolumePerPlace(), NetByteBuf::writeVarInt);
-        byteBuf.writeNullable(generalConfig.maxBoxSideLengthPerBreak(), NetByteBuf::writeVarInt);
-        byteBuf.writeNullable(generalConfig.maxBoxSideLengthPerPlace(), NetByteBuf::writeVarInt);
+        byteBuf.writeNullable(generalConfig.maxBlockBreakVolume(), NetByteBuf::writeVarInt);
+        byteBuf.writeNullable(generalConfig.maxBlockPlaceVolume(), NetByteBuf::writeVarInt);
         byteBuf.writeNullable(generalConfig.whitelistedItems(), (buffer1, list) -> buffer1.writeList(list, NetByteBuf::writeResourceLocation));
         byteBuf.writeNullable(generalConfig.blacklistedItems(), (buffer1, list) -> buffer1.writeList(list, NetByteBuf::writeResourceLocation));
 

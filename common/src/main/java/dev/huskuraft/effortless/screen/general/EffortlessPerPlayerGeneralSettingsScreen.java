@@ -56,7 +56,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
 //        bindEntry(
 //                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
 //                value -> {
-//                    this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+//                    this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
 //                },
 //                () -> globalConfig.useCommands(),
 //                () -> config.useCommands()
@@ -65,7 +65,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_use_mod"), null, null, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerPlace(), config.maxBoxVolumePerBreak(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockPlaceVolume(), config.maxBlockBreakVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowUseMod(),
                 () -> config.allowUseMod()
@@ -73,7 +73,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_break_blocks"), null, null, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowBreakBlocks(),
                 () -> config.allowBreakBlocks()
@@ -81,7 +81,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_place_blocks"), null, null, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowPlaceBlocks(),
                 () -> config.allowPlaceBlocks()
@@ -89,42 +89,26 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
         bindEntry(
                 entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_reach_distance"), null, null, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxReachDistance(),
                 () -> config.maxReachDistance()
         );
         bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_box_volume_per_break"), null, null, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_block_break_volume"), null, null, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), value, config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), value, config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
-                () -> globalConfig.maxBoxVolumePerBreak(),
-                () -> config.maxBoxVolumePerBreak()
+                () -> globalConfig.maxBlockBreakVolume(),
+                () -> config.maxBlockBreakVolume()
         );
         bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_box_volume_per_place"), null, null, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_block_place_volume"), null, null, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), value, config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), value, config.whitelistedItems(), config.blacklistedItems());
                 },
-                () -> globalConfig.maxBoxVolumePerPlace(),
-                () -> config.maxBoxVolumePerPlace()
-        );
-        bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_box_side_length_per_break"), null, null, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_BREAK_RANGE_END, null),
-                (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), value, config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
-                },
-                () -> globalConfig.maxBoxSideLengthPerBreak(),
-                () -> config.maxBoxSideLengthPerBreak()
-        );
-        bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_box_side_length_per_place"), null, null, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_SIDE_LENGTH_PER_PLACE_RANGE_END, null),
-                (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), value, config.whitelistedItems(), config.blacklistedItems());
-                },
-                () -> globalConfig.maxBoxSideLengthPerPlace(),
-                () -> config.maxBoxSideLengthPerPlace()
+                () -> globalConfig.maxBlockPlaceVolume(),
+                () -> config.maxBlockPlaceVolume()
         );
         bindEntry(
                 entries.addTab(Text.translate("effortless.global_general_settings.whitelisted_items"), null, null, null, (entry, value) -> {
@@ -136,7 +120,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
                     entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value == null ? null : value.size()));
                 }),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), value, config.blacklistedItems());
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), value, config.blacklistedItems());
                 },
                 () -> globalConfig.whitelistedItems(),
                 () -> config.whitelistedItems()
@@ -153,7 +137,7 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
                     entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value == null ? null : value.size()));
                 }),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBoxVolumePerBreak(), config.maxBoxVolumePerPlace(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), value);
+                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), value);
                 },
                 () -> globalConfig.blacklistedItems(),
                 () -> config.blacklistedItems()

@@ -285,16 +285,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 return context.newInteraction();
             }
 
-            if (!nextContext.isBoxSideLengthInBounds()) {
-                if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_side_length_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxSideLength())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxSideLength())).append(")"), true);
-                }
-                if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_side_length_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxSideLength())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxSideLength())).append(")"), true);
-                }
-                return context.newInteraction();
-            }
-
             return nextContext;
         });
 
@@ -543,11 +533,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     .append(context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD))
                     .append(" ")
                     .append("(")
-                    .append(Text.text(String.valueOf(context.getInteractionBox().x())).withStyle(context.getInteractionBox().x() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE))
+                    .append(Text.text(String.valueOf(context.getInteractionBox().x())).withStyle(ChatFormatting.WHITE))
                     .append("x")
-                    .append(Text.text(String.valueOf(context.getInteractionBox().y())).withStyle(context.getInteractionBox().y() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE))
+                    .append(Text.text(String.valueOf(context.getInteractionBox().y())).withStyle(ChatFormatting.WHITE))
                     .append("x")
-                    .append(Text.text(String.valueOf(context.getInteractionBox().z())).withStyle(context.getInteractionBox().z() > context.getMaxBoxSideLength() ? ChatFormatting.RED : ChatFormatting.WHITE))
+                    .append(Text.text(String.valueOf(context.getInteractionBox().z())).withStyle(ChatFormatting.WHITE))
                     .append("=")
                     .append(Text.text(String.valueOf(context.getBoxVolume())).withStyle(!context.isBoxVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE))
                     .append(")");
