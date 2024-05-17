@@ -22,8 +22,8 @@ public abstract class AbstractWidget implements Widget {
     private int y;
     private int width;
     private int height;
-    private Text message;
-    private List<Text> tooltip;
+    private Text message = Text.empty();;
+    private List<Text> tooltip = new ArrayList<>();
     private Widget parent;
 
     protected AbstractWidget(Entrance entrance, int x, int y, int width, int height, Text message) {
@@ -39,7 +39,10 @@ public abstract class AbstractWidget implements Widget {
     protected AbstractWidget(Entrance entrance, Text message) {
         this.entrance = (ClientEntrance) entrance;
         this.message = message;
-        this.tooltip = new ArrayList<>();
+    }
+
+    protected AbstractWidget(Entrance entrance) {
+        this.entrance = (ClientEntrance) entrance;
     }
 
     protected ClientEntrance getEntrance() {

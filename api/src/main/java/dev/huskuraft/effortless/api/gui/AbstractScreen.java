@@ -7,15 +7,36 @@ import dev.huskuraft.effortless.api.text.Text;
 public abstract class AbstractScreen extends AbstractContainerWidget implements Screen {
 
     protected boolean transparentBackground = true;
+    private int screenWidth = 0;
+    private int screenHeight = 0;
+
+    protected int getScreenWidth() {
+        return screenWidth;
+    }
+
+    protected void setScreenWidth(int screenWidth) {
+        this.screenWidth = screenWidth;
+    }
+
+    protected int getScreenHeight() {
+        return screenHeight;
+    }
+
+    protected void setScreenHeight(int screenHeight) {
+        this.screenHeight = screenHeight;
+    }
+
+    protected AbstractScreen(Entrance entrance, int x, int y, int width, int height, Text message) {
+        super(entrance, x, y, width, height, message);
+    }
 
     protected AbstractScreen(Entrance entrance, Text title) {
-        super(entrance, 0, 0, 0, 0, title);
+        super(entrance,  title);
     }
 
     protected AbstractScreen(Entrance entrance) {
-        super(entrance, 0, 0, 0, 0, Text.empty());
+        super(entrance);
     }
-
 
     public Text getScreenTitle() {
         return getMessage();
@@ -23,8 +44,14 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
 
     @Override
     public void init(int width, int height) {
-        setWidth(width);
-        setHeight(height);
+        setScreenWidth(width);
+        setScreenHeight(height);
+        if (getWidth() == UNSPECIFIC_SIZE) {
+            setWidth(width);
+        }
+        if (getHeight() == UNSPECIFIC_SIZE) {
+            setHeight(height);
+        }
         recreate();
     }
 
@@ -68,7 +95,7 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
 
     public void renderWidgetBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         if (isTransparentBackground() && getEntrance().getClient().isLoaded()) {
-            renderer.renderGradientRect(0, 0, super.getWidth(), super.getHeight(), -1072689136, -804253680);
+            renderer.renderGradientRect(0, 0, getScreenWidth(), getScreenHeight(), -1072689136, -804253680);
         } else {
             renderer.setRsShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
             renderer.renderPanelBackgroundTexture(0, 0, 0F, 0F, getWidth(), getHeight());

@@ -25,6 +25,14 @@ public abstract class AbstractContainerWidget extends AbstractWidget implements 
         super(entrance, x, y, width, height, message);
     }
 
+    protected AbstractContainerWidget(Entrance entrance, Text message) {
+        super(entrance, message);
+    }
+
+    protected AbstractContainerWidget(Entrance entrance) {
+        super(entrance);
+    }
+
     @Override
     public void tick() {
         for (var child : children()) {

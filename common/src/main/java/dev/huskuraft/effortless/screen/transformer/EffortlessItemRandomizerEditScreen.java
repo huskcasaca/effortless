@@ -38,7 +38,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
     private Button cancelButton;
 
     public EffortlessItemRandomizerEditScreen(Entrance entrance, Consumer<ItemRandomizer> consumer, ItemRandomizer randomizer) {
-        super(entrance, Text.translate("effortless.randomizer.edit.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.randomizer.edit.title"));
         this.consumer = consumer;
         this.defaultRandomizer = randomizer;
         this.randomizer = randomizer;
@@ -46,7 +46,8 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
 
     @Override
     public void onCreate() {
-        setPanelHeight(randomizer.getSource() == ItemRandomizer.Source.CUSTOMIZE ? PANEL_HEIGHT_270 : PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_3);
+        setWidth(PANEL_WIDTH_EXPANDED);
+        setHeight(randomizer.getSource() == ItemRandomizer.Source.CUSTOMIZE ? PANEL_HEIGHT_270 : PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_3);
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 

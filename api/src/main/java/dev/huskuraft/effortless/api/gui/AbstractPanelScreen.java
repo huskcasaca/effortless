@@ -32,8 +32,6 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     public static final int PANEL_BUTTON_ROW_HEIGHT_5N = Dimens.Buttons.HEIGHT * 5 + Button.COMPAT_SPACING_H * 5 + Button.COMPAT_SPACING_H;
     public static final int PANEL_BUTTON_ROW_HEIGHT_6N = Dimens.Buttons.HEIGHT * 6 + Button.COMPAT_SPACING_H * 6 + Button.COMPAT_SPACING_H;
 
-    public static final int UNSPECIFIC = 0;
-
     public static final int PADDINGS_H = 6;
     public static final int PADDINGS_V = 6;
     public static final int INNER_PADDINGS_H = Button.COMPAT_SPACING_H;
@@ -44,23 +42,19 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     public static final TextureSprite DEMO_BACKGROUND_SPRITE = TextureFactory.getInstance().getDemoBackgroundTextureSprite();
     public static final int ANIMATED_OFFSET_Y = 12;
     public static final int MAX_ANIMATION_TICKS = 2;
-    private int panelWidth;
-    private int panelHeight;
     protected float animationTicks = 0;
     private boolean detached = false;
 
-    protected AbstractPanelScreen(Entrance entrance, Text title, int panelWidth, int panelHeight) {
-        super(entrance, title);
-        this.panelWidth = panelWidth;
-        this.panelHeight = panelHeight;
+    protected AbstractPanelScreen(Entrance entrance, Text title, int width, int height) {
+        super(entrance, 0, 0, width, height, title);
     }
 
     protected AbstractPanelScreen(Entrance entrance, Text title) {
-        this(entrance, title, UNSPECIFIC, UNSPECIFIC);
+        this(entrance, title, UNSPECIFIC_SIZE, UNSPECIFIC_SIZE);
     }
 
     protected AbstractPanelScreen(Entrance entrance) {
-        this(entrance, Text.empty(), UNSPECIFIC, UNSPECIFIC);
+        this(entrance, Text.empty(), UNSPECIFIC_SIZE, UNSPECIFIC_SIZE);
     }
 
     @Override
@@ -69,31 +63,13 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     }
 
     @Override
-    public int getWidth() {
-        return panelWidth;
-    }
-
-    @Override
-    public int getHeight() {
-        return panelHeight;
-    }
-
-    public void setPanelWidth(int panelWidth) {
-        this.panelWidth = panelWidth;
-    }
-
-    public void setPanelHeight(int height) {
-        this.panelHeight = height;
-    }
-
-    @Override
     public int getX() {
-        return super.getX() + super.getWidth() / 2 - getWidth() / 2;
+        return getScreenWidth() / 2 - getWidth() / 2;
     }
 
     @Override
     public int getY() {
-        return super.getY() + super.getHeight() / 2 - getHeight() / 2;
+        return getScreenHeight() / 2 - getHeight() / 2;
     }
 
     private float getAnimationFactor() {

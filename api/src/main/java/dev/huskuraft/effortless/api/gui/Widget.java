@@ -2,6 +2,8 @@ package dev.huskuraft.effortless.api.gui;
 
 public interface Widget extends Renderable, InputHandler {
 
+    int UNSPECIFIC_SIZE = 0;
+
     void tick();
 
     void onCreate();

@@ -36,7 +36,7 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
     private Button saveButton;
 
     public EffortlessPatternScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.pattern.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.pattern.title").withStyle(ChatFormatting.DARK_GRAY));
         this.applySettings = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer() , lastSettings);
         };
@@ -51,8 +51,8 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
 
     @Override
     public void onCreate() {
-        setPanelHeight(lastSettings.enabled() ? PANEL_HEIGHT_270 : PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_2);
-        setPanelWidth(lastSettings.enabled() ? PANEL_WIDTH_EXPANDED : PANEL_WIDTH);
+        setHeight(lastSettings.enabled() ? PANEL_HEIGHT_270 : PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_2);
+        setWidth(lastSettings.enabled() ? PANEL_WIDTH_EXPANDED : PANEL_WIDTH);
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 
