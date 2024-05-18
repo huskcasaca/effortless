@@ -58,7 +58,7 @@ public record MinecraftItemStack(
 
     @Override
     public TagRecord getTag() {
-        return new MinecraftTagRecord(referenceValue().getOrCreateTag());
+        return MinecraftTagRecord.ofNullable(referenceValue().getTag());
     }
 
     @Override

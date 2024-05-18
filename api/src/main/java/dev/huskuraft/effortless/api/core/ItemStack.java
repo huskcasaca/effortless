@@ -36,6 +36,13 @@ public interface ItemStack extends PlatformReference {
 
     TagRecord getTag();
 
+    default TagRecord getOrCreateTag() {
+        if (getTag() == null) {
+            setTag(TagRecord.newRecord());
+        }
+        return getTag();
+    };
+
     void setTag(TagRecord tagRecord);
 
     default void increase(int count) {
@@ -59,15 +66,15 @@ public interface ItemStack extends PlatformReference {
     }
 
     default boolean isDamaged() {
-        return this.isDamageableItem() && this.getDamageValue() > 0;
+        return isDamageableItem() && this.getDamageValue() > 0;
     }
 
     default void setDamageValue(int damage) {
-        this.getTag().putInt(DAMAGE_TAG, Math.max(0, damage));
+        this.getOrCreateTag().putInt(DAMAGE_TAG, Math.max(0, damage));
     }
 
     default int getDamageValue() {
-        return getTag().getIntOrElse(DAMAGE_TAG, 0);
+        return getOrCreateTag().getIntOrElse(DAMAGE_TAG, 0);
     }
 
     default int getMaxDamage() {
@@ -76,7 +83,7 @@ public interface ItemStack extends PlatformReference {
 
     default boolean isDamageableItem() {
         if (!isEmpty() && getItem().getMaxDamage() > 0) {
-            return !getTag().getBooleanOrElse(UNBREAKABLE_TAG, false);
+            return !getOrCreateTag().getBooleanOrElse(UNBREAKABLE_TAG, false);
         } else {
             return false;
         }

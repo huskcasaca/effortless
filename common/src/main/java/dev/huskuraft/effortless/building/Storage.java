@@ -132,7 +132,7 @@ public interface Storage {
             @Override
             public Optional<ItemStack> searchTag(ItemStack itemStack) {
                 var result = search(itemStack.getItem());
-                if (result.isPresent() && result.get().getTag().equals(itemStack.getTag())) {
+                if (result.isPresent() && result.get().getOrCreateTag().equals(itemStack.getOrCreateTag())) {
                     return result;
                 } else {
                     return Optional.empty();

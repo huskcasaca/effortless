@@ -20,7 +20,7 @@ public class ItemStackUtils {
         var map = new HashMap<Pair<Item, TagRecord>, ItemStack>();
         for (var stack : stacks) {
             var item = stack.getItem();
-            var key = new Pair<>(item, stack.getTag());
+            var key = new Pair<>(item, stack.getOrCreateTag());
             if (map.containsKey(key)) {
                 map.get(key).increase(stack.getCount());
             } else {
@@ -42,13 +42,13 @@ public class ItemStackUtils {
     }
 
     public static ItemStack putColorTag(ItemStack itemStack, int color) {
-        itemStack.getTag().putInt("RenderColor", color);
+        itemStack.getOrCreateTag().putInt("RenderColor", color);
         return itemStack;
     }
 
     public static Integer getColorTag(ItemStack itemStack) {
         try {
-            return itemStack.getTag().getInt("RenderColor");
+            return itemStack.getOrCreateTag().getInt("RenderColor");
         } catch (NullPointerException e) {
             return null;
         }
