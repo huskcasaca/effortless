@@ -283,11 +283,13 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         if (isActive() && isVisible()) {
             if (radialSelectResponder != null && hoveredSlot != null) {
                 radialSelectResponder.accept(hoveredSlot);
+                playRadialMenuSound();
                 result = true;
             }
 
             if (radialOptionSelectResponder != null && hoveredButton != null) {
                 radialOptionSelectResponder.accept(hoveredButton);
+                playRadialMenuSound();
                 result = true;
             }
         }

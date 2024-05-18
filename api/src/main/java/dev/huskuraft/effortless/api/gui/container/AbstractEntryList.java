@@ -72,7 +72,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     public void setSelected(@Nullable E entry) {
-        super.setFocused(entry);
+        setFocused(entry);
     }
 
     @Nullable
@@ -671,6 +671,15 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         @Override
         public int getWidth() {
             return MathUtils.min(Dimens.Entry.ROW_WIDTH, getParent().getWidth() - DEFAULT_VERTICAL_PADDING * 2);
+        }
+
+        @Override
+        public boolean onMouseClicked(double mouseX, double mouseY, int button) {
+            var result = super.onMouseClicked(mouseX, mouseY, button);
+            if (result) {
+                getEntrance().getClient().getSoundManager().playButtonClickSound();
+            }
+            return result;
         }
     }
 }
