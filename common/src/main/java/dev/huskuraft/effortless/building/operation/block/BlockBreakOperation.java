@@ -125,10 +125,10 @@ public class BlockBreakOperation extends BlockOperation {
 
         if (getWorld().isClient() && getContext().isPreviewSound()) {
             if (result.success()) {
-                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
+                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.5F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
                 getPlayer().getClient().getSoundManager().play(sound);
             } else {
-                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 8.0F, getBlockState().getSoundSet().pitch() * 0.5F, getBlockPosition().getCenter());
+                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 8.0F * 0.5F, getBlockState().getSoundSet().pitch() * 0.5F, getBlockPosition().getCenter());
                 getPlayer().getClient().getSoundManager().play(sound);
             }
         }

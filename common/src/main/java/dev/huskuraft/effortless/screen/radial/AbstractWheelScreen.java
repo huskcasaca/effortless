@@ -50,7 +50,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
     private static final double BUTTON_OFFSET_Y = 26;
     private static final double TITLE_HEIGHT = 10;
     private static final int MIN_RADIAL_SIZE = 8;
-    private static final float MOUSE_SCROLL_THRESHOLD = 1;
+    private static final float MOUSE_SCROLL_THRESHOLD = 2;
     private Consumer<Slot<S>> radialSelectResponder;
     private Consumer<Slot<S>> radialSwipeResponder;
     private Consumer<Button<B>> radialOptionSelectResponder;
@@ -304,9 +304,11 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         }
         lastScrollOffset += amountY;
         if (lastScrollOffset > MOUSE_SCROLL_THRESHOLD) {
+            playRadialMenuSound();
             getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), getEntrance().getConfigStorage().getBuildStructure(getEntrance().getStructureBuilder().getContext(getPlayer()).buildMode().previous()));
             lastScrollOffset = 0;
         } else if (lastScrollOffset < -MOUSE_SCROLL_THRESHOLD) {
+            playRadialMenuSound();
             getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), getEntrance().getConfigStorage().getBuildStructure(getEntrance().getStructureBuilder().getContext(getPlayer()).buildMode().next()));
             lastScrollOffset = 0;
         }
