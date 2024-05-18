@@ -54,6 +54,11 @@ public class MinecraftContentFactory implements ContentFactory {
     }
 
     @Override
+    public ItemStack newItemStack(Item item, int count) {
+        return new MinecraftItemStack(new net.minecraft.world.item.ItemStack((net.minecraft.world.item.Item) item.reference(), count));
+    }
+
+    @Override
     public Text newText() {
         return new MinecraftText(Component.nullToEmpty(null));
     }

@@ -16,6 +16,10 @@ public interface ItemStack extends PlatformReference {
         return ContentFactory.getInstance().newItemStack();
     }
 
+    static ItemStack of(Item item, int count) {
+        return ContentFactory.getInstance().newItemStack(item, count);
+    }
+
     List<Text> getTooltips(Player player, TooltipType flag);
 
     Item getItem();
