@@ -80,6 +80,9 @@ public class BlockInteractOperation extends BlockOperation {
             return BlockOperationResult.Type.CONSUME;
         }
 
+        if (world.isClient()) {
+            return BlockOperationResult.Type.CONSUME;
+        }
         // compatible layer
         var originalItemStack = player.getItemStack(getHand());
 

@@ -73,29 +73,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
     }
 
-    private static Text getStateComponent(BuildState state) {
-        return Text.translate("effortless.state.%s".formatted(
-                switch (state) {
-                    case IDLE -> "idle";
-                    case PLACE_BLOCK -> "placing_block";
-                    case BREAK_BLOCK -> "breaking_block";
-                    case INTERACT_BLOCK -> "interacting_block";
-                }
-        ));
-    }
-
-//    private static String getTracingComponent(TracingResult result) {
-//        return Text.translate("effortless.tracing.%s".formatted(
-//                switch (result) {
-//                    case SUCCESS_FULFILLED -> "success_fulfilled";
-//                    case SUCCESS_PARTIAL -> "success_partial";
-//                    case PASS -> "pass";
-//                    case FAILED_TRACE -> "failed";
-//                    case FAILED_OVERFLOW -> null;
-//                }
-//        )).getString();
-//    }
-
     private EffortlessClient getEntrance() {
         return entrance;
     }
@@ -106,14 +83,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (context.isFulfilled()) {
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
-//            var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_SOUND);
-            var result = new BatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
-
-//            if (finalizedContext.buildType() != BuildType.COMMAND) {
+            var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_SOUND);
+            var result = new BatchBuildSession(player.getWorld(), player, previewContext).build().commit();
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
-//            }
-
             showBuildContextResult(context.id(), 1024, player, context, result);
+
 //            showBuildTooltip(context.id(), 1024, player, context, result);
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
             setContext(player, context.newInteraction());
@@ -546,7 +520,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void showBuildMessage(Player player, Context context) {
         var message = Text.empty();
         if (context.tracingResult().isSuccess()) {
-            message = message.append(getStateComponent(context.buildState()))
+            message = message.append(context.buildState().getDisplayName())
                     .append(" ")
                     .append(context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD))
                     .append(" ")

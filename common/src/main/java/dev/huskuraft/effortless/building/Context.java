@@ -36,9 +36,10 @@ public record Context(
         CustomParams customParams
 ) {
 
-    public boolean useProperToolOnly() {
+    public boolean useCorrectTool() {
         return true;
     }
+
     public static Context defaultSet() {
         return new Context(
                 UUID.randomUUID(),

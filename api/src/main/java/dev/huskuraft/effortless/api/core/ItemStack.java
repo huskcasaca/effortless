@@ -81,6 +81,10 @@ public interface ItemStack extends PlatformReference {
         return getItem().getMaxDamage();
     }
 
+    default int getRemainingDamage() {
+        return getMaxDamage() - getDamageValue();
+    }
+
     default boolean isDamageableItem() {
         if (!isEmpty() && getItem().getMaxDamage() > 0) {
             return !getOrCreateTag().getBooleanOrElse(UNBREAKABLE_TAG, false);
@@ -88,6 +92,8 @@ public interface ItemStack extends PlatformReference {
             return false;
         }
     }
+
+    boolean damageBy(Player player, int damage);
 
     enum TooltipType {
         NORMAL,

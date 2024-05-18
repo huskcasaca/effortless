@@ -112,6 +112,11 @@ public class BlockPlaceOperation extends BlockOperation {
 //        }
 
         // compatible layer
+
+        if (world.isClient()) {
+            return BlockOperationResult.Type.CONSUME;
+        }
+
         var originalItemStack = player.getItemStack(getHand());
         player.setItemStack(getHand(), itemStack);
         var placed = blockItem.placeOnBlock(player, getInteraction()).consumesAction();

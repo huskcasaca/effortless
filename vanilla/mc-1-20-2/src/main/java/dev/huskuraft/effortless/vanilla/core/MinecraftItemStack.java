@@ -66,4 +66,9 @@ public record MinecraftItemStack(
         referenceValue().setTag(tagRecord.reference());
     }
 
+    @Override
+    public boolean damageBy(Player player, int damage) {
+        return referenceValue().hurt(damage, player.<net.minecraft.world.entity.player.Player>reference().getRandom(), null);
+    }
+
 }

@@ -76,13 +76,18 @@ public class BlockBreakOperation extends BlockOperation {
         }
 
         var blockState = world.getBlockState(getBlockPosition());
-        var correctTool = getStorage().contents().stream().filter(itemStack -> itemStack.getItem().isCorrectToolForDrops(blockState)).filter(itemStack -> true).findFirst();
+        var reservedDamage = 1;
+        var useCorrectTool = !player.getGameType().isCreative() && context.useCorrectTool();
+        var correctTool = getStorage().contents().stream().filter(itemStack -> itemStack.getItem().isCorrectToolForDrops(blockState)).filter(itemStack -> !itemStack.isDamageableItem() || itemStack.getRemainingDamage() > reservedDamage).findFirst();
 
-        if (!player.getGameType().isCreative() && context.useProperToolOnly() && correctTool.isEmpty()) {
+        if (useCorrectTool && correctTool.isEmpty()) {
             return BlockOperationResult.Type.FAIL_TOOL_INSUFFICIENT;
         }
 
         if (context.isPreview() && world.isClient()) {
+            if (useCorrectTool) {
+                correctTool.get().damageBy(player, 1);
+            }
             return BlockOperationResult.Type.CONSUME;
         }
 
@@ -96,13 +101,13 @@ public class BlockBreakOperation extends BlockOperation {
         }
 
         var oldItem = player.getItemStack(InteractionHand.MAIN);
-        if (!player.getGameType().isCreative() && context.useProperToolOnly()) {
+        if (useCorrectTool) {
             player.setItemStack(InteractionHand.MAIN, correctTool.get());
         }
 
         var destroyed  = player.destroyBlock(getInteraction());
 
-        if (!player.getGameType().isCreative() && context.useProperToolOnly()) {
+        if (useCorrectTool) {
             player.setItemStack(InteractionHand.MAIN, oldItem);
         }
         if (destroyed) {
