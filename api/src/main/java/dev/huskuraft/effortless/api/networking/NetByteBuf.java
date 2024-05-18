@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.text.Style;
 import dev.huskuraft.effortless.api.text.Text;
 import io.netty.buffer.ByteBuf;
@@ -70,9 +71,12 @@ public final class NetByteBuf extends WrappedByteBuf {
         return VarLong.read(this);
     }
 
-    // use Registries
     public Item readItem() {
-        return Registry.ITEM.byIdOrThrow(readVarInt());
+        return readId(Registry.ITEM);
+    }
+
+    public <T extends PlatformReference> T readId(Registry<T> registry) {
+        return registry.byId(readVarInt());
     }
 
     public ItemStack readItemStack() {
@@ -144,7 +148,11 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public void writeItem(Item value) {
-        writeVarInt(Registry.ITEM.getId(value));
+        writeId(Registry.ITEM, value);
+    }
+
+    public <T extends PlatformReference> void writeId(Registry<T> registry, T value) {
+        writeVarInt(registry.getId(value));
     }
 
     // FIXME: 18/5/24 NBT
