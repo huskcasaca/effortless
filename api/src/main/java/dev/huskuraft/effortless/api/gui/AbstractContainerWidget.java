@@ -175,9 +175,8 @@ public abstract class AbstractContainerWidget extends AbstractWidget implements 
                 this.setDragging(true);
             }
             return true;
-        } else {
-            return mouseOver;
         }
+        return false;
     }
 
     @Override

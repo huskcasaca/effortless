@@ -676,10 +676,11 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         @Override
         public boolean onMouseClicked(double mouseX, double mouseY, int button) {
             var result = super.onMouseClicked(mouseX, mouseY, button);
-            if (result) {
+            var mouseOver = isMouseOver(mouseX, mouseY);
+            if (!result && mouseOver) {
                 getEntrance().getClient().getSoundManager().playButtonClickSound();
             }
-            return result;
+            return result || mouseOver;
         }
     }
 }
