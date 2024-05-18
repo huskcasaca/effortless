@@ -41,6 +41,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
     protected AbstractEntryList(Entrance entrance, int x, int y, int width, int height) {
         super(entrance, x, y, width, height, Text.empty());
+        this.focusable = true;
         this.x0 = x;
         this.x1 = x + width;
         this.y0 = y;
@@ -639,6 +640,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
         protected Entry(Entrance entrance) {
             super(entrance, 0, 0, 0, 0, Text.empty());
+            setFocusable(true);
         }
 
         @Override

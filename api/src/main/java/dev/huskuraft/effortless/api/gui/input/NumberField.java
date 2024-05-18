@@ -28,6 +28,7 @@ public class NumberField extends AbstractContainerWidget {
 
     public NumberField(Entrance entrance, int x, int y, int width, int height, int type) {
         super(entrance, x, y, width, height, Text.empty());
+        this.focusable = true;
         this.format = new DecimalFormat();
         this.format.setGroupingUsed(false);
 

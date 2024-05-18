@@ -54,6 +54,7 @@ public class EditBox extends AbstractWidget {
 
     public EditBox(Entrance entrance, int x, int y, int width, int height, @Nullable EditBox editBox, Text message) {
         super(entrance, x, y, width, height, message);
+        this.focusable = true;
         this.value = "";
         this.maxLength = Integer.MAX_VALUE;
         this.bordered = true;
