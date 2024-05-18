@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.vanilla.core;
 import java.util.UUID;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Inventory;
@@ -21,7 +20,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 
 public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference) implements Player {
 
@@ -108,11 +106,6 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
     @Override
     public void swing(InteractionHand hand) {
         reference.swing(MinecraftConvertor.toPlatformInteractionHand(hand));
-    }
-
-    @Override
-    public boolean canAttackBlock(BlockPosition blockPosition) {
-        return reference.getMainHandItem().getItem().canAttackBlock(((Level) getWorld().reference()).getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)), getWorld().reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), reference);
     }
 
     @Override

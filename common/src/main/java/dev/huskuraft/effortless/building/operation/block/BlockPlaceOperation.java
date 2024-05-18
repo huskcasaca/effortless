@@ -84,9 +84,6 @@ public class BlockPlaceOperation extends BlockOperation {
                 if (!player.getGameMode().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
-                if (!player.canAttackBlock(getBlockPosition())) {
-                    return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
-                }
             }
         }
 

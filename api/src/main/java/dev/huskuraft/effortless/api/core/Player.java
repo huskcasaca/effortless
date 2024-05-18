@@ -50,8 +50,6 @@ public interface Player extends Entity {
 
     void swing(InteractionHand hand);
 
-    boolean canAttackBlock(BlockPosition blockPosition);
-
     boolean destroyBlock(BlockInteraction interaction);
 
     default boolean useItem(BlockInteraction interaction) {
