@@ -69,7 +69,7 @@ public interface Storage {
             }
 
             private Storage getStorage() {
-                return switch (player.getGameType()) {
+                return switch (player.getGameMode()) {
                     case SURVIVAL, ADVENTURE -> survivalStorage;
                     case CREATIVE -> full();
                     case SPECTATOR -> empty();

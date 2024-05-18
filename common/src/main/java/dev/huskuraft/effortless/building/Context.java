@@ -213,7 +213,7 @@ public record Context(
     public Context finalize(Player player, BuildStage stage) {
         switch (stage) {
             case TICK -> {
-                return withPattern(pattern().finalize(player, stage)).withRandomPatternSeed().withLimitedPatternProducer(player.getGameType().isSurvival());
+                return withPattern(pattern().finalize(player, stage)).withRandomPatternSeed().withLimitedPatternProducer(player.getGameMode().isSurvival());
             }
             case UPDATE_CONTEXT -> {
             }

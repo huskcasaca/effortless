@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.core.fluid.Fluids;
 public interface BucketItem extends Item {
 
     static ItemStack createFilledResult(Player player, ItemStack emptyItemStack, ItemStack filledItemStack, boolean preventDuplicates) {
-        var isCreative = player.getGameType().isCreative(); // player.getAbilities().instabuild;
+        var isCreative = player.getGameMode().isCreative(); // player.getAbilities().instabuild;
         if (preventDuplicates && isCreative) {
             if (!player.getInventory().contains(filledItemStack)) {
                 player.getInventory().addItem(filledItemStack);

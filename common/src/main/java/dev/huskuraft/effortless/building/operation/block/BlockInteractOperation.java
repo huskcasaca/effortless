@@ -36,7 +36,7 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         // spectator
-        if (player.getGameType().isSpectator()) {
+        if (player.getGameMode().isSpectator()) {
             return BlockOperationResult.Type.FAIL_PLAYER_IS_SPECTATOR;
         }
 
@@ -69,11 +69,6 @@ public class BlockInteractOperation extends BlockOperation {
 //        if (!selectedItemStack.getItem().isBlockItem()) {
 //            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
 //        }
-
-        // action permission
-        if (!player.canInteractBlock(getBlockPosition())) {
-            return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
-        }
 
         if (context.isPreview() && player.getWorld().isClient()) {
             selectedItemStack.decrease(1);

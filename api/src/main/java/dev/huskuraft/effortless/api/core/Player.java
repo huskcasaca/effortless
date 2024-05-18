@@ -50,8 +50,6 @@ public interface Player extends Entity {
 
     void swing(InteractionHand hand);
 
-    boolean canInteractBlock(BlockPosition blockPosition);
-
     boolean canAttackBlock(BlockPosition blockPosition);
 
     boolean destroyBlock(BlockInteraction interaction);

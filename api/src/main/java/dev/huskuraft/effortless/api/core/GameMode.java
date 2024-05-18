@@ -21,4 +21,6 @@ public enum GameMode {
     public boolean isSpectator() {
         return this == SPECTATOR;
     }
+
+
 }

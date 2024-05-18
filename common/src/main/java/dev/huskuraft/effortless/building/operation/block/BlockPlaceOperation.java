@@ -37,7 +37,7 @@ public class BlockPlaceOperation extends BlockOperation {
         }
 
         // spectator
-        if (player.getGameType().isSpectator()) {
+        if (player.getGameMode().isSpectator()) {
             return BlockOperationResult.Type.FAIL_PLAYER_IS_SPECTATOR;
         }
 
@@ -74,11 +74,6 @@ public class BlockPlaceOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
         }
 
-        // action permission
-        if (!player.canInteractBlock(getBlockPosition())) {
-            return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
-        }
-
         switch (context.replaceMode()) {
             case DISABLED -> {
                 if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction())) {
@@ -86,7 +81,7 @@ public class BlockPlaceOperation extends BlockOperation {
                 }
             }
             case NORMAL, QUICK -> {
-                if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
+                if (!player.getGameMode().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
                 if (!player.canAttackBlock(getBlockPosition())) {

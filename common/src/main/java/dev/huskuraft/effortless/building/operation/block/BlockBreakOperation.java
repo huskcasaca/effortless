@@ -30,7 +30,7 @@ public class BlockBreakOperation extends BlockOperation {
     private BlockOperationResult.Type breakBlock() {
 
         // spectator
-        if (player.getGameType().isSpectator()) { // move
+        if (player.getGameMode().isBlockPlacingRestricted()) { // move
             return BlockOperationResult.Type.FAIL_PLAYER_IS_SPECTATOR;
         }
 
@@ -52,18 +52,13 @@ public class BlockBreakOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
         }
 
-        // action permission
-        if (!player.canInteractBlock(getBlockPosition())) {
-            return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
-        }
-
 //        // action permission
 //        if (!player.canAttackByTool(blockPos)) {
 //            return BlockInteractionResult.FAIL_PLAYER_CANNOT_ATTACK;
 //        }
 
         // world permission
-        if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
+        if (!player.getGameMode().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
             return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
         }
         // player permission
@@ -77,7 +72,7 @@ public class BlockBreakOperation extends BlockOperation {
 
         var blockState = world.getBlockState(getBlockPosition());
         var reservedDamage = 1;
-        var useCorrectTool = !player.getGameType().isCreative() && context.useCorrectTool();
+        var useCorrectTool = !player.getGameMode().isCreative() && context.useCorrectTool();
         var correctTool = getStorage().contents().stream().filter(itemStack -> itemStack.getItem().isCorrectToolForDrops(blockState)).filter(itemStack -> !itemStack.isDamageableItem() || itemStack.getRemainingDamage() > reservedDamage).findFirst();
 
         if (useCorrectTool && correctTool.isEmpty()) {

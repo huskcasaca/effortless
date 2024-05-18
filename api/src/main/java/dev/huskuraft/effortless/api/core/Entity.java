@@ -28,7 +28,7 @@ public interface Entity extends PlatformReference {
 
     Vector3d getEyeDirection();
 
-    GameMode getGameType();
+    GameMode getGameMode();
 
     BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids);
 

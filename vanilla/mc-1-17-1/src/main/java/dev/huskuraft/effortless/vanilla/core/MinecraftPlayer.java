@@ -21,7 +21,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 
 public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference) implements Player {
@@ -113,22 +112,12 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
     }
 
     @Override
-    public boolean canInteractBlock(BlockPosition blockPosition) {
-        return !reference.blockActionRestricted(getWorld().reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), switch (getGameType()) {
-            case SURVIVAL -> GameType.SURVIVAL;
-            case CREATIVE -> GameType.CREATIVE;
-            case ADVENTURE -> GameType.ADVENTURE;
-            case SPECTATOR -> GameType.SPECTATOR;
-        });
-    }
-
-    @Override
     public boolean canAttackBlock(BlockPosition blockPosition) {
         return reference.getMainHandItem().getItem().canAttackBlock(((Level) getWorld().reference()).getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)), getWorld().reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), reference);
     }
 
     @Override
-    public GameMode getGameType() {
+    public GameMode getGameMode() {
         if (reference instanceof ServerPlayer serverPlayer) {
             return switch (serverPlayer.gameMode.getGameModeForPlayer()) {
                 case SURVIVAL -> GameMode.SURVIVAL;
