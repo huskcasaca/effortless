@@ -404,5 +404,6 @@
   "effortless.option.pattern.tooltip": "Build Pattern is used to create complex shapes. You can combine different [%s] to achieve what your desired.",
   "effortless.option.pattern.tooltip.build_transformers": "Build Transformers",
   "effortless.global_general_settings.max_block_break_volume": "Max Block Break Volume",
-  "effortless.global_general_settings.max_block_place_volume": "Max Block Place Volume"
+  "effortless.global_general_settings.max_block_place_volume": "Max Block Place Volume",
+  "effortless.build.summary.blocks_break_insufficient_tools": "Insufficient Tools"
 }
