@@ -46,10 +46,10 @@ public class BatchBuildSession implements BuildSession {
     protected BatchOperation createDeferredOperations(World world, Player player, Context context, Storage storage) {
         var operations = new DeferredBatchOperation(context, () -> switch (context.buildState()) {
             case IDLE -> Stream.<BlockOperation>empty();
-            case PLACE_BLOCK ->
-                    context.collectInteractions().map(interaction -> createBlockPlaceOperationFromHit(world, player, context, storage, interaction));
             case BREAK_BLOCK ->
                     context.collectInteractions().map(interaction -> createBlockBreakOperationFromHit(world, player, context, storage, interaction));
+            case PLACE_BLOCK ->
+                    context.collectInteractions().map(interaction -> createBlockPlaceOperationFromHit(world, player, context, storage, interaction));
             case INTERACT_BLOCK ->
                     context.collectInteractions().map(interaction -> createBlockInteractOperationFromHit(world, player, context, storage, interaction));
         });
