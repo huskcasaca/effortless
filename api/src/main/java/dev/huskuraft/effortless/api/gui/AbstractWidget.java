@@ -63,7 +63,7 @@ public abstract class AbstractWidget implements Widget {
     }
 
     @Override
-    public void onPartialTick(float partialTick) {
+    public void onAnimateTick(float partialTick) {
 
     }
 
@@ -84,7 +84,7 @@ public abstract class AbstractWidget implements Widget {
 
     @Override
     public void render(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-        onPartialTick(deltaTick);
+        onAnimateTick(deltaTick);
         onReload();
         setHovered(isMouseOver(mouseX, mouseY));
 

@@ -238,7 +238,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     @Override
-    public void onPartialTick(float partialTick) {
+    public void onAnimateTick(float partialTick) {
         this.detached = !getAssignedKey().getBinding().isKeyDown();
         this.animationTicks = Math.min(Math.max(animationTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);
         if (detached && animationTicks == 0) {

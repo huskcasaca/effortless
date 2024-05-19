@@ -6,7 +6,7 @@ public interface Widget extends Renderable, InputHandler {
 
     void onTick();
 
-    void onPartialTick(float partialTick);
+    void onAnimateTick(float partialTick);
 
     void onCreate();
 
