@@ -110,7 +110,21 @@ public class BlockPlaceOperation extends BlockOperation {
 
         var originalItemStack = player.getItemStack(getHand());
         player.setItemStack(getHand(), itemStack);
-        var placed = blockItem.placeOnBlock(player, getInteraction()).consumesAction();
+        var placed = false;
+        if (context.useLegacyBlockPlace()) {
+            placed = blockItem.placeOnBlock(player, getInteraction()).consumesAction();
+        } else {
+            placed = blockItem.setBlockInWorld(getPlayer(), getInteraction(), getBlockState());
+            if (placed /*&& getWorld().getBlockState(getBlockPosition()).getBlock() == */) {
+                // FIXME: 19/5/24
+//                blockItem.updateBlockStateFromTag(getWorld(), getBlockPosition(), getBlockState(), itemStack);
+                blockItem.updateBlockEntityTag(getWorld(), getBlockPosition(), getBlockState(), itemStack);
+                blockItem.getBlock().place(getWorld(), getPlayer(), getBlockPosition(), getBlockState(), itemStack);
+            }
+            if (placed && !getPlayer().getGameMode().isCreative()) {
+                itemStack.decrease(1);
+            }
+        }
         player.setItemStack(getHand(), originalItemStack);
 
         if (!placed) {

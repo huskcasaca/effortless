@@ -90,7 +90,7 @@ public abstract class BlockOperation extends TransformableOperation {
         var itemInHand = getPlayer().getItemStack(InteractionHand.MAIN);
         var itemInHandCopy = itemInHand.copy();
 
-        blockState.getBlock().playerDestroyStart(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
+        blockState.getBlock().destroyStart(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
 
         var removed = getWorld().removeBlock(getBlockPosition(), false);
         if (removed) {
@@ -102,7 +102,7 @@ public abstract class BlockOperation extends TransformableOperation {
         var hasCorrectToolForDrops = !blockState.requiresCorrectToolForDrops() || itemInHand.isCorrectToolForDrops(blockState);
         itemInHand.mineBlock(getWorld(), getPlayer(), getBlockPosition(), blockState);
         if (removed && hasCorrectToolForDrops) {
-            blockState.getBlock().playerDestroy(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
+            blockState.getBlock().destroyEnd(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
         }
         return true;
     }

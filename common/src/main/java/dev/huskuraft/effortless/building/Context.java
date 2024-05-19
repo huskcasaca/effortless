@@ -40,6 +40,10 @@ public record Context(
         return true;
     }
 
+    public boolean useLegacyBlockPlace() {
+        return false;
+    }
+
     public static Context defaultSet() {
         return new Context(
                 UUID.randomUUID(),

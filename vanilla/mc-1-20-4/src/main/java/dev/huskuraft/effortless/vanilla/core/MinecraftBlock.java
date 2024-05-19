@@ -81,12 +81,17 @@ public record MinecraftBlock(
     }
 
     @Override
-    public void playerDestroyStart(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack) {
+    public void destroyStart(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack) {
         referenceValue().playerWillDestroy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), player.reference());
     }
 
     @Override
-    public void playerDestroy(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack) {
+    public void destroyEnd(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack) {
         referenceValue().playerDestroy(world.reference(), player.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), blockEntity.reference(), itemStack.reference());
+    }
+
+    @Override
+    public void place(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
+        referenceValue().setPlacedBy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), player.reference(), itemStack.reference());
     }
 }
