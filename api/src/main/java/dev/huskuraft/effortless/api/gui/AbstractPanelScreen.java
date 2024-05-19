@@ -43,7 +43,7 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     public static final int MAX_ANIMATION_TICKS = 4;
     protected float animationTicks = 0;
     private boolean detached = false;
-
+    private boolean detachedAll = false;
 
     protected AbstractPanelScreen(Entrance entrance, Text title, int width, int height) {
         super(entrance, 0, 0, width, height, title);
@@ -61,7 +61,11 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     public void onPartialTick(float partialTick) {
         this.animationTicks = Math.min(Math.max(animationTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);
         if (detached && animationTicks == 0) {
-            super.detach();
+            if (detachedAll) {
+                super.detachAll();
+            } else {
+                super.detach();
+            }
         }
     }
 
@@ -87,13 +91,22 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     public void init(int width, int height) {
         super.init(width, height);
         if (detached) {
-            super.detach();
+            if (detachedAll) {
+                super.detachAll();
+            } else {
+                super.detach();
+            }
         }
     }
 
     @Override
     public void detach() {
         this.detached = true;
+    }
+
+    public void detachAll() {
+        this.detached = true;
+        this.detachedAll = true;
     }
 
     @Override

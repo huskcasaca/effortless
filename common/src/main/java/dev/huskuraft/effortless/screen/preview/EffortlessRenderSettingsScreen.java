@@ -59,7 +59,7 @@ public class EffortlessRenderSettingsScreen extends AbstractPanelScreen {
 
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             consumer.accept(lastConfig);
-            detach();
+            detachAll();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
     }

@@ -79,13 +79,18 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
 
     @Override
     public void attach() {
-        getEntrance().getClientManager().pushPanel(this);
+        getEntrance().getClientManager().pushScreen(this);
         onAttach();
     }
 
     @Override
     public void detach() {
-        getEntrance().getClientManager().popPanel(this);
+        getEntrance().getClientManager().popScreen(this);
+        onDetach();
+    }
+
+    public void detachAll() {
+        getEntrance().getClientManager().pushScreen(null);
         onDetach();
     }
 
