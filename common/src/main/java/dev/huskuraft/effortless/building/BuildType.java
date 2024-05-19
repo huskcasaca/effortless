@@ -3,6 +3,6 @@ package dev.huskuraft.effortless.building;
 public enum BuildType {
     BUILD,
     PREVIEW,
-    PREVIEW_SOUND
+    PREVIEW_ONCE
 
 }

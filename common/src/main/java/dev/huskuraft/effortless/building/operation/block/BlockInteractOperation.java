@@ -70,7 +70,7 @@ public class BlockInteractOperation extends BlockOperation {
 //            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
 //        }
 
-        if (context.isPreview() && player.getWorld().isClient()) {
+        if (context.isPreviewType() && player.getWorld().isClient()) {
             selectedItemStack.decrease(1);
             return BlockOperationResult.Type.CONSUME;
         }
@@ -107,7 +107,7 @@ public class BlockInteractOperation extends BlockOperation {
         var outputs = Collections.<ItemStack>emptyList();
         var result = interactBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewSound() && result.success()) {
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && result.success()) {
             var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.5F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
             getPlayer().getClient().getSoundManager().play(sound);
         }

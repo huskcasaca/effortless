@@ -83,12 +83,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (context.isFulfilled()) {
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
-            var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_SOUND);
-            var result = new BatchBuildSession(player.getWorld(), player, previewContext).build().commit();
+            var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_ONCE);
+            var result = new BatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
             showBuildContextResult(context.id(), 1024, player, context, result);
 
-//            showBuildTooltip(context.id(), 1024, player, context, result);
+            showBuildTooltip(context.id(), 1024, player, context, result);
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
             setContext(player, context.newInteraction());
 

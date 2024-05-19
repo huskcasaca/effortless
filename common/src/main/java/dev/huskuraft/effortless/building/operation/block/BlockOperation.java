@@ -92,6 +92,10 @@ public abstract class BlockOperation extends TransformableOperation {
 
         blockState.getBlock().destroyStart(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
 
+        if (getWorld().isClient()) {
+            return true;
+        }
+
         var removed = getWorld().removeBlock(getBlockPosition(), false);
         if (removed) {
             getWorld().getBlockState(getBlockPosition()).getBlock().destroy(getWorld(), getBlockPosition(), blockState);

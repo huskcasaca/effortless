@@ -75,7 +75,7 @@ public class BlockBreakOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_TOOL_INSUFFICIENT;
         }
 
-        if (context.isPreview() && world.isClient()) {
+        if (context.isPreviewType() && world.isClient()) {
             if (useCorrectTool) {
                 correctTool.get().damageBy(player, 1);
             }
@@ -87,10 +87,6 @@ public class BlockBreakOperation extends BlockOperation {
 //            return BlockOperationResult.Type.SUCCESS;
 //        }
 
-        if (world.isClient()) {
-            return BlockOperationResult.Type.CONSUME;
-        }
-
         var oldItem = player.getItemStack(InteractionHand.MAIN);
         if (useCorrectTool) {
             player.setItemStack(InteractionHand.MAIN, correctTool.get());
@@ -101,6 +97,10 @@ public class BlockBreakOperation extends BlockOperation {
         if (useCorrectTool) {
             player.setItemStack(InteractionHand.MAIN, oldItem);
         }
+        if (world.isClient()) {
+            return BlockOperationResult.Type.SUCCESS;
+        }
+
         if (destroyed) {
             return BlockOperationResult.Type.SUCCESS;
         } else {
@@ -114,10 +114,10 @@ public class BlockBreakOperation extends BlockOperation {
         var outputs = Collections.singletonList(getItemStack());
         var result = breakBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewSound()) {
+        if (getWorld().isClient() && (getContext().isBuildType() || getContext().isPreviewOnceType())) {
             if (result.success()) {
-                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.5F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
-                getPlayer().getClient().getSoundManager().play(sound);
+//                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.5F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
+//                getPlayer().getClient().getSoundManager().play(sound);
             } else {
                 var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 8.0F * 0.5F, getBlockState().getSoundSet().pitch() * 0.5F, getBlockPosition().getCenter());
                 getPlayer().getClient().getSoundManager().play(sound);

@@ -100,7 +100,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     @Override
     public void onContextReceived(Player player, Context context) {
 
-        if (context.isPreview()) {
+        if (context.isPreviewType()) {
             var server = player.getServer();
             for (var otherPlayer : server.getPlayerList().getPlayers()) {
                 if (otherPlayer.getId().equals(player.getId()) || otherPlayer.getPosition().distance(player.getPosition()) > 128) {

@@ -79,12 +79,16 @@ public record Context(
         return buildMode() == BuildMode.DISABLED;
     }
 
-    public boolean isPreview() {
-        return buildType() == BuildType.PREVIEW || buildType() == BuildType.PREVIEW_SOUND;
+    public boolean isBuildType() {
+        return buildType() == BuildType.BUILD;
     }
 
-    public boolean isPreviewSound() {
-        return buildType() == BuildType.PREVIEW_SOUND;
+    public boolean isPreviewType() {
+        return buildType() == BuildType.PREVIEW || buildType() == BuildType.PREVIEW_ONCE;
+    }
+
+    public boolean isPreviewOnceType() {
+        return buildType() == BuildType.PREVIEW_ONCE;
     }
 
     public BuildMode buildMode() {
