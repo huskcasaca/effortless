@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ public interface Storage {
     Storage FULL = new Storage() {
         @Override
         public Optional<ItemStack> searchTag(ItemStack stack) {
-            return Optional.of(stack);
+            return Optional.of(stack.copy());
         }
 
         @Override
@@ -58,22 +59,27 @@ public interface Storage {
 
     static Storage create(Player player, boolean copy) {
         return new Storage() {
-            private final Storage survivalStorage;
+            private final Storage storage;
 
             {
-                if (copy) {
-                    survivalStorage = Storage.create(player.getInventory().getAllItems().stream().map(ItemStack::copy).toList());
-                } else {
-                    survivalStorage = Storage.create(player.getInventory().getAllItems());
-                }
+                storage = switch (player.getGameMode()) {
+                    case SURVIVAL, ADVENTURE -> {
+                        if (copy) {
+                            yield Storage.create(player.getInventory().getAllItems().stream().map(ItemStack::copy).toList(), false);
+                        } else {
+                            yield Storage.create(player.getInventory().getAllItems(), false);
+                        }
+                    }
+                    case CREATIVE -> Storage.merge(
+                            Storage.create(player.getInventory().getAllItems().stream().map(ItemStack::copy).toList(), true),
+                            full()
+                    );
+                    case SPECTATOR -> empty();
+                };
             }
 
             private Storage getStorage() {
-                return switch (player.getGameMode()) {
-                    case SURVIVAL, ADVENTURE -> survivalStorage;
-                    case CREATIVE -> full();
-                    case SPECTATOR -> empty();
-                };
+                return storage;
             }
 
             @Override
@@ -99,6 +105,49 @@ public interface Storage {
         };
     }
 
+
+    static Storage merge(Storage... storage) {
+        return new Storage() {
+            @Override
+            public Optional<ItemStack> searchTag(ItemStack stack) {
+                for (Storage storage1 : storage) {
+                    var found = storage1.searchTag(stack);
+                    if (found.isPresent()) {
+                        return found;
+                    }
+                }
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<ItemStack> search(Item item) {
+                for (Storage storage1 : storage) {
+                    var found = storage1.search(item);
+                    if (found.isPresent()) {
+                        return found;
+                    }
+                }
+                return Optional.empty();
+            }
+
+            @Override
+            public boolean consume(ItemStack stack) {
+                for (Storage storage1 : storage) {
+                    if (storage1.consume(stack)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public List<ItemStack> contents() {
+                return Arrays.stream(storage).map(Storage::contents).flatMap(List::stream).toList();
+            }
+
+        };
+    }
+
     static Storage full() {
         return FULL;
     }
@@ -107,7 +156,7 @@ public interface Storage {
         return EMPTY;
     }
 
-    static Storage create(List<ItemStack> itemStacks) {
+    static Storage create(List<ItemStack> itemStacks, boolean infinite) {
         return new Storage() {
 
             private final Map<Item, ItemStack> cache = new HashMap<>();
@@ -117,12 +166,12 @@ public interface Storage {
             public Optional<ItemStack> search(Item item) {
                 var last = cache.get(item);
                 if (last != null && !last.isEmpty()) {
-                    return Optional.of(last);
+                    return Optional.of(last).map(stack -> infinite ? stack.copy() : stack);
                 }
                 for (var itemStack : itemStacks) {
                     if (itemStack.getItem().equals(item) && !itemStack.isEmpty()) {
                         cache.put(item, itemStack);
-                        return Optional.of(itemStack);
+                        return Optional.of(itemStack).map(stack -> infinite ? stack.copy() : stack);
                     }
                 }
                 cache.put(item, ItemStack.empty());
@@ -133,7 +182,7 @@ public interface Storage {
             public Optional<ItemStack> searchTag(ItemStack itemStack) {
                 var result = search(itemStack.getItem());
                 if (result.isPresent() && result.get().getOrCreateTag().equals(itemStack.getOrCreateTag())) {
-                    return result;
+                    return result.map(stack -> infinite ? stack.copy() : stack);
                 } else {
                     return Optional.empty();
                 }
@@ -144,6 +193,9 @@ public interface Storage {
                 var found = searchTag(itemStack);
                 if (found.isEmpty()) {
                     return false;
+                }
+                if (infinite) {
+                    return true;
                 }
                 if (itemStack.getCount() > found.get().getCount()) {
                     return false;
