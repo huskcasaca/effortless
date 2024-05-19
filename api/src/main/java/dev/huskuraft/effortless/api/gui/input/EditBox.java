@@ -75,21 +75,17 @@ public class EditBox extends AbstractWidget {
         return filterText(string, false);
     }
 
-    public static String filterText(String string, boolean bl) {
-        StringBuilder stringBuilder = new StringBuilder();
-        char[] var3 = string.toCharArray();
-        int var4 = var3.length;
+    public static String filterText(String string, boolean wrapLines) {
+        var builder = new StringBuilder();
 
-        for (int var5 = 0; var5 < var4; ++var5) {
-            char c = var3[var5];
-            if (isAllowedChatCharacter(c)) {
-                stringBuilder.append(c);
-            } else if (bl && c == '\n') {
-                stringBuilder.append(c);
+        for (var chr : string.toCharArray()) {
+            if (isAllowedChatCharacter(chr)) {
+                builder.append(chr);
+            } else if (wrapLines && chr == '\n') {
+                builder.append(chr);
             }
         }
-
-        return stringBuilder.toString();
+        return builder.toString();
     }
 
     public static boolean isAllowedChatCharacter(char c) {
@@ -102,11 +98,11 @@ public class EditBox extends AbstractWidget {
 //	}
 
     public static int offsetByCodepoints(String string, int i, int j) {
-        int k = string.length();
+        var length = string.length();
         int l;
         if (j >= 0) {
-            for (l = 0; i < k && l < j; ++l) {
-                if (Character.isHighSurrogate(string.charAt(i++)) && i < k && Character.isLowSurrogate(string.charAt(i))) {
+            for (l = 0; i < length && l < j; ++l) {
+                if (Character.isHighSurrogate(string.charAt(i++)) && i < length && Character.isLowSurrogate(string.charAt(i))) {
                     ++i;
                 }
             }
@@ -153,8 +149,8 @@ public class EditBox extends AbstractWidget {
     }
 
     public String getHighlighted() {
-        int i = MathUtils.min(this.cursorPos, this.highlightPos);
-        int j = MathUtils.max(this.cursorPos, this.highlightPos);
+        var i = MathUtils.min(this.cursorPos, this.highlightPos);
+        var j = MathUtils.max(this.cursorPos, this.highlightPos);
         return this.value.substring(i, j);
     }
 
@@ -191,9 +187,9 @@ public class EditBox extends AbstractWidget {
             if (this.highlightPos != this.cursorPos) {
                 this.insertText("");
             } else {
-                int j = this.getCursorPos(i);
-                int k = MathUtils.min(j, this.cursorPos);
-                int l = MathUtils.max(j, this.cursorPos);
+                var j = this.getCursorPos(i);
+                var k = MathUtils.min(j, this.cursorPos);
+                var l = MathUtils.max(j, this.cursorPos);
                 if (k != l) {
                     String string = (new StringBuilder(this.value)).delete(k, l).toString();
                     if (this.filter.test(string)) {
@@ -209,14 +205,14 @@ public class EditBox extends AbstractWidget {
         return this.getWordPosition(i, this.getCursorPosition());
     }
 
-    private int getWordPosition(int i, int j) {
-        return this.getWordPosition(i, j, true);
+    private int getWordPosition(int start, int ebd) {
+        return this.getWordPosition(start, ebd, true);
     }
 
-    private int getWordPosition(int i, int j, boolean bl) {
-        int k = j;
-        boolean bl2 = i < 0;
-        int l = MathUtils.abs(i);
+    private int getWordPosition(int start, int end, boolean bl) {
+        int k = end;
+        boolean bl2 = start < 0;
+        int l = MathUtils.abs(start);
 
         for (int m = 0; m < l; ++m) {
             if (!bl2) {
@@ -350,31 +346,29 @@ public class EditBox extends AbstractWidget {
 
     public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         if (!this.isVisible() || !this.isActive()) {
-            this.setFocus(false);
+            this.setFocused(false);
             return false;
         } else {
-            boolean isMouseOver = isMouseOver(mouseX, mouseY);
+            var isMouseOver = isMouseOver(mouseX, mouseY);
             if (this.canLoseFocus) {
-                this.setFocus(isMouseOver);
+                if (isMouseOver && !isFocused()) {
+                    getEntrance().getClient().getSoundManager().playButtonClickSound();
+                }
+                this.setFocused(isMouseOver);
             }
-
             if (this.isFocused() && isMouseOver && button == 0) {
                 var j = (int) MathUtils.floor(mouseX) - this.getX();
                 if (this.bordered) {
                     j -= 4;
                 }
 
-                String string = getTypeface().subtractByWidth(this.value.substring(this.displayPos), this.getInnerWidth(), false);
+                var string = getTypeface().subtractByWidth(this.value.substring(this.displayPos), this.getInnerWidth(), false);
                 this.moveCursorTo(getTypeface().subtractByWidth(string, j, false).length() + this.displayPos);
                 return true;
             } else {
                 return false;
             }
         }
-    }
-
-    public void setFocus(boolean bl) {
-        this.setFocused(bl);
     }
 
     @Override
@@ -516,10 +510,6 @@ public class EditBox extends AbstractWidget {
 
     public boolean onFocusMove(boolean forwards) {
         return super.isVisible() && this.isEditable && super.onFocusMove(forwards);
-    }
-
-    public boolean isMouseOver(double mouseX, double mouseY) {
-        return super.isVisible() && mouseX >= (double) this.getX() && mouseX < (double) (this.getX() + this.getWidth()) && mouseY >= (double) this.getY() && mouseY < (double) (this.getY() + this.getHeight());
     }
 
     protected void onFocusedChanged(boolean bl) {

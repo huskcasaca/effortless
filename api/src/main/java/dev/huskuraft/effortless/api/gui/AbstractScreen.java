@@ -28,6 +28,7 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
 
     protected AbstractScreen(Entrance entrance, int x, int y, int width, int height, Text message) {
         super(entrance, x, y, width, height, message);
+        this.focusable = true;
     }
 
     protected AbstractScreen(Entrance entrance, Text title) {

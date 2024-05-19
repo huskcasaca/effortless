@@ -150,7 +150,7 @@ public abstract class AbstractWidget implements Widget {
     }
 
     public void setFocused(boolean focused) {
-        if (this.focusable) {
+        if (!this.focusable) {
             return;
         }
         this.focused = focused;
