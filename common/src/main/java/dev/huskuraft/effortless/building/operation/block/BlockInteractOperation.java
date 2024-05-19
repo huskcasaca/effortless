@@ -36,8 +36,8 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         // config permission
-        if (!context.customParams().generalConfig().allowPlaceBlocks()) {
-            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_PERMISSION;
+        if (!context.customParams().generalConfig().allowInteractBlocks()) {
+            return BlockOperationResult.Type.FAIL_CONFIG_INTERACT_PERMISSION;
         }
 
         if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {

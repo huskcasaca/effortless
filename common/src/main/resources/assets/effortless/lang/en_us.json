@@ -407,5 +407,11 @@
   "effortless.global_general_settings.max_block_place_volume": "Max Block Place Volume",
   "effortless.build.summary.blocks_tools_insufficient": "Insufficient Tools",
   "effortless.build.summary.blocks_items_insufficient": "Insufficient Items",
-  "effortless.build.summary.blocks_blacklisted": "Blacklisted"
+  "effortless.build.summary.blocks_blacklisted": "Blacklisted",
+  "effortless.global_general_settings.allow_interact_blocks": "Allow Interact Blocks",
+  "effortless.build.summary.blocks_no_permission": "No Permission",
+  "effortless.message.permissions.no_interact_permission": "You are not allowed to interact blocks! Please go to §b[Global/Per-Player General Settings]§r and enable §b[Allow Interact Blocks]§r!",
+  "effortless.message.building.cannot_interact_blocks_no_permission": "No Block Interact Permission",
+  "effortless.message.building.cannot_interact_blocks_box_volume_too_large": "Cannot Interact Blocks! Box Volume is Too Large",
+  "effortless.message.building.cannot_interact_blocks_box_side_length_too_large": "Cannot Interact Blocks! Box Side Length is Too Large"
 }

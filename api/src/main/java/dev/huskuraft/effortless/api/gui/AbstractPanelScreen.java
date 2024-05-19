@@ -110,6 +110,11 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     }
 
     @Override
+    public boolean isPauseGame() {
+        return true;
+    }
+
+    @Override
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         renderer.pushPose();
         renderer.translate(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0);

@@ -9,6 +9,7 @@ public record GeneralConfig(
         Boolean allowUseMod,
         Boolean allowBreakBlocks,
         Boolean allowPlaceBlocks,
+        Boolean allowInteractBlocks,
         Integer maxReachDistance,
         Integer maxBlockBreakVolume,
         Integer maxBlockPlaceVolume,
@@ -20,6 +21,7 @@ public record GeneralConfig(
     public static final boolean ALLOW_USE_MOD_DEFAULT = true;
     public static final boolean ALLOW_BREAK_BLOCKS_DEFAULT = true;
     public static final boolean ALLOW_PLACE_BLOCKS_DEFAULT = true;
+    public static final boolean ALLOW_INTERACT_BLOCKS_DEFAULT = true;
 
     public static final int MAX_REACH_DISTANCE_DEFAULT = 128;
     public static final int MAX_REACH_DISTANCE_RANGE_START = 0;
@@ -41,6 +43,7 @@ public record GeneralConfig(
             ALLOW_USE_MOD_DEFAULT,
             ALLOW_BREAK_BLOCKS_DEFAULT,
             ALLOW_PLACE_BLOCKS_DEFAULT,
+            ALLOW_INTERACT_BLOCKS_DEFAULT,
             MAX_REACH_DISTANCE_DEFAULT,
             MAX_BOX_VOLUME_PER_BREAK_DEFAULT,
             MAX_BOX_VOLUME_PER_PLACE_DEFAULT,
@@ -52,6 +55,7 @@ public record GeneralConfig(
             false,
             false,
             false,
+            false,
             0,
             0,
             0,
@@ -59,6 +63,7 @@ public record GeneralConfig(
             List.of());
 
     public static final GeneralConfig NULL = new GeneralConfig(
+            null,
             null,
             null,
             null,

@@ -240,23 +240,30 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
 
             if (!context.withBuildState(state).hasPermission()) {
+                if (state == BuildState.BREAK_BLOCK) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permissio"), true);
+                }
                 if (state == BuildState.PLACE_BLOCK) {
                     player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_place_permission")));
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_no_permission"), true);
                 }
-                if (state == BuildState.BREAK_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permissio"), true);
+                if (state == BuildState.INTERACT_BLOCK) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_interact_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_interact_blocks_no_permission"), true);
                 }
                 return context.newInteraction();
             }
 
             if (!nextContext.isBoxVolumeInBounds()) {
+                if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
+                }
                 if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
-                if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
+                if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_interact_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 return context.newInteraction();
             }

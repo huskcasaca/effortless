@@ -55,7 +55,6 @@ public class BlockBreakOperationResult extends BlockOperationResult {
                 default -> List.of();
             };
             case BLOCKS_NO_PERMISSION -> switch (result) {
-                case FAIL_CONFIG_PLACE_PERMISSION -> inputs;
                 case FAIL_CONFIG_BREAK_PERMISSION -> outputs;
                 default -> List.of();
             };

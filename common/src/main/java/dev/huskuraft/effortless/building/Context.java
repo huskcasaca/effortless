@@ -290,8 +290,9 @@ public record Context(
     public int getMaxBoxVolume() {
         return switch (buildState()) {
             case IDLE -> 0;
-            case PLACE_BLOCK, INTERACT_BLOCK -> customParams().generalConfig().maxBlockPlaceVolume();
             case BREAK_BLOCK -> customParams().generalConfig().maxBlockBreakVolume();
+            case PLACE_BLOCK -> customParams().generalConfig().maxBlockPlaceVolume();
+            case INTERACT_BLOCK -> customParams().generalConfig().maxBlockPlaceVolume();
         };
     }
 
@@ -302,8 +303,9 @@ public record Context(
     public boolean hasPermission() {
         return switch (buildState()) {
             case IDLE -> true;
-            case PLACE_BLOCK, INTERACT_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
             case BREAK_BLOCK -> customParams().generalConfig().allowBreakBlocks();
+            case PLACE_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
+            case INTERACT_BLOCK -> customParams().generalConfig().allowInteractBlocks();
         };
     }
 

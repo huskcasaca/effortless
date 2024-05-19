@@ -42,8 +42,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
                 default -> List.of();
             };
             case BLOCKS_NO_PERMISSION -> switch (result) {
-                case FAIL_CONFIG_PLACE_PERMISSION -> inputs;
-                case FAIL_CONFIG_BREAK_PERMISSION -> outputs;
+                case FAIL_CONFIG_INTERACT_PERMISSION -> inputs;
                 default -> List.of();
             };
             default -> List.of();

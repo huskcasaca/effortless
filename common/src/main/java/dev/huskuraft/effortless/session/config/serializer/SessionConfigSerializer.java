@@ -25,6 +25,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
     private static final String KEY_ALLOW_USE_MOD = "allowUseMod";
     private static final String KEY_ALLOW_BREAK_BLOCKS = "allowBreakBlocks";
     private static final String KEY_ALLOW_PLACE_BLOCKS = "allowPlaceBlocks";
+    private static final String KEY_ALLOW_INTERACT_BLOCKS = "allowInteractBlocks";
     private static final String KEY_MAX_REACH_DISTANCE = "maxReachDistance";
     private static final String KEY_MAX_BOX_VOLUME_PER_BREAK = "maxBlockBreakVolume";
     private static final String KEY_MAX_BOX_VOLUME_PER_PLACE = "maxBlockPlaceVolume";
@@ -84,6 +85,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             spec.define(KEY_ALLOW_USE_MOD, () -> GeneralConfig.ALLOW_USE_MOD_DEFAULT, Objects::nonNull);
             spec.define(KEY_ALLOW_BREAK_BLOCKS, () -> GeneralConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Objects::nonNull);
             spec.define(KEY_ALLOW_PLACE_BLOCKS, () -> GeneralConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Objects::nonNull);
+            spec.define(KEY_ALLOW_INTERACT_BLOCKS, () -> GeneralConfig.ALLOW_INTERACT_BLOCKS_DEFAULT, Objects::nonNull);
             spec.defineInRange(KEY_MAX_REACH_DISTANCE, GeneralConfig.MAX_REACH_DISTANCE_DEFAULT, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_BREAK, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_DEFAULT, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_PLACE, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_DEFAULT, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
@@ -105,6 +107,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
                     config.get(KEY_ALLOW_USE_MOD),
                     config.get(KEY_ALLOW_BREAK_BLOCKS),
                     config.get(KEY_ALLOW_PLACE_BLOCKS),
+                    config.get(KEY_ALLOW_INTERACT_BLOCKS),
                     config.get(KEY_MAX_REACH_DISTANCE),
                     config.get(KEY_MAX_BOX_VOLUME_PER_BREAK),
                     config.get(KEY_MAX_BOX_VOLUME_PER_PLACE),
@@ -119,6 +122,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.set(KEY_ALLOW_USE_MOD, generalConfig.allowUseMod());
             config.set(KEY_ALLOW_BREAK_BLOCKS, generalConfig.allowBreakBlocks());
             config.set(KEY_ALLOW_PLACE_BLOCKS, generalConfig.allowPlaceBlocks());
+            config.set(KEY_ALLOW_INTERACT_BLOCKS, generalConfig.allowInteractBlocks());
             config.set(KEY_MAX_REACH_DISTANCE, generalConfig.maxReachDistance());
             config.set(KEY_MAX_BOX_VOLUME_PER_BREAK, generalConfig.maxBlockBreakVolume());
             config.set(KEY_MAX_BOX_VOLUME_PER_PLACE, generalConfig.maxBlockPlaceVolume());
@@ -129,6 +133,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.setComment(KEY_ALLOW_USE_MOD, "Should allow players to use this mod.");
             config.setComment(KEY_ALLOW_BREAK_BLOCKS, "Should allow players to break blocks using this mod.");
             config.setComment(KEY_ALLOW_PLACE_BLOCKS, "Should allow players to place blocks using this mod.");
+            config.setComment(KEY_ALLOW_INTERACT_BLOCKS, "Should allow players to interact blocks using this mod.");
             config.setComment(KEY_MAX_REACH_DISTANCE, "The maximum distance a player can reach when building using this mod. \nRange: " + GeneralConfig.MAX_REACH_DISTANCE_RANGE_START + " ~ " + GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
             config.setComment(KEY_MAX_BOX_VOLUME_PER_BREAK, "The maximum box volume a player can break at once when building using this mod.. \nRange: " + GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
             config.setComment(KEY_MAX_BOX_VOLUME_PER_PLACE, "The maximum box volume a player can place at once  when building using this mod. \nRange: " + GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START + " ~ " + GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
@@ -170,6 +175,9 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             if (config.contains(KEY_ALLOW_PLACE_BLOCKS)) {
                 spec.define(KEY_ALLOW_PLACE_BLOCKS, () -> GeneralConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Boolean.class::isInstance);
             }
+            if (config.contains(KEY_ALLOW_INTERACT_BLOCKS)) {
+                spec.define(KEY_ALLOW_INTERACT_BLOCKS, () -> GeneralConfig.ALLOW_INTERACT_BLOCKS_DEFAULT, Boolean.class::isInstance);
+            }
             if (config.contains(KEY_MAX_REACH_DISTANCE)) {
                 spec.defineInRange(KEY_MAX_REACH_DISTANCE, GeneralConfig.MAX_REACH_DISTANCE_DEFAULT, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END);
             }
@@ -201,6 +209,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
                     config.get(KEY_ALLOW_USE_MOD),
                     config.get(KEY_ALLOW_BREAK_BLOCKS),
                     config.get(KEY_ALLOW_PLACE_BLOCKS),
+                    config.get(KEY_ALLOW_INTERACT_BLOCKS),
                     config.get(KEY_MAX_REACH_DISTANCE),
                     config.get(KEY_MAX_BOX_VOLUME_PER_BREAK),
                     config.get(KEY_MAX_BOX_VOLUME_PER_PLACE),
@@ -215,6 +224,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             addOrRemove(config, KEY_ALLOW_USE_MOD, generalConfig.allowUseMod());
             addOrRemove(config, KEY_ALLOW_BREAK_BLOCKS, generalConfig.allowBreakBlocks());
             addOrRemove(config, KEY_ALLOW_PLACE_BLOCKS, generalConfig.allowPlaceBlocks());
+            addOrRemove(config, KEY_ALLOW_INTERACT_BLOCKS, generalConfig.allowInteractBlocks());
             addOrRemove(config, KEY_MAX_REACH_DISTANCE, generalConfig.maxReachDistance());
             addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_BREAK, generalConfig.maxBlockBreakVolume());
             addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_PLACE, generalConfig.maxBlockPlaceVolume());

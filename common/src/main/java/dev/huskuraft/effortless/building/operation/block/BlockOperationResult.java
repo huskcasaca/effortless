@@ -60,6 +60,7 @@ public abstract class BlockOperationResult extends OperationResult {
         FAIL_CONFIG_BLACKLISTED,
         FAIL_CONFIG_BREAK_PERMISSION,
         FAIL_CONFIG_PLACE_PERMISSION,
+        FAIL_CONFIG_INTERACT_PERMISSION,
 
         FAIL_BLOCK_STATE_AIR,
         FAIL_BLOCK_STATE_NULL,
