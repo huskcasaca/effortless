@@ -76,7 +76,7 @@ public class BlockPlaceOperation extends BlockOperation {
 
         switch (context.replaceMode()) {
             case DISABLED -> {
-                if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction())) {
+                if (!player.getWorld().getBlockState(getBlockPosition()).canBeReplaced(player, getInteraction())) {
                     return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
                 }
             }
@@ -93,7 +93,7 @@ public class BlockPlaceOperation extends BlockOperation {
         }
 
         if (context.replaceMode().isReplace()) {
-            if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction()) && !destroyBlock()) {
+            if (!player.getWorld().getBlockState(getBlockPosition()).canBeReplaced(player, getInteraction()) && !destroyBlock()) {
                 return BlockOperationResult.Type.FAIL_UNKNOWN;
             }
         }

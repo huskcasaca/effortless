@@ -58,7 +58,7 @@ public interface BucketItem extends Item {
                     }
                 }
             } else {
-                if (blockState.getBlock().getLiquidPlaceable() != null || blockState.isAir() || blockState.canReplace(bucketItem.getContent())) {
+                if (blockState.getBlock().getLiquidPlaceable() != null || blockState.isAir() || blockState.canBeReplaced(bucketItem.getContent())) {
                     if (bucketItem.useContent(player.getWorld(), player, blockInteraction.getBlockPosition(), blockInteraction)) {
                         bucketItem.useExtraContent(player.getWorld(), player, blockInteraction.getBlockPosition(), itemStack);
                         return InteractionResult.SUCCESS;
