@@ -121,7 +121,7 @@ public class BlockPlaceOperation extends BlockOperation {
         }
 
         // FIXME: 29/4/24
-        if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockState(getBlockPosition(), blockState)) {
+        if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockAndUpdate(getBlockPosition(), blockState)) {
             return BlockOperationResult.Type.FAIL_UNKNOWN;
         }
 

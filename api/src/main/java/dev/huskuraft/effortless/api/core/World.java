@@ -10,7 +10,23 @@ public interface World extends PlatformReference {
 
     BlockState getBlockState(BlockPosition blockPosition);
 
-    boolean setBlockState(BlockPosition blockPosition, BlockState blockState);
+    FluidState getFluidState(BlockPosition blockPosition);
+
+    BlockEntity getBlockEntity(BlockPosition blockPosition);
+
+    boolean setBlock(BlockPosition blockPosition, BlockState blockState, int flags, int recursionLeft);
+
+    default boolean setBlock(BlockPosition blockPosition, BlockState blockState, int flags) {
+        return setBlock(blockPosition, blockState, flags, 512);
+    }
+
+    default boolean setBlockAndUpdate(BlockPosition blockPosition, BlockState blockState) {
+        return setBlock(blockPosition, blockState, 3);
+    }
+
+    default boolean removeBlock(BlockPosition blockPosition, boolean moving) {
+        return setBlock(blockPosition, getFluidState(blockPosition).createLegacyBlock(), 3 | (moving ? 64 : 0));
+    }
 
     boolean isClient();
 
