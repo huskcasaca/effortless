@@ -405,5 +405,7 @@
   "effortless.option.pattern.tooltip.build_transformers": "Build Transformers",
   "effortless.global_general_settings.max_block_break_volume": "Max Block Break Volume",
   "effortless.global_general_settings.max_block_place_volume": "Max Block Place Volume",
-  "effortless.build.summary.blocks_break_insufficient_tools": "Insufficient Tools"
+  "effortless.build.summary.blocks_tools_insufficient": "Insufficient Tools",
+  "effortless.build.summary.blocks_items_insufficient": "Insufficient Items",
+  "effortless.build.summary.blocks_blacklisted": "Blacklisted"
 }

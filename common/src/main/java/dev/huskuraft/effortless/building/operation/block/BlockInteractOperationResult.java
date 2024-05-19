@@ -35,15 +35,15 @@ public class BlockInteractOperationResult extends BlockOperationResult {
             };
             case BLOCKS_NOT_INTERACTABLE -> switch (result) {
                 case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> inputs;
-                case FAIL_CONFIG_BREAK_PERMISSION, FAIL_CONFIG_PLACE_PERMISSION -> inputs; // remove
                 default -> List.of();
             };
-            case BLOCKS_PLACE_NOT_WHITELISTED -> switch (result) {
-                case FAIL_CONFIG_WHITELISTED -> inputs;
-                default -> List.of();
-            };
-            case BLOCKS_PLACE_BLACKLISTED -> switch (result) {
+            case BLOCKS_BLACKLISTED -> switch (result) {
                 case FAIL_CONFIG_BLACKLISTED -> inputs;
+                default -> List.of();
+            };
+            case BLOCKS_NO_PERMISSION -> switch (result) {
+                case FAIL_CONFIG_PLACE_PERMISSION -> inputs;
+                case FAIL_CONFIG_BREAK_PERMISSION -> outputs;
                 default -> List.of();
             };
             default -> List.of();

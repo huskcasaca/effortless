@@ -41,7 +41,7 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_WHITELISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
         if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
