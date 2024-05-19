@@ -111,7 +111,7 @@ public class BlockInteractOperation extends BlockOperation {
         var outputs = Collections.<ItemStack>emptyList();
         var result = interactBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType() && result.success()) {
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && result.success() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
             getPlayer().getClient().getSoundManager().play(sound);
         }

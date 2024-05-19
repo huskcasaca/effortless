@@ -19,6 +19,7 @@ import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.Tuple2;
@@ -29,6 +30,7 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
+import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildResult;
@@ -64,6 +66,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     private final EffortlessClient entrance;
 
     private final Map<UUID, Context> contexts = new HashMap<>();
+    private final Map<UUID, Context> historyContexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
     private final AtomicReference<ResourceLocation> lastClientPlayerLevel = new AtomicReference<>();
 
@@ -75,6 +78,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private EffortlessClient getEntrance() {
         return entrance;
+    }
+
+    private Player getPlayer() {
+        return getEntrance().getClient().getPlayer();
     }
 
     @Override
@@ -123,6 +130,14 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     @Override
     public Context getContext(Player player) {
         return contexts.computeIfAbsent(player.getId(), uuid -> getDefaultContext(player));
+    }
+
+    private Context getHistoryContext(Player player) {
+        return historyContexts.computeIfAbsent(player.getId(), uuid -> getDefaultContext(player));
+    }
+
+    private Context putHistoryContext(Player player, Context context) {
+        return historyContexts.put(player.getId(), context);
     }
 
     @Override
@@ -201,9 +216,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
-        if (getEntrance().getConfigStorage().get().passiveMode() && !EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
-            return EventResult.pass();
-        }
+        if (getEntrance().getConfigStorage().get().passiveMode())
+            if (!EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
+                return EventResult.pass();
+            }
 
         var buildResult = updateContext(player, context -> {
 
@@ -330,12 +346,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (phase == ClientTick.Phase.END) {
             return;
         }
-        if (getEntrance().getClient() == null || getEntrance().getClient().getPlayer() == null) {
+        if (getEntrance().getClient() == null || getPlayer() == null) {
             resetAll();
             return;
         }
 
-        var player = getEntrance().getClient().getPlayer();
+        var player = getPlayer();
 
         if (!isSessionValid(player)) {
             resetContext(player);
@@ -369,7 +385,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         reloadContext(player);
 
-        Context context1 = getContextTraced(player);
+        var context1 = getContextTraced(player);
         var context = context1.withBuildType(BuildType.PREVIEW);
 
         if (context.getBoxVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
@@ -383,6 +399,13 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         if (!getContext(player).isIdle()) {
             showBuildMessage(player, context);
+        }
+
+        if (getHistoryContext(player).getBoxVolume() != context.getBoxVolume()) {
+            putHistoryContext(player, context);
+            var blockState = Items.AIR.item().getBlock().getDefaultBlockState();
+            var sound = SoundInstance.createBlock(blockState.getSoundSet().hitSound(), (blockState.getSoundSet().volume() + 1.0F) / 2.0F * 0.1F, blockState.getSoundSet().pitch() * 0.2F, getPlayer().getEyePosition().add(getPlayer().getEyeDirection()));
+            getEntrance().getClient().getSoundManager().play(sound);
         }
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
@@ -412,7 +435,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildContextResult(UUID uuid, int priority, Player player, Context context, OperationResult result) {
-        if (player.getId() != getEntrance().getClient().getPlayer().getId()) {
+        if (player.getId() != getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuild()) {
                 return;
             }
@@ -463,7 +486,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildTooltip(UUID id, int priority, Player player, Context context, Map<ItemSummaryType, List<ItemStack>> itemSummary) {
-        if (player.getId() != getEntrance().getClient().getPlayer().getId()) {
+        if (player.getId() != getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuildTooltips()) {
                 return;
             }

@@ -33,7 +33,7 @@ public class BlockBreakOperation extends BlockOperation {
         var outputs = Collections.singletonList(getItemStack());
         var result = destroyBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType()) {
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             if (result.success()) {
                 var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
                 getPlayer().getClient().getSoundManager().play(sound);
