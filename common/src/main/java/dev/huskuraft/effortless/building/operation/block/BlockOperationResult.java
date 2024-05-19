@@ -49,8 +49,7 @@ public abstract class BlockOperationResult extends OperationResult {
         FAIL_WORLD_HEIGHT,
         FAIL_WORLD_BORDER,
 
-        FAIL_PLAYER_IS_SPECTATOR,
-        FAIL_PLAYER_CANNOT_ATTACK,
+        FAIL_PLAYER_GAME_MODE,
         FAIL_PLAYER_CANNOT_BREAK,
         FAIL_PLAYER_CANNOT_INTERACT,
 
@@ -58,8 +57,10 @@ public abstract class BlockOperationResult extends OperationResult {
         FAIL_ITEM_NOT_BLOCK,
         FAIL_TOOL_INSUFFICIENT,
 
-        FAIL_WHITELISTED,
-        FAIL_BLACKLISTED,
+        FAIL_CONFIG_WHITELISTED,
+        FAIL_CONFIG_BLACKLISTED,
+        FAIL_CONFIG_BREAK_PERMISSION,
+        FAIL_CONFIG_PLACE_PERMISSION,
 
         FAIL_BLOCK_STATE_AIR,
         FAIL_BLOCK_STATE_NULL,

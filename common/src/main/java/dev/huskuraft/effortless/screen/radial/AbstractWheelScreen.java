@@ -226,6 +226,11 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
     protected abstract Key getAssignedKey();
 
     @Override
+    public boolean isPauseGame() {
+        return true;
+    }
+
+    @Override
     public void onPartialTick(float partialTick) {
         this.detached = !getAssignedKey().getBinding().isKeyDown();
         this.animationTicks = Math.min(Math.max(animationTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);

@@ -29,18 +29,22 @@ public class BlockBreakOperation extends BlockOperation {
 
     private BlockOperationResult.Type breakBlock() {
 
-        // spectator
-        if (player.getGameMode().isBlockPlacingRestricted()) { // move
-            return BlockOperationResult.Type.FAIL_PLAYER_IS_SPECTATOR;
+        // config permission
+        if (!context.customParams().generalConfig().allowBreakBlocks()) {
+            return BlockOperationResult.Type.FAIL_CONFIG_BREAK_PERMISSION;
         }
 
-        // whitelist/blacklist
         if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(getItemStack().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_WHITELISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_WHITELISTED;
         }
 
         if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(getItemStack().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+        }
+
+        // game mode permission
+        if (player.getGameMode().isBlockPlacingRestricted()) { // move
+            return BlockOperationResult.Type.FAIL_PLAYER_GAME_MODE;
         }
 
         // world permission
@@ -86,6 +90,9 @@ public class BlockBreakOperation extends BlockOperation {
 //            CommandManager.dispatch(new SetBlockCommand(Items.AIR.item().getDefaultStack().getBlockState(getPlayer(), getInteraction()), getBlockPosition(), SetBlockCommand.Mode.REPLACE));
 //            return BlockOperationResult.Type.SUCCESS;
 //        }
+        if (world.isClient()) {
+            return BlockOperationResult.Type.SUCCESS;
+        }
 
         var oldItem = player.getItemStack(InteractionHand.MAIN);
         if (useCorrectTool) {
@@ -96,9 +103,6 @@ public class BlockBreakOperation extends BlockOperation {
 
         if (useCorrectTool) {
             player.setItemStack(InteractionHand.MAIN, oldItem);
-        }
-        if (world.isClient()) {
-            return BlockOperationResult.Type.SUCCESS;
         }
 
         if (destroyed) {
@@ -114,13 +118,16 @@ public class BlockBreakOperation extends BlockOperation {
         var outputs = Collections.singletonList(getItemStack());
         var result = breakBlock();
 
-        if (getWorld().isClient() && (getContext().isBuildType() || getContext().isPreviewOnceType())) {
+        if (getWorld().isClient() && getContext().isPreviewOnceType()) {
             if (result.success()) {
-//                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.5F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
-//                getPlayer().getClient().getSoundManager().play(sound);
-            } else {
-                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 8.0F * 0.5F, getBlockState().getSoundSet().pitch() * 0.5F, getBlockPosition().getCenter());
+                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
                 getPlayer().getClient().getSoundManager().play(sound);
+                getPlayer().getClient().getParticleEngine().destroy(getBlockPosition(), getBlockState());
+            } else {
+                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 8.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.5F, getBlockPosition().getCenter());
+                getPlayer().getClient().getSoundManager().play(sound);
+                getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
+
             }
         }
 

@@ -35,18 +35,22 @@ public class BlockInteractOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
         }
 
-        // spectator
-        if (player.getGameMode().isSpectator()) {
-            return BlockOperationResult.Type.FAIL_PLAYER_IS_SPECTATOR;
+        // config permission
+        if (!context.customParams().generalConfig().allowPlaceBlocks()) {
+            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_PERMISSION;
         }
 
-        // whitelist/blacklist
         if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_WHITELISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_WHITELISTED;
         }
 
         if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+        }
+
+        // game mode permission
+        if (player.getGameMode().isSpectator()) {
+            return BlockOperationResult.Type.FAIL_PLAYER_GAME_MODE;
         }
 
         // world permission
@@ -108,7 +112,7 @@ public class BlockInteractOperation extends BlockOperation {
         var result = interactBlock();
 
         if (getWorld().isClient() && getContext().isPreviewOnceType() && result.success()) {
-            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.5F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
+            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
             getPlayer().getClient().getSoundManager().play(sound);
         }
 
