@@ -44,9 +44,14 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
                 case FAIL_ITEM_INSUFFICIENT -> inputs;
                 default -> List.of();
             };
+            case BLOCKS_TOOLS_INSUFFICIENT -> switch (result) {
+                case FAIL_TOOL_INSUFFICIENT -> outputs;
+                default -> List.of();
+            };
             case BLOCKS_NOT_PLACEABLE -> switch (result) {
                 case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> inputs;
-                case FAIL_CONFIG_BREAK_PERMISSION, FAIL_CONFIG_PLACE_PERMISSION -> inputs;
+                case FAIL_CONFIG_PLACE_PERMISSION -> inputs;
+                case FAIL_CONFIG_BREAK_PERMISSION -> outputs;
                 default -> List.of();
             };
             case BLOCKS_PLACE_NOT_WHITELISTED -> switch (result) {

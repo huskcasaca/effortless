@@ -40,6 +40,10 @@ public record Context(
         return true;
     }
 
+    public int reservedToolDurability() {
+        return 1;
+    }
+
     public boolean useLegacyBlockPlace() {
         return false;
     }

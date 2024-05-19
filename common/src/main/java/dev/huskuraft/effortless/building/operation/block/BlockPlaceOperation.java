@@ -1,13 +1,11 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.Collections;
+import java.util.List;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.building.Context;
@@ -30,131 +28,17 @@ public class BlockPlaceOperation extends BlockOperation {
         super(world, player, context, storage, interaction, blockState);
     }
 
-    private BlockOperationResult.Type placeBlock() {
-
-        if (blockState == null) {
-            return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
-        }
-
-        // config permission
-        if (!context.customParams().generalConfig().allowPlaceBlocks()) {
-            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_PERMISSION;
-        }
-
-        if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_WHITELISTED;
-        }
-
-        if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
-        }
-
-        // game mode permission
-        if (player.getGameMode().isSpectator()) {
-            return BlockOperationResult.Type.FAIL_PLAYER_GAME_MODE;
-        }
-
-        // world permission
-        if (!isInBorderBound()) {
-            return BlockOperationResult.Type.FAIL_WORLD_BORDER;
-        }
-
-        if (!isInHeightBound()) {
-            return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
-        }
-
-        // action permission
-        var itemStack = storage.search(blockState.getItem()).orElse(null);
-
-        if (itemStack == null || itemStack.isEmpty()) {
-            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
-        }
-
-        if (itemStack.isAir()) {
-            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
-        }
-
-        if (!(itemStack.getItem() instanceof BlockItem blockItem)) {
-            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
-        }
-
-        switch (context.replaceMode()) {
-            case DISABLED -> {
-                if (!player.getWorld().getBlockState(getBlockPosition()).canBeReplaced(player, getInteraction())) {
-                    return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
-                }
-            }
-            case NORMAL, QUICK -> {
-                if (!player.getGameMode().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
-                    return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
-                }
-            }
-        }
-
-        if (context.isPreviewType() && player.getWorld().isClient()) {
-            itemStack.decrease(1);
-            return BlockOperationResult.Type.CONSUME;
-        }
-
-        if (world.isClient()) {
-            return BlockOperationResult.Type.CONSUME;
-        }
-
-        if (context.replaceMode().isReplace()) {
-            if (!player.getWorld().getBlockState(getBlockPosition()).canBeReplaced(player, getInteraction())) {
-                if (!context.customParams().generalConfig().allowBreakBlocks()) {
-                    return BlockOperationResult.Type.FAIL_CONFIG_BREAK_PERMISSION;
-                }
-                if (!destroyBlock()) {
-                    return BlockOperationResult.Type.FAIL_UNKNOWN;
-                }
-            }
-        }
-
-//        if (context.buildType() == BuildType.COMMAND) {
-//            CommandManager.dispatch(new SetBlockCommand(getBlockState(), getBlockPosition(), SetBlockCommand.Mode.REPLACE));
-//            return BlockOperationResult.Type.SUCCESS;
-//        }
-
-
-        var originalItemStack = player.getItemStack(getHand());
-        player.setItemStack(getHand(), itemStack);
-        var placed = false;
-        if (context.useLegacyBlockPlace()) {
-            placed = blockItem.placeOnBlock(player, getInteraction()).consumesAction();
-        } else {
-            placed = blockItem.setBlockOnly(getWorld(), getPlayer(), getInteraction(), getBlockState());
-            if (placed /*&& getWorld().getBlockState(getBlockPosition()).getBlock() == */) {
-                // FIXME: 19/5/24
-//                blockItem.updateBlockStateFromTag(getWorld(), getBlockPosition(), getBlockState(), itemStack);
-                blockItem.updateBlockEntityTag(getWorld(), getBlockPosition(), getBlockState(), itemStack);
-                blockItem.getBlock().place(getWorld(), getPlayer(), getBlockPosition(), getBlockState(), itemStack);
-            }
-            if (placed && !getPlayer().getGameMode().isCreative()) {
-                itemStack.decrease(1);
-            }
-        }
-        player.setItemStack(getHand(), originalItemStack);
-
-        if (!placed) {
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
-        }
-        if (!world.isClient()) {
-            player.awardStat(StatTypes.ITEM_USED.get(itemStack.getItem()));
-        }
-
-        // FIXME: 29/4/24
-        if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockAndUpdate(getBlockPosition(), blockState)) {
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
-        }
-
-        return BlockOperationResult.Type.SUCCESS;
-    }
 
     @Override
     public BlockPlaceOperationResult commit() {
-        var inputs = blockState != null ? Collections.singletonList(blockState.getItem().getDefaultStack()) : Collections.<ItemStack>emptyList();
-        var outputs = Collections.<ItemStack>emptyList();
+        var inputs = List.of(ItemStack.empty());
+        if (blockState != null) {
+            inputs = List.of(blockState.getItem().getDefaultStack());
+        }
+        var outputs = List.of(ItemStack.empty());
+        if (getWorld().getBlockState(getBlockPosition()) != null) {
+            outputs = List.of(getWorld().getBlockState(getBlockPosition()).getItem().getDefaultStack());
+        }
         var result = placeBlock();
 
         if (getWorld().isClient() && getContext().isPreviewOnceType() && result.success()) {

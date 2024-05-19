@@ -42,7 +42,7 @@ public class BlockBreakOperationResult extends BlockOperationResult {
                 case SUCCESS, SUCCESS_PARTIAL, CONSUME -> outputs;
                 default -> List.of();
             };
-            case BLOCKS_BREAK_INSUFFICIENT_TOOLS -> switch (result) {
+            case BLOCKS_TOOLS_INSUFFICIENT -> switch (result) {
                 case FAIL_ITEM_INSUFFICIENT, FAIL_TOOL_INSUFFICIENT -> outputs;
                 default -> Collections.emptyList();
             };
