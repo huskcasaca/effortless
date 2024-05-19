@@ -99,12 +99,12 @@ public abstract class BlockOperation extends TransformableOperation {
         if (getPlayer().getGameMode().isCreative()) {
             return true;
         }
-        var hasCorrectToolForDrops = !blockState.requiresCorrectToolForDrops() || itemInHand.isCorrectToolForDrops(blockState);
+        var correctTool = !blockState.requiresCorrectToolForDrops() || itemInHand.isCorrectToolForDrops(blockState);
         itemInHand.mineBlock(getWorld(), getPlayer(), getBlockPosition(), blockState);
-        if (removed && hasCorrectToolForDrops) {
-            blockState.getBlock().destroyEnd(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
+        if (removed && correctTool) {
+            blockState.getBlock().destroyByPlayer(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
         }
-        return true;
+        return removed;
     }
 
     public boolean useItem(BlockInteraction interaction) {

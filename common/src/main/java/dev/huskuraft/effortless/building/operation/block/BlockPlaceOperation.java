@@ -114,7 +114,7 @@ public class BlockPlaceOperation extends BlockOperation {
         if (context.useLegacyBlockPlace()) {
             placed = blockItem.placeOnBlock(player, getInteraction()).consumesAction();
         } else {
-            placed = blockItem.setBlockInWorld(getPlayer(), getInteraction(), getBlockState());
+            placed = blockItem.setBlockOnly(getWorld(), getPlayer(), getInteraction(), getBlockState());
             if (placed /*&& getWorld().getBlockState(getBlockPosition()).getBlock() == */) {
                 // FIXME: 19/5/24
 //                blockItem.updateBlockStateFromTag(getWorld(), getBlockPosition(), getBlockState(), itemStack);

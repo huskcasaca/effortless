@@ -9,7 +9,11 @@ public interface BlockItem extends Item {
 
     InteractionResult placeOnBlock(Player player, BlockInteraction blockInteraction);
 
-    boolean setBlockInWorld(Player player, BlockInteraction blockInteraction, BlockState blockState);
+    default boolean setBlockOnly(World world, Player player, BlockInteraction blockInteraction, BlockState blockState) {
+        return world.setBlockAndUpdate(blockInteraction.getBlockPosition(), blockState);
+    }
+
+    boolean setBlockInWorld(World world, Player player, BlockInteraction blockInteraction, BlockState blockState);
 
     boolean updateBlockEntityTag(World world, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack);
 

@@ -40,13 +40,13 @@ public record MinecraftBlockItem(net.minecraft.world.item.BlockItem referenceVal
     }
 
     @Override
-    public boolean setBlockInWorld(Player player, BlockInteraction blockInteraction, BlockState blockState) {
+    public boolean setBlockInWorld(World world, Player player, BlockInteraction blockInteraction, BlockState blockState) {
         return referenceValue().placeBlock(new BlockPlaceContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), player.getItemStack(blockInteraction.getHand()).reference(), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)), blockState.reference());
     }
 
     @Override
     public boolean updateBlockEntityTag(World world, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
-        return referenceValue().updateCustomBlockEntityTag(MinecraftConvertor.toPlatformBlockPosition(blockPosition), ((MinecraftWorld) world).referenceValue(), (net.minecraft.world.entity.player.Player) null, ((MinecraftItemStack) itemStack).referenceValue(), ((MinecraftBlockState) blockState).referenceValue());
+        return referenceValue().updateCustomBlockEntityTag(MinecraftConvertor.toPlatformBlockPosition(blockPosition), world.reference(), null, itemStack.reference(), blockState.reference());
     }
 
     @Override
