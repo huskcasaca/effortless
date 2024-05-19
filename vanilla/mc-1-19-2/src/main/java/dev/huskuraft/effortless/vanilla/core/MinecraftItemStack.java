@@ -31,11 +31,6 @@ public record MinecraftItemStack(
     }
 
     @Override
-    public int getMaxStackSize() {
-        return referenceValue().getMaxStackSize();
-    }
-
-    @Override
     public Text getHoverName() {
         return new MinecraftText(referenceValue().getHoverName());
     }

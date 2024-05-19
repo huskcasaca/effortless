@@ -25,6 +25,8 @@ public interface Item extends PlatformReference {
 
     boolean isCorrectToolForDrops(BlockState blockState);
 
+    int getMaxStackSize();
+
     int getMaxDamage();
 
     boolean mineBlock(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack);

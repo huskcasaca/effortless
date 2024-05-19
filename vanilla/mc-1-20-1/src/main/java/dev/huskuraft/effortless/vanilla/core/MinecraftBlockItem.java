@@ -45,6 +45,11 @@ public record MinecraftBlockItem(net.minecraft.world.item.BlockItem referenceVal
     }
 
     @Override
+    public int getMaxStackSize() {
+        return new MinecraftItem(referenceValue()).getMaxStackSize();
+    }
+
+    @Override
     public int getMaxDamage() {
         return new MinecraftItem(referenceValue()).getMaxDamage();
     }

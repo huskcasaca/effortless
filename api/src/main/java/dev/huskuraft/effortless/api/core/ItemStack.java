@@ -28,8 +28,6 @@ public interface ItemStack extends PlatformReference {
 
     void setCount(int count);
 
-    int getMaxStackSize();
-
     Text getHoverName();
 
     ItemStack copy();
@@ -44,6 +42,10 @@ public interface ItemStack extends PlatformReference {
     };
 
     void setTag(TagRecord tagRecord);
+
+    default int getMaxStackSize() {
+        return getItem().getMaxStackSize();
+    }
 
     default void increase(int count) {
         setCount(getCount() + count);
@@ -69,6 +71,11 @@ public interface ItemStack extends PlatformReference {
         return isDamageableItem() && this.getDamageValue() > 0;
     }
 
+    default boolean isStackable() {
+        return getMaxStackSize() > 1 && (!isDamageableItem() || !isDamaged());
+    }
+
+
     default void setDamageValue(int damage) {
         this.getOrCreateTag().putInt(DAMAGE_TAG, Math.max(0, damage));
     }
@@ -93,7 +100,18 @@ public interface ItemStack extends PlatformReference {
         }
     }
 
+    default boolean isCorrectToolForDrops(BlockState blockState) {
+        return getItem().isCorrectToolForDrops(blockState);
+    }
+
     boolean damageBy(Player player, int damage);
+
+    default void mineBlock(World world, Player player, BlockPosition blockPosition, BlockState blockState) {
+        if (getItem().mineBlock(world, player, blockPosition, blockState, this)) {
+            player.awardStat(StatTypes.ITEM_USED.get(getItem()));
+        }
+
+    }
 
     enum TooltipType {
         NORMAL,

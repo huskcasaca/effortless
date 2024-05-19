@@ -49,8 +49,18 @@ public record MinecraftBucketItem(net.minecraft.world.item.BucketItem referenceV
     }
 
     @Override
+    public int getMaxStackSize() {
+        return new MinecraftItem(referenceValue()).getMaxStackSize();
+    }
+
+    @Override
     public int getMaxDamage() {
         return new MinecraftItem(referenceValue()).getMaxDamage();
+    }
+
+    @Override
+    public boolean mineBlock(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
+        return new MinecraftItem(referenceValue()).mineBlock(world, player, blockPosition, blockState, itemStack);
     }
 
 }
