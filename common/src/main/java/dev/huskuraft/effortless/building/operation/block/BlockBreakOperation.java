@@ -96,7 +96,7 @@ public class BlockBreakOperation extends BlockOperation {
             player.setItemStack(InteractionHand.MAIN, correctTool.get());
         }
 
-        var destroyed  = player.destroyBlock(getInteraction());
+        var destroyed  = destroyBlock();
 
         if (useCorrectTool) {
             player.setItemStack(InteractionHand.MAIN, oldItem);

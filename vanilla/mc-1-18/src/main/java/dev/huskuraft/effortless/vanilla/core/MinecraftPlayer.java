@@ -18,7 +18,6 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 
 public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference) implements Player {
@@ -132,18 +131,6 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
     @Override
     public BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids) {
         return (BlockInteraction) MinecraftConvertor.fromPlatformInteraction(reference.pick(maxDistance, deltaTick, includeFluids));
-    }
-
-    @Override
-    public boolean destroyBlock(BlockInteraction interaction) {
-        var minecraftBlockPosition = MinecraftConvertor.toPlatformBlockPosition(interaction.getBlockPosition());
-        if (reference instanceof ServerPlayer serverPlayer) {
-            return serverPlayer.gameMode.destroyBlock(minecraftBlockPosition);
-        }
-        if (reference instanceof LocalPlayer localPlayer) {
-            return Minecraft.getInstance().gameMode != null && Minecraft.getInstance().gameMode.destroyBlock(minecraftBlockPosition);
-        }
-        return false;
     }
 
     @Override

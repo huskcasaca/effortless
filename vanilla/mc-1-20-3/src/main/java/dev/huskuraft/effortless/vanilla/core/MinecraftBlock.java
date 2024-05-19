@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.vanilla.core;
 import java.util.Optional;
 
 import dev.huskuraft.effortless.api.core.Block;
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
@@ -72,5 +73,20 @@ public record MinecraftBlock(
             };
         }
         return null;
+    }
+
+    @Override
+    public void destroy(World world, BlockPosition blockPosition, BlockState blockState) {
+        referenceValue().destroy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference());
+    }
+
+    @Override
+    public void playerDestroyStart(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack) {
+        referenceValue().playerWillDestroy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), player.reference());
+    }
+
+    @Override
+    public void playerDestroy(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack) {
+        referenceValue().playerDestroy(world.reference(), player.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), blockEntity.reference(), itemStack.reference());
     }
 }

@@ -37,4 +37,6 @@ public interface BlockState extends StateHolder {
 
     InteractionResult use(Player player, BlockInteraction blockInteraction);
 
+    boolean requiresCorrectToolForDrops();
+
 }

@@ -167,4 +167,8 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
         return MinecraftConvertor.toPlatformInteractionResult(reference.use(player.getWorld().reference(), player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)));
     }
 
+    @Override
+    public boolean requiresCorrectToolForDrops() {
+        return referenceValue().requiresCorrectToolForDrops();
+    }
 }

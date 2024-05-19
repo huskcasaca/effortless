@@ -93,7 +93,7 @@ public class BlockPlaceOperation extends BlockOperation {
         }
 
         if (context.replaceMode().isReplace()) {
-            if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction()) && !player.destroyBlock(getInteraction())) {
+            if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction()) && !destroyBlock()) {
                 return BlockOperationResult.Type.FAIL_UNKNOWN;
             }
         }
@@ -104,7 +104,6 @@ public class BlockPlaceOperation extends BlockOperation {
 //        }
 
         // compatible layer
-
         if (world.isClient()) {
             return BlockOperationResult.Type.CONSUME;
         }

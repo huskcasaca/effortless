@@ -69,7 +69,7 @@ public abstract class BlockOperation extends TransformableOperation {
     }
 
     public BlockPosition getRelativeBlockPosition() {
-        return getInteraction().getBlockPosition().relative(getInteraction().getDirection());
+        return getBlockPosition().relative(getInteraction().getDirection());
     }
 
     public InteractionHand getHand() {
@@ -83,5 +83,33 @@ public abstract class BlockOperation extends TransformableOperation {
     public boolean isInHeightBound() {
         return getBlockPosition().y() >= getWorld().getMinBuildHeight() && getBlockPosition().y() <= getWorld().getMaxBuildHeight();
     }
+
+    public boolean destroyBlock() {
+        var blockState = getWorld().getBlockState(getBlockPosition());
+        var blockEntity = getWorld().getBlockEntity(getBlockPosition());
+        var itemInHand = getPlayer().getItemStack(InteractionHand.MAIN);
+        var itemInHandCopy = itemInHand.copy();
+
+        blockState.getBlock().playerDestroyStart(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
+
+        var removed = getWorld().removeBlock(getBlockPosition(), false);
+        if (removed) {
+            getWorld().getBlockState(getBlockPosition()).getBlock().destroy(getWorld(), getBlockPosition(), blockState);
+        }
+        if (getPlayer().getGameMode().isCreative()) {
+            return true;
+        }
+        var hasCorrectToolForDrops = !blockState.requiresCorrectToolForDrops() || itemInHand.isCorrectToolForDrops(blockState);
+        itemInHand.mineBlock(getWorld(), getPlayer(), getBlockPosition(), blockState);
+        if (removed && hasCorrectToolForDrops) {
+            blockState.getBlock().playerDestroy(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
+        }
+        return true;
+    }
+
+    public boolean useItem(BlockInteraction interaction) {
+        return getWorld().getBlockState(interaction.getBlockPosition()).use(getPlayer(), interaction).consumesAction() || getPlayer().getItemStack(interaction.getHand()).getItem().useOnBlock(getPlayer(), interaction).consumesAction();
+    }
+
 
 }
