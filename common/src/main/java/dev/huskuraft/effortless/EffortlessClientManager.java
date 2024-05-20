@@ -161,20 +161,25 @@ public final class EffortlessClientManager implements ClientManager {
             }
         }
         if (EffortlessKeys.UNDO.getBinding().consumeClick()) {
+            getEntrance().getClient().getSoundManager().playButtonClickSound();
             getEntrance().getStructureBuilder().undo(getRunningClient().getPlayer());
         }
         if (EffortlessKeys.REDO.getBinding().consumeClick()) {
+            getEntrance().getClient().getSoundManager().playButtonClickSound();
             getEntrance().getStructureBuilder().redo(getRunningClient().getPlayer());
         }
         if (EffortlessKeys.SETTINGS.getBinding().consumeClick()) {
+            getEntrance().getClient().getSoundManager().playButtonClickSound();
             new EffortlessSettingsScreen(getEntrance()).attach();
         }
         if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
+            getEntrance().getClient().getSoundManager().playButtonClickSound();
             getEntrance().getStructureBuilder().setReplaceMode(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());
         }
 
         if (Platform.getInstance().isDevelopment()) {
             if (Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown() && Keys.KEY_ENTER.getBinding().isKeyDown()) {
+                getEntrance().getClient().getSoundManager().playButtonClickSound();
                 new EffortlessTestScreen(getEntrance()).attach();
             }
         }

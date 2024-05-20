@@ -25,4 +25,12 @@ public class OperationResultStack {
         return undoStack.push(redoStack.pop().getReverseOperation().commit());
     }
 
+    public int undoSize() {
+        return undoStack.size();
+    }
+
+    public int redoSize() {
+        return redoStack.size();
+    }
+
 }

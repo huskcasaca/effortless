@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building;
 
 import dev.huskuraft.effortless.api.text.Text;
+import dev.huskuraft.effortless.building.structure.BuildMode;
 
 public enum BuildState {
     IDLE,
@@ -21,6 +22,17 @@ public enum BuildState {
                     case INTERACT_BLOCK -> "interacting_block";
                 }
         ));
+    }
+
+    public Text getDisplayName(BuildMode buildMode) {
+        return Text.translate("effortless.state.%s.var1".formatted(
+                switch (this) {
+                    case IDLE -> "idle";
+                    case BREAK_BLOCK -> "breaking_block";
+                    case PLACE_BLOCK -> "placing_block";
+                    case INTERACT_BLOCK -> "interacting_block";
+                }
+        ), buildMode.getDisplayName());
     }
 
 }

@@ -30,7 +30,11 @@ public class Effortless implements Entrance {
     }
 
     public static Text getSystemMessage(Text msg) {
-        return Text.text("[").append(Text.translate("effortless.name")).append("] ").withStyle(ChatFormatting.GRAY).append(msg.withStyle(ChatFormatting.WHITE));
+        return Text.text("[").append(Text.translate("effortless.symbol")).append("] ").withStyle(ChatFormatting.GRAY).append(msg.withStyle(ChatFormatting.WHITE));
+    }
+
+    public static Text getMessage(Text msg) {
+        return msg;
     }
 
     public CommonEventRegistry getEventRegistry() {

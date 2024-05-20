@@ -53,6 +53,7 @@ import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.session.BatchBuildSession;
+import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
@@ -403,11 +404,17 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             }
             default -> {
-                var entries = new ArrayList<>();
-                entries.add(buildTooltip.itemSummary().values().stream().flatMap(List::stream).toList());
-                entries.add(Text.translate("effortless.history." + buildTooltip.type().getName()));
-                entries.add(buildTooltip.context().buildMode().getIcon());
-                getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1, entries, true);
+
+                if (buildTooltip.context().buildMode() == BuildMode.DISABLED) { // nothing
+                    var entries = new ArrayList<>();
+                    entries.add(buildTooltip.itemSummary().values().stream().flatMap(List::stream).toList());
+                    entries.add(Text.translate("effortless.history." + buildTooltip.type().getName()));
+                    entries.add(buildTooltip.context().buildMode().getIcon());
+                    getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1024 + 1, entries, true);
+                } else {
+                    showBuildTooltip(buildTooltip.context().id(), 1024, player, buildTooltip.context(), buildTooltip.itemSummary());
+                }
+
 
             }
         }

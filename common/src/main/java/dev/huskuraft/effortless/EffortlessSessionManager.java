@@ -6,6 +6,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.platform.Server;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 import dev.huskuraft.effortless.session.Session;
@@ -41,8 +42,8 @@ public final class EffortlessSessionManager implements SessionManager {
     @Override
     public void onSessionConfig(SessionConfig sessionConfig, Player player) {
         if (!player.isOperator() && !player.isSinglePlayerOwner()) {
-            player.sendMessage("You do not have permission to set server config.");
-            Effortless.LOGGER.warn("%s has no permission to set server config.");
+            player.sendMessage(Effortless.getSystemMessage(Text.text("You do not have permission to set server config.")));
+            Effortless.LOGGER.warn("%s has no permission to set server config.".formatted(player.getProfile().getName()));
             return;
         }
 

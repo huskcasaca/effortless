@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.operation.ItemSummaryType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
+import dev.huskuraft.effortless.building.operation.OperationSummaryType;
 
 public record BuildTooltip(
         Type type,
         Context context,
-        Map<ItemSummaryType, List<ItemStack>> itemSummary
+        Map<OperationSummaryType, List<ItemStack>> itemSummary
 ) {
     public BuildTooltip(
             Type type,
@@ -23,7 +23,7 @@ public record BuildTooltip(
         this(
                 type,
                 result.getOperation().getContext(),
-                Arrays.stream(ItemSummaryType.values()).collect(Collectors.toMap(Function.identity(), result::getProducts))
+                Arrays.stream(OperationSummaryType.values()).collect(Collectors.toMap(Function.identity(), result::getSummary))
         );
 
     }
