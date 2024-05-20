@@ -101,7 +101,7 @@ public abstract class BlockOperation extends TransformableOperation {
 
         var removed = getWorld().removeBlock(getBlockPosition(), false);
         if (removed) {
-            getWorld().getBlockState(getBlockPosition()).getBlock().destroy(getWorld(), getBlockPosition(), blockState);
+            getWorld().getBlockState(getBlockPosition()).getBlock().destroy(getWorld(), getPlayer(), getBlockPosition(), blockState);
         }
         if (getPlayer().getGameMode().isCreative()) {
             return true;
@@ -109,12 +109,10 @@ public abstract class BlockOperation extends TransformableOperation {
         var correctTool = !blockState.requiresCorrectToolForDrops() || itemInHand.isCorrectToolForDrops(blockState);
         itemInHand.mineBlock(getWorld(), getPlayer(), getBlockPosition(), blockState);
         if (removed && correctTool) {
-            blockState.getBlock().destroyByPlayer(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
+            blockState.getBlock().destroyEnd(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
         }
         return removed;
     }
-
-
 
     protected BlockOperationResult.Type destroyBlockCheckOnly() {
 
