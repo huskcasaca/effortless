@@ -3,13 +3,9 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.Collections;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.BucketItem;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -29,93 +25,15 @@ public class BlockInteractOperation extends BlockOperation {
         super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
     }
 
-    private BlockOperationResult.Type interactBlock() {
-
-        if (blockState == null) {
-            return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
-        }
-
-        // config permission
-        if (!context.customParams().generalConfig().allowInteractBlocks()) {
-            return BlockOperationResult.Type.FAIL_CONFIG_INTERACT_PERMISSION;
-        }
-
-        if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
-        }
-
-        if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
-        }
-
-        // game mode permission
-        if (player.getGameMode().isSpectator()) {
-            return BlockOperationResult.Type.FAIL_PLAYER_GAME_MODE;
-        }
-
-        // world permission
-        if (!isInBorderBound()) {
-            return BlockOperationResult.Type.FAIL_WORLD_BORDER;
-        }
-
-        if (!isInHeightBound()) {
-            return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
-        }
-
-        // action permission
-        var selectedItemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
-
-//        if (selectedItemStack == null) {
-//            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
-//        }
-//
-//
-//        if (!selectedItemStack.getItem().isBlockItem()) {
-//            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
-//        }
-
-        if (context.isPreviewType() && player.getWorld().isClient()) {
-            selectedItemStack.decrease(1);
-            return BlockOperationResult.Type.CONSUME;
-        }
-
-        if (world.isClient()) {
-            return BlockOperationResult.Type.CONSUME;
-        }
-        // compatible layer
-        var originalItemStack = player.getItemStack(getHand());
-
-        if (!(originalItemStack.getItem() instanceof BucketItem) && blockState.isAir()) {
-            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
-        }
-
-        player.setItemStack(getHand(), selectedItemStack);
-        var interacted = getWorld().getBlockState(interaction.getBlockPosition()).use(player, interaction).consumesAction();
-        if (!interacted) {
-            interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();
-            if (interacted && !world.isClient()) {
-                player.awardStat(StatTypes.ITEM_USED.get(selectedItemStack.getItem()));
-            }
-        }
-        player.setItemStack(getHand(), originalItemStack);
-        if (!interacted) {
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
-        }
-
-        return BlockOperationResult.Type.SUCCESS;
-    }
-
     @Override
     public BlockInteractOperationResult commit() {
         var inputs = blockState != null ? Collections.singletonList(blockState.getItem().getDefaultStack()) : Collections.<ItemStack>emptyList();
         var outputs = Collections.<ItemStack>emptyList();
         var result = interactBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType() && result.success() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
-            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
-            getPlayer().getClient().getSoundManager().play(sound);
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
+            getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
-
         return new BlockInteractOperationResult(this, result, inputs, outputs);
     }
 
@@ -139,4 +57,8 @@ public class BlockInteractOperation extends BlockOperation {
         return this;
     }
 
+    @Override
+    public Type getType() {
+        return Type.INTERACT;
+    }
 }

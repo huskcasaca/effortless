@@ -4,8 +4,10 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.BucketItem;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Item;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
@@ -86,6 +88,8 @@ public abstract class BlockOperation extends TransformableOperation {
     public boolean isInHeightBound() {
         return getBlockPosition().y() >= getWorld().getMinBuildHeight() && getBlockPosition().y() <= getWorld().getMaxBuildHeight();
     }
+
+    public abstract Type getType();
 
     protected boolean destroyBlockInternal() {
         var blockState = getWorld().getBlockState(getBlockPosition());
@@ -324,10 +328,91 @@ public abstract class BlockOperation extends TransformableOperation {
         return BlockOperationResult.Type.SUCCESS;
     }
 
+    protected BlockOperationResult.Type interactBlock() {
+
+        if (blockState == null) {
+            return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
+        }
+
+        // config permission
+        if (!context.customParams().generalConfig().allowInteractBlocks()) {
+            return BlockOperationResult.Type.FAIL_CONFIG_INTERACT_PERMISSION;
+        }
+
+        if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
+            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+        }
+
+        if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
+            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+        }
+
+        // game mode permission
+        if (player.getGameMode().isSpectator()) {
+            return BlockOperationResult.Type.FAIL_PLAYER_GAME_MODE;
+        }
+
+        // world permission
+        if (!isInBorderBound()) {
+            return BlockOperationResult.Type.FAIL_WORLD_BORDER;
+        }
+
+        if (!isInHeightBound()) {
+            return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
+        }
+
+        // action permission
+        var selectedItemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
+
+//        if (selectedItemStack == null) {
+//            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
+//        }
+//
+//
+//        if (!selectedItemStack.getItem().isBlockItem()) {
+//            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
+//        }
+
+        if (context.isPreviewType() && player.getWorld().isClient()) {
+            selectedItemStack.decrease(1);
+            return BlockOperationResult.Type.CONSUME;
+        }
+
+        if (world.isClient()) {
+            return BlockOperationResult.Type.CONSUME;
+        }
+        // compatible layer
+        var originalItemStack = player.getItemStack(getHand());
+
+        if (!(originalItemStack.getItem() instanceof BucketItem) && blockState.isAir()) {
+            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
+        }
+
+        player.setItemStack(getHand(), selectedItemStack);
+        var interacted = getWorld().getBlockState(interaction.getBlockPosition()).use(player, interaction).consumesAction();
+        if (!interacted) {
+            interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();
+            if (interacted && !world.isClient()) {
+                player.awardStat(StatTypes.ITEM_USED.get(selectedItemStack.getItem()));
+            }
+        }
+        player.setItemStack(getHand(), originalItemStack);
+        if (!interacted) {
+            return BlockOperationResult.Type.FAIL_UNKNOWN;
+        }
+
+        return BlockOperationResult.Type.SUCCESS;
+    }
+
 
     public boolean useItem(BlockInteraction interaction) {
         return getWorld().getBlockState(interaction.getBlockPosition()).use(getPlayer(), interaction).consumesAction() || getPlayer().getItemStack(interaction.getHand()).getItem().useOnBlock(getPlayer(), interaction).consumesAction();
     }
 
+    public enum Type {
+        BREAK,
+        PLACE,
+        INTERACT
+    }
 
 }
