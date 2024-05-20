@@ -396,7 +396,12 @@ public abstract class BlockOperation extends TransformableOperation {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
         }
 
+        if (selectedItemStack.isDamageableItem() && selectedItemStack.getRemainingDamage() <= context.getReservedToolDurability()) {
+            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
+        }
+
         player.setItemStack(getHand(), selectedItemStack);
+
         var interacted = getWorld().getBlockState(interaction.getBlockPosition()).use(player, interaction).consumesAction();
         if (!interacted) {
             interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();

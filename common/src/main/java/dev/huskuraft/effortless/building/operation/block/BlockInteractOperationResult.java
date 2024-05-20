@@ -37,6 +37,10 @@ public class BlockInteractOperationResult extends BlockOperationResult {
                 case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> inputs;
                 default -> List.of();
             };
+            case BLOCKS_TOOLS_INSUFFICIENT -> switch (result) {
+                case FAIL_TOOL_INSUFFICIENT -> inputs;
+                default -> List.of();
+            };
             case BLOCKS_BLACKLISTED -> switch (result) {
                 case FAIL_CONFIG_BLACKLISTED -> inputs;
                 default -> List.of();
