@@ -45,9 +45,9 @@ import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.BuildTooltip;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
-import dev.huskuraft.effortless.building.operation.ItemSummaryType;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.OperationResult;
+import dev.huskuraft.effortless.building.operation.OperationSummaryType;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
@@ -97,7 +97,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             showBuildContextResult(context.id(), 1024, player, context, result);
 
             playSoundInBatch(player, result);
-            showBuildTooltip(context.id(), 1024, player, previewContext, result);
+//            showBuildTooltip(context.id(), 1024, player, previewContext, result);
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
             setContext(player, context.newInteraction());
 
@@ -497,7 +497,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (getHistoryContext(player).getBoxVolume() != context.getBoxVolume()) {
             putHistoryContext(player, context);
             var blockState = Items.AIR.item().getBlock().getDefaultBlockState();
-            var distance = player.getEyePosition().distance(context.buildInteractions().get(context.interactionsSize() - 1).getBlockPosition().getCenter());
+            var interaction = context.buildInteractions().get(context.interactionsSize() - 1);
+            var distance = interaction  == null ? 0 : player.getEyePosition().distance(interaction.getBlockPosition().getCenter());
             var location = player.getEyePosition().add(player.getEyeDirection().mul(Math.min(distance, 3)));
             var sound = SoundInstance.createBlock(blockState.getSoundSet().hitSound(), (blockState.getSoundSet().volume() + 1.0F) / 2.0F * 0.1F, blockState.getSoundSet().pitch() * 0.2F, location);
             getEntrance().getClient().getSoundManager().play(sound);
@@ -576,11 +577,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildTooltip(UUID id, int priority, Player player, Context context, OperationResult result) {
-        var itemSummary = Arrays.stream(ItemSummaryType.values()).collect(Collectors.toMap(Function.identity(), result::getProducts));
+        var itemSummary = Arrays.stream(OperationSummaryType.values()).collect(Collectors.toMap(Function.identity(), result::getSummary));
         showBuildTooltip(id, priority, player, context, itemSummary);
     }
 
-    public void showBuildTooltip(UUID id, int priority, Player player, Context context, Map<ItemSummaryType, List<ItemStack>> itemSummary) {
+    public void showBuildTooltip(UUID id, int priority, Player player, Context context, Map<OperationSummaryType, List<ItemStack>> itemSummary) {
         if (player.getId() != getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuildTooltips()) {
                 return;
