@@ -6,61 +6,47 @@ import com.mojang.blaze3d.platform.InputConstants;
 
 import dev.huskuraft.effortless.api.renderer.Window;
 
-public class MinecraftWindow implements Window {
-
-    private final com.mojang.blaze3d.platform.Window reference;
-
-    public MinecraftWindow(com.mojang.blaze3d.platform.Window reference) {
-        this.reference = reference;
-    }
-
-    @Override
-    public com.mojang.blaze3d.platform.Window referenceValue() {
-        return reference;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftWindow window && reference.equals(window.reference);
-    }
+public record MinecraftWindow(
+        com.mojang.blaze3d.platform.Window refs
+) implements Window {
 
     @Override
     public int hashCode() {
-        return reference.hashCode();
+        return refs.hashCode();
     }
 
     @Override
     public int getWidth() {
-        return reference.getWidth();
+        return refs.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return reference.getHeight();
+        return refs.getHeight();
     }
 
     @Override
     public int getGuiScaledWidth() {
-        return reference.getGuiScaledWidth();
+        return refs.getGuiScaledWidth();
     }
 
     @Override
     public int getGuiScaledHeight() {
-        return reference.getGuiScaledHeight();
+        return refs.getGuiScaledHeight();
     }
 
     @Override
     public double getGuiScaledFactor() {
-        return reference.getGuiScale();
+        return refs.getGuiScale();
     }
 
     @Override
     public boolean isKeyDown(int key) {
-        return InputConstants.isKeyDown(reference.getWindow(), key);
+        return InputConstants.isKeyDown(refs.getWindow(), key);
     }
 
     @Override
     public boolean isMouseButtonDown(int button) {
-        return GLFW.glfwGetMouseButton(reference.getWindow(), button) == 1;
+        return GLFW.glfwGetMouseButton(refs.getWindow(), button) == 1;
     }
 }

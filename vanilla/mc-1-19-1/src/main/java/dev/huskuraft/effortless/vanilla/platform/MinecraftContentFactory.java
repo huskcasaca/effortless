@@ -135,7 +135,7 @@ public class MinecraftContentFactory implements ContentFactory {
             }
 
             @Override
-            public Object referenceValue() {
+            public Object refs() {
                 return statType;
             }
         };

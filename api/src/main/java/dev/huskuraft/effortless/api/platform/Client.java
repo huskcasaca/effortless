@@ -5,8 +5,6 @@ import java.util.List;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.PlayerInfo;
-import dev.huskuraft.effortless.api.core.Resource;
-import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
@@ -41,8 +39,6 @@ public interface Client extends PlatformReference {
     void setClipboard(String content);
 
     SoundManager getSoundManager();
-
-    Resource getResource(ResourceLocation location);
 
     void sendChat(String chat);
 

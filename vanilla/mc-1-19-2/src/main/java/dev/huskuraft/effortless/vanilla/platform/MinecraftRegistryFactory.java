@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftRegistry;
 import net.minecraft.core.DefaultedRegistry;
 
 @AutoService(RegistryFactory.class)
-public record MinecraftRegistryFactory() implements RegistryFactory {
+public final class MinecraftRegistryFactory implements RegistryFactory {
 
     @SuppressWarnings("unchecked")
     @Override

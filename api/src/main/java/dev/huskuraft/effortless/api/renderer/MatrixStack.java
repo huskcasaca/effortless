@@ -19,8 +19,6 @@ public interface MatrixStack extends PlatformReference {
 
     void rotate(Quaternionf quaternion);
 
-    void rotate(Quaternionf quaternion, float x, float y, float z);
-
     void multiply(Matrix4f matrix);
 
     void identity();

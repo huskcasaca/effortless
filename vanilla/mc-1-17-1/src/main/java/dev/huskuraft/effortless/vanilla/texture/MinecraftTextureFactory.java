@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 
 @AutoService(TextureFactory.class)
-public class MinecraftTextureFactory implements TextureFactory {
+public final class MinecraftTextureFactory implements TextureFactory {
 
     @Override
     public Texture getBlockAtlasTexture() {

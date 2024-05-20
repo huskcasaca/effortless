@@ -31,7 +31,7 @@ public record OfflinePlayerInfo(UUID id, String name, Text displayName, PlayerSk
             }
 
             @Override
-            public Object referenceValue() {
+            public Object refs() {
                 throw new NullPointerException();
             }
         };
@@ -48,7 +48,7 @@ public record OfflinePlayerInfo(UUID id, String name, Text displayName, PlayerSk
     }
 
     @Override
-    public Object referenceValue() {
+    public Object refs() {
         throw new NullPointerException();
     }
 

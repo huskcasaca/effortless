@@ -48,7 +48,7 @@ public enum Keys implements Key {
             }
 
             @Override
-            public Object referenceValue() {
+            public Object refs() {
                 return this;
             }
         };

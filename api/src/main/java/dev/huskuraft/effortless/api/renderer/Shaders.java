@@ -101,7 +101,7 @@ public enum Shaders implements Shader {
     }
 
     @Override
-    public Object referenceValue() {
-        return getShader().referenceValue();
+    public Object refs() {
+        return getShader().refs();
     }
 }

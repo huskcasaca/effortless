@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
-public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockState reference) implements BlockState {
+public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockState refs) implements BlockState {
 
     public static BlockState ofNullable(net.minecraft.world.level.block.state.BlockState value) {
         return value == null ? null : new MinecraftBlockState(value);
@@ -88,13 +88,8 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
     }
 
     @Override
-    public net.minecraft.world.level.block.state.BlockState referenceValue() {
-        return reference;
-    }
-
-    @Override
     public BlockState rotate(Revolve revolve) {
-        return ofNullable(reference.rotate(switch (revolve) {
+        return ofNullable(refs.rotate(switch (revolve) {
             case NONE -> Rotation.NONE;
             case CLOCKWISE_90 -> Rotation.CLOCKWISE_90;
             case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
@@ -104,27 +99,27 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
 
     @Override
     public boolean isAir() {
-        return reference.isAir();
+        return refs.isAir();
     }
 
     @Override
     public Item getItem() {
-        return MinecraftItem.ofNullable(reference.getBlock().asItem());
+        return MinecraftItem.ofNullable(refs.getBlock().asItem());
     }
 
     @Override
     public BlockState mirror(Axis axis) {
         return switch (axis) {
-            case Y -> ofNullable(mirrorTopBottom(reference));
-            case X -> ofNullable(mirrorFrontBack(reference));
-            case Z -> ofNullable(mirrorLeftRight(reference));
+            case Y -> ofNullable(mirrorTopBottom(refs));
+            case X -> ofNullable(mirrorFrontBack(refs));
+            case Z -> ofNullable(mirrorLeftRight(refs));
         };
     }
 
     @Override
     public boolean canBeReplaced(Player player, BlockInteraction interaction) {
         ItemStack itemStack = player.getItemStack(interaction.getHand());
-        return reference.canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
+        return refs.canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
                 player.reference(),
                 MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
                 itemStack.reference(),
@@ -134,41 +129,41 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
 
     @Override
     public boolean isReplaceable() {
-        return reference.canBeReplaced();
+        return refs.canBeReplaced();
     }
 
     @Override
     public boolean isDestroyable() {
-        return !reference.is(BlockTags.FEATURES_CANNOT_REPLACE);
+        return !refs.is(BlockTags.FEATURES_CANNOT_REPLACE);
     }
 
     @Override
     public SoundSet getSoundSet() {
-        return new MinecraftSoundSet(reference.getSoundType());
+        return new MinecraftSoundSet(refs.getSoundType());
     }
 
     @Override
     public Map<Property, PropertyValue> getPropertiesMap() {
-        return reference.getValues().entrySet().stream().collect(Collectors.toMap(entry -> new MinecraftProperty(entry.getKey()), entry -> new MinecraftPropertyValue(entry.getValue())));
+        return refs.getValues().entrySet().stream().collect(Collectors.toMap(entry -> new MinecraftProperty(entry.getKey()), entry -> new MinecraftPropertyValue(entry.getValue())));
     }
 
     @Override
     public Block getBlock() {
-        return new MinecraftBlock(referenceValue().getBlock());
+        return new MinecraftBlock(refs.getBlock());
     }
 
     @Override
     public boolean canBeReplaced(Fluid fluid) {
-        return referenceValue().canBeReplaced((net.minecraft.world.level.material.Fluid) fluid.reference());
+        return refs.canBeReplaced((net.minecraft.world.level.material.Fluid) fluid.reference());
     }
 
     @Override
     public InteractionResult use(Player player, BlockInteraction blockInteraction) {
-        return MinecraftConvertor.toPlatformInteractionResult(reference.use(player.getWorld().reference(), player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)));
+        return MinecraftConvertor.toPlatformInteractionResult(refs.use(player.getWorld().reference(), player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)));
     }
 
     @Override
     public boolean requiresCorrectToolForDrops() {
-        return referenceValue().requiresCorrectToolForDrops();
+        return refs.requiresCorrectToolForDrops();
     }
 }

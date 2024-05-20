@@ -11,23 +11,23 @@ import dev.huskuraft.effortless.api.core.Registry;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
 
 public record MinecraftRegistry<T extends PlatformReference, R>(
-        net.minecraft.core.Registry<R> referenceValue,
+        net.minecraft.core.Registry<R> refs,
         Function<R, T> typeConvertor
 ) implements Registry<T> {
 
     @Override
     public int getId(T value) {
-        return referenceValue().getId(value.reference());
+        return refs.getId(value.reference());
     }
 
     @Nullable
     @Override
     public T byId(int key) {
-        return typeConvertor().apply(referenceValue().byId(key));
+        return typeConvertor().apply(refs.byId(key));
     }
 
     @Override
     public Iterator<T> iterator() {
-        return Iterators.transform(referenceValue().iterator(), typeConvertor());
+        return Iterators.transform(refs.iterator(), typeConvertor());
     }
 }

@@ -20,17 +20,17 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 
 public record MinecraftBlock(
-        net.minecraft.world.level.block.Block referenceValue
+        net.minecraft.world.level.block.Block refs
 ) implements Block {
 
     @Override
     public BlockState getDefaultBlockState() {
-        return MinecraftBlockState.ofNullable(referenceValue().defaultBlockState());
+        return MinecraftBlockState.ofNullable(refs.defaultBlockState());
     }
 
     @Override
     public BlockState getBlockState(Player player, BlockInteraction interaction) {
-        return MinecraftBlockState.ofNullable(referenceValue().getStateForPlacement(new BlockPlaceContext(
+        return MinecraftBlockState.ofNullable(refs.getStateForPlacement(new BlockPlaceContext(
                 player.reference(),
                 MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
                 player.getItemStack(interaction.getHand()).reference(),
@@ -40,7 +40,7 @@ public record MinecraftBlock(
 
     @Override
     public BucketCollectable getBucketCollectable() {
-        if (referenceValue() instanceof net.minecraft.world.level.block.BucketPickup bucketPickup) {
+        if (refs instanceof net.minecraft.world.level.block.BucketPickup bucketPickup) {
             return new BucketCollectable() {
 
                 @Override
@@ -59,7 +59,7 @@ public record MinecraftBlock(
 
     @Override
     public LiquidPlaceable getLiquidPlaceable() {
-        if (referenceValue() instanceof LiquidBlockContainer liquidPlace) {
+        if (refs instanceof LiquidBlockContainer liquidPlace) {
             return new LiquidPlaceable() {
                 @Override
                 public boolean canPlaceLiquid(World world, Player player, BlockPosition blockPosition, BlockState blockState, Fluid fluid) {
@@ -77,21 +77,21 @@ public record MinecraftBlock(
 
     @Override
     public void destroy(World world, BlockPosition blockPosition, BlockState blockState) {
-        referenceValue().destroy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference());
+        refs.destroy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference());
     }
 
     @Override
     public void destroyStart(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack) {
-        referenceValue().playerWillDestroy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), player.reference());
+        refs.playerWillDestroy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), player.reference());
     }
 
     @Override
     public void destroyByPlayer(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack) {
-        referenceValue().playerDestroy(world.reference(), player.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), blockEntity == null ? null : blockEntity.reference(), itemStack.reference());
+        refs.playerDestroy(world.reference(), player.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), blockEntity == null ? null : blockEntity.reference(), itemStack.reference());
     }
 
     @Override
     public void place(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
-        referenceValue().setPlacedBy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), player.reference(), itemStack.reference());
+        refs.setPlacedBy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), player.reference(), itemStack.reference());
     }
 }

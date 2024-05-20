@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.tag.TagRecord;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 
-public record MinecraftTagRecord(CompoundTag referenceValue) implements TagRecord {
+public record MinecraftTagRecord(CompoundTag refs) implements TagRecord {
 
     public static TagRecord ofNullable(CompoundTag compoundTag) {
         return compoundTag == null ? null : new MinecraftTagRecord(compoundTag);
@@ -13,26 +13,26 @@ public record MinecraftTagRecord(CompoundTag referenceValue) implements TagRecor
 
     @Override
     public byte getId() {
-        return new MinecraftTagElement(referenceValue()).getId();
+        return new MinecraftTagElement(refs).getId();
     }
 
     @Override
     public String getAsString() {
-        return new MinecraftTagElement(referenceValue()).getAsString();
+        return new MinecraftTagElement(refs).getAsString();
     }
 
     @Override
     public TagElement getTag(String key) {
-        return MinecraftTagElement.ofNullable(referenceValue().get(key));
+        return MinecraftTagElement.ofNullable(refs.get(key));
     }
 
     @Override
     public TagElement putTag(String key, TagElement value) {
-        return MinecraftTagElement.ofNullable(referenceValue().put(key, (Tag) value.referenceValue()));
+        return MinecraftTagElement.ofNullable(refs.put(key, (Tag) value.refs()));
     }
 
     @Override
     public void remove(String key) {
-        referenceValue().remove(key);
+        refs.remove(key);
     }
 }

@@ -3,51 +3,51 @@ package dev.huskuraft.effortless.vanilla.tag;
 import dev.huskuraft.effortless.api.tag.TagPrimitive;
 import net.minecraft.nbt.NumericTag;
 
-public record MinecraftTagPrimitive(NumericTag referenceValue) implements TagPrimitive {
+public record MinecraftTagPrimitive(NumericTag refs) implements TagPrimitive {
 
     @Override
     public byte getId() {
-        return new MinecraftTagElement(referenceValue()).getId();
+        return new MinecraftTagElement(refs).getId();
     }
 
     @Override
     public String getAsString() {
-        return new MinecraftTagElement(referenceValue()).getAsString();
+        return new MinecraftTagElement(refs).getAsString();
     }
 
     @Override
     public long getAsLong() {
-        return referenceValue().getAsLong();
+        return refs.getAsLong();
     }
 
     @Override
     public int getAsInt() {
-        return referenceValue().getAsInt();
+        return refs.getAsInt();
     }
 
     @Override
     public short getAsShort() {
-        return referenceValue().getAsShort();
+        return refs.getAsShort();
     }
 
     @Override
     public byte getAsByte() {
-        return referenceValue().getAsByte();
+        return refs.getAsByte();
     }
 
     @Override
     public double getAsDouble() {
-        return referenceValue().getAsDouble();
+        return refs.getAsDouble();
     }
 
     @Override
     public float getAsFloat() {
-        return referenceValue().getAsFloat();
+        return refs.getAsFloat();
     }
 
     @Override
     public Number getAsNumber() {
-        return referenceValue().getAsNumber();
+        return refs.getAsNumber();
     }
 
 }

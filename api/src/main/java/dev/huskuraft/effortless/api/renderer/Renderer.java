@@ -104,7 +104,8 @@ public abstract class Renderer {
     }
 
     public final void rotate(Quaternionf quaternion, float x, float y, float z) {
-        this.matrixStack().rotate(quaternion, x, y, z);
+        // TODO: 20/5/24
+//        this.matrixStack().rotate(quaternion, x, y, z);
     }
 
     //    public final void rotate(Quaternionf quaternion, float x, float y, float z) {

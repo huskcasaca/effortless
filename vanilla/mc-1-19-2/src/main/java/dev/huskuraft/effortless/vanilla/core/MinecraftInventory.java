@@ -6,51 +6,51 @@ import java.util.stream.Collectors;
 import dev.huskuraft.effortless.api.core.Inventory;
 import dev.huskuraft.effortless.api.core.ItemStack;
 
-public record MinecraftInventory(net.minecraft.world.entity.player.Inventory referenceValue) implements Inventory {
+public record MinecraftInventory(net.minecraft.world.entity.player.Inventory refs) implements Inventory {
 
     @Override
     public List<ItemStack> getItems() {
-        return referenceValue().items.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
+        return refs.items.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
     }
 
     @Override
     public List<ItemStack> getArmorItems() {
-        return referenceValue().armor.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
+        return refs.armor.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
     }
 
     @Override
     public List<ItemStack> getOffhandItems() {
-        return referenceValue().offhand.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
+        return refs.offhand.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
     }
 
     @Override
     public void setItem(int index, ItemStack itemStack) {
-        referenceValue().items.set(index, itemStack.reference());
+        refs.items.set(index, itemStack.reference());
     }
 
     @Override
     public void setArmorItem(int index, ItemStack itemStack) {
-        referenceValue().armor.set(index, itemStack.reference());
+        refs.armor.set(index, itemStack.reference());
     }
 
     @Override
     public void setOffhandItem(int index, ItemStack itemStack) {
-        referenceValue().offhand.set(index, itemStack.reference());
+        refs.offhand.set(index, itemStack.reference());
     }
 
     @Override
     public boolean addItem(ItemStack itemStack) {
-        return referenceValue().add(itemStack.reference());
+        return refs.add(itemStack.reference());
     }
 
     @Override
     public int getSelected() {
-        return referenceValue().selected;
+        return refs.selected;
     }
 
     @Override
     public int getHotbarSize() {
-        return referenceValue().getSelectionSize();
+        return refs.getSelectionSize();
     }
 
 }

@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.core.WorldBorder;
 import net.minecraft.world.level.Level;
 
-public record MinecraftWorld(Level referenceValue) implements World {
+public record MinecraftWorld(Level refs) implements World {
 
     public static World ofNullable(Level reference) {
         return reference == null ? null : new MinecraftWorld(reference);
@@ -21,51 +21,51 @@ public record MinecraftWorld(Level referenceValue) implements World {
 
     @Override
     public Player getPlayer(UUID uuid) {
-        return MinecraftPlayer.ofNullable(referenceValue().getPlayerByUUID(uuid));
+        return MinecraftPlayer.ofNullable(refs.getPlayerByUUID(uuid));
     }
 
     @Override
     public BlockState getBlockState(BlockPosition blockPosition) {
-        return MinecraftBlockState.ofNullable(referenceValue().getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
+        return MinecraftBlockState.ofNullable(refs.getBlockState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
     }
 
     @Override
     public FluidState getFluidState(BlockPosition blockPosition) {
-        return MinecraftFluidState.ofNullable(referenceValue().getFluidState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
+        return MinecraftFluidState.ofNullable(refs.getFluidState(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
     }
 
     @Override
     public BlockEntity getBlockEntity(BlockPosition blockPosition) {
-        return MinecraftBlockEntity.ofNullable(referenceValue().getBlockEntity(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
+        return MinecraftBlockEntity.ofNullable(refs.getBlockEntity(MinecraftConvertor.toPlatformBlockPosition(blockPosition)));
     }
 
     @Override
     public boolean setBlock(BlockPosition blockPosition, BlockState blockState, int flags, int recursionLeft) {
-        return referenceValue().setBlock(MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), flags, recursionLeft);
+        return refs.setBlock(MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), flags, recursionLeft);
     }
 
     @Override
     public boolean isClient() {
-        return referenceValue().isClientSide();
+        return refs.isClientSide();
     }
 
     @Override
     public ResourceKey<World> getDimensionId() {
-        return new MinecraftResourceKey<>(referenceValue().dimension());
+        return new MinecraftResourceKey<>(refs.dimension());
     }
 
     @Override
     public DimensionType getDimensionType() {
-        return new MinecraftDimensionType(referenceValue().dimensionType());
+        return new MinecraftDimensionType(refs.dimensionType());
     }
 
     @Override
     public WorldBorder getWorldBorder() {
-        return new MinecraftWorldBorder(referenceValue().getWorldBorder());
+        return new MinecraftWorldBorder(refs.getWorldBorder());
     }
 
     @Override
     public boolean removeBlock(BlockPosition blockPosition, boolean moving) {
-        return referenceValue().removeBlock(MinecraftConvertor.toPlatformBlockPosition(blockPosition), moving);
+        return refs.removeBlock(MinecraftConvertor.toPlatformBlockPosition(blockPosition), moving);
     }
 }

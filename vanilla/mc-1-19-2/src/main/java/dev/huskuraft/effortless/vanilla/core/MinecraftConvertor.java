@@ -24,7 +24,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class MinecraftConvertor {
+public final class MinecraftConvertor {
 
     public static Quaternionf fromPlatformQuaternion(Quaternion quaternion) {
         return new Quaternionf(quaternion.i(), quaternion.j(), quaternion.k(), quaternion.r());

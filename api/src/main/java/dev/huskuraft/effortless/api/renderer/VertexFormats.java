@@ -18,8 +18,8 @@ public enum VertexFormats implements VertexFormat {
     ;
 
     @Override
-    public Object referenceValue() {
-        return RenderStateFactory.getInstance().getVertexFormat(this).referenceValue();
+    public Object refs() {
+        return RenderStateFactory.getInstance().getVertexFormat(this).refs();
     }
 
     public enum Modes implements Mode {
@@ -34,8 +34,8 @@ public enum VertexFormats implements VertexFormat {
         ;
 
         @Override
-        public Object referenceValue() {
-            return RenderStateFactory.getInstance().getVertexFormatMode(this).referenceValue();
+        public Object refs() {
+            return RenderStateFactory.getInstance().getVertexFormatMode(this).refs();
         }
     }
 }

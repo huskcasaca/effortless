@@ -5,29 +5,20 @@ import dev.huskuraft.effortless.api.renderer.Shader;
 import dev.huskuraft.effortless.api.renderer.Uniform;
 import dev.huskuraft.effortless.api.renderer.VertexFormat;
 
-public class MinecraftShader implements Shader {
-
-    private final net.minecraft.client.renderer.ShaderInstance reference;
-
-    public MinecraftShader(net.minecraft.client.renderer.ShaderInstance reference) {
-        this.reference = reference;
-    }
-
-    @Override
-    public net.minecraft.client.renderer.ShaderInstance referenceValue() {
-        return reference;
-    }
+public record MinecraftShader(
+        net.minecraft.client.renderer.ShaderInstance refs
+) implements Shader {
 
     @Override
     public ResourceLocation getResource() {
-        return ResourceLocation.vanilla(reference.getName());
+        return ResourceLocation.vanilla(refs.getName());
     }
 
     public VertexFormat getVertexFormat() {
-        return () -> reference.getVertexFormat();
+        return () -> refs.getVertexFormat();
     }
 
     public Uniform getUniform(String param) {
-        return new MinecraftUniform(reference.getUniform(param));
+        return new MinecraftUniform(refs.getUniform(param));
     }
 }

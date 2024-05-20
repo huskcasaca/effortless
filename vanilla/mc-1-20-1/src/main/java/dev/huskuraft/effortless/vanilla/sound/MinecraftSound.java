@@ -6,11 +6,11 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 public record MinecraftSound(
-    SoundEvent referenceValue
+    SoundEvent refs
 ) implements Sound {
 
     @Override
     public ResourceLocation getId() {
-        return new MinecraftResourceLocation(referenceValue().getLocation());
+        return new MinecraftResourceLocation(refs.getLocation());
     }
 }

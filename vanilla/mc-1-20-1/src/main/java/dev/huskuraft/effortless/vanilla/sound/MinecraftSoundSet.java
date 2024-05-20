@@ -5,42 +5,42 @@ import dev.huskuraft.effortless.api.sound.SoundSet;
 import net.minecraft.world.level.block.SoundType;
 
 public record MinecraftSoundSet(
-        SoundType referenceValue
+        SoundType refs
 ) implements SoundSet {
 
 
     @Override
     public float volume() {
-        return referenceValue().getVolume();
+        return refs.getVolume();
     }
 
     @Override
     public float pitch() {
-        return referenceValue().getPitch();
+        return refs.getPitch();
     }
 
     @Override
     public Sound breakSound() {
-        return new MinecraftSound(referenceValue().getBreakSound());
+        return new MinecraftSound(refs.getBreakSound());
     }
 
     @Override
     public Sound stepSound() {
-        return new MinecraftSound(referenceValue().getStepSound());
+        return new MinecraftSound(refs.getStepSound());
     }
 
     @Override
     public Sound placeSound() {
-        return new MinecraftSound(referenceValue().getPlaceSound());
+        return new MinecraftSound(refs.getPlaceSound());
     }
 
     @Override
     public Sound hitSound() {
-        return new MinecraftSound(referenceValue().getHitSound());
+        return new MinecraftSound(refs.getHitSound());
     }
 
     @Override
     public Sound fallSound() {
-        return new MinecraftSound(referenceValue().getFallSound());
+        return new MinecraftSound(refs.getFallSound());
     }
 }

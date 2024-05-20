@@ -15,7 +15,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.context.UseOnContext;
 
-public record MinecraftItem(net.minecraft.world.item.Item referenceValue) implements Item {
+public record MinecraftItem(net.minecraft.world.item.Item refs) implements Item {
 
     public static Item ofNullable(net.minecraft.world.item.Item reference) {
         if (reference == null) return null;
@@ -26,43 +26,43 @@ public record MinecraftItem(net.minecraft.world.item.Item referenceValue) implem
 
     @Override
     public ItemStack getDefaultStack() {
-        return new MinecraftItemStack(referenceValue().getDefaultInstance());
+        return new MinecraftItemStack(refs.getDefaultInstance());
     }
 
     @Override
     public Block getBlock() {
-        return new MinecraftBlock(net.minecraft.world.level.block.Block.byItem(referenceValue()));
+        return new MinecraftBlock(net.minecraft.world.level.block.Block.byItem(refs));
     }
 
     @Override
     public ResourceLocation getId() {
-        var minecraftResourceLocation = BuiltInRegistries.ITEM.getKey(referenceValue());
+        var minecraftResourceLocation = BuiltInRegistries.ITEM.getKey(refs);
         return new MinecraftResourceLocation(minecraftResourceLocation);
     }
 
     @Override
     public InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction) {
-        return MinecraftConvertor.toPlatformInteractionResult(referenceValue().useOn(new UseOnContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction))));
+        return MinecraftConvertor.toPlatformInteractionResult(refs.useOn(new UseOnContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction))));
     }
 
     @Override
     public int getMaxStackSize() {
-        return referenceValue().getMaxStackSize();
+        return refs.getMaxStackSize();
     }
 
     @Override
     public boolean isCorrectToolForDrops(BlockState blockState) {
-        return referenceValue().isCorrectToolForDrops(blockState.reference());
+        return refs.isCorrectToolForDrops(blockState.reference());
     }
 
     @Override
     public int getMaxDamage() {
-        return referenceValue().getMaxDamage();
+        return refs.getMaxDamage();
     }
 
     @Override
     public boolean mineBlock(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
-        return referenceValue().mineBlock(itemStack.reference(), world.reference(), blockState.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), player.reference());
+        return refs.mineBlock(itemStack.reference(), world.reference(), blockState.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), player.reference());
     }
 
 }

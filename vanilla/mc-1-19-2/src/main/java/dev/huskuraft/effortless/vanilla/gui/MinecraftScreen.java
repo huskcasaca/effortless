@@ -9,12 +9,12 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftText;
 
 public record MinecraftScreen(
-    net.minecraft.client.gui.screens.Screen referenceValue
+    net.minecraft.client.gui.screens.Screen refs
 ) implements Screen {
 
     @Override
     public Text getScreenTitle() {
-        return MinecraftText.ofNullable(referenceValue().getTitle());
+        return MinecraftText.ofNullable(refs.getTitle());
     }
 
     @Override
@@ -34,7 +34,7 @@ public record MinecraftScreen(
 
     @Override
     public boolean isPauseGame() {
-        return referenceValue().isPauseScreen();
+        return refs.isPauseScreen();
     }
 
     @Override

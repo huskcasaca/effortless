@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.platform.PlatformReference;
 
 public interface Resource extends PlatformReference {
 
-    ResourceLocation location();
+//    ResourceLocation location();
 
     ResourceMetadata metadata() throws IOException;
 

@@ -3,57 +3,38 @@ package dev.huskuraft.effortless.vanilla.input;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import net.minecraft.client.KeyMapping;
 
-public class MinecraftKeyBinding implements KeyBinding {
-
-    private final KeyMapping reference;
-
-    public MinecraftKeyBinding(KeyMapping reference) {
-        this.reference = reference;
-    }
-
-    @Override
-    public KeyMapping referenceValue() {
-        return reference;
-    }
+public record MinecraftKeyBinding(
+        KeyMapping refs
+) implements KeyBinding {
 
     @Override
     public String getName() {
-        return reference.getName();
+        return refs.getName();
     }
 
     @Override
     public String getCategory() {
-        return reference.getCategory();
+        return refs.getCategory();
     }
 
     @Override
     public int getDefaultKey() {
-        return reference.getDefaultKey().getValue();
+        return refs.getDefaultKey().getValue();
     }
 
     @Override
     public boolean consumeClick() {
-        return reference.consumeClick();
+        return refs.consumeClick();
     }
 
     @Override
     public boolean isDown() {
-        return reference.isDown();
+        return refs.isDown();
     }
 
     @Override
     public int getBoundCode() {
-        return reference.key.getValue();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftKeyBinding keyBinding && reference.equals(keyBinding.reference);
-    }
-
-    @Override
-    public int hashCode() {
-        return reference.hashCode();
+        return refs.key.getValue();
     }
 
 }

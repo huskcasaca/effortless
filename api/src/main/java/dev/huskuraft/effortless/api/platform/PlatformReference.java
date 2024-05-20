@@ -8,29 +8,37 @@ public interface PlatformReference {
         return null;
     }
 
-    Object referenceValue();
+    Object refs();
 
     default <T> T reference() {
-        return (T) referenceValue();
+        return (T) refs();
     }
 
-    default PlatformVersion isAvailableSince() {
-        return PlatformVersion.UNAVAILABLE;
-    }
-
-    default PlatformVersion isAvailableUntil() {
-        return PlatformVersion.UNAVAILABLE;
-    }
-
-    default boolean isAvailableOn(PlatformVersion version) {
-        return true;
-    }
+//    default PlatformVersion isAvailableSince() {
+//        return PlatformVersion.UNAVAILABLE;
+//    }
+//
+//    default PlatformVersion isAvailableUntil() {
+//        return PlatformVersion.UNAVAILABLE;
+//    }
+//
+//    default boolean isAvailableOn(PlatformVersion version) {
+//        return true;
+//    }
 
     default boolean isAvailable() {
-        return referenceValue() != null;
+        return refs() != null;
     }
 
     default <T extends PlatformReference> T ifUnavailable(Supplier<T> supplier) {
         return isAvailable() ? (T) this : supplier.get();
+    }
+
+    class PlatformUnsupportedException extends UnsupportedOperationException {
+
+        public PlatformUnsupportedException(String message) {
+            super(message);
+        }
+
     }
 }

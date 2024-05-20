@@ -20,35 +20,30 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.server.level.ServerPlayer;
 
-public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference) implements Player {
+public record MinecraftPlayer(net.minecraft.world.entity.player.Player refs) implements Player {
 
     public static Player ofNullable(net.minecraft.world.entity.player.Player reference) {
         return reference == null ? null : new MinecraftPlayer(reference);
     }
 
     @Override
-    public net.minecraft.world.entity.player.Player referenceValue() {
-        return reference;
-    }
-
-    @Override
     public UUID getId() {
-        return reference.getUUID();
+        return refs.getUUID();
     }
 
     @Override
     public PlayerProfile getProfile() {
-        return new MinecraftPlayerProfile(reference.getGameProfile());
+        return new MinecraftPlayerProfile(refs.getGameProfile());
     }
 
     @Override
     public Inventory getInventory() {
-        return new MinecraftInventory(reference.getInventory());
+        return new MinecraftInventory(refs.getInventory());
     }
 
     @Override
     public boolean isDeadOrDying() {
-        return reference.isDeadOrDying();
+        return refs.isDeadOrDying();
     }
 
     @Override
@@ -58,58 +53,58 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
 
     @Override
     public Server getServer() {
-        return new MinecraftServer(reference.getServer());
+        return new MinecraftServer(refs.getServer());
     }
 
     @Override
     public World getWorld() {
-        return MinecraftWorld.ofNullable(reference.getLevel());
+        return MinecraftWorld.ofNullable(refs.getLevel());
     }
 
     @Override
     public Text getDisplayName() {
-        return new MinecraftText(reference.getDisplayName());
+        return new MinecraftText(refs.getDisplayName());
     }
 
     @Override
     public Vector3d getPosition() {
-        return MinecraftConvertor.fromPlatformVector3d(reference.position());
+        return MinecraftConvertor.fromPlatformVector3d(refs.position());
     }
 
     @Override
     public Vector3d getEyePosition() {
-        return MinecraftConvertor.fromPlatformVector3d(reference.getEyePosition());
+        return MinecraftConvertor.fromPlatformVector3d(refs.getEyePosition());
     }
 
     @Override
     public Vector3d getEyeDirection() {
-        return MinecraftConvertor.fromPlatformVector3d(reference.getLookAngle());
+        return MinecraftConvertor.fromPlatformVector3d(refs.getLookAngle());
     }
 
     @Override
     public void drop(ItemStack itemStack, boolean dropAround, boolean includeThrowerName) {
-        reference.drop(itemStack.reference(), dropAround, includeThrowerName);
+        refs.drop(itemStack.reference(), dropAround, includeThrowerName);
     }
 
     @Override
     public void sendMessage(Text message) {
-        reference.sendSystemMessage(message.reference());
+        refs.sendSystemMessage(message.reference());
 //        getRef().displayClientMessage(message, true);
     }
 
     @Override
     public void sendClientMessage(Text message, boolean actionBar) {
-        reference.displayClientMessage(message.reference(), actionBar);
+        refs.displayClientMessage(message.reference(), actionBar);
     }
 
     @Override
     public void swing(InteractionHand hand) {
-        reference.swing(MinecraftConvertor.toPlatformInteractionHand(hand));
+        refs.swing(MinecraftConvertor.toPlatformInteractionHand(hand));
     }
 
     @Override
     public GameMode getGameMode() {
-        if (reference instanceof ServerPlayer serverPlayer) {
+        if (refs instanceof ServerPlayer serverPlayer) {
             return switch (serverPlayer.gameMode.getGameModeForPlayer()) {
                 case SURVIVAL -> GameMode.SURVIVAL;
                 case CREATIVE -> GameMode.CREATIVE;
@@ -117,7 +112,7 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
                 case SPECTATOR -> GameMode.SPECTATOR;
             };
         }
-        if (reference instanceof AbstractClientPlayer localPlayer) {
+        if (refs instanceof AbstractClientPlayer localPlayer) {
             return switch (localPlayer.getPlayerInfo().getGameMode()) {
                 case SURVIVAL -> GameMode.SURVIVAL;
                 case CREATIVE -> GameMode.CREATIVE;
@@ -130,17 +125,17 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player reference
 
     @Override
     public BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids) {
-        return (BlockInteraction) MinecraftConvertor.fromPlatformInteraction(reference.pick(maxDistance, deltaTick, includeFluids));
+        return (BlockInteraction) MinecraftConvertor.fromPlatformInteraction(refs.pick(maxDistance, deltaTick, includeFluids));
     }
 
     @Override
     public void awardStat(Stat<?> stat, int increment) {
-        referenceValue().awardStat((net.minecraft.stats.Stat<?>) stat.reference(), increment);
+        refs.awardStat((net.minecraft.stats.Stat<?>) stat.reference(), increment);
     }
 
     @Override
     public void resetStat(Stat<?> stat) {
-        referenceValue().resetStat(stat.reference());
+        refs.resetStat(stat.reference());
     }
 
 }

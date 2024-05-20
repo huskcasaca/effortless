@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.PlayerInfo;
-import dev.huskuraft.effortless.api.core.Resource;
-import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Screen;
 import dev.huskuraft.effortless.api.gui.Typeface;
@@ -20,7 +18,6 @@ import dev.huskuraft.effortless.api.sound.SoundManager;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayerInfo;
-import dev.huskuraft.effortless.vanilla.core.MinecraftResource;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
 import dev.huskuraft.effortless.vanilla.gui.MinecraftProxyScreen;
 import dev.huskuraft.effortless.vanilla.gui.MinecraftScreen;
@@ -31,73 +28,64 @@ import dev.huskuraft.effortless.vanilla.sound.MinecraftParticleEngine;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSoundManager;
 import net.minecraft.client.Minecraft;
 
-public class MinecraftClient implements Client {
-
-    private final Minecraft reference;
-
-    public MinecraftClient(Minecraft reference) {
-        this.reference = reference;
-    }
-
-    @Override
-    public Minecraft referenceValue() {
-        return reference;
-    }
+public record MinecraftClient(
+        Minecraft refs
+) implements Client {
 
     @Override
     public Window getWindow() {
-        return new MinecraftWindow(reference.getWindow());
+        return new MinecraftWindow(refs.getWindow());
     }
 
     @Override
     public Camera getCamera() {
-        return new MinecraftCamera(reference.gameRenderer.getMainCamera());
+        return new MinecraftCamera(refs.gameRenderer.getMainCamera());
     }
 
     @Override
     public Screen getPanel() {
-        if (reference.screen == null) {
+        if (refs.screen == null) {
             return null;
         }
-        if (reference.screen instanceof MinecraftProxyScreen proxyScreen) {
+        if (refs.screen instanceof MinecraftProxyScreen proxyScreen) {
             return proxyScreen.getProxy();
         }
-        return new MinecraftScreen(reference.screen);
+        return new MinecraftScreen(refs.screen);
     }
 
     @Override
     public void setPanel(Screen screen) {
         if (screen == null) {
-            reference.setScreen(null);
+            refs.setScreen(null);
             return;
         }
         if (screen instanceof MinecraftScreen minecraftScreen) {
-            reference.setScreen(minecraftScreen.referenceValue());
+            refs.setScreen(minecraftScreen.refs());
             return;
         }
-        reference.setScreen(new MinecraftProxyScreen(screen));
+        refs.setScreen(new MinecraftProxyScreen(screen));
 
     }
 
     @Override
     public Player getPlayer() {
-        return MinecraftPlayer.ofNullable(reference.player);
+        return MinecraftPlayer.ofNullable(refs.player);
     }
 
     @Override
     public List<PlayerInfo> getOnlinePlayers() {
-        if (reference.getConnection() == null) return List.of();
-        return reference.getConnection().getOnlinePlayers().stream().map(MinecraftPlayerInfo::new).collect(Collectors.toList());
+        if (refs.getConnection() == null) return List.of();
+        return refs.getConnection().getOnlinePlayers().stream().map(MinecraftPlayerInfo::new).collect(Collectors.toList());
     }
 
     @Override
     public Typeface getTypeface() {
-        return new MinecraftTypeface(reference.font);
+        return new MinecraftTypeface(refs.font);
     }
 
     @Override
     public World getWorld() {
-        return MinecraftWorld.ofNullable(reference.level);
+        return MinecraftWorld.ofNullable(refs.level);
     }
 
     @Override
@@ -107,62 +95,46 @@ public class MinecraftClient implements Client {
 
     @Override
     public Interaction getLastInteraction() {
-        return MinecraftConvertor.fromPlatformInteraction(reference.hitResult);
+        return MinecraftConvertor.fromPlatformInteraction(refs.hitResult);
     }
 
     @Override
     public String getClipboard() {
-        return reference.keyboardHandler.getClipboard();
+        return refs.keyboardHandler.getClipboard();
     }
 
     @Override
     public void setClipboard(String content) {
-        reference.keyboardHandler.setClipboard(content);
+        refs.keyboardHandler.setClipboard(content);
     }
 
     @Override
     public SoundManager getSoundManager() {
-        return new MinecraftSoundManager(reference.getSoundManager());
-    }
-
-    @Override
-    public Resource getResource(ResourceLocation location) {
-        var resource = reference.getResourceManager().getResource(location.reference());
-        return resource.map(value -> new MinecraftResource(value, location.reference())).orElse(null);
+        return new MinecraftSoundManager(refs.getSoundManager());
     }
 
     @Override
     public void sendChat(String chat) {
-        reference.getConnection().sendChat(chat);
+        refs.getConnection().sendChat(chat);
     }
 
     @Override
     public void sendCommand(String command) {
-        reference.getConnection().sendCommand(command);
+        refs.getConnection().sendCommand(command);
     }
 
     @Override
     public void execute(Runnable runnable) {
-        reference.execute(runnable);
+        refs.execute(runnable);
     }
 
     @Override
     public Options getOptions() {
-        return new MinecraftOptions(reference.options);
+        return new MinecraftOptions(refs.options);
     }
 
     @Override
     public ParticleEngine getParticleEngine() {
-        return new MinecraftParticleEngine(reference.particleEngine);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftClient client && reference.equals(client.reference);
-    }
-
-    @Override
-    public int hashCode() {
-        return reference.hashCode();
+        return new MinecraftParticleEngine(refs.particleEngine);
     }
 }

@@ -17,8 +17,8 @@ class LazyShader implements Shader {
     }
 
     @Override
-    public Object referenceValue() {
-        return reference.referenceValue();
+    public Object refs() {
+        return reference.refs();
     }
 
     @Override

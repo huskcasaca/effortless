@@ -22,7 +22,7 @@ import net.minecraft.nbt.ShortTag;
 import net.minecraft.nbt.StringTag;
 
 @AutoService(TagFactory.class)
-public record MinecraftTagFactory() implements TagFactory {
+public final class MinecraftTagFactory implements TagFactory {
 
     @Override
     public TagRecord newRecord() {

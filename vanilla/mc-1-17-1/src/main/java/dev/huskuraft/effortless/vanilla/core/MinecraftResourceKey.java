@@ -2,20 +2,10 @@ package dev.huskuraft.effortless.vanilla.core;
 
 import dev.huskuraft.effortless.api.core.ResourceKey;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
-import dev.huskuraft.effortless.api.platform.PlatformUnsupportedException;
 
-public class MinecraftResourceKey<T> implements ResourceKey<T> {
-
-    private final net.minecraft.resources.ResourceKey<?> reference;
-
-    public MinecraftResourceKey(net.minecraft.resources.ResourceKey<?> reference) {
-        this.reference = reference;
-    }
-
-    @Override
-    public Object referenceValue() {
-        return reference;
-    }
+public record MinecraftResourceKey<T>(
+        net.minecraft.resources.ResourceKey<?> refs
+) implements ResourceKey<T> {
 
     @Override
     public ResourceLocation registry() {
@@ -24,21 +14,7 @@ public class MinecraftResourceKey<T> implements ResourceKey<T> {
 
     @Override
     public ResourceLocation location() {
-        return new MinecraftResourceLocation(reference.location());
+        return new MinecraftResourceLocation(refs.location());
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof MinecraftResourceKey<?> obj1 && reference.equals(obj1.reference);
-    }
-
-    @Override
-    public int hashCode() {
-        return reference.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return reference.toString();
-    }
 }

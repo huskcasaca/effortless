@@ -23,7 +23,7 @@ import dev.huskuraft.effortless.api.sound.SoundSource;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 
 @AutoService(SoundFactory.class)
-public class MinecraftSoundFactory implements SoundFactory {
+public final class MinecraftSoundFactory implements SoundFactory {
 
     @Override
     public SoundInstance createSimpleSoundInstance(ResourceLocation location, SoundSource source, float volume, float pitch, boolean looping, int delay, SoundInstance.Attenuation attenuation, double x, double y, double z, boolean relative) {

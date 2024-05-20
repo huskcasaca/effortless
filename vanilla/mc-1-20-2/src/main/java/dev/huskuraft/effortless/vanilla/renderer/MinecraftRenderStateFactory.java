@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 
 @AutoService(RenderStateFactory.class)
-public class MinecraftRenderStateFactory implements RenderStateFactory {
+public final class MinecraftRenderStateFactory implements RenderStateFactory {
 
     @Override
     public RenderLayer createCompositeRenderLayer(String name,

@@ -7,7 +7,7 @@ import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 
-public record MinecraftTagElement(Tag referenceValue) implements TagElement {
+public record MinecraftTagElement(Tag refs) implements TagElement {
 
     public static TagElement ofNullable(Tag tag) {
         if (tag == null) return null;
@@ -21,11 +21,11 @@ public record MinecraftTagElement(Tag referenceValue) implements TagElement {
 
     @Override
     public byte getId() {
-        return referenceValue().getId();
+        return refs.getId();
     }
 
     @Override
     public String getAsString() {
-        return referenceValue().getAsString();
+        return refs.getAsString();
     }
 }

@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.lang.Lang;
 import net.minecraft.locale.Language;
 
 @AutoService(Lang.class)
-public class MinecraftLang implements Lang {
+public final class MinecraftLang implements Lang {
 
     @Override
     public String getOrDefault(String id) {

@@ -3,37 +3,37 @@ package dev.huskuraft.effortless.vanilla.core;
 import dev.huskuraft.effortless.api.core.DimensionType;
 
 public record MinecraftDimensionType(
-        net.minecraft.world.level.dimension.DimensionType referenceValue
+        net.minecraft.world.level.dimension.DimensionType refs
 ) implements DimensionType {
 
     @Override
     public boolean hasSkyLight() {
-        return referenceValue().hasSkyLight();
+        return refs.hasSkyLight();
     }
 
     @Override
     public boolean hasCeiling() {
-        return referenceValue().hasCeiling();
+        return refs.hasCeiling();
     }
 
     @Override
     public double coordinateScale() {
-        return referenceValue().coordinateScale();
+        return refs.coordinateScale();
     }
 
     @Override
     public int minY() {
-        return referenceValue().minY();
+        return refs.minY();
     }
 
     @Override
     public int height() {
-        return referenceValue().height();
+        return refs.height();
     }
 
     @Override
     public int logicalHeight() {
-        return referenceValue().logicalHeight();
+        return refs.logicalHeight();
     }
 
 }

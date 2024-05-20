@@ -12,27 +12,27 @@ import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
 import net.minecraft.world.item.TooltipFlag;
 
 public record MinecraftItemStack(
-        net.minecraft.world.item.ItemStack referenceValue
+        net.minecraft.world.item.ItemStack refs
 ) implements ItemStack {
 
     @Override
     public Item getItem() {
-        return MinecraftItem.ofNullable(referenceValue().getItem());
+        return MinecraftItem.ofNullable(refs.getItem());
     }
 
     @Override
     public int getCount() {
-        return referenceValue().getCount();
+        return refs.getCount();
     }
 
     @Override
     public void setCount(int count) {
-        referenceValue().setCount(count);
+        refs.setCount(count);
     }
 
     @Override
     public Text getHoverName() {
-        return new MinecraftText(referenceValue().getHoverName());
+        return new MinecraftText(refs.getHoverName());
     }
 
     @Override
@@ -43,27 +43,27 @@ public record MinecraftItemStack(
             case ADVANCED -> TooltipFlag.ADVANCED;
             case ADVANCED_CREATIVE -> TooltipFlag.ADVANCED.asCreative();
         };
-        return referenceValue().getTooltipLines(player.reference(), minecraftFlag).stream().map(text -> new MinecraftText(text)).collect(Collectors.toList());
+        return refs.getTooltipLines(player.reference(), minecraftFlag).stream().map(text -> new MinecraftText(text)).collect(Collectors.toList());
     }
 
     @Override
     public ItemStack copy() {
-        return new MinecraftItemStack(referenceValue().copy());
+        return new MinecraftItemStack(refs.copy());
     }
 
     @Override
     public TagRecord getTag() {
-        return MinecraftTagRecord.ofNullable(referenceValue().getTag());
+        return MinecraftTagRecord.ofNullable(refs.getTag());
     }
 
     @Override
     public void setTag(TagRecord tagRecord) {
-        referenceValue().setTag(tagRecord.reference());
+        refs.setTag(tagRecord.reference());
     }
 
     @Override
     public boolean damageBy(Player player, int damage) {
-        return referenceValue().hurt(damage, player.<net.minecraft.world.entity.player.Player>reference().getRandom(), null);
+        return refs.hurt(damage, player.<net.minecraft.world.entity.player.Player>reference().getRandom(), null);
     }
 
 }
