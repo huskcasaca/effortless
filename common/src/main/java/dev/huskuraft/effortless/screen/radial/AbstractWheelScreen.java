@@ -224,6 +224,13 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     protected abstract Key getAssignedKey();
+    @Override
+    public void init(int width, int height) {
+        super.init(width, height);
+        if (detached) {
+            super.detach();
+        }
+    }
 
     @Override
     public boolean isPauseGame() {

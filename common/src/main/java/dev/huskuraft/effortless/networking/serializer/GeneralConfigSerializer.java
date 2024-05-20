@@ -14,6 +14,7 @@ public class GeneralConfigSerializer implements NetByteBufSerializer<GeneralConf
                 byteBuf.readNullable(NetByteBuf::readBoolean),
                 byteBuf.readNullable(NetByteBuf::readBoolean),
                 byteBuf.readNullable(NetByteBuf::readBoolean),
+                byteBuf.readNullable(NetByteBuf::readBoolean),
                 byteBuf.readNullable(NetByteBuf::readVarInt),
                 byteBuf.readNullable(NetByteBuf::readVarInt),
                 byteBuf.readNullable(NetByteBuf::readVarInt),
@@ -28,6 +29,7 @@ public class GeneralConfigSerializer implements NetByteBufSerializer<GeneralConf
         byteBuf.writeNullable(generalConfig.allowBreakBlocks(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(generalConfig.allowPlaceBlocks(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(generalConfig.allowInteractBlocks(), NetByteBuf::writeBoolean);
+        byteBuf.writeNullable(generalConfig.useCorrectTools(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(generalConfig.maxReachDistance(), NetByteBuf::writeVarInt);
         byteBuf.writeNullable(generalConfig.maxBlockBreakVolume(), NetByteBuf::writeVarInt);
         byteBuf.writeNullable(generalConfig.maxBlockPlaceVolume(), NetByteBuf::writeVarInt);

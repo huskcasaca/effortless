@@ -37,10 +37,10 @@ public record Context(
 ) {
 
     public boolean useCorrectTool() {
-        return true;
+        return customParams().generalConfig().useCorrectTools();
     }
 
-    public int reservedToolDurability() {
+    public int getReservedToolDurability() {
         return 1;
     }
 

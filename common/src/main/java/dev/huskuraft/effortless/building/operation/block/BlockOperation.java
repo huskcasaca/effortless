@@ -151,7 +151,7 @@ public abstract class BlockOperation extends TransformableOperation {
         }
 
         var blockState = world.getBlockState(getBlockPosition());
-        var reservedDurability = getContext().reservedToolDurability();
+        var reservedDurability = getContext().getReservedToolDurability();
         var useCorrectTool = !player.getGameMode().isCreative() && context.useCorrectTool();
         var correctTool = getStorage().contents().stream().filter(itemStack -> itemStack.getItem().isCorrectToolForDrops(blockState)).filter(itemStack -> !itemStack.isDamageableItem() || itemStack.getRemainingDamage() > reservedDurability).findFirst();
 
@@ -177,7 +177,7 @@ public abstract class BlockOperation extends TransformableOperation {
         }
         // build type
         var useCorrectTool = !player.getGameMode().isCreative() && context.useCorrectTool();
-        var reservedDurability = getContext().reservedToolDurability();
+        var reservedDurability = getContext().getReservedToolDurability();
         var correctTool = getStorage().contents().stream().filter(itemStack -> itemStack.getItem().isCorrectToolForDrops(blockState)).filter(itemStack -> !itemStack.isDamageableItem() || itemStack.getRemainingDamage() > reservedDurability).findFirst();
 
         if (world.isClient()) {
