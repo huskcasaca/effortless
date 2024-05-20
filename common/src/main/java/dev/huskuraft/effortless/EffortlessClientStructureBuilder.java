@@ -15,10 +15,12 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.Tuple2;
@@ -29,6 +31,7 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
+import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildResult;
@@ -64,6 +67,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     private final EffortlessClient entrance;
 
     private final Map<UUID, Context> contexts = new HashMap<>();
+    private final Map<UUID, Context> historyContexts = new HashMap<>();
     private final Map<UUID, OperationResultStack> undoRedoStacks = new HashMap<>();
     private final AtomicReference<ResourceLocation> lastClientPlayerLevel = new AtomicReference<>();
 
@@ -77,6 +81,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         return entrance;
     }
 
+    private Player getPlayer() {
+        return getEntrance().getClient().getPlayer();
+    }
+
     @Override
     public BuildResult updateContext(Player player, UnaryOperator<Context> updater) {
         var context = updater.apply(getContext(player));
@@ -88,10 +96,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
             showBuildContextResult(context.id(), 1024, player, context, result);
 
+            playSoundInBatch(player, result);
             showBuildTooltip(context.id(), 1024, player, previewContext, result);
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
             setContext(player, context.newInteraction());
-
 
             return BuildResult.COMPLETED;
         } else {
@@ -102,6 +110,90 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 return BuildResult.PARTIAL;
             }
         }
+    }
+
+    record TypedBlockSound(
+            SoundType soundType,
+            BlockState blockState
+    ) {
+        enum SoundType {
+            BREAK,
+            PLACE,
+            HIT,
+            FAIL,
+        }
+
+        static TypedBlockSound breakSound(BlockState blockState) {
+            return new TypedBlockSound(SoundType.BREAK, blockState);
+        }
+
+        static TypedBlockSound failSound(BlockState blockState) {
+            return new TypedBlockSound(SoundType.FAIL, blockState);
+        }
+
+        static TypedBlockSound placeSound(BlockState blockState) {
+            return new TypedBlockSound(SoundType.PLACE, blockState);
+        }
+
+        static TypedBlockSound hitSound(BlockState blockState) {
+            return new TypedBlockSound(SoundType.HIT, blockState);
+        }
+    }
+
+    private void playSoundInBatch(Player player, BatchOperationResult batchOperationResult) {
+        var soundMap = new HashMap<TypedBlockSound, Integer>();
+        for (var operationResult : batchOperationResult.getResult()) {
+            if (soundMap.size() >= 4) {
+                break;
+            }
+            if (operationResult instanceof BlockOperationResult blockOperationResult) {
+                switch (blockOperationResult.getOperation().getType()) {
+                    case BREAK -> {
+                        if (blockOperationResult.result().success()) {
+                            soundMap.compute(TypedBlockSound.breakSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                        } else {
+                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                        }
+                    }
+                    case PLACE -> {
+                        if (blockOperationResult.result().success()) {
+                            soundMap.compute(TypedBlockSound.placeSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                        } else {
+                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                        }
+                    }
+                    case INTERACT -> {
+                        if (blockOperationResult.result().success()) {
+                            soundMap.compute(TypedBlockSound.hitSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                        } else {
+                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                        }
+                    }
+                }
+            }
+        }
+        var context = batchOperationResult.getOperation().getContext();
+        var distance = player.getEyePosition().distance(context.buildInteractions().get(context.interactionsSize() - 1).getBlockPosition().getCenter());
+        var location = player.getEyePosition().add(player.getEyeDirection().mul(Math.min(distance, 14)));
+        for (var entry : soundMap.entrySet()) {
+            var typedSound = entry.getKey();
+            var count = entry.getValue();
+            for (int i = 0; i <= MathUtils.min(count / 2, 4); i++) {
+                var sound = switch (typedSound.soundType()) {
+                    case BREAK ->
+                            SoundInstance.createBlock(typedSound.blockState().getSoundSet().breakSound(), (typedSound.blockState().getSoundSet().volume() + 1.0F) / 2.0F, typedSound.blockState().getSoundSet().pitch() * 0.8F, location);
+                    case PLACE ->
+                            SoundInstance.createBlock(typedSound.blockState().getSoundSet().placeSound(), (typedSound.blockState().getSoundSet().volume() + 1.0F) / 2.0F, typedSound.blockState().getSoundSet().pitch() * 0.8F, location);
+                    case HIT ->
+                            SoundInstance.createBlock(typedSound.blockState().getSoundSet().hitSound(), (typedSound.blockState().getSoundSet().volume() + 1.0F) / 2.0F, typedSound.blockState().getSoundSet().pitch() * 0.8F, location);
+                    case FAIL ->
+                            SoundInstance.createBlock(typedSound.blockState().getSoundSet().hitSound(), (typedSound.blockState().getSoundSet().volume() + 1.0F) / 3.0F, typedSound.blockState().getSoundSet().pitch() * 0.5F, location);
+                };
+                getPlayer().getClient().getSoundManager().playDelayed(sound, i);
+            }
+
+        }
+
     }
 
     public void onSessionConfig(SessionConfig sessionConfig) {
@@ -123,6 +215,14 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     @Override
     public Context getContext(Player player) {
         return contexts.computeIfAbsent(player.getId(), uuid -> getDefaultContext(player));
+    }
+
+    private Context getHistoryContext(Player player) {
+        return historyContexts.computeIfAbsent(player.getId(), uuid -> getDefaultContext(player));
+    }
+
+    private Context putHistoryContext(Player player, Context context) {
+        return historyContexts.put(player.getId(), context);
     }
 
     @Override
@@ -201,9 +301,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
-        if (getEntrance().getConfigStorage().get().passiveMode() && !EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
-            return EventResult.pass();
-        }
+        if (getEntrance().getConfigStorage().get().passiveMode())
+            if (!EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
+                return EventResult.pass();
+            }
 
         var buildResult = updateContext(player, context -> {
 
@@ -280,10 +381,18 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void onContextReceived(Player player, Context context) {
+        if (context.isBuildType()) {
+            return; // handle on server
+        }
         var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
 
         showBuildContextResult(player.getId(), 1024, player, context, result);
         showBuildTooltip(context.id(), 1024, player, context, result);
+
+        if (context.isPreviewOnceType()) {
+            playSoundInBatch(player, result);
+        }
+
     }
 
     public void onHistoryResultReceived(Player player, BuildTooltip buildTooltip) {
@@ -330,12 +439,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (phase == ClientTick.Phase.END) {
             return;
         }
-        if (getEntrance().getClient() == null || getEntrance().getClient().getPlayer() == null) {
+        if (getEntrance().getClient() == null || getPlayer() == null) {
             resetAll();
             return;
         }
 
-        var player = getEntrance().getClient().getPlayer();
+        var player = getPlayer();
 
         if (!isSessionValid(player)) {
             resetContext(player);
@@ -369,7 +478,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         reloadContext(player);
 
-        Context context1 = getContextTraced(player);
+        var context1 = getContextTraced(player);
         var context = context1.withBuildType(BuildType.PREVIEW);
 
         if (context.getBoxVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
@@ -383,6 +492,15 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         if (!getContext(player).isIdle()) {
             showBuildMessage(player, context);
+        }
+
+        if (getHistoryContext(player).getBoxVolume() != context.getBoxVolume()) {
+            putHistoryContext(player, context);
+            var blockState = Items.AIR.item().getBlock().getDefaultBlockState();
+            var distance = player.getEyePosition().distance(context.buildInteractions().get(context.interactionsSize() - 1).getBlockPosition().getCenter());
+            var location = player.getEyePosition().add(player.getEyeDirection().mul(Math.min(distance, 3)));
+            var sound = SoundInstance.createBlock(blockState.getSoundSet().hitSound(), (blockState.getSoundSet().volume() + 1.0F) / 2.0F * 0.1F, blockState.getSoundSet().pitch() * 0.2F, location);
+            getEntrance().getClient().getSoundManager().play(sound);
         }
 
         getEntrance().getChannel().sendPacket(new PlayerBuildPacket(context));
@@ -412,7 +530,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildContextResult(UUID uuid, int priority, Player player, Context context, OperationResult result) {
-        if (player.getId() != getEntrance().getClient().getPlayer().getId()) {
+        if (player.getId() != getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuild()) {
                 return;
             }
@@ -458,12 +576,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildTooltip(UUID id, int priority, Player player, Context context, OperationResult result) {
-        var itemSummary =  Arrays.stream(ItemSummaryType.values()).collect(Collectors.toMap(Function.identity(), result::getProducts));
+        var itemSummary = Arrays.stream(ItemSummaryType.values()).collect(Collectors.toMap(Function.identity(), result::getProducts));
         showBuildTooltip(id, priority, player, context, itemSummary);
     }
 
     public void showBuildTooltip(UUID id, int priority, Player player, Context context, Map<ItemSummaryType, List<ItemStack>> itemSummary) {
-        if (player.getId() != getEntrance().getClient().getPlayer().getId()) {
+        if (player.getId() != getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuildTooltips()) {
                 return;
             }

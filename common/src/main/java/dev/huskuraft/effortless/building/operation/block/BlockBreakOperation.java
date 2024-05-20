@@ -6,7 +6,6 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -33,14 +32,10 @@ public class BlockBreakOperation extends BlockOperation {
         var outputs = Collections.singletonList(getItemStack());
         var result = destroyBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType()) {
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             if (result.success()) {
-                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().breakSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
-                getPlayer().getClient().getSoundManager().play(sound);
                 getPlayer().getClient().getParticleEngine().destroy(getBlockPosition(), getBlockState());
             } else {
-                var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 8.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.5F, getBlockPosition().getCenter());
-                getPlayer().getClient().getSoundManager().play(sound);
                 getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
 
             }
@@ -67,6 +62,11 @@ public class BlockBreakOperation extends BlockOperation {
     @Override
     public BlockBreakOperation refactor(RefactorContext source) {
         return this;
+    }
+
+    @Override
+    public Type getType() {
+        return Type.BREAK;
     }
 
     private ItemStack getItemStack() {

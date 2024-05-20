@@ -7,7 +7,6 @@ import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -41,9 +40,8 @@ public class BlockPlaceOperation extends BlockOperation {
         }
         var result = placeBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType() && result.success()) {
-            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
-            getPlayer().getClient().getSoundManager().play(sound);
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
+            getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
 
         return new BlockPlaceOperationResult(this, result, inputs, outputs);
@@ -69,4 +67,8 @@ public class BlockPlaceOperation extends BlockOperation {
         return new BlockPlaceOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()));
     }
 
+    @Override
+    public Type getType() {
+        return Type.PLACE;
+    }
 }
