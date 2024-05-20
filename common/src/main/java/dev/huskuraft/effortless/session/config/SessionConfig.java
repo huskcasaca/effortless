@@ -41,11 +41,14 @@ public record SessionConfig(
                 getPlayerOrGlobalEntry(id, GeneralConfig::allowUseMod),
                 getPlayerOrGlobalEntry(id, GeneralConfig::allowBreakBlocks),
                 getPlayerOrGlobalEntry(id, GeneralConfig::allowPlaceBlocks),
+                getPlayerOrGlobalEntry(id, GeneralConfig::allowInteractBlocks),
+                getPlayerOrGlobalEntry(id, GeneralConfig::useCorrectTools),
                 getPlayerOrGlobalEntry(id, GeneralConfig::maxReachDistance),
                 getPlayerOrGlobalEntry(id, GeneralConfig::maxBlockBreakVolume),
                 getPlayerOrGlobalEntry(id, GeneralConfig::maxBlockPlaceVolume),
                 getPlayerOrGlobalEntry(id, GeneralConfig::whitelistedItems),
-                getPlayerOrGlobalEntry(id, GeneralConfig::blacklistedItems));
+                getPlayerOrGlobalEntry(id, GeneralConfig::blacklistedItems)
+        );
     }
 
     public GeneralConfig getPlayerConfigOrNull(Player player) {
@@ -58,6 +61,8 @@ public record SessionConfig(
                 getPlayerOrNullEntry(id, GeneralConfig::allowUseMod),
                 getPlayerOrNullEntry(id, GeneralConfig::allowBreakBlocks),
                 getPlayerOrNullEntry(id, GeneralConfig::allowPlaceBlocks),
+                getPlayerOrNullEntry(id, GeneralConfig::allowInteractBlocks),
+                getPlayerOrNullEntry(id, GeneralConfig::useCorrectTools),
                 getPlayerOrNullEntry(id, GeneralConfig::maxReachDistance),
                 getPlayerOrNullEntry(id, GeneralConfig::maxBlockBreakVolume),
                 getPlayerOrNullEntry(id, GeneralConfig::maxBlockPlaceVolume),

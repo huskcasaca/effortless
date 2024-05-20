@@ -7,6 +7,10 @@ import net.minecraft.nbt.Tag;
 
 public record MinecraftTagRecord(CompoundTag referenceValue) implements TagRecord {
 
+    public static TagRecord ofNullable(CompoundTag compoundTag) {
+        return compoundTag == null ? null : new MinecraftTagRecord(compoundTag);
+    }
+
     @Override
     public byte getId() {
         return new MinecraftTagElement(referenceValue()).getId();

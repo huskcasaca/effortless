@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.vanilla.core;
 import dev.huskuraft.effortless.api.core.Block;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.BucketItem;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
@@ -40,6 +41,26 @@ public record MinecraftBucketItem(net.minecraft.world.item.BucketItem referenceV
     @Override
     public ResourceLocation getId() {
         return new MinecraftItem(referenceValue()).getId();
+    }
+
+    @Override
+    public boolean isCorrectToolForDrops(BlockState blockState) {
+        return new MinecraftItem(referenceValue()).isCorrectToolForDrops(blockState);
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return new MinecraftItem(referenceValue()).getMaxStackSize();
+    }
+
+    @Override
+    public int getMaxDamage() {
+        return new MinecraftItem(referenceValue()).getMaxDamage();
+    }
+
+    @Override
+    public boolean mineBlock(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
+        return new MinecraftItem(referenceValue()).mineBlock(world, player, blockPosition, blockState, itemStack);
     }
 
 }

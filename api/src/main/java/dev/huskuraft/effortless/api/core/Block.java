@@ -14,4 +14,12 @@ public interface Block extends PlatformReference {
 
     LiquidPlaceable getLiquidPlaceable();
 
+    void destroy(World world, BlockPosition blockPosition, BlockState blockState);
+
+    void destroyStart(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack);
+
+    void destroyByPlayer(World world, Player player, BlockPosition blockPosition, BlockState blockState, BlockEntity blockEntity, ItemStack itemStack);
+
+    void place(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack);
+
 }

@@ -28,6 +28,7 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
 
     protected AbstractScreen(Entrance entrance, int x, int y, int width, int height, Text message) {
         super(entrance, x, y, width, height, message);
+        this.focusable = true;
     }
 
     protected AbstractScreen(Entrance entrance, Text title) {
@@ -78,13 +79,18 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
 
     @Override
     public void attach() {
-        getEntrance().getClientManager().pushPanel(this);
+        getEntrance().getClientManager().pushScreen(this);
         onAttach();
     }
 
     @Override
     public void detach() {
-        getEntrance().getClientManager().popPanel(this);
+        getEntrance().getClientManager().popScreen(this);
+        onDetach();
+    }
+
+    public void detachAll() {
+        getEntrance().getClientManager().pushScreen(null);
         onDetach();
     }
 

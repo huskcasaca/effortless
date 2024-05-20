@@ -31,11 +31,6 @@ public record MinecraftItemStack(
     }
 
     @Override
-    public int getMaxStackSize() {
-        return referenceValue().getMaxStackSize();
-    }
-
-    @Override
     public Text getHoverName() {
         return new MinecraftText(referenceValue().getHoverName());
     }
@@ -58,12 +53,17 @@ public record MinecraftItemStack(
 
     @Override
     public TagRecord getTag() {
-        return new MinecraftTagRecord(referenceValue().getOrCreateTag());
+        return MinecraftTagRecord.ofNullable(referenceValue().getTag());
     }
 
     @Override
     public void setTag(TagRecord tagRecord) {
         referenceValue().setTag(tagRecord.reference());
+    }
+
+    @Override
+    public boolean damageBy(Player player, int damage) {
+        return referenceValue().hurt(damage, player.<net.minecraft.world.entity.player.Player>reference().getRandom(), null);
     }
 
 }

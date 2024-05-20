@@ -4,7 +4,9 @@ public interface Widget extends Renderable, InputHandler {
 
     int UNSPECIFIC_SIZE = 0;
 
-    void tick();
+    void onTick();
+
+    void onPartialTick(float partialTick);
 
     void onCreate();
 

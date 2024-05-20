@@ -41,6 +41,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
     protected AbstractEntryList(Entrance entrance, int x, int y, int width, int height) {
         super(entrance, x, y, width, height, Text.empty());
+        this.focusable = true;
         this.x0 = x;
         this.x1 = x + width;
         this.y0 = y;
@@ -72,7 +73,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
     }
 
     public void setSelected(@Nullable E entry) {
-        super.setFocused(entry);
+        setFocused(entry);
     }
 
     @Nullable
@@ -639,6 +640,7 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
 
         protected Entry(Entrance entrance) {
             super(entrance, 0, 0, 0, 0, Text.empty());
+            setFocusable(true);
         }
 
         @Override
@@ -671,6 +673,16 @@ public abstract class AbstractEntryList<E extends AbstractEntryList.Entry> exten
         @Override
         public int getWidth() {
             return MathUtils.min(Dimens.Entry.ROW_WIDTH, getParent().getWidth() - DEFAULT_VERTICAL_PADDING * 2);
+        }
+
+        @Override
+        public boolean onMouseClicked(double mouseX, double mouseY, int button) {
+            var result = super.onMouseClicked(mouseX, mouseY, button);
+            var mouseOver = isMouseOver(mouseX, mouseY);
+            if (!result && mouseOver) {
+                getEntrance().getClient().getSoundManager().playButtonClickSound();
+            }
+            return result || mouseOver;
         }
     }
 }

@@ -89,17 +89,9 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
         return getEntrance().getClient().getPlayer();
     }
 
+    @Override
     public Key getAssignedKey() {
         return assignedKey;
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        Key key = getAssignedKey();
-        if (!key.getBinding().isKeyDown()) {
-            detach();
-        }
     }
 
     @Override

@@ -11,6 +11,7 @@ public abstract class AbstractButton extends AbstractWidget {
 
     protected AbstractButton(Entrance entrance, int x, int y, int width, int height, Text message) {
         super(entrance, x, y, width, height, message);
+        this.focusable = true;
     }
 
     protected abstract void onPress();

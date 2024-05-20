@@ -2,6 +2,7 @@ package dev.huskuraft.effortless;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,7 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.config.ClientConfig;
-import dev.huskuraft.effortless.building.history.HistoryResult;
+import dev.huskuraft.effortless.building.history.BuildTooltip;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.ItemSummaryType;
@@ -71,29 +73,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getEventRegistry().getClientTickEvent().register(this::onClientTick);
     }
 
-    private static Text getStateComponent(BuildState state) {
-        return Text.translate("effortless.state.%s".formatted(
-                switch (state) {
-                    case IDLE -> "idle";
-                    case PLACE_BLOCK -> "placing_block";
-                    case BREAK_BLOCK -> "breaking_block";
-                    case INTERACT_BLOCK -> "interacting_block";
-                }
-        ));
-    }
-
-//    private static String getTracingComponent(TracingResult result) {
-//        return Text.translate("effortless.tracing.%s".formatted(
-//                switch (result) {
-//                    case SUCCESS_FULFILLED -> "success_fulfilled";
-//                    case SUCCESS_PARTIAL -> "success_partial";
-//                    case PASS -> "pass";
-//                    case FAILED_TRACE -> "failed";
-//                    case FAILED_OVERFLOW -> null;
-//                }
-//        )).getString();
-//    }
-
     private EffortlessClient getEntrance() {
         return entrance;
     }
@@ -105,14 +84,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
             var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_ONCE);
-            var result = new BatchBuildSession(player.getWorld(), player, finalizedContext).build().commit();
-
-//            if (finalizedContext.buildType() != BuildType.COMMAND) {
+            var result = new BatchBuildSession(player.getWorld(), player, previewContext).build().commit();
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
-//            }
-
             showBuildContextResult(context.id(), 1024, player, context, result);
-            showBuildTooltip(context.id(), 1024, player, context, result);
+
+            showBuildTooltip(context.id(), 1024, player, previewContext, result);
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
             setContext(player, context.newInteraction());
 
@@ -264,23 +240,30 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
 
             if (!context.withBuildState(state).hasPermission()) {
+                if (state == BuildState.BREAK_BLOCK) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permissio"), true);
+                }
                 if (state == BuildState.PLACE_BLOCK) {
                     player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_place_permission")));
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_no_permission"), true);
                 }
-                if (state == BuildState.BREAK_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permissio"), true);
+                if (state == BuildState.INTERACT_BLOCK) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_interact_permission")));
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_interact_blocks_no_permission"), true);
                 }
                 return context.newInteraction();
             }
 
             if (!nextContext.isBoxVolumeInBounds()) {
+                if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
+                }
                 if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
-                if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
+                if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_interact_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 return context.newInteraction();
             }
@@ -299,16 +282,27 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void onContextReceived(Player player, Context context) {
         var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
 
-        showBuildContextResult(player.getId(), 1, player, context, result);
-        showBuildTooltip(context.id(), 1, player, context, result);
+        showBuildContextResult(player.getId(), 1024, player, context, result);
+        showBuildTooltip(context.id(), 1024, player, context, result);
     }
 
-    public void onHistoryResultReceived(Player player, HistoryResult historyResult) {
-        var entries = new ArrayList<>();
-        entries.add(historyResult.itemSummary().values().stream().flatMap(List::stream).toList());
-        entries.add(Text.translate("effortless.history." + historyResult.type().getName()));
-        entries.add(historyResult.context().buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1, entries, true);
+    public void onHistoryResultReceived(Player player, BuildTooltip buildTooltip) {
+        switch (buildTooltip.type()) {
+            case BUILD_SUCCESS -> {
+//        showBuildContextResult(player.getId(), 1024, player, context, result);
+                showBuildTooltip(buildTooltip.context().id(), 1024, player, buildTooltip.context(), buildTooltip.itemSummary());
+
+            }
+            default -> {
+                var entries = new ArrayList<>();
+                entries.add(buildTooltip.itemSummary().values().stream().flatMap(List::stream).toList());
+                entries.add(Text.translate("effortless.history." + buildTooltip.type().getName()));
+                entries.add(buildTooltip.context().buildMode().getIcon());
+                getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1, entries, true);
+
+            }
+        }
+
     }
 
     @Override
@@ -318,7 +312,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void undo(Player player) {
-        if (checkPermission(player)) {
+        if (!checkPermission(player)) {
             return;
         }
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.UNDO));
@@ -326,7 +320,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public void redo(Player player) {
-        if (checkPermission(player)) {
+        if (!checkPermission(player)) {
             return;
         }
         getEntrance().getChannel().sendPacket(new PlayerCommandPacket(SingleCommand.REDO));
@@ -380,7 +374,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         if (context.getBoxVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
             showBuildContextResult(player.getId(), 0, player, context, null);
-            showBuildTooltip(player.getId(), 0, player, context, null);
+            showBuildTooltip(player.getId(), 0, player, context, Map.of());
         } else {
             var result = new BatchBuildSession(player.getWorld(), player, context.withBuildType(BuildType.PREVIEW)).build().commit();
             showBuildContextResult(player.getId(), 0, player, context, result);
@@ -464,6 +458,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildTooltip(UUID id, int priority, Player player, Context context, OperationResult result) {
+        var itemSummary =  Arrays.stream(ItemSummaryType.values()).collect(Collectors.toMap(Function.identity(), result::getProducts));
+        showBuildTooltip(id, priority, player, context, itemSummary);
+    }
+
+    public void showBuildTooltip(UUID id, int priority, Player player, Context context, Map<ItemSummaryType, List<ItemStack>> itemSummary) {
         if (player.getId() != getEntrance().getClient().getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuildTooltips()) {
                 return;
@@ -471,28 +470,26 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
         var entries = new ArrayList<>();
 
-        if (result != null) {
+        if (!itemSummary.isEmpty()) {
             var allProducts = new ArrayList<ItemStack>();
-            for (var itemType : ItemSummaryType.values()) {
-                var products = result.getProducts(itemType);
+            for (var entry : itemSummary.entrySet()) {
+                var products = entry.getValue();
                 if (!products.isEmpty()) {
-                    var color = switch (itemType) {
+                    var color = switch (entry.getKey()) {
                         case BLOCKS_PLACED -> ChatFormatting.WHITE;
                         case BLOCKS_DESTROYED -> ChatFormatting.RED;
                         case BLOCKS_INTERACTED -> ChatFormatting.YELLOW;
-                        case BLOCKS_PLACE_INSUFFICIENT -> ChatFormatting.RED;
-                        case BLOCKS_BREAK_INSUFFICIENT -> ChatFormatting.RED;
                         case BLOCKS_NOT_PLACEABLE -> ChatFormatting.GRAY;
                         case BLOCKS_NOT_BREAKABLE -> ChatFormatting.GRAY;
                         case BLOCKS_NOT_INTERACTABLE -> ChatFormatting.GRAY;
-                        case BLOCKS_PLACE_NOT_WHITELISTED -> ChatFormatting.GRAY;
-                        case BLOCKS_BREAK_NOT_WHITELISTED -> ChatFormatting.GRAY;
-                        case BLOCKS_PLACE_BLACKLISTED -> ChatFormatting.GRAY;
-                        case BLOCKS_BREAK_BLACKLISTED -> ChatFormatting.GRAY;
+                        case BLOCKS_ITEMS_INSUFFICIENT -> ChatFormatting.RED;
+                        case BLOCKS_TOOLS_INSUFFICIENT -> ChatFormatting.GRAY;
+                        case BLOCKS_BLACKLISTED -> ChatFormatting.GRAY;
+                        case BLOCKS_NO_PERMISSION -> ChatFormatting.GRAY;
                     };
                     products = products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
                     entries.add(products);
-                    entries.add(Text.translate("effortless.build.summary." + itemType.name().toLowerCase(Locale.ROOT)).withStyle(color));
+                    entries.add(Text.translate("effortless.build.summary." + entry.getKey().name().toLowerCase(Locale.ROOT)).withStyle(color));
                     allProducts.addAll(products);
                 }
             }
@@ -528,7 +525,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void showBuildMessage(Player player, Context context) {
         var message = Text.empty();
         if (context.tracingResult().isSuccess()) {
-            message = message.append(getStateComponent(context.buildState()))
+            message = message.append(context.buildState().getDisplayName())
                     .append(" ")
                     .append(context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD))
                     .append(" ")

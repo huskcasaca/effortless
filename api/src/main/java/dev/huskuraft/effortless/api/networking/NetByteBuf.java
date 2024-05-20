@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.api.math.Vector2d;
 import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.api.platform.PlatformReference;
 import dev.huskuraft.effortless.api.text.Style;
 import dev.huskuraft.effortless.api.text.Text;
 import io.netty.buffer.ByteBuf;
@@ -70,14 +71,19 @@ public final class NetByteBuf extends WrappedByteBuf {
         return VarLong.read(this);
     }
 
-    // use Registries
     public Item readItem() {
-        return Registry.ITEM.byIdOrThrow(readVarInt());
+        return readId(Registry.ITEM);
+    }
+
+    public <T extends PlatformReference> T readId(Registry<T> registry) {
+        return registry.byId(readVarInt());
     }
 
     public ItemStack readItemStack() {
-        // FIXME: 4/5/24
-        return ItemStack.empty();
+        return ItemStack.of(
+                readItem(),
+                readVarInt()
+        );
     }
 
     public <T> T read(NetByteBufReader<T> reader) {
@@ -141,14 +147,18 @@ public final class NetByteBuf extends WrappedByteBuf {
         VarLong.write(this, value);
     }
 
-
     public void writeItem(Item value) {
-        writeVarInt(Registry.ITEM.getId(value));
+        writeId(Registry.ITEM, value);
     }
 
-    // TODO: 7/12/23 extract
-    public void writeItemStack(ItemStack value) {
+    public <T extends PlatformReference> void writeId(Registry<T> registry, T value) {
+        writeVarInt(registry.getId(value));
+    }
 
+    // FIXME: 18/5/24 NBT
+    public void writeItemStack(ItemStack value) {
+        writeItem(value.getItem());
+        writeVarInt(value.getCount());
     }
 
     public <T> void write(T value, NetByteBufWriter<T> writer) {

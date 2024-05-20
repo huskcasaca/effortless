@@ -8,10 +8,8 @@ public interface ClientManager {
 
     void setRunningClient(Client client);
 
-    @Deprecated
-    void pushPanel(Screen screen);
+    void pushScreen(Screen screen);
 
-    @Deprecated
-    void popPanel(Screen screen);
+    void popScreen(Screen screen);
 
 }

@@ -19,7 +19,11 @@ public interface SoundManager {
     void resume();
 
     default void playButtonClickSound() {
-        play(SoundInstance.createMaster(Sounds.UI_BUTTON_CLICK.sound(), 1.0F));
+        playButtonClickSound(0.2f);
+    }
+
+    default void playButtonClickSound(float volume) {
+        play(SoundInstance.createMaster(Sounds.UI_BUTTON_CLICK.sound(), volume, 0.75f));
     }
 
 }

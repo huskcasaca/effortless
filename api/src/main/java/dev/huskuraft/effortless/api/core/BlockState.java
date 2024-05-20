@@ -15,7 +15,7 @@ public interface BlockState extends StateHolder {
 
     Item getItem();
 
-    boolean isReplaceable(Player player, BlockInteraction interaction);
+    boolean canBeReplaced(Player player, BlockInteraction interaction);
 
     boolean isReplaceable();
 
@@ -33,8 +33,10 @@ public interface BlockState extends StateHolder {
 
     Block getBlock();
 
-    boolean canReplace(Fluid fluid);
+    boolean canBeReplaced(Fluid fluid);
 
     InteractionResult use(Player player, BlockInteraction blockInteraction);
+
+    boolean requiresCorrectToolForDrops();
 
 }

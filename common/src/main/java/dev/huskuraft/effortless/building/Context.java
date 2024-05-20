@@ -36,6 +36,18 @@ public record Context(
         CustomParams customParams
 ) {
 
+    public boolean useCorrectTool() {
+        return customParams().generalConfig().useCorrectTools();
+    }
+
+    public int getReservedToolDurability() {
+        return 1;
+    }
+
+    public boolean useLegacyBlockPlace() {
+        return false;
+    }
+
     public static Context defaultSet() {
         return new Context(
                 UUID.randomUUID(),
@@ -71,11 +83,15 @@ public record Context(
         return buildMode() == BuildMode.DISABLED;
     }
 
-    public boolean isPreview() {
+    public boolean isBuildType() {
+        return buildType() == BuildType.BUILD;
+    }
+
+    public boolean isPreviewType() {
         return buildType() == BuildType.PREVIEW || buildType() == BuildType.PREVIEW_ONCE;
     }
 
-    public boolean isPreviewOnce() {
+    public boolean isPreviewOnceType() {
         return buildType() == BuildType.PREVIEW_ONCE;
     }
 
@@ -209,7 +225,7 @@ public record Context(
     public Context finalize(Player player, BuildStage stage) {
         switch (stage) {
             case TICK -> {
-                return withPattern(pattern().finalize(player, stage)).withRandomPatternSeed().withLimitedPatternProducer(player.getGameType().isSurvival());
+                return withPattern(pattern().finalize(player, stage)).withRandomPatternSeed().withLimitedPatternProducer(player.getGameMode().isSurvival());
             }
             case UPDATE_CONTEXT -> {
             }
@@ -274,8 +290,9 @@ public record Context(
     public int getMaxBoxVolume() {
         return switch (buildState()) {
             case IDLE -> 0;
-            case PLACE_BLOCK, INTERACT_BLOCK -> customParams().generalConfig().maxBlockPlaceVolume();
             case BREAK_BLOCK -> customParams().generalConfig().maxBlockBreakVolume();
+            case PLACE_BLOCK -> customParams().generalConfig().maxBlockPlaceVolume();
+            case INTERACT_BLOCK -> customParams().generalConfig().maxBlockPlaceVolume();
         };
     }
 
@@ -286,8 +303,9 @@ public record Context(
     public boolean hasPermission() {
         return switch (buildState()) {
             case IDLE -> true;
-            case PLACE_BLOCK, INTERACT_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
             case BREAK_BLOCK -> customParams().generalConfig().allowBreakBlocks();
+            case PLACE_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
+            case INTERACT_BLOCK -> customParams().generalConfig().allowInteractBlocks();
         };
     }
 

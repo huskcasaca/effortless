@@ -50,17 +50,6 @@ public interface Player extends Entity {
 
     void swing(InteractionHand hand);
 
-    boolean canInteractBlock(BlockPosition blockPosition);
-
-    boolean canAttackBlock(BlockPosition blockPosition);
-
-    boolean destroyBlock(BlockInteraction interaction);
-
-    default boolean useItem(BlockInteraction interaction) {
-        return getWorld().getBlockState(interaction.getBlockPosition()).use(this, interaction).consumesAction()
-                || getItemStack(interaction.getHand()).getItem().useOnBlock(this, interaction).consumesAction();
-    }
-
     void awardStat(Stat<?> stat, int increment);
 
     default void awardStat(Stat<?> stat) {

@@ -153,7 +153,7 @@ public class TooltipRenderer {
                 var map = iterator.next();
                 for (var iterator1 = map.values().iterator(); iterator1.hasNext(); ) {
                     var entry = iterator1.next();
-                    entry.tick();
+                    entry.onTick();
                     if (!entry.isAlive()) {
                         iterator1.remove();
                     }
@@ -491,10 +491,10 @@ public class TooltipRenderer {
         }
 
         @Override
-        public void tick() {
-            super.tick();
+        public void onTick() {
+            super.onTick();
             for (var entry : entries) {
-                entry.tick();
+                entry.onTick();
             }
         }
 
@@ -571,7 +571,7 @@ public class TooltipRenderer {
             return getContentHeight() + getPaddingY() * 2;
         }
 
-        public void tick() {
+        public void onTick() {
             ticksAlive++;
             ticksTillRemoval--;
         }

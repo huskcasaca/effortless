@@ -1,13 +1,11 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.Collections;
+import java.util.List;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.building.Context;
@@ -30,116 +28,21 @@ public class BlockPlaceOperation extends BlockOperation {
         super(world, player, context, storage, interaction, blockState);
     }
 
-    private BlockOperationResult.Type placeBlock() {
-
-        if (blockState == null) {
-            return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
-        }
-
-        // spectator
-        if (player.getGameType().isSpectator()) {
-            return BlockOperationResult.Type.FAIL_PLAYER_IS_SPECTATOR;
-        }
-
-        // whitelist/blacklist
-        if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_WHITELISTED;
-        }
-
-        if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_BLACKLISTED;
-        }
-
-        // world permission
-        if (!isInBorderBound()) {
-            return BlockOperationResult.Type.FAIL_WORLD_BORDER;
-        }
-
-        if (!isInHeightBound()) {
-            return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
-        }
-
-        // action permission
-        var itemStack = storage.search(blockState.getItem()).orElse(null);
-
-        if (itemStack == null || itemStack.isEmpty()) {
-            return BlockOperationResult.Type.FAIL_ITEM_INSUFFICIENT;
-        }
-
-        if (itemStack.isAir()) {
-            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
-        }
-
-        if (!(itemStack.getItem() instanceof BlockItem blockItem)) {
-            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
-        }
-
-        // action permission
-        if (!player.canInteractBlock(getBlockPosition())) {
-            return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
-        }
-
-        switch (context.replaceMode()) {
-            case DISABLED -> {
-                if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction())) {
-                    return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
-                }
-            }
-            case NORMAL, QUICK -> {
-                if (!player.getGameType().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
-                    return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
-                }
-                if (!player.canAttackBlock(getBlockPosition())) {
-                    return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_BREAK;
-                }
-            }
-        }
-
-        if (context.isPreview() && player.getWorld().isClient()) {
-            itemStack.decrease(1);
-            return BlockOperationResult.Type.CONSUME;
-        }
-
-        if (context.replaceMode().isReplace()) {
-            if (!player.getWorld().getBlockState(getBlockPosition()).isReplaceable(player, getInteraction()) && !player.destroyBlock(getInteraction())) {
-                return BlockOperationResult.Type.FAIL_UNKNOWN;
-            }
-        }
-
-//        if (context.buildType() == BuildType.COMMAND) {
-//            CommandManager.dispatch(new SetBlockCommand(getBlockState(), getBlockPosition(), SetBlockCommand.Mode.REPLACE));
-//            return BlockOperationResult.Type.SUCCESS;
-//        }
-
-        // compatible layer
-        var originalItemStack = player.getItemStack(getHand());
-        player.setItemStack(getHand(), itemStack);
-        var placed = blockItem.placeOnBlock(player, getInteraction()).consumesAction();
-        player.setItemStack(getHand(), originalItemStack);
-
-        if (!placed) {
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
-        }
-        if (!world.isClient()) {
-            player.awardStat(StatTypes.ITEM_USED.get(itemStack.getItem()));
-        }
-
-        // FIXME: 29/4/24
-        if (!world.getBlockState(getBlockPosition()).equals(blockState) && !world.setBlockState(getBlockPosition(), blockState)) {
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
-        }
-
-        return BlockOperationResult.Type.SUCCESS;
-    }
 
     @Override
     public BlockPlaceOperationResult commit() {
-        var inputs = blockState != null ? Collections.singletonList(blockState.getItem().getDefaultStack()) : Collections.<ItemStack>emptyList();
-        var outputs = Collections.<ItemStack>emptyList();
+        var inputs = List.of(ItemStack.empty());
+        if (blockState != null) {
+            inputs = List.of(blockState.getItem().getDefaultStack());
+        }
+        var outputs = List.of(ItemStack.empty());
+        if (getWorld().getBlockState(getBlockPosition()) != null) {
+            outputs = List.of(getWorld().getBlockState(getBlockPosition()).getItem().getDefaultStack());
+        }
         var result = placeBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewOnce() && result.success()) {
-            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && result.success()) {
+            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().placeSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
             getPlayer().getClient().getSoundManager().play(sound);
         }
 

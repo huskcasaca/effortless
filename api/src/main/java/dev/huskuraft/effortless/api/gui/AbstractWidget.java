@@ -25,6 +25,7 @@ public abstract class AbstractWidget implements Widget {
     private Text message = Text.empty();;
     private List<Text> tooltip = new ArrayList<>();
     private Widget parent;
+    protected boolean focusable = false;
 
     protected AbstractWidget(Entrance entrance, int x, int y, int width, int height, Text message) {
         this.entrance = (ClientEntrance) entrance;
@@ -49,11 +50,19 @@ public abstract class AbstractWidget implements Widget {
         return entrance;
     }
 
+    public void setFocusable(boolean focusable) {
+        this.focusable = focusable;
+        if (!focusable) {
+            this.focused = false;
+        }
+    }
+
     @Override
-    public void tick() {
+    public void onTick() {
 
     }
 
+    @Override
     public void onPartialTick(float partialTick) {
 
     }
@@ -141,6 +150,9 @@ public abstract class AbstractWidget implements Widget {
     }
 
     public void setFocused(boolean focused) {
+        if (!this.focusable) {
+            return;
+        }
         this.focused = focused;
     }
 
@@ -218,6 +230,9 @@ public abstract class AbstractWidget implements Widget {
 
     @Override
     public boolean onMouseClicked(double mouseX, double mouseY, int button) {
+        if (!focusable) {
+            return false;
+        }
         var mouseOver = isMouseOver(mouseX, mouseY);
         this.focused = mouseOver;
         return mouseOver;

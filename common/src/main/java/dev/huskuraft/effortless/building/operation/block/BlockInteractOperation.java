@@ -35,18 +35,22 @@ public class BlockInteractOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
         }
 
-        // spectator
-        if (player.getGameType().isSpectator()) {
-            return BlockOperationResult.Type.FAIL_PLAYER_IS_SPECTATOR;
+        // config permission
+        if (!context.customParams().generalConfig().allowInteractBlocks()) {
+            return BlockOperationResult.Type.FAIL_CONFIG_INTERACT_PERMISSION;
         }
 
-        // whitelist/blacklist
         if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_WHITELISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
         if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+        }
+
+        // game mode permission
+        if (player.getGameMode().isSpectator()) {
+            return BlockOperationResult.Type.FAIL_PLAYER_GAME_MODE;
         }
 
         // world permission
@@ -70,16 +74,14 @@ public class BlockInteractOperation extends BlockOperation {
 //            return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
 //        }
 
-        // action permission
-        if (!player.canInteractBlock(getBlockPosition())) {
-            return BlockOperationResult.Type.FAIL_PLAYER_CANNOT_INTERACT;
-        }
-
-        if (context.isPreview() && player.getWorld().isClient()) {
+        if (context.isPreviewType() && player.getWorld().isClient()) {
             selectedItemStack.decrease(1);
             return BlockOperationResult.Type.CONSUME;
         }
 
+        if (world.isClient()) {
+            return BlockOperationResult.Type.CONSUME;
+        }
         // compatible layer
         var originalItemStack = player.getItemStack(getHand());
 
@@ -109,8 +111,8 @@ public class BlockInteractOperation extends BlockOperation {
         var outputs = Collections.<ItemStack>emptyList();
         var result = interactBlock();
 
-        if (getWorld().isClient() && getContext().isPreviewOnce() && result.success()) {
-            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && result.success()) {
+            var sound = SoundInstance.createBlock(getBlockState().getSoundSet().hitSound(), (getBlockState().getSoundSet().volume() + 1.0F) / 2.0F * 0.2F, getBlockState().getSoundSet().pitch() * 0.8F, getBlockPosition().getCenter());
             getPlayer().getClient().getSoundManager().play(sound);
         }
 

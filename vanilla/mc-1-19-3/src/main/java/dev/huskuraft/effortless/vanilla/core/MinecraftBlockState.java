@@ -122,7 +122,7 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
     }
 
     @Override
-    public boolean isReplaceable(Player player, BlockInteraction interaction) {
+    public boolean canBeReplaced(Player player, BlockInteraction interaction) {
         ItemStack itemStack = player.getItemStack(interaction.getHand());
         return reference.canBeReplaced(new net.minecraft.world.item.context.BlockPlaceContext(
                 player.reference(),
@@ -158,7 +158,7 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
     }
 
     @Override
-    public boolean canReplace(Fluid fluid) {
+    public boolean canBeReplaced(Fluid fluid) {
         return referenceValue().canBeReplaced((net.minecraft.world.level.material.Fluid) fluid.reference());
     }
 
@@ -167,4 +167,8 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
         return MinecraftConvertor.toPlatformInteractionResult(reference.use(player.getWorld().reference(), player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)));
     }
 
+    @Override
+    public boolean requiresCorrectToolForDrops() {
+        return referenceValue().requiresCorrectToolForDrops();
+    }
 }

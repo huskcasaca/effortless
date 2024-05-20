@@ -52,4 +52,6 @@ public interface Client extends PlatformReference {
 
     Options getOptions();
 
+    ParticleEngine getParticleEngine();
+
 }

@@ -12,13 +12,12 @@ import dev.huskuraft.effortless.api.platform.Server;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.StructureBuilder;
-import dev.huskuraft.effortless.building.history.HistoryResult;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
-import dev.huskuraft.effortless.networking.packets.player.PlayerHistoryResultPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
 
 public final class EffortlessStructureBuilder extends StructureBuilder {
 
@@ -101,18 +100,20 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     @Override
     public void onContextReceived(Player player, Context context) {
 
-        if (context.isPreview()) {
-            // FIXME: 13/10/23 add event for server manager
-            Server server = player.getServer();
-            for (var serverPlayer : server.getPlayerList().getPlayers()) {
-                if (serverPlayer.getId().equals(player.getId())) {
+        if (context.isPreviewType()) {
+            var server = player.getServer();
+            for (var otherPlayer : server.getPlayerList().getPlayers()) {
+                if (otherPlayer.getId().equals(player.getId()) || otherPlayer.getPosition().distance(player.getPosition()) > 128) {
                     continue;
                 }
-                getEntrance().getChannel().sendPacket(new PlayerBuildPreviewPacket(player.getId(), context), serverPlayer);
+                getEntrance().getChannel().sendPacket(new PlayerBuildPreviewPacket(player.getId(), context), otherPlayer);
             }
         } else {
-            // FIXME: 13/10/23 getCommandSenderWorld
-            getOperationResultStack(player).push(context.createSession(player.getWorld(), player).build().commit());
+            getEntrance().getChannel().sendPacket(
+                    PlayerBuildTooltipPacket.buildSuccess(
+                            getOperationResultStack(player).push(context.createSession(player.getWorld(), player).build().commit())
+                    ), player
+            );
         }
     }
 
@@ -124,19 +125,18 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     @Override
     public void undo(Player player) {
         try {
-            ;
-            getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.SUCCESS_UNDO, getOperationResultStack(player).undo())), player);
+            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undoSuccess(getOperationResultStack(player).undo()), player);
         } catch (EmptyStackException e) {
-            getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.NOTHING_TO_UNDO)), player);
+            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToUndo(), player);
         }
     }
 
     @Override
     public void redo(Player player) {
         try {
-            getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.SUCCESS_REDO, getOperationResultStack(player).redo())), player);
+            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.redoSuccess(getOperationResultStack(player).redo()), player);
         } catch (EmptyStackException e) {
-            getEntrance().getChannel().sendPacket(new PlayerHistoryResultPacket(new HistoryResult(HistoryResult.Type.NOTHING_TO_REDO)), player);
+            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToRedo(), player);
         }
     }
 

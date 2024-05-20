@@ -41,6 +41,14 @@ public interface TagRecord extends TagElement {
         return getTag(key).asPrimitive().getAsByte() != 0;
     }
 
+    default boolean getBooleanOrElse(String key, boolean defaultValue) {
+        try {
+            return getBoolean(key);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
     default void putBoolean(String key, boolean value) {
         putTag(key, TagPrimitive.of(value));
     }
@@ -63,6 +71,14 @@ public interface TagRecord extends TagElement {
 
     default int getInt(String key) {
         return getTag(key).asPrimitive().getAsInt();
+    }
+
+    default int getIntOrElse(String key, int defaultValue) {
+        try {
+            return getInt(key);
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 
     default void putInt(String key, int value) {

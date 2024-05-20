@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.Collections;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
@@ -38,27 +37,33 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
     public List<ItemStack> getProducts(ItemSummaryType type) {
         return switch (type) {
             case BLOCKS_PLACED -> switch (result) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> inputs();
-                default -> Collections.emptyList();
-            };
-            case BLOCKS_PLACE_INSUFFICIENT -> switch (result) {
-                case FAIL_ITEM_INSUFFICIENT -> inputs();
-                default -> Collections.emptyList();
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> inputs;
+                default -> List.of();
             };
             case BLOCKS_NOT_PLACEABLE -> switch (result) {
-                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT ->
-                        inputs();
-                default -> Collections.emptyList();
+                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> inputs;
+                case FAIL_CONFIG_PLACE_PERMISSION -> inputs;
+                case FAIL_CONFIG_BREAK_PERMISSION -> outputs;
+                default -> List.of();
             };
-            case BLOCKS_PLACE_NOT_WHITELISTED -> switch (result) {
-                case FAIL_WHITELISTED -> inputs();
-                default -> Collections.emptyList();
+            case BLOCKS_ITEMS_INSUFFICIENT -> switch (result) {
+                case FAIL_ITEM_INSUFFICIENT -> inputs;
+                default -> List.of();
             };
-            case BLOCKS_PLACE_BLACKLISTED -> switch (result) {
-                case FAIL_BLACKLISTED -> inputs();
-                default -> Collections.emptyList();
+            case BLOCKS_TOOLS_INSUFFICIENT -> switch (result) {
+                case FAIL_TOOL_INSUFFICIENT -> outputs;
+                default -> List.of();
             };
-            default -> Collections.emptyList();
+            case BLOCKS_BLACKLISTED -> switch (result) {
+                case FAIL_CONFIG_BLACKLISTED -> inputs;
+                default -> List.of();
+            };
+            case BLOCKS_NO_PERMISSION -> switch (result) {
+                case FAIL_CONFIG_PLACE_PERMISSION -> inputs;
+                case FAIL_CONFIG_BREAK_PERMISSION -> outputs;
+                default -> List.of();
+            };
+            default -> List.of();
         };
     }
 

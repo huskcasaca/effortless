@@ -33,6 +33,8 @@ public interface ContentFactory {
 
     ItemStack newItemStack();
 
+    ItemStack newItemStack(Item item, int count);
+
     Text newText();
 
     Text newText(String text);

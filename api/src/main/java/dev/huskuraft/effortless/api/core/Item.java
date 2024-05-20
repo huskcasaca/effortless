@@ -23,4 +23,12 @@ public interface Item extends PlatformReference {
 
     InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction);
 
+    boolean isCorrectToolForDrops(BlockState blockState);
+
+    int getMaxStackSize();
+
+    int getMaxDamage();
+
+    boolean mineBlock(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack);
+
 }

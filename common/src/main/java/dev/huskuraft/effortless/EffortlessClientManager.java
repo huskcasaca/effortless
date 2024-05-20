@@ -90,7 +90,7 @@ public final class EffortlessClientManager implements ClientManager {
     }
 
     @Override
-    public void pushPanel(Screen screen) {
+    public void pushScreen(Screen screen) {
         if (screen == null) {
             screenStack.clear();
         } else {
@@ -100,7 +100,7 @@ public final class EffortlessClientManager implements ClientManager {
     }
 
     @Override
-    public void popPanel(Screen screen) {
+    public void popScreen(Screen screen) {
         if (getRunningClient().getPanel() != screen) {
             return;
         }

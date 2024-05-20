@@ -39,24 +39,23 @@ public class BlockBreakOperationResult extends BlockOperationResult {
     public List<ItemStack> getProducts(ItemSummaryType type) {
         return switch (type) {
             case BLOCKS_DESTROYED -> switch (result) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> outputs();
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> outputs;
                 default -> List.of();
-            };
-            case BLOCKS_BREAK_INSUFFICIENT -> switch (result) {
-                case FAIL_ITEM_INSUFFICIENT -> outputs();
-                default -> Collections.emptyList();
             };
             case BLOCKS_NOT_BREAKABLE -> switch (result) {
-                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT ->
-                        outputs();
+                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> outputs;
                 default -> List.of();
             };
-            case BLOCKS_BREAK_NOT_WHITELISTED -> switch (result) {
-                case FAIL_WHITELISTED -> outputs();
+            case BLOCKS_TOOLS_INSUFFICIENT -> switch (result) {
+                case FAIL_ITEM_INSUFFICIENT, FAIL_TOOL_INSUFFICIENT -> outputs;
+                default -> Collections.emptyList();
+            };
+            case BLOCKS_BLACKLISTED -> switch (result) {
+                case FAIL_CONFIG_BLACKLISTED -> outputs;
                 default -> List.of();
             };
-            case BLOCKS_BREAK_BLACKLISTED -> switch (result) {
-                case FAIL_BLACKLISTED -> outputs();
+            case BLOCKS_NO_PERMISSION -> switch (result) {
+                case FAIL_CONFIG_BREAK_PERMISSION -> outputs;
                 default -> List.of();
             };
             default -> List.of();

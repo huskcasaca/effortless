@@ -51,10 +51,6 @@ public abstract class EditableEntryList<T> extends AbstractEntryList<EditableEnt
         return children().get(i);
     }
 
-    public Entry<T> getSelected() {
-        return super.getSelected();
-    }
-
     public int indexOf(Object entry) {
         return children().indexOf(entry);
     }
