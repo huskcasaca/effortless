@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -23,6 +24,19 @@ public class BlockPlaceOperation extends BlockOperation {
             Storage storage,
             BlockInteraction interaction,
             BlockState blockState
+    ) {
+        super(world, player, context, storage, interaction, blockState, player.getEyePosition(), player.getEyeDirection());
+    }
+
+    public BlockPlaceOperation(
+            World world,
+            Player player,
+            Context context,
+            Storage storage,
+            BlockInteraction interaction,
+            BlockState blockState,
+            Vector3d playerPosition,
+            Vector3d playerDirection
     ) {
         super(world, player, context, storage, interaction, blockState);
     }

@@ -72,16 +72,6 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player refs) imp
     }
 
     @Override
-    public Vector3d getEyePosition() {
-        return MinecraftConvertor.fromPlatformVector3d(refs.getEyePosition());
-    }
-
-    @Override
-    public Vector3d getEyeDirection() {
-        return MinecraftConvertor.fromPlatformVector3d(refs.getLookAngle());
-    }
-
-    @Override
     public void drop(ItemStack itemStack, boolean dropAround, boolean includeThrowerName) {
         refs.drop(itemStack.reference(), dropAround, includeThrowerName);
     }

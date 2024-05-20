@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
@@ -23,6 +24,8 @@ public abstract class BlockOperation extends TransformableOperation {
     protected final Storage storage;
     protected final BlockInteraction interaction;
     protected final BlockState blockState;
+    protected Vector3d playerPosition;
+    protected Vector3d playerDirection;
 
     protected BlockOperation(
             World world,
@@ -38,6 +41,27 @@ public abstract class BlockOperation extends TransformableOperation {
         this.storage = storage;
         this.interaction = interaction;
         this.blockState = blockState;
+    }
+
+    protected BlockOperation(
+            World world,
+            Player player,
+            Context context,
+            Storage storage, // for preview
+            BlockInteraction interaction,
+            BlockState blockState,
+            Vector3d playerPosition,
+            Vector3d playerDirection
+    ) {
+        this.world = world;
+        this.player = player;
+        this.context = context;
+        this.storage = storage;
+        this.interaction = interaction;
+        this.blockState = blockState;
+
+        this.playerPosition = playerPosition;
+        this.playerDirection = playerDirection;
     }
 
     @Override
