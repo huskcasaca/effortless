@@ -50,4 +50,8 @@ public interface Client extends PlatformReference {
 
     ParticleEngine getParticleEngine();
 
+    boolean isLocalServer();
+
+    boolean hasSinglePlayerServer();
+
 }

@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
-import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
@@ -41,7 +41,7 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         registerPacket(PlayerSettingsPacket.class, new PlayerSettingsPacket.Serializer());
         registerPacket(PlayerBuildPacket.class, new PlayerBuildPacket.Serializer());
         registerPacket(PlayerBuildPreviewPacket.class, new PlayerBuildPreviewPacket.Serializer());
-        registerPacket(PlayerOperatorCheckPacket.class, new PlayerOperatorCheckPacket.Serializer());
+        registerPacket(PlayerPermissionCheckPacket.class, new PlayerPermissionCheckPacket.Serializer());
         registerPacket(PlayerBuildTooltipPacket.class, new PlayerBuildTooltipPacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
@@ -102,10 +102,11 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         }
 
         @Override
-        public void handle(PlayerOperatorCheckPacket packet, Player player) {
+        public void handle(PlayerPermissionCheckPacket packet, Player player) {
             getEntrance().getServer().execute(() -> {
-                var isOperator = getEntrance().getServerManager().getRunningServer().getPlayerList().isOperator(player.getProfile());
-                getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(packet.responseId(), packet.playerId(), isOperator), player);
+                var isSinglePlayerOwner = getEntrance().getServerManager().getRunningServer().isSinglePlayerOwner(player.getProfile());
+                var isOperator = getEntrance().getServerManager().getRunningServer().isOperator(player.getProfile());
+                getEntrance().getChannel().sendPacket(new PlayerPermissionCheckPacket(packet.responseId(), packet.playerId(), isSinglePlayerOwner || isOperator), player);
             });
 
         }

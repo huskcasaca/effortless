@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.screen.settings.EffortlessNotAnOperatorScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 
@@ -26,8 +26,8 @@ public class EffortlessGeneralSettingsScreen extends AbstractPanelScreen {
                     new EffortlessSessionStatusScreen(getEntrance()).attach();
                 });
             } else {
-                getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
-                    if (packet.isOperator()) {
+                getEntrance().getChannel().sendPacket(new PlayerPermissionCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
+                    if (packet.granted()) {
                         getEntrance().getClient().execute(() -> {
                             new EffortlessGlobalGeneralSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig(), config -> {
                                 getEntrance().getSessionManager().updateGlobalConfig(config);
@@ -43,14 +43,14 @@ public class EffortlessGeneralSettingsScreen extends AbstractPanelScreen {
 
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.per_player_general_settings.title"), button -> {
-            getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
+            getEntrance().getChannel().sendPacket(new PlayerPermissionCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
 
                 if (!getEntrance().getSessionManager().isSessionValid()) {
                     getEntrance().getClient().execute(() -> {
                         new EffortlessSessionStatusScreen(getEntrance()).attach();
                     });
                 } else {
-                    if (packet.isOperator()) {
+                    if (packet.granted()) {
                         getEntrance().getClient().execute(() -> {
                             new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().playerConfigs(), playerConfigs -> {
                                 getEntrance().getSessionManager().updatePlayerConfig(playerConfigs);

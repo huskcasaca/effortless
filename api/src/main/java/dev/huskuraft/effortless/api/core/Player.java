@@ -9,7 +9,11 @@ public interface Player extends Entity {
     Inventory getInventory();
 
     default boolean isOperator() {
-        return getServer().getPlayerList().isOperator(getProfile());
+        return getServer().isOperator(getProfile());
+    }
+
+    default boolean isSinglePlayerOwner() {
+        return getServer().isSinglePlayerOwner(getProfile());
     }
 
     default ItemStack getItemStack(InteractionHand hand) {

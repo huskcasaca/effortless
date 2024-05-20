@@ -22,4 +22,5 @@ dependencies {
     runtimeOnly 'com.electronwill.night-config:toml:3.6.7'
 
     compileOnly 'io.netty:netty-all:4.1.109.Final'
+    compileOnly 'org.slf4j:slf4j-api:2.0.13'
 }

@@ -8,18 +8,18 @@ import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.ResponsiblePacket;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 
-public record PlayerOperatorCheckPacket(
+public record PlayerPermissionCheckPacket(
         UUID responseId,
         UUID playerId,
-        boolean isOperator
+        boolean granted
 ) implements ResponsiblePacket<AllPacketListener> {
 
-    public PlayerOperatorCheckPacket(UUID playerId) {
+    public PlayerPermissionCheckPacket(UUID playerId) {
         this(playerId, true);
     }
 
-    public PlayerOperatorCheckPacket(UUID playerId, boolean isOp) {
-        this(UUID.randomUUID(), playerId, isOp);
+    public PlayerPermissionCheckPacket(UUID playerId, boolean granted) {
+        this(UUID.randomUUID(), playerId, granted);
     }
 
     @Override
@@ -27,18 +27,18 @@ public record PlayerOperatorCheckPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer implements NetByteBufSerializer<PlayerOperatorCheckPacket> {
+    public static class Serializer implements NetByteBufSerializer<PlayerPermissionCheckPacket> {
 
         @Override
-        public PlayerOperatorCheckPacket read(NetByteBuf byteBuf) {
-            return new PlayerOperatorCheckPacket(byteBuf.readUUID(), byteBuf.readUUID(), byteBuf.readBoolean());
+        public PlayerPermissionCheckPacket read(NetByteBuf byteBuf) {
+            return new PlayerPermissionCheckPacket(byteBuf.readUUID(), byteBuf.readUUID(), byteBuf.readBoolean());
         }
 
         @Override
-        public void write(NetByteBuf byteBuf, PlayerOperatorCheckPacket packet) {
+        public void write(NetByteBuf byteBuf, PlayerPermissionCheckPacket packet) {
             byteBuf.writeUUID(packet.responseId());
             byteBuf.writeUUID(packet.playerId());
-            byteBuf.writeBoolean(packet.isOperator());
+            byteBuf.writeBoolean(packet.granted());
         }
 
     }

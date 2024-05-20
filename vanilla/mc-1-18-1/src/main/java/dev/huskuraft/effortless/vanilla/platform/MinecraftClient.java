@@ -137,4 +137,14 @@ public record MinecraftClient(
     public ParticleEngine getParticleEngine() {
         return new MinecraftParticleEngine(refs.particleEngine);
     }
+
+    @Override
+    public boolean isLocalServer() {
+        return refs.isLocalServer();
+    }
+
+    @Override
+    public boolean hasSinglePlayerServer() {
+        return refs.hasSingleplayerServer();
+    }
 }

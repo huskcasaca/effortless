@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.networking.packets.player.PlayerOperatorCheckPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
@@ -32,8 +32,8 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
                     new EffortlessSessionStatusScreen(getEntrance()).attach();
                 });
             } else {
-                getEntrance().getChannel().sendPacket(new PlayerOperatorCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
-                    if (packet.isOperator()) {
+                getEntrance().getChannel().sendPacket(new PlayerPermissionCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
+                    if (packet.granted()) {
                         getEntrance().getClient().execute(() -> {
                             new EffortlessGeneralSettingsScreen(getEntrance()).attach();
                         });
