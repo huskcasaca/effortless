@@ -2,7 +2,6 @@ package dev.huskuraft.effortless.api.core;
 
 import java.util.UUID;
 
-import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
@@ -38,12 +37,12 @@ public interface Entity extends PlatformReference {
     BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids);
 
     static Vector3d calculateViewVector(float xRot, float yRot) {
-        var f = xRot * ((float)Math.PI / 180F);
-        var f1 = -yRot * ((float)Math.PI / 180F);
-        var f2 = MathUtils.cos(f1);
-        var f3 = MathUtils.sin(f1);
-        var f4 = MathUtils.cos(f);
-        var f5 = MathUtils.sin(f);
+        var f = xRot * (Math.PI / 180F);
+        var f1 = -yRot * (Math.PI / 180F);
+        var f2 = Math.cos(f1);
+        var f3 = Math.sin(f1);
+        var f4 = Math.cos(f);
+        var f5 = Math.sin(f);
         return new Vector3d(f3 * f4, -f5, f2 * f4);
     }
 
@@ -53,9 +52,9 @@ public interface Entity extends PlatformReference {
 
     float getXRot();
 
-    float getYRot();
-
     void setXRot(float xRot);
+
+    float getYRot();
 
     void setYRot(float yRot);
 

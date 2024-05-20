@@ -119,6 +119,36 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player refs) imp
     }
 
     @Override
+    public float getEyeHeight() {
+        return refs.getEyeHeight();
+    }
+
+    @Override
+    public void setPosition(Vector3d position) {
+        refs.setPos(MinecraftConvertor.toPlatformVector3d(position));
+    }
+
+    @Override
+    public float getXRot() {
+        return refs.getXRot();
+    }
+
+    @Override
+    public void setXRot(float xRot) {
+        refs.setXRot(xRot);
+    }
+
+    @Override
+    public float getYRot() {
+        return refs.getYRot();
+    }
+
+    @Override
+    public void setYRot(float yRot) {
+        refs.setYRot(yRot);
+    }
+
+    @Override
     public void awardStat(Stat<?> stat, int increment) {
         refs.awardStat((net.minecraft.stats.Stat<?>) stat.reference(), increment);
     }

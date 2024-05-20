@@ -22,7 +22,19 @@ public class BlockBreakOperation extends BlockOperation {
             Storage storage, // for preview
             BlockInteraction interaction
     ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
+        this(world, player, context, storage, interaction, EntityState.get(player));
+    }
+
+
+    public BlockBreakOperation(
+            World world,
+            Player player,
+            Context context,
+            Storage storage, // for preview
+            BlockInteraction interaction,
+            EntityState entityState
+    ) {
+        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
     }
 
 
@@ -30,7 +42,11 @@ public class BlockBreakOperation extends BlockOperation {
     public BlockBreakOperationResult commit() {
         var inputs = Collections.<ItemStack>emptyList();
         var outputs = Collections.singletonList(getItemStack());
+
+        var entityState = EntityState.get(player);
+        EntityState.set(player, getEntityState());
         var result = destroyBlock();
+        EntityState.set(player, entityState);
 
         if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             if (result.success()) {
