@@ -308,7 +308,7 @@
   "effortless.position.move_to_player": "Zum Spieler bewegen",
   "effortless.position": "Position %s",
   "effortless.position.absolute": "Absolut",
-  "effortless.position.relative": "Immer relativ",
+  "effortless.position.relative_always": "Immer relativ",
   "effortless.position.relative_once": "Einmal relativ",
   "effortless.test.save": "Speichern",
   "effortless.test.cancel": "Abbrechen",

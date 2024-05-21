@@ -149,7 +149,6 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
                         case Z -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().z();
                     };
                     case RELATIVE -> 0d;
-                    case RELATIVE_ONCE -> 0d;
                 }));
                 numberField.setValue(getItem().value2());
                 typeButton.setMessage(getItem().value1().getDisplayName());

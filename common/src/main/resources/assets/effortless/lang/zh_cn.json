@@ -308,7 +308,7 @@
   "effortless.position.move_to_player": "移动到玩家",
   "effortless.position": "位置 %s",
   "effortless.position.absolute": "绝对",
-  "effortless.position.relative": "始终相对",
+  "effortless.position.relative_always": "始终相对",
   "effortless.position.relative_once": "单次相对",
   "effortless.test.save": "保存",
   "effortless.test.cancel": "取消",

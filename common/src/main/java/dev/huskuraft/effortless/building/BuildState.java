@@ -25,7 +25,7 @@ public enum BuildState {
     }
 
     public Text getDisplayName(BuildMode buildMode) {
-        return Text.translate("effortless.state.%s.var1".formatted(
+        return Text.translate("effortless.state.%s.build_mode".formatted(
                 switch (this) {
                     case IDLE -> "idle";
                     case BREAK_BLOCK -> "breaking_block";

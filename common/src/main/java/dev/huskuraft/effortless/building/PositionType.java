@@ -4,8 +4,7 @@ import dev.huskuraft.effortless.api.text.Text;
 
 public enum PositionType implements BuildModifier {
     ABSOLUTE("absolute"),
-    RELATIVE("relative"),
-    RELATIVE_ONCE("relative_once");
+    RELATIVE("relative");
 
     private final String name;
 
@@ -23,15 +22,14 @@ public enum PositionType implements BuildModifier {
 
     @Override
     public boolean isIntermediate() {
-        return this == RELATIVE_ONCE;
+        return this == RELATIVE;
     }
 
     @Override
     public BuildStage getStage() {
         return switch (this) {
             case ABSOLUTE -> BuildStage.TICK;
-            case RELATIVE -> BuildStage.INTERACT;
-            case RELATIVE_ONCE -> BuildStage.UPDATE_CONTEXT;
+            case RELATIVE -> BuildStage.UPDATE_CONTEXT;
         };
     }
 

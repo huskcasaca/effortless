@@ -18,7 +18,7 @@ import dev.huskuraft.effortless.building.pattern.RotateContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 
-public record RadialTransformer(UUID id, Text name, Vector3d position, PositionType[] positionType, int slices) implements Transformer {
+public record RadialTransformer(UUID id, Text name, Vector3d position, PositionType positionType, int slices) implements Transformer {
 
     public static final RadialTransformer ZERO = new RadialTransformer(Vector3d.ZERO, 0);
 
@@ -35,15 +35,7 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, PositionT
 //    private final boolean drawPlanes;
 
     public RadialTransformer(Vector3d position, int slice) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, new PositionType[]{PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE}, slice);
-    }
-
-    public RadialTransformer(UUID id, Text name, Vector3d position, PositionType positionTypeX, PositionType positionTypeY, PositionType positionTypeZ, int slice) {
-        this(id, name, position, new PositionType[]{positionTypeX, positionTypeY, positionTypeZ}, slice);
-//        this.axis = axis;
-//        this.count = count;
-//        this.step = step;
-//        this.clockwise = clockwise;
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, PositionType.RELATIVE, slice);
     }
 
     @Override
@@ -59,36 +51,12 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, PositionT
         return Transformers.RADIAL;
     }
 
-    public RadialTransformer withPositionX(double x) {
-        return new RadialTransformer(id, name, position.withX(x), positionType, slices);
-    }
-
-    public RadialTransformer withPositionY(double y) {
-        return new RadialTransformer(id, name, position.withY(y), positionType, slices);
-    }
-
-    public RadialTransformer withPositionZ(double z) {
-        return new RadialTransformer(id, name, position.withZ(z), positionType, slices);
-    }
-
-    public RadialTransformer withPositionType(PositionType positionType) {
-        return new RadialTransformer(id, name, position, new PositionType[]{positionType, positionType, positionType}, slices);
-    }
-
-    public RadialTransformer withPositionType(PositionType[] positionType) {
+    public RadialTransformer withPosition(Vector3d position) {
         return new RadialTransformer(id, name, position, positionType, slices);
     }
 
-    public RadialTransformer withPositionTypeX(PositionType positionTypeX) {
-        return new RadialTransformer(id, name, position, new PositionType[]{positionTypeX, positionType[1], positionType[2]}, slices);
-    }
-
-    public RadialTransformer withPositionTypeY(PositionType positionTypeY) {
-        return new RadialTransformer(id, name, position, new PositionType[]{positionType[0], positionTypeY, positionType[2]}, slices);
-    }
-
-    public RadialTransformer withPositionTypeZ(PositionType positionTypeZ) {
-        return new RadialTransformer(id, name, position, new PositionType[]{positionType[0], positionType[1], positionTypeZ}, slices);
+    public RadialTransformer withPositionType(PositionType positionType) {
+        return new RadialTransformer(id, name, position, positionType, slices);
     }
 
     public RadialTransformer withSlice(int slice) {
@@ -107,23 +75,19 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, PositionT
 
     @Override
     public boolean isIntermediate() {
-        return positionType[0] != PositionType.ABSOLUTE || positionType[1] != PositionType.ABSOLUTE || positionType[2] != PositionType.ABSOLUTE;
+        return positionType.isIntermediate();
     }
-
 
     @Override
     public RadialTransformer finalize(Player player, BuildStage stage) {
         return switch (stage) {
             case TICK -> this;
-            case UPDATE_CONTEXT, INTERACT -> new RadialTransformer(id, name, new Vector3d(
-                    positionType[0].getStage() == stage ? position.x() + player.getPosition().toVector3i().x() : position.x(),
-                    positionType[1].getStage() == stage ? position.y() + player.getPosition().toVector3i().y() : position.y(),
-                    positionType[2].getStage() == stage ? position.z() + player.getPosition().toVector3i().z() : position.z()
-            ), new PositionType[]{
-                    positionType[0].getStage() == stage ? PositionType.ABSOLUTE : positionType[0],
-                    positionType[1].getStage() == stage ? PositionType.ABSOLUTE : positionType[1],
-                    positionType[2].getStage() == stage ? PositionType.ABSOLUTE : positionType[2]
-            }, slices);
+            case UPDATE_CONTEXT, INTERACT -> {
+                if (positionType.getStage() == stage) {
+                    yield new RadialTransformer(id, name, position.add(player.getPosition()), PositionType.ABSOLUTE, slices);
+                }
+                yield this;
+            }
         };
     }
 
@@ -137,20 +101,8 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, PositionT
         return new RadialTransformer(id, name, position, positionType, slices);
     }
 
-    public PositionType[] getPositionType() {
+    public PositionType getPositionType() {
         return positionType;
-    }
-
-    public PositionType getPositionTypeX() {
-        return positionType[0];
-    }
-
-    public PositionType getPositionTypeY() {
-        return positionType[1];
-    }
-
-    public PositionType getPositionTypeZ() {
-        return positionType[2];
     }
 
 }
