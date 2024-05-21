@@ -111,7 +111,7 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
 
     @Override
     public boolean isPauseGame() {
-        return true;
+        return false;
     }
 
     @Override
