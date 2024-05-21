@@ -24,19 +24,7 @@ public class BlockPlaceOperation extends BlockOperation {
             BlockInteraction interaction,
             BlockState blockState
     ) {
-        this(world, player, context, storage, interaction, blockState, EntityState.get(player));
-    }
-
-    public BlockPlaceOperation(
-            World world,
-            Player player,
-            Context context,
-            Storage storage,
-            BlockInteraction interaction,
-            BlockState blockState,
-            EntityState entityState
-    ) {
-        super(world, player, context, storage, interaction, blockState, entityState);
+        super(world, player, context, storage, interaction, blockState);
     }
 
     @Override

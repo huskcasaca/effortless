@@ -289,7 +289,13 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (!checkPermission(player)) {
             return false;
         }
-        updateContext(player, context -> context.withPattern(pattern).finalize(player, BuildStage.UPDATE_CONTEXT));
+        updateContext(player, context -> {
+            var nextContext = context.withPattern(pattern).finalize(player, BuildStage.UPDATE_CONTEXT);
+            if (!context.pattern().enabled() && nextContext.pattern().enabled()) {
+                nextContext = nextContext.finalize(player, BuildStage.ENABLE_PATTERN);
+            }
+            return nextContext;
+        });
         return true;
     }
 

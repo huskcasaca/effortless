@@ -34,9 +34,13 @@ public record MirrorTransformer(
 
     @Override
     public BatchOperation transform(TransformableOperation operation) {
+        var realPosition = switch (positionType) {
+            case ABSOLUTE -> position;
+            case RELATIVE -> position.add(operation.getContext().patternParams().activeState().position()); // relative to player
+        };
         return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(
                 operation,
-                operation.mirror(MirrorContext.of(position, axis))
+                operation.mirror(MirrorContext.of(realPosition, axis))
         ));
     }
 
@@ -62,15 +66,7 @@ public record MirrorTransformer(
 
     @Override
     public MirrorTransformer finalize(Player player, BuildStage stage) {
-        return switch (stage) {
-            case TICK -> this;
-            case UPDATE_CONTEXT, INTERACT -> {
-                if (positionType.getStage() == stage) {
-                    yield new MirrorTransformer(id, name, position.add(player.getPosition()), PositionType.ABSOLUTE, axis);
-                }
-                yield this;
-            }
-        };
+        return this;
     }
 
     @Override

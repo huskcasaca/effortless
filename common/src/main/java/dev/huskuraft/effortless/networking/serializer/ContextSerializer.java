@@ -5,6 +5,7 @@ import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 
@@ -23,13 +24,10 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                         byteBuf.read(new BuildStructureSerializer()),
                         byteBuf.readEnum(ReplaceMode.class)),
                 new Context.PatternParams(
-                        new Pattern(
-                                byteBuf.readUUID(),
-                                byteBuf.readBoolean(),
-                                byteBuf.readList(new TransformerSerializer())
-                        ),
-                        byteBuf.readBoolean(),
-                        byteBuf.readLong()),
+                        byteBuf.readNullable(new PatternSerializer()),
+                        byteBuf.readNullable(new EntityStateSerializer()),
+                        byteBuf.readNullable(new EntityStateSerializer()),
+                        byteBuf.readBoolean(), byteBuf.readLong()),
                 new Context.CustomParams(
                         byteBuf.read(new GeneralConfigSerializer())
                 )
@@ -46,13 +44,50 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.write(context.structureParams().buildStructure(), new BuildStructureSerializer());
         byteBuf.writeEnum(context.structureParams().replaceMode());
 
-        byteBuf.writeUUID(context.patternParams().pattern().id());
-        byteBuf.writeBoolean(context.patternParams().pattern().enabled());
-        byteBuf.writeList(context.patternParams().pattern().transformers(), new TransformerSerializer());
+        byteBuf.writeNullable(context.patternParams().pattern(), new PatternSerializer());
+        byteBuf.writeNullable(context.patternParams().activeState(), new EntityStateSerializer());
+        byteBuf.writeNullable(context.patternParams().interactState(), new EntityStateSerializer());
+
         byteBuf.writeBoolean(context.patternParams().limitedProducer());
         byteBuf.writeLong(context.patternParams().seed());
 
         byteBuf.write(context.customParams().generalConfig(), new GeneralConfigSerializer());
+    }
+
+    public static class PatternSerializer implements NetByteBufSerializer<Pattern> {
+        @Override
+        public Pattern read(NetByteBuf byteBuf) {
+            return new Pattern(
+                    byteBuf.readUUID(),
+                    byteBuf.readBoolean(),
+                    byteBuf.readList(new TransformerSerializer())
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, Pattern pattern) {
+            byteBuf.writeUUID(pattern.id());
+            byteBuf.writeBoolean(pattern.enabled());
+            byteBuf.writeList(pattern.transformers(), new TransformerSerializer());
+        }
+    }
+
+    public static class EntityStateSerializer implements NetByteBufSerializer<EntityState> {
+        @Override
+        public EntityState read(NetByteBuf byteBuf) {
+            return new EntityState(
+                    byteBuf.read(new Vector3dSerializer()),
+                    byteBuf.readFloat(),
+                    byteBuf.readFloat()
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, EntityState entityState) {
+            byteBuf.write(entityState.position(), new Vector3dSerializer());
+            byteBuf.writeFloat(entityState.rotationX());
+            byteBuf.writeFloat(entityState.rotationY());
+        }
     }
 
 }

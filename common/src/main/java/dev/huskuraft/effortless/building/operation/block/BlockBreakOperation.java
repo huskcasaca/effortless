@@ -22,19 +22,7 @@ public class BlockBreakOperation extends BlockOperation {
             Storage storage, // for preview
             BlockInteraction interaction
     ) {
-        this(world, player, context, storage, interaction, EntityState.get(player));
-    }
-
-
-    public BlockBreakOperation(
-            World world,
-            Player player,
-            Context context,
-            Storage storage, // for preview
-            BlockInteraction interaction,
-            EntityState entityState
-    ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
+        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
     }
 
 

@@ -40,9 +40,13 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, PositionT
 
     @Override
     public BatchOperation transform(TransformableOperation operation) {
+        var realPosition = switch (positionType) {
+            case ABSOLUTE -> position;
+            case RELATIVE -> position.add(operation.getContext().patternParams().activeState().position()); // relative to player
+        };
         return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(0, slices).mapToObj(i -> {
             var angle = 2 * MathUtils.PI / slices * i;
-            return operation.rotate(RotateContext.absolute(position, angle));
+            return operation.rotate(RotateContext.absolute(realPosition, angle));
         }));
     }
 
@@ -80,15 +84,7 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, PositionT
 
     @Override
     public RadialTransformer finalize(Player player, BuildStage stage) {
-        return switch (stage) {
-            case TICK -> this;
-            case UPDATE_CONTEXT, INTERACT -> {
-                if (positionType.getStage() == stage) {
-                    yield new RadialTransformer(id, name, position.add(player.getPosition()), PositionType.ABSOLUTE, slices);
-                }
-                yield this;
-            }
-        };
+        return this;
     }
 
     @Override
