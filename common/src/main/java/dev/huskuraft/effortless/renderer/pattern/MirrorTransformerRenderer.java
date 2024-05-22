@@ -27,6 +27,7 @@ public class MirrorTransformerRenderer extends TransformerRenderer {
                 renderLineByAxis(renderer, transformer.position(), transformer.size(), value, new Color(0, 0, 0, 200));
             }
         }
+        renderBoundingBox(renderer, transformer.getPositionBoundingBox(), new Color(0, 0, 0, 140).getRGB());
     }
 
 }
