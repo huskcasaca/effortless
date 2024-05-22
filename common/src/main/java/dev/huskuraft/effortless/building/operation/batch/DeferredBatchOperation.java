@@ -15,8 +15,11 @@ import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public class DeferredBatchOperation extends BatchOperation {
 
+    protected final Supplier<Stream<? extends TransformableOperation>> operationsSupplier;
+
     public DeferredBatchOperation(Context context, Supplier<Stream<? extends TransformableOperation>> operationsSupplier) {
-        super(context, operationsSupplier);
+        super(context);
+        this.operationsSupplier = operationsSupplier;
     }
 
     @Override
@@ -52,7 +55,7 @@ public class DeferredBatchOperation extends BatchOperation {
     @Override
     public DeferredBatchOperation mapEach(UnaryOperator<TransformableOperation> operator) {
         return new DeferredBatchOperation(context, () -> operations().map(op -> {
-            if (op instanceof DeferredBatchOperation op1) {
+            if (op instanceof BatchOperation op1) {
                 return op1.mapEach(operator);
             } else {
                 return operator.apply(op);
@@ -63,13 +66,18 @@ public class DeferredBatchOperation extends BatchOperation {
     @Override
     public DeferredBatchOperation flatten() {
         return new DeferredBatchOperation(context, () -> {
-            return operations().flatMap(op -> op instanceof DeferredBatchOperation op1 ? op1.flatten().operations() : Stream.of(op));
+            return operations().flatMap(op -> op instanceof BatchOperation op1 ? op1.flatten().operations() : Stream.of(op));
         });
     }
 
     @Override
     public DeferredBatchOperation filter(Predicate<TransformableOperation> predicate) {
         return new DeferredBatchOperation(context, () -> operations().filter(predicate));
+    }
+
+    @Override
+    public Stream<? extends TransformableOperation> operations() {
+        return operationsSupplier.get();
     }
 
 }

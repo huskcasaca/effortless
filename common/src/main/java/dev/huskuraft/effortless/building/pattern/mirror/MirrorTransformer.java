@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
-import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
+import dev.huskuraft.effortless.building.operation.batch.GroupOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
@@ -35,7 +35,10 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
 
     @Override
     public BatchOperation transform(TransformableOperation operation) {
-        return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(
+//        if (!isInBounds(operation.locate().getCenter())) {
+//            return
+//        }
+        return new GroupOperation(operation.getContext(), Stream.of(
                 operation,
                 operation.mirror(MirrorContext.of(position, axis))
         ));

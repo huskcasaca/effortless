@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless.building.operation.batch;
 
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
@@ -12,11 +11,9 @@ import dev.huskuraft.effortless.building.operation.TransformableOperation;
 public abstract class BatchOperation extends TransformableOperation {
 
     protected final Context context;
-    protected final Supplier<Stream<? extends TransformableOperation>> operationsSupplier;
 
-    protected BatchOperation(Context context, Supplier<Stream<? extends TransformableOperation>> operationsSupplier) {
+    protected BatchOperation(Context context) {
         this.context = context;
-        this.operationsSupplier = operationsSupplier;
     }
 
     public Context getContext() {
@@ -34,9 +31,7 @@ public abstract class BatchOperation extends TransformableOperation {
 
     public abstract BatchOperation filter(Predicate<TransformableOperation> predicate);
 
-    public Stream<? extends TransformableOperation> operations() {
-        return operationsSupplier.get();
-    }
+    public abstract Stream<? extends TransformableOperation> operations();
 
     @Override
     public BlockPosition locate() {
