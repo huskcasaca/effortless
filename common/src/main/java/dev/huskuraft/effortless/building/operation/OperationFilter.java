@@ -14,7 +14,10 @@ public interface OperationFilter<O> extends Predicate<O> {
 
     static <O extends Operation> OperationFilter<O> distinctBy(Function<O, ?> propertyGetter) {
         var seen = ConcurrentHashMap.newKeySet();
-        return t -> seen.add(propertyGetter.apply(t));
+        return t -> {
+            var property = propertyGetter.apply(t);
+            return property != null && seen.add(propertyGetter.apply(t));
+        };
     }
 
 }
