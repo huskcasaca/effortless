@@ -15,6 +15,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
@@ -548,7 +549,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (context.buildInteractions().isEmpty()) {
             getEntrance().getClientManager().getOutlineRenderer().remove(generateId(uuid, BoundingBox3d.class));
         } else {
-            var box = BoundingBox3d.fromLowerCornersOf(context.buildInteractions().results().stream().filter(Objects::nonNull).map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new));
+            var box = BoundingBox3d.fromLowerCornersOf(context.buildInteractions().results().stream().filter(Objects::nonNull).map(BlockInteraction::getBlockPosition).map(BlockPosition::toVector3i).toArray(Vector3i[]::new));
             getEntrance().getClientManager().getOutlineRenderer().showBoundingBox(generateId(uuid, BoundingBox3d.class), box)
                     .texture(OutlineRenderLayers.CHECKERED_THIN_TEXTURE_LOCATION)
                     .lightMap(LightTexture.FULL_BLOCK)
@@ -676,7 +677,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     message = message.append(Text.translate("effortless.message.building.cannot_reach_target").withStyle(ChatFormatting.WHITE));
                     var interaction = context.buildInteractions().results().stream().filter(result -> result != null && result.getTarget() == Interaction.Target.MISS).findAny();
                     if (interaction.isPresent()) {
-                        message = message.append(" (").append(Text.text(String.valueOf(MathUtils.round(interaction.get().getBlockPosition().distance(player.getPosition().toVector3i())))).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(context.customParams().generalConfig().maxReachDistance())).append(")");
+                        message = message.append(" (").append(Text.text(String.valueOf(MathUtils.round(interaction.get().getBlockPosition().toVector3i().distance(player.getPosition().toVector3i())))).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(context.customParams().generalConfig().maxReachDistance())).append(")");
                     }
                 }
             }

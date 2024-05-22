@@ -4,14 +4,11 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 
-public final class BlockPosition extends Vector3i {
+public record BlockPosition(int x, int y, int z) {
 
     public static final BlockPosition ZERO = new BlockPosition(0, 0, 0);
     public static final BlockPosition ONE = new BlockPosition(1, 1, 1);
 
-    public BlockPosition(int x, int y, int z) {
-        super(x, y, z);
-    }
 
     public static BlockPosition at(double x, double y, double z) {
         return at((int) MathUtils.floor(x), (int) MathUtils.floor(y), (int) MathUtils.floor(z));
@@ -43,6 +40,10 @@ public final class BlockPosition extends Vector3i {
 
     public BlockPosition sub(Vector3i vector) {
         return offset(-vector.x(), -vector.y(), -vector.z());
+    }
+
+    public BlockPosition sub(BlockPosition blockPosition) {
+        return offset(-blockPosition.x(), -blockPosition.y(), -blockPosition.z());
     }
 
     public BlockPosition mul(int i) {
@@ -141,33 +142,44 @@ public final class BlockPosition extends Vector3i {
         };
     }
 
-    @Override
-    public BlockPosition add(Vector3i... others) {
-        return BlockPosition.at(super.add(others));
-    }
-
-    @Override
     public BlockPosition add(Vector3i other) {
-        return BlockPosition.at(super.add(other));
+        return add(other.x(), other.y(), other.z());
     }
 
-    @Override
+    public BlockPosition add(BlockPosition blockPosition) {
+        return add(blockPosition.x(), blockPosition.y(), blockPosition.z());
+    }
+
     public BlockPosition add(int x, int y, int z) {
-        return BlockPosition.at(super.add(x, y, z));
+        return BlockPosition.at(this.x + x, this.y + y, this.z + z);
     }
 
-    @Override
     public BlockPosition withX(int x) {
         return new BlockPosition(x, y, z);
     }
 
-    @Override
     public BlockPosition withY(int y) {
         return new BlockPosition(x, y, z);
     }
 
-    @Override
     public BlockPosition withZ(int z) {
         return new BlockPosition(x, y, z);
+    }
+
+    public Vector3d toVector3d() {
+        return Vector3d.at(x, y, z);
+    }
+
+    public Vector3i toVector3i() {
+        return Vector3i.at(x, y, z);
+    }
+
+    public int volume() {
+        return x * y * z;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ", " + z + ")";
     }
 }

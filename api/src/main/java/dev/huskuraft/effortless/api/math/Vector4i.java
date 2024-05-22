@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.math;
 
 import java.util.stream.IntStream;
 
-public class Vector4i {
+public record Vector4i(int x, int y, int z, int w) {
 
     public static final Vector4i ZERO = new Vector4i(0, 0, 0, 0);
     public static final Vector4i ONE = new Vector4i(1, 1, 1, 0);
@@ -16,11 +16,6 @@ public class Vector4i {
     public static final Vector4i UNIT_MINUS_Z = new Vector4i(0, 0, -1, 0);
     public static final Vector4i UNIT_MINUS_W = new Vector4i(0, 0, 0, -1);
 
-    protected final int x;
-    protected final int y;
-    protected final int z;
-    protected final int w;
-
     /**
      * Construct an instance.
      *
@@ -29,11 +24,7 @@ public class Vector4i {
      * @param z the Z coordinate
      * @param w the W coordinate
      */
-    public Vector4i(int x, int y, int z, int w) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.w = w;
+    public Vector4i {
     }
 
     public static Vector4i at(double x, double y, double z, double w) {
@@ -90,42 +81,6 @@ public class Vector4i {
      */
     public Vector4i withW(int w) {
         return Vector4i.at(x, y, z, w);
-    }
-
-    /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public int x() {
-        return x;
-    }
-
-    /**
-     * Get the Y coordinate.
-     *
-     * @return the y coordinate
-     */
-    public int y() {
-        return y;
-    }
-
-    /**
-     * Get the Z coordinate.
-     *
-     * @return the z coordinate
-     */
-    public int z() {
-        return z;
-    }
-
-    /**
-     * Get the W coordinate.
-     *
-     * @return the w coordinate
-     */
-    public int w() {
-        return w;
     }
 
     /**
@@ -519,24 +474,6 @@ public class Vector4i {
 
     public int volume() {
         return x * y * z * w;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Vector4i other)) {
-            return false;
-        }
-
-        return other.x == this.x && other.y == this.y && other.z == this.z && other.w == this.w;
-    }
-
-    public int hashCode() {
-        int result = 1;
-        result = 31 * result + x;
-        result = 31 * result + y;
-        result = 31 * result + z;
-        result = 31 * result + w;
-        return result;
     }
 
     @Override

@@ -21,7 +21,7 @@ public record ArrayTransformer(UUID id, Text name, Vector3i offset, int count) i
     public static final ArrayTransformer ZERO = new ArrayTransformer(new Vector3i(0, 0, 0), 0);
     public static final ArrayTransformer DEFAULT = new ArrayTransformer(new Vector3i(1, 1, 1), 4);
 
-    public static final BoundingBox3i OFFSET_BOUND = new BoundingBox3i(
+    public static final BoundingBox3i OFFSET_BOUND = BoundingBox3i.of(
             Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE,
             Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE
     );

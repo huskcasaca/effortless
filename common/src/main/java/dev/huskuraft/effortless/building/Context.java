@@ -288,7 +288,7 @@ public record Context(
         if (buildInteractions().isEmpty() || buildInteractions().isMissing()) {
             return Vector3i.ZERO;
         }
-        return BoundingBox3d.fromLowerCornersOf(buildInteractions().results().stream().map(BlockInteraction::getBlockPosition).toArray(Vector3i[]::new)).getSize().toVector3i();
+        return BoundingBox3d.fromLowerCornersOf(buildInteractions().results().stream().map(BlockInteraction::getBlockPosition).map(BlockPosition::toVector3i).toArray(Vector3i[]::new)).getSize().toVector3i();
     }
 
     public int getBoxVolume() {

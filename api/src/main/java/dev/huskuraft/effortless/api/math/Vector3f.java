@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.api.math;
 import java.util.Comparator;
 import java.util.stream.DoubleStream;
 
-public class Vector3f {
+public record Vector3f(float x, float y, float z) {
 
     public static final Vector3f ZERO = new Vector3f(0, 0, 0);
     public static final Vector3f ONE = new Vector3f(1, 1, 1);
@@ -15,10 +15,6 @@ public class Vector3f {
     public static final Vector3f UNIT_MINUS_Y = new Vector3f(0, -1, 0);
     public static final Vector3f UNIT_MINUS_Z = new Vector3f(0, 0, -1);
 
-    protected final float x;
-    protected final float y;
-    protected final float z;
-
     /**
      * Construct an instance.
      *
@@ -26,10 +22,7 @@ public class Vector3f {
      * @param y the Y coordinate
      * @param z the Z coordinate
      */
-    public Vector3f(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Vector3f {
     }
 
     public static Comparator<Vector3f> sortByCoordsYzx() {
@@ -72,33 +65,6 @@ public class Vector3f {
      */
     public Vector3f withZ(float z) {
         return Vector3f.at(x, y, z);
-    }
-
-    /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public float x() {
-        return x;
-    }
-
-    /**
-     * Get the Y coordinate.
-     *
-     * @return the y coordinate
-     */
-    public float y() {
-        return y;
-    }
-
-    /**
-     * Get the Z coordinate.
-     *
-     * @return the z coordinate
-     */
-    public float z() {
-        return z;
     }
 
     /**
@@ -505,25 +471,6 @@ public class Vector3f {
 
     public double volume() {
         return x * y * z;
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Vector3f other)) {
-            return false;
-        }
-
-        return other.x == this.x && other.y == this.y && other.z == this.z;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 17;
-        hash = 31 * hash + Float.hashCode(x);
-        hash = 31 * hash + Float.hashCode(y);
-        hash = 31 * hash + Float.hashCode(z);
-        return hash;
     }
 
     @Override

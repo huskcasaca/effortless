@@ -26,14 +26,14 @@ public class BlockBoundingBoxOutline extends Outline {
         bb = bb.inflate(noCull ? -1 / 128d : 1 / 128d);
         noCull |= params.disableCull;
 
-        var xyz = new Vector3d(bb.minX, bb.minY, bb.minZ);
-        var Xyz = new Vector3d(bb.maxX, bb.minY, bb.minZ);
-        var xYz = new Vector3d(bb.minX, bb.maxY, bb.minZ);
-        var XYz = new Vector3d(bb.maxX, bb.maxY, bb.minZ);
-        var xyZ = new Vector3d(bb.minX, bb.minY, bb.maxZ);
-        var XyZ = new Vector3d(bb.maxX, bb.minY, bb.maxZ);
-        var xYZ = new Vector3d(bb.minX, bb.maxY, bb.maxZ);
-        var XYZ = new Vector3d(bb.maxX, bb.maxY, bb.maxZ);
+        var xyz = new Vector3d(bb.minX(), bb.minY(), bb.minZ());
+        var Xyz = new Vector3d(bb.maxX(), bb.minY(), bb.minZ());
+        var xYz = new Vector3d(bb.minX(), bb.maxY(), bb.minZ());
+        var XYz = new Vector3d(bb.maxX(), bb.maxY(), bb.minZ());
+        var xyZ = new Vector3d(bb.minX(), bb.minY(), bb.maxZ());
+        var XyZ = new Vector3d(bb.maxX(), bb.minY(), bb.maxZ());
+        var xYZ = new Vector3d(bb.minX(), bb.maxY(), bb.maxZ());
+        var XYZ = new Vector3d(bb.maxX(), bb.maxY(), bb.maxZ());
 
         var start = xyz;
         renderAACuboidLine(renderer, start, Xyz);

@@ -39,7 +39,7 @@ public interface Transformer {
         ).flatMap(List::stream).collect(Collectors.toList());
     }
 
-    BoundingBox3d POSITION_BOUND = new BoundingBox3d(
+    BoundingBox3d POSITION_BOUND = BoundingBox3d.of(
             Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE,
             Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE
     );

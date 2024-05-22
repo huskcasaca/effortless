@@ -59,7 +59,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
     }
 
     public static void defineVector3d(ConfigSpec configSpec, String key, Vector3d defaultValue, BoundingBox3d boundingBox3d) {
-        defineVector3d(configSpec, key, defaultValue, boundingBox3d.minX, boundingBox3d.maxX, boundingBox3d.minY, boundingBox3d.maxY, boundingBox3d.minZ, boundingBox3d.maxZ);
+        defineVector3d(configSpec, key, defaultValue, boundingBox3d.minX(), boundingBox3d.maxX(), boundingBox3d.minY(), boundingBox3d.maxY(), boundingBox3d.minZ(), boundingBox3d.maxZ());
     }
 
     public static void defineVector3d(ConfigSpec configSpec, String key, Vector3d defaultValue) {

@@ -112,7 +112,7 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
     }
 
     public BoundingBox3d getPositionBoundingBox() {
-        return new BoundingBox3d(position.sub(size, size, size), position.add(size, size, size));
+        return BoundingBox3d.of(position.sub(size, size, size), position.add(size, size, size));
     }
 
 }
