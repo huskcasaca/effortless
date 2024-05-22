@@ -9,6 +9,8 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
+import dev.huskuraft.effortless.building.operation.Operation;
+import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
@@ -50,22 +52,25 @@ public class BlockPlaceOperation extends BlockOperation {
     }
 
     @Override
-    public BlockPlaceOperation move(MoveContext moveContext) {
+    public Operation move(MoveContext moveContext) {
         return new BlockPlaceOperation(world, player, context, storage, moveContext.move(interaction), blockState);
     }
 
     @Override
-    public BlockPlaceOperation mirror(MirrorContext mirrorContext) {
+    public Operation mirror(MirrorContext mirrorContext) {
+        if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
+            return new EmptyOperation();
+        }
         return new BlockPlaceOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(blockState));
     }
 
     @Override
-    public BlockPlaceOperation rotate(RotateContext rotateContext) {
+    public Operation rotate(RotateContext rotateContext) {
         return new BlockPlaceOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(blockState));
     }
 
     @Override
-    public BlockPlaceOperation refactor(RefactorContext refactorContext) {
+    public Operation refactor(RefactorContext refactorContext) {
         return new BlockPlaceOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()));
     }
 

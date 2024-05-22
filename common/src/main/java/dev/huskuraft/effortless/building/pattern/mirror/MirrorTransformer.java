@@ -5,12 +5,12 @@ import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Range1i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.Operation;
-import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.GroupOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
@@ -34,13 +34,10 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
     }
 
     @Override
-    public BatchOperation transform(Operation operation) {
-//        if (!isInBounds(operation.locate().getCenter())) {
-//            return
-//        }
+    public Operation transform(Operation operation) {
         return new GroupOperation(operation.getContext(), Stream.of(
                 operation,
-                operation.mirror(MirrorContext.of(position, axis))
+                operation.mirror(new MirrorContext(position, getPositionBoundingBox(), axis))
         ));
     }
 
@@ -112,6 +109,10 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
 
     public MirrorTransformer withSize(int size) {
         return new MirrorTransformer(id, name, position, axis, size);
+    }
+
+    public BoundingBox3d getPositionBoundingBox() {
+        return new BoundingBox3d(position.sub(size, size, size), position.add(size, size, size));
     }
 
 }

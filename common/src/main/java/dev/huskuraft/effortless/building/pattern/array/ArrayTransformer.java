@@ -11,7 +11,6 @@ import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.Operation;
-import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
@@ -34,7 +33,7 @@ public record ArrayTransformer(UUID id, Text name, Vector3i offset, int count) i
     }
 
     @Override
-    public BatchOperation transform(Operation operation) {
+    public Operation transform(Operation operation) {
         return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(0, count).mapToObj(i -> {
             return operation.move(MoveContext.relative(offset.mul(i)));
         }));

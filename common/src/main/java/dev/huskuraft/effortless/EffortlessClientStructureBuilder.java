@@ -93,7 +93,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
             var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_ONCE);
-            var result = new BatchBuildSession(player.getWorld(), player, previewContext).build().commit();
+            var result = new BatchBuildSession(player, previewContext).commit();
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
             showBuildContextResult(context.id(), 1024, player, context, result);
 
@@ -385,7 +385,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (context.isBuildType()) {
             return; // handle on server
         }
-        var result = new BatchBuildSession(player.getWorld(), player, context).build().commit();
+        var result = new BatchBuildSession(player, context).commit();
 
         showBuildContextResult(player.getId(), 1024, player, context, result);
         showBuildTooltip(context.id(), 1024, player, context, result);
@@ -492,7 +492,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             showBuildContextResult(player.getId(), 0, player, context, null);
             showBuildTooltip(player.getId(), 0, player, context, Map.of());
         } else {
-            var result = new BatchBuildSession(player.getWorld(), player, context.withBuildType(BuildType.PREVIEW)).build().commit();
+            var result = new BatchBuildSession(player, context.withBuildType(BuildType.PREVIEW)).commit();
             showBuildContextResult(player.getId(), 0, player, context, result);
             showBuildTooltip(player.getId(), 0, player, context, result);
         }

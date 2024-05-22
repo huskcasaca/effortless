@@ -121,7 +121,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
         } else {
             getEntrance().getChannel().sendPacket(
                     PlayerBuildTooltipPacket.buildSuccess(
-                            getOperationResultStack(player).push(context.createSession(player.getWorld(), player).build().commit())
+                            getOperationResultStack(player).push(context.createSession(player.getWorld(), player).commit())
                     ), player
             );
         }

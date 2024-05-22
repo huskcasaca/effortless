@@ -257,7 +257,7 @@ public record Context(
     }
 
     public BuildSession createSession(World world, Player player) {
-        return new BatchBuildSession(world, player, this);
+        return new BatchBuildSession(player, this);
     }
 
     // for build mode only

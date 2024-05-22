@@ -5,21 +5,14 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
 
-public class MirrorContext {
-
-    private final Vector3d center;
-    private final Axis axis;
-
-    private MirrorContext(Vector3d position, Axis axis) {
-        this.center = position;
-        this.axis = axis;
-    }
-
-    public static MirrorContext of(Vector3d position, Axis axis) {
-        return new MirrorContext(position, axis);
-    }
+public record MirrorContext(
+       Vector3d center,
+       BoundingBox3d bounds,
+       Axis axis
+) implements PositionBounded {
 
     public Vector3d mirror(Vector3d vec) {
         return switch (axis) {
@@ -52,4 +45,8 @@ public class MirrorContext {
         return blockState.mirror(axis);
     }
 
+    @Override
+    public boolean isInBounds(Vector3d position) {
+        return bounds.contains(position);
+    }
 }
