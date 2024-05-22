@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.building.operation.empty;
 
-import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.OperationResult;
@@ -9,14 +8,9 @@ import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
 
-public final class EmptyOperation extends Operation {
+public final class EmptyOperation implements Operation {
 
     public EmptyOperation() {
-    }
-
-    @Override
-    public BlockPosition locate() {
-        return null;
     }
 
     @Override

@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.Operation;
 
-public abstract class BlockOperation extends Operation {
+public abstract class BlockOperation implements Operation {
 
     protected final World world;
     protected final Player player;
@@ -38,11 +38,6 @@ public abstract class BlockOperation extends Operation {
         this.storage = storage;
         this.interaction = interaction;
         this.blockState = blockState;
-    }
-
-    @Override
-    public BlockPosition locate() {
-        return getBlockPosition();
     }
 
     public World getWorld() {

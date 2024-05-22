@@ -68,7 +68,7 @@ public class BatchBuildSession implements BuildSession {
             }
         }
         operations = operations.flatten().filter(Objects::nonNull);
-        operations = operations.filter(OperationFilter.distinctByLocation());
+        operations = operations.filter(OperationFilter.distinctBlockOperations());
 
         return operations;
     }

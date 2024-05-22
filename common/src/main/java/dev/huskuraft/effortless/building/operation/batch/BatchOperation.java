@@ -4,11 +4,10 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.operation.Operation;
 
-public abstract class BatchOperation extends Operation {
+public abstract class BatchOperation implements Operation {
 
     protected final Context context;
 
@@ -33,8 +32,4 @@ public abstract class BatchOperation extends Operation {
 
     public abstract Stream<? extends Operation> operations();
 
-    @Override
-    public BlockPosition locate() {
-        return null;
-    }
 }
