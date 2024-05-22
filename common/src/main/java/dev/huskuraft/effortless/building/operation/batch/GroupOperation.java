@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.operation.Operation;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
@@ -16,14 +15,14 @@ import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public class GroupOperation extends BatchOperation {
 
-    protected final List<TransformableOperation> operations;
+    protected final List<Operation> operations;
 
-    public GroupOperation(Context context, List<TransformableOperation> operations) {
+    public GroupOperation(Context context, List<Operation> operations) {
         super(context);
         this.operations = operations;
     }
 
-    public GroupOperation(Context context, Stream<? extends TransformableOperation> operations) {
+    public GroupOperation(Context context, Stream<? extends Operation> operations) {
         super(context);
         this.operations = operations.collect(Collectors.toList());
     }
@@ -54,12 +53,12 @@ public class GroupOperation extends BatchOperation {
     }
 
     @Override
-    public GroupOperation map(UnaryOperator<TransformableOperation> operator) {
+    public GroupOperation map(UnaryOperator<Operation> operator) {
         return new GroupOperation(context, operations().map(operator));
     }
 
     @Override
-    public GroupOperation mapEach(UnaryOperator<TransformableOperation> operator) {
+    public GroupOperation mapEach(UnaryOperator<Operation> operator) {
         return new GroupOperation(context, operations().map(op -> {
             if (op instanceof BatchOperation op1) {
                 return op1.mapEach(operator);
@@ -75,12 +74,12 @@ public class GroupOperation extends BatchOperation {
     }
 
     @Override
-    public GroupOperation filter(Predicate<TransformableOperation> predicate) {
+    public GroupOperation filter(Predicate<Operation> predicate) {
         return new GroupOperation(context, operations().filter(predicate));
     }
 
     @Override
-    public Stream<? extends TransformableOperation> operations() {
+    public Stream<? extends Operation> operations() {
         return operations.stream();
     }
 

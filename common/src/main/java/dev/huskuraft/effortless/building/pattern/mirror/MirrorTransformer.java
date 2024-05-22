@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.api.math.Range1i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
+import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.GroupOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -34,7 +34,7 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
     }
 
     @Override
-    public BatchOperation transform(TransformableOperation operation) {
+    public BatchOperation transform(Operation operation) {
 //        if (!isInBounds(operation.locate().getCenter())) {
 //            return
 //        }

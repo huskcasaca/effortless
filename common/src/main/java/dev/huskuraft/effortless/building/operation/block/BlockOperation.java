@@ -13,9 +13,9 @@ import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
+import dev.huskuraft.effortless.building.operation.Operation;
 
-public abstract class BlockOperation extends TransformableOperation {
+public abstract class BlockOperation extends Operation {
 
     protected final World world;
     protected final Player player;

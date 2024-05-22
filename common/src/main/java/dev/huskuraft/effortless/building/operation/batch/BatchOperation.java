@@ -6,9 +6,9 @@ import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
+import dev.huskuraft.effortless.building.operation.Operation;
 
-public abstract class BatchOperation extends TransformableOperation {
+public abstract class BatchOperation extends Operation {
 
     protected final Context context;
 
@@ -23,15 +23,15 @@ public abstract class BatchOperation extends TransformableOperation {
     @Override
     public abstract BatchOperationResult commit();
 
-    public abstract BatchOperation map(UnaryOperator<TransformableOperation> operator);
+    public abstract BatchOperation map(UnaryOperator<Operation> operator);
 
-    public abstract BatchOperation mapEach(UnaryOperator<TransformableOperation> operator);
+    public abstract BatchOperation mapEach(UnaryOperator<Operation> operator);
 
     public abstract BatchOperation flatten();
 
-    public abstract BatchOperation filter(Predicate<TransformableOperation> predicate);
+    public abstract BatchOperation filter(Predicate<Operation> predicate);
 
-    public abstract Stream<? extends TransformableOperation> operations();
+    public abstract Stream<? extends Operation> operations();
 
     @Override
     public BlockPosition locate() {

@@ -65,7 +65,7 @@ public class BlockPlaceOperation extends BlockOperation {
     }
 
     @Override
-    public BlockOperation refactor(RefactorContext refactorContext) {
+    public BlockPlaceOperation refactor(RefactorContext refactorContext) {
         return new BlockPlaceOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()));
     }
 

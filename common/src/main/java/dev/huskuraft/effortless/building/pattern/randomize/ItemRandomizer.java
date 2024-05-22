@@ -14,7 +14,7 @@ import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
+import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
@@ -366,7 +366,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     }
 
     @Override
-    public BatchOperation transform(TransformableOperation operation) {
+    public BatchOperation transform(Operation operation) {
         if (!isValid()) {
             return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation));
         }

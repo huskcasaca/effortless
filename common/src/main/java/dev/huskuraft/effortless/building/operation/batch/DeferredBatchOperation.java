@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.operation.Operation;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
@@ -15,9 +14,9 @@ import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public class DeferredBatchOperation extends BatchOperation {
 
-    protected final Supplier<Stream<? extends TransformableOperation>> operationsSupplier;
+    protected final Supplier<Stream<? extends Operation>> operationsSupplier;
 
-    public DeferredBatchOperation(Context context, Supplier<Stream<? extends TransformableOperation>> operationsSupplier) {
+    public DeferredBatchOperation(Context context, Supplier<Stream<? extends Operation>> operationsSupplier) {
         super(context);
         this.operationsSupplier = operationsSupplier;
     }
@@ -48,12 +47,12 @@ public class DeferredBatchOperation extends BatchOperation {
     }
 
     @Override
-    public DeferredBatchOperation map(UnaryOperator<TransformableOperation> operator) {
+    public DeferredBatchOperation map(UnaryOperator<Operation> operator) {
         return new DeferredBatchOperation(context, () -> operations().map(operator));
     }
 
     @Override
-    public DeferredBatchOperation mapEach(UnaryOperator<TransformableOperation> operator) {
+    public DeferredBatchOperation mapEach(UnaryOperator<Operation> operator) {
         return new DeferredBatchOperation(context, () -> operations().map(op -> {
             if (op instanceof BatchOperation op1) {
                 return op1.mapEach(operator);
@@ -71,12 +70,12 @@ public class DeferredBatchOperation extends BatchOperation {
     }
 
     @Override
-    public DeferredBatchOperation filter(Predicate<TransformableOperation> predicate) {
+    public DeferredBatchOperation filter(Predicate<Operation> predicate) {
         return new DeferredBatchOperation(context, () -> operations().filter(predicate));
     }
 
     @Override
-    public Stream<? extends TransformableOperation> operations() {
+    public Stream<? extends Operation> operations() {
         return operationsSupplier.get();
     }
 

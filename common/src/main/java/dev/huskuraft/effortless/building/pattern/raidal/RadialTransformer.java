@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.api.math.Range1i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
+import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
@@ -47,7 +47,7 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
     }
 
     @Override
-    public BatchOperation transform(TransformableOperation operation) {
+    public BatchOperation transform(Operation operation) {
         return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(0, slices).mapToObj(i -> {
             var angle = 2 * MathUtils.PI / slices * i;
             return operation.rotate(RotateContext.absolute(position, angle));

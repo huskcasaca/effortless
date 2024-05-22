@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.OperationSummaryType;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
 public class BlockInteractOperationResult extends BlockOperationResult {
@@ -19,7 +19,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
     }
 
     @Override
-    public TransformableOperation getReverseOperation() {
+    public Operation getReverseOperation() {
         if (result().fail()) {
             return new EmptyOperation();
         }
