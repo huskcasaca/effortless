@@ -36,7 +36,7 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
     @Override
     public Operation transform(Operation operation) {
         return new GroupOperation(operation.getContext(), Stream.of(
-                operation,
+                operation.mirror(new MirrorContext(position, getPositionBoundingBox(), axis)).mirror(new MirrorContext(position, getPositionBoundingBox(), axis)),
                 operation.mirror(new MirrorContext(position, getPositionBoundingBox(), axis))
         ));
     }
