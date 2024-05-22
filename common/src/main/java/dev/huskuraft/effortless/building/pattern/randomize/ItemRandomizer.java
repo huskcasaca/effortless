@@ -403,11 +403,6 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     }
 
     @Override
-    public boolean isIntermediate() {
-        return false;
-    }
-
-    @Override
     public ItemRandomizer withRandomId() {
         return withId(UUID.randomUUID());
     }
@@ -430,7 +425,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     public ItemRandomizer finalize(Player player, BuildStage stage) {
 
         switch (stage) {
-            case TICK, UPDATE_CONTEXT, INTERACT -> {
+            case TICK, SET_PATTERN, INTERACT -> {
                 if (getSource() != Source.CUSTOMIZE) {
                     var itemStacks = switch (getSource()) {
                         case INVENTORY -> Stream.of(player.getInventory().getItems(), player.getInventory().getOffhandItems()).flatMap(List::stream).toList();

@@ -239,14 +239,6 @@ public record Context(
                         .withLimitedPatternProducer(player.getGameMode().isSurvival())
                         .withRandomPatternSeed();
             }
-            case UPDATE_CONTEXT -> {
-            }
-            case ENABLE_PATTERN -> {
-                return withActiveState(EntityState.get(player));
-            }
-            case INTERACT -> {
-
-            }
         }
         return withPattern(pattern().finalize(player, stage));
     }
@@ -392,7 +384,7 @@ public record Context(
         }
 
         public PatternParams withLimitProducer(boolean limitedProducer) {
-            return new PatternParams(pattern, activeState, interactState, limitedProducer, new Random().nextLong());
+            return new PatternParams(pattern, activeState, interactState, limitedProducer, seed);
         }
 
         public PatternParams withRandomSeed() {

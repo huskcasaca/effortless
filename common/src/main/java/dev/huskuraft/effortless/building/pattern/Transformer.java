@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
+import dev.huskuraft.effortless.api.math.Range1d;
+import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
@@ -18,7 +20,16 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public interface Transformer {
 
+    Range1d POSITION_RANGE = new Range1d(-30000000, 30000000);
     int MAX_NAME_LENGTH = 255;
+
+    static double roundToHalf(double value) {
+        return Math.round(value * 2) / 2.0;
+    }
+
+    static Vector3d roundToHalf(Vector3d vector3d) {
+        return new Vector3d(roundToHalf(vector3d.x()), roundToHalf(vector3d.y()), roundToHalf(vector3d.z()));
+    }
 
     static List<Transformer> getDefaultTransformers() {
         return Stream.of(
@@ -53,8 +64,6 @@ public interface Transformer {
     Stream<Text> getSearchableTags();
 
     boolean isValid();
-
-    boolean isIntermediate();
 
     Transformer withName(Text name);
 

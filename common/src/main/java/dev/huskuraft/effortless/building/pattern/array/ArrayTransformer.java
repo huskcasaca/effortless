@@ -5,9 +5,9 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.math.BoundingBox3d;
+import dev.huskuraft.effortless.api.math.BoundingBox3i;
 import dev.huskuraft.effortless.api.math.Range1i;
-import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
@@ -17,22 +17,19 @@ import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 
-public record ArrayTransformer(UUID id, Text name, Vector3d offset, int count) implements Transformer {
+public record ArrayTransformer(UUID id, Text name, Vector3i offset, int count) implements Transformer {
 
-    public static final ArrayTransformer ZERO = new ArrayTransformer(new Vector3d(0, 0, 0), 0);
-    public static final ArrayTransformer DEFAULT = new ArrayTransformer(new Vector3d(1, 1, 1), 4);
+    public static final ArrayTransformer ZERO = new ArrayTransformer(new Vector3i(0, 0, 0), 0);
+    public static final ArrayTransformer DEFAULT = new ArrayTransformer(new Vector3i(1, 1, 1), 4);
 
-    public static final BoundingBox3d OFFSET_BOUND = new BoundingBox3d(
+    public static final BoundingBox3i OFFSET_BOUND = new BoundingBox3i(
             Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE,
             Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE
     );
 
     public static final Range1i COUNT_RANGE = new Range1i(0, Short.MAX_VALUE);
 
-    public static final int MIN_COUNT = 0;
-    public static final int MAX_COUNT = Short.MAX_VALUE;
-
-    public ArrayTransformer(Vector3d offset, int count) {
+    public ArrayTransformer(Vector3i offset, int count) {
         this(UUID.randomUUID(), Text.translate("effortless.transformer.array"), offset, count);
     }
 
@@ -55,12 +52,7 @@ public record ArrayTransformer(UUID id, Text name, Vector3d offset, int count) i
 
     @Override
     public boolean isValid() {
-        return OFFSET_BOUND.containsIn(offset) && COUNT_RANGE.contains(count);
-    }
-
-    @Override
-    public boolean isIntermediate() {
-        return false;
+        return OFFSET_BOUND.contains(offset) && COUNT_RANGE.contains(count);
     }
 
     @Override
@@ -73,7 +65,7 @@ public record ArrayTransformer(UUID id, Text name, Vector3d offset, int count) i
         return new ArrayTransformer(id, name, offset, count);
     }
 
-    public Vector3d offset() {
+    public Vector3i offset() {
         return offset;
     }
 
@@ -85,19 +77,19 @@ public record ArrayTransformer(UUID id, Text name, Vector3d offset, int count) i
         return Math.max(0, count - 1);
     }
 
-    public ArrayTransformer withOffset(Vector3d offset) {
+    public ArrayTransformer withOffset(Vector3i offset) {
         return new ArrayTransformer(id, name, offset, count);
     }
 
-    public ArrayTransformer withOffsetX(double x) {
+    public ArrayTransformer withOffsetX(int x) {
         return new ArrayTransformer(id, name, offset.withX(x), count);
     }
 
-    public ArrayTransformer withOffsetY(double y) {
+    public ArrayTransformer withOffsetY(int y) {
         return new ArrayTransformer(id, name, offset.withY(y), count);
     }
 
-    public ArrayTransformer withOffsetZ(double z) {
+    public ArrayTransformer withOffsetZ(int z) {
         return new ArrayTransformer(id, name, offset.withZ(z), count);
     }
 

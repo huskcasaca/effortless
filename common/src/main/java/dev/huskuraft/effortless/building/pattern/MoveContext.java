@@ -2,27 +2,27 @@ package dev.huskuraft.effortless.building.pattern;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
-import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.api.math.Vector3i;
 
 public class MoveContext {
 
-    private final Vector3d amount;
+    private final Vector3i amount;
     private final PositionType positionType;
 
-    private MoveContext(Vector3d amount, PositionType positionType) {
+    private MoveContext(Vector3i amount, PositionType positionType) {
         this.amount = amount;
         this.positionType = positionType;
     }
 
-    public static MoveContext relative(Vector3d amount) {
+    public static MoveContext relative(Vector3i amount) {
         return new MoveContext(amount, PositionType.RELATIVE);
     }
 
-    public static MoveContext relative(double x, double y, double z) {
-        return new MoveContext(new Vector3d(x, y, z), PositionType.RELATIVE);
+    public static MoveContext relative(int x, int y, int z) {
+        return new MoveContext(new Vector3i(x, y, z), PositionType.RELATIVE);
     }
 
-    public static MoveContext absolute(Vector3d amount) {
+    public static MoveContext absolute(Vector3i amount) {
         return new MoveContext(amount, PositionType.ABSOLUTE);
     }
 
@@ -34,7 +34,7 @@ public class MoveContext {
         return new BlockInteraction(location, direction, blockPosition, blockInteraction.isInside());
     }
 
-    private Vector3d move(Vector3d vector) {
+    private Vector3i move(Vector3i vector) {
         return switch (positionType) {
             case RELATIVE -> vector.add(amount);
             case ABSOLUTE -> amount;
@@ -43,10 +43,7 @@ public class MoveContext {
 
     private BlockPosition move(BlockPosition blockPosition) {
         return switch (positionType) {
-            case RELATIVE -> {
-                Vector3d vector = move(blockPosition.getCenter());
-                yield BlockPosition.at(vector);
-            }
+            case RELATIVE -> blockPosition.add(amount);
             case ABSOLUTE -> BlockPosition.at(amount);
         };
     }

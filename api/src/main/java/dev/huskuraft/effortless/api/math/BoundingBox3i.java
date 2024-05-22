@@ -166,4 +166,8 @@ public class BoundingBox3i {
     public int maxZ() {
         return this.maxZ;
     }
+
+    public BoundingBox3d toBoundingBox3d() {
+        return new BoundingBox3d(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
+    }
 }

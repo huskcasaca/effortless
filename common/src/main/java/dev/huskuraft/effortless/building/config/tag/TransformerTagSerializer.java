@@ -70,7 +70,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             return new ArrayTransformer(
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
-                    tag.asRecord().getVector3d(TAG_OFFSET),
+                    tag.asRecord().getVector3d(TAG_OFFSET).toVector3i(),
                     tag.asRecord().getInt(TAG_COUNT)
             );
         }
@@ -80,7 +80,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             var tag = TagRecord.newRecord();
             tag.putUUID(TAG_ID, transformer.getId());
             tag.putText(TAG_NAME, transformer.getName());
-            tag.putVector3d(TAG_OFFSET, transformer.offset());
+            tag.putVector3d(TAG_OFFSET, transformer.offset().toVector3d());
             tag.putInt(TAG_COUNT, transformer.count());
             return tag;
         }
@@ -121,7 +121,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
     public static class MirrorTransformerTagSerializer implements TagSerializer<MirrorTransformer> {
 
         private static final String TAG_POSITION = "Position";
-        private static final String TAG_POSITION_TYPE = "PositionType";
+        private static final String TAG_SIZE = "Size";
         private static final String TAG_AXIS = "Axis";
 
 
@@ -131,8 +131,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
                     tag.asRecord().getVector3d(TAG_POSITION),
-                    tag.asRecord().getEnum(TAG_POSITION_TYPE, PositionType.class),
-                    tag.asRecord().getEnum(TAG_AXIS, Axis.class)
+                    tag.asRecord().getEnum(TAG_AXIS, Axis.class),
+                    tag.asRecord().getInt(TAG_SIZE)
             );
         }
 
@@ -142,8 +142,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             tag.asRecord().putUUID(TAG_ID, transformer.getId());
             tag.asRecord().putText(TAG_NAME, transformer.getName());
             tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
-            tag.asRecord().putEnum(TAG_POSITION_TYPE, transformer.getPositionType());
             tag.asRecord().putEnum(TAG_AXIS, transformer.axis());
+            tag.asRecord().putInt(TAG_AXIS, transformer.size());
             return tag;
         }
 
@@ -155,8 +155,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     value.getId() != null ? value.getId() : UUID.randomUUID(),
                     value.getName() != null ? value.getName() : MirrorTransformer.ZERO_Y.getName(),
                     value.position() != null ? value.position() : MirrorTransformer.ZERO_Y.position(),
-                    value.positionType() != null ? value.positionType() : MirrorTransformer.ZERO_Y.positionType(),
-                    value.axis() != null ? value.axis() : MirrorTransformer.ZERO_Y.axis()
+                    value.axis() != null ? value.axis() : MirrorTransformer.ZERO_Y.axis(),
+                    value.size()
             );
         }
     }
@@ -166,6 +166,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         private static final String TAG_POSITION = "Position";
         private static final String TAG_POSITION_TYPE = "PositionType";
         private static final String TAG_SLICE = "Slice";
+        private static final String TAG_RADIUS = "Radius";
 
         @Override
         public RadialTransformer decode(TagElement tag) {
@@ -173,8 +174,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
                     tag.asRecord().getVector3d(TAG_POSITION),
-                    tag.asRecord().getEnum(TAG_POSITION_TYPE, PositionType.class),
-                    tag.asRecord().getInt(TAG_SLICE)
+                    tag.asRecord().getInt(TAG_SLICE),
+                    tag.asRecord().getInt(TAG_RADIUS)
             );
         }
 
@@ -184,8 +185,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             tag.asRecord().putUUID(TAG_ID, transformer.getId());
             tag.asRecord().putText(TAG_NAME, transformer.getName());
             tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
-            tag.asRecord().putEnum(TAG_POSITION_TYPE, transformer.getPositionType());
             tag.asRecord().putInt(TAG_SLICE, transformer.slices());
+            tag.asRecord().putInt(TAG_RADIUS, transformer.radius());
             return tag;
         }
 
@@ -197,8 +198,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     value.getId() != null ? value.getId() : UUID.randomUUID(),
                     value.getName() != null ? value.getName() : RadialTransformer.ZERO.getName(),
                     value.position() != null ? value.position() : RadialTransformer.ZERO.position(),
-                    value.positionType() != null ? value.positionType() : RadialTransformer.ZERO.positionType(),
-                    value.slices()
+                    value.slices(),
+                    value.radius()
             );
         }
     }

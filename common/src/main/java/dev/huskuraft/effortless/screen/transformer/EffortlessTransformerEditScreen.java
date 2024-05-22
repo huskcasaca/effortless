@@ -5,16 +5,15 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.api.core.Tuple2;
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.slot.TextSlot;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
-import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Transformer;
+import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
 import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
 import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
@@ -27,6 +26,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
     private AbstractWidget titleTextWidget;
     private TransformerList transformerEntries;
     private SettingOptionsList entries;
+    private Button moveToPlayerButton;
     private Button saveButton;
     private Button cancelButton;
     private TextSlot textSlot;
@@ -55,9 +55,20 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
         this.transformerEntries.setRenderSelection(false);
         this.transformerEntries.reset(List.of(transformer));
 
-        this.entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + transformerEntries.getHeight() + INNER_PADDINGS_V, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - transformerEntries.getHeight() - INNER_PADDINGS_V - PANEL_BUTTON_ROW_HEIGHT_1, true, false));
+        this.entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + transformerEntries.getHeight() + INNER_PADDINGS_V, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - transformerEntries.getHeight() - INNER_PADDINGS_V - (transformer.getType() == Transformers.MIRROR || transformer.getType() == Transformers.RADIAL ? PANEL_BUTTON_ROW_HEIGHT_2 : PANEL_BUTTON_ROW_HEIGHT_1), true, false));
         this.entries.setAlwaysShowScrollbar(true);
 
+        this.moveToPlayerButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.position.move_to_player"), button -> {
+            var playerPosition = getEntrance().getClient().getPlayer().getPosition();
+            this.transformer = switch (transformer.getType()) {
+                case ARRAY -> transformer;
+                case MIRROR -> ((MirrorTransformer) transformer).withPosition(Transformer.roundToHalf(playerPosition));
+                case RADIAL -> ((RadialTransformer) transformer).withPosition(Transformer.roundToHalf(playerPosition));
+                case ITEM_RANDOMIZER -> transformer;
+            };
+            recreate();
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
+        this.moveToPlayerButton.setVisible(transformer.getType() == Transformers.MIRROR || transformer.getType() == Transformers.RADIAL);
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.cancel"), button -> {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
@@ -68,36 +79,42 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
 
         switch (transformer.getType()) {
             case ARRAY -> {
-                this.entries.addNumberEntry(Text.translate("effortless.transformer.array.offset.x"), Text.text("X"), ((ArrayTransformer) transformer).offset().x(), ArrayTransformer.OFFSET_BOUND.getMinX(), ArrayTransformer.OFFSET_BOUND.getMaxX(), value -> this.transformer = ((ArrayTransformer) transformer).withOffsetX(value));
-                this.entries.addNumberEntry(Text.translate("effortless.transformer.array.offset.y"), Text.text("Y"), ((ArrayTransformer) transformer).offset().y(), ArrayTransformer.OFFSET_BOUND.getMinY(), ArrayTransformer.OFFSET_BOUND.getMaxY(), value -> this.transformer = ((ArrayTransformer) transformer).withOffsetY(value));
-                this.entries.addNumberEntry(Text.translate("effortless.transformer.array.offset.z"), Text.text("Z"), ((ArrayTransformer) transformer).offset().z(), ArrayTransformer.OFFSET_BOUND.getMinZ(), ArrayTransformer.OFFSET_BOUND.getMaxZ(), value -> this.transformer = ((ArrayTransformer) transformer).withOffsetZ(value));
-                this.entries.addIntegerEntry(Text.translate("effortless.transformer.array.count"), Text.text("C"), ((ArrayTransformer) transformer).count(), ArrayTransformer.MIN_COUNT, ArrayTransformer.MAX_COUNT, value -> this.transformer = ((ArrayTransformer) transformer).withCount(value));
+                this.entries.addIntegerEntry(Text.translate("effortless.transformer.array.offset.x"), Text.text("X"), ((ArrayTransformer) transformer).offset().x(), ArrayTransformer.OFFSET_BOUND.minX(), ArrayTransformer.OFFSET_BOUND.maxX(), value -> this.transformer = ((ArrayTransformer) transformer).withOffsetX(value));
+                this.entries.addIntegerEntry(Text.translate("effortless.transformer.array.offset.y"), Text.text("Y"), ((ArrayTransformer) transformer).offset().y(), ArrayTransformer.OFFSET_BOUND.minY(), ArrayTransformer.OFFSET_BOUND.maxY(), value -> this.transformer = ((ArrayTransformer) transformer).withOffsetY(value));
+                this.entries.addIntegerEntry(Text.translate("effortless.transformer.array.offset.z"), Text.text("Z"), ((ArrayTransformer) transformer).offset().z(), ArrayTransformer.OFFSET_BOUND.minZ(), ArrayTransformer.OFFSET_BOUND.maxZ(), value -> this.transformer = ((ArrayTransformer) transformer).withOffsetZ(value));
+                this.entries.addIntegerEntry(Text.translate("effortless.transformer.array.count"), Text.text("C"), ((ArrayTransformer) transformer).count(), ArrayTransformer.COUNT_RANGE.min(), ArrayTransformer.COUNT_RANGE.max(), value -> this.transformer = ((ArrayTransformer) transformer).withCount(value));
             }
             case MIRROR -> {
-                var mirrorTransformer = (MirrorTransformer) transformer;
-                this.entries.addPositionNumberEntry(mirrorTransformer.axis(), new Tuple2<>(mirrorTransformer.getPositionType(), mirrorTransformer.getPosition(mirrorTransformer.axis())), value -> {
-                    this.transformer = mirrorTransformer.withPositionType(value.value1()).withPosition(new Vector3d(value.value2(), value.value2(), value.value2()));
-                });
-                this.entries.addSelectorEntry(Text.translate("effortless.transformer.mirror.axis"), Text.text("A"), Arrays.stream(Axis.values()).map(Axis::getDisplayName).toList(), Arrays.stream(Axis.values()).toList(), mirrorTransformer.axis(), value -> {
-                    (((SettingOptionsList.PositionNumberEntry) this.entries.getWidget(0))).setAxis(value);
-                    this.transformer = mirrorTransformer.withAxis(value);
-                });
+                this.entries.addPositionEntry(Axis.X.getPositionName(), Axis.X.getDisplayName(), ((MirrorTransformer) transformer).position().x(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((MirrorTransformer) transformer).withPositionX(Transformer.roundToHalf(value)));
+                this.entries.addPositionEntry(Axis.Y.getPositionName(), Axis.Y.getDisplayName(), ((MirrorTransformer) transformer).position().y(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((MirrorTransformer) transformer).withPositionY(Transformer.roundToHalf(value)));
+                this.entries.addPositionEntry(Axis.Z.getPositionName(), Axis.Z.getDisplayName(), ((MirrorTransformer) transformer).position().z(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((MirrorTransformer) transformer).withPositionZ(Transformer.roundToHalf(value)));
+                this.entries.addSelectorEntry(Text.translate("effortless.transformer.mirror.axis"), Text.text("A"), Arrays.stream(Axis.values()).map(Axis::getDisplayName).toList(), Arrays.stream(Axis.values()).toList(), ((MirrorTransformer) transformer).axis(), value -> this.transformer = ((MirrorTransformer) transformer).withAxis(value));
+                this.entries.addIntegerEntry(Text.translate("effortless.transformer.mirror.size"), Text.text("S"), ((MirrorTransformer) transformer).size(), MirrorTransformer.SIZE_RANGE.min(), MirrorTransformer.SIZE_RANGE.max(), value -> this.transformer = ((MirrorTransformer) transformer).withSize(value));
             }
             case RADIAL -> {
-                this.entries.addPositionNumberEntry(Axis.X, new Tuple2<>(((RadialTransformer) transformer).getPositionType(), ((RadialTransformer) transformer).position().x()), value -> this.transformer = ((RadialTransformer) transformer).withPositionType(value.value1()).withPosition(((RadialTransformer) transformer).position().withX(value.value2())));
-                this.entries.addPositionNumberEntry(Axis.Y, new Tuple2<>(((RadialTransformer) transformer).getPositionType(), ((RadialTransformer) transformer).position().y()), value -> this.transformer = ((RadialTransformer) transformer).withPositionType(value.value1()).withPosition(((RadialTransformer) transformer).position().withY(value.value2())));
-                this.entries.addPositionNumberEntry(Axis.Z, new Tuple2<>(((RadialTransformer) transformer).getPositionType(), ((RadialTransformer) transformer).position().z()), value -> this.transformer = ((RadialTransformer) transformer).withPositionType(value.value1()).withPosition(((RadialTransformer) transformer).position().withZ(value.value2())));
-                this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.slices"), Text.text("S"), ((RadialTransformer) transformer).slices(), RadialTransformer.SLICE_RANGE.min(), RadialTransformer.SLICE_RANGE.max(), value -> this.transformer = ((RadialTransformer) transformer).withSlice(value));
+                var radialTransformer = (RadialTransformer) transformer;
+                this.entries.addPositionEntry(Axis.X.getPositionName(), Axis.X.getDisplayName(), ((RadialTransformer) transformer).position().x(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((RadialTransformer) transformer).withPositionX(Transformer.roundToHalf(value)));
+                this.entries.addPositionEntry(Axis.Y.getPositionName(), Axis.Y.getDisplayName(), ((RadialTransformer) transformer).position().y(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((RadialTransformer) transformer).withPositionY(Transformer.roundToHalf(value)));
+                this.entries.addPositionEntry(Axis.Z.getPositionName(), Axis.Z.getDisplayName(), ((RadialTransformer) transformer).position().z(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((RadialTransformer) transformer).withPositionZ(Transformer.roundToHalf(value)));
+//                this.entries.addSelectorEntry(Text.translate("effortless.transformer.mirror.axis"), Text.text("A"), Arrays.stream(Axis.values()).map(Axis::getDisplayName).toList(), Arrays.stream(Axis.values()).toList(), radialTransformer.axis(), value -> this.transformer = radialTransformer.withAxis(value));
+                this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.slices"), Text.text("S"), radialTransformer.slices(), RadialTransformer.SLICE_RANGE.min(), RadialTransformer.SLICE_RANGE.max(), value -> this.transformer = radialTransformer.withSlice(value));
+                this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.radius"), Text.text("R"), radialTransformer.radius(), RadialTransformer.RADIUS_RANGE.min(), RadialTransformer.RADIUS_RANGE.max(), value -> this.transformer = radialTransformer.withRadius(value));
             }
             case ITEM_RANDOMIZER -> {
             }
         }
-
     }
 
     @Override
     public void onReload() {
         this.transformerEntries.reset(List.of(transformer));
+        for (var entry : this.entries.children()) {
+            if (entry instanceof SettingOptionsList.PositionEntry positionEntry) {
+                if (!positionEntry.isFocused()) {
+                    positionEntry.setItem(Transformer.roundToHalf(positionEntry.getItem()));
+                }
+            }
+        }
     }
 
 }

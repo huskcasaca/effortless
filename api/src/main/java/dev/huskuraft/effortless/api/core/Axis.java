@@ -41,6 +41,10 @@ public enum Axis {
         return Text.translate("effortless.axis.%s".formatted(name));
     }
 
+    public Text getPositionName() {
+        return Text.translate("effortless.position.%s".formatted(name));
+    }
+
     public String getName() {
         return name;
     }

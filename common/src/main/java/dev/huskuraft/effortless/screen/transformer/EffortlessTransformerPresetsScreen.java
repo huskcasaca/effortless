@@ -158,9 +158,12 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
                         }).withStyle(ChatFormatting.GRAY)).stream()
                 ).toList()
         );
+        this.addButton.setActive(selectedType == Transformers.ITEM_RANDOMIZER);
 
         if (entries.consumeDoubleClick() && entries.hasSelected()) {
-            editTransformer(entries.getSelected().getItem());
+            if (!entries.getSelected().getItem().isBuiltIn()) {
+                editTransformer(entries.getSelected().getItem());
+            }
         }
 
     }

@@ -31,7 +31,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 
     public static final TransformerConfigSerializer INSTANCE = new TransformerConfigSerializer();
     private static final String KEY_ID = "id";
-//    private static final String KEY_NAME = "name";
+    //    private static final String KEY_NAME = "name";
     private static final String KEY_TYPE = "type";
 
     private TransformerConfigSerializer() {
@@ -166,8 +166,8 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             spec.define(KEY_ID, TransformerConfigSerializer::randomIdString, TransformerConfigSerializer::isIdCorrect);
 //            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
-            defineVector3d(spec, KEY_OFFSET, ArrayTransformer.ZERO.offset(), ArrayTransformer.OFFSET_BOUND);
-            spec.defineInRange(KEY_COUNT, getDefault().count(), ArrayTransformer.MIN_COUNT, ArrayTransformer.MAX_COUNT);
+            defineVector3d(spec, KEY_OFFSET, ArrayTransformer.ZERO.offset().toVector3d(), ArrayTransformer.OFFSET_BOUND.toBoundingBox3d());
+            spec.defineInRange(KEY_COUNT, getDefault().count(), ArrayTransformer.COUNT_RANGE.min(), ArrayTransformer.COUNT_RANGE.max());
             return spec;
         }
 
@@ -182,7 +182,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             return new ArrayTransformer(
                     UUID.fromString(config.get(KEY_ID)),
                     Text.empty(),
-                    getVector3d(config, KEY_OFFSET),
+                    getVector3d(config, KEY_OFFSET).toVector3i(),
                     config.get(KEY_COUNT)
             );
         }
@@ -193,7 +193,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             config.set(KEY_ID, transformer.getId().toString());
 //            config.set(KEY_NAME, transformer.getName().getString());
             setEnum(config, KEY_TYPE, transformer.getType());
-            setVector3d(config, KEY_OFFSET, transformer.offset());
+            setVector3d(config, KEY_OFFSET, transformer.offset().toVector3d());
             config.set(KEY_COUNT, transformer.count());
             validate(config);
             return config;
@@ -206,6 +206,8 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         private static final String KEY_POSITION = "position";
         private static final String KEY_POSITION_TYPE = "positionType";
         private static final String KEY_AXIS = "axis";
+        private static final String KEY_SIZE = "size";
+
         public static MirrorTransformerConfigSerializer INSTANCE = new MirrorTransformerConfigSerializer();
 
         private MirrorTransformerConfigSerializer() {
@@ -215,10 +217,9 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         public ConfigSpec getSpec(Config config) {
             var spec = new ConfigSpec();
             spec.define(KEY_ID, TransformerConfigSerializer::randomIdString, TransformerConfigSerializer::isIdCorrect);
-//            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineVector3d(spec, KEY_POSITION, MirrorTransformer.ZERO_Y.position());
-            defineEnum(spec, KEY_POSITION_TYPE, getDefault().getPositionType());
+            spec.defineInRange(KEY_SIZE, getDefault().size(), MirrorTransformer.SIZE_RANGE.min(), MirrorTransformer.SIZE_RANGE.max());
             defineEnum(spec, KEY_AXIS, getDefault().axis());
 
             return spec;
@@ -236,8 +237,8 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
                     UUID.fromString(config.get(KEY_ID)),
                     Text.empty(),
                     getVector3d(config, KEY_POSITION),
-                    getEnum(config, KEY_POSITION_TYPE),
-                    getEnum(config, KEY_AXIS)
+                    getEnum(config, KEY_AXIS),
+                    config.getInt(KEY_SIZE)
             );
         }
 
@@ -245,10 +246,9 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         public Config serialize(MirrorTransformer transformer) {
             var config = Config.inMemory();
             config.set(KEY_ID, transformer.getId().toString());
-//            config.set(KEY_NAME, transformer.getName().getString());
             setEnum(config, KEY_TYPE, transformer.getType());
             setVector3d(config, KEY_POSITION, transformer.position());
-            setEnum(config, KEY_POSITION_TYPE, transformer.getPositionType());
+            config.set(KEY_SIZE, transformer.size());
             config.set(KEY_AXIS, transformer.axis().name().toLowerCase(Locale.ROOT));
             validate(config);
             return config;
@@ -259,8 +259,8 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
     public static class RadialTransformerConfigSerializer implements ConfigSerializer<RadialTransformer> {
 
         private static final String KEY_POSITION = "position";
-        private static final String KEY_POSITION_TYPE = "positionType";
         private static final String KEY_SLICE = "slices";
+        private static final String KEY_RADIUS = "radius";
         public static RadialTransformerConfigSerializer INSTANCE = new RadialTransformerConfigSerializer();
 
         private RadialTransformerConfigSerializer() {
@@ -270,11 +270,10 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         public ConfigSpec getSpec(Config config) {
             var spec = new ConfigSpec();
             spec.define(KEY_ID, TransformerConfigSerializer::randomIdString, TransformerConfigSerializer::isIdCorrect);
-//            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineVector3d(spec, KEY_POSITION, RadialTransformer.ZERO.position());
-            defineEnum(spec, KEY_POSITION_TYPE, getDefault().getPositionType());
             spec.defineInRange(KEY_SLICE, getDefault().slices(), RadialTransformer.SLICE_RANGE.min(), RadialTransformer.SLICE_RANGE.max());
+            spec.defineInRange(KEY_RADIUS, getDefault().slices(), RadialTransformer.RADIUS_RANGE.min(), RadialTransformer.RADIUS_RANGE.max());
 
             return spec;
         }
@@ -291,8 +290,8 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
                     UUID.fromString(config.get(KEY_ID)),
                     Text.empty(),
                     getVector3d(config, KEY_POSITION),
-                    getEnum(config, KEY_POSITION_TYPE),
-                    config.get(KEY_SLICE)
+                    config.get(KEY_SLICE),
+                    config.get(KEY_RADIUS)
             );
         }
 
@@ -303,8 +302,8 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 //            config.set(KEY_NAME, transformer.getName().getString());
             setEnum(config, KEY_TYPE, transformer.getType());
             setVector3d(config, KEY_POSITION, transformer.position());
-            setEnum(config, KEY_POSITION_TYPE, transformer.getPositionType());
             config.set(KEY_SLICE, transformer.slices());
+            config.set(KEY_RADIUS, transformer.radius());
             validate(config);
             return config;
         }

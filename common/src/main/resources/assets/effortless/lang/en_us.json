@@ -419,5 +419,10 @@
   "effortless.state.placing_block.build_mode": "Placing %s Blocks",
   "effortless.state.breaking_block.build_mode": "Breaking %s Blocks",
   "effortless.state.interacting_block.build_mode": "Interacting %s Blocks",
-  "effortless.position.relative": "Relative"
+  "effortless.position.relative": "Relative",
+  "effortless.position.x": "Position X",
+  "effortless.position.y": "Position Y",
+  "effortless.position.z": "Position Z",
+  "effortless.transformer.mirror.size": "Size",
+  "effortless.transformer.radial.radius": "Radius"
 }
