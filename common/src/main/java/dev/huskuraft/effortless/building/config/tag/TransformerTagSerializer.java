@@ -32,7 +32,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             case ARRAY -> new ArrayTransformerTagSerializer().decode(tag);
             case MIRROR -> new MirrorTransformerTagSerializer().decode(tag);
             case RADIAL -> new RadialTransformerTagSerializer().decode(tag);
-            case ITEM_RANDOMIZER -> new ItemRandomizerTagSerializer().decode(tag);
+            case RANDOMIZER -> new ItemRandomizerTagSerializer().decode(tag);
         };
     }
 
@@ -42,7 +42,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             case ARRAY -> new ArrayTransformerTagSerializer().encode((ArrayTransformer) transformer);
             case MIRROR -> new MirrorTransformerTagSerializer().encode((MirrorTransformer) transformer);
             case RADIAL -> new RadialTransformerTagSerializer().encode((RadialTransformer) transformer);
-            case ITEM_RANDOMIZER -> new ItemRandomizerTagSerializer().encode((ItemRandomizer) transformer);
+            case RANDOMIZER -> new ItemRandomizerTagSerializer().encode((ItemRandomizer) transformer);
         };
         tag.asRecord().putEnum(TAG_TYPE, transformer.getType());
         return tag;
@@ -56,7 +56,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             case ARRAY -> new ArrayTransformerTagSerializer().validate((ArrayTransformer) value);
             case MIRROR -> new MirrorTransformerTagSerializer().validate((MirrorTransformer) value);
             case RADIAL -> new RadialTransformerTagSerializer().validate((RadialTransformer) value);
-            case ITEM_RANDOMIZER -> new ItemRandomizerTagSerializer().validate((ItemRandomizer) value);
+            case RANDOMIZER -> new ItemRandomizerTagSerializer().validate((ItemRandomizer) value);
         };
     }
 

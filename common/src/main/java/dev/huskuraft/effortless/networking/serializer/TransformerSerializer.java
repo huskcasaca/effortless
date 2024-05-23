@@ -19,7 +19,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             case ARRAY -> byteBuf.read(new ArrayTransformerSerializer());
             case MIRROR -> byteBuf.read(new MirrorTransformerSerializer());
             case RADIAL -> byteBuf.read(new RadialTransformerSerializer());
-            case ITEM_RANDOMIZER -> byteBuf.read(new ItemRandomizerSerializer());
+            case RANDOMIZER -> byteBuf.read(new ItemRandomizerSerializer());
         };
     }
 
@@ -30,7 +30,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             case ARRAY -> byteBuf.write((ArrayTransformer) transformer, new ArrayTransformerSerializer());
             case MIRROR -> byteBuf.write((MirrorTransformer) transformer, new MirrorTransformerSerializer());
             case RADIAL -> byteBuf.write((RadialTransformer) transformer, new RadialTransformerSerializer());
-            case ITEM_RANDOMIZER -> byteBuf.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
+            case RANDOMIZER -> byteBuf.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
         }
     }
 

@@ -48,7 +48,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
 //                new EditBox(getEntrance(), getWidth() / 2 - (Dimens.Entry.ROW_WIDTH) / 2 + 40, Dimens.Screen.TITLE_24, Dimens.Entry.ROW_WIDTH - 40, 20, null)
 //        );
 //        this.nameEditBox.setMaxLength(ItemRandomizer.MAX_NAME_LENGTH);
-//        this.nameEditBox.setHint(Text.translate("effortless.randomizer.edit.name_hint"));
+//        this.nameEditBox.setHint(Text.translate("effortless.transformer.randomizer.edit.name_hint"));
 
         this.transformerEntries = addWidget(new TransformerList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2, 38));
         this.transformerEntries.setShowScrollBar(false);
@@ -64,7 +64,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
                 case ARRAY -> transformer;
                 case MIRROR -> ((MirrorTransformer) transformer).withPosition(Transformer.roundToHalf(playerPosition));
                 case RADIAL -> ((RadialTransformer) transformer).withPosition(Transformer.roundToHalf(playerPosition));
-                case ITEM_RANDOMIZER -> transformer;
+                case RANDOMIZER -> transformer;
             };
             recreate();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
@@ -100,7 +100,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.radius"), Text.text("R"), ((RadialTransformer) transformer).radius(), RadialTransformer.RADIUS_RANGE.min(), RadialTransformer.RADIUS_RANGE.max(), value -> this.transformer = ((RadialTransformer) transformer).withRadius(value));
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.length"), Text.text("L"), ((RadialTransformer) transformer).length(), RadialTransformer.LENGTH_RANGE.min(), RadialTransformer.LENGTH_RANGE.max(), value -> this.transformer = ((RadialTransformer) transformer).withLength(value));
             }
-            case ITEM_RANDOMIZER -> {
+            case RANDOMIZER -> {
             }
         }
     }

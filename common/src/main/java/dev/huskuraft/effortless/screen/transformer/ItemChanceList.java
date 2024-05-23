@@ -45,7 +45,7 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
                     Text.empty()
             );
             components.add(
-                    Text.translate("effortless.randomizer.edit.total_probability", ChatFormatting.GOLD + percentage + ChatFormatting.DARK_GRAY + " (" + chance.chance() + "/" + totalCount + ")").withStyle(ChatFormatting.GRAY)
+                    Text.translate("effortless.transformer.randomizer.edit.total_probability", ChatFormatting.GOLD + percentage + ChatFormatting.DARK_GRAY + " (" + chance.chance() + "/" + totalCount + ")").withStyle(ChatFormatting.GRAY)
             );
             return components;
         }

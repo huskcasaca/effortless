@@ -132,7 +132,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             case ARRAY -> ArrayTransformerConfigSerializer.INSTANCE;
             case MIRROR -> MirrorTransformerConfigSerializer.INSTANCE;
             case RADIAL -> RadialTransformerConfigSerializer.INSTANCE;
-            case ITEM_RANDOMIZER -> ItemRandomizerConfigSerializer.INSTANCE;
+            case RANDOMIZER -> ItemRandomizerConfigSerializer.INSTANCE;
         }).deserialize(config);
     }
 
@@ -147,7 +147,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             case ARRAY -> ArrayTransformerConfigSerializer.INSTANCE.serialize((ArrayTransformer) transformer);
             case MIRROR -> MirrorTransformerConfigSerializer.INSTANCE.serialize((MirrorTransformer) transformer);
             case RADIAL -> RadialTransformerConfigSerializer.INSTANCE.serialize((RadialTransformer) transformer);
-            case ITEM_RANDOMIZER -> ItemRandomizerConfigSerializer.INSTANCE.serialize((ItemRandomizer) transformer);
+            case RANDOMIZER -> ItemRandomizerConfigSerializer.INSTANCE.serialize((ItemRandomizer) transformer);
         });
     }
 

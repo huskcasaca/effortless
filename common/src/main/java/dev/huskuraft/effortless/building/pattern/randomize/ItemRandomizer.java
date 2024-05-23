@@ -23,15 +23,15 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
 
     public static final int MAX_CHANCE_SIZE = 36; // Inventory.INVENTORY_SIZE // FIXME: 23/10/23 move
 
-    public static final ItemRandomizer RANDOM_INVENTORY = ItemRandomizer.create(Text.translate("effortless.randomizer.item.random_inventory"), Order.RANDOM, Target.SINGLE,  Source.INVENTORY, Collections.emptyList());
-    public static final ItemRandomizer RANDOM_HOTBAR = ItemRandomizer.create(Text.translate("effortless.randomizer.item.random_hotbar"), Order.RANDOM, Target.SINGLE,  Source.HOTBAR, Collections.emptyList());
-    public static final ItemRandomizer RANDOM_HANDS = ItemRandomizer.create(Text.translate("effortless.randomizer.item.random_hands"), Order.RANDOM, Target.SINGLE,  Source.HANDS, Collections.emptyList());
+    public static final ItemRandomizer RANDOM_INVENTORY = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.random_inventory"), Order.RANDOM, Target.SINGLE,  Source.INVENTORY, Collections.emptyList());
+    public static final ItemRandomizer RANDOM_HOTBAR = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.random_hotbar"), Order.RANDOM, Target.SINGLE,  Source.HOTBAR, Collections.emptyList());
+    public static final ItemRandomizer RANDOM_HANDS = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.random_hands"), Order.RANDOM, Target.SINGLE,  Source.HANDS, Collections.emptyList());
 
-    public static final ItemRandomizer SEQUENCE_INVENTORY = ItemRandomizer.create(Text.translate("effortless.randomizer.item.sequence_inventory"), Order.SEQUENCE, Target.SINGLE,  Source.INVENTORY, Collections.emptyList());
-    public static final ItemRandomizer SEQUENCE_HOTBAR = ItemRandomizer.create(Text.translate("effortless.randomizer.item.sequence_hotbar"), Order.SEQUENCE, Target.SINGLE,  Source.HOTBAR, Collections.emptyList());
-    public static final ItemRandomizer SEQUENCE_HANDS = ItemRandomizer.create(Text.translate("effortless.randomizer.item.sequence_hands"), Order.SEQUENCE, Target.SINGLE,  Source.HANDS, Collections.emptyList());
+    public static final ItemRandomizer SEQUENCE_INVENTORY = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.sequence_inventory"), Order.SEQUENCE, Target.SINGLE,  Source.INVENTORY, Collections.emptyList());
+    public static final ItemRandomizer SEQUENCE_HOTBAR = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.sequence_hotbar"), Order.SEQUENCE, Target.SINGLE,  Source.HOTBAR, Collections.emptyList());
+    public static final ItemRandomizer SEQUENCE_HANDS = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.sequence_hands"), Order.SEQUENCE, Target.SINGLE,  Source.HANDS, Collections.emptyList());
 
-    public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.randomizer.item.empty"), Order.SEQUENCE, Target.SINGLE,  Source.CUSTOMIZE, Collections.emptyList());
+    public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.empty"), Order.SEQUENCE, Target.SINGLE,  Source.CUSTOMIZE, Collections.emptyList());
 
     public static ItemRandomizer customize(Text name, Order order, Target target, Collection<Chance<Item>> chances) {
         return create(name, order, target, Source.CUSTOMIZE, chances);
@@ -47,7 +47,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     }
 
     private static Text name(String key) {
-        return Text.translate("effortless.transformer.randomize.example.%s".formatted(key));
+        return Text.translate("effortless.transformer.randomizer.item.example.%s".formatted(key));
     }
 
     public static List<ItemRandomizer> getDefaultItemRandomizers() {
@@ -382,7 +382,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
 
     @Override
     public Transformers getType() {
-        return Transformers.ITEM_RANDOMIZER;
+        return Transformers.RANDOMIZER;
     }
 
     @Override
@@ -452,7 +452,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
         }
 
         public Text getDisplayName() {
-            return Text.translate("effortless.randomizer.source.%s".formatted(name));
+            return Text.translate("effortless.transformer.randomizer.source.%s".formatted(name));
         }
 
         public String getName() {

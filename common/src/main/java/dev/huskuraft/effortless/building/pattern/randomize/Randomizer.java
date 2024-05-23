@@ -40,7 +40,7 @@ public interface Randomizer<T> extends Transformer {
         }
 
         public Text getDisplayName() {
-            return Text.translate("effortless.randomizer.order.%s".formatted(name));
+            return Text.translate("effortless.transformer.randomizer.order.%s".formatted(name));
         }
 
         public String getName() {
@@ -59,7 +59,7 @@ public interface Randomizer<T> extends Transformer {
         }
 
         public Text getDisplayName() {
-            return Text.translate("effortless.randomizer.target.%s".formatted(name));
+            return Text.translate("effortless.transformer.randomizer.target.%s".formatted(name));
         }
 
         public String getName() {
@@ -79,7 +79,7 @@ public interface Randomizer<T> extends Transformer {
         }
 
         public Text getDisplayName() {
-            return Text.translate("effortless.randomizer.category.%s".formatted(name));
+            return Text.translate("effortless.transformer.randomizer.category.%s".formatted(name));
         }
 
         public String getName() {
