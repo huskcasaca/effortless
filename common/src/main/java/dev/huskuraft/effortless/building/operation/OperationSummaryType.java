@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building.operation;
 
-public enum ItemSummaryType {
+public enum OperationSummaryType {
     BLOCKS_PLACED,
     BLOCKS_DESTROYED,
     BLOCKS_INTERACTED,

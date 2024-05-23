@@ -24,12 +24,38 @@ public interface Entity extends PlatformReference {
 
     Vector3d getPosition();
 
-    Vector3d getEyePosition();
+    default Vector3d getEyePosition() {
+        return getPosition().withY(getPosition().y() + getEyeHeight());
+    }
 
-    Vector3d getEyeDirection();
+    default Vector3d getEyeDirection() {
+        return calculateViewVector(getXRot(), getYRot());
+    }
 
     GameMode getGameMode();
 
     BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids);
+
+    static Vector3d calculateViewVector(float xRot, float yRot) {
+        var f = xRot * (Math.PI / 180F);
+        var f1 = -yRot * (Math.PI / 180F);
+        var f2 = Math.cos(f1);
+        var f3 = Math.sin(f1);
+        var f4 = Math.cos(f);
+        var f5 = Math.sin(f);
+        return new Vector3d(f3 * f4, -f5, f2 * f4);
+    }
+
+    float getEyeHeight();
+
+    void setPosition(Vector3d position);
+
+    float getXRot();
+
+    void setXRot(float xRot);
+
+    float getYRot();
+
+    void setYRot(float yRot);
 
 }

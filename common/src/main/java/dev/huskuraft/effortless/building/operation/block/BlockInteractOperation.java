@@ -22,14 +22,29 @@ public class BlockInteractOperation extends BlockOperation {
             Storage storage,
             BlockInteraction interaction
     ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
+        this(world, player, context, storage, interaction, EntityState.get(player));
+    }
+
+    public BlockInteractOperation(
+            World world,
+            Player player,
+            Context context,
+            Storage storage,
+            BlockInteraction interaction,
+            EntityState entityState
+    ) {
+        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
     }
 
     @Override
     public BlockInteractOperationResult commit() {
         var inputs = blockState != null ? Collections.singletonList(blockState.getItem().getDefaultStack()) : Collections.<ItemStack>emptyList();
         var outputs = Collections.<ItemStack>emptyList();
+
+        var entityState = EntityState.get(player);
+        EntityState.set(player, getEntityState());
         var result = interactBlock();
+        EntityState.set(player, entityState);
 
         if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());

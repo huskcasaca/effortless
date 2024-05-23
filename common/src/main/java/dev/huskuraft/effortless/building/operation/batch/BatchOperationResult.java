@@ -5,8 +5,8 @@ import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
-import dev.huskuraft.effortless.building.operation.ItemSummaryType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
+import dev.huskuraft.effortless.building.operation.OperationSummaryType;
 
 public class BatchOperationResult extends OperationResult {
 
@@ -32,8 +32,8 @@ public class BatchOperationResult extends OperationResult {
     }
 
     @Override
-    public List<ItemStack> getProducts(ItemSummaryType type) {
-        return ItemStackUtils.reduceStack(result.stream().map(result -> result.getProducts(type)).flatMap(Collection::stream).toList());
+    public List<ItemStack> getSummary(OperationSummaryType type) {
+        return ItemStackUtils.reduceStack(result.stream().map(result -> result.getSummary(type)).flatMap(Collection::stream).toList());
     }
 
 

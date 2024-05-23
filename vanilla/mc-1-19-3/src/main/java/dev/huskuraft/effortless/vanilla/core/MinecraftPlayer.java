@@ -72,16 +72,6 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player refs) imp
     }
 
     @Override
-    public Vector3d getEyePosition() {
-        return MinecraftConvertor.fromPlatformVector3d(refs.getEyePosition());
-    }
-
-    @Override
-    public Vector3d getEyeDirection() {
-        return MinecraftConvertor.fromPlatformVector3d(refs.getLookAngle());
-    }
-
-    @Override
     public void drop(ItemStack itemStack, boolean dropAround, boolean includeThrowerName) {
         refs.drop(itemStack.reference(), dropAround, includeThrowerName);
     }
@@ -126,6 +116,36 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player refs) imp
     @Override
     public BlockInteraction raytrace(double maxDistance, float deltaTick, boolean includeFluids) {
         return (BlockInteraction) MinecraftConvertor.fromPlatformInteraction(refs.pick(maxDistance, deltaTick, includeFluids));
+    }
+
+    @Override
+    public float getEyeHeight() {
+        return refs.getEyeHeight();
+    }
+
+    @Override
+    public void setPosition(Vector3d position) {
+        refs.setPos(MinecraftConvertor.toPlatformVector3d(position));
+    }
+
+    @Override
+    public float getXRot() {
+        return refs.getXRot();
+    }
+
+    @Override
+    public void setXRot(float xRot) {
+        refs.setXRot(xRot);
+    }
+
+    @Override
+    public float getYRot() {
+        return refs.getYRot();
+    }
+
+    @Override
+    public void setYRot(float yRot) {
+        refs.setYRot(yRot);
     }
 
     @Override

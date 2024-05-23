@@ -13,6 +13,26 @@ public abstract class OperationResult {
 
 //    public abstract boolean isSuccess();
 
-    public abstract List<ItemStack> getProducts(ItemSummaryType type);
+    public abstract List<ItemStack> getSummary(OperationSummaryType type);
+
+    public int getSuccessItemsCount() {
+        var sum = 0;
+        for (var value : OperationSummaryType.values()) {
+            if (value.isSuccess()) {
+                sum += getSummary(value).stream().mapToInt(ItemStack::getCount).sum();
+            }
+        }
+        return sum;
+    }
+
+    public int getFailItemsCount() {
+        var sum = 0;
+        for (var value : OperationSummaryType.values()) {
+            if (!value.isSuccess()) {
+                sum += getSummary(value).stream().mapToInt(ItemStack::getCount).sum();
+            }
+        }
+        return sum;
+    }
 
 }

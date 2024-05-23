@@ -234,7 +234,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @Override
     public boolean isPauseGame() {
-        return true;
+        return false;
     }
 
     @Override

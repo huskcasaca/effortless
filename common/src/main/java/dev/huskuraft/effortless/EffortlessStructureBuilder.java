@@ -3,12 +3,15 @@ package dev.huskuraft.effortless;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.platform.Server;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.StructureBuilder;
@@ -99,6 +102,13 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
 
     @Override
     public void onContextReceived(Player player, Context context) {
+        if (!checkPermission(player, context)) {
+            if (context.isBuildType()) {
+                player.sendMessage(Effortless.getSystemMessage(Text.text("Your session config is outdated. Please try to rejoin the server!")));
+                Effortless.LOGGER.warn("%s has an outdated session config".formatted(player.getProfile().getName()));
+            }
+            return;
+        }
 
         if (context.isPreviewType()) {
             var server = player.getServer();
@@ -124,19 +134,49 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
 
     @Override
     public void undo(Player player) {
+        var stack = getOperationResultStack(player);
         try {
-            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undoSuccess(getOperationResultStack(player).undo()), player);
+            var result = stack.undo();
+            var context = result.getOperation().getContext();
+
+            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undoSuccess(result), player);
+            var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
+            var buildStateText = Text.text("[").append(context.buildState().getDisplayName(context.buildMode())).append("]").withStyle(switch (context.buildState()) {
+                case IDLE -> ChatFormatting.RESET;
+                case BREAK_BLOCK -> ChatFormatting.RED;
+                case PLACE_BLOCK -> ChatFormatting.WHITE;
+                case INTERACT_BLOCK -> ChatFormatting.YELLOW;
+            }).withStyle(ChatFormatting.GOLD);
+            var affectedText = Text.text("[").append(String.valueOf(result.getSuccessItemsCount())).append("]").withStyle(ChatFormatting.AQUA);
+            player.sendMessage(Effortless.getMessage(countText.append(" Undo ").append(buildStateText).append(" affected ").append(affectedText).append(" blocks!")));
         } catch (EmptyStackException e) {
             getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToUndo(), player);
+            var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
+            player.sendMessage(Effortless.getMessage(countText.append(Text.text(" Nothing to undo!"))));
         }
     }
 
     @Override
     public void redo(Player player) {
+        var stack = getOperationResultStack(player);
         try {
-            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.redoSuccess(getOperationResultStack(player).redo()), player);
+            var result = stack.redo();
+            var context = result.getOperation().getContext();
+
+            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undoSuccess(result), player);
+            var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
+            var buildStateText = Text.text("[").append(context.buildState().getDisplayName(context.buildMode())).append("]").withStyle(switch (context.buildState()) {
+                case IDLE -> ChatFormatting.RESET;
+                case BREAK_BLOCK -> ChatFormatting.RED;
+                case PLACE_BLOCK -> ChatFormatting.WHITE;
+                case INTERACT_BLOCK -> ChatFormatting.YELLOW;
+            }).withStyle(ChatFormatting.GOLD);
+            var affectedText = Text.text("[").append(String.valueOf(result.getSuccessItemsCount())).append("]").withStyle(ChatFormatting.AQUA);
+            player.sendMessage(Effortless.getMessage(countText.append(" Redo ").append(buildStateText).append(" affected ").append(affectedText).append(" blocks!")));
         } catch (EmptyStackException e) {
             getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToRedo(), player);
+            var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
+            player.sendMessage(Effortless.getMessage(countText.append(Text.text(" Nothing to redo!"))));
         }
     }
 
@@ -158,6 +198,11 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
 
     private void onServerStopped(Server server) {
         resetAll();
+    }
+
+    private boolean checkPermission(Player player, Context context) {
+        var generalConfig = getEntrance().getSessionManager().getLastSessionConfig().getPlayerConfig(player);
+        return Objects.equals(context.customParams().generalConfig(), generalConfig);
     }
 
 }

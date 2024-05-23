@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.building.operation.ItemSummaryType;
+import dev.huskuraft.effortless.building.operation.OperationSummaryType;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
@@ -29,12 +29,13 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
                 operation.getPlayer(),
                 operation.getContext(),
                 operation.getStorage(),
-                operation.getInteraction()
+                operation.getInteraction(),
+                operation.getEntityState()
         );
     }
 
     @Override
-    public List<ItemStack> getProducts(ItemSummaryType type) {
+    public List<ItemStack> getSummary(OperationSummaryType type) {
         return switch (type) {
             case BLOCKS_PLACED -> switch (result) {
                 case SUCCESS, SUCCESS_PARTIAL, CONSUME -> inputs;

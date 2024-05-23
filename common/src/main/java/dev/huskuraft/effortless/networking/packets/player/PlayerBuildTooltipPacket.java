@@ -5,8 +5,8 @@ import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.building.history.BuildTooltip;
-import dev.huskuraft.effortless.building.operation.ItemSummaryType;
 import dev.huskuraft.effortless.building.operation.OperationResult;
+import dev.huskuraft.effortless.building.operation.OperationSummaryType;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.serializer.ContextSerializer;
 
@@ -28,7 +28,7 @@ public record PlayerBuildTooltipPacket(
                     new BuildTooltip(
                             byteBuf.readEnum(BuildTooltip.Type.class),
                             byteBuf.read(new ContextSerializer()),
-                            byteBuf.readMap((buffer1) -> buffer1.readEnum(ItemSummaryType.class), (buffer1) -> buffer1.readList(NetByteBuf::readItemStack)))
+                            byteBuf.readMap((buffer1) -> buffer1.readEnum(OperationSummaryType.class), (buffer1) -> buffer1.readList(NetByteBuf::readItemStack)))
             );
 
         }

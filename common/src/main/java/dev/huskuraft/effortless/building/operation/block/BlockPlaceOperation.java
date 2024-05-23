@@ -24,9 +24,20 @@ public class BlockPlaceOperation extends BlockOperation {
             BlockInteraction interaction,
             BlockState blockState
     ) {
-        super(world, player, context, storage, interaction, blockState);
+        this(world, player, context, storage, interaction, blockState, EntityState.get(player));
     }
 
+    public BlockPlaceOperation(
+            World world,
+            Player player,
+            Context context,
+            Storage storage,
+            BlockInteraction interaction,
+            BlockState blockState,
+            EntityState entityState
+    ) {
+        super(world, player, context, storage, interaction, blockState, entityState);
+    }
 
     @Override
     public BlockPlaceOperationResult commit() {
@@ -38,7 +49,10 @@ public class BlockPlaceOperation extends BlockOperation {
         if (getWorld().getBlockState(getBlockPosition()) != null) {
             outputs = List.of(getWorld().getBlockState(getBlockPosition()).getItem().getDefaultStack());
         }
+        var entityData = EntityState.get(player);
+        EntityState.set(player, getEntityState());
         var result = placeBlock();
+        EntityState.set(player, entityData);
 
         if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
