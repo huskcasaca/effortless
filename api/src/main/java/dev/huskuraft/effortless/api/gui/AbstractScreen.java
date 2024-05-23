@@ -47,13 +47,23 @@ public abstract class AbstractScreen extends AbstractContainerWidget implements 
     public void init(int width, int height) {
         setScreenWidth(width);
         setScreenHeight(height);
-        if (getWidth() == UNSPECIFIC_SIZE) {
-            setWidth(width);
-        }
-        if (getHeight() == UNSPECIFIC_SIZE) {
-            setHeight(height);
-        }
         recreate();
+    }
+
+    @Override
+    public int getWidth() {
+        if (super.getWidth() == UNSPECIFIC_SIZE) {
+            return getScreenWidth();
+        }
+        return super.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        if (super.getHeight() == UNSPECIFIC_SIZE) {
+            return getScreenHeight();
+        }
+        return super.getHeight();
     }
 
     @Override
