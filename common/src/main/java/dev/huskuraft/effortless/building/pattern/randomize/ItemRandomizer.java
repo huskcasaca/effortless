@@ -14,8 +14,7 @@ import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
-import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
+import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.Transformers;
@@ -24,15 +23,15 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
 
     public static final int MAX_CHANCE_SIZE = 36; // Inventory.INVENTORY_SIZE // FIXME: 23/10/23 move
 
-    public static final ItemRandomizer RANDOM_INVENTORY = ItemRandomizer.create(Text.translate("effortless.randomizer.item.random_inventory"), Order.RANDOM, Target.SINGLE,  Source.INVENTORY, Collections.emptyList());
-    public static final ItemRandomizer RANDOM_HOTBAR = ItemRandomizer.create(Text.translate("effortless.randomizer.item.random_hotbar"), Order.RANDOM, Target.SINGLE,  Source.HOTBAR, Collections.emptyList());
-    public static final ItemRandomizer RANDOM_HANDS = ItemRandomizer.create(Text.translate("effortless.randomizer.item.random_hands"), Order.RANDOM, Target.SINGLE,  Source.HANDS, Collections.emptyList());
+    public static final ItemRandomizer RANDOM_INVENTORY = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.random_inventory"), Order.RANDOM, Target.SINGLE,  Source.INVENTORY, Collections.emptyList());
+    public static final ItemRandomizer RANDOM_HOTBAR = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.random_hotbar"), Order.RANDOM, Target.SINGLE,  Source.HOTBAR, Collections.emptyList());
+    public static final ItemRandomizer RANDOM_HANDS = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.random_hands"), Order.RANDOM, Target.SINGLE,  Source.HANDS, Collections.emptyList());
 
-    public static final ItemRandomizer SEQUENCE_INVENTORY = ItemRandomizer.create(Text.translate("effortless.randomizer.item.sequence_inventory"), Order.SEQUENCE, Target.SINGLE,  Source.INVENTORY, Collections.emptyList());
-    public static final ItemRandomizer SEQUENCE_HOTBAR = ItemRandomizer.create(Text.translate("effortless.randomizer.item.sequence_hotbar"), Order.SEQUENCE, Target.SINGLE,  Source.HOTBAR, Collections.emptyList());
-    public static final ItemRandomizer SEQUENCE_HANDS = ItemRandomizer.create(Text.translate("effortless.randomizer.item.sequence_hands"), Order.SEQUENCE, Target.SINGLE,  Source.HANDS, Collections.emptyList());
+    public static final ItemRandomizer SEQUENCE_INVENTORY = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.sequence_inventory"), Order.SEQUENCE, Target.SINGLE,  Source.INVENTORY, Collections.emptyList());
+    public static final ItemRandomizer SEQUENCE_HOTBAR = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.sequence_hotbar"), Order.SEQUENCE, Target.SINGLE,  Source.HOTBAR, Collections.emptyList());
+    public static final ItemRandomizer SEQUENCE_HANDS = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.sequence_hands"), Order.SEQUENCE, Target.SINGLE,  Source.HANDS, Collections.emptyList());
 
-    public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.randomizer.item.empty"), Order.SEQUENCE, Target.SINGLE,  Source.CUSTOMIZE, Collections.emptyList());
+    public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.empty"), Order.SEQUENCE, Target.SINGLE,  Source.CUSTOMIZE, Collections.emptyList());
 
     public static ItemRandomizer customize(Text name, Order order, Target target, Collection<Chance<Item>> chances) {
         return create(name, order, target, Source.CUSTOMIZE, chances);
@@ -48,7 +47,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     }
 
     private static Text name(String key) {
-        return Text.translate("effortless.transformer.randomize.example.%s".formatted(key));
+        return Text.translate("effortless.transformer.randomizer.item.example.%s".formatted(key));
     }
 
     public static List<ItemRandomizer> getDefaultItemRandomizers() {
@@ -366,11 +365,11 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     }
 
     @Override
-    public BatchOperation transform(TransformableOperation operation) {
+    public Operation transform(Operation operation) {
         if (!isValid()) {
             return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation));
         }
-        var source = asProducer(operation.getContext().patternParams().seed(), operation.getContext().patternParams().limitedProducer());
+        var source = asProducer(operation.getContext().extras().seed(), operation.getContext().extras().gameMode().isSurvival());
         if (operation instanceof DeferredBatchOperation deferredBatchOperation) {
             return switch (target) {
                 case SINGLE -> deferredBatchOperation.mapEach(o -> o.refactor(RefactorContext.of(source.next())));
@@ -383,7 +382,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
 
     @Override
     public Transformers getType() {
-        return Transformers.ITEM_RANDOMIZER;
+        return Transformers.RANDOMIZER;
     }
 
     @Override
@@ -400,11 +399,6 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     @Override
     public boolean isValid() {
         return !getChances().isEmpty();
-    }
-
-    @Override
-    public boolean isIntermediate() {
-        return false;
     }
 
     @Override
@@ -430,7 +424,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     public ItemRandomizer finalize(Player player, BuildStage stage) {
 
         switch (stage) {
-            case TICK, UPDATE_CONTEXT, INTERACT -> {
+            case TICK, SET_PATTERN, INTERACT -> {
                 if (getSource() != Source.CUSTOMIZE) {
                     var itemStacks = switch (getSource()) {
                         case INVENTORY -> Stream.of(player.getInventory().getItems(), player.getInventory().getOffhandItems()).flatMap(List::stream).toList();
@@ -458,7 +452,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
         }
 
         public Text getDisplayName() {
-            return Text.translate("effortless.randomizer.source.%s".formatted(name));
+            return Text.translate("effortless.transformer.randomizer.source.%s".formatted(name));
         }
 
         public String getName() {

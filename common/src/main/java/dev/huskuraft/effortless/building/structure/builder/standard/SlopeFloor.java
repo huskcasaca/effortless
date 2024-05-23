@@ -16,19 +16,19 @@ import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record SlopeFloor(
         PlaneLength planeLength, RaisedEdge raisedEdge
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public SlopeFloor() {
         this(PlaneLength.VARIABLE, RaisedEdge.SHORT);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case PLANE_LENGTH -> new SlopeFloor((PlaneLength) feature, raisedEdge);
             case RAISED_EDGE -> new SlopeFloor(planeLength, (RaisedEdge) feature);

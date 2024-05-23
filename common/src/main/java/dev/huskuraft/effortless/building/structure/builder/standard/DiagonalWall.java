@@ -13,19 +13,19 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record DiagonalWall(
         PlaneLength planeLength
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public DiagonalWall() {
         this(PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case PLANE_LENGTH -> new DiagonalWall((PlaneLength) feature);
             default -> this;

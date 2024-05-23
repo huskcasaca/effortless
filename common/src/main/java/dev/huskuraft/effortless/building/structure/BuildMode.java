@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.building.structure.builder.standard.Circle;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cone;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cube;
@@ -46,13 +46,13 @@ public enum BuildMode {
 
 //    DOME("dome", new Dome(), Category.ROOF);
 
-    private final BuildStructure defaultStructure;
+    private final Structure defaultStructure;
     private final Category category;
     private final BuildFeatures[] features;
     private final String name;
     private final boolean enabled;
 
-    BuildMode(String name, BuildStructure instance, Category category, BuildFeatures... features) {
+    BuildMode(String name, Structure instance, Category category, BuildFeatures... features) {
         this.name = name;
         this.defaultStructure = instance;
         this.category = category;
@@ -60,7 +60,7 @@ public enum BuildMode {
         this.enabled = true;
     }
 
-    BuildMode(String name, BuildStructure defaultStructure, Category category, boolean enabled, BuildFeatures... features) {
+    BuildMode(String name, Structure defaultStructure, Category category, boolean enabled, BuildFeatures... features) {
         this.name = name;
         this.defaultStructure = defaultStructure;
         this.category = category;
@@ -68,7 +68,7 @@ public enum BuildMode {
         this.enabled = enabled;
     }
 
-    public BuildStructure getDefaultStructure() {
+    public Structure getDefaultStructure() {
         return defaultStructure;
     }
 

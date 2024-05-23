@@ -27,15 +27,13 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         super(entrance, x, y, width, height);
     }
 
-    @SuppressWarnings("unchecked")
-    // FIXME: 12/5/24
     @Override
-    protected EditableEntryList.Entry<Transformer> createHolder(Transformer transformer) {
-        return (EditableEntryList.Entry) switch (transformer.getType()) {
+    protected EditableEntryList.Entry createHolder(Transformer transformer) {
+        return switch (transformer.getType()) {
             case ARRAY -> new ArrayEntry(getEntrance(), this, (ArrayTransformer) transformer);
             case MIRROR -> new MirrorEntry(getEntrance(), this, (MirrorTransformer) transformer);
             case RADIAL -> new RadialEntry(getEntrance(), this, (RadialTransformer) transformer);
-            case ITEM_RANDOMIZER -> new ItemRandomizerEntry(getEntrance(), this, (ItemRandomizer) transformer);
+            case RANDOMIZER -> new ItemRandomizerEntry(getEntrance(), this, (ItemRandomizer) transformer);
         };
     }
 
@@ -64,7 +62,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
                 case ARRAY -> Text.text("AT");
                 case MIRROR -> Text.text("MT");
                 case RADIAL -> Text.text("RT");
-                case ITEM_RANDOMIZER -> Text.text("IR");
+                case RANDOMIZER -> Text.text("IR");
             };
         }
 
@@ -105,43 +103,43 @@ public final class TransformerList extends EditableEntryList<Transformer> {
                         case INVENTORY -> {
                             switch (itemRandomizer.getOrder()) {
                                 case SEQUENCE -> {
-                                    return Text.translate("effortless.randomizer.item.sequence_inventory");
+                                    return Text.translate("effortless.transformer.randomizer.item.sequence_inventory");
                                 }
                                 case RANDOM -> {
-                                    return Text.translate("effortless.randomizer.item.random_inventory");
+                                    return Text.translate("effortless.transformer.randomizer.item.random_inventory");
                                 }
                             }
                         }
                         case HOTBAR -> {
                             switch (itemRandomizer.getOrder()) {
                                 case SEQUENCE -> {
-                                    return Text.translate("effortless.randomizer.item.sequence_hotbar");
+                                    return Text.translate("effortless.transformer.randomizer.item.sequence_hotbar");
                                 }
                                 case RANDOM -> {
-                                    return Text.translate("effortless.randomizer.item.random_hotbar");
+                                    return Text.translate("effortless.transformer.randomizer.item.random_hotbar");
                                 }
                             }
                         }
                         case HANDS -> {
                             switch (itemRandomizer.getOrder()) {
                                 case SEQUENCE -> {
-                                    return Text.translate("effortless.randomizer.item.sequence_hands");
+                                    return Text.translate("effortless.transformer.randomizer.item.sequence_hands");
                                 }
                                 case RANDOM -> {
-                                    return Text.translate("effortless.randomizer.item.random_hands");
+                                    return Text.translate("effortless.transformer.randomizer.item.random_hands");
                                 }
                             }
                         }
                         case CUSTOMIZE -> {
                             if (itemRandomizer.getChances().isEmpty()) {
-                                return Text.translate("effortless.randomizer.item.empty");
+                                return Text.translate("effortless.transformer.randomizer.item.empty");
                             }
                             switch (itemRandomizer.getOrder()) {
                                 case SEQUENCE -> {
-                                    return Text.translate("effortless.randomizer.item.sequence_customized");
+                                    return Text.translate("effortless.transformer.randomizer.item.sequence_customized");
                                 }
                                 case RANDOM -> {
-                                    return Text.translate("effortless.randomizer.item.random_customized");
+                                    return Text.translate("effortless.transformer.randomizer.item.random_customized");
                                 }
                             }
                         }
@@ -152,7 +150,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
                     case ARRAY -> Text.translate("effortless.transformer.array.no_name");
                     case MIRROR -> Text.translate("effortless.transformer.mirror.no_name");
                     case RADIAL -> Text.translate("effortless.transformer.radial.no_name");
-                    case ITEM_RANDOMIZER -> Text.empty();
+                    case RANDOMIZER -> Text.empty();
                 };
             }
             return getItem().getName();
@@ -169,10 +167,10 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         protected List<SlotData> getData() {
             return List.of(
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().x())), Text.translate("effortless.axis.x")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().y())), Text.translate("effortless.axis.y")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().z())), Text.translate("effortless.axis.z")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().count())), Text.translate("effortless.transformer.array.count"))
+                    new SlotData.TextSymbol(formatDouble(getItem().offset().x()), Axis.X.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().offset().y()), Axis.Y.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().offset().z()), Axis.Z.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().count()), Text.text("C"))
             );
         }
 
@@ -203,11 +201,13 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         protected List<SlotData> getData() {
             return List.of(
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().getPosition(getItem().axis()))), Text.text("D")),
-                    new SlotData.TextSymbol(getItem().axis().getDisplayName(), Text.translate("effortless.transformer.mirreor.axis"))
+                    new SlotData.TextSymbol(formatDouble(getItem().position().x()), Axis.X.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().position().y()), Axis.Y.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().position().z()), Axis.Z.getDisplayName()),
+                    new SlotData.TextSymbol(getItem().axis().getDisplayName(), Text.text("A")),
+                    new SlotData.TextSymbol(formatDouble(getItem().size()), Text.text("S"))
             );
         }
-
 
     }
 
@@ -220,10 +220,13 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         protected List<SlotData> getData() {
             return List.of(
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().x())), Axis.X.getDisplayName()),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().y())), Axis.Y.getDisplayName()),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().z())), Axis.Z.getDisplayName()),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().slices())), Text.translate("effortless.transformer.radial.slices"))
+                    new SlotData.TextSymbol(formatDouble(getItem().position().x()), Axis.X.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().position().y()), Axis.Y.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().position().z()), Axis.Z.getDisplayName()),
+                    new SlotData.TextSymbol(getItem().axis().getDisplayName(), Text.text("A")),
+                    new SlotData.TextSymbol(formatDouble(getItem().slices()), Text.text("S")),
+                    new SlotData.TextSymbol(formatDouble(getItem().radius()), Text.text("R")),
+                    new SlotData.TextSymbol(formatDouble(getItem().length()), Text.text("L"))
             );
         }
 

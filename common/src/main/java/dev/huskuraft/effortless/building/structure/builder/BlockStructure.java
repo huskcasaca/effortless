@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 
-public interface BlockBuildStructure extends BuildStructure {
+public interface BlockStructure extends Structure {
 
     double LOOK_VEC_TOLERANCE = 0.01;
 

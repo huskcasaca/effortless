@@ -7,9 +7,9 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
 
-public record Disable() implements BlockBuildStructure {
+public record Disable() implements BlockStructure {
 
     public BlockInteraction trace(Player player, Context context, int index) {
         return null;

@@ -8,6 +8,8 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
+import dev.huskuraft.effortless.building.operation.Operation;
+import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
@@ -20,9 +22,10 @@ public class BlockBreakOperation extends BlockOperation {
             Player player,
             Context context,
             Storage storage, // for preview
-            BlockInteraction interaction
+            BlockInteraction interaction,
+            EntityState entityState
     ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
+        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
     }
 
 
@@ -49,22 +52,28 @@ public class BlockBreakOperation extends BlockOperation {
     }
 
     @Override
-    public BlockBreakOperation move(MoveContext moveContext) {
-        return new BlockBreakOperation(world, player, context, storage, moveContext.move(interaction));
+    public Operation move(MoveContext moveContext) {
+        return new BlockBreakOperation(world, player, context, storage, moveContext.move(interaction), entityState);
     }
 
     @Override
-    public BlockBreakOperation mirror(MirrorContext mirrorContext) {
-        return new BlockBreakOperation(world, player, context, storage, mirrorContext.mirror(interaction));
+    public Operation mirror(MirrorContext mirrorContext) {
+        if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
+            return new EmptyOperation();
+        }
+        return new BlockBreakOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(entityState));
     }
 
     @Override
-    public BlockBreakOperation rotate(RotateContext rotateContext) {
-        return new BlockBreakOperation(world, player, context, storage, rotateContext.rotate(interaction));
+    public Operation rotate(RotateContext rotateContext) {
+        if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
+            return new EmptyOperation();
+        }
+        return new BlockBreakOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(entityState));
     }
 
     @Override
-    public BlockBreakOperation refactor(RefactorContext source) {
+    public Operation refactor(RefactorContext source) {
         return this;
     }
 

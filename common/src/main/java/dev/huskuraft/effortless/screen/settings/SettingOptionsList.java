@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.api.core.Tuple2;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.EntryList;
@@ -18,7 +16,6 @@ import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.PositionType;
 
 public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Entry<?>> {
 
@@ -55,8 +52,8 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         this.recreateChildren();
     }
 
-    public PositionNumberEntry addPositionNumberEntry(Axis axis, Tuple2<PositionType, Double> value, Consumer<Tuple2<PositionType, Double>> consumer) {
-        return addEntry(new PositionNumberEntry(getEntrance(), this, axis, value, consumer));
+    public PositionEntry addPositionEntry(Text title, Text symbol, Double value, Double min, Double max, Consumer<Double> consumer) {
+        return addEntry(new PositionEntry(getEntrance(), this, title, symbol, value, min, max, consumer));
     }
 
     public NumberEntry addNumberEntry(Text title, Text symbol, Double value, Double min, Double max, Consumer<Double> consumer) {
@@ -123,71 +120,53 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         }
     }
 
-    public static final class PositionNumberEntry extends SettingsEntry<Tuple2<PositionType, Double>> {
+    public static final class PositionEntry extends SettingsEntry<Double> {
 
-        private Button typeButton;
+        private final Double min;
+        private final Double max;
         private NumberField numberField;
-        private Button teleportButton;
-        private Axis axis;
+        private Button positionRoundButton;
 
-        public PositionNumberEntry(Entrance entrance, SettingOptionsList entryList, Axis axis, Tuple2<PositionType, Double> value, Consumer<Tuple2<PositionType, Double>> consumer) {
-            super(entrance, entryList, Text.translate("effortless.position", axis.getDisplayName()), axis.getDisplayName(), value, consumer);
-            this.axis = axis;
+        public PositionEntry(Entrance entrance, SettingOptionsList entryList, Text title, Text symbol, Double value, Double min, Double max, Consumer<Double> consumer) {
+            super(entrance, entryList, title, symbol, value, consumer);
+            this.min = min;
+            this.max = max;
         }
 
         @Override
         public void onCreate() {
             super.onCreate();
 
-            this.typeButton = addWidget(new Button(getEntrance(), getInnerRight() - 72, getTop(), 72, 20, getItem().value1().getDisplayName()));
-            this.typeButton.setOnPressListener(button -> {
-                var newPositionType = PositionType.values()[(getItem().value1().ordinal() + 1) % PositionType.values().length];
-                setItem(getItem().withValue1(newPositionType).withValue2(switch (newPositionType) {
-                    case ABSOLUTE -> switch (axis) {
-                        case X -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().x();
-                        case Y -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().y();
-                        case Z -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().z();
-                    };
-                    case RELATIVE -> 0d;
-                }));
-                numberField.setValue(getItem().value2());
-                typeButton.setMessage(getItem().value1().getDisplayName());
-                teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
-            });
-
-            this.numberField = addWidget(new NumberField(getEntrance(), getInnerRight() - 72 - 72, getTop(), 72, 20, NumberField.TYPE_DOUBLE));
-            this.numberField.setValueRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
-            this.numberField.setValue(getItem().value2());
+            this.numberField = addWidget(new NumberField(getEntrance(), getInnerRight() - 72 - 20, getTop(), 72, 20, NumberField.TYPE_DOUBLE));
+            this.numberField.setValueRange(min, max);
+            this.numberField.setValue(getItem());
             this.numberField.setValueChangeListener(value -> {
-                super.setItem(getItem().withValue2(value.doubleValue()));
+                super.setItem(value.doubleValue());
             });
+            this.positionRoundButton = addWidget(new Button(getEntrance(), getInnerRight() - 20, getTop(), 20, 20, Text.empty()));
+            this.titleTextWidget.setWidth(getInnerRight() - getInnerLeft() - 8 - numberField.getWidth());
 
-            this.teleportButton = addWidget(new Button(getEntrance(), getInnerRight() - 72 - 72 - 20, getTop(), 20, 20, Text.text("P")));
-            this.teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
-            this.teleportButton.setOnPressListener(button -> {
-                setItem(getItem().withValue2(switch (axis) {
-                    case X -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().x();
-                    case Y -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().y();
-                    case Z -> getEntrance().getClient().getPlayer().getPosition().toVector3i().toVector3d().z();
-                }));
-                numberField.setValue(getItem().value2());
-            });
-            this.titleTextWidget.setWidth(getInnerRight() - getInnerLeft() - 8 - typeButton.getWidth() - numberField.getWidth() - teleportButton.getWidth());
-
-        }
-
-        public void setAxis(Axis axis) {
-            this.axis = axis;
-            setMessage(Text.translate("effortless.position", axis.getDisplayName()));
-            setSymbol(axis.getDisplayName());
         }
 
         @Override
-        public void setItem(Tuple2<PositionType, Double> item) {
+        public void setItem(Double item) {
             super.setItem(item);
-            this.typeButton.setMessage(getItem().value1().getDisplayName());
-            this.teleportButton.setVisible(getItem().value1() == PositionType.ABSOLUTE);
-            this.numberField.setValue(getItem().value2());
+            this.numberField.setValue(getItem());
+        }
+
+        @Override
+        public void onReload() {
+            if (Math.round(getItem() * 2) / 2.0 % 1 == 0) {
+                this.positionRoundButton.setMessage(".0");
+                this.positionRoundButton.setOnPressListener(button -> {
+                    setItem(Math.floor(getItem()) + 0.5);
+                });
+            } else {
+                this.positionRoundButton.setMessage(".5");
+                this.positionRoundButton.setOnPressListener(button -> {
+                    setItem(Math.floor(getItem()));
+                });
+            }
         }
     }
 

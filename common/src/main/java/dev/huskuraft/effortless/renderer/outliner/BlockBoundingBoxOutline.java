@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.renderer.outliner;
 
+import java.awt.*;
+
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
@@ -26,14 +28,14 @@ public class BlockBoundingBoxOutline extends Outline {
         bb = bb.inflate(noCull ? -1 / 128d : 1 / 128d);
         noCull |= params.disableCull;
 
-        var xyz = new Vector3d(bb.minX, bb.minY, bb.minZ);
-        var Xyz = new Vector3d(bb.maxX, bb.minY, bb.minZ);
-        var xYz = new Vector3d(bb.minX, bb.maxY, bb.minZ);
-        var XYz = new Vector3d(bb.maxX, bb.maxY, bb.minZ);
-        var xyZ = new Vector3d(bb.minX, bb.minY, bb.maxZ);
-        var XyZ = new Vector3d(bb.maxX, bb.minY, bb.maxZ);
-        var xYZ = new Vector3d(bb.minX, bb.maxY, bb.maxZ);
-        var XYZ = new Vector3d(bb.maxX, bb.maxY, bb.maxZ);
+        var xyz = new Vector3d(bb.minX(), bb.minY(), bb.minZ());
+        var Xyz = new Vector3d(bb.maxX(), bb.minY(), bb.minZ());
+        var xYz = new Vector3d(bb.minX(), bb.maxY(), bb.minZ());
+        var XYz = new Vector3d(bb.maxX(), bb.maxY(), bb.minZ());
+        var xyZ = new Vector3d(bb.minX(), bb.minY(), bb.maxZ());
+        var XyZ = new Vector3d(bb.maxX(), bb.minY(), bb.maxZ());
+        var xYZ = new Vector3d(bb.minX(), bb.maxY(), bb.maxZ());
+        var XYZ = new Vector3d(bb.maxX(), bb.maxY(), bb.maxZ());
 
         var start = xyz;
         renderAACuboidLine(renderer, start, Xyz);
@@ -82,7 +84,7 @@ public class BlockBoundingBoxOutline extends Outline {
         var vDiff = p4.sub(p1);
         var maxU = (float) MathUtils.abs(axis == Axis.X ? uDiff.z() : uDiff.x());
         var maxV = (float) MathUtils.abs(axis == Axis.Y ? vDiff.z() : vDiff.y());
-        renderer.renderQuadUV(renderLayer, p1, p2, p3, p4, 0, 0, maxU, maxV, getParams().getLightMap(), getParams().getColor().getRGB(), Orientation.UP);
+        renderer.renderQuadUV(renderLayer, p1, p2, p3, p4, 0, 0, maxU, maxV, getParams().getLightMap(), new Color(0, 0, 0, 200).getRGB(), Orientation.UP);
 
         params.alpha = alphaBefore;
 

@@ -12,6 +12,8 @@ import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Transformer;
+import dev.huskuraft.effortless.building.pattern.mirror.MirrorTransformer;
+import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.screen.transformer.EffortlessItemRandomizerEditScreen;
 import dev.huskuraft.effortless.screen.transformer.EffortlessTransformerEditScreen;
@@ -105,7 +107,11 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
             new EffortlessTransformerPresetsSelectScreen(
                     getEntrance(),
                     transformer -> {
-                        entries.insertSelected(transformer.withRandomId().withName(Text.empty()));
+                        editTransformer(switch (transformer.getType()) {
+                            case MIRROR -> ((MirrorTransformer) transformer.withRandomId().withName(Text.empty())).withPosition(Transformer.roundToHalf(getEntrance().getClient().getPlayer().getPosition()));
+                            case RADIAL -> ((RadialTransformer) transformer.withRandomId().withName(Text.empty())).withPosition(Transformer.roundToHalf(getEntrance().getClient().getPlayer().getPosition()));
+                            default -> transformer.withRandomId().withName(Text.empty());
+                        });
                         onReload();
                     }
             ).attach();
@@ -155,7 +161,7 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
                         transformer
                 ).attach();
             }
-            case ITEM_RANDOMIZER -> {
+            case RANDOMIZER -> {
                 new EffortlessItemRandomizerEditScreen(
                         getEntrance(),
                         result -> {

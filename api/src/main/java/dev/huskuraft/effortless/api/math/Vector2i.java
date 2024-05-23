@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.math;
 
 import java.util.stream.IntStream;
 
-public class Vector2i {
+public record Vector2i(int x, int y) {
 
     public static final Vector2i ZERO = new Vector2i(0, 0);
     public static final Vector2i ONE = new Vector2i(1, 1);
@@ -12,18 +12,13 @@ public class Vector2i {
     public static final Vector2i UNIT_MINUS_X = new Vector2i(-1, 0);
     public static final Vector2i UNIT_MINUS_Y = new Vector2i(0, -1);
 
-    private final int x;
-    private final int y;
-
     /**
      * Construct an instance.
      *
      * @param x the X coordinate
      * @param y the Y coordinate
      */
-    public Vector2i(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Vector2i {
     }
 
     public static Vector2i at(double x, double y) {
@@ -52,24 +47,6 @@ public class Vector2i {
      */
     public Vector2i withY(int y) {
         return Vector2i.at(x, y);
-    }
-
-    /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public int x() {
-        return x;
-    }
-
-    /**
-     * Get the Y coordinate.
-     *
-     * @return the y coordinate
-     */
-    public int y() {
-        return y;
     }
 
     /**
@@ -408,21 +385,6 @@ public class Vector2i {
 
     public int volume() {
         return x * y;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Vector2i other)) {
-            return false;
-        }
-
-        return other.x == this.x && other.y == this.y;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return (x << 16) ^ y;
     }
 
     @Override

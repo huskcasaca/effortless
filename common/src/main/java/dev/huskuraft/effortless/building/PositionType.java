@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.building;
 
 import dev.huskuraft.effortless.api.text.Text;
 
-public enum PositionType implements BuildModifier {
+public enum PositionType {
     ABSOLUTE("absolute"),
     RELATIVE("relative");
 
@@ -18,19 +18,6 @@ public enum PositionType implements BuildModifier {
 
     public Text getDisplayName() {
         return Text.translate("effortless.position.%s".formatted(name));
-    }
-
-    @Override
-    public boolean isIntermediate() {
-        return this == RELATIVE;
-    }
-
-    @Override
-    public BuildStage getStage() {
-        return switch (this) {
-            case ABSOLUTE -> BuildStage.TICK;
-            case RELATIVE -> BuildStage.UPDATE_CONTEXT;
-        };
     }
 
 }

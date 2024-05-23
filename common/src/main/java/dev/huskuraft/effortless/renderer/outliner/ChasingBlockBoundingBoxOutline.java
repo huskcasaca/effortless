@@ -16,10 +16,10 @@ public class ChasingBlockBoundingBoxOutline extends BlockBoundingBoxOutline {
     }
 
     private static BoundingBox3d interpolateBBs(BoundingBox3d current, BoundingBox3d target, float deltaTick) {
-        return new BoundingBox3d(MathUtils.lerp(deltaTick, current.minX, target.minX),
-                MathUtils.lerp(deltaTick, current.minY, target.minY), MathUtils.lerp(deltaTick, current.minZ, target.minZ),
-                MathUtils.lerp(deltaTick, current.maxX, target.maxX), MathUtils.lerp(deltaTick, current.maxY, target.maxY),
-                MathUtils.lerp(deltaTick, current.maxZ, target.maxZ));
+        return BoundingBox3d.of(MathUtils.lerp(deltaTick, current.minX(), target.minX()),
+                MathUtils.lerp(deltaTick, current.minY(), target.minY()), MathUtils.lerp(deltaTick, current.minZ(), target.minZ()),
+                MathUtils.lerp(deltaTick, current.maxX(), target.maxX()), MathUtils.lerp(deltaTick, current.maxY(), target.maxY()),
+                MathUtils.lerp(deltaTick, current.maxZ(), target.maxZ()));
     }
 
     public void target(BoundingBox3d target) {

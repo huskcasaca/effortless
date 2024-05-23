@@ -84,7 +84,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
                 case ARRAY -> ArrayTransformer.DEFAULT.withName(Text.empty()).withRandomId();
                 case MIRROR -> MirrorTransformer.DEFAULT_X.withName(Text.empty()).withRandomId();
                 case RADIAL -> RadialTransformer.DEFAULT.withName(Text.empty()).withRandomId();
-                case ITEM_RANDOMIZER -> ItemRandomizer.EMPTY.withName(Text.empty()).withRandomId();
+                case RANDOMIZER -> ItemRandomizer.EMPTY.withName(Text.empty()).withRandomId();
             });
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 
@@ -148,19 +148,22 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
                             case ARRAY -> Stream.of(Text.translate("effortless.transformer.add.tooltip.array.title"));
                             case MIRROR -> Stream.of(Text.translate("effortless.transformer.add.tooltip.mirror.title"));
                             case RADIAL -> Stream.of(Text.translate("effortless.transformer.add.tooltip.radial.title"));
-                            case ITEM_RANDOMIZER -> Stream.of(Text.translate("effortless.transformer.add.tooltip.random.title"));
+                            case RANDOMIZER -> Stream.of(Text.translate("effortless.transformer.add.tooltip.random.title"));
                         },
                         TooltipHelper.wrapLines(getTypeface(), (switch (selectedType) {
                             case ARRAY -> Text.translate("effortless.transformer.add.tooltip.array.message");
                             case MIRROR -> Text.translate("effortless.transformer.add.tooltip.mirror.message");
                             case RADIAL -> Text.translate("effortless.transformer.add.tooltip.radial.message");
-                            case ITEM_RANDOMIZER -> Text.translate("effortless.transformer.add.tooltip.random.message");
+                            case RANDOMIZER -> Text.translate("effortless.transformer.add.tooltip.random.message");
                         }).withStyle(ChatFormatting.GRAY)).stream()
                 ).toList()
         );
+        this.addButton.setActive(selectedType == Transformers.RANDOMIZER);
 
         if (entries.consumeDoubleClick() && entries.hasSelected()) {
-            editTransformer(entries.getSelected().getItem());
+            if (!entries.getSelected().getItem().isBuiltIn()) {
+                editTransformer(entries.getSelected().getItem());
+            }
         }
 
     }
@@ -188,7 +191,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
                         transformer
                 ).attach();
             }
-            case ITEM_RANDOMIZER -> {
+            case RANDOMIZER -> {
                 new EffortlessItemRandomizerEditScreen(
                         getEntrance(),
                         result -> {

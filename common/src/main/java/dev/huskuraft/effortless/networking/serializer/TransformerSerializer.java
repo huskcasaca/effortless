@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.networking.serializer;
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
-import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
@@ -20,7 +19,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             case ARRAY -> byteBuf.read(new ArrayTransformerSerializer());
             case MIRROR -> byteBuf.read(new MirrorTransformerSerializer());
             case RADIAL -> byteBuf.read(new RadialTransformerSerializer());
-            case ITEM_RANDOMIZER -> byteBuf.read(new ItemRandomizerSerializer());
+            case RANDOMIZER -> byteBuf.read(new ItemRandomizerSerializer());
         };
     }
 
@@ -31,7 +30,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             case ARRAY -> byteBuf.write((ArrayTransformer) transformer, new ArrayTransformerSerializer());
             case MIRROR -> byteBuf.write((MirrorTransformer) transformer, new MirrorTransformerSerializer());
             case RADIAL -> byteBuf.write((RadialTransformer) transformer, new RadialTransformerSerializer());
-            case ITEM_RANDOMIZER -> byteBuf.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
+            case RANDOMIZER -> byteBuf.write((ItemRandomizer) transformer, new ItemRandomizerSerializer());
         }
     }
 
@@ -42,8 +41,8 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             return new ArrayTransformer(
                     byteBuf.readUUID(),
                     byteBuf.readText(),
-                    byteBuf.readVector3d(),
-                    byteBuf.readInt()
+                    byteBuf.readVector3i(),
+                    byteBuf.readVarInt()
             );
         }
 
@@ -51,8 +50,8 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
         public void write(NetByteBuf byteBuf, ArrayTransformer transformer) {
             byteBuf.writeUUID(transformer.getId());
             byteBuf.writeText(transformer.getName());
-            byteBuf.writeVector3d(transformer.offset());
-            byteBuf.writeInt(transformer.count());
+            byteBuf.writeVector3i(transformer.offset());
+            byteBuf.writeVarInt(transformer.count());
         }
 
     }
@@ -65,8 +64,8 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
                     byteBuf.readUUID(),
                     byteBuf.readText(),
                     byteBuf.readVector3d(),
-                    byteBuf.readEnum(PositionType.class),
-                    byteBuf.readEnum(Axis.class)
+                    byteBuf.readEnum(Axis.class),
+                    byteBuf.readVarInt()
             );
         }
 
@@ -75,8 +74,8 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeUUID(transformer.getId());
             byteBuf.writeText(transformer.getName());
             byteBuf.writeVector3d(transformer.position());
-            byteBuf.writeEnum(transformer.getPositionType());
             byteBuf.writeEnum(transformer.axis());
+            byteBuf.writeVarInt(transformer.size());
         }
 
     }
@@ -89,9 +88,9 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
                     byteBuf.readUUID(),
                     byteBuf.readText(),
                     byteBuf.readVector3d(),
-                    byteBuf.readEnum(PositionType.class),
-                    byteBuf.readInt()
-            );
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt());
         }
 
         @Override
@@ -99,8 +98,9 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeUUID(transformer.getId());
             byteBuf.writeText(transformer.getName());
             byteBuf.writeVector3d(transformer.position());
-            byteBuf.writeEnum(transformer.getPositionType());
-            byteBuf.writeInt(transformer.slices());
+            byteBuf.writeVarInt(transformer.slices());
+            byteBuf.writeVarInt(transformer.radius());
+            byteBuf.writeVarInt(transformer.length());
         }
 
     }

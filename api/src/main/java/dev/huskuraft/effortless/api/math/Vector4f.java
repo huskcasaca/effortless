@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.math;
 
 import java.util.stream.DoubleStream;
 
-public class Vector4f {
+public record Vector4f(float x, float y, float z, float w) {
 
     public static final Vector4f ZERO = new Vector4f(0, 0, 0, 0);
     public static final Vector4f ONE = new Vector4f(1, 1, 1, 1);
@@ -16,11 +16,6 @@ public class Vector4f {
     public static final Vector4f UNIT_MINUS_Z = new Vector4f(0, 0, -1, 0);
     public static final Vector4f UNIT_MINUS_W = new Vector4f(0, 0, 0, -1);
 
-    protected final float x;
-    protected final float y;
-    protected final float z;
-    protected final float w;
-
     /**
      * Construct an instance.
      *
@@ -29,11 +24,7 @@ public class Vector4f {
      * @param z the Z coordinate
      * @param w the W coordinate
      */
-    public Vector4f(float x, float y, float z, float w) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.w = w;
+    public Vector4f {
     }
 
     public static Vector4f at(double x, double y, double z, double w) {
@@ -82,43 +73,6 @@ public class Vector4f {
      */
     public Vector4f withW(float w) {
         return Vector4f.at(x, y, z, w);
-    }
-
-
-    /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public float x() {
-        return x;
-    }
-
-    /**
-     * Get the Y coordinate.
-     *
-     * @return the y coordinate
-     */
-    public float y() {
-        return y;
-    }
-
-    /**
-     * Get the Z coordinate.
-     *
-     * @return the z coordinate
-     */
-    public float z() {
-        return z;
-    }
-
-    /**
-     * Get the W coordinate.
-     *
-     * @return the w coordinate
-     */
-    public float w() {
-        return w;
     }
 
     /**
@@ -431,25 +385,6 @@ public class Vector4f {
 
     public double volume() {
         return x * y * z * w;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Vector4f other)) {
-            return false;
-        }
-
-        return other.x == this.x && other.y == this.y && other.z == this.z && other.w == this.w;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 17;
-        hash = 31 * hash + Float.hashCode(x);
-        hash = 31 * hash + Float.hashCode(y);
-        hash = 31 * hash + Float.hashCode(z);
-        hash = 31 * hash + Float.hashCode(w);
-        return hash;
     }
 
     @Override

@@ -14,21 +14,21 @@ import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CubeFilling;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record Cube(
         CubeFilling cubeFilling,
         PlaneFacing planeFacing,
         PlaneLength planeLength
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public Cube() {
         this(CubeFilling.FILLED, PlaneFacing.BOTH, PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case CUBE_FILLING -> new Cube((CubeFilling) feature, planeFacing, planeLength);
             case PLANE_FACING -> new Cube(cubeFilling, (PlaneFacing) feature, planeLength);

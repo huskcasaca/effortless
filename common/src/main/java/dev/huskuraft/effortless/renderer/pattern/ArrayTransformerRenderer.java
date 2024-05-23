@@ -27,7 +27,7 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
             return;
         }
         var typeface = EffortlessClient.getInstance().getClient().getTypeface();
-        for (var result : context.buildInteractions().results()) {
+        for (var result : context.interactions().results()) {
             if (result == null) {
                 break; // global check
             }
@@ -36,8 +36,8 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
 
             for (var i = 0; i < transformer.copyCount(); i++) {
 
-                var v1 = interactionPosition.add(transformer.offset().mul(i));
-                var v2 = interactionPosition.add(transformer.offset().mul(i + 1));
+                var v1 = interactionPosition.add(transformer.offset().mul(i).toVector3d());
+                var v2 = interactionPosition.add(transformer.offset().mul(i + 1).toVector3d());
                 renderAACuboidLine(renderer, v1, v2, 1 / 32f, 0xFFFFFF, true);
                 var cam = renderer.camera().position();
                 renderer.pushPose();

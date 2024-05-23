@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.api.math;
 import java.util.Comparator;
 import java.util.stream.DoubleStream;
 
-public class Vector3d {
+public record Vector3d(double x, double y, double z) {
 
     public static final Vector3d ZERO = new Vector3d(0, 0, 0);
     public static final Vector3d ONE = new Vector3d(1, 1, 1);
@@ -15,10 +15,6 @@ public class Vector3d {
     public static final Vector3d UNIT_MINUS_Y = new Vector3d(0, -1, 0);
     public static final Vector3d UNIT_MINUS_Z = new Vector3d(0, 0, -1);
 
-    protected final double x;
-    protected final double y;
-    protected final double z;
-
     /**
      * Construct an instance.
      *
@@ -26,10 +22,7 @@ public class Vector3d {
      * @param y the Y coordinate
      * @param z the Z coordinate
      */
-    public Vector3d(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Vector3d {
     }
 
     public static Comparator<Vector3d> sortByCoordsYzx() {
@@ -68,33 +61,6 @@ public class Vector3d {
      */
     public Vector3d withZ(double z) {
         return Vector3d.at(x, y, z);
-    }
-
-    /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public double x() {
-        return x;
-    }
-
-    /**
-     * Get the Y coordinate.
-     *
-     * @return the y coordinate
-     */
-    public double y() {
-        return y;
-    }
-
-    /**
-     * Get the Z coordinate.
-     *
-     * @return the z coordinate
-     */
-    public double z() {
-        return z;
     }
 
     /**
@@ -503,33 +469,22 @@ public class Vector3d {
         return x * y * z;
     }
 
-
-    public Vector3d rotY(double pYaw) {
-        var cos = MathUtils.cos(pYaw);
-        var sin = MathUtils.sin(pYaw);
-        var x = this.x * (double) cos + this.z * (double) sin;
-        var y = this.y;
-        var z = this.z * (double) cos - this.x * (double) sin;
-        return new Vector3d(x, y, z);
+    public Vector3d rotY(double angle) {
+        var cos = MathUtils.cos(angle);
+        var sin = MathUtils.sin(angle);
+        return new Vector3d(this.x * cos + this.z * sin, this.y, this.z * cos - this.x * sin);
     }
 
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Vector3d other)) {
-            return false;
-        }
-
-        return other.x == this.x && other.y == this.y && other.z == this.z;
+    public Vector3d rotX(double angle) {
+        var cos = MathUtils.cos(angle);
+        var sin = MathUtils.sin(angle);
+        return new Vector3d(this.x, this.y * cos - this.z * sin, this.y * sin + this.z * cos);
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 17;
-        hash = 31 * hash + Double.hashCode(x);
-        hash = 31 * hash + Double.hashCode(y);
-        hash = 31 * hash + Double.hashCode(z);
-        return hash;
+    public Vector3d rotZ(double angle) {
+        var cos = MathUtils.cos(angle);
+        var sin = MathUtils.sin(angle);
+        return new Vector3d(this.x * cos - this.y * sin, this.y * cos + this.x * sin, this.z);
     }
 
     @Override

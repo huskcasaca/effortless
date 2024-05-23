@@ -7,11 +7,11 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
 
 public record Dome(
 
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public BlockInteraction trace(Player player, Context context, int index) {
         return null;

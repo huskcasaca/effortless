@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.api.math;
 
 import java.util.stream.DoubleStream;
 
-public class Vector2d {
+public record Vector2d(double x, double y) {
 
     public static final Vector2d ZERO = new Vector2d(0, 0);
     public static final Vector2d ONE = new Vector2d(1, 1);
@@ -12,18 +12,13 @@ public class Vector2d {
     public static final Vector2d UNIT_MINUS_X = new Vector2d(-1, 0);
     public static final Vector2d UNIT_MINUS_Y = new Vector2d(0, -1);
 
-    private final double x;
-    private final double y;
-
     /**
      * Construct an instance.
      *
      * @param x the X coordinate
      * @param y the Y coordinate
      */
-    public Vector2d(double x, double y) {
-        this.x = x;
-        this.y = y;
+    public Vector2d {
     }
 
     public static Vector2d at(double x, double y) {
@@ -48,24 +43,6 @@ public class Vector2d {
      */
     public Vector2d withY(double y) {
         return Vector2d.at(x, y);
-    }
-
-    /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public double x() {
-        return x;
-    }
-
-    /**
-     * Get the Y coordinate.
-     *
-     * @return the y coordinate
-     */
-    public double y() {
-        return y;
     }
 
     /**
@@ -382,24 +359,6 @@ public class Vector2d {
 
     public double volume() {
         return x * y;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Vector2d other)) {
-            return false;
-        }
-
-        return other.x == this.x && other.y == this.y;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 17;
-        hash = 31 * hash + Double.hashCode(x);
-        hash = 31 * hash + Double.hashCode(y);
-        return hash;
     }
 
     @Override

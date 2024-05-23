@@ -16,21 +16,21 @@ import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record Square(
         PlaneFacing planeFacing,
         PlaneFilling planeFilling,
         PlaneLength planeLength
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public Square() {
         this(PlaneFacing.BOTH, PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case PLANE_FACING -> new Square((PlaneFacing) feature, planeFilling, planeLength);
             case PLANE_FILLING -> new Square(planeFacing, (PlaneFilling) feature, planeLength);
@@ -117,7 +117,7 @@ public record Square(
         var y2 = pos2.y();
         var z2 = pos2.z();
 
-        switch (BlockBuildStructure.getShape(pos1, pos2)) {
+        switch (BlockStructure.getShape(pos1, pos2)) {
             case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
             case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_X -> {
@@ -162,7 +162,7 @@ public record Square(
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return BlockBuildStructure.transformUniformLengthInteraction(start, result, uniformLength);
+        return BlockStructure.transformUniformLengthInteraction(start, result, uniformLength);
     }
 
     public BlockInteraction trace(Player player, Context context, int index) {

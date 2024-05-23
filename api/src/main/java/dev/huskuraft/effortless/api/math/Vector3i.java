@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.api.math;
 import java.util.Comparator;
 import java.util.stream.IntStream;
 
-public class Vector3i {
+public record Vector3i(int x, int y, int z) {
 
     public static final Vector3i ZERO = new Vector3i(0, 0, 0);
     public static final Vector3i ONE = new Vector3i(1, 1, 1);
@@ -15,10 +15,6 @@ public class Vector3i {
     public static final Vector3i UNIT_MINUS_Y = new Vector3i(0, -1, 0);
     public static final Vector3i UNIT_MINUS_Z = new Vector3i(0, 0, -1);
 
-    protected final int x;
-    protected final int y;
-    protected final int z;
-
     /**
      * Construct an instance.
      *
@@ -26,10 +22,7 @@ public class Vector3i {
      * @param y the Y coordinate
      * @param z the Z coordinate
      */
-    public Vector3i(int x, int y, int z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+    public Vector3i {
     }
 
     public static Comparator<Vector3i> sortByCoordsYzx() {
@@ -80,33 +73,6 @@ public class Vector3i {
      */
     public Vector3i withZ(int z) {
         return Vector3i.at(x, y, z);
-    }
-
-    /**
-     * Get the X coordinate.
-     *
-     * @return the x coordinate
-     */
-    public int x() {
-        return x;
-    }
-
-    /**
-     * Get the Y coordinate.
-     *
-     * @return the y coordinate
-     */
-    public int y() {
-        return y;
-    }
-
-    /**
-     * Get the Z coordinate.
-     *
-     * @return the z coordinate
-     */
-    public int z() {
-        return z;
     }
 
     /**
@@ -554,20 +520,6 @@ public class Vector3i {
 
     public int volume() {
         return x * y * z;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Vector3i other)) {
-            return false;
-        }
-
-        return other.x == this.x && other.y == this.y && other.z == this.z;
-    }
-
-    @Override
-    public int hashCode() {
-        return (x ^ (z << 12)) ^ (y << 24);
     }
 
     @Override

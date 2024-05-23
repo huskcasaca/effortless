@@ -1,37 +1,39 @@
 package dev.huskuraft.effortless.api.math;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
-public class BoundingBox3d {
+public record BoundingBox3d(
+        double minX,
+        double minY,
+        double minZ,
+        double maxX,
+        double maxY,
+        double maxZ
+) {
 
     private static final double EPSILON = 1.0E-7;
-    public final double minX;
-    public final double minY;
-    public final double minZ;
-    public final double maxX;
-    public final double maxY;
-    public final double maxZ;
 
-    public BoundingBox3d(double x0, double y0, double z0, double x1, double y1, double z1) {
-        this.minX = MathUtils.min(x0, x1);
-        this.minY = MathUtils.min(y0, y1);
-        this.minZ = MathUtils.min(z0, z1);
-        this.maxX = MathUtils.max(x0, x1);
-        this.maxY = MathUtils.max(y0, y1);
-        this.maxZ = MathUtils.max(z0, z1);
+    public static BoundingBox3d of(double x0, double y0, double z0, double x1, double y1, double z1) {
+        return new BoundingBox3d(
+                MathUtils.min(x0, x1),
+                MathUtils.min(y0, y1),
+                MathUtils.min(z0, z1),
+                MathUtils.max(x0, x1),
+                MathUtils.max(y0, y1),
+                MathUtils.max(z0, z1)
+        );
     }
 
-    public BoundingBox3d(Vector3i vector) {
-        this(vector.x(), vector.y(), vector.z(), vector.x() + 1, vector.y() + 1, vector.z() + 1);
+    public static BoundingBox3d of(Vector3i vector) {
+        return new BoundingBox3d(vector.x(), vector.y(), vector.z(), vector.x() + 1, vector.y() + 1, vector.z() + 1);
     }
 
-    public BoundingBox3d(Vector3i start, Vector3i end) {
-        this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
+    public static BoundingBox3d of(Vector3i start, Vector3i end) {
+        return new BoundingBox3d(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
     }
 
-    public BoundingBox3d(Vector3d start, Vector3d end) {
-        this(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
+    public static BoundingBox3d of(Vector3d start, Vector3d end) {
+        return new BoundingBox3d(start.x(), start.y(), start.z(), end.x(), end.y(), end.z());
     }
 
     public static BoundingBox3d of(BoundingBox3i boundingBox) {
@@ -39,11 +41,11 @@ public class BoundingBox3d {
     }
 
     public static BoundingBox3d unitCubeFromLowerCorner(Vector3d vector) {
-        return new BoundingBox3d(vector.x(), vector.y(), vector.z(), vector.x() + 1.0, vector.y() + 1.0, vector.z() + 1.0);
+        return BoundingBox3d.of(vector.x(), vector.y(), vector.z(), vector.x() + 1.0, vector.y() + 1.0, vector.z() + 1.0);
     }
 
     public static BoundingBox3d ofSize(Vector3d vector, double x, double y, double z) {
-        return new BoundingBox3d(vector.x() - x / 2.0, vector.y() - y / 2.0, vector.z() - z / 2.0, vector.x() + x / 2.0, vector.y() + y / 2.0, vector.z() + z / 2.0);
+        return BoundingBox3d.of(vector.x() - x / 2.0, vector.y() - y / 2.0, vector.z() - z / 2.0, vector.x() + x / 2.0, vector.y() + y / 2.0, vector.z() + z / 2.0);
     }
 
     public static BoundingBox3d of(Vector3d... vectors) {
@@ -61,7 +63,7 @@ public class BoundingBox3d {
             maxY = Math.max(maxY, vector.y());
             maxZ = Math.max(maxZ, vector.z());
         }
-        return new BoundingBox3d(minX, minY, minZ, maxX, maxY, maxZ);
+        return BoundingBox3d.of(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     public static BoundingBox3d fromLowerCornersOf(Vector3i... vectors) {
@@ -79,63 +81,39 @@ public class BoundingBox3d {
             maxY = Math.max(maxY, vector.y() + 1);
             maxZ = Math.max(maxZ, vector.z() + 1);
         }
-        return new BoundingBox3d(minX, minY, minZ, maxX, maxY, maxZ);
-    }
-
-    public double getMinX() {
-        return minX;
-    }
-
-    public double getMinY() {
-        return minY;
-    }
-
-    public double getMinZ() {
-        return minZ;
-    }
-
-    public double getMaxX() {
-        return maxX;
-    }
-
-    public double getMaxY() {
-        return maxY;
-    }
-
-    public double getMaxZ() {
-        return maxZ;
+        return BoundingBox3d.of(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     public BoundingBox3d withMinX(double a) {
-        return new BoundingBox3d(a, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
+        return BoundingBox3d.of(a, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
     }
 
     public BoundingBox3d withMinY(double a) {
-        return new BoundingBox3d(this.minX, a, this.minZ, this.maxX, this.maxY, this.maxZ);
+        return BoundingBox3d.of(this.minX, a, this.minZ, this.maxX, this.maxY, this.maxZ);
     }
 
     public BoundingBox3d withMinZ(double a) {
-        return new BoundingBox3d(this.minX, this.minY, a, this.maxX, this.maxY, this.maxZ);
+        return BoundingBox3d.of(this.minX, this.minY, a, this.maxX, this.maxY, this.maxZ);
     }
 
     public BoundingBox3d withMaxX(double a) {
-        return new BoundingBox3d(this.minX, this.minY, this.minZ, a, this.maxY, this.maxZ);
+        return BoundingBox3d.of(this.minX, this.minY, this.minZ, a, this.maxY, this.maxZ);
     }
 
     public BoundingBox3d withMaxY(double a) {
-        return new BoundingBox3d(this.minX, this.minY, this.minZ, this.maxX, a, this.maxZ);
+        return BoundingBox3d.of(this.minX, this.minY, this.minZ, this.maxX, a, this.maxZ);
     }
 
     public BoundingBox3d withMaxZ(double a) {
-        return new BoundingBox3d(this.minX, this.minY, this.minZ, this.maxX, this.maxY, a);
+        return BoundingBox3d.of(this.minX, this.minY, this.minZ, this.maxX, this.maxY, a);
     }
 
     public BoundingBox3d move(double x, double y, double z) {
-        return new BoundingBox3d(this.minX + x, this.minY + y, this.minZ + z, this.maxX + x, this.maxY + y, this.maxZ + z);
+        return BoundingBox3d.of(this.minX + x, this.minY + y, this.minZ + z, this.maxX + x, this.maxY + y, this.maxZ + z);
     }
 
     public BoundingBox3d move(Vector3i vector) {
-        return new BoundingBox3d(this.minX + (double) vector.x(), this.minY + (double) vector.y(), this.minZ + (double) vector.z(), this.maxX + (double) vector.x(), this.maxY + (double) vector.y(), this.maxZ + (double) vector.z());
+        return BoundingBox3d.of(this.minX + (double) vector.x(), this.minY + (double) vector.y(), this.minZ + (double) vector.z(), this.maxX + (double) vector.x(), this.maxY + (double) vector.y(), this.maxZ + (double) vector.z());
     }
 
     public BoundingBox3d move(Vector3d vector) {
@@ -167,7 +145,7 @@ public class BoundingBox3d {
             l -= z;
         }
 
-        return new BoundingBox3d(g, h, i, j, k, l);
+        return BoundingBox3d.of(g, h, i, j, k, l);
     }
 
     public BoundingBox3d expandTowards(Vector3d vector) {
@@ -199,7 +177,7 @@ public class BoundingBox3d {
             l += z;
         }
 
-        return new BoundingBox3d(g, h, i, j, k, l);
+        return BoundingBox3d.of(g, h, i, j, k, l);
     }
 
     public BoundingBox3d intersect(BoundingBox3d boundingBox) {
@@ -209,7 +187,7 @@ public class BoundingBox3d {
         double g = MathUtils.min(this.maxX, boundingBox.maxX);
         double h = MathUtils.min(this.maxY, boundingBox.maxY);
         double i = MathUtils.min(this.maxZ, boundingBox.maxZ);
-        return new BoundingBox3d(d, e, f, g, h, i);
+        return BoundingBox3d.of(d, e, f, g, h, i);
     }
 
     public BoundingBox3d minmax(BoundingBox3d boundingBox) {
@@ -219,7 +197,7 @@ public class BoundingBox3d {
         double g = MathUtils.max(this.maxX, boundingBox.maxX);
         double h = MathUtils.max(this.maxY, boundingBox.maxY);
         double i = MathUtils.max(this.maxZ, boundingBox.maxZ);
-        return new BoundingBox3d(d, e, f, g, h, i);
+        return BoundingBox3d.of(d, e, f, g, h, i);
     }
 
     public boolean intersects(BoundingBox3d boundingBox) {
@@ -288,7 +266,7 @@ public class BoundingBox3d {
         double j = this.maxX + d;
         double k = this.maxY + e;
         double l = this.maxZ + f;
-        return new BoundingBox3d(g, h, i, j, k, l);
+        return BoundingBox3d.of(g, h, i, j, k, l);
     }
 
     public BoundingBox3d inflate(double d) {
@@ -313,36 +291,6 @@ public class BoundingBox3d {
 
     public String toString() {
         return "BoundingBox3d[" + this.minX + ", " + this.minY + ", " + this.minZ + "] -> [" + this.maxX + ", " + this.maxY + ", " + this.maxZ + "]";
-    }
-
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        } else if (!(object instanceof BoundingBox3d boundingBox)) {
-            return false;
-        } else {
-            return this.minX == boundingBox.minX && this.minY == boundingBox.minY && this.minZ == boundingBox.minZ && this.maxX == boundingBox.maxX && this.maxY == boundingBox.maxY && this.maxZ == boundingBox.maxZ;
-        }
-    }
-
-//	public int hashCode() {
-//		long l = Double.doubleToLongBits(this.minX);
-//		int i = (int)(l ^ l >>> 32);
-//		l = Double.doubleToLongBits(this.minY);
-//		i = 31 * i + (int)(l ^ l >>> 32);
-//		l = Double.doubleToLongBits(this.minZ);
-//		i = 31 * i + (int)(l ^ l >>> 32);
-//		l = Double.doubleToLongBits(this.maxX);
-//		i = 31 * i + (int)(l ^ l >>> 32);
-//		l = Double.doubleToLongBits(this.maxY);
-//		i = 31 * i + (int)(l ^ l >>> 32);
-//		l = Double.doubleToLongBits(this.maxZ);
-//		i = 31 * i + (int)(l ^ l >>> 32);
-//		return i;
-//	}
-
-    public int hashCode() {
-        return Objects.hash(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
     }
 
     public boolean hasNaN() {

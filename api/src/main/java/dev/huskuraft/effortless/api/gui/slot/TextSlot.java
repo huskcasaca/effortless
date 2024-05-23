@@ -48,8 +48,6 @@ public class TextSlot extends Slot {
         renderer.renderRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), color);
 
         if (symbol != null) {
-            renderer.pushScissor(getX() + getFullWidth() - getWidth(), getY(), getWidth(), getHeight());
-
             renderer.pushPose();
             renderer.translate(getX(), getY(), 0);
             renderer.scale(getWidth() / 18f, getHeight() / 18f, 0);
@@ -60,7 +58,6 @@ public class TextSlot extends Slot {
             renderer.renderTextFromCenter(getTypeface(), getSymbol(), 0, 0, 0xFF6C6C6C, false);
             renderer.popPose();
             renderer.popPose();
-            renderer.popScissor();
         }
 
         if (getMessage() != null) {

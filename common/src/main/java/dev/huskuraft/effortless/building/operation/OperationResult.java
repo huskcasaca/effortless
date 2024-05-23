@@ -9,7 +9,7 @@ public abstract class OperationResult {
     public abstract Operation getOperation();
 
     // FIXME: 27/12/23 type
-    public abstract TransformableOperation getReverseOperation();
+    public abstract Operation getReverseOperation();
 
 //    public abstract boolean isSuccess();
 

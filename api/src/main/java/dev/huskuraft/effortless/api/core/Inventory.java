@@ -81,5 +81,4 @@ public interface Inventory extends PlatformReference {
         return Stream.of(getItems(), getArmorItems(), getOffhandItems()).flatMap(List::stream).toList();
     }
 
-
 }

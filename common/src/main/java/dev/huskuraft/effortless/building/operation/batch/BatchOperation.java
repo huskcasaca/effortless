@@ -1,22 +1,18 @@
 package dev.huskuraft.effortless.building.operation.batch;
 
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.operation.TransformableOperation;
+import dev.huskuraft.effortless.building.operation.Operation;
 
-public abstract class BatchOperation extends TransformableOperation {
+public abstract class BatchOperation implements Operation {
 
     protected final Context context;
-    protected final Supplier<Stream<? extends TransformableOperation>> operationsSupplier;
 
-    protected BatchOperation(Context context, Supplier<Stream<? extends TransformableOperation>> operationsSupplier) {
+    protected BatchOperation(Context context) {
         this.context = context;
-        this.operationsSupplier = operationsSupplier;
     }
 
     public Context getContext() {
@@ -26,20 +22,14 @@ public abstract class BatchOperation extends TransformableOperation {
     @Override
     public abstract BatchOperationResult commit();
 
-    public abstract BatchOperation map(UnaryOperator<TransformableOperation> operator);
+    public abstract BatchOperation map(UnaryOperator<Operation> operator);
 
-    public abstract BatchOperation mapEach(UnaryOperator<TransformableOperation> operator);
+    public abstract BatchOperation mapEach(UnaryOperator<Operation> operator);
 
     public abstract BatchOperation flatten();
 
-    public abstract BatchOperation filter(Predicate<TransformableOperation> predicate);
+    public abstract BatchOperation filter(Predicate<Operation> predicate);
 
-    public Stream<? extends TransformableOperation> operations() {
-        return operationsSupplier.get();
-    }
+    public abstract Stream<? extends Operation> operations();
 
-    @Override
-    public BlockPosition locate() {
-        return null;
-    }
 }

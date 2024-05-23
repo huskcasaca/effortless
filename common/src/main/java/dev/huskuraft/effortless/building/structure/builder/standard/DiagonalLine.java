@@ -12,9 +12,9 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
 
-public record DiagonalLine() implements BlockBuildStructure {
+public record DiagonalLine() implements BlockStructure {
 
     private static Set<BlockPosition> getDiagonalLine(List<BlockPosition> positions, int radius, boolean hollow) {
         Set<BlockPosition> result = Sets.newLinkedHashSet();
@@ -69,8 +69,8 @@ public record DiagonalLine() implements BlockBuildStructure {
             }
         }
 
-        result = BlockBuildStructure.getBallooned(result, radius);
-        if (hollow) result = BlockBuildStructure.getHollowed(result);
+        result = BlockStructure.getBallooned(result, radius);
+        if (hollow) result = BlockStructure.getHollowed(result);
         return result;
     }
 
