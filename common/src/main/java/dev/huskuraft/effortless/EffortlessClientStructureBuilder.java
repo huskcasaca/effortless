@@ -3,6 +3,7 @@ package dev.huskuraft.effortless;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -175,8 +176,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
         }
         var context = batchOperationResult.getOperation().getContext();
-        var distance = player.getEyePosition().distance(context.interactions().get(context.interactionsSize() - 1).getBlockPosition().getCenter());
-        var location = player.getEyePosition().add(player.getEyeDirection().mul(Math.min(distance, 14)));
+        var nearestInteraction = context.interactions().results().stream().filter(Objects::nonNull).min(Comparator.comparing(interaction1 -> interaction1.getBlockPosition().getCenter().distance(player.getEyePosition())));
+        if (nearestInteraction.isEmpty()) {
+            return;
+        }
+        var distance = player.getEyePosition().distance(nearestInteraction.get().getBlockPosition().getCenter());
+        var location = player.getEyePosition().add(player.getEyeDirection().mul(Math.min(distance, 12)));
         for (var entry : soundMap.entrySet()) {
             var typedSound = entry.getKey();
             var count = entry.getValue();
@@ -505,11 +510,15 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             showBuildMessage(player, context);
         }
 
+        ;
         if (getHistoryContext(player).getBoxVolume() != context.getBoxVolume()) {
             putHistoryContext(player, context);
+            var nearestInteraction = context.interactions().results().stream().filter(Objects::nonNull).min(Comparator.comparing(interaction1 -> interaction1.getBlockPosition().getCenter().distance(player.getEyePosition())));
+            if (nearestInteraction.isEmpty()) {
+                return;
+            }
             var blockState = Items.AIR.item().getBlock().getDefaultBlockState();
-            var interaction = context.interactions().get(context.interactionsSize() - 1);
-            var distance = interaction  == null ? 0 : player.getEyePosition().distance(interaction.getBlockPosition().getCenter());
+            var distance = player.getEyePosition().distance(nearestInteraction.get().getBlockPosition().getCenter());
             var location = player.getEyePosition().add(player.getEyeDirection().mul(Math.min(distance, 3)));
             var sound = SoundInstance.createBlock(blockState.getSoundSet().hitSound(), (blockState.getSoundSet().volume() + 1.0F) / 2.0F * 0.1F, blockState.getSoundSet().pitch() * 0.2F, location);
             getEntrance().getClient().getSoundManager().play(sound);
