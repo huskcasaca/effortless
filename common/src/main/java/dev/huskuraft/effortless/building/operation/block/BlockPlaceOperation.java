@@ -32,6 +32,10 @@ public class BlockPlaceOperation extends BlockOperation {
 
     @Override
     public BlockPlaceOperationResult commit() {
+        if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
+            return new BlockPlaceOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, List.of(), List.of());
+        }
+
         var inputs = List.of(ItemStack.empty());
         if (blockState != null) {
             inputs = List.of(blockState.getItem().getDefaultStack());

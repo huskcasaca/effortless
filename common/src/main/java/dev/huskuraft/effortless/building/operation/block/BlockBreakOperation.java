@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.operation.block;
 
 import java.util.Collections;
+import java.util.List;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.ItemStack;
@@ -31,6 +32,10 @@ public class BlockBreakOperation extends BlockOperation {
 
     @Override
     public BlockBreakOperationResult commit() {
+        if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
+            return new BlockBreakOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, List.of(), List.of());
+        }
+
         var inputs = Collections.<ItemStack>emptyList();
         var outputs = Collections.singletonList(getItemStack());
 

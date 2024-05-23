@@ -28,12 +28,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                 new Context.Configs(
                         byteBuf.read(new GeneralConfigSerializer())
                 ),
-                new Context.Extras(
-                        byteBuf.readResourceLocation(),
-                        byteBuf.read(new EntityStateSerializer()),
-                        byteBuf.readEnum(GameMode.class),
-                        byteBuf.readLong(),
-                        byteBuf.read(new InventorySnapshotSerializer()))
+                byteBuf.readNullable(new ExtrasSerializer())
         );
     }
 
@@ -49,12 +44,9 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.writeEnum(context.replaceMode());
 
         byteBuf.write(context.configs().generalConfig(), new GeneralConfigSerializer());
+        byteBuf.writeNullable(context.extras(), new ExtrasSerializer());
 
-        byteBuf.writeResourceLocation(context.extras().world());
-        byteBuf.write(context.extras().entityState(), new EntityStateSerializer());
-        byteBuf.writeEnum(context.extras().gameMode());
-        byteBuf.writeLong(context.extras().seed());
-        byteBuf.write(context.extras().inventorySnapshot(), new InventorySnapshotSerializer());
+
     }
 
     public static class PatternSerializer implements NetByteBufSerializer<Pattern> {
@@ -113,6 +105,29 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
             byteBuf.writeList(inventorySnapshot.offhandItems(), NetByteBuf::writeItemStack);
             byteBuf.writeVarInt(inventorySnapshot.selected());
             byteBuf.writeVarInt(inventorySnapshot.hotbarSize());
+        }
+    }
+
+
+    public static class ExtrasSerializer implements NetByteBufSerializer<Context.Extras> {
+
+        @Override
+        public Context.Extras read(NetByteBuf byteBuf) {
+            return new Context.Extras(
+                    byteBuf.readResourceLocation(),
+                    byteBuf.read(new EntityStateSerializer()),
+                    byteBuf.readEnum(GameMode.class),
+                    byteBuf.readLong(),
+                    byteBuf.read(new InventorySnapshotSerializer()));
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, Context.Extras extras) {
+            byteBuf.writeResourceLocation(extras.dimensionId());
+            byteBuf.write(extras.entityState(), new EntityStateSerializer());
+            byteBuf.writeEnum(extras.gameMode());
+            byteBuf.writeLong(extras.seed());
+            byteBuf.write(extras.inventorySnapshot(), new InventorySnapshotSerializer());
         }
     }
 }

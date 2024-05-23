@@ -318,7 +318,7 @@ public record Context(
     }
 
     public record Extras(
-            ResourceLocation world,
+            ResourceLocation dimensionId,
             EntityState entityState,
             GameMode gameMode,
             long seed,

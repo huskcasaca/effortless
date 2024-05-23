@@ -48,6 +48,7 @@ public abstract class BlockOperationResult extends OperationResult {
 
         FAIL_WORLD_HEIGHT,
         FAIL_WORLD_BORDER,
+        FAIL_WORLD_INCORRECT_DIM,
 
         FAIL_PLAYER_GAME_MODE,
         FAIL_PLAYER_CANNOT_BREAK,
