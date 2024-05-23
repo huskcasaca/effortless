@@ -321,13 +321,13 @@ public record Context(
             ResourceLocation world,
             EntityState entityState,
             GameMode gameMode,
-            long seed
+            long seed,
+            InventorySnapshot inventorySnapshot
     ) {
 
         public Extras(Player player) {
-            this(player.getWorld().getDimensionId().location(), EntityState.get(player), player.getGameMode(), new Random().nextLong());
+            this(player.getWorld().getDimensionId().location(), EntityState.get(player), player.getGameMode(), new Random().nextLong(), new InventorySnapshot(player.getInventory()));
         }
-
     }
 
     public record Configs(

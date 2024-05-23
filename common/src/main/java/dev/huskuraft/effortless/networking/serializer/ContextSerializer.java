@@ -6,6 +6,7 @@ import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.InventorySnapshot;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
@@ -31,7 +32,8 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                         byteBuf.readResourceLocation(),
                         byteBuf.read(new EntityStateSerializer()),
                         byteBuf.readEnum(GameMode.class),
-                        byteBuf.readLong())
+                        byteBuf.readLong(),
+                        byteBuf.read(new InventorySnapshotSerializer()))
         );
     }
 
@@ -52,6 +54,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.write(context.extras().entityState(), new EntityStateSerializer());
         byteBuf.writeEnum(context.extras().gameMode());
         byteBuf.writeLong(context.extras().seed());
+        byteBuf.write(context.extras().inventorySnapshot(), new InventorySnapshotSerializer());
     }
 
     public static class PatternSerializer implements NetByteBufSerializer<Pattern> {
@@ -90,4 +93,26 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         }
     }
 
+    public static class InventorySnapshotSerializer implements NetByteBufSerializer<InventorySnapshot> {
+
+        @Override
+        public InventorySnapshot read(NetByteBuf byteBuf) {
+            return new InventorySnapshot(
+                    byteBuf.readList(NetByteBuf::readItemStack),
+                    byteBuf.readList(NetByteBuf::readItemStack),
+                    byteBuf.readList(NetByteBuf::readItemStack),
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt()
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, InventorySnapshot inventorySnapshot) {
+            byteBuf.writeList(inventorySnapshot.items(), NetByteBuf::writeItemStack);
+            byteBuf.writeList(inventorySnapshot.armorItems(), NetByteBuf::writeItemStack);
+            byteBuf.writeList(inventorySnapshot.offhandItems(), NetByteBuf::writeItemStack);
+            byteBuf.writeVarInt(inventorySnapshot.selected());
+            byteBuf.writeVarInt(inventorySnapshot.hotbarSize());
+        }
+    }
 }
