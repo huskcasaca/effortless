@@ -432,5 +432,7 @@
   "effortless.transformer.radial.title": "Radial",
   "effortless.player_constraint_settings.title": "Player Constraint Settings",
   "effortless.global_constraint_settings.title": "Global Constraint Settings",
-  "effortless.constraint_settings.title": "Constraint Settings"
+  "effortless.constraint_settings.title": "Constraint Settings",
+  "effortless.constraint_settings.tooltip": "These settings add restrictive conditions for players during building. The settings are only available to server operators or single-player game owners. \nThe settings are saved in file named %s in the config directory.",
+  "effortless.render_settings.tooltip": "These settings adjust build tooltips and blocks preview rendering. The settings are available for client side only. \nThe settings are saved in file named %s in the config directory."
 }

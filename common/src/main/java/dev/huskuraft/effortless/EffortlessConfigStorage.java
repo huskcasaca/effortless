@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.session.config.serializer.SessionConfigSerialize
 
 public final class EffortlessConfigStorage extends ConfigFileStorage<SessionConfig> {
 
-    private static final String CONFIG_NAME = "effortless.toml";
+    public static final String CONFIG_NAME = "effortless.toml";
 
     public EffortlessConfigStorage(Effortless entrance) {
         super(CONFIG_NAME, FileType.TOML, new SessionConfigSerializer());

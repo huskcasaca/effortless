@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public final class EffortlessClientConfigStorage extends ConfigFileStorage<ClientConfig> {
 
-    private static final String CONFIG_NAME = "effortless-client.toml";
+    public static final String CONFIG_NAME = "effortless-client.toml";
 
     public EffortlessClientConfigStorage(EffortlessClient entrance) {
         super(CONFIG_NAME, FileType.TOML, new ClientConfigConfigSerializer());
