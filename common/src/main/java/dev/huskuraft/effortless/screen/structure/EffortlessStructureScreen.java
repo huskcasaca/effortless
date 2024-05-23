@@ -17,8 +17,8 @@ import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
-import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
+import dev.huskuraft.effortless.screen.wheel.AbstractWheelScreen;
 
 public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Option> {
 

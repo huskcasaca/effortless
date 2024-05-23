@@ -9,15 +9,15 @@ public class SessionConfigSerializer implements NetByteBufSerializer<SessionConf
     @Override
     public SessionConfig read(NetByteBuf byteBuf) {
         return new SessionConfig(
-                byteBuf.read(new GeneralConfigSerializer()),
-                byteBuf.readMap(NetByteBuf::readUUID, new GeneralConfigSerializer())
+                byteBuf.read(new ConstraintConfigSerializer()),
+                byteBuf.readMap(NetByteBuf::readUUID, new ConstraintConfigSerializer())
         );
     }
 
     @Override
     public void write(NetByteBuf byteBuf, SessionConfig sessionConfig) {
-        byteBuf.write(sessionConfig.globalConfig(), new GeneralConfigSerializer());
-        byteBuf.writeMap(sessionConfig.playerConfigs(), NetByteBuf::writeUUID, new GeneralConfigSerializer());
+        byteBuf.write(sessionConfig.globalConfig(), new ConstraintConfigSerializer());
+        byteBuf.writeMap(sessionConfig.playerConfigs(), NetByteBuf::writeUUID, new ConstraintConfigSerializer());
     }
 
 }

@@ -119,15 +119,15 @@ public abstract class BlockOperation implements Operation {
     protected BlockOperationResult.Type destroyBlockCheckOnly() {
 
         // config permission
-        if (!context.configs().generalConfig().allowBreakBlocks()) {
+        if (!context.configs().constraintConfig().allowBreakBlocks()) {
             return BlockOperationResult.Type.FAIL_CONFIG_BREAK_PERMISSION;
         }
 
-        if (!context.configs().generalConfig().whitelistedItems().isEmpty() && !context.configs().generalConfig().whitelistedItems().contains(getBlockItem().getId())) {
+        if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
-        if (!context.configs().generalConfig().blacklistedItems().isEmpty() && context.configs().generalConfig().blacklistedItems().contains(getBlockItem().getId())) {
+        if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
@@ -218,15 +218,15 @@ public abstract class BlockOperation implements Operation {
         }
 
         // config permission
-        if (!context.configs().generalConfig().allowPlaceBlocks()) {
+        if (!context.configs().constraintConfig().allowPlaceBlocks()) {
             return BlockOperationResult.Type.FAIL_CONFIG_PLACE_PERMISSION;
         }
 
-        if (!context.configs().generalConfig().whitelistedItems().isEmpty() && !context.configs().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
+        if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(blockState.getItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
-        if (!context.configs().generalConfig().blacklistedItems().isEmpty() && context.configs().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
+        if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(blockState.getItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
@@ -335,15 +335,15 @@ public abstract class BlockOperation implements Operation {
         }
 
         // config permission
-        if (!context.configs().generalConfig().allowInteractBlocks()) {
+        if (!context.configs().constraintConfig().allowInteractBlocks()) {
             return BlockOperationResult.Type.FAIL_CONFIG_INTERACT_PERMISSION;
         }
 
-        if (!context.configs().generalConfig().whitelistedItems().isEmpty() && !context.configs().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
+        if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(blockState.getItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
-        if (!context.configs().generalConfig().blacklistedItems().isEmpty() && context.configs().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
+        if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(blockState.getItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 

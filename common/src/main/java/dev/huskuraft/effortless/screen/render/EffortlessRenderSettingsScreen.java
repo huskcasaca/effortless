@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.screen.preview;
+package dev.huskuraft.effortless.screen.render;
 
 import java.util.function.Consumer;
 

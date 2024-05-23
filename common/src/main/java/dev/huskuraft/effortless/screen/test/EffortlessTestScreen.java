@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
-import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
+import dev.huskuraft.effortless.screen.constraint.EffortlessConstraintSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
@@ -58,8 +58,8 @@ public class EffortlessTestScreen extends AbstractPanelScreen {
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getTop(), entry.getWidth(), 20, Text.text("Open EffortlessSettingsScreen"), button -> {
                 new EffortlessSettingsScreen(getEntrance()).attach();
             }));
-            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getTop() + 20, entry.getWidth(), 20, Text.text("Open EffortlessGeneralSettingsScreen"), button -> {
-                new EffortlessGeneralSettingsScreen(getEntrance()).attach();
+            entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getTop() + 20, entry.getWidth(), 20, Text.text("Open EffortlessConstraintSettingsScreen"), button -> {
+                new EffortlessConstraintSettingsScreen(getEntrance()).attach();
             }));
             entry.addWidget(new Button(getEntrance(), entry.getLeft(), entry.getTop() + 80, entry.getWidth(), 20, Text.text("Open EffortlessOnlinePlayersScreen"), button -> {
                 new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {

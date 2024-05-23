@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.screen.general;
+package dev.huskuraft.effortless.screen.constraint;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -18,23 +18,23 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.screen.item.EffortlessItemsScreen;
 import dev.huskuraft.effortless.screen.player.PlayerInfoList;
 import dev.huskuraft.effortless.screen.settings.SettingOptionsList;
-import dev.huskuraft.effortless.session.config.GeneralConfig;
+import dev.huskuraft.effortless.session.config.ConstraintConfig;
 
-public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScreen {
+public class EffortlessPlayerConstraintSettingsScreen extends AbstractPanelScreen {
 
     private final PlayerInfo playerInfo;
-    private final BiConsumer<PlayerInfo, GeneralConfig> consumer;
-    private GeneralConfig defaultConfig;
-    private GeneralConfig originalConfig;
-    private GeneralConfig config;
-    private GeneralConfig globalConfig;
+    private final BiConsumer<PlayerInfo, ConstraintConfig> consumer;
+    private ConstraintConfig defaultConfig;
+    private ConstraintConfig originalConfig;
+    private ConstraintConfig config;
+    private ConstraintConfig globalConfig;
     private AbstractWidget resetButton;
     private AbstractWidget saveButton;
 
-    public EffortlessPerPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, GeneralConfig config, BiConsumer<PlayerInfo, GeneralConfig> consumer) {
-        super(entrance, Text.translate("effortless.general_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+    public EffortlessPlayerConstraintSettingsScreen(Entrance entrance, PlayerInfo playerInfo, ConstraintConfig config, BiConsumer<PlayerInfo, ConstraintConfig> consumer) {
+        super(entrance, Text.translate("effortless.constraint_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.playerInfo = playerInfo;
-        this.defaultConfig = GeneralConfig.NULL;
+        this.defaultConfig = ConstraintConfig.NULL;
         this.originalConfig = config;
         this.config = config;
         this.globalConfig = getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig();
@@ -54,89 +54,89 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
         var entries = addWidget(new SettingOptionsList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + playerEntries.getHeight() + INNER_PADDINGS_V, getWidth() - PADDINGS_H * 2 - 8, getHeight() - PANEL_TITLE_HEIGHT_1 - playerEntries.getHeight() - INNER_PADDINGS_V - PANEL_BUTTON_ROW_HEIGHT_1, false, true));
         entries.setAlwaysShowScrollbar(true);
 //        bindEntry(
-//                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_commands"), null, null, null),
+//                entries.addSwitchEntry(Text.translate("effortless.constraint_settings.use_commands"), null, null, null),
 //                value -> {
-//                    this.config = new GeneralConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
+//                    this.config = new ConstraintConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
 //                },
 //                () -> globalConfig.useCommands(),
 //                () -> config.useCommands()
 //        );
 
         bindEntry(
-                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_use_mod"), null, null, null),
+                entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_use_mod"), null, null, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockPlaceVolume(), config.maxBlockBreakVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockPlaceVolume(), config.maxBlockBreakVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowUseMod(),
                 () -> config.allowUseMod()
         );
         bindEntry(
-                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_break_blocks"), null, null, null),
+                entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_break_blocks"), null, null, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowBreakBlocks(),
                 () -> config.allowBreakBlocks()
         );
         bindEntry(
-                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_place_blocks"), null, null, null),
+                entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_place_blocks"), null, null, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowPlaceBlocks(),
                 () -> config.allowPlaceBlocks()
         );
         bindEntry(
-                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.allow_interact_blocks"), null, null, null),
+                entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_interact_blocks"), null, null, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowInteractBlocks(),
                 () -> config.allowInteractBlocks()
         );
         bindEntry(
-                entries.addSwitchEntry(Text.translate("effortless.global_general_settings.use_correct_tools"), null, null, null),
+                entries.addSwitchEntry(Text.translate("effortless.constraint_settings.use_correct_tools"), null, null, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), value, config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), value, config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.useCorrectTools(),
                 () -> config.useCorrectTools()
         );
         bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_reach_distance"), null, null, GeneralConfig.MAX_REACH_DISTANCE_RANGE_START, GeneralConfig.MAX_REACH_DISTANCE_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_reach_distance"), null, null, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_START, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_END, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), value, config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), value, config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxReachDistance(),
                 () -> config.maxReachDistance()
         );
         bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_block_break_volume"), null, null, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_block_break_volume"), null, null, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), value, config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), value, config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxBlockBreakVolume(),
                 () -> config.maxBlockBreakVolume()
         );
         bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.global_general_settings.max_block_place_volume"), null, null, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, GeneralConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_block_place_volume"), null, null, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END, null),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), value, config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), value, config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxBlockPlaceVolume(),
                 () -> config.maxBlockPlaceVolume()
         );
         bindEntry(
-                entries.addTab(Text.translate("effortless.global_general_settings.whitelisted_items"), null, null, null, (entry, value) -> {
+                entries.addTab(Text.translate("effortless.constraint_settings.whitelisted_items"), null, null, null, (entry, value) -> {
                     entry.getButton().setOnPressListener(button1 -> {
-                        new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.whitelisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
+                        new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.constraint_settings.whitelisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
                             entry.setItem(value1.stream().map(Item::getId).toList());
                         }).attach();
                     });
-                    entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value == null ? null : value.size()));
+                    entry.getButton().setMessage(Text.translate("effortless.constraint_settings.items", value == null ? null : value.size()));
                 }),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), value, config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), value, config.blacklistedItems());
                 },
                 () -> globalConfig.whitelistedItems(),
                 () -> config.whitelistedItems()
@@ -144,16 +144,16 @@ public class EffortlessPerPlayerGeneralSettingsScreen extends AbstractPanelScree
         );
 
         bindEntry(
-                entries.addTab(Text.translate("effortless.global_general_settings.blacklisted_items"), null, null, null, (entry, value) -> {
+                entries.addTab(Text.translate("effortless.constraint_settings.blacklisted_items"), null, null, null, (entry, value) -> {
                     entry.getButton().setOnPressListener(button1 -> {
-                        new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.global_general_settings.blacklisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
+                        new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.constraint_settings.blacklisted_items"), value.stream().map(Item::fromId).toList(), (value1) -> {
                             entry.setItem(value1.stream().map(Item::getId).toList());
                         }).attach();
                     });
-                    entry.getButton().setMessage(Text.translate("effortless.global_general_settings.items", value == null ? null : value.size()));
+                    entry.getButton().setMessage(Text.translate("effortless.constraint_settings.items", value == null ? null : value.size()));
                 }),
                 (value) -> {
-                    this.config = new GeneralConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), value);
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), value);
                 },
                 () -> globalConfig.blacklistedItems(),
                 () -> config.blacklistedItems()

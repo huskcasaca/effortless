@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.screen.general;
+package dev.huskuraft.effortless.screen.constraint;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
@@ -10,17 +10,17 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckP
 import dev.huskuraft.effortless.screen.settings.EffortlessNotAnOperatorScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 
-public class EffortlessGeneralSettingsScreen extends AbstractPanelScreen {
+public class EffortlessConstraintSettingsScreen extends AbstractPanelScreen {
 
-    public EffortlessGeneralSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.general_settings.title"), PANEL_WIDTH, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3);
+    public EffortlessConstraintSettingsScreen(Entrance entrance) {
+        super(entrance, Text.translate("effortless.constraint_settings.title"), PANEL_WIDTH, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3);
     }
 
     @Override
     public void onCreate() {
         addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 
-        addWidget(Button.builder(getEntrance(), Text.translate("effortless.global_general_settings.title"), button -> {
+        addWidget(Button.builder(getEntrance(), Text.translate("effortless.global_constraint_settings.title"), button -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {
                 getEntrance().getClient().execute(() -> {
                     new EffortlessSessionStatusScreen(getEntrance()).attach();
@@ -29,7 +29,7 @@ public class EffortlessGeneralSettingsScreen extends AbstractPanelScreen {
                 getEntrance().getChannel().sendPacket(new PlayerPermissionCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                     if (packet.granted()) {
                         getEntrance().getClient().execute(() -> {
-                            new EffortlessGlobalGeneralSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig(), config -> {
+                            new EffortlessGlobalConstraintSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig(), config -> {
                                 getEntrance().getSessionManager().updateGlobalConfig(config);
                             }).attach();
                         });
@@ -42,7 +42,7 @@ public class EffortlessGeneralSettingsScreen extends AbstractPanelScreen {
             }
 
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
-        addWidget(Button.builder(getEntrance(), Text.translate("effortless.per_player_general_settings.title"), button -> {
+        addWidget(Button.builder(getEntrance(), Text.translate("effortless.player_constraint_settings.title"), button -> {
             getEntrance().getChannel().sendPacket(new PlayerPermissionCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
 
                 if (!getEntrance().getSessionManager().isSessionValid()) {
@@ -52,7 +52,7 @@ public class EffortlessGeneralSettingsScreen extends AbstractPanelScreen {
                 } else {
                     if (packet.granted()) {
                         getEntrance().getClient().execute(() -> {
-                            new EffortlessPerPlayerGeneralSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().playerConfigs(), playerConfigs -> {
+                            new EffortlessPlayerConstraintSettingsListScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().playerConfigs(), playerConfigs -> {
                                 getEntrance().getSessionManager().updatePlayerConfig(playerConfigs);
                             }).attach();
                         });

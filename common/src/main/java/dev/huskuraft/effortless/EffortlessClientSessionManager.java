@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.session.Session;
 import dev.huskuraft.effortless.session.SessionManager;
-import dev.huskuraft.effortless.session.config.GeneralConfig;
+import dev.huskuraft.effortless.session.config.ConstraintConfig;
 import dev.huskuraft.effortless.session.config.SessionConfig;
 
 public final class EffortlessClientSessionManager implements SessionManager {
@@ -55,24 +55,24 @@ public final class EffortlessClientSessionManager implements SessionManager {
         getEntrance().getChannel().sendPacket(new SessionConfigPacket(sessionConfig));
     }
 
-    public boolean updateGlobalConfig(GeneralConfig generalConfig) {
+    public boolean updateGlobalConfig(ConstraintConfig constraintConfig) {
         var serverSessionConfig = getServerSessionConfig();
         if (serverSessionConfig == null) return false;
-        updateSessionConfig(serverSessionConfig.withGlobalConfig(generalConfig));
+        updateSessionConfig(serverSessionConfig.withGlobalConfig(constraintConfig));
         return true;
     }
 
-    public boolean updatePlayerConfig(Map<UUID, GeneralConfig> playerConfigs) {
+    public boolean updatePlayerConfig(Map<UUID, ConstraintConfig> playerConfigs) {
         var serverSessionConfig = getServerSessionConfig();
         if (serverSessionConfig == null) return false;
         updateSessionConfig(serverSessionConfig.withPlayerConfig(playerConfigs));
         return true;
     }
 
-    public boolean updatePlayerConfig(UUID id, GeneralConfig generalConfig) {
+    public boolean updatePlayerConfig(UUID id, ConstraintConfig constraintConfig) {
         var serverSessionConfig = getServerSessionConfig();
         if (serverSessionConfig == null) return false;
-        updateSessionConfig(serverSessionConfig.withPlayerConfig(id, generalConfig));
+        updateSessionConfig(serverSessionConfig.withPlayerConfig(id, constraintConfig));
         return true;
     }
 

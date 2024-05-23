@@ -61,8 +61,8 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderLayers;
-import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
-import dev.huskuraft.effortless.session.config.GeneralConfig;
+import dev.huskuraft.effortless.screen.wheel.AbstractWheelScreen;
+import dev.huskuraft.effortless.session.config.ConstraintConfig;
 import dev.huskuraft.effortless.session.config.SessionConfig;
 
 public final class EffortlessClientStructureBuilder extends StructureBuilder {
@@ -208,8 +208,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     public void onSessionConfig(SessionConfig sessionConfig) {
         for (var uuid : getAllContexts().keySet()) {
-            var config = sessionConfig.getPlayerConfig(uuid);
-            getAllContexts().computeIfPresent(uuid, (uuid1, context) -> context.withGeneralConfig(config));
+            var config = sessionConfig.getByPlayer(uuid);
+            getAllContexts().computeIfPresent(uuid, (uuid1, context) -> context.withConstraintConfig(config));
         }
     }
 
@@ -217,9 +217,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public Context getDefaultContext(Player player) {
         var serverSessionConfig = getEntrance().getSessionManager().getServerSessionConfig();
         if (serverSessionConfig == null) {
-            return Context.defaultSet().withGeneralConfig(GeneralConfig.EMPTY);
+            return Context.defaultSet().withConstraintConfig(ConstraintConfig.EMPTY);
         }
-        return Context.defaultSet().withGeneralConfig(serverSessionConfig.getPlayerConfig(player));
+        return Context.defaultSet().withConstraintConfig(serverSessionConfig.getByPlayer(player));
     }
 
     @Override
@@ -337,7 +337,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
             if (interaction.getTarget() == Interaction.Target.MISS) {
                 var traced = player.raytrace(Short.MAX_VALUE, 0f, false);
-                var message = Text.empty().append(" (").append(Text.text(String.valueOf(MathUtils.round(traced.getPosition().distance(player.getEyePosition())))).withStyle(ChatFormatting.RED)).append(Text.text("/")).append(Text.text(String.valueOf(context.configs().generalConfig().maxReachDistance()))).append(Text.text(")"));
+                var message = Text.empty().append(" (").append(Text.text(String.valueOf(MathUtils.round(traced.getPosition().distance(player.getEyePosition())))).withStyle(ChatFormatting.RED)).append(Text.text("/")).append(Text.text(String.valueOf(context.configs().constraintConfig().maxReachDistance()))).append(Text.text(")"));
                 player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_target").append(message), true);
                 return context.newInteraction();
             }
@@ -543,7 +543,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     private boolean isPermissionGranted(Player player) {
-        return getEntrance().getSessionManager().getServerSessionConfig().getPlayerConfig(player).allowUseMod();
+        return getEntrance().getSessionManager().getServerSessionConfig().getByPlayer(player).allowUseMod();
     }
 
     private UUID generateId(UUID uuid, Object tag) {
@@ -689,7 +689,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     message = message.append(Text.translate("effortless.message.building.cannot_reach_target").withStyle(ChatFormatting.WHITE));
                     var interaction = context.interactions().results().stream().filter(result -> result != null && result.getTarget() == Interaction.Target.MISS).findAny();
                     if (interaction.isPresent()) {
-                        message = message.append(" (").append(Text.text(String.valueOf(MathUtils.round(interaction.get().getBlockPosition().toVector3i().distance(player.getPosition().toVector3i())))).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(context.configs().generalConfig().maxReachDistance())).append(")");
+                        message = message.append(" (").append(Text.text(String.valueOf(MathUtils.round(interaction.get().getBlockPosition().toVector3i().distance(player.getPosition().toVector3i())))).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(context.configs().constraintConfig().maxReachDistance())).append(")");
                     }
                 }
             }

@@ -9,68 +9,68 @@ import java.util.function.Function;
 import dev.huskuraft.effortless.api.core.Player;
 
 public record SessionConfig(
-        GeneralConfig globalConfig,
-        Map<UUID, GeneralConfig> playerConfigs
+        ConstraintConfig globalConfig,
+        Map<UUID, ConstraintConfig> playerConfigs
 ) {
 
-    public static final SessionConfig EMPTY = new SessionConfig(GeneralConfig.EMPTY, Map.of());
+    public static final SessionConfig EMPTY = new SessionConfig(ConstraintConfig.EMPTY, Map.of());
 
     public static SessionConfig defaultConfig() {
-        return new SessionConfig(GeneralConfig.DEFAULT, Map.of());
+        return new SessionConfig(ConstraintConfig.DEFAULT, Map.of());
     }
 
-    private <T> T getPlayerOrGlobalEntry(UUID id, Function<GeneralConfig, T> entry) {
+    private <T> T getPlayerOrGlobalEntry(UUID id, Function<ConstraintConfig, T> entry) {
         return entry.apply(playerConfigs.get(id) == null || entry.apply(playerConfigs.get(id)) == null ? globalConfig : playerConfigs.get(id));
     }
 
-    private <T> T getPlayerOrNullEntry(UUID id, Function<GeneralConfig, T> entry) {
-        return entry.apply(playerConfigs.get(id) == null || entry.apply(playerConfigs.get(id)) == null ? GeneralConfig.NULL : playerConfigs.get(id));
+    private <T> T getPlayerOrNullEntry(UUID id, Function<ConstraintConfig, T> entry) {
+        return entry.apply(playerConfigs.get(id) == null || entry.apply(playerConfigs.get(id)) == null ? ConstraintConfig.NULL : playerConfigs.get(id));
     }
 
-    public GeneralConfig getGlobalConfig() {
+    public ConstraintConfig getGlobalConfig() {
         return globalConfig;
     }
 
-    public GeneralConfig getPlayerConfig(Player player) {
-        return getPlayerConfig(player.getId());
+    public ConstraintConfig getByPlayer(Player player) {
+        return getByPlayer(player.getId());
     }
 
-    public GeneralConfig getPlayerConfig(UUID id) {
-        return new GeneralConfig(
-                getPlayerOrGlobalEntry(id, GeneralConfig::useCommands),
-                getPlayerOrGlobalEntry(id, GeneralConfig::allowUseMod),
-                getPlayerOrGlobalEntry(id, GeneralConfig::allowBreakBlocks),
-                getPlayerOrGlobalEntry(id, GeneralConfig::allowPlaceBlocks),
-                getPlayerOrGlobalEntry(id, GeneralConfig::allowInteractBlocks),
-                getPlayerOrGlobalEntry(id, GeneralConfig::useCorrectTools),
-                getPlayerOrGlobalEntry(id, GeneralConfig::maxReachDistance),
-                getPlayerOrGlobalEntry(id, GeneralConfig::maxBlockBreakVolume),
-                getPlayerOrGlobalEntry(id, GeneralConfig::maxBlockPlaceVolume),
-                getPlayerOrGlobalEntry(id, GeneralConfig::whitelistedItems),
-                getPlayerOrGlobalEntry(id, GeneralConfig::blacklistedItems)
+    public ConstraintConfig getByPlayer(UUID id) {
+        return new ConstraintConfig(
+                getPlayerOrGlobalEntry(id, ConstraintConfig::useCommands),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::allowUseMod),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::allowBreakBlocks),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::allowPlaceBlocks),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::allowInteractBlocks),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::useCorrectTools),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::maxReachDistance),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::maxBlockBreakVolume),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::maxBlockPlaceVolume),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::whitelistedItems),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::blacklistedItems)
         );
     }
 
-    public GeneralConfig getPlayerConfigOrNull(Player player) {
+    public ConstraintConfig getPlayerConfigOrNull(Player player) {
         return getPlayerConfigOrNull(player.getId());
     }
 
-    public GeneralConfig getPlayerConfigOrNull(UUID id) {
-        return new GeneralConfig(
-                getPlayerOrNullEntry(id, GeneralConfig::useCommands),
-                getPlayerOrNullEntry(id, GeneralConfig::allowUseMod),
-                getPlayerOrNullEntry(id, GeneralConfig::allowBreakBlocks),
-                getPlayerOrNullEntry(id, GeneralConfig::allowPlaceBlocks),
-                getPlayerOrNullEntry(id, GeneralConfig::allowInteractBlocks),
-                getPlayerOrNullEntry(id, GeneralConfig::useCorrectTools),
-                getPlayerOrNullEntry(id, GeneralConfig::maxReachDistance),
-                getPlayerOrNullEntry(id, GeneralConfig::maxBlockBreakVolume),
-                getPlayerOrNullEntry(id, GeneralConfig::maxBlockPlaceVolume),
-                getPlayerOrNullEntry(id, GeneralConfig::whitelistedItems),
-                getPlayerOrNullEntry(id, GeneralConfig::blacklistedItems));
+    public ConstraintConfig getPlayerConfigOrNull(UUID id) {
+        return new ConstraintConfig(
+                getPlayerOrNullEntry(id, ConstraintConfig::useCommands),
+                getPlayerOrNullEntry(id, ConstraintConfig::allowUseMod),
+                getPlayerOrNullEntry(id, ConstraintConfig::allowBreakBlocks),
+                getPlayerOrNullEntry(id, ConstraintConfig::allowPlaceBlocks),
+                getPlayerOrNullEntry(id, ConstraintConfig::allowInteractBlocks),
+                getPlayerOrNullEntry(id, ConstraintConfig::useCorrectTools),
+                getPlayerOrNullEntry(id, ConstraintConfig::maxReachDistance),
+                getPlayerOrNullEntry(id, ConstraintConfig::maxBlockBreakVolume),
+                getPlayerOrNullEntry(id, ConstraintConfig::maxBlockPlaceVolume),
+                getPlayerOrNullEntry(id, ConstraintConfig::whitelistedItems),
+                getPlayerOrNullEntry(id, ConstraintConfig::blacklistedItems));
     }
 
-    public SessionConfig withPlayerConfig(UUID id, GeneralConfig config) {
+    public SessionConfig withPlayerConfig(UUID id, ConstraintConfig config) {
         var map = new HashMap<>(playerConfigs);
         if (config == null) {
             map.remove(id);
@@ -84,7 +84,7 @@ public record SessionConfig(
         );
     }
 
-    public SessionConfig withPlayerConfig(Map<UUID, GeneralConfig> config) {
+    public SessionConfig withPlayerConfig(Map<UUID, ConstraintConfig> config) {
 
         return new SessionConfig(
                 globalConfig,
@@ -92,7 +92,7 @@ public record SessionConfig(
         );
     }
 
-    public SessionConfig withGlobalConfig(GeneralConfig config) {
+    public SessionConfig withGlobalConfig(ConstraintConfig config) {
         return new SessionConfig(
                 config,
                 playerConfigs

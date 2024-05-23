@@ -26,7 +26,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                 byteBuf.read(new PatternSerializer()),
                 byteBuf.readEnum(ReplaceMode.class),
                 new Context.Configs(
-                        byteBuf.read(new GeneralConfigSerializer())
+                        byteBuf.read(new ConstraintConfigSerializer())
                 ),
                 byteBuf.readNullable(new ExtrasSerializer())
         );
@@ -43,7 +43,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.write(context.pattern(), new PatternSerializer());
         byteBuf.writeEnum(context.replaceMode());
 
-        byteBuf.write(context.configs().generalConfig(), new GeneralConfigSerializer());
+        byteBuf.write(context.configs().constraintConfig(), new ConstraintConfigSerializer());
         byteBuf.writeNullable(context.extras(), new ExtrasSerializer());
 
 

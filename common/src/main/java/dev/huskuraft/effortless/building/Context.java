@@ -26,7 +26,7 @@ import dev.huskuraft.effortless.building.session.BuildSession;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
-import dev.huskuraft.effortless.session.config.GeneralConfig;
+import dev.huskuraft.effortless.session.config.ConstraintConfig;
 
 public record Context(
         UUID id,
@@ -43,7 +43,7 @@ public record Context(
 ) {
 
     public boolean useCorrectTool() {
-        return configs().generalConfig().useCorrectTools();
+        return configs().constraintConfig().useCorrectTools();
     }
 
     public int getReservedToolDurability() {
@@ -64,7 +64,7 @@ public record Context(
                 Pattern.DISABLED,
                 ReplaceMode.DISABLED,
                 new Configs(
-                        GeneralConfig.DEFAULT
+                        ConstraintConfig.DEFAULT
                 ), null
         );
     }
@@ -150,7 +150,7 @@ public record Context(
     }
 
     public int maxReachDistance() {
-        return configs.generalConfig.maxReachDistance();
+        return configs.constraintConfig.maxReachDistance();
     }
 
     public TracingResult tracingResult() {
@@ -251,7 +251,7 @@ public record Context(
         return new Context(id, buildState, buildType, interactions, structure, pattern, replaceMode, configs, extras);
     }
 
-    public Context withGeneralConfig(GeneralConfig config) {
+    public Context withConstraintConfig(ConstraintConfig config) {
         // FIXME: 4/4/24 commands
         return withReachParams(new Configs(config));
     }
@@ -270,9 +270,9 @@ public record Context(
     public int getMaxBoxVolume() {
         return switch (buildState()) {
             case IDLE -> 0;
-            case BREAK_BLOCK -> configs().generalConfig().maxBlockBreakVolume();
-            case PLACE_BLOCK -> configs().generalConfig().maxBlockPlaceVolume();
-            case INTERACT_BLOCK -> configs().generalConfig().maxBlockPlaceVolume();
+            case BREAK_BLOCK -> configs().constraintConfig().maxBlockBreakVolume();
+            case PLACE_BLOCK -> configs().constraintConfig().maxBlockPlaceVolume();
+            case INTERACT_BLOCK -> configs().constraintConfig().maxBlockPlaceVolume();
         };
     }
 
@@ -283,9 +283,9 @@ public record Context(
     public boolean hasPermission() {
         return switch (buildState()) {
             case IDLE -> true;
-            case BREAK_BLOCK -> configs().generalConfig().allowBreakBlocks();
-            case PLACE_BLOCK -> configs().generalConfig().allowPlaceBlocks();
-            case INTERACT_BLOCK -> configs().generalConfig().allowInteractBlocks();
+            case BREAK_BLOCK -> configs().constraintConfig().allowBreakBlocks();
+            case PLACE_BLOCK -> configs().constraintConfig().allowPlaceBlocks();
+            case INTERACT_BLOCK -> configs().constraintConfig().allowInteractBlocks();
         };
     }
 
@@ -331,7 +331,7 @@ public record Context(
     }
 
     public record Configs(
-            GeneralConfig generalConfig
+            ConstraintConfig constraintConfig
     ) {
     }
 

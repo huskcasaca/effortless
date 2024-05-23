@@ -7,9 +7,9 @@ import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
-import dev.huskuraft.effortless.screen.general.EffortlessGeneralSettingsScreen;
+import dev.huskuraft.effortless.screen.constraint.EffortlessConstraintSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
-import dev.huskuraft.effortless.screen.preview.EffortlessRenderSettingsScreen;
+import dev.huskuraft.effortless.screen.render.EffortlessRenderSettingsScreen;
 
 public class EffortlessSettingsScreen extends AbstractPanelScreen {
 
@@ -26,7 +26,7 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
     public void onCreate() {
         addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
 
-        addWidget(Button.builder(getEntrance(), Text.translate("effortless.general_settings.title"), button -> {
+        addWidget(Button.builder(getEntrance(), Text.translate("effortless.constraint_settings.title"), button -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {
                 getEntrance().getClient().execute(() -> {
                     new EffortlessSessionStatusScreen(getEntrance()).attach();
@@ -35,7 +35,7 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
                 getEntrance().getChannel().sendPacket(new PlayerPermissionCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                     if (packet.granted()) {
                         getEntrance().getClient().execute(() -> {
-                            new EffortlessGeneralSettingsScreen(getEntrance()).attach();
+                            new EffortlessConstraintSettingsScreen(getEntrance()).attach();
                         });
                     } else {
                         getEntrance().getClient().execute(() -> {

@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.screen.radial;
+package dev.huskuraft.effortless.screen.wheel;
 
 import java.awt.*;
 import java.util.ArrayList;

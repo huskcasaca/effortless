@@ -201,8 +201,8 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     private boolean checkPermission(Player player, Context context) {
-        var generalConfig = getEntrance().getSessionManager().getLastSessionConfig().getPlayerConfig(player);
-        return Objects.equals(context.configs().generalConfig(), generalConfig);
+        var config = getEntrance().getSessionManager().getLastSessionConfig().getByPlayer(player);
+        return Objects.equals(context.configs().constraintConfig(), config);
     }
 
 }

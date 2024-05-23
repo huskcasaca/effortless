@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.screen.general;
+package dev.huskuraft.effortless.screen.constraint;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,14 +18,14 @@ import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.player.PlayerInfoList;
-import dev.huskuraft.effortless.session.config.GeneralConfig;
+import dev.huskuraft.effortless.session.config.ConstraintConfig;
 
-public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelScreen {
+public class EffortlessPlayerConstraintSettingsListScreen extends AbstractPanelScreen {
 
-    private final Consumer<Map<UUID, GeneralConfig>> consumer;
-    private Map<UUID, GeneralConfig> defaultConfig;
-    private Map<UUID, GeneralConfig> originalConfig;
-    private Map<UUID, GeneralConfig> config;
+    private final Consumer<Map<UUID, ConstraintConfig>> consumer;
+    private Map<UUID, ConstraintConfig> defaultConfig;
+    private Map<UUID, ConstraintConfig> originalConfig;
+    private Map<UUID, ConstraintConfig> config;
     private PlayerInfoList entries;
     private Button editButton;
     private Button deleteButton;
@@ -33,8 +33,8 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
     private Button saveButton;
     private Button cancelButton;
 
-    public EffortlessPerPlayerGeneralSettingsListScreen(Entrance entrance, Map<UUID, GeneralConfig> config, Consumer<Map<UUID, GeneralConfig>> editConsumer) {
-        super(entrance, Text.translate("effortless.per_player_general_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+    public EffortlessPlayerConstraintSettingsListScreen(Entrance entrance, Map<UUID, ConstraintConfig> config, Consumer<Map<UUID, ConstraintConfig>> editConsumer) {
+        super(entrance, Text.translate("effortless.player_constraint_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
         this.defaultConfig = new LinkedHashMap<>();
         this.originalConfig = new LinkedHashMap<>(config);
         this.config = new LinkedHashMap<>(config);
@@ -53,7 +53,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.hasSelected()) {
-                new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), GeneralConfig.NULL), (playerInfo1, config) -> {
+                new EffortlessPlayerConstraintSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), ConstraintConfig.NULL), (playerInfo1, config) -> {
                     this.entries.insertSelected(playerInfo1);
                     this.config.put(playerInfo1.getId(), config);
                     onReload();
@@ -73,7 +73,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
             new EffortlessOnlinePlayersScreen(
                     getEntrance(),
                     playerInfo -> {
-                        new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), playerInfo, config.getOrDefault(playerInfo.getId(), GeneralConfig.NULL), (playerInfo1, config) -> {
+                        new EffortlessPlayerConstraintSettingsScreen(getEntrance(), playerInfo, config.getOrDefault(playerInfo.getId(), ConstraintConfig.NULL), (playerInfo1, config) -> {
                             this.entries.insertSelected(playerInfo1);
                             this.config.put(playerInfo1.getId(), config);
                             onReload();
@@ -103,7 +103,7 @@ public class EffortlessPerPlayerGeneralSettingsListScreen extends AbstractPanelS
         this.config = this.entries.items().stream().map(PlayerInfo::getId).collect(Collectors.toMap(Function.identity(), config::get, (e1, e2) -> e1, LinkedHashMap::new));
 
         if (entries.consumeDoubleClick() && entries.hasSelected()) {
-            new EffortlessPerPlayerGeneralSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), GeneralConfig.NULL), (playerInfo1, config) -> {
+            new EffortlessPlayerConstraintSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), ConstraintConfig.NULL), (playerInfo1, config) -> {
                 this.entries.insertSelected(playerInfo1);
                 this.config.put(playerInfo1.getId(), config);
                 onReload();
