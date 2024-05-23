@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.file.FileType;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.config.universal.ClientConfigConfigSerializer;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public final class EffortlessClientConfigStorage extends ConfigFileStorage<ClientConfig> {
 
@@ -15,12 +15,12 @@ public final class EffortlessClientConfigStorage extends ConfigFileStorage<Clien
         super(CONFIG_NAME, FileType.TOML, new ClientConfigConfigSerializer());
     }
 
-    public void setBuildStructure(BuildStructure buildStructure) {
-        set(get().withBuildStructure(buildStructure));
+    public void setStructure(Structure structure) {
+        set(get().withStructure(structure));
     }
 
-    public BuildStructure getBuildStructure(BuildMode buildMode) {
-        return get().getBuildStructure(buildMode);
+    public Structure getStructure(BuildMode buildMode) {
+        return get().getStructure(buildMode);
     }
 
 }

@@ -15,12 +15,12 @@ import dev.huskuraft.effortless.building.pattern.Patterns;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
 import dev.huskuraft.effortless.screen.radial.AbstractWheelScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 
-public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructure, Option> {
+public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Option> {
 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO, false);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
@@ -71,13 +71,13 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
         this.assignedKey = assignedKey;
     }
 
-    public static Slot<BuildStructure> slot(BuildStructure buildStructure) {
+    public static Slot<Structure> slot(Structure structure) {
         return slot(
-                buildStructure.getMode(),
-                buildStructure.getMode().getDisplayName(),
-                buildStructure.getMode().getIcon(),
-                buildStructure.getMode().getTintColor(),
-                buildStructure);
+                structure.getMode(),
+                structure.getMode().getDisplayName(),
+                structure.getMode().getIcon(),
+                structure.getMode().getTintColor(),
+                structure);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
         super.onCreate();
 
         setRadialSelectResponder(slot -> {
-            getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), slot.getContent());
+            getEntrance().getStructureBuilder().setStructure(getPlayer(), slot.getContent());
         });
         setRadialOptionSelectResponder(entry -> {
             if (entry.getContent() instanceof Settings settings) {
@@ -142,9 +142,9 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
                 return;
             }
             if (entry.getContent() instanceof BuildFeature buildFeature) {
-                var buildStructure = getEntrance().getStructureBuilder().getContext(getPlayer()).buildStructure().withFeature(buildFeature);
-                if (getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), buildStructure)) {
-                    getEntrance().getConfigStorage().setBuildStructure(buildStructure);
+                var structure = getEntrance().getStructureBuilder().getContext(getPlayer()).structure().withFeature(buildFeature);
+                if (getEntrance().getStructureBuilder().setStructure(getPlayer(), structure)) {
+                    getEntrance().getConfigStorage().setStructure(structure);
                 }
             }
         });
@@ -153,17 +153,17 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<BuildStructur
     @Override
     public void onReload() {
 
-        setRadialSlots(getEntrance().getConfigStorage().get().buildStructures().values().stream().map(EffortlessStructureScreen::slot).toList());
+        setRadialSlots(getEntrance().getConfigStorage().get().structureMap().values().stream().map(EffortlessStructureScreen::slot).toList());
 
-        var buildStructure = getEntrance().getStructureBuilder().getContext(getPlayer()).buildStructure();
-//        var buildStructure = getEntrance().getStructureBuilder().getContext(getPlayer()).buildStructure();
-        setSelectedSlots(slot(buildStructure));
+        var structure = getEntrance().getStructureBuilder().getContext(getPlayer()).structure();
+//        var structure = getEntrance().getStructureBuilder().getContext(getPlayer()).structure();
+        setSelectedSlots(slot(structure));
         setLeftButtons(
                 buttonSet(REPLACE_OPTION, REDO_OPTION, UNDO_OPTION),
                 buttonSet(PASSIVE_MODE_OPTION, PATTERN_OPTION, SETTING_OPTION)
         );
         setRightButtons(
-                buildStructure.getSupportedFeatures().stream().map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, buildStructure.getFeatures().contains(option))).toList())).toList()
+                structure.getSupportedFeatures().stream().map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, structure.getFeatures().contains(option))).toList())).toList()
         );
     }
 

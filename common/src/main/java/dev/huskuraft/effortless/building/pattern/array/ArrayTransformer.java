@@ -4,12 +4,10 @@ import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.BoundingBox3i;
 import dev.huskuraft.effortless.api.math.Range1i;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
@@ -96,8 +94,4 @@ public record ArrayTransformer(UUID id, Text name, Vector3i offset, int count) i
         return new ArrayTransformer(id, name, offset, count);
     }
 
-    @Override
-    public ArrayTransformer finalize(Player player, BuildStage stage) {
-        return this;
-    }
 }

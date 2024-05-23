@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.building.structure.builder.standard.Circle;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cone;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cube;
@@ -29,10 +29,10 @@ import dev.huskuraft.effortless.building.structure.builder.standard.SlopeFloor;
 import dev.huskuraft.effortless.building.structure.builder.standard.Sphere;
 import dev.huskuraft.effortless.building.structure.builder.standard.Wall;
 
-public class BuildStructureSerializer implements NetByteBufSerializer<BuildStructure> {
+public class StructureSerializer implements NetByteBufSerializer<Structure> {
 
     @Override
-    public BuildStructure read(NetByteBuf byteBuf) {
+    public Structure read(NetByteBuf byteBuf) {
         return (switch (byteBuf.readEnum(BuildMode.class)) {
             case DISABLED -> new Disable();
             case SINGLE -> new Single();
@@ -52,9 +52,9 @@ public class BuildStructureSerializer implements NetByteBufSerializer<BuildStruc
     }
 
     @Override
-    public void write(NetByteBuf byteBuf, BuildStructure buildStructure) {
-        byteBuf.writeEnum(buildStructure.getMode());
-        byteBuf.writeList(buildStructure.getFeatures(), new BuildFeatureReader());
+    public void write(NetByteBuf byteBuf, Structure structure) {
+        byteBuf.writeEnum(structure.getMode());
+        byteBuf.writeList(structure.getFeatures(), new BuildFeatureReader());
     }
 
     public static class BuildFeatureReader implements NetByteBufSerializer<BuildFeature> {

@@ -28,11 +28,11 @@ import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.RaisedEdge;
 import dev.huskuraft.effortless.building.structure.builder.standard.Disable;
 
-public interface BuildStructure {
+public interface Structure {
 
-    BuildStructure DISABLED = new Disable();
+    Structure DISABLED = new Disable();
 
-    Map<BuildMode, BuildStructure> DEFAULTS = Arrays.stream(BuildMode.values()).collect(Collectors.toMap(Function.identity(), BuildMode::getDefaultStructure, (e1, e2) -> e1, LinkedHashMap::new));
+    Map<BuildMode, Structure> DEFAULTS = Arrays.stream(BuildMode.values()).collect(Collectors.toMap(Function.identity(), BuildMode::getDefaultStructure, (e1, e2) -> e1, LinkedHashMap::new));
 
     int volume(Context context);
 
@@ -91,47 +91,47 @@ public interface BuildStructure {
         return getFeatures().stream().filter(f -> f.getType() == buildFeatures).findFirst().orElse(null);
     }
 
-    default BuildStructure withFeature(BuildFeature feature) {
+    default Structure withFeature(BuildFeature feature) {
         return this;
     }
 
-    default BuildStructure withFeatures(List<BuildFeature> features) {
-        var buildStructure = this;
+    default Structure withFeatures(List<BuildFeature> features) {
+        var structure = this;
         for (var feature : features) {
-            buildStructure = buildStructure.withFeature(feature);
+            structure = structure.withFeature(feature);
         }
-        return buildStructure;
+        return structure;
     }
 
 
-//    default BuildStructure withCircleStart(CircleStart circleStart) {
+//    default Structure withCircleStart(CircleStart circleStart) {
 //        return this;
 //    }
 //
-//    default BuildStructure withCubeFilling(CubeFilling cubeFilling) {
+//    default Structure withCubeFilling(CubeFilling cubeFilling) {
 //        return this;
 //    }
 //
-//    default BuildStructure withPlaneFilling(PlaneFilling planeFilling) {
+//    default Structure withPlaneFilling(PlaneFilling planeFilling) {
 //        return this;
 //    }
 //
-//    default BuildStructure withPlaneFacing(PlaneFacing planeFacing) {
+//    default Structure withPlaneFacing(PlaneFacing planeFacing) {
 //        return this;
 //    }
 //
-//    default BuildStructure withRaisedEdge(RaisedEdge raisedEdge) {
+//    default Structure withRaisedEdge(RaisedEdge raisedEdge) {
 //        return this;
 //    }
 //
-//    default BuildStructure withLineDirection(LineDirection lineDirection) {
+//    default Structure withLineDirection(LineDirection lineDirection) {
 //        return this;
 //    }
 //
-//    default BuildStructure withPlaneLength(PlaneLength planeLength) {
+//    default Structure withPlaneLength(PlaneLength planeLength) {
 //        return this;
 //    }
-//    default BuildStructure withFeature(BuildFeature feature) {
+//    default Structure withFeature(BuildFeature feature) {
 //        return switch (feature.getType()) {
 //            case CIRCLE_START -> withCircleStart((CircleStart) feature);
 //            case CUBE_FILLING -> withCubeFilling((CubeFilling) feature);

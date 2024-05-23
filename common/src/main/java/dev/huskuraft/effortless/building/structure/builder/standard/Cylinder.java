@@ -15,22 +15,22 @@ import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record Cylinder(
         CircleStart circleStart,
         PlaneFilling planeFilling,
         PlaneFacing planeFacing,
         PlaneLength planeLength
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public Cylinder() {
         this(CircleStart.CORNER, PlaneFilling.FILLED, PlaneFacing.BOTH, PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case CIRCLE_START -> new Cylinder((CircleStart) feature, planeFilling, planeFacing, planeLength);
             case PLANE_FILLING -> new Cylinder(circleStart, (PlaneFilling) feature, planeFacing, planeLength);
@@ -56,7 +56,7 @@ public record Cylinder(
         var y3 = pos3.y();
         var z3 = pos3.z();
 
-        switch (BlockBuildStructure.getShape(pos1, pos2)) {
+        switch (BlockStructure.getShape(pos1, pos2)) {
             case PLANE_X -> {
                 for (int x = x1; x1 < x3 ? x <= x3 : x >= x3; x += x1 < x3 ? 1 : -1) {
                     int x0 = x;

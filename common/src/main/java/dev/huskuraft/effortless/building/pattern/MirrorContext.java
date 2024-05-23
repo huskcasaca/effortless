@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.building.operation.block.EntityState;
 
 public record MirrorContext(
        Vector3d center,
@@ -43,6 +44,10 @@ public record MirrorContext(
             return blockState;
         }
         return blockState.mirror(axis);
+    }
+
+    public EntityState mirror(EntityState entityState) {
+        return entityState;
     }
 
     @Override

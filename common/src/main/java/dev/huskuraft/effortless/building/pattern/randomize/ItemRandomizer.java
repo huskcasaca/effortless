@@ -369,7 +369,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
         if (!isValid()) {
             return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation));
         }
-        var source = asProducer(operation.getContext().patternParams().seed(), operation.getContext().patternParams().limitedProducer());
+        var source = asProducer(operation.getContext().extras().seed(), operation.getContext().extras().gameMode().isSurvival());
         if (operation instanceof DeferredBatchOperation deferredBatchOperation) {
             return switch (target) {
                 case SINGLE -> deferredBatchOperation.mapEach(o -> o.refactor(RefactorContext.of(source.next())));

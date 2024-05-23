@@ -13,20 +13,20 @@ import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record Pyramid(
         PlaneFilling planeFilling,
         PlaneLength planeLength
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public Pyramid() {
         this(PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case PLANE_FILLING -> new Pyramid((PlaneFilling) feature, planeLength);
             case PLANE_LENGTH -> new Pyramid(planeFilling, (PlaneLength) feature);

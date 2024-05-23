@@ -33,15 +33,15 @@ public class BatchBuildSession implements BuildSession {
     }
 
     protected BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockPlaceOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState());
+        return new BlockPlaceOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState(), context.extras().entityState());
     }
 
     protected BlockBreakOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockBreakOperation(world, player, context, storage, interaction);
+        return new BlockBreakOperation(world, player, context, storage, interaction, context.extras().entityState());
     }
 
     protected BlockInteractOperation createBlockInteractOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockInteractOperation(world, player, context, storage, interaction);
+        return new BlockInteractOperation(world, player, context, storage, interaction, context.extras().entityState());
     }
 
     protected BatchOperation create(World world, Player player, Context context) {

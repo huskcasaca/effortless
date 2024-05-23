@@ -14,20 +14,20 @@ import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record Cone(
         CircleStart circleStart,
         PlaneLength planeLength
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public Cone() {
         this(CircleStart.CORNER, PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case CIRCLE_START -> new Cone((CircleStart) feature, planeLength);
             case PLANE_LENGTH -> new Cone(circleStart, (PlaneLength) feature);

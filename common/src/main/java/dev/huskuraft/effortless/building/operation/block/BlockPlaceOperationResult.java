@@ -29,7 +29,8 @@ public class BlockPlaceOperationResult extends BlockOperationResult {
                 operation.getPlayer(),
                 operation.getContext(),
                 operation.getStorage(),
-                operation.getInteraction()
+                operation.getInteraction(),
+                operation.getEntityState()
         );
     }
 

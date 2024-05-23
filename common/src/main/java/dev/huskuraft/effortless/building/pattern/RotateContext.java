@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.core.Revolve;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
+import dev.huskuraft.effortless.building.operation.block.EntityState;
 
 public record RotateContext(
         Axis axis,
@@ -108,6 +109,10 @@ public record RotateContext(
             return null;
         }
         return rotateBlockState(blockState, angle, false);
+    }
+
+    public EntityState rotate(EntityState entityState) {
+        return entityState;
     }
 
     @Override

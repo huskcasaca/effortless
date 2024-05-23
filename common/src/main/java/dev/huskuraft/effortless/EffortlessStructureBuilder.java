@@ -18,7 +18,7 @@ import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
 
@@ -80,7 +80,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public boolean setBuildStructure(Player player, BuildStructure buildStructure) {
+    public boolean setStructure(Player player, Structure structure) {
         return false;
     }
 
@@ -202,7 +202,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
 
     private boolean checkPermission(Player player, Context context) {
         var generalConfig = getEntrance().getSessionManager().getLastSessionConfig().getPlayerConfig(player);
-        return Objects.equals(context.customParams().generalConfig(), generalConfig);
+        return Objects.equals(context.configs().generalConfig(), generalConfig);
     }
 
 }

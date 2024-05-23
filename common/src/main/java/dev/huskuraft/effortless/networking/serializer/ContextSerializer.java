@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.networking.serializer;
 
+import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.building.BuildState;
@@ -17,20 +18,20 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                 byteBuf.readUUID(),
                 byteBuf.readEnum(BuildState.class),
                 byteBuf.readEnum(BuildType.class),
-                new Context.BuildInteractions(
+                new Context.Interactions(
                         byteBuf.readList(buffer1 -> buffer1.readNullable(new BlockInteractionSerializer()))
                 ),
-                new Context.StructureParams(
-                        byteBuf.read(new BuildStructureSerializer()),
-                        byteBuf.readEnum(ReplaceMode.class)),
-                new Context.PatternParams(
-                        byteBuf.readNullable(new PatternSerializer()),
-                        byteBuf.readNullable(new EntityStateSerializer()),
-                        byteBuf.readNullable(new EntityStateSerializer()),
-                        byteBuf.readBoolean(), byteBuf.readLong()),
-                new Context.CustomParams(
+                byteBuf.read(new StructureSerializer()),
+                byteBuf.read(new PatternSerializer()),
+                byteBuf.readEnum(ReplaceMode.class),
+                new Context.Configs(
                         byteBuf.read(new GeneralConfigSerializer())
-                )
+                ),
+                new Context.Extras(
+                        byteBuf.readResourceLocation(),
+                        byteBuf.read(new EntityStateSerializer()),
+                        byteBuf.readEnum(GameMode.class),
+                        byteBuf.readLong())
         );
     }
 
@@ -39,19 +40,18 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.writeUUID(context.id());
         byteBuf.writeEnum(context.buildState());
         byteBuf.writeEnum(context.buildType());
-        byteBuf.writeList(context.buildInteractions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
+        byteBuf.writeList(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
 
-        byteBuf.write(context.structureParams().buildStructure(), new BuildStructureSerializer());
-        byteBuf.writeEnum(context.structureParams().replaceMode());
+        byteBuf.write(context.structure(), new StructureSerializer());
+        byteBuf.write(context.pattern(), new PatternSerializer());
+        byteBuf.writeEnum(context.replaceMode());
 
-        byteBuf.writeNullable(context.patternParams().pattern(), new PatternSerializer());
-        byteBuf.writeNullable(context.patternParams().activeState(), new EntityStateSerializer());
-        byteBuf.writeNullable(context.patternParams().interactState(), new EntityStateSerializer());
+        byteBuf.write(context.configs().generalConfig(), new GeneralConfigSerializer());
 
-        byteBuf.writeBoolean(context.patternParams().limitedProducer());
-        byteBuf.writeLong(context.patternParams().seed());
-
-        byteBuf.write(context.customParams().generalConfig(), new GeneralConfigSerializer());
+        byteBuf.writeResourceLocation(context.extras().world());
+        byteBuf.write(context.extras().entityState(), new EntityStateSerializer());
+        byteBuf.writeEnum(context.extras().gameMode());
+        byteBuf.writeLong(context.extras().seed());
     }
 
     public static class PatternSerializer implements NetByteBufSerializer<Pattern> {

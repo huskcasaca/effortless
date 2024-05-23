@@ -4,12 +4,10 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Range1i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.batch.GroupOperation;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -54,11 +52,6 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
     @Override
     public boolean isValid() {
         return POSITION_BOUND.containsIn(position) && SIZE_RANGE.contains(size);
-    }
-
-    @Override
-    public MirrorTransformer finalize(Player player, BuildStage stage) {
-        return this;
     }
 
     @Override

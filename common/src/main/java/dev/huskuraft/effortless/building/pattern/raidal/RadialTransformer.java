@@ -5,12 +5,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Range1i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.BuildStage;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
@@ -99,11 +97,6 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
     @Override
     public boolean isValid() {
         return POSITION_BOUND.containsIn(position) && SLICE_RANGE.contains(slices) && RADIUS_RANGE.contains(radius);
-    }
-
-    @Override
-    public RadialTransformer finalize(Player player, BuildStage stage) {
-        return this;
     }
 
     @Override

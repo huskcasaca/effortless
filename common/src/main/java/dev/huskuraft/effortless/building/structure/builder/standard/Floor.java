@@ -14,20 +14,20 @@ import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record Floor(
         PlaneFilling planeFilling,
         PlaneLength planeLength
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public Floor() {
         this(PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case PLANE_FILLING -> new Floor((PlaneFilling) feature, planeLength);
             case PLANE_LENGTH -> new Floor(planeFilling, (PlaneLength) feature);
@@ -52,7 +52,7 @@ public record Floor(
                 .map(AxisCriteria::tracePlane)
                 .orElse(null);
 
-        return BlockBuildStructure.transformUniformLengthInteraction(start, result, uniformLength);
+        return BlockStructure.transformUniformLengthInteraction(start, result, uniformLength);
     }
 
     public static Stream<BlockPosition> collectFloorBlocks(Context context, PlaneFilling planeFilling) {
@@ -68,7 +68,7 @@ public record Floor(
         var y2 = pos2.y();
         var z2 = pos2.z();
 
-        switch (BlockBuildStructure.getShape(pos1, pos2)) {
+        switch (BlockStructure.getShape(pos1, pos2)) {
             case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
             case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_Y -> {

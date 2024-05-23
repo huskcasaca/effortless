@@ -23,6 +23,7 @@ public abstract class BlockOperation implements Operation {
     protected final Storage storage;
     protected final BlockInteraction interaction;
     protected final BlockState blockState;
+    protected final EntityState entityState;
 
     protected BlockOperation(
             World world,
@@ -30,7 +31,8 @@ public abstract class BlockOperation implements Operation {
             Context context,
             Storage storage, // for preview
             BlockInteraction interaction,
-            BlockState blockState
+            BlockState blockState,
+            EntityState entityState
     ) {
         this.world = world;
         this.player = player;
@@ -38,6 +40,7 @@ public abstract class BlockOperation implements Operation {
         this.storage = storage;
         this.interaction = interaction;
         this.blockState = blockState;
+        this.entityState = entityState;
     }
 
     public World getWorld() {
@@ -61,7 +64,7 @@ public abstract class BlockOperation implements Operation {
     }
 
     public EntityState getEntityState() {
-        return getContext().patternParams().interactState();
+        return getContext().extras().entityState();
     }
 
     public BlockInteraction getInteraction() {
@@ -116,15 +119,15 @@ public abstract class BlockOperation implements Operation {
     protected BlockOperationResult.Type destroyBlockCheckOnly() {
 
         // config permission
-        if (!context.customParams().generalConfig().allowBreakBlocks()) {
+        if (!context.configs().generalConfig().allowBreakBlocks()) {
             return BlockOperationResult.Type.FAIL_CONFIG_BREAK_PERMISSION;
         }
 
-        if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(getBlockItem().getId())) {
+        if (!context.configs().generalConfig().whitelistedItems().isEmpty() && !context.configs().generalConfig().whitelistedItems().contains(getBlockItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
-        if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(getBlockItem().getId())) {
+        if (!context.configs().generalConfig().blacklistedItems().isEmpty() && context.configs().generalConfig().blacklistedItems().contains(getBlockItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
@@ -215,15 +218,15 @@ public abstract class BlockOperation implements Operation {
         }
 
         // config permission
-        if (!context.customParams().generalConfig().allowPlaceBlocks()) {
+        if (!context.configs().generalConfig().allowPlaceBlocks()) {
             return BlockOperationResult.Type.FAIL_CONFIG_PLACE_PERMISSION;
         }
 
-        if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
+        if (!context.configs().generalConfig().whitelistedItems().isEmpty() && !context.configs().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
-        if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
+        if (!context.configs().generalConfig().blacklistedItems().isEmpty() && context.configs().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
@@ -332,15 +335,15 @@ public abstract class BlockOperation implements Operation {
         }
 
         // config permission
-        if (!context.customParams().generalConfig().allowInteractBlocks()) {
+        if (!context.configs().generalConfig().allowInteractBlocks()) {
             return BlockOperationResult.Type.FAIL_CONFIG_INTERACT_PERMISSION;
         }
 
-        if (!context.customParams().generalConfig().whitelistedItems().isEmpty() && !context.customParams().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
+        if (!context.configs().generalConfig().whitelistedItems().isEmpty() && !context.configs().generalConfig().whitelistedItems().contains(blockState.getItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 
-        if (!context.customParams().generalConfig().blacklistedItems().isEmpty() && context.customParams().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
+        if (!context.configs().generalConfig().blacklistedItems().isEmpty() && context.configs().generalConfig().blacklistedItems().contains(blockState.getItem().getId())) {
             return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
         }
 

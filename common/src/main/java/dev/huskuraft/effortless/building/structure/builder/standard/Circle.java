@@ -16,21 +16,21 @@ import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record Circle(
         CircleStart circleStart,
         PlaneFacing planeFacing, PlaneFilling planeFilling,
         PlaneLength planeLength
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public Circle() {
         this(CircleStart.CORNER, PlaneFacing.BOTH, PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case CIRCLE_START -> new Circle((CircleStart) feature, planeFacing, planeFilling, planeLength);
             case PLANE_FACING -> new Circle(circleStart, (PlaneFacing) feature, planeFilling, planeLength);
@@ -52,9 +52,9 @@ public record Circle(
         var yn1 = (Math.abs(y - centerY) + 1) / radiusY;
 
         if (fill) {
-            return BlockBuildStructure.lengthSq(xn, yn) < 1;
+            return BlockStructure.lengthSq(xn, yn) < 1;
         } else {
-            return BlockBuildStructure.lengthSq(xn, yn) < 1 && !(BlockBuildStructure.lengthSq(xn1, yn) <= 1 && BlockBuildStructure.lengthSq(xn, yn1) <= 1);
+            return BlockStructure.lengthSq(xn, yn) < 1 && !(BlockStructure.lengthSq(xn1, yn) <= 1 && BlockStructure.lengthSq(xn, yn1) <= 1);
         }
 
     }
@@ -119,7 +119,7 @@ public record Circle(
         var radiusY = MathUtils.abs(y2 - centerY);
         var radiusZ = MathUtils.abs(z2 - centerZ);
 
-        switch (BlockBuildStructure.getShape(pos1, pos2)) {
+        switch (BlockStructure.getShape(pos1, pos2)) {
             case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
             case LINE_X, LINE_Y, LINE_Z -> Line.addLineBlocks(set, x1, y1, z1, x2, y2, z2);
             case PLANE_X -> addCircleBlocksX(set, x1, y1, z1, x2, y2, z2, centerY, centerZ, radiusY, radiusZ, isFill);

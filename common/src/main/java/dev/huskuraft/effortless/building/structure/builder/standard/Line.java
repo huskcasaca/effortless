@@ -15,19 +15,19 @@ import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.LineDirection;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record Line(
         LineDirection lineDirection
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public Line() {
         this(LineDirection.ALL);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case LINE_DIRECTION -> new Line((LineDirection) feature);
             default -> this;
@@ -39,7 +39,7 @@ public record Line(
     }
 
     public static BlockInteraction traceLineOnPlane(Player player, BlockPosition pos1, BlockPosition pos2, PlaneFacing planeFacing) {
-        return switch (BlockBuildStructure.getShape(pos1, pos2)) {
+        return switch (BlockStructure.getShape(pos1, pos2)) {
             case PLANE_X -> switch (planeFacing) {
                 case BOTH, VERTICAL -> Line.traceLineX(player, pos2);
                 case HORIZONTAL -> null;
@@ -57,7 +57,7 @@ public record Line(
     }
 
     public static BlockInteraction traceLineOnPlane(Player player, BlockPosition pos1, BlockPosition pos2) {
-        return switch (BlockBuildStructure.getShape(pos1, pos2)) {
+        return switch (BlockStructure.getShape(pos1, pos2)) {
             case PLANE_X -> Line.traceLineX(player, pos2);
             case PLANE_Y -> Line.traceLineY(player, pos2);
             case PLANE_Z -> Line.traceLineZ(player, pos2);
@@ -66,7 +66,7 @@ public record Line(
     }
 
     public static BlockInteraction traceLineOnVerticalPlane(Player player, BlockPosition pos1, BlockPosition pos2) {
-        return switch (BlockBuildStructure.getShape(pos1, pos2)) {
+        return switch (BlockStructure.getShape(pos1, pos2)) {
             case PLANE_X -> Line.traceLineX(player, pos2);
             case PLANE_Z -> Line.traceLineZ(player, pos2);
             default -> null;
@@ -74,7 +74,7 @@ public record Line(
     }
 
     public static BlockInteraction traceLineOnHorizontalPlane(Player player, BlockPosition pos1, BlockPosition pos2) {
-        return switch (BlockBuildStructure.getShape(pos1, pos2)) {
+        return switch (BlockStructure.getShape(pos1, pos2)) {
             case PLANE_Y -> Line.traceLineY(player, pos2);
             default -> null;
         };
@@ -147,7 +147,7 @@ public record Line(
     }
 
     public static void addLineBlocks(Set<BlockPosition> set, int x1, int y1, int z1, int x2, int y2, int z2) {
-        switch (BlockBuildStructure.getShape(x1, y1, z1, x2, y2, z2)) {
+        switch (BlockStructure.getShape(x1, y1, z1, x2, y2, z2)) {
             case SINGLE -> Single.addSingleBlock(set, x1, y1, z1);
             case LINE_X -> addXLineBlocks(set, x1, x2, y1, z1);
             case LINE_Y -> addYLineBlocks(set, y1, y2, x1, z1);

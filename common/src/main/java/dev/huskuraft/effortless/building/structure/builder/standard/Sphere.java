@@ -16,21 +16,21 @@ import dev.huskuraft.effortless.building.structure.CircleStart;
 import dev.huskuraft.effortless.building.structure.PlaneFacing;
 import dev.huskuraft.effortless.building.structure.PlaneFilling;
 import dev.huskuraft.effortless.building.structure.PlaneLength;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record Sphere(
         CircleStart circleStart,
         PlaneFacing planeFacing, PlaneFilling planeFilling,
         PlaneLength planeLength
-) implements BlockBuildStructure {
+) implements BlockStructure {
 
     public Sphere() {
         this(CircleStart.CORNER, PlaneFacing.BOTH, PlaneFilling.FILLED, PlaneLength.VARIABLE);
     }
 
     @Override
-    public BuildStructure withFeature(BuildFeature feature) {
+    public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
             case CIRCLE_START -> new Sphere((CircleStart) feature, planeFacing, planeFilling, planeLength);
             case PLANE_FACING -> new Sphere(circleStart, (PlaneFacing) feature, planeFilling, planeLength);
@@ -55,9 +55,9 @@ public record Sphere(
         var zn1 = (Math.abs(z - centerZ) + 1) / radiusZ;
 
         if (fill) {
-            return BlockBuildStructure.lengthSq(xn, yn, zn) < 1;
+            return BlockStructure.lengthSq(xn, yn, zn) < 1;
         } else {
-            return BlockBuildStructure.lengthSq(xn, yn, zn) < 1 && !(BlockBuildStructure.lengthSq(xn1, yn, zn) <= 1 && BlockBuildStructure.lengthSq(xn, yn1, zn) <= 1 && BlockBuildStructure.lengthSq(xn, yn, zn1) <= 1);
+            return BlockStructure.lengthSq(xn, yn, zn) < 1 && !(BlockStructure.lengthSq(xn1, yn, zn) <= 1 && BlockStructure.lengthSq(xn, yn1, zn) <= 1 && BlockStructure.lengthSq(xn, yn, zn1) <= 1);
         }
 
     }

@@ -11,8 +11,10 @@ import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
@@ -23,22 +25,25 @@ import dev.huskuraft.effortless.building.session.BatchBuildSession;
 import dev.huskuraft.effortless.building.session.BuildSession;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.building.structure.builder.BuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.session.config.GeneralConfig;
 
 public record Context(
         UUID id,
         BuildState buildState,
         BuildType buildType,
-        BuildInteractions buildInteractions,
+        Interactions interactions,
 
-        StructureParams structureParams,
-        PatternParams patternParams,
-        CustomParams customParams
+        Structure structure,
+        Pattern pattern,
+        ReplaceMode replaceMode,
+
+        Configs configs,
+        Extras extras
 ) {
 
     public boolean useCorrectTool() {
-        return customParams().generalConfig().useCorrectTools();
+        return configs().generalConfig().useCorrectTools();
     }
 
     public int getReservedToolDurability() {
@@ -54,17 +59,13 @@ public record Context(
                 UUID.randomUUID(),
                 BuildState.IDLE,
                 BuildType.BUILD,
-                BuildInteractions.EMPTY,
-                new StructureParams(
-                        BuildStructure.DISABLED,
-                        ReplaceMode.DISABLED
-                ),
-                new PatternParams(
-                        Pattern.DISABLED
-                ),
-                new CustomParams(
+                Interactions.EMPTY,
+                Structure.DISABLED,
+                Pattern.DISABLED,
+                ReplaceMode.DISABLED,
+                new Configs(
                         GeneralConfig.DEFAULT
-                )
+                ), null
         );
     }
 
@@ -72,8 +73,8 @@ public record Context(
         return new BlockInteraction(blockInteraction.getPosition().add(blockPosition.sub(blockInteraction.getBlockPosition()).toVector3d()), blockInteraction.getDirection(), blockPosition, blockInteraction.isInside());
     }
 
-    public UUID id() {
-        return id;
+    public BuildMode buildMode() {
+        return structure().getMode();
     }
 
     public boolean isIdle() {
@@ -96,20 +97,12 @@ public record Context(
         return buildType() == BuildType.PREVIEW_ONCE;
     }
 
-    public BuildMode buildMode() {
-        return structureParams.buildStructure().getMode();
-    }
-
-    public BuildStructure buildStructure() {
-        return structureParams.buildStructure();
-    }
-
     public boolean isBuilding() {
         return buildMode() != BuildMode.DISABLED && buildState() != BuildState.IDLE;
     }
 
     public boolean isMissingHit() {
-        return buildInteractions().isMissing();
+        return interactions().isMissing();
     }
 
     public boolean skipRaytrace() {
@@ -117,36 +110,35 @@ public record Context(
     }
 
     public boolean isFulfilled() {
-        return isBuilding() && buildStructure().traceSize(this) == interactionsSize();
+        return isBuilding() && structure().traceSize(this) == interactionsSize();
     }
 
     public int interactionsSize() {
-        return buildInteractions.size();
+        return interactions.size();
     }
 
     public boolean isInteractionEmpty() {
-        return buildInteractions.isEmpty();
+        return interactions.isEmpty();
     }
 
     public BlockPosition getPosition(int index) {
-        return buildInteractions.get(index).getBlockPosition();
+        return interactions.get(index).getBlockPosition();
     }
+
     public List<BlockPosition> getPositions() {
-        return buildInteractions.results().stream().map(BlockInteraction::getBlockPosition).toList();
+        return interactions.results().stream().map(BlockInteraction::getBlockPosition).toList();
     }
+
     public BlockInteraction getInteraction(int index) {
-        return buildInteractions.get(index);
+        return interactions.get(index);
     }
+
     public List<BlockInteraction> getInteractions() {
-        return buildInteractions.results();
+        return interactions.results();
     }
 
     public Set<BuildFeature> buildFeatures() {
-        return structureParams.buildStructure().getFeatures();
-    }
-
-    public ReplaceMode replaceMode() {
-        return structureParams.replaceMode();
+        return structure().getFeatures();
     }
 
     public int axisLimitation() {
@@ -158,15 +150,7 @@ public record Context(
     }
 
     public int maxReachDistance() {
-        return customParams.generalConfig.maxReachDistance();
-    }
-
-    public Pattern pattern() {
-        return patternParams.pattern();
-    }
-
-    public long patternSeed() {
-        return patternParams.seed();
+        return configs.generalConfig.maxReachDistance();
     }
 
     public TracingResult tracingResult() {
@@ -188,56 +172,45 @@ public record Context(
     }
 
     public Context withBuildState(BuildState state) {
-        return new Context(id, state, buildType, buildInteractions, structureParams, patternParams, customParams);
+        return new Context(id, state, buildType, interactions, structure, pattern, replaceMode, configs, extras);
     }
 
     public Context withBuildType(BuildType type) {
-        return new Context(id, buildState, type, buildInteractions, structureParams, patternParams, customParams);
+        return new Context(id, buildState, type, interactions, structure, pattern, replaceMode, configs, extras);
     }
 
     public Context withNextInteraction(BlockInteraction interaction) {
-        return new Context(id, buildState, buildType, buildInteractions.put(interaction), structureParams, patternParams, customParams);
+        return new Context(id, buildState, buildType, interactions.put(interaction), structure, pattern, replaceMode, configs, extras);
     }
 
-    public Context withEmptyInteractions() {
-        return new Context(id, buildState, buildType, BuildInteractions.EMPTY, structureParams, patternParams, customParams);
+    public Context withNoInteraction() {
+        return new Context(id, buildState, buildType, Interactions.EMPTY, structure, pattern, replaceMode, configs, extras);
     }
 
-    public Context withBuildStructure(BuildStructure buildStructure) {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams.withBuildStructure(buildStructure), patternParams, customParams);
-    }
-
-    public Context withReplaceMode(ReplaceMode replaceMode) {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams.withReplaceMode(replaceMode), patternParams, customParams);
+    public Context withStructure(Structure structure) {
+        return new Context(id, buildState, buildType, interactions, structure, pattern, replaceMode, configs, extras);
     }
 
     public Context withPattern(Pattern pattern) {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withPattern(pattern), customParams);
+        return new Context(id, buildState, buildType, interactions, structure, pattern, replaceMode, configs, extras);
     }
 
-    public Context withActiveState(EntityState activeState) {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withActiveState(activeState), customParams);
+    public Context withReplaceMode(ReplaceMode replaceMode) {
+        return new Context(id, buildState, buildType, interactions, structure, pattern, replaceMode, configs, extras);
     }
 
-    public Context withInteractState(EntityState interactState) {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withInteractState(interactState), customParams);
+    public Context withExtras(Extras extras) {
+        return new Context(id, buildState, buildType, interactions, structure, pattern, replaceMode, configs, extras);
     }
 
-    public Context withLimitedPatternProducer(boolean limitedProducer) {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withLimitProducer(limitedProducer), customParams);
-    }
-
-    public Context withRandomPatternSeed() {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withRandomSeed(), customParams);
+    public Context withPlayerExtras(Player player) {
+        return new Context(id, buildState, buildType, interactions, structure, pattern, replaceMode, configs, new Extras(player));
     }
 
     public Context finalize(Player player, BuildStage stage) {
         switch (stage) {
             case TICK -> {
-                return withPattern(pattern().finalize(player, stage))
-                        .withInteractState(EntityState.get(player))
-                        .withLimitedPatternProducer(player.getGameMode().isSurvival())
-                        .withRandomPatternSeed();
+                return withPattern(pattern().finalize(player, stage)).withPlayerExtras(player);
             }
         }
         return withPattern(pattern().finalize(player, stage));
@@ -249,10 +222,9 @@ public record Context(
                 UUID.randomUUID(),
                 BuildState.IDLE,
                 buildType,
-                BuildInteractions.EMPTY,
-                structureParams,
-                patternParams,
-                customParams
+                Interactions.EMPTY,
+                structure, pattern, replaceMode,
+                configs, extras
         );
     }
 
@@ -263,44 +235,44 @@ public record Context(
     // for build mode only
     @Nullable
     public BlockInteraction trace(Player player) {
-        return buildStructure().trace(player, this);
+        return structure().trace(player, this);
     }
 
     // for build mode only
     public Stream<BlockInteraction> collectInteractions() {
         if (tracingResult().isSuccess()) {
-            return buildStructure().collect(this).map(blockPosition -> withPosition(getInteraction(0), blockPosition));
+            return structure().collect(this).map(blockPosition -> withPosition(getInteraction(0), blockPosition));
         } else {
             return Stream.empty();
         }
     }
 
-    public Context withReachParams(CustomParams customParams) {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams, customParams);
+    public Context withReachParams(Configs configs) {
+        return new Context(id, buildState, buildType, interactions, structure, pattern, replaceMode, configs, extras);
     }
 
     public Context withGeneralConfig(GeneralConfig config) {
         // FIXME: 4/4/24 commands
-        return withReachParams(new CustomParams(config));
+        return withReachParams(new Configs(config));
     }
 
     public Vector3i getInteractionBox() {
-        if (buildInteractions().isEmpty() || buildInteractions().isMissing()) {
+        if (interactions().isEmpty() || interactions().isMissing()) {
             return Vector3i.ZERO;
         }
-        return BoundingBox3d.fromLowerCornersOf(buildInteractions().results().stream().map(BlockInteraction::getBlockPosition).map(BlockPosition::toVector3i).toArray(Vector3i[]::new)).getSize().toVector3i();
+        return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).map(BlockPosition::toVector3i).toArray(Vector3i[]::new)).getSize().toVector3i();
     }
 
     public int getBoxVolume() {
-        return buildStructure().volume(this);
+        return structure().volume(this);
     }
 
     public int getMaxBoxVolume() {
         return switch (buildState()) {
             case IDLE -> 0;
-            case BREAK_BLOCK -> customParams().generalConfig().maxBlockBreakVolume();
-            case PLACE_BLOCK -> customParams().generalConfig().maxBlockPlaceVolume();
-            case INTERACT_BLOCK -> customParams().generalConfig().maxBlockPlaceVolume();
+            case BREAK_BLOCK -> configs().generalConfig().maxBlockBreakVolume();
+            case PLACE_BLOCK -> configs().generalConfig().maxBlockPlaceVolume();
+            case INTERACT_BLOCK -> configs().generalConfig().maxBlockPlaceVolume();
         };
     }
 
@@ -311,17 +283,17 @@ public record Context(
     public boolean hasPermission() {
         return switch (buildState()) {
             case IDLE -> true;
-            case BREAK_BLOCK -> customParams().generalConfig().allowBreakBlocks();
-            case PLACE_BLOCK -> customParams().generalConfig().allowPlaceBlocks();
-            case INTERACT_BLOCK -> customParams().generalConfig().allowInteractBlocks();
+            case BREAK_BLOCK -> configs().generalConfig().allowBreakBlocks();
+            case PLACE_BLOCK -> configs().generalConfig().allowPlaceBlocks();
+            case INTERACT_BLOCK -> configs().generalConfig().allowInteractBlocks();
         };
     }
 
-    public record BuildInteractions(
+    public record Interactions(
             List<BlockInteraction> results
     ) {
 
-        public static final BuildInteractions EMPTY = new BuildInteractions(Collections.emptyList());
+        public static final Interactions EMPTY = new Interactions(Collections.emptyList());
 
         public int size() {
             return results.size();
@@ -335,8 +307,8 @@ public record Context(
             return results.get(index);
         }
 
-        public BuildInteractions put(BlockInteraction interaction) {
-            return new BuildInteractions(Stream.concat(results.stream(), Stream.of(interaction)).toList());
+        public Interactions put(BlockInteraction interaction) {
+            return new Interactions(Stream.concat(results.stream(), Stream.of(interaction)).toList());
         }
 
         public boolean isMissing() {
@@ -345,54 +317,20 @@ public record Context(
 
     }
 
-    public record StructureParams(
-            BuildStructure buildStructure,
-            ReplaceMode replaceMode
-    ) {
-
-        public StructureParams withBuildStructure(BuildStructure buildStructure) {
-            return new StructureParams(buildStructure, replaceMode);
-        }
-//
-        public StructureParams withReplaceMode(ReplaceMode replaceMode) {
-            return new StructureParams(buildStructure, replaceMode);
-        }
-    }
-
-    public record PatternParams(
-            Pattern pattern,
-            EntityState activeState,
-            EntityState interactState,
-            boolean limitedProducer,
+    public record Extras(
+            ResourceLocation world,
+            EntityState entityState,
+            GameMode gameMode,
             long seed
     ) {
 
-        public PatternParams(Pattern pattern) {
-            this(pattern, null, null, false, new Random().nextLong());
+        public Extras(Player player) {
+            this(player.getWorld().getDimensionId().location(), EntityState.get(player), player.getGameMode(), new Random().nextLong());
         }
 
-        public PatternParams withPattern(Pattern pattern) {
-            return new PatternParams(pattern, activeState, interactState, limitedProducer, seed);
-        }
-
-        public PatternParams withActiveState(EntityState activeState) {
-            return new PatternParams(pattern, activeState, interactState, limitedProducer, seed);
-        }
-
-        public PatternParams withInteractState(EntityState interactState) {
-            return new PatternParams(pattern, activeState, interactState, limitedProducer, seed);
-        }
-
-        public PatternParams withLimitProducer(boolean limitedProducer) {
-            return new PatternParams(pattern, activeState, interactState, limitedProducer, seed);
-        }
-
-        public PatternParams withRandomSeed() {
-            return new PatternParams(pattern, activeState, interactState, limitedProducer, new Random().nextLong());
-        }
     }
 
-    public record CustomParams(
+    public record Configs(
             GeneralConfig generalConfig
     ) {
     }

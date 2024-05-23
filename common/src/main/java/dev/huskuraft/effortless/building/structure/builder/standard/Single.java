@@ -12,9 +12,9 @@ import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.structure.BuildMode;
-import dev.huskuraft.effortless.building.structure.builder.BlockBuildStructure;
+import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
 
-public record Single() implements BlockBuildStructure {
+public record Single() implements BlockStructure {
 
     protected static BlockInteraction traceSingle(Player player, Context context) {
         return traceSingle(player, context.buildState(), context.replaceMode(), context.maxReachDistance());

@@ -24,9 +24,10 @@ public class BlockPlaceOperation extends BlockOperation {
             Context context,
             Storage storage,
             BlockInteraction interaction,
-            BlockState blockState
+            BlockState blockState,
+            EntityState entityState
     ) {
-        super(world, player, context, storage, interaction, blockState);
+        super(world, player, context, storage, interaction, blockState, entityState);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class BlockPlaceOperation extends BlockOperation {
 
     @Override
     public Operation move(MoveContext moveContext) {
-        return new BlockPlaceOperation(world, player, context, storage, moveContext.move(interaction), blockState);
+        return new BlockPlaceOperation(world, player, context, storage, moveContext.move(interaction), blockState, entityState);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class BlockPlaceOperation extends BlockOperation {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation();
         }
-        return new BlockPlaceOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(blockState));
+        return new BlockPlaceOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(blockState), mirrorContext.mirror(entityState));
     }
 
     @Override
@@ -69,12 +70,12 @@ public class BlockPlaceOperation extends BlockOperation {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation();
         }
-        return new BlockPlaceOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(blockState));
+        return new BlockPlaceOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(blockState), rotateContext.rotate(entityState));
     }
 
     @Override
     public Operation refactor(RefactorContext refactorContext) {
-        return new BlockPlaceOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()));
+        return new BlockPlaceOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()), entityState);
     }
 
     @Override

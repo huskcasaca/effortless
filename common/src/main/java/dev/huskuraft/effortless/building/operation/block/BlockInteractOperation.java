@@ -22,9 +22,10 @@ public class BlockInteractOperation extends BlockOperation {
             Player player,
             Context context,
             Storage storage,
-            BlockInteraction interaction
+            BlockInteraction interaction,
+            EntityState entityState
     ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
+        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class BlockInteractOperation extends BlockOperation {
 
     @Override
     public Operation move(MoveContext moveContext) {
-        return new BlockInteractOperation(world, player, context, storage, moveContext.move(interaction));
+        return new BlockInteractOperation(world, player, context, storage, moveContext.move(interaction), entityState);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class BlockInteractOperation extends BlockOperation {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation();
         }
-        return new BlockInteractOperation(world, player, context, storage, mirrorContext.mirror(interaction));
+        return new BlockInteractOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(entityState));
     }
 
     @Override
@@ -61,7 +62,7 @@ public class BlockInteractOperation extends BlockOperation {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation();
         }
-        return new BlockInteractOperation(world, player, context, storage, rotateContext.rotate(interaction));
+        return new BlockInteractOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(entityState));
     }
 
     @Override

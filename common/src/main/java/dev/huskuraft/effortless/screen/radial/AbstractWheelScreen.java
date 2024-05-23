@@ -317,11 +317,11 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         lastScrollOffset += amountY;
         if (lastScrollOffset > MOUSE_SCROLL_THRESHOLD) {
             playRadialMenuSound();
-            getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), getEntrance().getConfigStorage().getBuildStructure(getEntrance().getStructureBuilder().getContext(getPlayer()).buildMode().previous()));
+            getEntrance().getStructureBuilder().setStructure(getPlayer(), getEntrance().getConfigStorage().getStructure(getEntrance().getStructureBuilder().getContext(getPlayer()).buildMode().previous()));
             lastScrollOffset = 0;
         } else if (lastScrollOffset < -MOUSE_SCROLL_THRESHOLD) {
             playRadialMenuSound();
-            getEntrance().getStructureBuilder().setBuildStructure(getPlayer(), getEntrance().getConfigStorage().getBuildStructure(getEntrance().getStructureBuilder().getContext(getPlayer()).buildMode().next()));
+            getEntrance().getStructureBuilder().setStructure(getPlayer(), getEntrance().getConfigStorage().getStructure(getEntrance().getStructureBuilder().getContext(getPlayer()).buildMode().next()));
             lastScrollOffset = 0;
         }
         return true;
