@@ -9,19 +9,13 @@ import dev.huskuraft.effortless.api.core.Revolve;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
 
-public class RotateContext {
-
-    private final Vector3d center;
-    private final double angle;
-
-    private RotateContext(Vector3d center, double angle) {
-        this.center = center;
-        this.angle = angle;
-    }
-
-    public static RotateContext absolute(Vector3d position, double angle) {
-        return new RotateContext(position, angle);
-    }
+public record RotateContext(
+        Axis axis,
+        Vector3d center,
+        double angle,
+        int radius,
+        int length
+) implements PositionBounded {
 
     private static BlockState rotateOriginalBlockState(double startAngleToCenter, BlockState blockState) {
         BlockState newBlockState = blockState;
@@ -83,16 +77,30 @@ public class RotateContext {
         return newOrientation;
     }
 
+    private static BlockInteraction rotateX(BlockInteraction blockInteraction, Vector3d center, double angle) {
+        var rotatedPosition = blockInteraction.getPosition().sub(center).rotX(angle).add(center);
+        var rotatedBlockPosition = BlockPosition.at(center.add(blockInteraction.getBlockPosition().getCenter().sub(center).rotX(angle)));
+        return blockInteraction.withDirection(rotateOrientation(blockInteraction.getDirection(), angle)).withPosition(rotatedPosition).withBlockPosition(rotatedBlockPosition);
+    }
 
-    private static BlockInteraction rotateBlockInteraction(BlockInteraction blockInteraction, Vector3d center, double angle) {
+    private static BlockInteraction rotateY(BlockInteraction blockInteraction, Vector3d center, double angle) {
         var rotatedPosition = blockInteraction.getPosition().sub(center).rotY(angle).add(center);
         var rotatedBlockPosition = BlockPosition.at(center.add(blockInteraction.getBlockPosition().getCenter().sub(center).rotY(angle)));
         return blockInteraction.withDirection(rotateOrientation(blockInteraction.getDirection(), angle)).withPosition(rotatedPosition).withBlockPosition(rotatedBlockPosition);
     }
 
+    private static BlockInteraction rotateZ(BlockInteraction blockInteraction, Vector3d center, double angle) {
+        var rotatedPosition = blockInteraction.getPosition().sub(center).rotZ(angle).add(center);
+        var rotatedBlockPosition = BlockPosition.at(center.add(blockInteraction.getBlockPosition().getCenter().sub(center).rotZ(angle)));
+        return blockInteraction.withDirection(rotateOrientation(blockInteraction.getDirection(), angle)).withPosition(rotatedPosition).withBlockPosition(rotatedBlockPosition);
+    }
 
     public BlockInteraction rotate(BlockInteraction blockInteraction) {
-        return rotateBlockInteraction(blockInteraction, center, angle);
+        return switch (axis) {
+            case X -> rotateX(blockInteraction, center, angle);
+            case Y -> rotateY(blockInteraction, center, angle);
+            case Z -> rotateZ(blockInteraction, center, angle);
+        };
     }
 
     public BlockState rotate(BlockState blockState) {
@@ -102,4 +110,12 @@ public class RotateContext {
         return rotateBlockState(blockState, angle, false);
     }
 
+    @Override
+    public boolean isInBounds(Vector3d position) {
+        return switch (axis) {
+            case X -> position.withX(0).distance(center.withX(0)) <= radius && position.withY(0).withZ(0).distance(center.withY(0).withZ(0)) <= length;
+            case Y -> position.withY(0).distance(center.withY(0)) <= radius && position.withX(0).withZ(0).distance(center.withX(0).withZ(0)) <= length;
+            case Z -> position.withZ(0).distance(center.withZ(0)) <= radius && position.withX(0).withY(0).distance(center.withX(0).withY(0)) <= length;
+        };
+    }
 }

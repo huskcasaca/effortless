@@ -424,5 +424,7 @@
   "effortless.position.y": "Position Y",
   "effortless.position.z": "Position Z",
   "effortless.transformer.mirror.size": "Size",
-  "effortless.transformer.radial.radius": "Radius"
+  "effortless.transformer.radial.radius": "Radius",
+  "effortless.transformer.radial.length": "Length",
+  "effortless.transformer.radial.axis": "Axis"
 }

@@ -261,6 +261,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
         private static final String KEY_POSITION = "position";
         private static final String KEY_SLICE = "slices";
         private static final String KEY_RADIUS = "radius";
+        private static final String KEY_LENGTH = "length";
         public static RadialTransformerConfigSerializer INSTANCE = new RadialTransformerConfigSerializer();
 
         private RadialTransformerConfigSerializer() {
@@ -274,6 +275,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             defineVector3d(spec, KEY_POSITION, RadialTransformer.ZERO.position());
             spec.defineInRange(KEY_SLICE, getDefault().slices(), RadialTransformer.SLICE_RANGE.min(), RadialTransformer.SLICE_RANGE.max());
             spec.defineInRange(KEY_RADIUS, getDefault().slices(), RadialTransformer.RADIUS_RANGE.min(), RadialTransformer.RADIUS_RANGE.max());
+            spec.defineInRange(KEY_LENGTH, getDefault().length(), RadialTransformer.LENGTH_RANGE.min(), RadialTransformer.LENGTH_RANGE.max());
 
             return spec;
         }
@@ -291,7 +293,8 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
                     Text.empty(),
                     getVector3d(config, KEY_POSITION),
                     config.get(KEY_SLICE),
-                    config.get(KEY_RADIUS)
+                    config.get(KEY_RADIUS),
+                    config.get(KEY_LENGTH)
             );
         }
 
@@ -304,6 +307,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
             setVector3d(config, KEY_POSITION, transformer.position());
             config.set(KEY_SLICE, transformer.slices());
             config.set(KEY_RADIUS, transformer.radius());
+            config.set(KEY_LENGTH, transformer.length());
             validate(config);
             return config;
         }

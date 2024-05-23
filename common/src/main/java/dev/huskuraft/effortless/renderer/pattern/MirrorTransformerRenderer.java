@@ -24,7 +24,7 @@ public class MirrorTransformerRenderer extends TransformerRenderer {
         renderPlaneByAxis(renderer, transformer.position(), transformer.size(), transformer.axis(), new Color(0, 0, 0, 72));
         for (var value : Axis.values()) {
             if (value != transformer.axis()) {
-                renderLineByAxis(renderer, transformer.position(), transformer.size(), value, new Color(0, 0, 0, 200));
+                renderLineByAxis(renderer, transformer.position(), transformer.size(), value);
             }
         }
         renderBoundingBox(renderer, transformer.getPositionBoundingBox(), new Color(0, 0, 0, 140).getRGB());

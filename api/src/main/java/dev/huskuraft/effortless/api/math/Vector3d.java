@@ -469,14 +469,22 @@ public record Vector3d(double x, double y, double z) {
         return x * y * z;
     }
 
+    public Vector3d rotY(double angle) {
+        var cos = MathUtils.cos(angle);
+        var sin = MathUtils.sin(angle);
+        return new Vector3d(this.x * cos + this.z * sin, this.y, this.z * cos - this.x * sin);
+    }
 
-    public Vector3d rotY(double pYaw) {
-        var cos = MathUtils.cos(pYaw);
-        var sin = MathUtils.sin(pYaw);
-        var x = this.x * (double) cos + this.z * (double) sin;
-        var y = this.y;
-        var z = this.z * (double) cos - this.x * (double) sin;
-        return new Vector3d(x, y, z);
+    public Vector3d rotX(double angle) {
+        var cos = MathUtils.cos(angle);
+        var sin = MathUtils.sin(angle);
+        return new Vector3d(this.x, this.y * cos - this.z * sin, this.y * sin + this.z * cos);
+    }
+
+    public Vector3d rotZ(double angle) {
+        var cos = MathUtils.cos(angle);
+        var sin = MathUtils.sin(angle);
+        return new Vector3d(this.x * cos - this.y * sin, this.y * cos + this.x * sin, this.z);
     }
 
     @Override

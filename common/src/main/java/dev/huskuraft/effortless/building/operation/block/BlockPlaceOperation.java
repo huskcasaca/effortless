@@ -66,6 +66,9 @@ public class BlockPlaceOperation extends BlockOperation {
 
     @Override
     public Operation rotate(RotateContext rotateContext) {
+        if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
+            return new EmptyOperation();
+        }
         return new BlockPlaceOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(blockState));
     }
 

@@ -42,7 +42,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
                     byteBuf.readUUID(),
                     byteBuf.readText(),
                     byteBuf.readVector3i(),
-                    byteBuf.readInt()
+                    byteBuf.readVarInt()
             );
         }
 
@@ -51,7 +51,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeUUID(transformer.getId());
             byteBuf.writeText(transformer.getName());
             byteBuf.writeVector3i(transformer.offset());
-            byteBuf.writeInt(transformer.count());
+            byteBuf.writeVarInt(transformer.count());
         }
 
     }
@@ -65,7 +65,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
                     byteBuf.readText(),
                     byteBuf.readVector3d(),
                     byteBuf.readEnum(Axis.class),
-                    byteBuf.readInt()
+                    byteBuf.readVarInt()
             );
         }
 
@@ -75,7 +75,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeText(transformer.getName());
             byteBuf.writeVector3d(transformer.position());
             byteBuf.writeEnum(transformer.axis());
-            byteBuf.writeInt(transformer.size());
+            byteBuf.writeVarInt(transformer.size());
         }
 
     }
@@ -88,8 +88,9 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
                     byteBuf.readUUID(),
                     byteBuf.readText(),
                     byteBuf.readVector3d(),
-                    byteBuf.readInt(),
-                    byteBuf.readInt());
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt());
         }
 
         @Override
@@ -97,8 +98,9 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeUUID(transformer.getId());
             byteBuf.writeText(transformer.getName());
             byteBuf.writeVector3d(transformer.position());
-            byteBuf.writeInt(transformer.slices());
-            byteBuf.writeInt(transformer.radius());
+            byteBuf.writeVarInt(transformer.slices());
+            byteBuf.writeVarInt(transformer.radius());
+            byteBuf.writeVarInt(transformer.length());
         }
 
     }

@@ -27,11 +27,9 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         super(entrance, x, y, width, height);
     }
 
-    @SuppressWarnings("unchecked")
-    // FIXME: 12/5/24
     @Override
-    protected EditableEntryList.Entry<Transformer> createHolder(Transformer transformer) {
-        return (EditableEntryList.Entry) switch (transformer.getType()) {
+    protected EditableEntryList.Entry createHolder(Transformer transformer) {
+        return switch (transformer.getType()) {
             case ARRAY -> new ArrayEntry(getEntrance(), this, (ArrayTransformer) transformer);
             case MIRROR -> new MirrorEntry(getEntrance(), this, (MirrorTransformer) transformer);
             case RADIAL -> new RadialEntry(getEntrance(), this, (RadialTransformer) transformer);
@@ -169,10 +167,10 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         protected List<SlotData> getData() {
             return List.of(
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().x())), Text.translate("effortless.axis.x")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().y())), Text.translate("effortless.axis.y")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().offset().z())), Text.translate("effortless.axis.z")),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().count())), Text.translate("effortless.transformer.array.count"))
+                    new SlotData.TextSymbol(formatDouble(getItem().offset().x()), Axis.X.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().offset().y()), Axis.Y.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().offset().z()), Axis.Z.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().count()), Text.text("C"))
             );
         }
 
@@ -203,11 +201,13 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         protected List<SlotData> getData() {
             return List.of(
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().getPosition(getItem().axis()))), Text.text("D")),
-                    new SlotData.TextSymbol(getItem().axis().getDisplayName(), Text.translate("effortless.transformer.mirreor.axis"))
+                    new SlotData.TextSymbol(formatDouble(getItem().position().x()), Axis.X.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().position().y()), Axis.Y.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().position().z()), Axis.Z.getDisplayName()),
+                    new SlotData.TextSymbol(getItem().axis().getDisplayName(), Text.text("A")),
+                    new SlotData.TextSymbol(formatDouble(getItem().size()), Text.text("S"))
             );
         }
-
 
     }
 
@@ -220,10 +220,13 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         protected List<SlotData> getData() {
             return List.of(
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().x())), Axis.X.getDisplayName()),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().y())), Axis.Y.getDisplayName()),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().position().z())), Axis.Z.getDisplayName()),
-                    new SlotData.TextSymbol(Text.text(formatDouble(getItem().slices())), Text.translate("effortless.transformer.radial.slices"))
+                    new SlotData.TextSymbol(formatDouble(getItem().position().x()), Axis.X.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().position().y()), Axis.Y.getDisplayName()),
+                    new SlotData.TextSymbol(formatDouble(getItem().position().z()), Axis.Z.getDisplayName()),
+                    new SlotData.TextSymbol(getItem().axis().getDisplayName(), Text.text("A")),
+                    new SlotData.TextSymbol(formatDouble(getItem().slices()), Text.text("S")),
+                    new SlotData.TextSymbol(formatDouble(getItem().radius()), Text.text("R")),
+                    new SlotData.TextSymbol(formatDouble(getItem().length()), Text.text("L"))
             );
         }
 

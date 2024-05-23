@@ -32,6 +32,64 @@ public abstract class TransformerRenderer {
 
     public abstract void render(Renderer renderer, float deltaTick);
 
+    protected void renderRadialFloor(Renderer renderer, Vector3d center, Vector3d pos1, Vector3d pos2, int color) {
+        var cam = renderer.camera().position();
+        pos1 = pos1.sub(center);
+        pos2 = pos2.sub(center);
+        renderer.pushPose();
+        renderer.translate(center.sub(cam));
+        renderer.renderQuad(BlockRenderLayers.planes(), pos1, pos2, Vector3d.ZERO, Vector3d.ZERO, 0, color, null);
+        renderer.popPose();
+    }
+
+
+    protected void renderRadialPlane(Renderer renderer, Vector3d pos1, Vector3d pos2, int length, Axis axis, int color) {
+        var cam = renderer.camera().position();
+        var min = switch (axis) {
+            case X -> Vector3d.ZERO.withX(-length);
+            case Y -> Vector3d.ZERO.withY(-length);
+            case Z -> Vector3d.ZERO.withZ(-length);
+
+        };
+        var max = switch (axis) {
+            case X -> pos2.sub(pos1).withX(+length);
+            case Y -> pos2.sub(pos1).withY(+length);
+            case Z -> pos2.sub(pos1).withZ(+length);
+        };
+
+        renderer.pushPose();
+        renderer.translate(pos1.sub(cam));
+        var cen = Vector3d.ZERO;
+
+        var v1 = Vector3d.ZERO;
+        var v2 = Vector3d.ZERO;
+        var v3 = Vector3d.ZERO;
+        var v4 = Vector3d.ZERO;
+
+        switch (axis) {
+            case X -> {
+                v1 = new Vector3d((float) max.x(), (float) max.y(), (float) max.z());
+                v2 = new Vector3d((float) min.x(), (float) max.y(), (float) max.z());
+                v3 = new Vector3d((float) min.x(), (float) min.y(), (float) min.z());
+                v4 = new Vector3d((float) max.x(), (float) min.y(), (float) min.z());
+            }
+            case Y -> {
+                v1 = new Vector3d((float) max.x(), (float) max.y(), (float) max.z());
+                v2 = new Vector3d((float) max.x(), (float) min.y(), (float) max.z());
+                v3 = new Vector3d((float) min.x(), (float) min.y(), (float) min.z());
+                v4 = new Vector3d((float) min.x(), (float) max.y(), (float) min.z());
+            }
+            case Z -> {
+                v1 = new Vector3d((float) max.x(), (float) max.y(), (float) max.z());
+                v2 = new Vector3d((float) max.x(), (float) max.y(), (float) min.z());
+                v3 = new Vector3d((float) min.x(), (float) min.y(), (float) min.z());
+                v4 = new Vector3d((float) min.x(), (float) min.y(), (float) max.z());
+            }
+        }
+        renderer.renderQuad(BlockRenderLayers.planes(), v1, v2, v3, v4, 0, color, null);
+        renderer.popPose();
+    }
+
     protected void renderPlaneByAxis(Renderer renderer, Vector3d pos, Integer range, Axis axis, Color color) {
         var cam = renderer.camera().position();
         var min = new Vector3d(-range, -range, -range);
@@ -102,7 +160,11 @@ public abstract class TransformerRenderer {
 
     }
 
-    protected void renderLineByAxis(Renderer renderer, Vector3d pos, Integer range, Axis axis, Color color) {
+    protected void renderLine(Renderer renderer, Vector3d pos1, Vector3d pos2) {
+        renderAACuboidLine(renderer, pos1, pos2, 1 / 32f, 0xFFFFFF, true);
+    }
+
+    protected void renderLineByAxis(Renderer renderer, Vector3d pos, Integer range, Axis axis) {
 
         var min = pos.sub(range, range, range);
         var max = pos.add(range, range, range);

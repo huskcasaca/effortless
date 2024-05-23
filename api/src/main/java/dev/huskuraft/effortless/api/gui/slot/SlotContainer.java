@@ -18,8 +18,7 @@ public class SlotContainer extends AbstractContainerWidget {
     public void setEntries(List<SlotData> entries) {
         clearWidgets();
         var width = 0;
-        for (int i = 0; i < entries.size(); i++) {
-            var entry = entries.get(i);
+        for (var entry : entries) {
             if (entry instanceof SlotData.TextSymbol textEntry) {
                 var slot = this.addWidget(new TextSlot(getEntrance(), getX() + width, getY(), Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, textEntry.text(), textEntry.symbol()));
                 width += slot.getFullWidth() + 2;

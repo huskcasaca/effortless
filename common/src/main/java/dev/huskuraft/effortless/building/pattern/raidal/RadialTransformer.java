@@ -17,16 +17,17 @@ import dev.huskuraft.effortless.building.pattern.RotateContext;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 
-public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis, int slices, int radius) implements Transformer {
+public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis, int slices, int radius, int length) implements Transformer {
 
     public static final int DEFAULT_SLICE = 4;
     public static final int DEFAULT_RADIUS = 16;
-    public static final Range1i SLICE_RANGE = new Range1i(1, 720);
+    public static final int DEFAULT_LENGTH = 128;
+    public static final Range1i SLICE_RANGE = new Range1i(2, 360 * 8);
     public static final Range1i RADIUS_RANGE = new Range1i(1, 1024);
+    public static final Range1i LENGTH_RANGE = new Range1i(1, 1024);
 
-    public static final RadialTransformer ZERO = new RadialTransformer(Vector3d.ZERO, 0, 128);
-    public static final RadialTransformer DEFAULT = new RadialTransformer(Vector3d.ZERO, DEFAULT_SLICE, DEFAULT_RADIUS);
-
+    public static final RadialTransformer ZERO = new RadialTransformer(Vector3d.ZERO, 0, DEFAULT_RADIUS, DEFAULT_LENGTH);
+    public static final RadialTransformer DEFAULT = new RadialTransformer(Vector3d.ZERO, DEFAULT_SLICE, DEFAULT_RADIUS, DEFAULT_LENGTH);
 
     //    private final double start;
 //    private final Axis axis;
@@ -37,19 +38,19 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
 //    private final boolean drawLines;
 //    private final boolean drawPlanes;
 
-    public RadialTransformer(Vector3d position, int slice, int radius) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, slice, radius);
+    public RadialTransformer(Vector3d position, int slice, int radius, int length) {
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, slice, radius, length);
     }
 
-    public RadialTransformer(UUID id, Text name, Vector3d position, int slices, int radius) {
-        this(id, name, position, Axis.Y, slices, radius);
+    public RadialTransformer(UUID id, Text name, Vector3d position, int slices, int radius, int length) {
+        this(id, name, position, Axis.X, slices, radius, length);
     }
 
     @Override
     public Operation transform(Operation operation) {
-        return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(0, slices).mapToObj(i -> {
-            var angle = 2 * MathUtils.PI / slices * i;
-            return operation.rotate(RotateContext.absolute(position, angle));
+        return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(1, slices + 1).mapToObj(i -> {
+            var angle = 2 * MathUtils.PI / slices * (i % slices);
+            return operation.rotate(new RotateContext(axis, position, angle, radius, length));
         }));
     }
 
@@ -59,27 +60,35 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
     }
 
     public RadialTransformer withPosition(Vector3d position) {
-        return new RadialTransformer(id, name, position, axis, slices, radius);
+        return new RadialTransformer(id, name, position, axis, slices, radius, length);
     }
 
     public RadialTransformer withPositionX(double x) {
-        return new RadialTransformer(id, name, new Vector3d(x, position.y(), position.z()), axis, slices, radius);
+        return new RadialTransformer(id, name, new Vector3d(x, position.y(), position.z()), axis, slices, radius, length);
     }
 
     public RadialTransformer withPositionY(double y) {
-        return new RadialTransformer(id, name, new Vector3d(position.x(), y, position.z()), axis, slices, radius);
+        return new RadialTransformer(id, name, new Vector3d(position.x(), y, position.z()), axis, slices, radius, length);
     }
 
     public RadialTransformer withPositionZ(double z) {
-        return new RadialTransformer(id, name, new Vector3d(position.x(), position.y(), z), axis, slices, radius);
+        return new RadialTransformer(id, name, new Vector3d(position.x(), position.y(), z), axis, slices, radius, length);
+    }
+
+    public RadialTransformer withAxis(Axis axis) {
+        return new RadialTransformer(id, name, position, axis, slices, radius, length);
     }
 
     public RadialTransformer withSlice(int slice) {
-        return new RadialTransformer(id, name, position, axis, slice, radius);
+        return new RadialTransformer(id, name, position, axis, slice, radius, length);
     }
 
     public RadialTransformer withRadius(int radius) {
-        return new RadialTransformer(id, name, position, axis, slices, radius);
+        return new RadialTransformer(id, name, position, axis, slices, radius, length);
+    }
+
+    public RadialTransformer withLength(int length) {
+        return new RadialTransformer(id, name, position, axis, slices, radius, length);
     }
 
     @Override
@@ -99,12 +108,12 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
 
     @Override
     public RadialTransformer withName(Text name) {
-        return new RadialTransformer(id, name, position, axis, slices, radius);
+        return new RadialTransformer(id, name, position, axis, slices, radius, length);
     }
 
     @Override
     public RadialTransformer withId(UUID id) {
-        return new RadialTransformer(id, name, position, axis, slices, radius);
+        return new RadialTransformer(id, name, position, axis, slices, radius, length);
     }
 
 

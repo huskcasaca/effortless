@@ -167,6 +167,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         private static final String TAG_POSITION_TYPE = "PositionType";
         private static final String TAG_SLICE = "Slice";
         private static final String TAG_RADIUS = "Radius";
+        private static final String TAG_LENGTH = "Length";
 
         @Override
         public RadialTransformer decode(TagElement tag) {
@@ -175,7 +176,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     tag.asRecord().getText(TAG_NAME),
                     tag.asRecord().getVector3d(TAG_POSITION),
                     tag.asRecord().getInt(TAG_SLICE),
-                    tag.asRecord().getInt(TAG_RADIUS)
+                    tag.asRecord().getInt(TAG_RADIUS),
+                    tag.asRecord().getInt(TAG_LENGTH)
             );
         }
 
@@ -187,6 +189,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
             tag.asRecord().putInt(TAG_SLICE, transformer.slices());
             tag.asRecord().putInt(TAG_RADIUS, transformer.radius());
+            tag.asRecord().putInt(TAG_LENGTH, transformer.length());
             return tag;
         }
 
@@ -199,7 +202,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     value.getName() != null ? value.getName() : RadialTransformer.ZERO.getName(),
                     value.position() != null ? value.position() : RadialTransformer.ZERO.position(),
                     value.slices(),
-                    value.radius()
+                    value.radius(),
+                    value.length()
             );
         }
     }
