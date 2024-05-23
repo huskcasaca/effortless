@@ -181,6 +181,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var typedSound = entry.getKey();
             var count = entry.getValue();
             for (int i = 0; i <= MathUtils.min(count / 2, 4); i++) {
+                if (typedSound.blockState() == null) {
+                    continue;
+                }
                 var sound = switch (typedSound.soundType()) {
                     case BREAK ->
                             SoundInstance.createBlock(typedSound.blockState().getSoundSet().breakSound(), (typedSound.blockState().getSoundSet().volume() + 1.0F) / 2.0F, typedSound.blockState().getSoundSet().pitch() * 0.8F, location);
