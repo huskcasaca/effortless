@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.networking.serializer;
 
-import java.util.Arrays;
-
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
@@ -67,7 +65,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
                     byteBuf.readUUID(),
                     byteBuf.readText(),
                     byteBuf.readVector3d(),
-                    byteBuf.readList(buffer1 -> buffer1.readEnum(PositionType.class)).toArray(PositionType[]::new),
+                    byteBuf.readEnum(PositionType.class),
                     byteBuf.readEnum(Axis.class)
             );
         }
@@ -77,7 +75,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeUUID(transformer.getId());
             byteBuf.writeText(transformer.getName());
             byteBuf.writeVector3d(transformer.position());
-            byteBuf.writeList(Arrays.asList(transformer.getPositionType()), NetByteBuf::writeEnum);
+            byteBuf.writeEnum(transformer.getPositionType());
             byteBuf.writeEnum(transformer.axis());
         }
 
@@ -91,7 +89,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
                     byteBuf.readUUID(),
                     byteBuf.readText(),
                     byteBuf.readVector3d(),
-                    byteBuf.readList(buffer1 -> buffer1.readEnum(PositionType.class)).toArray(PositionType[]::new),
+                    byteBuf.readEnum(PositionType.class),
                     byteBuf.readInt()
             );
         }
@@ -101,7 +99,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeUUID(transformer.getId());
             byteBuf.writeText(transformer.getName());
             byteBuf.writeVector3d(transformer.position());
-            byteBuf.writeList(Arrays.asList(transformer.getPositionType()), NetByteBuf::writeEnum);
+            byteBuf.writeEnum(transformer.getPositionType());
             byteBuf.writeInt(transformer.slices());
         }
 

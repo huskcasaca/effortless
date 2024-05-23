@@ -22,18 +22,7 @@ public class BlockInteractOperation extends BlockOperation {
             Storage storage,
             BlockInteraction interaction
     ) {
-        this(world, player, context, storage, interaction, EntityState.get(player));
-    }
-
-    public BlockInteractOperation(
-            World world,
-            Player player,
-            Context context,
-            Storage storage,
-            BlockInteraction interaction,
-            EntityState entityState
-    ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
+        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()));
     }
 
     @Override

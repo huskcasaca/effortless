@@ -75,7 +75,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
             }
             case MIRROR -> {
                 var mirrorTransformer = (MirrorTransformer) transformer;
-                this.entries.addPositionNumberEntry(mirrorTransformer.axis(), new Tuple2<>(mirrorTransformer.getPositionType(mirrorTransformer.axis()), mirrorTransformer.getPosition(mirrorTransformer.axis())), value -> {
+                this.entries.addPositionNumberEntry(mirrorTransformer.axis(), new Tuple2<>(mirrorTransformer.getPositionType(), mirrorTransformer.getPosition(mirrorTransformer.axis())), value -> {
                     this.transformer = mirrorTransformer.withPositionType(value.value1()).withPosition(new Vector3d(value.value2(), value.value2(), value.value2()));
                 });
                 this.entries.addSelectorEntry(Text.translate("effortless.transformer.mirror.axis"), Text.text("A"), Arrays.stream(Axis.values()).map(Axis::getDisplayName).toList(), Arrays.stream(Axis.values()).toList(), mirrorTransformer.axis(), value -> {
@@ -84,9 +84,9 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
                 });
             }
             case RADIAL -> {
-                this.entries.addPositionNumberEntry(Axis.X, new Tuple2<>(((RadialTransformer) transformer).getPositionTypeX(), ((RadialTransformer) transformer).position().x()), value -> this.transformer = ((RadialTransformer) transformer).withPositionTypeX(value.value1()).withPositionX(value.value2()));
-                this.entries.addPositionNumberEntry(Axis.Y, new Tuple2<>(((RadialTransformer) transformer).getPositionTypeY(), ((RadialTransformer) transformer).position().y()), value -> this.transformer = ((RadialTransformer) transformer).withPositionTypeY(value.value1()).withPositionY(value.value2()));
-                this.entries.addPositionNumberEntry(Axis.Z, new Tuple2<>(((RadialTransformer) transformer).getPositionTypeZ(), ((RadialTransformer) transformer).position().z()), value -> this.transformer = ((RadialTransformer) transformer).withPositionTypeZ(value.value1()).withPositionZ(value.value2()));
+                this.entries.addPositionNumberEntry(Axis.X, new Tuple2<>(((RadialTransformer) transformer).getPositionType(), ((RadialTransformer) transformer).position().x()), value -> this.transformer = ((RadialTransformer) transformer).withPositionType(value.value1()).withPosition(((RadialTransformer) transformer).position().withX(value.value2())));
+                this.entries.addPositionNumberEntry(Axis.Y, new Tuple2<>(((RadialTransformer) transformer).getPositionType(), ((RadialTransformer) transformer).position().y()), value -> this.transformer = ((RadialTransformer) transformer).withPositionType(value.value1()).withPosition(((RadialTransformer) transformer).position().withY(value.value2())));
+                this.entries.addPositionNumberEntry(Axis.Z, new Tuple2<>(((RadialTransformer) transformer).getPositionType(), ((RadialTransformer) transformer).position().z()), value -> this.transformer = ((RadialTransformer) transformer).withPositionType(value.value1()).withPosition(((RadialTransformer) transformer).position().withZ(value.value2())));
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.slices"), Text.text("S"), ((RadialTransformer) transformer).slices(), RadialTransformer.SLICE_RANGE.min(), RadialTransformer.SLICE_RANGE.max(), value -> this.transformer = ((RadialTransformer) transformer).withSlice(value));
             }
             case ITEM_RANDOMIZER -> {

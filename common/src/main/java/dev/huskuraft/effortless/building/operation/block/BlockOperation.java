@@ -1,19 +1,16 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.BucketItem;
-import dev.huskuraft.effortless.api.core.Entity;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.TransformableOperation;
@@ -26,7 +23,6 @@ public abstract class BlockOperation extends TransformableOperation {
     protected final Storage storage;
     protected final BlockInteraction interaction;
     protected final BlockState blockState;
-    protected final EntityState entityState;
 
     protected BlockOperation(
             World world,
@@ -34,8 +30,7 @@ public abstract class BlockOperation extends TransformableOperation {
             Context context,
             Storage storage, // for preview
             BlockInteraction interaction,
-            BlockState blockState,
-            EntityState entityState
+            BlockState blockState
     ) {
         this.world = world;
         this.player = player;
@@ -43,7 +38,6 @@ public abstract class BlockOperation extends TransformableOperation {
         this.storage = storage;
         this.interaction = interaction;
         this.blockState = blockState;
-        this.entityState = entityState;
     }
 
     @Override
@@ -72,7 +66,7 @@ public abstract class BlockOperation extends TransformableOperation {
     }
 
     public EntityState getEntityState() {
-        return entityState;
+        return getContext().patternParams().interactState();
     }
 
     public BlockInteraction getInteraction() {
@@ -426,27 +420,6 @@ public abstract class BlockOperation extends TransformableOperation {
         BREAK,
         PLACE,
         INTERACT
-    }
-
-    public record EntityState(
-            Vector3d position,
-            float xRot,
-            float yRot
-    ) {
-
-        public static EntityState get(Entity entity) {
-            return new EntityState(entity.getPosition(), entity.getXRot(), entity.getYRot());
-        }
-
-        public static void set(Entity entity, EntityState entityState) {
-            if (entityState == null) {
-                Effortless.LOGGER.warn("Attempted to set entity data to null");
-                return;
-            }
-            entity.setPosition(entityState.position());
-            entity.setXRot(entityState.xRot());
-            entity.setYRot(entityState.yRot());
-        }
     }
 
 }

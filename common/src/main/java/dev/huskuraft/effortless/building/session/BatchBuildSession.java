@@ -57,7 +57,7 @@ public class BatchBuildSession implements BuildSession {
     }
 
     protected BatchOperation create(World world, Player player, Context context) {
-        var storage = Storage.create(player, context.isPreviewType());
+        var storage = Storage.create(player, context.isPreviewType()); // TODO: 21/5/24 use storage from context
         var operations = createDeferredOperations(world, player, context, storage);
 
         if (context.pattern().enabled()) {

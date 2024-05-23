@@ -19,7 +19,6 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.pattern.Transformer;
 import dev.huskuraft.effortless.building.pattern.Transformers;
 import dev.huskuraft.effortless.building.pattern.array.ArrayTransformer;
@@ -82,18 +81,6 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
     public static Vector3d getVector3d(Config config, String key) {
         var values = config.<List<Number>>get(key).stream().map(Number::doubleValue).toArray(Double[]::new);
         return new Vector3d(values[0], values[1], values[2]);
-    }
-
-    public static void definePositionType(ConfigSpec configSpec, String key, PositionType[] defaultValue) {
-        configSpec.define(key, () -> Arrays.stream(defaultValue).map(Enum::name).map(String::toLowerCase).toList(), value -> value instanceof List<?> list && list.size() == defaultValue.length && list.stream().allMatch(value1 -> value1 instanceof String name && isSuccess(() -> PositionType.valueOf(name.toUpperCase(Locale.ROOT)))));
-    }
-
-    public static void setPositionType(Config config, String key, PositionType[] value) {
-        config.set(key, Arrays.stream(value).map(Enum::name).map(String::toLowerCase).toList());
-    }
-
-    public static PositionType[] getPositionType(Config config, String key) {
-        return config.<List<String>>get(key).stream().map(String::toUpperCase).map(PositionType::valueOf).toArray(PositionType[]::new);
     }
 
     public static <T extends Enum<T>> void setEnum(Config config, String key, T value) {
@@ -231,7 +218,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 //            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineVector3d(spec, KEY_POSITION, MirrorTransformer.ZERO_Y.position());
-            definePositionType(spec, KEY_POSITION_TYPE, getDefault().getPositionType());
+            defineEnum(spec, KEY_POSITION_TYPE, getDefault().getPositionType());
             defineEnum(spec, KEY_AXIS, getDefault().axis());
 
             return spec;
@@ -249,7 +236,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
                     UUID.fromString(config.get(KEY_ID)),
                     Text.empty(),
                     getVector3d(config, KEY_POSITION),
-                    getPositionType(config, KEY_POSITION_TYPE),
+                    getEnum(config, KEY_POSITION_TYPE),
                     getEnum(config, KEY_AXIS)
             );
         }
@@ -261,7 +248,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 //            config.set(KEY_NAME, transformer.getName().getString());
             setEnum(config, KEY_TYPE, transformer.getType());
             setVector3d(config, KEY_POSITION, transformer.position());
-            setPositionType(config, KEY_POSITION_TYPE, transformer.getPositionType());
+            setEnum(config, KEY_POSITION_TYPE, transformer.getPositionType());
             config.set(KEY_AXIS, transformer.axis().name().toLowerCase(Locale.ROOT));
             validate(config);
             return config;
@@ -286,7 +273,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 //            spec.define(KEY_NAME, () -> getDefault().getName().getString(), String.class::isInstance);
             defineEnum(spec, KEY_TYPE, getDefault().getType());
             defineVector3d(spec, KEY_POSITION, RadialTransformer.ZERO.position());
-            definePositionType(spec, KEY_POSITION_TYPE, getDefault().getPositionType());
+            defineEnum(spec, KEY_POSITION_TYPE, getDefault().getPositionType());
             spec.defineInRange(KEY_SLICE, getDefault().slices(), RadialTransformer.SLICE_RANGE.min(), RadialTransformer.SLICE_RANGE.max());
 
             return spec;
@@ -304,7 +291,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
                     UUID.fromString(config.get(KEY_ID)),
                     Text.empty(),
                     getVector3d(config, KEY_POSITION),
-                    getPositionType(config, KEY_POSITION_TYPE),
+                    getEnum(config, KEY_POSITION_TYPE),
                     config.get(KEY_SLICE)
             );
         }
@@ -316,7 +303,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
 //            config.set(KEY_NAME, transformer.getName().getString());
             setEnum(config, KEY_TYPE, transformer.getType());
             setVector3d(config, KEY_POSITION, transformer.position());
-            setPositionType(config, KEY_POSITION_TYPE, transformer.getPositionType());
+            setEnum(config, KEY_POSITION_TYPE, transformer.getPositionType());
             config.set(KEY_SLICE, transformer.slices());
             validate(config);
             return config;

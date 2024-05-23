@@ -114,7 +114,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
 
         @Override
         public PositionType[] validate(PositionType[] value) {
-            return value != null && value.length == 3 ? value : new PositionType[]{PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE, PositionType.RELATIVE_ONCE};
+            return value != null && value.length == 3 ? value : new PositionType[]{PositionType.RELATIVE, PositionType.RELATIVE, PositionType.RELATIVE};
         }
     }
 
@@ -131,7 +131,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
                     tag.asRecord().getVector3d(TAG_POSITION),
-                    tag.asRecord().getTag(TAG_POSITION_TYPE, new PositionTypeArrayTagSerializer()),
+                    tag.asRecord().getEnum(TAG_POSITION_TYPE, PositionType.class),
                     tag.asRecord().getEnum(TAG_AXIS, Axis.class)
             );
         }
@@ -142,7 +142,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             tag.asRecord().putUUID(TAG_ID, transformer.getId());
             tag.asRecord().putText(TAG_NAME, transformer.getName());
             tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
-            tag.asRecord().putTag(TAG_POSITION_TYPE, transformer.getPositionType(), new PositionTypeArrayTagSerializer());
+            tag.asRecord().putEnum(TAG_POSITION_TYPE, transformer.getPositionType());
             tag.asRecord().putEnum(TAG_AXIS, transformer.axis());
             return tag;
         }
@@ -155,7 +155,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     value.getId() != null ? value.getId() : UUID.randomUUID(),
                     value.getName() != null ? value.getName() : MirrorTransformer.ZERO_Y.getName(),
                     value.position() != null ? value.position() : MirrorTransformer.ZERO_Y.position(),
-                    new PositionTypeArrayTagSerializer().validate(value.getPositionType()),
+                    value.positionType() != null ? value.positionType() : MirrorTransformer.ZERO_Y.positionType(),
                     value.axis() != null ? value.axis() : MirrorTransformer.ZERO_Y.axis()
             );
         }
@@ -173,7 +173,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
                     tag.asRecord().getVector3d(TAG_POSITION),
-                    tag.asRecord().getTag(TAG_POSITION_TYPE, new PositionTypeArrayTagSerializer()),
+                    tag.asRecord().getEnum(TAG_POSITION_TYPE, PositionType.class),
                     tag.asRecord().getInt(TAG_SLICE)
             );
         }
@@ -184,7 +184,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
             tag.asRecord().putUUID(TAG_ID, transformer.getId());
             tag.asRecord().putText(TAG_NAME, transformer.getName());
             tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
-            tag.asRecord().putTag(TAG_POSITION_TYPE, transformer.getPositionType(), new PositionTypeArrayTagSerializer());
+            tag.asRecord().putEnum(TAG_POSITION_TYPE, transformer.getPositionType());
             tag.asRecord().putInt(TAG_SLICE, transformer.slices());
             return tag;
         }
@@ -197,7 +197,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     value.getId() != null ? value.getId() : UUID.randomUUID(),
                     value.getName() != null ? value.getName() : RadialTransformer.ZERO.getName(),
                     value.position() != null ? value.position() : RadialTransformer.ZERO.position(),
-                    new PositionTypeArrayTagSerializer().validate(value.getPositionType()),
+                    value.positionType() != null ? value.positionType() : RadialTransformer.ZERO.positionType(),
                     value.slices()
             );
         }

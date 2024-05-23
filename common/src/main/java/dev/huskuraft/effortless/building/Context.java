@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.session.BatchBuildSession;
@@ -214,22 +215,37 @@ public record Context(
         return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withPattern(pattern), customParams);
     }
 
-    public Context withRandomPatternSeed() {
-        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withRandomSeed(), customParams);
+    public Context withActiveState(EntityState activeState) {
+        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withActiveState(activeState), customParams);
+    }
+
+    public Context withInteractState(EntityState interactState) {
+        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withInteractState(interactState), customParams);
     }
 
     public Context withLimitedPatternProducer(boolean limitedProducer) {
         return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withLimitProducer(limitedProducer), customParams);
     }
 
+    public Context withRandomPatternSeed() {
+        return new Context(id, buildState, buildType, buildInteractions, structureParams, patternParams.withRandomSeed(), customParams);
+    }
+
     public Context finalize(Player player, BuildStage stage) {
         switch (stage) {
             case TICK -> {
-                return withPattern(pattern().finalize(player, stage)).withRandomPatternSeed().withLimitedPatternProducer(player.getGameMode().isSurvival());
+                return withPattern(pattern().finalize(player, stage))
+                        .withInteractState(EntityState.get(player))
+                        .withLimitedPatternProducer(player.getGameMode().isSurvival())
+                        .withRandomPatternSeed();
             }
             case UPDATE_CONTEXT -> {
             }
+            case ENABLE_PATTERN -> {
+                return withActiveState(EntityState.get(player));
+            }
             case INTERACT -> {
+
             }
         }
         return withPattern(pattern().finalize(player, stage));
@@ -353,24 +369,34 @@ public record Context(
 
     public record PatternParams(
             Pattern pattern,
+            EntityState activeState,
+            EntityState interactState,
             boolean limitedProducer,
             long seed
     ) {
 
         public PatternParams(Pattern pattern) {
-            this(pattern, false, new Random().nextLong());
+            this(pattern, null, null, false, new Random().nextLong());
         }
 
         public PatternParams withPattern(Pattern pattern) {
-            return new PatternParams(pattern, limitedProducer, seed);
+            return new PatternParams(pattern, activeState, interactState, limitedProducer, seed);
         }
 
-        public PatternParams withRandomSeed() {
-            return new PatternParams(pattern, limitedProducer, new Random().nextLong());
+        public PatternParams withActiveState(EntityState activeState) {
+            return new PatternParams(pattern, activeState, interactState, limitedProducer, seed);
+        }
+
+        public PatternParams withInteractState(EntityState interactState) {
+            return new PatternParams(pattern, activeState, interactState, limitedProducer, seed);
         }
 
         public PatternParams withLimitProducer(boolean limitedProducer) {
-            return new PatternParams(pattern, limitedProducer, new Random().nextLong());
+            return new PatternParams(pattern, activeState, interactState, limitedProducer, new Random().nextLong());
+        }
+
+        public PatternParams withRandomSeed() {
+            return new PatternParams(pattern, activeState, interactState, limitedProducer, new Random().nextLong());
         }
     }
 

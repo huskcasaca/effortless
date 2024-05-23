@@ -308,7 +308,7 @@
   "effortless.position.move_to_player": "Переместить к игроку",
   "effortless.position": "Позиция %s",
   "effortless.position.absolute": "Абсолютная",
-  "effortless.position.relative": "Относительная всегда",
+  "effortless.position.relative_always": "Относительная всегда",
   "effortless.position.relative_once": "Относительная однократно",
   "effortless.test.save": "Сохранить",
   "effortless.test.cancel": "Отмена",

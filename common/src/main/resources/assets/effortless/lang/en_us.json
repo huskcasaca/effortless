@@ -308,7 +308,7 @@
   "effortless.position.move_to_player": "Move To Player",
   "effortless.position": "Position %s",
   "effortless.position.absolute": "Absolute",
-  "effortless.position.relative": "Relative Always",
+  "effortless.position.relative_always": "Relative Always",
   "effortless.position.relative_once": "Relative Once",
   "effortless.test.save": "Save",
   "effortless.test.cancel": "Cancel",
@@ -416,7 +416,8 @@
   "effortless.message.building.cannot_interact_blocks_box_volume_too_large": "Cannot Interact Blocks! Box Volume is Too Large",
   "effortless.message.building.cannot_interact_blocks_box_side_length_too_large": "Cannot Interact Blocks! Box Side Length is Too Large",
   "effortless.symbol": "Effortless",
-  "effortless.state.placing_block.var1": "Placing %s Blocks",
-  "effortless.state.breaking_block.var1": "Breaking %s Blocks",
-  "effortless.state.interacting_block.var1": "Interacting %s Blocks"
+  "effortless.state.placing_block.build_mode": "Placing %s Blocks",
+  "effortless.state.breaking_block.build_mode": "Breaking %s Blocks",
+  "effortless.state.interacting_block.build_mode": "Interacting %s Blocks",
+  "effortless.position.relative": "Relative"
 }
