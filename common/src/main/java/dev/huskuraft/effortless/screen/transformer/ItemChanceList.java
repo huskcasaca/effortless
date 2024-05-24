@@ -77,16 +77,17 @@ public final class ItemChanceList extends EditableEntryList<Chance<Item>> {
                 this.setItem(Chance.of(getItem().content(), value.intValue()));
             });
             this.itemSlot = addWidget(new ItemSlot(getEntrance(), getX() + 1, getY() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getItem().content(), Text.text(String.valueOf(getItem().chance()))));
-            this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getWidth() - 48 - 4 - Dimens.SLOT_WIDTH - 4 - 20, 0, getDisplayName(getItem()), TextWidget.Gravity.START));
             this.chanceTextWidget = addWidget(new TextWidget(getEntrance(), getX() + getWidth() - 48 - 4, getY() + 6, Text.empty(), TextWidget.Gravity.END));
+            this.nameTextWidget = addWidget(new TextWidget(getEntrance(), getX() + 24, getY() + 6, getDisplayName(getItem()), TextWidget.Gravity.START));
         }
 
         @Override
         public void onReload() {
-            chanceTextWidget.setMessage(String.format("%.2f%%", 100.0 * getItem().chance() / totalCount()));
-            itemSlot.setItemStack(getItem().content().getDefaultStack());
-            itemSlot.setDescription(Text.text(String.valueOf(getItem().chance())));
-            nameTextWidget.setMessage(getDisplayName(getItem()));
+            this.chanceTextWidget.setMessage(String.format("%.2f%%", 100.0 * getItem().chance() / totalCount()));
+            this.itemSlot.setItemStack(getItem().content().getDefaultStack());
+            this.itemSlot.setDescription(Text.text(String.valueOf(getItem().chance())));
+            this.nameTextWidget.setMessage(getDisplayName(getItem()));
+            this.nameTextWidget.setWidth(getWidth() - 48 - 4 - Dimens.SLOT_WIDTH - 4 - chanceTextWidget.getWidth() - 8);
         }
 
         // TODO: 8/2/23
