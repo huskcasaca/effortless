@@ -36,13 +36,10 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
 //    private final boolean drawLines;
 //    private final boolean drawPlanes;
 
-    public RadialTransformer(Vector3d position, int slice, int radius, int length) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, slice, radius, length);
+    public RadialTransformer(Vector3d position, Axis axis, int slice, int radius, int length) {
+        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, axis, slice, radius, length);
     }
 
-    public RadialTransformer(UUID id, Text name, Vector3d position, int slices, int radius, int length) {
-        this(id, name, position, Axis.X, slices, radius, length);
-    }
 
     @Override
     public Operation transform(Operation operation) {

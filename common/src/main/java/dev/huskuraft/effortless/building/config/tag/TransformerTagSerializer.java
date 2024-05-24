@@ -175,6 +175,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
                     tag.asRecord().getVector3d(TAG_POSITION),
+                    tag.asRecord().getEnum(TAG_POSITION_TYPE, Axis.class),
                     tag.asRecord().getInt(TAG_SLICE),
                     tag.asRecord().getInt(TAG_RADIUS),
                     tag.asRecord().getInt(TAG_LENGTH)
@@ -201,6 +202,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
                     value.getId() != null ? value.getId() : UUID.randomUUID(),
                     value.getName() != null ? value.getName() : RadialTransformer.ZERO.getName(),
                     value.position() != null ? value.position() : RadialTransformer.ZERO.position(),
+                    value.axis() != null ? value.axis() : RadialTransformer.ZERO.axis(),
                     value.slices(),
                     value.radius(),
                     value.length()

@@ -88,6 +88,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
                     byteBuf.readUUID(),
                     byteBuf.readText(),
                     byteBuf.readVector3d(),
+                    byteBuf.readEnum(Axis.class),
                     byteBuf.readVarInt(),
                     byteBuf.readVarInt(),
                     byteBuf.readVarInt());
@@ -98,6 +99,7 @@ public class TransformerSerializer implements NetByteBufSerializer<Transformer> 
             byteBuf.writeUUID(transformer.getId());
             byteBuf.writeText(transformer.getName());
             byteBuf.writeVector3d(transformer.position());
+            byteBuf.writeEnum(transformer.axis());
             byteBuf.writeVarInt(transformer.slices());
             byteBuf.writeVarInt(transformer.radius());
             byteBuf.writeVarInt(transformer.length());

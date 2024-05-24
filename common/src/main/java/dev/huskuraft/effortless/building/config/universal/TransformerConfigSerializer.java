@@ -292,6 +292,7 @@ public class TransformerConfigSerializer implements ConfigSerializer<Transformer
                     UUID.fromString(config.get(KEY_ID)),
                     Text.empty(),
                     getVector3d(config, KEY_POSITION),
+                    getEnum(config, KEY_TYPE),
                     config.get(KEY_SLICE),
                     config.get(KEY_RADIUS),
                     config.get(KEY_LENGTH)
