@@ -68,6 +68,8 @@ public interface Transformer {
 
     Transformer withId(UUID id);
 
+    float volumeMultiplier();
+
     default boolean isBuiltIn() {
         return !name().getString().isEmpty();
     }

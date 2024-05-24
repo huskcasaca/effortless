@@ -108,4 +108,8 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
         return BoundingBox3d.of(position.sub(size, size, size), position.add(size, size, size));
     }
 
+    @Override
+    public float volumeMultiplier() {
+        return 2;
+    }
 }

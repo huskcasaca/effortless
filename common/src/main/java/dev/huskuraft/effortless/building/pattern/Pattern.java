@@ -37,4 +37,12 @@ public record Pattern(
         );
     }
 
+    public float volumeMultiplier() {
+        var multiplier = 1f;
+        for (var transformer : transformers()) {
+            multiplier = multiplier * transformer.volumeMultiplier();
+        }
+        return multiplier;
+    }
+
 }

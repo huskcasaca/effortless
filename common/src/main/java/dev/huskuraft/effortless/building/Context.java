@@ -264,7 +264,7 @@ public record Context(
     }
 
     public int getBoxVolume() {
-        return structure().volume(this);
+        return (int) (structure().volume(this) * pattern().volumeMultiplier());
     }
 
     public int getMaxBoxVolume() {

@@ -27,6 +27,11 @@ public interface Randomizer<T> extends Transformer {
 
     Producer<T> asProducer(long seed, boolean limitedProducer);
 
+    @Override
+    default float volumeMultiplier() {
+        return 1f;
+    }
+
     enum Order {
         SEQUENCE("sequence"),
         RANDOM("random");

@@ -24,7 +24,7 @@ public record ArrayTransformer(UUID id, Text name, Vector3i offset, int count) i
             Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE
     );
 
-    public static final Range1i COUNT_RANGE = new Range1i(0, Short.MAX_VALUE);
+    public static final Range1i COUNT_RANGE = new Range1i(1, Short.MAX_VALUE);
 
     public ArrayTransformer(Vector3i offset, int count) {
         this(UUID.randomUUID(), Text.translate("effortless.transformer.array"), offset, count);
@@ -94,4 +94,8 @@ public record ArrayTransformer(UUID id, Text name, Vector3i offset, int count) i
         return new ArrayTransformer(id, name, offset, count);
     }
 
+    @Override
+    public float volumeMultiplier() {
+        return count;
+    }
 }

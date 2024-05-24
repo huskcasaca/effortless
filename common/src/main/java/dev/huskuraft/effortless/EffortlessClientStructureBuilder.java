@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless;
 
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -484,6 +485,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
 
         if (getContext(player).isDisabled()) {
+            clearBuildMessage(player);
             return;
         }
 
@@ -506,11 +508,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             showBuildTooltip(player.getId(), 0, player, context, result);
         }
 
-        if (!getContext(player).isIdle()) {
-            showBuildMessage(player, context);
-        }
+        showBuildMessage(player, context);
 
-        ;
         if (getHistoryContext(player).getBoxVolume() != context.getBoxVolume()) {
             putHistoryContext(player, context);
             var nearestInteraction = context.interactions().results().stream().filter(Objects::nonNull).min(Comparator.comparing(interaction1 -> interaction1.getBlockPosition().getCenter().distance(player.getEyePosition())));
@@ -661,6 +660,16 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     }
 
+    private boolean isBuildMessageVisible = false;
+
+    public void clearBuildMessage(Player player) {
+        if (this.isBuildMessageVisible) {
+            player.sendClientMessage(Text.empty(), true);
+            this.isBuildMessageVisible = false;
+        }
+
+    }
+
     public void showBuildMessage(Player player, Context context) {
         var message = Text.empty();
         if (context.tracingResult().isSuccess()) {
@@ -674,6 +683,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     .append(Text.text(String.valueOf(context.getInteractionBox().y())).withStyle(ChatFormatting.WHITE))
                     .append("x")
                     .append(Text.text(String.valueOf(context.getInteractionBox().z())).withStyle(ChatFormatting.WHITE))
+                    .append(context.pattern().volumeMultiplier() > 1 ? "x" + new DecimalFormat("#.##").format(context.pattern().volumeMultiplier()) : "")
                     .append("=")
                     .append(Text.text(String.valueOf(context.getBoxVolume())).withStyle(!context.isBoxVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE))
                     .append(")");
@@ -696,6 +706,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
 
         player.sendClientMessage(message, true);
+        this.isBuildMessageVisible = true;
 
 
     }

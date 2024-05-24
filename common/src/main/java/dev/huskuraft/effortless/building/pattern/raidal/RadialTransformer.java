@@ -24,8 +24,8 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
     public static final Range1i RADIUS_RANGE = new Range1i(1, 1024);
     public static final Range1i LENGTH_RANGE = new Range1i(1, 1024);
 
-    public static final RadialTransformer ZERO = new RadialTransformer(Vector3d.ZERO, 0, DEFAULT_RADIUS, DEFAULT_LENGTH);
-    public static final RadialTransformer DEFAULT = new RadialTransformer(Vector3d.ZERO, DEFAULT_SLICE, DEFAULT_RADIUS, DEFAULT_LENGTH);
+    public static final RadialTransformer ZERO = new RadialTransformer(Vector3d.ZERO, Axis.Y, 0, DEFAULT_RADIUS, DEFAULT_LENGTH);
+    public static final RadialTransformer DEFAULT = new RadialTransformer(Vector3d.ZERO, Axis.Y, DEFAULT_SLICE, DEFAULT_RADIUS, DEFAULT_LENGTH);
 
     //    private final double start;
 //    private final Axis axis;
@@ -106,5 +106,8 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
         return new RadialTransformer(id, name, position, axis, slices, radius, length);
     }
 
-
+    @Override
+    public float volumeMultiplier() {
+        return slices;
+    }
 }

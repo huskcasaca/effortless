@@ -130,11 +130,6 @@ public record Circle(
         return set.stream();
     }
 
-    @Override
-    public int volume(Context context) {
-        return collect(context).toList().size();
-    }
-
     public BlockInteraction trace(Player player, Context context, int index) {
         return switch (index) {
             case 0 -> Single.traceSingle(player, context);
