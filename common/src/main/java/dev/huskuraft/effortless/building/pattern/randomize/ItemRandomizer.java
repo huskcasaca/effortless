@@ -432,7 +432,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
                         case HANDS -> List.of(player.getInventory().getSelectedItem(), player.getInventory().getOffhandItem());
                         case CUSTOMIZE -> List.of(ItemStack.empty());
                     };
-                    return withChances(itemStacks.stream().filter(itemStack -> !itemStack.isAir()).map(itemStack -> Chance.of(itemStack.getItem(), itemStack.getCount())).toList());
+                    return withChances(itemStacks.stream().filter(itemStack -> itemStack.getItem() instanceof BlockItem).map(itemStack -> Chance.of(itemStack.getItem(), itemStack.getCount())).toList());
                 }
             }
         }
