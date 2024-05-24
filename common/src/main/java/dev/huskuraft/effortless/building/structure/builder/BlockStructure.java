@@ -19,102 +19,24 @@ public interface BlockStructure extends Structure {
 
     double LOOK_VEC_TOLERANCE = 0.01;
 
-    enum DirectionTraceShape {
-        SINGLE,
-        LINE_DOWN(Orientation.DOWN),
-        LINE_UP(Orientation.UP),
-        LINE_NORTH(Orientation.NORTH),
-        LINE_SOUTH(Orientation.SOUTH),
-        LINE_WEST(Orientation.WEST),
-        LINE_EAST(Orientation.EAST),
-        PLANE_X(Axis.X),
-        PLANE_Y(Axis.Y),
-        PLANE_Z(Axis.Z),
-        CUBE;
-
-        private final Axis axis;
-        private final Orientation orientation;
-
-        DirectionTraceShape() {
-            this.axis = null;
-            this.orientation = null;
-        }
-
-        DirectionTraceShape(Axis axis) {
-            this.axis = axis;
-            this.orientation = null;
-        }
-
-        DirectionTraceShape(Orientation orientation) {
-            this.axis = orientation.getAxis();
-            this.orientation = orientation;
-        }
-    }
-
-    enum TraceShape {
-        SINGLE,
-        LINE_X(Axis.X),
-        LINE_Y(Axis.Y),
-        LINE_Z(Axis.Z),
-        PLANE_X(Axis.X),
-        PLANE_Y(Axis.Y),
-        PLANE_Z(Axis.Z),
-        CUBE;
-
-        private final Axis axis;
-
-        TraceShape() {
-            this.axis = null;
-        }
-
-        TraceShape(Axis axis) {
-            this.axis = axis;
-        }
-
-        private static TraceShape fromPosition(int x1, int y1, int z1, int x2, int y2, int z2) {
-            if (x1 == x2 && y1 == y2 && z1 == z2) {
-                return TraceShape.SINGLE;
-            }
-            if (x1 == x2 && z1 == z2) {
-                return TraceShape.LINE_Y;
-            }
-            if (y1 == y2 && z1 == z2) {
-                return TraceShape.LINE_X;
-            }
-            if (x1 == x2 && y1 == y2) {
-                return TraceShape.LINE_Z;
-            }
-            if (x1 == x2) {
-                return PLANE_X;
-            }
-            if (y1 == y2) {
-                return PLANE_Y;
-            }
-            if (z1 == z2) {
-                return PLANE_Z;
-            }
-            return TraceShape.CUBE;
-        }
-    }
-
     @Override
     default int volume(Context context) {
         return context.getInteractionBox().volume();
     }
 
-    public static TraceShape getShape(int x1, int y1, int z1, int x2, int y2, int z2) {
+    static TraceShape getShape(int x1, int y1, int z1, int x2, int y2, int z2) {
         return TraceShape.fromPosition(x1, y1, z1, x2, y2, z2);
     }
 
-    public static TraceShape getShape(BlockPosition pos1, BlockPosition pos2) {
+    static TraceShape getShape(BlockPosition pos1, BlockPosition pos2) {
         return TraceShape.fromPosition(pos1.x(), pos1.y(), pos1.z(), pos2.x(), pos2.y(), pos2.z());
     }
 
-    public static double lengthSq(double x, double y, double z) {
+    static double lengthSq(double x, double y, double z) {
         return (x * x) + (y * y) + (z * z);
     }
 
-    public static double lengthSq(double x, double z) {
+    static double lengthSq(double x, double z) {
         return (x * x) + (z * z);
     }
 
@@ -215,9 +137,9 @@ public interface BlockStructure extends Structure {
         return new Vector3d(x, y, z).normalize();
     }
 
-    abstract BlockInteraction trace(Player player, Context context, int index);
+    BlockInteraction trace(Player player, Context context, int index);
 
-    abstract Stream<BlockPosition> collect(Context context, int index);
+    Stream<BlockPosition> collect(Context context, int index);
 
     @Override
     default BlockInteraction trace(Player player, Context context) {
@@ -409,7 +331,6 @@ public interface BlockStructure extends Structure {
         }
 
     }
-
 
 
     class NearestAxisLineCriteria extends NearestLineCriteria {

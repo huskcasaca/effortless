@@ -87,10 +87,6 @@ public interface Structure {
         return Stream.of(circleStart(), cubeFilling(), planeFilling(), planeFacing(), planeLength(), raisedEdge(), lineDirection()).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
-    default BuildFeature getFeatureByType(BuildFeatures buildFeatures) {
-        return getFeatures().stream().filter(f -> f.getType() == buildFeatures).findFirst().orElse(null);
-    }
-
     default Structure withFeature(BuildFeature feature) {
         return this;
     }
@@ -103,7 +99,10 @@ public interface Structure {
         return structure;
     }
 
-
+//    default BuildFeature getFeatureByType(BuildFeatures buildFeatures) {
+//        return getFeatures().stream().filter(f -> f.getType() == buildFeatures).findFirst().orElse(null);
+//    }
+//
 //    default Structure withCircleStart(CircleStart circleStart) {
 //        return this;
 //    }
