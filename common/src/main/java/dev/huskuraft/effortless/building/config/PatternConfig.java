@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.building.pattern.raidal.RadialTransformer;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public record PatternConfig(
-        List<Transformer> transformerPreset
+        List<? extends Transformer> transformerPreset
 ) {
 
     public static PatternConfig DEFAULT = new PatternConfig();
@@ -50,11 +50,11 @@ public record PatternConfig(
         return transformerPreset().stream().filter(ItemRandomizer.class::isInstance).map(ItemRandomizer.class::cast).collect(Collectors.toList());
     }
 
-    public List<Transformer> getByType(Transformers type) {
+    public List<? extends Transformer> getByType(Transformers type) {
         return transformerPreset().stream().filter(t -> t.getType() == type).toList();
     }
 
-    public Map<Transformers, List<Transformer>> getByType() {
+    public Map<Transformers, List<? extends Transformer>> getByType() {
         return Arrays.stream(Transformers.values()).collect(Collectors.toMap(Function.identity(), this::getByType));
     }
 

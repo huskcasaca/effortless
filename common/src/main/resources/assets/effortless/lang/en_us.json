@@ -433,6 +433,16 @@
   "effortless.player_constraint_settings.title": "Player Constraint Settings",
   "effortless.global_constraint_settings.title": "Global Constraint Settings",
   "effortless.constraint_settings.title": "Constraint Settings",
-  "effortless.constraint_settings.tooltip": "These settings add restrictive conditions for players during building. The settings are only available to server operators or single-player game owners. \nThe settings are saved in file named %s in the config directory.",
-  "effortless.render_settings.tooltip": "These settings adjust build tooltips and blocks preview rendering. The settings are available for client side only. \nThe settings are saved in file named %s in the config directory."
+  "effortless.constraint_settings.tooltip": "These settings add restrictive rules for players during building. They are only available to server operators or single-player game owners. \n\nThese settings are saved in file named %s in the config directory.",
+  "effortless.global_constraint_settings.tooltip": "These settings add global restrictive rules for all players. They are only available to server operators or single-player game owners. \n\nThese settings are saved in file named %s in the config directory.",
+  "effortless.player_constraint_settings.tooltip": "These settings add player specific restrictive rules that overrides the global one. They are only available to server operators or single-player game owners. \n\nThese settings are saved in file named %s in the config directory.",
+  "effortless.render_settings.tooltip": "These settings adjust build tooltips and blocks preview rendering. They are available for client side only. \n\nThese settings are saved in file named %s in the config directory.",
+  "effortless.builder_settings.title": "Builder Settings",
+  "effortless.builder_settings.reserved_tool_durability": "Reserved Tool Durability",
+  "effortless.builder_settings.passive_mode": "Passive Mode",
+  "effortless.builder_settings.tooltip": "These settings adjust build behaviors and tool consumption rules. They are available for client side only. \n\nThese settings are saved in file named %s in the config directory.",
+  "effortless.pattern_settings.tooltip": "These settings manage the build patterns and transformer presets. They are available for client side only. \n\nThese settings are saved in file named %s in the config directory.",
+  "effortless.button.done.tooltip": "This button goes back to the previous page.",
+  "effortless.pattern_settings.item_randomizer_presets": "Item Randomizer Presets",
+  "effortless.pattern_settings.presets": "%s Preset(s)"
 }

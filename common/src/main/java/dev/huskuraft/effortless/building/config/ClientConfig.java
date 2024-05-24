@@ -9,9 +9,9 @@ import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public record ClientConfig(
-        RenderConfig renderConfig,
+        BuilderConfig builderConfig,
         PatternConfig patternConfig,
-        Boolean passiveMode,
+        RenderConfig renderConfig,
         Map<BuildMode, Structure> structureMap
 ) {
 
@@ -19,33 +19,33 @@ public record ClientConfig(
             RenderConfig renderConfig,
             PatternConfig patternConfig
     ) {
-        this(renderConfig, patternConfig, Boolean.FALSE, Structure.DEFAULTS);
+        this(BuilderConfig.DEFAULT, patternConfig, renderConfig, Structure.DEFAULTS);
     }
 
     public static ClientConfig DEFAULT = new ClientConfig(
-            RenderConfig.DEFAULT,
-            PatternConfig.DEFAULT,
-            Boolean.FALSE,
-            Structure.DEFAULTS
+            BuilderConfig.DEFAULT, PatternConfig.DEFAULT, RenderConfig.DEFAULT, Structure.DEFAULTS
     );
 
     public ClientConfig withRenderConfig(RenderConfig renderConfig) {
-        return new ClientConfig(renderConfig, patternConfig, passiveMode, structureMap);
+        return new ClientConfig(builderConfig, patternConfig, renderConfig, structureMap);
     }
 
     public ClientConfig withPatternConfig(PatternConfig patternConfig) {
-        return new ClientConfig(renderConfig, patternConfig, passiveMode, structureMap);
+        return new ClientConfig(builderConfig, patternConfig, renderConfig, structureMap);
     }
 
+    public ClientConfig withBuilderConfig(BuilderConfig builderConfig) {
+        return new ClientConfig(builderConfig, patternConfig, renderConfig, structureMap);
+    }
 
-    public ClientConfig withPassiveMode(Boolean passiveMode) {
-        return new ClientConfig(renderConfig, patternConfig, passiveMode, structureMap);
+    public ClientConfig withPassiveMode(boolean passiveMode) {
+        return new ClientConfig(builderConfig.withPassiveMode(passiveMode), patternConfig, renderConfig, structureMap);
     }
 
     public ClientConfig withStructure(Structure structure) {
         var structureMap = Maps.newLinkedHashMap(this.structureMap);
         structureMap.put(structure.getMode(), structure);
-        return new ClientConfig(renderConfig, patternConfig, passiveMode, Collections.unmodifiableMap(structureMap));
+        return new ClientConfig(builderConfig, patternConfig, renderConfig, Collections.unmodifiableMap(structureMap));
     }
 
     public Structure getStructure(BuildMode buildMode) {

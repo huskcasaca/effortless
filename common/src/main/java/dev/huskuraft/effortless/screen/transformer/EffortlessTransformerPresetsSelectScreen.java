@@ -21,8 +21,8 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractPanelScree
 
     private final Consumer<Transformer> consumer;
     private final List<Button> tabButtons = new ArrayList<>();
-    private Map<Transformers, List<Transformer>> builtInTransformers;
-    private Map<Transformers, List<Transformer>> transformers;
+    private Map<Transformers, List<? extends Transformer>> builtInTransformers;
+    private Map<Transformers, List<? extends Transformer>> transformers;
     private TransformerList entries;
     private TextWidget titleTextWidget;
     private Button useTemplateButton;

@@ -24,12 +24,12 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
 
-    private final Consumer<List<Transformer>> applySettings;
     private final List<Button> tabButtons = new ArrayList<>();
-    private Map<Transformers, List<Transformer>> builtInTransformers;
-    private Map<Transformers, List<Transformer>> defaultConfig;
-    private Map<Transformers, List<Transformer>> originalConfig;
-    private Map<Transformers, List<Transformer>> config;
+    private Consumer<List<? extends Transformer>> consumer;
+    private Map<Transformers, List<? extends Transformer>> builtInTransformers;
+    private Map<Transformers, List<? extends Transformer>> defaultConfig;
+    private Map<Transformers, List<? extends Transformer>> originalConfig;
+    private Map<Transformers, List<? extends Transformer>> config;
     private TransformerList entries;
     private TextWidget titleTextWidget;
     private Button editButton;
@@ -42,13 +42,18 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
 
     public EffortlessTransformerPresetsScreen(Entrance entrance) {
         super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
-        this.applySettings = transformers -> {
+        this.consumer = transformers -> {
             getEntrance().getConfigStorage().update(config -> config.withPatternConfig(new PatternConfig(transformers)));
         };
         this.builtInTransformers = PatternConfig.getBuiltInPresets().getByType();
         this.defaultConfig = getEntrance().getConfigStorage().get().patternConfig().getByType();
         this.originalConfig = getEntrance().getConfigStorage().get().patternConfig().getByType();
         this.config = getEntrance().getConfigStorage().get().patternConfig().getByType();
+    }
+
+    public EffortlessTransformerPresetsScreen(Entrance entrance, Consumer<List<? extends Transformer>> consumer) {
+        this(entrance);
+        this.consumer = consumer;
     }
 
     @Override
@@ -93,7 +98,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());
         this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             detachAll();
-            applySettings.accept(config.values().stream().flatMap(List::stream).toList());
+            consumer.accept(config.values().stream().flatMap(List::stream).toList());
 
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 

@@ -57,7 +57,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
 
     private static final Button<Option> PASSIVE_MODE_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
-        if (entrance.getConfigStorage().get().passiveMode()) {
+        if (entrance.getConfigStorage().get().builderConfig().passiveMode()) {
             return PASSIVE_MODE_ENABLED_OPTION;
         } else {
             return PASSIVE_MODE_DISABLED_OPTION;

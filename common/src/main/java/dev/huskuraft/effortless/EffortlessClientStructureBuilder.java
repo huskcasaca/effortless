@@ -311,7 +311,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
-        if (getEntrance().getConfigStorage().get().passiveMode())
+        if (getEntrance().getConfigStorage().get().builderConfig().passiveMode())
             if (!EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
                 return EventResult.pass();
             }
@@ -487,7 +487,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             return;
         }
 
-        if (getEntrance().getConfigStorage().get().passiveMode() && !EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
+        if (getEntrance().getConfigStorage().get().builderConfig().passiveMode() && !EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, false);
             return;
         }
