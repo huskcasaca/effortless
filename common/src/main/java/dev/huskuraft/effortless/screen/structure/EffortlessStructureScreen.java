@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.gui.AbstractWidget;
+import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
@@ -65,6 +67,8 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     });
 
     private final Key assignedKey;
+
+    private AbstractWidget passiveMode;
 
     public EffortlessStructureScreen(Entrance entrance, Key assignedKey) {
         super(entrance, Text.translate("effortless.building.radial.title"));
@@ -148,10 +152,14 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                 }
             }
         });
+
+        this.passiveMode = addWidget(new TextWidget(getEntrance(), getX() + getWidth() - 10, getY() + getHeight() - 18, Text.translate("effortless.option.passive_mode"), TextWidget.Gravity.END));
+
     }
 
     @Override
     public void onReload() {
+        passiveMode.setVisible(getEntrance().getConfigStorage().get().builderConfig().passiveMode());
 
         setRadialSlots(getEntrance().getConfigStorage().get().structureMap().values().stream().map(EffortlessStructureScreen::slot).toList());
 
