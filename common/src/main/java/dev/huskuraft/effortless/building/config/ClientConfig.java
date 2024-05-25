@@ -1,7 +1,11 @@
 package dev.huskuraft.effortless.building.config;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Maps;
 
@@ -19,11 +23,11 @@ public record ClientConfig(
             RenderConfig renderConfig,
             PatternConfig patternConfig
     ) {
-        this(BuilderConfig.DEFAULT, patternConfig, renderConfig, Structure.DEFAULTS);
+        this(BuilderConfig.DEFAULT, patternConfig, renderConfig, DEFAULT.structureMap());
     }
 
     public static ClientConfig DEFAULT = new ClientConfig(
-            BuilderConfig.DEFAULT, PatternConfig.DEFAULT, RenderConfig.DEFAULT, Structure.DEFAULTS
+            BuilderConfig.DEFAULT, PatternConfig.DEFAULT, RenderConfig.DEFAULT, Arrays.stream(BuildMode.values()).collect(Collectors.toMap(Function.identity(), BuildMode::getDefaultStructure, (e1, e2) -> e1, LinkedHashMap::new))
     );
 
     public ClientConfig withRenderConfig(RenderConfig renderConfig) {

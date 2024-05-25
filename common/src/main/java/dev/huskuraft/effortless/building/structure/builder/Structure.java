@@ -1,12 +1,8 @@
 package dev.huskuraft.effortless.building.structure.builder;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,8 +27,6 @@ import dev.huskuraft.effortless.building.structure.builder.standard.Disable;
 public interface Structure {
 
     Structure DISABLED = new Disable();
-
-    Map<BuildMode, Structure> DEFAULTS = Arrays.stream(BuildMode.values()).collect(Collectors.toMap(Function.identity(), BuildMode::getDefaultStructure, (e1, e2) -> e1, LinkedHashMap::new));
 
     int volume(Context context);
 
