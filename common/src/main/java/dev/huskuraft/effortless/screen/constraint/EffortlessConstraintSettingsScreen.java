@@ -28,7 +28,7 @@ public class EffortlessConstraintSettingsScreen extends AbstractPanelScreen {
 
     @Override
     public void onCreate() {
-        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
+        addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(AbstractPanelScreen.TITLE_COLOR), TextWidget.Gravity.CENTER));
 
         this.globalButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.global_constraint_settings.title"), button -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {

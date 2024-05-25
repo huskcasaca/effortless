@@ -39,7 +39,7 @@ public class EffortlessOnlinePlayersScreen extends AbstractPanelScreen {
     @Override
     public void onCreate() {
 
-        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(0x00404040), TextWidget.Gravity.CENTER));
+        this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(AbstractPanelScreen.TITLE_COLOR), TextWidget.Gravity.CENTER));
 
         this.searchEditBox = addWidget(
                 new EditBox(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2, PANEL_TITLE_HEIGHT_2 - Button.COMPAT_SPACING_V, Text.translate("effortless.item.picker.search"))

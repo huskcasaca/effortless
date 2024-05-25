@@ -45,6 +45,8 @@ public abstract class AbstractPanelScreen extends AbstractScreen {
     private boolean detached = false;
     private boolean detachedAll = false;
 
+    public static final int TITLE_COLOR = 0x00404040;
+
     protected AbstractPanelScreen(Entrance entrance, Text title, int width, int height) {
         super(entrance, 0, 0, width, height, title);
     }
