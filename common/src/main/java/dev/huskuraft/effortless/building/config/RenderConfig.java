@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.building.config;
 
 public record RenderConfig(
+        boolean showBlockPreview,
         boolean showOtherPlayersBuild,
         boolean showOtherPlayersBuildTooltips,
-        boolean showBlockPreview,
         int maxRenderVolume,
         int maxRenderDistance
 ) {
@@ -15,10 +15,14 @@ public record RenderConfig(
         this(
                 true,
                 true,
-                true,
+                false,
                 MAX_RENDER_VOLUME_DEFAULT,
                 128
         );
+    }
+
+    public boolean showOtherPlayersBuildTooltips() {
+        return false;
     }
 
     public static RenderConfig DEFAULT = new RenderConfig();
