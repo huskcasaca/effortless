@@ -108,8 +108,8 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
                     getEntrance(),
                     transformer -> {
                         editTransformer(switch (transformer.getType()) {
-                            case MIRROR -> ((MirrorTransformer) transformer.withRandomId().withName(Text.empty())).withPosition(Transformer.roundToHalf(getEntrance().getClient().getPlayer().getPosition()));
-                            case RADIAL -> ((RadialTransformer) transformer.withRandomId().withName(Text.empty())).withPosition(Transformer.roundToHalf(getEntrance().getClient().getPlayer().getPosition()));
+                            case MIRROR -> ((MirrorTransformer) transformer.withRandomId().withName(Text.empty())).withPosition(Transformer.roundHalf(getEntrance().getClient().getPlayer().getPosition()));
+                            case RADIAL -> ((RadialTransformer) transformer.withRandomId().withName(Text.empty())).withPosition(Transformer.roundHalf(getEntrance().getClient().getPlayer().getPosition()));
                             default -> transformer.withRandomId().withName(Text.empty());
                         });
                         onReload();

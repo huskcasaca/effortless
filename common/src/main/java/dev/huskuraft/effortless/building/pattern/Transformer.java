@@ -22,12 +22,24 @@ public interface Transformer {
     Range1d POSITION_RANGE = new Range1d(-30000000, 30000000);
     int MAX_NAME_LENGTH = 255;
 
-    static double roundToHalf(double value) {
+    static double roundHalf(double value) {
         return Math.round(value * 2) / 2.0;
     }
 
-    static Vector3d roundToHalf(Vector3d vector3d) {
-        return new Vector3d(roundToHalf(vector3d.x()), roundToHalf(vector3d.y()), roundToHalf(vector3d.z()));
+    static double floorHalf(double value) {
+        return Math.floor(value) + 0.5;
+    }
+
+    static double round(double value) {
+        return Math.round(value);
+    }
+
+    static Vector3d roundHalf(Vector3d vector3d) {
+        if (roundHalf(vector3d.x()) % 1 != 0 || roundHalf(vector3d.y()) % 1 != 0 || roundHalf(vector3d.z()) % 1 != 0) {
+            return new Vector3d(floorHalf(vector3d.x()), floorHalf(vector3d.y()), floorHalf(vector3d.z()));
+        } else {
+            return new Vector3d(round(vector3d.x()), round(vector3d.y()), round(vector3d.z()));
+        }
     }
 
     static List<Transformer> getDefaultTransformers() {

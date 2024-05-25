@@ -62,8 +62,8 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
             var playerPosition = getEntrance().getClient().getPlayer().getPosition();
             this.transformer = switch (transformer.getType()) {
                 case ARRAY -> transformer;
-                case MIRROR -> ((MirrorTransformer) transformer).withPosition(Transformer.roundToHalf(playerPosition));
-                case RADIAL -> ((RadialTransformer) transformer).withPosition(Transformer.roundToHalf(playerPosition));
+                case MIRROR -> ((MirrorTransformer) transformer).withPosition(Transformer.roundHalf(playerPosition));
+                case RADIAL -> ((RadialTransformer) transformer).withPosition(Transformer.roundHalf(playerPosition));
                 case RANDOMIZER -> transformer;
             };
             recreate();
@@ -85,16 +85,16 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.array.count"), Text.text("C"), ((ArrayTransformer) transformer).count(), ArrayTransformer.COUNT_RANGE.min(), ArrayTransformer.COUNT_RANGE.max(), value -> this.transformer = ((ArrayTransformer) transformer).withCount(value));
             }
             case MIRROR -> {
-                this.entries.addPositionEntry(Axis.X.getPositionName(), Axis.X.getDisplayName(), ((MirrorTransformer) transformer).position().x(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((MirrorTransformer) transformer).withPositionX(Transformer.roundToHalf(value)));
-                this.entries.addPositionEntry(Axis.Y.getPositionName(), Axis.Y.getDisplayName(), ((MirrorTransformer) transformer).position().y(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((MirrorTransformer) transformer).withPositionY(Transformer.roundToHalf(value)));
-                this.entries.addPositionEntry(Axis.Z.getPositionName(), Axis.Z.getDisplayName(), ((MirrorTransformer) transformer).position().z(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((MirrorTransformer) transformer).withPositionZ(Transformer.roundToHalf(value)));
+                this.entries.addPositionEntry(Axis.X.getPositionName(), Axis.X.getDisplayName(), ((MirrorTransformer) transformer).position().x(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((MirrorTransformer) transformer).withPositionX(Transformer.roundHalf(value)));
+                this.entries.addPositionEntry(Axis.Y.getPositionName(), Axis.Y.getDisplayName(), ((MirrorTransformer) transformer).position().y(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((MirrorTransformer) transformer).withPositionY(Transformer.roundHalf(value)));
+                this.entries.addPositionEntry(Axis.Z.getPositionName(), Axis.Z.getDisplayName(), ((MirrorTransformer) transformer).position().z(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((MirrorTransformer) transformer).withPositionZ(Transformer.roundHalf(value)));
                 this.entries.addSelectorEntry(Text.translate("effortless.transformer.mirror.axis"), Text.text("A"), Arrays.stream(Axis.values()).map(Axis::getDisplayName).toList(), Arrays.stream(Axis.values()).toList(), ((MirrorTransformer) transformer).axis(), value -> this.transformer = ((MirrorTransformer) transformer).withAxis(value));
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.mirror.size"), Text.text("S"), ((MirrorTransformer) transformer).size(), MirrorTransformer.SIZE_RANGE.min(), MirrorTransformer.SIZE_RANGE.max(), value -> this.transformer = ((MirrorTransformer) transformer).withSize(value));
             }
             case RADIAL -> {
-                this.entries.addPositionEntry(Axis.X.getPositionName(), Axis.X.getDisplayName(), ((RadialTransformer) transformer).position().x(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((RadialTransformer) transformer).withPositionX(Transformer.roundToHalf(value)));
-                this.entries.addPositionEntry(Axis.Y.getPositionName(), Axis.Y.getDisplayName(), ((RadialTransformer) transformer).position().y(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((RadialTransformer) transformer).withPositionY(Transformer.roundToHalf(value)));
-                this.entries.addPositionEntry(Axis.Z.getPositionName(), Axis.Z.getDisplayName(), ((RadialTransformer) transformer).position().z(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((RadialTransformer) transformer).withPositionZ(Transformer.roundToHalf(value)));
+                this.entries.addPositionEntry(Axis.X.getPositionName(), Axis.X.getDisplayName(), ((RadialTransformer) transformer).position().x(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((RadialTransformer) transformer).withPositionX(Transformer.roundHalf(value)));
+                this.entries.addPositionEntry(Axis.Y.getPositionName(), Axis.Y.getDisplayName(), ((RadialTransformer) transformer).position().y(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((RadialTransformer) transformer).withPositionY(Transformer.roundHalf(value)));
+                this.entries.addPositionEntry(Axis.Z.getPositionName(), Axis.Z.getDisplayName(), ((RadialTransformer) transformer).position().z(), Transformer.POSITION_RANGE.low(), Transformer.POSITION_RANGE.high(), value -> this.transformer = ((RadialTransformer) transformer).withPositionZ(Transformer.roundHalf(value)));
                 this.entries.addSelectorEntry(Text.translate("effortless.transformer.radial.axis"), Text.text("A"), Arrays.stream(Axis.values()).map(Axis::getDisplayName).toList(), Arrays.stream(Axis.values()).toList(), ((RadialTransformer) transformer).axis(), value -> this.transformer = ((RadialTransformer) transformer).withAxis(value));
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.slices"), Text.text("S"), ((RadialTransformer) transformer).slices(), RadialTransformer.SLICE_RANGE.min(), RadialTransformer.SLICE_RANGE.max(), value -> this.transformer = ((RadialTransformer) transformer).withSlice(value));
                 this.entries.addIntegerEntry(Text.translate("effortless.transformer.radial.radius"), Text.text("R"), ((RadialTransformer) transformer).radius(), RadialTransformer.RADIUS_RANGE.min(), RadialTransformer.RADIUS_RANGE.max(), value -> this.transformer = ((RadialTransformer) transformer).withRadius(value));
@@ -111,7 +111,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
         for (var entry : this.entries.children()) {
             if (entry instanceof SettingOptionsList.PositionEntry positionEntry) {
                 if (!positionEntry.isFocused()) {
-                    positionEntry.setItem(Transformer.roundToHalf(positionEntry.getItem()));
+                    positionEntry.setItem(Transformer.roundHalf(positionEntry.getItem()));
                 }
             }
         }
