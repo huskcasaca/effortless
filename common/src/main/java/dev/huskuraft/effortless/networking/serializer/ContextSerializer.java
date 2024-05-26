@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.InventorySnapshot;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
+import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 
 public class ContextSerializer implements NetByteBufSerializer<Context> {
@@ -24,7 +25,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                 ),
                 byteBuf.read(new StructureSerializer()),
                 byteBuf.read(new PatternSerializer()),
-                byteBuf.readEnum(ReplaceMode.class),
+                byteBuf.read(new ReplaceSerializer()),
                 new Context.Configs(
                         byteBuf.read(new ConstraintConfigSerializer())
                 ),
@@ -41,7 +42,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
 
         byteBuf.write(context.structure(), new StructureSerializer());
         byteBuf.write(context.pattern(), new PatternSerializer());
-        byteBuf.writeEnum(context.replaceMode());
+        byteBuf.write(context.replace(), new ReplaceSerializer());
 
         byteBuf.write(context.configs().constraintConfig(), new ConstraintConfigSerializer());
         byteBuf.writeNullable(context.extras(), new ExtrasSerializer());
@@ -129,5 +130,24 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
             byteBuf.writeLong(extras.seed());
             byteBuf.write(extras.inventorySnapshot(), new InventorySnapshotSerializer());
         }
+    }
+
+    public static class ReplaceSerializer implements NetByteBufSerializer<Replace> {
+        @Override
+        public Replace read(NetByteBuf byteBuf) {
+            return new Replace(
+                    byteBuf.readEnum(ReplaceMode.class),
+                    byteBuf.readList(NetByteBuf::readItemStack),
+                    byteBuf.readBoolean()
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, Replace replace) {
+            byteBuf.writeEnum(replace.replaceMode());
+            byteBuf.writeList(replace.replaceList(), NetByteBuf::writeItemStack);
+            byteBuf.writeBoolean(replace.isQuick());
+        }
+
     }
 }

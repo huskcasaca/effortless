@@ -63,7 +63,7 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
             recreate();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1, 0f, 0f, 1f).build());
 
-        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
+        this.saveButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save"), button -> {
             this.lastSettings = lastSettings.withEnabled(lastSettings.enabled());
             applySettings.accept(lastSettings);
             detachAll();

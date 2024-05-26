@@ -53,16 +53,20 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     });
 
     private static final Button<Option> REPLACE_DISABLED_OPTION = button(ReplaceMode.DISABLED, false);
-    private static final Button<Option> REPLACE_NORMAL_OPTION = button(ReplaceMode.NORMAL, true);
-    private static final Button<Option> REPLACE_QUICK_OPTION = button(ReplaceMode.QUICK, true);
+    private static final Button<Option> REPLACE_BLOCKS_AND_AIR_OPTION = button(ReplaceMode.BLOCKS_AND_AIR, true);
+    private static final Button<Option> REPLACE_BLOCKS_ONLY_OPTION = button(ReplaceMode.BLOCKS_ONLY, true);
+    private static final Button<Option> REPLACE_OFFHAND_ONLY_OPTION = button(ReplaceMode.OFFHAND_ONLY, true);
+    private static final Button<Option> REPLACE_CUSTOM_LIST_ONLY_OPTION = button(ReplaceMode.CUSTOM_LIST_ONLY, true);
 
     private static final Button<Option> REPLACE_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
         return switch (context.replaceMode()) {
             case DISABLED -> REPLACE_DISABLED_OPTION;
-            case NORMAL -> REPLACE_NORMAL_OPTION;
-            case QUICK -> REPLACE_QUICK_OPTION;
+            case BLOCKS_AND_AIR -> REPLACE_BLOCKS_AND_AIR_OPTION;
+            case BLOCKS_ONLY -> REPLACE_BLOCKS_ONLY_OPTION;
+            case OFFHAND_ONLY -> REPLACE_OFFHAND_ONLY_OPTION;
+            case CUSTOM_LIST_ONLY -> REPLACE_CUSTOM_LIST_ONLY_OPTION;
         };
     });
 
@@ -156,7 +160,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                 return;
             }
             if (entry.getContent() instanceof ReplaceMode replaceMode) {
-                getEntrance().getStructureBuilder().setReplaceMode(getPlayer(), replaceMode.next());
+                getEntrance().getStructureBuilder().setReplace(getPlayer(), getEntrance().getStructureBuilder().getContext(getPlayer()).replace().withReplaceMode(replaceMode.next()));
                 return;
             }
             if (entry.getContent() instanceof PassiveMode passiveMode) {

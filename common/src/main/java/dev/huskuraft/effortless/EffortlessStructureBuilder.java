@@ -17,7 +17,7 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.replace.ReplaceMode;
+import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
@@ -85,7 +85,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public boolean setReplaceMode(Player player, ReplaceMode replaceMode) {
+    public boolean setReplace(Player player, Replace replace) {
         return false;
     }
 

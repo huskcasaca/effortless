@@ -10,21 +10,20 @@ import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.Context;
-import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
 
 public record Single() implements BlockStructure {
 
     protected static BlockInteraction traceSingle(Player player, Context context) {
-        return traceSingle(player, context.buildState(), context.replaceMode(), context.maxReachDistance());
+        return traceSingle(player, context.buildState(), !context.replace().isQuick(), context.maxReachDistance());
     }
 
     protected static BlockInteraction traceSingle(Player player, Context context, int maxReachDistance) {
-        return traceSingle(player, context.buildState(), context.replaceMode(), maxReachDistance);
+        return traceSingle(player, context.buildState(), !context.replace().isQuick(), maxReachDistance);
     }
 
-    protected static BlockInteraction traceSingle(Player player, BuildState buildState, ReplaceMode replaceMode, int maxReachDistance) {
+    protected static BlockInteraction traceSingle(Player player, BuildState buildState, boolean relative, int maxReachDistance) {
         var isHoldingEmptyBucket = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && bucketItem.isEmpty();
         var isHoldingNonBlockItem = player.getItemStack(InteractionHand.MAIN).getItem() instanceof BucketItem bucketItem && !bucketItem.isEmpty();
 
@@ -33,7 +32,7 @@ public record Single() implements BlockStructure {
         var startBlockPosition = interaction.getBlockPosition();
 
         var isTracingTarget = buildState == BuildState.BREAK_BLOCK || buildState == BuildState.INTERACT_BLOCK;
-        var isReplaceBlock = replaceMode.isQuick() || player.getWorld().getBlockState(startBlockPosition).canBeReplaced(player, interaction);
+        var isReplaceBlock = relative || player.getWorld().getBlockState(startBlockPosition).canBeReplaced(player, interaction);
 
         if ((isHoldingNonBlockItem && buildState == BuildState.INTERACT_BLOCK || !isTracingTarget) && !isReplaceBlock) {
             startBlockPosition = startBlockPosition.relative(interaction.getDirection());

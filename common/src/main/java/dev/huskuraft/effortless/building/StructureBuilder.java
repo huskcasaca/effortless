@@ -7,7 +7,7 @@ import java.util.function.UnaryOperator;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.replace.ReplaceMode;
+import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
 
 public abstract class StructureBuilder {
@@ -26,7 +26,7 @@ public abstract class StructureBuilder {
 
     public abstract boolean setStructure(Player player, Structure structure);
 
-    public abstract boolean setReplaceMode(Player player, ReplaceMode replaceMode);
+    public abstract boolean setReplace(Player player, Replace replace);
 
     public abstract boolean setPattern(Player player, Pattern pattern);
 

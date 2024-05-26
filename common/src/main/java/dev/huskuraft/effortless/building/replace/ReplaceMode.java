@@ -4,8 +4,10 @@ import dev.huskuraft.effortless.building.SingleSelectFeature;
 
 public enum ReplaceMode implements SingleSelectFeature {
     DISABLED("replace_disabled"),
-    NORMAL("replace_normal"),
-    QUICK("replace_quick");
+    BLOCKS_AND_AIR("replace_blocks_and_air"),
+    BLOCKS_ONLY("replace_blocks_only"),
+    OFFHAND_ONLY("replace_offhand_only"),
+    CUSTOM_LIST_ONLY("replace_custom");
 
     private final String name;
 
@@ -13,19 +15,13 @@ public enum ReplaceMode implements SingleSelectFeature {
         this.name = name;
     }
 
-    public String getCommandName() {
-        return switch (this) {
-            case DISABLED -> "disabled";
-            case NORMAL -> "normal";
-            case QUICK -> "quick";
-        };
-    }
-
     public ReplaceMode next() {
         return switch (this) {
-            case DISABLED -> NORMAL;
-            case NORMAL -> QUICK;
-            case QUICK -> DISABLED;
+            case DISABLED -> BLOCKS_AND_AIR;
+            case BLOCKS_AND_AIR -> BLOCKS_ONLY;
+            case BLOCKS_ONLY -> OFFHAND_ONLY;
+            case OFFHAND_ONLY -> CUSTOM_LIST_ONLY;
+            case CUSTOM_LIST_ONLY -> DISABLED;
         };
     }
 
@@ -41,10 +37,6 @@ public enum ReplaceMode implements SingleSelectFeature {
 
     public boolean isReplace() {
         return this != DISABLED;
-    }
-
-    public boolean isQuick() {
-        return this == QUICK;
     }
 
 }
