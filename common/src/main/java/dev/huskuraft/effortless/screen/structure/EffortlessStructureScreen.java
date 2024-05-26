@@ -56,7 +56,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     private static final Button<Option> REPLACE_BLOCKS_AND_AIR_OPTION = button(ReplaceMode.BLOCKS_AND_AIR, true);
     private static final Button<Option> REPLACE_BLOCKS_ONLY_OPTION = button(ReplaceMode.BLOCKS_ONLY, true);
     private static final Button<Option> REPLACE_OFFHAND_ONLY_OPTION = button(ReplaceMode.OFFHAND_ONLY, true);
-    private static final Button<Option> REPLACE_CUSTOM_LIST_ONLY_OPTION = button(ReplaceMode.CUSTOM_LIST_ONLY, true);
+//    private static final Button<Option> REPLACE_CUSTOM_LIST_ONLY_OPTION = button(ReplaceMode.CUSTOM_LIST_ONLY, true);
 
     private static final Button<Option> REPLACE_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
@@ -66,7 +66,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
             case BLOCKS_AND_AIR -> REPLACE_BLOCKS_AND_AIR_OPTION;
             case BLOCKS_ONLY -> REPLACE_BLOCKS_ONLY_OPTION;
             case OFFHAND_ONLY -> REPLACE_OFFHAND_ONLY_OPTION;
-            case CUSTOM_LIST_ONLY -> REPLACE_CUSTOM_LIST_ONLY_OPTION;
+//            case CUSTOM_LIST_ONLY -> REPLACE_CUSTOM_LIST_ONLY_OPTION;
         };
     });
 

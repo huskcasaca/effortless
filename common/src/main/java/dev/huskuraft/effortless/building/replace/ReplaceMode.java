@@ -6,8 +6,8 @@ public enum ReplaceMode implements SingleSelectFeature {
     DISABLED("replace_disabled"),
     BLOCKS_AND_AIR("replace_blocks_and_air"),
     BLOCKS_ONLY("replace_blocks_only"),
-    OFFHAND_ONLY("replace_offhand_only"),
-    CUSTOM_LIST_ONLY("replace_custom");
+    OFFHAND_ONLY("replace_offhand_only");
+//    CUSTOM_LIST_ONLY("replace_custom");
 
     private final String name;
 
@@ -20,8 +20,7 @@ public enum ReplaceMode implements SingleSelectFeature {
             case DISABLED -> BLOCKS_AND_AIR;
             case BLOCKS_AND_AIR -> BLOCKS_ONLY;
             case BLOCKS_ONLY -> OFFHAND_ONLY;
-            case OFFHAND_ONLY -> CUSTOM_LIST_ONLY;
-            case CUSTOM_LIST_ONLY -> DISABLED;
+            case OFFHAND_ONLY -> DISABLED;
         };
     }
 

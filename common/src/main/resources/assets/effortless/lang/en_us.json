@@ -446,7 +446,6 @@
   "effortless.pattern_settings.item_randomizer_presets": "Item Randomizer Presets",
   "effortless.pattern_settings.presets": "%s Preset(s)",
   "effortless.action.replace_blocks_and_air": "Blocks and Air",
-  "effortless.action.replace_blocks_only": "Blocks",
-  "effortless.action.replace_offhand_only": "Offhand",
-  "effortless.action.replace_custom": "Custom"
+  "effortless.action.replace_blocks_only": "Blocks Only",
+  "effortless.action.replace_offhand_only": "Offhand Only"
 }
