@@ -566,7 +566,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     .lightMap(LightTexture.FULL_BLOCK)
                     .disableNormals()
                     .colored(Color.DARK_GRAY)
-                    .stroke(1 / 64f);
+                    .stroke(1 / 32f);
         }
 
         if (result instanceof BatchOperationResult batchOperationResult) {
@@ -585,7 +585,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                         .lightMap(LightTexture.FULL_BLOCK)
                         .disableNormals()
                         .colored(allColor)
-                        .stroke(1 / 64f);
+                        .stroke(1 / 32f);
             }
         } else {
             getEntrance().getClientManager().getOperationsRenderer().remove(uuid);
