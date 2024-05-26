@@ -8,7 +8,6 @@ import dev.huskuraft.effortless.api.core.Block;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.InteractionResult;
-import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.Property;
@@ -100,11 +99,6 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
     @Override
     public boolean isAir() {
         return refs.isAir();
-    }
-
-    @Override
-    public Item getItem() {
-        return MinecraftItem.ofNullable(refs.getBlock().asItem());
     }
 
     @Override

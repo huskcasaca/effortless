@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.FluidState;
+import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
@@ -93,5 +94,10 @@ public record MinecraftBlock(
     @Override
     public void place(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
         refs.setPlacedBy(world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference(), player.reference(), itemStack.reference());
+    }
+
+    @Override
+    public Item asItem() {
+        return MinecraftItem.ofNullable(refs.asItem());
     }
 }

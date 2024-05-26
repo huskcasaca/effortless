@@ -13,8 +13,6 @@ public interface BlockState extends StateHolder {
 
     boolean isAir();
 
-    Item getItem();
-
     boolean canBeReplaced(Player player, BlockInteraction interaction);
 
     boolean isReplaceable();
@@ -38,5 +36,9 @@ public interface BlockState extends StateHolder {
     InteractionResult use(Player player, BlockInteraction blockInteraction);
 
     boolean requiresCorrectToolForDrops();
+
+    default Item getItem() {
+        return getBlock().asItem();
+    }
 
 }
