@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.screen.structure;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import dev.huskuraft.effortless.EffortlessClient;
@@ -8,6 +9,7 @@ import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.Feature;
 import dev.huskuraft.effortless.building.Option;
@@ -33,7 +35,18 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         var entrance = EffortlessClient.getInstance();
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
         if (context.pattern().enabled()) {
-            return PATTERN_ENABLED_OPTION;
+            var name = Patterns.ENABLED.getNameText().append(" " + context.pattern().transformers().size() + " Transformers");
+            var descriptions = new ArrayList<Text>();
+            if (!context.pattern().transformers().isEmpty()) {
+                descriptions.add(Text.empty());
+            }
+            for (var transformer : context.pattern().transformers()) {
+                descriptions.add(Text.text("").append(transformer.getName().withStyle(ChatFormatting.GRAY)).append("").withStyle(ChatFormatting.GRAY));
+                for (var description : transformer.getDescriptions()) {
+                    descriptions.add(Text.text(" ").append(description.withStyle(ChatFormatting.DARK_GRAY)));
+                }
+            }
+            return button(Patterns.ENABLED, name, descriptions, true);
         } else {
             return PATTERN_DISABLED_OPTION;
         }
@@ -102,10 +115,10 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     public void onCreate() {
         super.onCreate();
 
-        setRadialSelectResponder(slot -> {
+        setRadialSelectResponder((slot, click) -> {
             getEntrance().getStructureBuilder().setStructure(getPlayer(), slot.getContent());
         });
-        setRadialOptionSelectResponder(entry -> {
+        setRadialOptionSelectResponder((entry, click) -> {
             if (entry.getContent() instanceof Settings settings) {
                 switch (settings) {
                     case SETTINGS -> {
@@ -120,11 +133,16 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                 return;
             }
             if (entry.getContent() instanceof Patterns patterns) {
+//                if (click) {
+//                    var pattern = getEntrance().getStructureBuilder().getContext(getPlayer()).pattern();
+//                    getEntrance().getStructureBuilder().setPattern(getPlayer(), pattern.withEnabled(!pattern.enabled()));
+//                    return;
+//                }
                 if (getEntrance().getStructureBuilder().checkPermission(getPlayer())) {
                     detach();
                     new EffortlessPatternScreen(getEntrance()).attach();
+                    return;
                 }
-                return;
             }
             if (entry.getContent() instanceof UndoRedo undoRedo) {
                 switch (undoRedo) {

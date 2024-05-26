@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
@@ -63,6 +64,11 @@ public record MinecraftItem(net.minecraft.world.item.Item refs) implements Item 
     @Override
     public boolean mineBlock(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
         return refs.mineBlock(itemStack.reference(), world.reference(), blockState.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), player.reference());
+    }
+
+    @Override
+    public Text getName(ItemStack itemStack) {
+        return new MinecraftText(refs.getName(itemStack.reference()));
     }
 
 }

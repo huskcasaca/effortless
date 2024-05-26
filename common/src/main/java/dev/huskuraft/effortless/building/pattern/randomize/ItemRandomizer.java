@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.pattern.randomize;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +32,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     public static final ItemRandomizer SEQUENCE_HOTBAR = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.sequence_hotbar"), Order.SEQUENCE, Target.SINGLE,  Source.HOTBAR, Collections.emptyList());
     public static final ItemRandomizer SEQUENCE_HANDS = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.sequence_hands"), Order.SEQUENCE, Target.SINGLE,  Source.HANDS, Collections.emptyList());
 
-    public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.translate("effortless.transformer.randomizer.item.empty"), Order.SEQUENCE, Target.SINGLE,  Source.CUSTOMIZE, Collections.emptyList());
+    public static final ItemRandomizer EMPTY = ItemRandomizer.create(Text.empty(), Order.SEQUENCE, Target.SINGLE,  Source.CUSTOMIZE, Collections.emptyList());
 
     public static ItemRandomizer customize(Text name, Order order, Target target, Collection<Chance<Item>> chances) {
         return create(name, order, target, Source.CUSTOMIZE, chances);
@@ -333,6 +334,59 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     }
 
     @Override
+    public Text getName() {
+        if (!name().getString().isEmpty()) {
+            return name();
+        }
+        switch (getSource()) {
+            case INVENTORY -> {
+                switch (getOrder()) {
+                    case SEQUENCE -> {
+                        return Text.translate("effortless.transformer.randomizer.item.sequence_inventory");
+                    }
+                    case RANDOM -> {
+                        return Text.translate("effortless.transformer.randomizer.item.random_inventory");
+                    }
+                }
+            }
+            case HOTBAR -> {
+                switch (getOrder()) {
+                    case SEQUENCE -> {
+                        return Text.translate("effortless.transformer.randomizer.item.sequence_hotbar");
+                    }
+                    case RANDOM -> {
+                        return Text.translate("effortless.transformer.randomizer.item.random_hotbar");
+                    }
+                }
+            }
+            case HANDS -> {
+                switch (getOrder()) {
+                    case SEQUENCE -> {
+                        return Text.translate("effortless.transformer.randomizer.item.sequence_hands");
+                    }
+                    case RANDOM -> {
+                        return Text.translate("effortless.transformer.randomizer.item.random_hands");
+                    }
+                }
+            }
+            case CUSTOMIZE -> {
+                if (getChances().isEmpty()) {
+                    return Text.translate("effortless.transformer.randomizer.item.empty");
+                }
+                switch (getOrder()) {
+                    case SEQUENCE -> {
+                        return Text.translate("effortless.transformer.randomizer.item.sequence_customized");
+                    }
+                    case RANDOM -> {
+                        return Text.translate("effortless.transformer.randomizer.item.random_customized");
+                    }
+                }
+            }
+        }
+        return name();
+    }
+
+    @Override
     public Order getOrder() {
         return order;
     }
@@ -378,6 +432,18 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
         } else {
             return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation.refactor(RefactorContext.of(source.next()))));
         }
+    }
+
+    @Override
+    public List<Text> getDescriptions() {
+        var descriptions = new ArrayList<Text>();
+//        descriptions.add(Text.text("Order ").append(order.getDisplayName()));
+//        descriptions.add(Text.text("Target ").append(target.getDisplayName()));
+//        descriptions.add(Text.text("Source ").append(source.getDisplayName()));
+        for (var chance : chances) {
+            descriptions.add(chance.content().getName().append(" x" + chance.chance()));
+        }
+        return descriptions;
     }
 
     @Override

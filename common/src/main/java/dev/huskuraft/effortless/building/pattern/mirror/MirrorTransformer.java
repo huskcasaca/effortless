@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.pattern.mirror;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -28,7 +29,7 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
     public static final int DEFAULT_SIZE = 16;
 
     public MirrorTransformer(Vector3d position, Axis axis) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.mirror"), position, axis, DEFAULT_SIZE);
+        this(UUID.randomUUID(), Text.empty(), position, axis, DEFAULT_SIZE);
     }
 
     @Override
@@ -37,6 +38,14 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
                 operation.mirror(new MirrorContext(position, getPositionBoundingBox(), axis)).mirror(new MirrorContext(position, getPositionBoundingBox(), axis)),
                 operation.mirror(new MirrorContext(position, getPositionBoundingBox(), axis))
         ));
+    }
+
+    @Override
+    public Text getName() {
+        if (!name().getString().isEmpty()) {
+            return name();
+        }
+        return Text.translate("effortless.transformer.mirror.no_name");
     }
 
     @Override
@@ -111,5 +120,10 @@ public record MirrorTransformer(UUID id, Text name, Vector3d position, Axis axis
     @Override
     public float volumeMultiplier() {
         return 2;
+    }
+
+    @Override
+    public List<Text> getDescriptions() {
+        return List.of(Text.text("Position " +  position.x() + " " + position.y() + " " + position.z()), Text.text("Axis ").append(axis.getDisplayName()), Text.text("Size " + size));
     }
 }

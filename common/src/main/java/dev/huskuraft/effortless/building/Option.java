@@ -32,7 +32,11 @@ public interface Option {
     }
 
     default Text getTooltipText() {
-        return Text.empty();
+        if (Lang.hasKey(getTooltipKey())) {
+            return Text.translate(getTooltipKey());
+        } else {
+            return Text.empty();
+        }
     }
 
     default ResourceLocation getIcon() {

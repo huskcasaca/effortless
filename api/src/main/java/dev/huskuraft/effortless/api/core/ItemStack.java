@@ -113,6 +113,10 @@ public interface ItemStack extends PlatformReference {
 
     }
 
+    default Text getName() {
+        return getItem().getName(this);
+    }
+
     enum TooltipType {
         NORMAL,
         NORMAL_CREATIVE,

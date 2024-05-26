@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.pattern.array;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -27,7 +28,7 @@ public record ArrayTransformer(UUID id, Text name, Vector3i offset, int count) i
     public static final Range1i COUNT_RANGE = new Range1i(1, Short.MAX_VALUE);
 
     public ArrayTransformer(Vector3i offset, int count) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.array"), offset, count);
+        this(UUID.randomUUID(), Text.empty(), offset, count);
     }
 
     @Override
@@ -35,6 +36,14 @@ public record ArrayTransformer(UUID id, Text name, Vector3i offset, int count) i
         return new DeferredBatchOperation(operation.getContext(), () -> IntStream.range(0, count).mapToObj(i -> {
             return operation.move(MoveContext.relative(offset.mul(i)));
         }));
+    }
+
+    @Override
+    public Text getName() {
+        if (!name().getString().isEmpty()) {
+            return name();
+        }
+        return Text.translate("effortless.transformer.array.no_name");
     }
 
     @Override
@@ -97,5 +106,10 @@ public record ArrayTransformer(UUID id, Text name, Vector3i offset, int count) i
     @Override
     public float volumeMultiplier() {
         return count;
+    }
+
+    @Override
+    public List<Text> getDescriptions() {
+        return List.of(Text.text("Offset " + offset.x() + " " + offset.y() + " " + offset.z()), Text.text("Count " + count));
     }
 }

@@ -138,7 +138,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
             sourceTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.randomizer.edit.source.tooltip.message").withStyle(ChatFormatting.GRAY)));
             for (var source : ItemRandomizer.Source.values()) {
                 sourceTooltip.add(Text.empty());
-                sourceTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text("[").append(source.getDisplayName()).append("] ").withColor(Palette.GRAY_AND_GOLD.highlight().color()).append(Text.translate("effortless.transformer.randomizer.edit.source.tooltip.%s".formatted(source.getName())).withColor(Palette.GRAY_AND_GOLD.primary().color()))));
+                sourceTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text("").append(source.getDisplayName()).append("\n").withColor(Palette.GRAY_AND_WHITE.highlight().color()).append(Text.translate("effortless.transformer.randomizer.edit.source.tooltip.%s".formatted(source.getName())).withColor(Palette.GRAY_AND_WHITE.primary().color()))));
             }
         }
         this.sourceButton.setTooltip(sourceTooltip);
@@ -155,7 +155,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
             orderTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.randomizer.edit.order.tooltip.message").withStyle(ChatFormatting.GRAY)));
             for (var order : Randomizer.Order.values()) {
                 orderTooltip.add(Text.empty());
-                orderTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text("[").append(order.getDisplayName()).append("] ").withColor(Palette.GRAY_AND_GOLD.highlight().color()).append(Text.translate("effortless.transformer.randomizer.edit.order.tooltip.%s".formatted(order.getName())).withColor(Palette.GRAY_AND_GOLD.primary().color()))));
+                orderTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text("").append(order.getDisplayName()).append("\n").withColor(Palette.GRAY_AND_WHITE.highlight().color()).append(Text.translate("effortless.transformer.randomizer.edit.order.tooltip.%s".formatted(order.getName())).withColor(Palette.GRAY_AND_WHITE.primary().color()))));
             }
         }
         this.orderButton.setTooltip(orderTooltip);
@@ -172,7 +172,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
             targetTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.randomizer.edit.target.tooltip.message").withStyle(ChatFormatting.GRAY)));
             for (var target : Randomizer.Target.values()) {
                 targetTooltip.add(Text.empty());
-                targetTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text("[").append(target.getDisplayName()).append("] ").withColor(Palette.GRAY_AND_GOLD.highlight().color()).append(Text.translate("effortless.transformer.randomizer.edit.target.tooltip.%s".formatted(target.getName())).withColor(Palette.GRAY_AND_GOLD.primary().color()))));
+                targetTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.text("").append(target.getDisplayName()).append("\n").withColor(Palette.GRAY_AND_WHITE.highlight().color()).append(Text.translate("effortless.transformer.randomizer.edit.target.tooltip.%s".formatted(target.getName())).withColor(Palette.GRAY_AND_WHITE.primary().color()))));
             }
         }
         this.targetButton.setTooltip(targetTooltip);
