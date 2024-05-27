@@ -320,12 +320,22 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var buildResult = updateContext(player, context -> {
 
             var state = switch (type) {
-                case ATTACK -> BuildState.BREAK_BLOCK;
-                case USE_ITEM -> {
-                    if (player.getItemStack(hand).isEmpty() || !player.getItemStack(hand).isBlock()) {
-                        yield BuildState.INTERACT_BLOCK;
+                case ATTACK -> {
+                    if (context.isCopyPasteEnabled()) {
+                        yield BuildState.COPY_STRUCTURE;
+                    } else {
+                        yield BuildState.BREAK_BLOCK;
                     }
-                    yield BuildState.PLACE_BLOCK;
+                }
+                case USE_ITEM -> {
+                    if (context.isCopyPasteEnabled()) {
+                        yield BuildState.COPY_STRUCTURE;
+                    } else {
+                        if (player.getItemStack(hand).isEmpty() || !player.getItemStack(hand).isBlock()) {
+                            yield BuildState.INTERACT_BLOCK;
+                        }
+                        yield BuildState.PLACE_BLOCK;
+                    }
                 }
                 case UNKNOWN -> BuildState.IDLE;
             };

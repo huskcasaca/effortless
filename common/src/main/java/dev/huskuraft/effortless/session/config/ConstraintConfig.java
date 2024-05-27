@@ -18,6 +18,10 @@ public record ConstraintConfig(
         List<ResourceLocation> blacklistedItems
 ) {
 
+    public boolean allowCopyPasteStructure() {
+        return true;
+    }
+
     public static final boolean USE_COMMANDS_DEFAULT = false;
     public static final boolean ALLOW_USE_MOD_DEFAULT = true;
     public static final boolean ALLOW_BREAK_BLOCKS_DEFAULT = true;

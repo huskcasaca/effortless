@@ -43,6 +43,10 @@ public record Context(
         Extras extras
 ) {
 
+    public boolean isCopyPasteEnabled() {
+        return true;
+    }
+
     public boolean useCorrectTool() {
         return configs().constraintConfig().useCorrectTools();
     }
@@ -279,8 +283,7 @@ public record Context(
         return switch (buildState()) {
             case IDLE -> 0;
             case BREAK_BLOCK -> configs().constraintConfig().maxBlockBreakVolume();
-            case PLACE_BLOCK -> configs().constraintConfig().maxBlockPlaceVolume();
-            case INTERACT_BLOCK -> configs().constraintConfig().maxBlockPlaceVolume();
+            case PLACE_BLOCK, INTERACT_BLOCK, COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().maxBlockPlaceVolume();
         };
     }
 
@@ -294,6 +297,7 @@ public record Context(
             case BREAK_BLOCK -> configs().constraintConfig().allowBreakBlocks();
             case PLACE_BLOCK -> configs().constraintConfig().allowPlaceBlocks();
             case INTERACT_BLOCK -> configs().constraintConfig().allowInteractBlocks();
+            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().allowCopyPasteStructure();
         };
     }
 
