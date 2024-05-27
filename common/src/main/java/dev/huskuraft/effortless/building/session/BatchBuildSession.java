@@ -1,22 +1,30 @@
 package dev.huskuraft.effortless.building.session;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.building.BuildState;
+import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.StructureBuilder;
+import dev.huskuraft.effortless.building.clipboard.BlockSnapshot;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.operation.OperationFilter;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockCopyOperation;
+import dev.huskuraft.effortless.building.operation.block.BlockCopyOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockInteractOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperation;
@@ -41,8 +49,8 @@ public class BatchBuildSession implements BuildSession {
         return builder;
     }
 
-    protected BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockPlaceOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState(), context.extras().entityState());
+    protected BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction, BlockState blockState) {
+        return new BlockPlaceOperation(world, player, context, storage, interaction, blockState, context.extras().entityState());
     }
 
     protected BlockBreakOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
@@ -65,15 +73,21 @@ public class BatchBuildSession implements BuildSession {
             case BREAK_BLOCK ->
                     context.collectInteractions().map(interaction -> createBlockBreakOperationFromHit(world, player, context, storage, interaction));
             case PLACE_BLOCK ->
-                    context.collectInteractions().map(interaction -> createBlockPlaceOperationFromHit(world, player, context, storage, interaction));
+                    context.collectInteractions().map(interaction -> createBlockPlaceOperationFromHit(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState()));
             case INTERACT_BLOCK ->
                     context.collectInteractions().map(interaction -> createBlockInteractOperationFromHit(world, player, context, storage, interaction));
             case COPY_STRUCTURE ->
                     context.collectInteractions().map(interaction -> createBlockCopyOperationFromHit(world, player, context, storage, interaction));
-            case PASTE_STRUCTURE -> null;
+            case PASTE_STRUCTURE -> {
+                yield context.clipboard().blockSnapshots().stream().map(blockSnapshot -> {
+                    var interaction = context.getInteraction(0).withBlockPosition(context.getInteraction(0).blockPosition().add(blockSnapshot.relativePosition()));
+                    return createBlockPlaceOperationFromHit(world, player, context, storage, interaction, blockSnapshot.blockState());
+                });
+            }
         });
-        operations = (BatchOperation) inHandTransformer.transform(operations);
-
+        if (context.buildState() == BuildState.PLACE_BLOCK) {
+            operations = (BatchOperation) inHandTransformer.transform(operations);
+        }
         if (context.pattern().enabled()) {
             for (var transformer : context.pattern().transformers()) {
                 if (transformer.isValid()) {
@@ -87,11 +101,30 @@ public class BatchBuildSession implements BuildSession {
     }
 
     @Override
-    public BatchOperationResult commit() {
+    public synchronized BatchOperationResult commit() {
         if (lastResult == null) {
-            this.lastResult = create(world, player, context).commit();
+            lastResult = create(world, player, context).commit();
+            saveClipboard();
         }
         return lastResult;
+    }
+
+    protected void saveClipboard() {
+        if (!world.isClient()) {
+            return;
+        }
+        if (context.buildState() != BuildState.COPY_STRUCTURE) {
+            return;
+        }
+        if (context.buildType() != BuildType.PREVIEW_ONCE) {
+            return;
+        }
+        var blockSnapshots = new ArrayList<BlockSnapshot>();
+        for (var operationResult : lastResult.getResult()) {
+            var blockCopyOperationResult = ((BlockCopyOperationResult) operationResult);
+            blockSnapshots.add(blockCopyOperationResult.getBlockSnapshot());
+        }
+        getStructureBuilder().setContext(player, getStructureBuilder().getContext(player).withClipboard(Clipboard.of(true, Collections.unmodifiableList(blockSnapshots))));
     }
 
 }

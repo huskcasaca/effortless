@@ -9,18 +9,18 @@ public class Vector3iSerializer implements NetByteBufSerializer<Vector3i> {
     @Override
     public Vector3i read(NetByteBuf byteBuf) {
         return Vector3i.at(
-                byteBuf.readInt(),
-                byteBuf.readInt(),
-                byteBuf.readInt()
+                byteBuf.readVarInt(),
+                byteBuf.readVarInt(),
+                byteBuf.readVarInt()
         );
     }
 
 
     @Override
     public void write(NetByteBuf byteBuf, Vector3i vector) {
-        byteBuf.writeInt(vector.x());
-        byteBuf.writeInt(vector.y());
-        byteBuf.writeInt(vector.z());
+        byteBuf.writeVarInt(vector.x());
+        byteBuf.writeVarInt(vector.y());
+        byteBuf.writeVarInt(vector.z());
     }
 
 }

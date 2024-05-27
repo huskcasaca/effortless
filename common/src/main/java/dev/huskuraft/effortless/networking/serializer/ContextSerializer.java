@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.networking.serializer;
 
+import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
@@ -7,6 +8,8 @@ import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.InventorySnapshot;
+import dev.huskuraft.effortless.building.clipboard.BlockSnapshot;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
@@ -24,6 +27,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                         byteBuf.readList(buffer1 -> buffer1.readNullable(new BlockInteractionSerializer()))
                 ),
                 byteBuf.read(new StructureSerializer()),
+                byteBuf.read(new ClipboardSerializer()),
                 byteBuf.read(new PatternSerializer()),
                 byteBuf.read(new ReplaceSerializer()),
                 new Context.Configs(
@@ -41,6 +45,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.writeList(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
 
         byteBuf.write(context.structure(), new StructureSerializer());
+        byteBuf.write(context.clipboard(), new ClipboardSerializer());
         byteBuf.write(context.pattern(), new PatternSerializer());
         byteBuf.write(context.replace(), new ReplaceSerializer());
 
@@ -48,6 +53,38 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.writeNullable(context.extras(), new ExtrasSerializer());
 
 
+    }
+
+    public static class ClipboardSerializer implements NetByteBufSerializer<Clipboard> {
+        @Override
+        public Clipboard read(NetByteBuf byteBuf) {
+            return new Clipboard(
+                    byteBuf.readBoolean(),
+                    byteBuf.readList(new BlockSnapshotSerializer())
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, Clipboard clipboard) {
+            byteBuf.writeBoolean(clipboard.enabled());
+            byteBuf.writeList(clipboard.blockSnapshots(), new BlockSnapshotSerializer());
+        }
+    }
+
+    public static class BlockSnapshotSerializer implements NetByteBufSerializer<BlockSnapshot> {
+        @Override
+        public BlockSnapshot read(NetByteBuf byteBuf) {
+            return new BlockSnapshot(
+                    byteBuf.read(new BlockPositionSerializer()),
+                    byteBuf.readId(BlockState.REGISTRY)
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, BlockSnapshot blockSnapshot) {
+            byteBuf.write(blockSnapshot.relativePosition(), new BlockPositionSerializer());
+            byteBuf.writeId(BlockState.REGISTRY, blockSnapshot.blockState());
+        }
     }
 
     public static class PatternSerializer implements NetByteBufSerializer<Pattern> {

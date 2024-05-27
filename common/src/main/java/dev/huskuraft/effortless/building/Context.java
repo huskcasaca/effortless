@@ -17,6 +17,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
@@ -33,6 +34,7 @@ public record Context(
         Interactions interactions,
 
         Structure structure,
+        Clipboard clipboard,
         Pattern pattern,
         Replace replace,
 
@@ -63,6 +65,7 @@ public record Context(
                 BuildType.BUILD,
                 Interactions.EMPTY,
                 Structure.DISABLED,
+                Clipboard.DISABLED,
                 Pattern.DISABLED,
                 Replace.DISABLED,
                 new Configs(
@@ -178,39 +181,43 @@ public record Context(
     }
 
     public Context withBuildState(BuildState state) {
-        return new Context(id, state, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, state, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withBuildType(BuildType type) {
-        return new Context(id, buildState, type, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, type, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withNextInteraction(BlockInteraction interaction) {
-        return new Context(id, buildState, buildType, interactions.put(interaction), structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions.put(interaction), structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withNoInteraction() {
-        return new Context(id, buildState, buildType, Interactions.EMPTY, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, Interactions.EMPTY, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withStructure(Structure structure) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
+    }
+
+    public Context withClipboard(Clipboard clipboard) {
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withPattern(Pattern pattern) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withReplace(Replace replace) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withExtras(Extras extras) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withPlayerExtras(Player player) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, new Extras(player));
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, new Extras(player));
     }
 
     public Context finalize(Player player, BuildStage stage) {
@@ -230,6 +237,7 @@ public record Context(
                 buildType,
                 Interactions.EMPTY,
                 structure,
+                clipboard,
                 pattern,
                 replace,
                 configs,
@@ -253,7 +261,7 @@ public record Context(
     }
 
     public Context withReachParams(Configs configs) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withConstraintConfig(ConstraintConfig config) {

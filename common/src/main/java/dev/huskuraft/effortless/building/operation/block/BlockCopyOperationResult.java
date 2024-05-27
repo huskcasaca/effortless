@@ -3,8 +3,8 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
-import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.building.clipboard.BlockSnapshot;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.OperationSummaryType;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
@@ -52,15 +52,8 @@ public class BlockCopyOperationResult extends BlockOperationResult {
         return getOperation().getInteraction().blockPosition().sub(getOperation().getContext().getInteractions().get(0).blockPosition());
     }
 
-    public BlockSnapShot getBlockSnapshot() {
-        return new BlockSnapShot(getRelativePosition(), getOperation().getBlockState());
-    }
-
-    public record BlockSnapShot(
-            BlockPosition relativePosition,
-            BlockState blockState
-    ) {
-
+    public BlockSnapshot getBlockSnapshot() {
+        return new BlockSnapshot(getRelativePosition(), getOperation().getBlockState());
     }
 
 }
