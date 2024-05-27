@@ -72,7 +72,7 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public Item readItem() {
-        return readId(Registry.ITEM);
+        return readId(Item.REGISTRY);
     }
 
     public <T extends PlatformReference> T readId(Registry<T> registry) {
@@ -148,7 +148,7 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public void writeItem(Item value) {
-        writeId(Registry.ITEM, value);
+        writeId(Item.REGISTRY, value);
     }
 
     public <T extends PlatformReference> void writeId(Registry<T> registry, T value) {

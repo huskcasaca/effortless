@@ -3,9 +3,12 @@ package dev.huskuraft.effortless.api.core;
 import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.fluid.Fluid;
+import dev.huskuraft.effortless.api.platform.RegistryFactory;
 import dev.huskuraft.effortless.api.sound.SoundSet;
 
 public interface BlockState extends StateHolder {
+
+    Registry<BlockState> REGISTRY = RegistryFactory.getInstance().getRegistry();
 
     BlockState mirror(Axis axis);
 

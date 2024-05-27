@@ -9,9 +9,10 @@ import com.google.common.collect.Iterators;
 
 import dev.huskuraft.effortless.api.core.Registry;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
+import net.minecraft.core.IdMap;
 
 public record MinecraftRegistry<T extends PlatformReference, R>(
-        net.minecraft.core.Registry<R> refs,
+        IdMap<R> refs,
         Function<R, T> typeConvertor
 ) implements Registry<T> {
 
