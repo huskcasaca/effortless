@@ -339,7 +339,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 }
                 case USE_ITEM -> {
                     if (context.clipboard().enabled()) {
-                        yield BuildState.COPY_STRUCTURE;
+                        yield BuildState.PASTE_STRUCTURE;
                     } else {
                         if (player.getItemStack(hand).isEmpty() || !player.getItemStack(hand).isBlock()) {
                             yield BuildState.INTERACT_BLOCK;
