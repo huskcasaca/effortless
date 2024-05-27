@@ -447,5 +447,11 @@
   "effortless.pattern_settings.presets": "%s Preset(s)",
   "effortless.action.replace_blocks_and_air": "Blocks and Air",
   "effortless.action.replace_blocks_only": "Blocks Only",
-  "effortless.action.replace_offhand_only": "Offhand Only"
+  "effortless.action.replace_offhand_only": "Offhand Only",
+  "effortless.action.replace_disabled.tooltip": "Replace air and replaceable blocks like grass only.",
+  "effortless.action.replace_blocks_and_air.tooltip": "Replace air and blocks that can be destroyed by tools.",
+  "effortless.action.replace_blocks_only.tooltip": "Replace blocks that can be destroyed by tools only.",
+  "effortless.action.replace_offhand_only.tooltip": "Replace blocks that holding in your offhand only.",
+  "effortless.action.replace_custom.tooltip": "Replace blocks that are in the custom list only."
+
 }

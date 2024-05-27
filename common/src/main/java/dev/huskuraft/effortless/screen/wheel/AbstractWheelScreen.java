@@ -547,7 +547,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
                     tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
                     tooltip.add(Text.empty());
 //                    tooltip.add(hoveredButton.getTooltip());
-                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), hoveredButton.getSummary()));
+                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), hoveredButton.getSummary().withStyle(ChatFormatting.GRAY)));
                 }
             }
             renderer.renderTooltip(getTypeface(), tooltip, mouseX, mouseY);
