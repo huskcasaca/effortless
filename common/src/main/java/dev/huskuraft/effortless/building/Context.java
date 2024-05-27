@@ -200,6 +200,10 @@ public record Context(
         return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
+    public Context withEmptyClipboard() {
+        return new Context(id, buildState, buildType, interactions, structure, clipboard.withBlockSnapshots(List.of()), pattern, replace, configs, extras);
+    }
+
     public Context withPattern(Pattern pattern) {
         return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }

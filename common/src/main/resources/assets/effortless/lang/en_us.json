@@ -452,6 +452,10 @@
   "effortless.action.replace_blocks_and_air.tooltip": "Replace air and blocks that can be destroyed by tools.",
   "effortless.action.replace_blocks_only.tooltip": "Replace blocks that can be destroyed by tools only.",
   "effortless.action.replace_offhand_only.tooltip": "Replace blocks that holding in your offhand only.",
-  "effortless.action.replace_custom.tooltip": "Replace blocks that are in the custom list only."
-
+  "effortless.action.replace_custom.tooltip": "Replace blocks that are in the custom list only.",
+  "effortless.state.copying_structure": "Copying Blocks",
+  "effortless.state.pasting_structure": "Pasting Blocks",
+  "effortless.option.clipboard": "Clipboard",
+  "effortless.action.clipboard_enabled": "Enabled",
+  "effortless.action.clipboard_disabled": "Disabled"
 }

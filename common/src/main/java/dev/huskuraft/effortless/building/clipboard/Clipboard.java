@@ -20,4 +20,8 @@ public record Clipboard(
         return new Clipboard(enabled, blockSnapshots);
     }
 
+    public boolean isEmpty() {
+        return blockSnapshots.isEmpty();
+    }
+
 }

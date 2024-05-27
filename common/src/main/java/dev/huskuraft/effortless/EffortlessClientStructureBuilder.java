@@ -94,6 +94,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public BuildResult updateContext(Player player, UnaryOperator<Context> updater) {
         var context = updater.apply(getContext(player));
         if (context.isFulfilled()) {
+            setContext(player, getContext(getPlayer()).newInteraction());
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
             var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_ONCE);
@@ -104,7 +105,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             playSoundInBatch(player, result);
 //            showBuildTooltip(context.id(), 1024, player, previewContext, result);
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
-            setContext(player, context.newInteraction());
 
             return BuildResult.COMPLETED;
         } else {
@@ -241,10 +241,18 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public Context getContextTraced(Player player) {
         var context = getContext(player).finalize(player, BuildStage.INTERACT);
         if (context.isInteractionEmpty()) {
-            if (player.getItemStack(InteractionHand.MAIN).isEmpty() || !player.getItemStack(InteractionHand.MAIN).isBlock()) {
-                context = context.withBuildState(BuildState.INTERACT_BLOCK);
+            if (context.clipboard().enabled()) {
+                if (context.clipboard().blockSnapshots().isEmpty()) {
+                    context = context.withBuildState(BuildState.COPY_STRUCTURE);
+                } else {
+                    context = context.withBuildState(BuildState.PASTE_STRUCTURE);
+                }
             } else {
-                context = context.withBuildState(BuildState.PLACE_BLOCK);
+                if (player.getItemStack(InteractionHand.MAIN).isEmpty() || !player.getItemStack(InteractionHand.MAIN).isBlock()) {
+                    context = context.withBuildState(BuildState.INTERACT_BLOCK);
+                } else {
+                    context = context.withBuildState(BuildState.PLACE_BLOCK);
+                }
             }
         }
         return context.withNextInteraction(context.trace(player));
@@ -278,7 +286,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (!checkPermission(player)) {
             return false;
         }
-        updateContext(player, context -> context.withNoInteraction().withStructure(structure));
+        updateContext(player, context -> context.withNoInteraction().withStructure(structure).withEmptyClipboard());
         if (structure.getMode().isDisabled()) {
             getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
             updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
@@ -370,6 +378,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 player.sendClientMessage(Text.translate("effortless.message.building.build_canceled"), true);
                 return context.newInteraction();
             }
+            if (context.buildState() == BuildState.IDLE && state == BuildState.COPY_STRUCTURE && !context.clipboard().isEmpty()) {
+                return context.newInteraction().withEmptyClipboard();
+            }
 
             if (!context.withBuildState(state).hasPermission()) {
                 if (state == BuildState.BREAK_BLOCK) {
@@ -394,7 +405,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
-                if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
+                if (nextContext.buildState() == BuildState.INTERACT_BLOCK) {
                     player.sendClientMessage(Text.translate("effortless.message.building.cannot_interact_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 return context.newInteraction();

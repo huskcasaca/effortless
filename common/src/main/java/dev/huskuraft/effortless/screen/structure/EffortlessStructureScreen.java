@@ -84,8 +84,8 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         }
     });
 
-    private static final Button<Option> CLIPBOARD_ENABLED_OPTION = button(Clipboards.ENABLED, false);
-    private static final Button<Option> CLIPBOARD_DISABLED_OPTION = button(Clipboards.ENABLED, true);
+    private static final Button<Option> CLIPBOARD_DISABLED_OPTION = button(Clipboards.ENABLED, false);
+    private static final Button<Option> CLIPBOARD_ENABLED_OPTION = button(Clipboards.ENABLED, true);
 
     private static final Button<Option> CLIPBOARD_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();

@@ -31,7 +31,7 @@ public record Single() implements BlockStructure {
 
         var startBlockPosition = interaction.getBlockPosition();
 
-        var isTracingTarget = buildState == BuildState.BREAK_BLOCK || buildState == BuildState.INTERACT_BLOCK;
+        var isTracingTarget = buildState == BuildState.BREAK_BLOCK || buildState == BuildState.INTERACT_BLOCK || buildState == BuildState.COPY_STRUCTURE;
         var isReplaceBlock = relative || player.getWorld().getBlockState(startBlockPosition).canBeReplaced(player, interaction);
 
         if ((isHoldingNonBlockItem && buildState == BuildState.INTERACT_BLOCK || !isTracingTarget) && !isReplaceBlock) {
