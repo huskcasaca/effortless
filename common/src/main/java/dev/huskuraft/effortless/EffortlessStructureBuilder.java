@@ -18,6 +18,7 @@ import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
+import dev.huskuraft.effortless.building.session.BatchBuildSession;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
@@ -121,7 +122,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
         } else {
             getEntrance().getChannel().sendPacket(
                     PlayerBuildTooltipPacket.buildSuccess(
-                            getOperationResultStack(player).push(context.createSession(player.getWorld(), player).commit())
+                            getOperationResultStack(player).pushSession(new BatchBuildSession(this, player, context))
                     ), player
             );
         }
@@ -146,6 +147,8 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
                 case BREAK_BLOCK -> ChatFormatting.RED;
                 case PLACE_BLOCK -> ChatFormatting.WHITE;
                 case INTERACT_BLOCK -> ChatFormatting.YELLOW;
+                case COPY_STRUCTURE -> ChatFormatting.GREEN;
+                case PASTE_STRUCTURE -> ChatFormatting.WHITE;
             }).withStyle(ChatFormatting.GOLD);
             var affectedText = Text.text("[").append(String.valueOf(result.getSuccessItemsCount())).append("]").withStyle(ChatFormatting.AQUA);
             player.sendMessage(Effortless.getMessage(countText.append(" Undo ").append(buildStateText).append(" affected ").append(affectedText).append(" blocks!")));
@@ -170,6 +173,8 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
                 case BREAK_BLOCK -> ChatFormatting.RED;
                 case PLACE_BLOCK -> ChatFormatting.WHITE;
                 case INTERACT_BLOCK -> ChatFormatting.YELLOW;
+                case COPY_STRUCTURE -> ChatFormatting.GREEN;
+                case PASTE_STRUCTURE -> ChatFormatting.WHITE;
             }).withStyle(ChatFormatting.GOLD);
             var affectedText = Text.text("[").append(String.valueOf(result.getSuccessItemsCount())).append("]").withStyle(ChatFormatting.AQUA);
             player.sendMessage(Effortless.getMessage(countText.append(" Redo ").append(buildStateText).append(" affected ").append(affectedText).append(" blocks!")));

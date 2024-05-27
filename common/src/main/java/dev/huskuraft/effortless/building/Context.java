@@ -15,15 +15,12 @@ import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
-import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
-import dev.huskuraft.effortless.building.session.BatchBuildSession;
-import dev.huskuraft.effortless.building.session.BuildSession;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
@@ -119,7 +116,7 @@ public record Context(
     }
 
     public boolean isFulfilled() {
-        return isBuilding() && structure().traceSize(this) == interactionsSize();
+        return isBuilding() && ((buildState() == BuildState.PASTE_STRUCTURE && interactionsSize() == 1) || structure().traceSize(this) == interactionsSize());
     }
 
     public int interactionsSize() {
@@ -240,10 +237,6 @@ public record Context(
         );
     }
 
-    public BuildSession createSession(World world, Player player) {
-        return new BatchBuildSession(player, this);
-    }
-
     // for build mode only
     @Nullable
     public BlockInteraction trace(Player player) {
@@ -283,7 +276,8 @@ public record Context(
         return switch (buildState()) {
             case IDLE -> 0;
             case BREAK_BLOCK -> configs().constraintConfig().maxBlockBreakVolume();
-            case PLACE_BLOCK, INTERACT_BLOCK, COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().maxBlockPlaceVolume();
+            case PLACE_BLOCK, INTERACT_BLOCK, COPY_STRUCTURE, PASTE_STRUCTURE ->
+                    configs().constraintConfig().maxBlockPlaceVolume();
         };
     }
 

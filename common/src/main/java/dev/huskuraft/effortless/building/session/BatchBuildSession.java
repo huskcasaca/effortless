@@ -10,11 +10,13 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
+import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.operation.OperationFilter;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperation;
+import dev.huskuraft.effortless.building.operation.block.BlockCopyOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockInteractOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperation;
@@ -22,14 +24,21 @@ import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public class BatchBuildSession implements BuildSession {
 
+    private final StructureBuilder builder;
     private final World world;
     private final Player player;
     private final Context context;
+    private BatchOperationResult lastResult;
 
-    public BatchBuildSession(Player player, Context context) {
+    public BatchBuildSession(StructureBuilder builder, Player player, Context context) {
+        this.builder = builder;
         this.world = player.getWorld();
         this.player = player;
         this.context = context;
+    }
+
+    private StructureBuilder getStructureBuilder() {
+        return builder;
     }
 
     protected BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
@@ -44,6 +53,10 @@ public class BatchBuildSession implements BuildSession {
         return new BlockInteractOperation(world, player, context, storage, interaction, context.extras().entityState());
     }
 
+    protected BlockCopyOperation createBlockCopyOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
+        return new BlockCopyOperation(world, player, context, storage, interaction, context.extras().entityState());
+    }
+
     protected BatchOperation create(World world, Player player, Context context) {
         var storage = Storage.create(player, context.isPreviewType()); // TODO: 21/5/24 use storage from context
         var inHandTransformer = ItemRandomizer.single(null, player.getItemStack(InteractionHand.MAIN).getItem());
@@ -55,6 +68,9 @@ public class BatchBuildSession implements BuildSession {
                     context.collectInteractions().map(interaction -> createBlockPlaceOperationFromHit(world, player, context, storage, interaction));
             case INTERACT_BLOCK ->
                     context.collectInteractions().map(interaction -> createBlockInteractOperationFromHit(world, player, context, storage, interaction));
+            case COPY_STRUCTURE ->
+                    context.collectInteractions().map(interaction -> createBlockCopyOperationFromHit(world, player, context, storage, interaction));
+            case PASTE_STRUCTURE -> null;
         });
         operations = (BatchOperation) inHandTransformer.transform(operations);
 
@@ -72,7 +88,10 @@ public class BatchBuildSession implements BuildSession {
 
     @Override
     public BatchOperationResult commit() {
-        return create(world, player, context).commit();
+        if (lastResult == null) {
+            this.lastResult = create(world, player, context).commit();
+        }
+        return lastResult;
     }
 
 }
