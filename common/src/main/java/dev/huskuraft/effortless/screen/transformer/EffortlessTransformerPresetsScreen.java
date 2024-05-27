@@ -86,10 +86,10 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
 
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.add"), button -> {
             editTransformer(switch (selectedType) {
-                case ARRAY -> ArrayTransformer.DEFAULT.withName(Text.empty()).withRandomId();
-                case MIRROR -> MirrorTransformer.DEFAULT_X.withName(Text.empty()).withRandomId();
-                case RADIAL -> RadialTransformer.DEFAULT.withName(Text.empty()).withRandomId();
-                case RANDOMIZER -> ItemRandomizer.EMPTY.withName(Text.empty()).withRandomId();
+                case ARRAY -> ArrayTransformer.DEFAULT.withRandomId();
+                case MIRROR -> MirrorTransformer.DEFAULT_X.withRandomId();
+                case RADIAL -> RadialTransformer.DEFAULT.withRandomId();
+                case RANDOMIZER -> ItemRandomizer.EMPTY.withRandomId();
             });
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.75f, 0.25f).build());
 

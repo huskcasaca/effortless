@@ -259,8 +259,9 @@ public abstract class BlockOperation implements Operation {
             return BlockOperationResult.Type.FAIL_ITEM_NOT_BLOCK;
         }
 
-        if (!player.getWorld().getBlockState(getBlockPosition()).canBeReplaced(player, getInteraction())) {
-            if (context.replaceMode().isReplace()) {
+        var blockStateInWorld = getBlockStateInWorld();
+        if (!blockStateInWorld.canBeReplaced(player, getInteraction()) || !context.replace().shouldIgnore(blockStateInWorld)) {
+            if (context.replace().shouldReplace(context, blockStateInWorld)) {
                 var destroyCheck = destroyBlockCheckOnly();
                 if (destroyCheck.fail()) {
                     return destroyCheck;
@@ -280,8 +281,8 @@ public abstract class BlockOperation implements Operation {
         }
 
         // build type
-        if (!player.getWorld().getBlockState(getBlockPosition()).canBeReplaced(player, getInteraction())) {
-            if (context.replaceMode().isReplace()) {
+        if (!getBlockStateInWorld().canBeReplaced(player, getInteraction()) || !context.replace().shouldIgnore(blockStateInWorld)) {
+            if (context.replace().shouldReplace(context, blockStateInWorld)) {
                 var destroyResult = destroyBlock();
                 if (!destroyResult.success()) {
                     return destroyResult;
@@ -407,6 +408,10 @@ public abstract class BlockOperation implements Operation {
         }
 
         return BlockOperationResult.Type.SUCCESS;
+    }
+
+    public BlockState getBlockStateInWorld() {
+        return getWorld().getBlockState(getBlockPosition());
     }
 
 

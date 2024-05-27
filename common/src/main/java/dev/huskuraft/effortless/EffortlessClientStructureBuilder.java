@@ -54,7 +54,7 @@ import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.replace.ReplaceMode;
+import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.session.BatchBuildSession;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
@@ -286,11 +286,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public boolean setReplaceMode(Player player, ReplaceMode replaceMode) {
+    public boolean setReplace(Player player, Replace replace) {
         if (!checkPermission(player)) {
             return false;
         }
-        updateContext(player, context -> context.withReplaceMode(replaceMode));
+        updateContext(player, context -> context.withReplace(replace));
         return true;
     }
 
@@ -566,7 +566,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     .lightMap(LightTexture.FULL_BLOCK)
                     .disableNormals()
                     .colored(Color.DARK_GRAY)
-                    .stroke(1 / 64f);
+                    .stroke(1 / 32f);
         }
 
         if (result instanceof BatchOperationResult batchOperationResult) {
@@ -585,7 +585,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                         .lightMap(LightTexture.FULL_BLOCK)
                         .disableNormals()
                         .colored(allColor)
-                        .stroke(1 / 64f);
+                        .stroke(1 / 32f);
             }
         } else {
             getEntrance().getClientManager().getOperationsRenderer().remove(uuid);

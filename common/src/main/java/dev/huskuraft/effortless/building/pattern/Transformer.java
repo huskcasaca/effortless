@@ -64,9 +64,7 @@ public interface Transformer {
         return id();
     }
 
-    default Text getName() {
-        return name();
-    }
+    Text getName();
 
     Operation transform(Operation operation);
 
@@ -92,6 +90,10 @@ public interface Transformer {
 
     default Transformer finalize(Player player, BuildStage stage) {
         return this;
+    }
+
+    default List<Text> getDescriptions() {
+        return List.of();
     }
 
 }

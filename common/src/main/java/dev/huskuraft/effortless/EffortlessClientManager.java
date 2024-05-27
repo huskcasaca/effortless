@@ -174,7 +174,7 @@ public final class EffortlessClientManager implements ClientManager {
         }
         if (EffortlessKeys.TOGGLE_REPLACE.getBinding().consumeClick()) {
             getEntrance().getClient().getSoundManager().playButtonClickSound();
-            getEntrance().getStructureBuilder().setReplaceMode(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replaceMode().next());
+            getEntrance().getStructureBuilder().setReplace(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replace().next());
         }
 
         if (Platform.getInstance().isDevelopment()) {

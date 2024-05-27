@@ -398,7 +398,7 @@
   "effortless.transformer.radial.no_name": "Radial Transformer",
   "effortless.pattern.no_transformer": "There is no transformer in your pattern. Patterns will not take effect.",
   "effortless.pattern.title": "Pattern",
-  "effortless.option.pattern": "Build Pattern",
+  "effortless.option.pattern": "Pattern",
   "effortless.action.pattern_disabled": "Disabled",
   "effortless.action.pattern_enabled": "Enabled",
   "effortless.option.pattern.tooltip": "Build Pattern is used to create complex shapes. You can combine different [%s] to achieve what your desired.",
@@ -444,5 +444,14 @@
   "effortless.pattern_settings.tooltip": "These settings manage the build patterns and transformer presets. They are available for client side only. \n\nThese settings are saved in file named %s in the config directory.",
   "effortless.button.done.tooltip": "This button goes back to the previous page.",
   "effortless.pattern_settings.item_randomizer_presets": "Item Randomizer Presets",
-  "effortless.pattern_settings.presets": "%s Preset(s)"
+  "effortless.pattern_settings.presets": "%s Preset(s)",
+  "effortless.action.replace_blocks_and_air": "Blocks and Air",
+  "effortless.action.replace_blocks_only": "Blocks Only",
+  "effortless.action.replace_offhand_only": "Offhand Only",
+  "effortless.action.replace_disabled.tooltip": "Replace air and replaceable blocks like grass only.",
+  "effortless.action.replace_blocks_and_air.tooltip": "Replace air and blocks that can be destroyed by tools.",
+  "effortless.action.replace_blocks_only.tooltip": "Replace blocks that can be destroyed by tools only.",
+  "effortless.action.replace_offhand_only.tooltip": "Replace blocks that holding in your offhand only.",
+  "effortless.action.replace_custom.tooltip": "Replace blocks that are in the custom list only."
+
 }

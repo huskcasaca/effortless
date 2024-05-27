@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import dev.huskuraft.effortless.EffortlessClient;
@@ -51,9 +51,8 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
     private static final double TITLE_HEIGHT = 10;
     private static final int MIN_RADIAL_SIZE = 8;
     private static final float MOUSE_SCROLL_THRESHOLD = 2;
-    private Consumer<Slot<S>> radialSelectResponder;
-    private Consumer<Slot<S>> radialSwipeResponder;
-    private Consumer<Button<B>> radialOptionSelectResponder;
+    private BiConsumer<Slot<S>, Boolean> radialSelectResponder;
+    private BiConsumer<Button<B>, Boolean> radialOptionSelectResponder;
     private List<? extends Slot<S>> radialSlots = List.of();
     private List<? extends ButtonSet<B>> leftButtons = List.of();
     private List<? extends ButtonSet<B>> rightButtons = List.of();
@@ -106,7 +105,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         };
     }
 
-    protected static <T> Button<T> button(Object id, Text name, Text category, ResourceLocation icon, Text tooltip, T content, boolean activated) {
+    protected static <T> Button<T> button(Object id, Text name, Text category, Text summary, List<Text> description, ResourceLocation icon, T content, boolean activated) {
         return new Button<>() {
 
             @Override
@@ -125,8 +124,13 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
             }
 
             @Override
-            public Text getTooltip() {
-                return tooltip;
+            public Text getSummary() {
+                return summary;
+            }
+
+            @Override
+            public List<Text> getDescriptions() {
+                return description;
             }
 
             @Override
@@ -193,8 +197,13 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
             }
 
             @Override
-            public Text getTooltip() {
-                return supplier.get().getTooltip();
+            public Text getSummary() {
+                return supplier.get().getSummary();
+            }
+
+            @Override
+            public List<Text> getDescriptions() {
+                return supplier.get().getDescriptions();
             }
 
             @Override
@@ -220,7 +229,11 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
     }
 
     public static <T extends Option> Button<T> button(T option, boolean activated) {
-        return button(option, option.getNameText(), option.getCategoryText(), option.getIcon(), option.getTooltipText(), option, activated);
+        return button(option, option.getNameText(), option.getCategoryText(), option.getTooltipText(), List.of(), option.getIcon(), option, activated);
+    }
+
+    public static <T extends Option> Button<T> button(T option, Text name, List<Text> description, boolean activated) {
+        return button(option, name, option.getCategoryText(), option.getTooltipText(), description, option.getIcon(), option, activated);
     }
 
     protected abstract Key getAssignedKey();
@@ -294,13 +307,13 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         var result = false;
         if (isActive() && isVisible()) {
             if (radialSelectResponder != null && hoveredSlot != null) {
-                radialSelectResponder.accept(hoveredSlot);
+                radialSelectResponder.accept(hoveredSlot, button == 0);
                 playRadialMenuSound();
                 result = true;
             }
 
             if (radialOptionSelectResponder != null && hoveredButton != null) {
-                radialOptionSelectResponder.accept(hoveredButton);
+                radialOptionSelectResponder.accept(hoveredButton, button == 0);
                 playRadialMenuSound();
                 result = true;
             }
@@ -327,15 +340,11 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         return true;
     }
 
-    public final void setRadialSelectResponder(Consumer<Slot<S>> consumer) {
+    public final void setRadialSelectResponder(BiConsumer<Slot<S>, Boolean> consumer) {
         this.radialSelectResponder = consumer;
     }
 
-    public final void setRadialSwipeResponder(Consumer<Slot<S>> consumer) {
-        this.radialSwipeResponder = consumer;
-    }
-
-    public final void setRadialOptionSelectResponder(Consumer<Button<B>> consumer) {
+    public final void setRadialOptionSelectResponder(BiConsumer<Button<B>, Boolean> consumer) {
         this.radialOptionSelectResponder = consumer;
     }
 
@@ -524,7 +533,13 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
             var tooltip = new ArrayList<Text>();
             tooltip.add(hoveredButton.getCategory().withStyle(ChatFormatting.WHITE));
             tooltip.add(hoveredButton.getName().withStyle(ChatFormatting.GOLD));
-            if (!hoveredButton.getTooltip().getString().isBlank()) {
+
+            if (!hoveredButton.getDescriptions().isEmpty()) {
+                tooltip.addAll(hoveredButton.getDescriptions());
+            }
+            if (!hoveredButton.getSummary().getString().isEmpty()) {
+//                tooltip.add(Text.text("Click [Left Button] for Switch").withStyle(ChatFormatting.DARK_GRAY));
+//                tooltip.add(Text.text("Click [Right Button] for More Configs").withStyle(ChatFormatting.DARK_GRAY));
                 tooltip.add(Text.empty());
                 if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
                     tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
@@ -532,7 +547,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
                     tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
                     tooltip.add(Text.empty());
 //                    tooltip.add(hoveredButton.getTooltip());
-                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), hoveredButton.getTooltip()));
+                    tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), hoveredButton.getSummary().withStyle(ChatFormatting.GRAY)));
                 }
             }
             renderer.renderTooltip(getTypeface(), tooltip, mouseX, mouseY);
@@ -593,7 +608,9 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
         Text getCategory();
 
-        Text getTooltip();
+        Text getSummary();
+
+        List<Text> getDescriptions();
 
         ResourceLocation getIcon();
 
@@ -613,8 +630,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     }
 
-    record ColorState(Color disabledColor, Color defaultColor, Color hoveredColor, Color activedColor,
-                      Color activedHoveredColor) {
+    record ColorState(Color disabledColor, Color defaultColor, Color hoveredColor, Color activedColor, Color activedHoveredColor) {
     }
 
 }

@@ -22,4 +22,6 @@ public interface Block extends PlatformReference {
 
     void place(World world, Player player, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack);
 
+    Item asItem();
+
 }

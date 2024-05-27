@@ -69,7 +69,7 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         public void onCreate() {
             this.textSlot = addWidget(new TextSlot(getEntrance(), getX(), getY(), Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, getSymbol()));
-            this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getX() + Dimens.ICON_WIDTH + 2, getY() + 2, getDisplayName()));
+            this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getX() + Dimens.ICON_WIDTH + 2, getY() + 2, getItem().getName()));
             this.slotContainer = addWidget(new SlotContainer(getEntrance(), getX() + Dimens.ICON_WIDTH + 2, getY() + 12, 0, 0));
         }
 
@@ -78,11 +78,6 @@ public final class TransformerList extends EditableEntryList<Transformer> {
             slotContainer.setWrapLines(getEntryList().getSelected() == this);
             textSlot.setMessage(getSymbol());
             slotContainer.setEntries(getData());
-        }
-
-        @Override
-        public Text getNarration() {
-            return Text.translate("narrator.select", getDisplayName());
         }
 
         protected abstract List<SlotData> getData();
@@ -94,66 +89,6 @@ public final class TransformerList extends EditableEntryList<Transformer> {
         @Override
         public int getHeight() {
             return Dimens.ICON_HEIGHT + 4;
-        }
-
-        protected Text getDisplayName() {
-            if (getItem().getName().getString().isEmpty()) {
-                if (getItem() instanceof ItemRandomizer itemRandomizer) {
-                    switch (itemRandomizer.getSource()) {
-                        case INVENTORY -> {
-                            switch (itemRandomizer.getOrder()) {
-                                case SEQUENCE -> {
-                                    return Text.translate("effortless.transformer.randomizer.item.sequence_inventory");
-                                }
-                                case RANDOM -> {
-                                    return Text.translate("effortless.transformer.randomizer.item.random_inventory");
-                                }
-                            }
-                        }
-                        case HOTBAR -> {
-                            switch (itemRandomizer.getOrder()) {
-                                case SEQUENCE -> {
-                                    return Text.translate("effortless.transformer.randomizer.item.sequence_hotbar");
-                                }
-                                case RANDOM -> {
-                                    return Text.translate("effortless.transformer.randomizer.item.random_hotbar");
-                                }
-                            }
-                        }
-                        case HANDS -> {
-                            switch (itemRandomizer.getOrder()) {
-                                case SEQUENCE -> {
-                                    return Text.translate("effortless.transformer.randomizer.item.sequence_hands");
-                                }
-                                case RANDOM -> {
-                                    return Text.translate("effortless.transformer.randomizer.item.random_hands");
-                                }
-                            }
-                        }
-                        case CUSTOMIZE -> {
-                            if (itemRandomizer.getChances().isEmpty()) {
-                                return Text.translate("effortless.transformer.randomizer.item.empty");
-                            }
-                            switch (itemRandomizer.getOrder()) {
-                                case SEQUENCE -> {
-                                    return Text.translate("effortless.transformer.randomizer.item.sequence_customized");
-                                }
-                                case RANDOM -> {
-                                    return Text.translate("effortless.transformer.randomizer.item.random_customized");
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return switch (getItem().getType()) {
-                    case ARRAY -> Text.translate("effortless.transformer.array.no_name");
-                    case MIRROR -> Text.translate("effortless.transformer.mirror.no_name");
-                    case RADIAL -> Text.translate("effortless.transformer.radial.no_name");
-                    case RANDOMIZER -> Text.empty();
-                };
-            }
-            return getItem().getName();
         }
     }
 

@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.pattern.raidal;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -37,7 +38,7 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
 //    private final boolean drawPlanes;
 
     public RadialTransformer(Vector3d position, Axis axis, int slice, int radius, int length) {
-        this(UUID.randomUUID(), Text.translate("effortless.transformer.radial"), position, axis, slice, radius, length);
+        this(UUID.randomUUID(), Text.empty(), position, axis, slice, radius, length);
     }
 
 
@@ -47,6 +48,14 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
             var angle = 2 * MathUtils.PI / slices * (i % slices);
             return operation.rotate(new RotateContext(axis, position, angle, radius, length));
         }));
+    }
+
+    @Override
+    public Text getName() {
+        if (!name().getString().isEmpty()) {
+            return name();
+        }
+        return Text.translate("effortless.transformer.radial.no_name");
     }
 
     @Override
@@ -109,5 +118,10 @@ public record RadialTransformer(UUID id, Text name, Vector3d position, Axis axis
     @Override
     public float volumeMultiplier() {
         return slices;
+    }
+
+    @Override
+    public List<Text> getDescriptions() {
+        return List.of(Text.text("Position " + position.x() + " " + position.y() + " " + position.z()), Text.text("Slices " + slices), Text.text("Radius " + radius), Text.text("Length " + length));
     }
 }
