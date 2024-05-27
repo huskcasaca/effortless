@@ -6,12 +6,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.renderer.RenderFadeEntry;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
+import dev.huskuraft.effortless.building.operation.block.BlockCopyOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockInteractOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationRenderer;
@@ -43,6 +45,7 @@ public class OperationsRenderer {
         try {
             return resultRendererMap.get(result.getClass()).apply(this, result);
         } catch (Exception e) {
+            Effortless.LOGGER.error("No renderer found for result: " + result.getClass().getSimpleName(), e);
             throw e;
         }
     }
@@ -51,6 +54,7 @@ public class OperationsRenderer {
         registerRenderer(BlockPlaceOperationResult.class, BlockOperationRenderer::new);
         registerRenderer(BlockBreakOperationResult.class, BlockOperationRenderer::new);
         registerRenderer(BlockInteractOperationResult.class, BlockOperationRenderer::new);
+        registerRenderer(BlockCopyOperationResult.class, BlockOperationRenderer::new);
 
         registerRenderer(BatchOperationResult.class, BatchOperationRenderer::new);
     }
