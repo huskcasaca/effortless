@@ -42,10 +42,6 @@ public record Context(
         Extras extras
 ) {
 
-    public boolean isCopyPasteEnabled() {
-        return true;
-    }
-
     public boolean useCorrectTool() {
         return configs().constraintConfig().useCorrectTools();
     }

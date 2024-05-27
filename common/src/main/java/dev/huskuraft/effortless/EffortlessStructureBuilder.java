@@ -15,6 +15,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildResult;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.StructureBuilder;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
@@ -86,12 +87,17 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public boolean setReplace(Player player, Replace replace) {
+    public boolean setClipboard(Player player, Clipboard clipboard) {
         return false;
     }
 
     @Override
     public boolean setPattern(Player player, Pattern pattern) {
+        return false;
+    }
+
+    @Override
+    public boolean setReplace(Player player, Replace replace) {
         return false;
     }
 

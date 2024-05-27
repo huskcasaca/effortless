@@ -119,12 +119,15 @@ public class BatchBuildSession implements BuildSession {
         if (context.buildType() != BuildType.PREVIEW_ONCE) {
             return;
         }
+        if (!context.clipboard().enabled()) {
+            return;
+        }
         var blockSnapshots = new ArrayList<BlockSnapshot>();
         for (var operationResult : lastResult.getResult()) {
             var blockCopyOperationResult = ((BlockCopyOperationResult) operationResult);
             blockSnapshots.add(blockCopyOperationResult.getBlockSnapshot());
         }
-        getStructureBuilder().setContext(player, getStructureBuilder().getContext(player).withClipboard(Clipboard.of(true, Collections.unmodifiableList(blockSnapshots))));
+        getStructureBuilder().setClipboard(player, Clipboard.of(true, Collections.unmodifiableList(blockSnapshots)));
     }
 
 }

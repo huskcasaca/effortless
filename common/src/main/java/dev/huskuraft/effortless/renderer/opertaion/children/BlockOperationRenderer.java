@@ -5,6 +5,7 @@ import java.util.List;
 
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
+import dev.huskuraft.effortless.building.operation.block.BlockCopyOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockInteractOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
@@ -18,7 +19,13 @@ public class BlockOperationRenderer implements OperationRenderer {
     public static final Color BLOCK_PLACE_FAIL_COLOR = new Color(128, 128, 128);
 
     public static final Color BLOCK_BREAK_SUCCESS_COLOR = new Color(235, 0, 0);
-    public static final Color BLOCK_BREAK_FAIL_COLOR = new Color(128, 128, 128);
+    public static final Color BLOCK_BREAK_FAIL_COLOR = BLOCK_PLACE_FAIL_COLOR;
+
+    public static final Color BLOCK_INTERACT_SUCCESS_COLOR = Color.YELLOW;
+    public static final Color BLOCK_INTERACT_FAIL_COLOR = BLOCK_PLACE_FAIL_COLOR;
+
+    public static final Color BLOCK_COPY_SUCCESS_COLOR = new Color(0, 235, 0);
+    public static final Color BLOCK_COPY_FAIL_COLOR = BLOCK_PLACE_FAIL_COLOR;
 
     private final BlockOperationResult result;
 
@@ -48,8 +55,14 @@ public class BlockOperationRenderer implements OperationRenderer {
         }
         if (blockOperationResult instanceof BlockInteractOperationResult) {
             return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> Color.YELLOW;
-                default -> BLOCK_BREAK_FAIL_COLOR;
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_INTERACT_SUCCESS_COLOR;
+                default -> BLOCK_INTERACT_FAIL_COLOR;
+            };
+        }
+        if (blockOperationResult instanceof BlockCopyOperationResult) {
+            return switch (blockOperationResult.result()) {
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_COPY_SUCCESS_COLOR;
+                default -> BLOCK_COPY_FAIL_COLOR;
             };
         }
         return null;
@@ -62,8 +75,10 @@ public class BlockOperationRenderer implements OperationRenderer {
                 BLOCK_PLACE_FAIL_COLOR,
                 BLOCK_BREAK_SUCCESS_COLOR,
                 BLOCK_BREAK_FAIL_COLOR,
-                Color.YELLOW,
-                Color.GRAY
+                BLOCK_INTERACT_SUCCESS_COLOR,
+                BLOCK_INTERACT_FAIL_COLOR,
+                BLOCK_COPY_SUCCESS_COLOR,
+                BLOCK_COPY_FAIL_COLOR
         );
     }
 

@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.function.UnaryOperator;
 
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
@@ -26,9 +27,11 @@ public abstract class StructureBuilder {
 
     public abstract boolean setStructure(Player player, Structure structure);
 
-    public abstract boolean setReplace(Player player, Replace replace);
+    public abstract boolean setClipboard(Player player, Clipboard clipboard);
 
     public abstract boolean setPattern(Player player, Pattern pattern);
+
+    public abstract boolean setReplace(Player player, Replace replace);
 
     public abstract void resetAll();
 

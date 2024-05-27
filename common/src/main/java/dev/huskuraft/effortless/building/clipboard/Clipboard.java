@@ -12,4 +12,12 @@ public record Clipboard(
         return new Clipboard(enabled, blockSnapshots);
     }
 
+    public Clipboard withEnabled(boolean enabled) {
+        return new Clipboard(enabled, blockSnapshots);
+    }
+
+    public Clipboard withBlockSnapshots(List<BlockSnapshot> blockSnapshots) {
+        return new Clipboard(enabled, blockSnapshots);
+    }
+
 }

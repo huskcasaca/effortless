@@ -44,6 +44,7 @@ import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.StructureBuilder;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.BuildTooltip;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
@@ -286,11 +287,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public boolean setReplace(Player player, Replace replace) {
+    public boolean setClipboard(Player player, Clipboard clipboard) {
         if (!checkPermission(player)) {
             return false;
         }
-        updateContext(player, context -> context.withReplace(replace));
+        updateContext(player, context -> context.withClipboard(clipboard));
         return true;
     }
 
@@ -300,6 +301,15 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             return false;
         }
         updateContext(player, context -> context.withPattern(pattern).finalize(player, BuildStage.SET_PATTERN));
+        return true;
+    }
+
+    @Override
+    public boolean setReplace(Player player, Replace replace) {
+        if (!checkPermission(player)) {
+            return false;
+        }
+        updateContext(player, context -> context.withReplace(replace));
         return true;
     }
 
@@ -321,14 +331,14 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             var state = switch (type) {
                 case ATTACK -> {
-                    if (context.isCopyPasteEnabled()) {
+                    if (context.clipboard().enabled()) {
                         yield BuildState.COPY_STRUCTURE;
                     } else {
                         yield BuildState.BREAK_BLOCK;
                     }
                 }
                 case USE_ITEM -> {
-                    if (context.isCopyPasteEnabled()) {
+                    if (context.clipboard().enabled()) {
                         yield BuildState.COPY_STRUCTURE;
                     } else {
                         if (player.getItemStack(hand).isEmpty() || !player.getItemStack(hand).isBlock()) {
