@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.building.clipboard;
 
-import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.building.Option;
 
 public enum Clipboards implements Option {
@@ -24,8 +23,4 @@ public enum Clipboards implements Option {
         return "clipboard";
     }
 
-    @Override
-    public String getTooltipKey() {
-        return Lang.asKey("option.%s.tooltip".formatted(getCategory()));
-    }
 }

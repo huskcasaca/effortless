@@ -335,7 +335,8 @@
   "effortless.option.line_direction": "Direction",
   "effortless.action.passive_mode_disabled": "Disabled",
   "effortless.action.passive_mode_enabled": "Enabled",
-  "effortless.option.passive_mode.tooltip": "If enabled, you can start to build only when pressed and hold the [%s] key. \nMake sure you have assigned the hotkey in key binds settings.",
+  "effortless.action.passive_mode_disabled.tooltip": "Start to build anytime.",
+  "effortless.action.passive_mode_enabled.tooltip": "Start to build only when hold the passive build key. \nMake sure you have assigned the hotkey in key binds settings.",
   "effortless.action.line_direction_all": "All",
   "effortless.action.line_direction_floor": "Floor",
   "effortless.action.line_direction_axis_y": "Y Axis",
@@ -401,7 +402,8 @@
   "effortless.option.pattern": "Pattern",
   "effortless.action.pattern_disabled": "Disabled",
   "effortless.action.pattern_enabled": "Enabled",
-  "effortless.option.pattern.tooltip": "Build Pattern is used to create complex shapes. You can combine different [%s] to achieve what your desired.",
+  "effortless.action.pattern_disabled.tooltip": "Create complex shapes by combining different transformers.",
+  "effortless.action.pattern_enabled.tooltip": "Create complex shapes by combining different transformers.",
   "effortless.option.pattern.tooltip.build_transformers": "Build Transformers",
   "effortless.constraint_settings.max_block_break_volume": "Max Block Break Volume",
   "effortless.constraint_settings.max_block_place_volume": "Max Block Place Volume",
@@ -457,5 +459,7 @@
   "effortless.state.pasting_structure": "Pasting Blocks",
   "effortless.option.clipboard": "Clipboard",
   "effortless.action.clipboard_enabled": "Enabled",
-  "effortless.action.clipboard_disabled": "Disabled"
+  "effortless.action.clipboard_disabled": "Disabled",
+  "effortless.action.clipboard_enabled.tooltip": "Transfer structures between worlds by copying and pasting blocks.",
+  "effortless.action.clipboard_disabled.tooltip": "Transfer structures between worlds by copying and pasting blocks."
 }
