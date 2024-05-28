@@ -209,7 +209,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         setSelectedSlots(slot(structure));
         setLeftButtons(
                 buttonSet(REPLACE_OPTION, REDO_OPTION, UNDO_OPTION),
-                buttonSet(CLIPBOARD_OPTION, PATTERN_OPTION, PASSIVE_MODE_OPTION, SETTING_OPTION)
+                buttonSet(CLIPBOARD_OPTION, PATTERN_OPTION, SETTING_OPTION)
         );
         setRightButtons(
                 structure.getSupportedFeatures().stream().map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, structure.getFeatures().contains(option))).toList())).toList()
