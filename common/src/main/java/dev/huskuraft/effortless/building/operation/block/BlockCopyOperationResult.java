@@ -45,12 +45,12 @@ public class BlockCopyOperationResult extends BlockOperationResult {
     public BlockSummary getSummaryType() {
         return switch (result) {
             case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BlockSummary.BLOCKS_COPIED;
-            case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT ->
+            case FAIL_BREAK_REPLACE_RULE, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT ->
                     BlockSummary.BLOCKS_NOT_COPYABLE;
-            case FAIL_ITEM_INSUFFICIENT -> BlockSummary.BLOCKS_ITEMS_INSUFFICIENT;
-            case FAIL_TOOL_INSUFFICIENT -> BlockSummary.BLOCKS_TOOLS_INSUFFICIENT;
+            case FAIL_PLACE_ITEM_INSUFFICIENT -> BlockSummary.BLOCKS_ITEMS_INSUFFICIENT;
+            case FAIL_BREAK_TOOL_INSUFFICIENT -> BlockSummary.BLOCKS_TOOLS_INSUFFICIENT;
             case FAIL_CONFIG_BREAK_BLACKLISTED -> BlockSummary.BLOCKS_BLACKLISTED;
-            case FAIL_CONFIG_PLACE_PERMISSION, FAIL_CONFIG_BREAK_PERMISSION, FAIL_CONFIG_INTERACT_PERMISSION ->
+            case FAIL_PLACE_NO_PERMISSION, FAIL_BREAK_NO_PERMISSION, FAIL_INTERACT_NO_PERMISSION ->
                     BlockSummary.BLOCKS_NO_PERMISSION;
             default -> BlockSummary.HIDDEN;
         };

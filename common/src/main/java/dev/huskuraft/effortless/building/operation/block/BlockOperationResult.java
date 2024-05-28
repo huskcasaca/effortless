@@ -58,24 +58,25 @@ public abstract class BlockOperationResult extends OperationResult {
         FAIL_WORLD_HEIGHT,
         FAIL_WORLD_BORDER,
         FAIL_WORLD_INCORRECT_DIM,
-
         FAIL_PLAYER_GAME_MODE,
-        FAIL_PLAYER_CANNOT_BREAK,
-        FAIL_PLAYER_CANNOT_INTERACT, // TODO: Remove
 
-        FAIL_ITEM_INSUFFICIENT,
-        FAIL_ITEM_NOT_BLOCK,
-        FAIL_TOOL_INSUFFICIENT,
+        FAIL_PLACE_ITEM_INSUFFICIENT,
+        FAIL_PLACE_ITEM_NOT_BLOCK,
+        FAIL_BREAK_TOOL_INSUFFICIENT,
+        FAIL_BREAK_REPLACE_RULE,
 
         FAIL_CONFIG_BREAK_BLACKLISTED,
         FAIL_CONFIG_PLACE_BLACKLISTED,
-        FAIL_CONFIG_BREAK_PERMISSION,
-        FAIL_CONFIG_PLACE_PERMISSION,
-        FAIL_CONFIG_INTERACT_PERMISSION,
+        FAIL_CONFIG_INTERACT_BLACKLISTED,
+        FAIL_CONFIG_COPY_BLACKLISTED,
 
-        FAIL_BLOCK_STATE_AIR,
+        FAIL_BREAK_NO_PERMISSION,
+        FAIL_PLACE_NO_PERMISSION,
+        FAIL_INTERACT_NO_PERMISSION,
+        FAIL_COPY_NO_PERMISSION,
+
         FAIL_BLOCK_STATE_NULL,
-
+        FAIL_BLOCK_STATE_AIR,
         FAIL_UNKNOWN;
 
         public boolean consumesAction() {
@@ -98,4 +99,5 @@ public abstract class BlockOperationResult extends OperationResult {
             return this == SUCCESS || this == SUCCESS_PARTIAL;
         }
     }
+
 }

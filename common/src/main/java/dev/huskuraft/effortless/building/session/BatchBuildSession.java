@@ -22,12 +22,11 @@ import dev.huskuraft.effortless.building.operation.OperationFilter;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperation;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
-import dev.huskuraft.effortless.building.operation.block.BlockBreakOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockCopyOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockCopyOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockInteractOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockOperation;
-import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperation;
+import dev.huskuraft.effortless.building.operation.block.BlockStateUpdateOperation;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public class BatchBuildSession implements BuildSession {
@@ -49,19 +48,19 @@ public class BatchBuildSession implements BuildSession {
         return builder;
     }
 
-    protected BlockPlaceOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction, BlockState blockState) {
-        return new BlockPlaceOperation(world, player, context, storage, interaction, blockState, context.extras().entityState());
+    protected BlockOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction, BlockState blockState) {
+        return new BlockStateUpdateOperation(world, player, context, storage, interaction, blockState, context.extras().entityState());
     }
 
-    protected BlockBreakOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockBreakOperation(world, player, context, storage, interaction, context.extras().entityState());
+    protected BlockOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
+        return new BlockStateUpdateOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState(), context.extras().entityState());
     }
 
-    protected BlockInteractOperation createBlockInteractOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
+    protected BlockOperation createBlockInteractOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
         return new BlockInteractOperation(world, player, context, storage, interaction, context.extras().entityState());
     }
 
-    protected BlockCopyOperation createBlockCopyOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
+    protected BlockOperation createBlockCopyOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
         return new BlockCopyOperation(world, player, context, storage, interaction, context.extras().entityState());
     }
 

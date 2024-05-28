@@ -1,7 +1,9 @@
 package dev.huskuraft.effortless.building.operation.block;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
@@ -24,6 +26,84 @@ public class BlockInteractOperation extends BlockOperation {
     ) {
         super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
     }
+
+    protected BlockOperationResult.Type interactBlock() {
+        if (getBlockState() == null) {
+            return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
+        }
+        if (!context.configs().constraintConfig().allowInteractBlocks()) {
+            return BlockOperationResult.Type.FAIL_INTERACT_NO_PERMISSION;
+        }
+
+        if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
+            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
+        }
+
+        if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
+            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
+        }
+
+        if (player.getGameMode().isSpectator()) {
+            return BlockOperationResult.Type.FAIL_PLAYER_GAME_MODE;
+        }
+
+        // world permission
+        if (!isInBorderBound()) {
+            return BlockOperationResult.Type.FAIL_WORLD_BORDER;
+        }
+
+        if (!isInHeightBound()) {
+            return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
+        }
+
+        // action permission
+        var selectedItemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
+
+//        if (selectedItemStack == null) {
+//            return BlockOperationResult.Type.FAIL_PLACE_ITEM_INSUFFICIENT;
+//        }
+//
+//
+//        if (!selectedItemStack.getItem().isBlockItem()) {
+//            return BlockOperationResult.Type.FAIL_PLACE_ITEM_NOT_BLOCK;
+//        }
+
+        if (context.isPreviewType() && player.getWorld().isClient()) {
+            selectedItemStack.decrease(1);
+            return BlockOperationResult.Type.CONSUME;
+        }
+
+        if (world.isClient()) {
+            return BlockOperationResult.Type.CONSUME;
+        }
+        // compatible layer
+        var originalItemStack = player.getItemStack(getHand());
+
+//        if (!(originalItemStack.getItem() instanceof BucketItem) && blockState.isAir()) {
+//            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
+//        }
+
+        if (selectedItemStack.isDamageableItem() && selectedItemStack.getRemainingDamage() <= context.getReservedToolDurability()) {
+            return BlockOperationResult.Type.FAIL_PLACE_ITEM_INSUFFICIENT;
+        }
+
+        player.setItemStack(getHand(), selectedItemStack);
+
+        var interacted = getBlockStateInWorld().use(player, interaction).consumesAction();
+        if (!interacted) {
+            interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();
+            if (interacted && !world.isClient()) {
+                player.awardStat(StatTypes.ITEM_USED.get(selectedItemStack.getItem()));
+            }
+        }
+        player.setItemStack(getHand(), originalItemStack);
+        if (!interacted) {
+            return BlockOperationResult.Type.FAIL_UNKNOWN;
+        }
+
+        return BlockOperationResult.Type.SUCCESS;
+    }
+
 
     @Override
     public BlockInteractOperationResult commit() {

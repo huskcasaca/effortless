@@ -4,11 +4,7 @@ import java.awt.*;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockCopyOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockInteractOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.BlockRenderLayers;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 
@@ -34,36 +30,36 @@ public class BlockOperationRenderer implements OperationRenderer {
     }
 
     public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
-        if (blockOperationResult instanceof BlockPlaceOperationResult) {
-            if (blockOperationResult.getOperation().getBlockState() == null) {
-                return Color.GRAY;
+        switch (blockOperationResult.getOperation().getType()) {
+            case UPDATE -> {
+                if (blockOperationResult.getOldBlockState() == null || blockOperationResult.getNewBlockState() == null) {
+                    return Color.GRAY;
+                }
+                if (!blockOperationResult.getOperation().getBlockState().isAir()) {
+                    return switch (blockOperationResult.result()) {
+                        case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
+                        case FAIL_PLACE_ITEM_INSUFFICIENT, FAIL_PLACE_ITEM_NOT_BLOCK -> BLOCK_PLACE_INSUFFICIENT_COLOR;
+                        default -> BLOCK_PLACE_FAIL_COLOR;
+                    };
+                }
+                return switch (blockOperationResult.result()) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_BREAK_SUCCESS_COLOR;
+                    default -> BLOCK_BREAK_FAIL_COLOR;
+                };
+
             }
-            if (blockOperationResult.getOperation().getBlockState().isAir()) {
-                return Color.GRAY;
+            case INTERACT -> {
+                return switch (blockOperationResult.result()) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_INTERACT_SUCCESS_COLOR;
+                    default -> BLOCK_INTERACT_FAIL_COLOR;
+                };
             }
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
-                case FAIL_ITEM_INSUFFICIENT -> BLOCK_PLACE_INSUFFICIENT_COLOR;
-                default -> BLOCK_PLACE_FAIL_COLOR;
-            };
-        }
-        if (blockOperationResult instanceof BlockBreakOperationResult) {
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_BREAK_SUCCESS_COLOR;
-                default -> BLOCK_BREAK_FAIL_COLOR;
-            };
-        }
-        if (blockOperationResult instanceof BlockInteractOperationResult) {
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_INTERACT_SUCCESS_COLOR;
-                default -> BLOCK_INTERACT_FAIL_COLOR;
-            };
-        }
-        if (blockOperationResult instanceof BlockCopyOperationResult) {
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_COPY_SUCCESS_COLOR;
-                default -> BLOCK_COPY_FAIL_COLOR;
-            };
+            case COPY -> {
+                return switch (blockOperationResult.result()) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_COPY_SUCCESS_COLOR;
+                    default -> BLOCK_COPY_FAIL_COLOR;
+                };
+            }
         }
         return null;
     }

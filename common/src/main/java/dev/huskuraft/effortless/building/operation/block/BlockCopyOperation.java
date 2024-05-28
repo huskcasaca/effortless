@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless.building.operation.block;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
@@ -76,9 +75,5 @@ public class BlockCopyOperation extends BlockOperation {
     @Override
     public Type getType() {
         return Type.COPY;
-    }
-
-    private ItemStack getItemStack() {
-        return world.getBlockState(interaction.getBlockPosition()).getItem().getDefaultStack();
     }
 }

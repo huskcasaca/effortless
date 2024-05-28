@@ -151,18 +151,19 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             }
             if (operationResult instanceof BlockOperationResult blockOperationResult) {
                 switch (blockOperationResult.getOperation().getType()) {
-                    case BREAK -> {
-                        if (blockOperationResult.result().success()) {
-                            soundMap.compute(TypedBlockSound.breakSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                    case UPDATE -> {
+                        if (!blockOperationResult.getOperation().getBlockState().isAir()) {
+                            if (blockOperationResult.result().success()) {
+                                soundMap.compute(TypedBlockSound.placeSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            } else {
+                                soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            }
                         } else {
-                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
-                        }
-                    }
-                    case PLACE -> {
-                        if (blockOperationResult.result().success()) {
-                            soundMap.compute(TypedBlockSound.placeSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
-                        } else {
-                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            if (blockOperationResult.result().success()) {
+                                soundMap.compute(TypedBlockSound.breakSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            } else {
+                                soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            }
                         }
                     }
                     case INTERACT -> {
