@@ -117,6 +117,12 @@ public interface ItemStack extends PlatformReference {
         return getItem().getName(this);
     }
 
+    default ItemStack withCount(int count) {
+        ItemStack itemStack = copy();
+        itemStack.setCount(count);
+        return itemStack;
+    }
+
     enum TooltipType {
         NORMAL,
         NORMAL_CREATIVE,

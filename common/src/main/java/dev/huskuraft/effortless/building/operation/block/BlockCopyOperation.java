@@ -1,8 +1,5 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.Collections;
-import java.util.List;
-
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
@@ -33,23 +30,21 @@ public class BlockCopyOperation extends BlockOperation {
     @Override
     public BlockCopyOperationResult commit() {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
-            return new BlockCopyOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, List.of(), List.of());
+            return new BlockCopyOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, null, null);
         }
-
-        var inputs = Collections.<ItemStack>emptyList();
-        var outputs = Collections.singletonList(getItemStack());
 
         var entityState = EntityState.get(player);
         EntityState.set(player, getEntityState());
-        var blockStateInWorld = getBlockStateInWorld();
+        var oldBlockState = getBlockStateInWorld();
         var result = getWorld().isClient() ? BlockOperationResult.Type.CONSUME : BlockOperationResult.Type.SUCCESS;
         EntityState.set(player, entityState);
 
         if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
+        var newBlockState = getBlockStateInWorld();
 
-        return new BlockCopyOperationResult(this, result, inputs, outputs);
+        return new BlockCopyOperationResult(this, result, oldBlockState, newBlockState);
     }
 
     @Override
@@ -80,7 +75,7 @@ public class BlockCopyOperation extends BlockOperation {
 
     @Override
     public Type getType() {
-        return Type.BREAK;
+        return Type.COPY;
     }
 
     private ItemStack getItemStack() {

@@ -1,27 +1,29 @@
 package dev.huskuraft.effortless.building.operation.block;
 
 import java.util.List;
+import java.util.Map;
 
-import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.OperationResult;
+import dev.huskuraft.effortless.building.operation.OperationTooltip;
 
 public abstract class BlockOperationResult extends OperationResult {
 
     protected final BlockOperation operation;
     protected final Type result;
-    protected final List<ItemStack> inputs;
-    protected final List<ItemStack> outputs;
+    protected final BlockState oldBlockState;
+    protected final BlockState newBlockState;
 
     protected BlockOperationResult(
             BlockOperation operation,
             Type result,
-            List<ItemStack> inputs,
-            List<ItemStack> outputs
-    ) {
+            BlockState oldBlockState,
+            BlockState newBlockState) {
         this.operation = operation;
         this.result = result;
-        this.inputs = inputs;
-        this.outputs = outputs;
+        this.oldBlockState = oldBlockState;
+        this.newBlockState = newBlockState;
     }
 
     @Override
@@ -29,16 +31,23 @@ public abstract class BlockOperationResult extends OperationResult {
         return operation;
     }
 
+    public final BlockState getOldBlockState() {
+        return oldBlockState;
+    }
+
+    public final BlockState getNewBlockState() {
+        return newBlockState;
+    }
+
+    @Override
+    public final OperationTooltip getTooltip() {
+        return OperationTooltip.build(getOperation().getContext(), getBlockSummary(), Map.of());
+    }
+
+    public abstract Map<BlockSummary, List<BlockState>> getBlockSummary();
+
     public Type result() {
         return result;
-    }
-
-    public List<ItemStack> inputs() {
-        return inputs;
-    }
-
-    public List<ItemStack> outputs() {
-        return outputs;
     }
 
     public enum Type {
@@ -52,13 +61,14 @@ public abstract class BlockOperationResult extends OperationResult {
 
         FAIL_PLAYER_GAME_MODE,
         FAIL_PLAYER_CANNOT_BREAK,
-        FAIL_PLAYER_CANNOT_INTERACT,
+        FAIL_PLAYER_CANNOT_INTERACT, // TODO: Remove
 
         FAIL_ITEM_INSUFFICIENT,
         FAIL_ITEM_NOT_BLOCK,
         FAIL_TOOL_INSUFFICIENT,
 
-        FAIL_CONFIG_BLACKLISTED,
+        FAIL_CONFIG_BREAK_BLACKLISTED,
+        FAIL_CONFIG_PLACE_BLACKLISTED,
         FAIL_CONFIG_BREAK_PERMISSION,
         FAIL_CONFIG_PLACE_PERMISSION,
         FAIL_CONFIG_INTERACT_PERMISSION,

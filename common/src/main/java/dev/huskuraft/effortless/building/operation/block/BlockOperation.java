@@ -124,11 +124,11 @@ public abstract class BlockOperation implements Operation {
         }
 
         if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_BREAK_BLACKLISTED;
         }
 
         if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_BREAK_BLACKLISTED;
         }
 
         // game mode permission
@@ -223,11 +223,11 @@ public abstract class BlockOperation implements Operation {
         }
 
         if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
         }
 
         if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
         }
 
         // game mode permission
@@ -341,11 +341,11 @@ public abstract class BlockOperation implements Operation {
         }
 
         if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
         }
 
         if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(blockState.getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
         }
 
         // game mode permission
@@ -422,7 +422,8 @@ public abstract class BlockOperation implements Operation {
     public enum Type {
         BREAK,
         PLACE,
-        INTERACT
+        INTERACT,
+        COPY
     }
 
 }

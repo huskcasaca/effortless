@@ -11,7 +11,7 @@ public final class BatchOperationRenderer implements OperationRenderer {
     private final List<OperationRenderer> previews;
 
     public BatchOperationRenderer(OperationsRenderer operationsRenderer, BatchOperationResult result) {
-        this.previews = result.getResult().stream().map(operationsRenderer::createRenderer).toList();
+        this.previews = result.getResults().stream().map(operationsRenderer::createRenderer).toList();
     }
 
     @Override

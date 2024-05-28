@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.networking.serializer;
 
-import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
@@ -76,14 +75,14 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         public BlockSnapshot read(NetByteBuf byteBuf) {
             return new BlockSnapshot(
                     byteBuf.read(new BlockPositionSerializer()),
-                    byteBuf.readId(BlockState.REGISTRY)
+                    byteBuf.readBlockState()
             );
         }
 
         @Override
         public void write(NetByteBuf byteBuf, BlockSnapshot blockSnapshot) {
             byteBuf.write(blockSnapshot.relativePosition(), new BlockPositionSerializer());
-            byteBuf.writeId(BlockState.REGISTRY, blockSnapshot.blockState());
+            byteBuf.writeBlockState(blockSnapshot.blockState());
         }
     }
 

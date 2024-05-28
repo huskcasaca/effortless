@@ -1,12 +1,9 @@
 package dev.huskuraft.effortless.building.operation.empty;
 
-import java.util.Collections;
-import java.util.List;
-
-import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.operation.OperationSummaryType;
+import dev.huskuraft.effortless.building.operation.OperationTooltip;
 
 public class EmptyOperationResult extends OperationResult {
 
@@ -21,8 +18,8 @@ public class EmptyOperationResult extends OperationResult {
     }
 
     @Override
-    public List<ItemStack> getSummary(OperationSummaryType type) {
-        return Collections.emptyList();
+    public OperationTooltip getTooltip() {
+        return OperationTooltip.build(Context.defaultSet());
     }
 
 }

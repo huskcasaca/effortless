@@ -107,7 +107,7 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
 
         @Override
         public void handle(PlayerBuildTooltipPacket packet, Player player) {
-            getEntrance().getStructureBuilder().onHistoryResultReceived(player, packet.buildTooltip());
+            getEntrance().getStructureBuilder().onHistoryResultReceived(player, packet.operationTooltip());
 
         }
 

@@ -1,10 +1,6 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.Collections;
-import java.util.List;
-
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
@@ -32,13 +28,11 @@ public class BlockInteractOperation extends BlockOperation {
     @Override
     public BlockInteractOperationResult commit() {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
-            return new BlockInteractOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, List.of(), List.of());
+            return new BlockInteractOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, null, null);
         }
 
-        var inputs = blockState != null ? Collections.singletonList(blockState.getItem().getDefaultStack()) : Collections.<ItemStack>emptyList();
-        var outputs = Collections.<ItemStack>emptyList();
-
         var entityState = EntityState.get(player);
+        var beforeBlockState = getBlockStateInWorld();
         EntityState.set(player, getEntityState());
         var result = interactBlock();
         EntityState.set(player, entityState);
@@ -46,7 +40,8 @@ public class BlockInteractOperation extends BlockOperation {
         if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
-        return new BlockInteractOperationResult(this, result, inputs, outputs);
+        var afterBlockState = getBlockStateInWorld();
+        return new BlockInteractOperationResult(this, result, beforeBlockState, afterBlockState);
     }
 
     @Override

@@ -3,7 +3,6 @@ package dev.huskuraft.effortless;
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -46,11 +44,11 @@ import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.ClientConfig;
-import dev.huskuraft.effortless.building.history.BuildTooltip;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.operation.OperationSummaryType;
+import dev.huskuraft.effortless.building.operation.OperationTooltip;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
@@ -147,7 +145,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private void playSoundInBatch(Player player, BatchOperationResult batchOperationResult) {
         var soundMap = new HashMap<TypedBlockSound, Integer>();
-        for (var operationResult : batchOperationResult.getResult()) {
+        for (var operationResult : batchOperationResult.getResults()) {
             if (soundMap.size() >= 4) {
                 break;
             }
@@ -173,6 +171,9 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                         } else {
                             soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
                         }
+                    }
+                    case COPY -> {
+                        soundMap.compute(TypedBlockSound.hitSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
                     }
                 }
             }
@@ -429,7 +430,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var result = new BatchBuildSession(this, player, context).commit();
 
         showBuildContextResult(player.getId(), 1024, player, context, result);
-        showBuildTooltip(context.id(), 1024, player, context, result);
+        showBuildTooltip(context.id(), 1024, player, result);
 
         if (context.isPreviewOnceType()) {
             playSoundInBatch(player, result);
@@ -437,23 +438,23 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     }
 
-    public void onHistoryResultReceived(Player player, BuildTooltip buildTooltip) {
-        switch (buildTooltip.type()) {
-            case BUILD_SUCCESS -> {
+    public void onHistoryResultReceived(Player player, OperationTooltip operationTooltip) {
+        switch (operationTooltip.type()) {
+            case BUILD -> {
 //        showBuildContextResult(player.getId(), 1024, player, context, result);
-                showBuildTooltip(buildTooltip.context().id(), 1024, player, buildTooltip.context(), buildTooltip.itemSummary());
+                showBuildTooltip(operationTooltip.context().id(), 1024, player, operationTooltip);
 
             }
             default -> {
 
-                if (buildTooltip.context().buildMode() == BuildMode.DISABLED) { // nothing
+                if (operationTooltip.context().buildMode() == BuildMode.DISABLED) { // nothing
                     var entries = new ArrayList<>();
-                    entries.add(buildTooltip.itemSummary().values().stream().flatMap(List::stream).toList());
-                    entries.add(Text.translate("effortless.history." + buildTooltip.type().getName()));
-                    entries.add(buildTooltip.context().buildMode().getIcon());
+                    entries.add(operationTooltip.itemStackSummary().values().stream().flatMap(List::stream).toList());
+                    entries.add(Text.translate("effortless.history." + operationTooltip.type().getName()));
+                    entries.add(operationTooltip.context().buildMode().getIcon());
                     getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1024 + 1, entries, true);
                 } else {
-                    showBuildTooltip(buildTooltip.context().id(), 1024, player, buildTooltip.context(), buildTooltip.itemSummary());
+                    showBuildTooltip(operationTooltip.context().id(), 1024, player, operationTooltip);
                 }
 
 
@@ -532,11 +533,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         if (context.getBoxVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
             showBuildContextResult(player.getId(), 0, player, context, null);
-            showBuildTooltip(player.getId(), 0, player, context, Map.of());
+            showBuildTooltip(player.getId(), 0, player, OperationTooltip.build(context));
         } else {
             var result = new BatchBuildSession(this, player, context.withBuildType(BuildType.PREVIEW)).commit();
             showBuildContextResult(player.getId(), 0, player, context, result);
-            showBuildTooltip(player.getId(), 0, player, context, result);
+            showBuildTooltip(player.getId(), 0, player, result.getTooltip());
         }
 
         showBuildMessage(player, context);
@@ -603,7 +604,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (result instanceof BatchOperationResult batchOperationResult) {
             getEntrance().getClientManager().getOperationsRenderer().showResult(uuid, result);
 
-            var resultMap = batchOperationResult.getResult().stream().filter(BlockOperationResult.class::isInstance).map(BlockOperationResult.class::cast).filter(blockOperationResult -> BlockOperationRenderer.getColorByOpResult(blockOperationResult) != null).collect(Collectors.groupingBy(BlockOperationRenderer::getColorByOpResult));
+            var resultMap = batchOperationResult.getResults().stream().filter(BlockOperationResult.class::isInstance).map(BlockOperationResult.class::cast).filter(blockOperationResult -> BlockOperationRenderer.getColorByOpResult(blockOperationResult) != null).collect(Collectors.groupingBy(BlockOperationRenderer::getColorByOpResult));
 
             for (var allColor : BlockOperationRenderer.getAllColors()) {
                 if (resultMap.get(allColor) == null) {
@@ -626,12 +627,14 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
     }
 
-    public void showBuildTooltip(UUID id, int priority, Player player, Context context, OperationResult result) {
-        var itemSummary = Arrays.stream(OperationSummaryType.values()).collect(Collectors.toMap(Function.identity(), result::getSummary));
-        showBuildTooltip(id, priority, player, context, itemSummary);
+    public void showBuildTooltip(UUID id, int priority, Player player, OperationResult result) {
+        showBuildTooltip(id, priority, player, result.getTooltip());
     }
 
-    public void showBuildTooltip(UUID id, int priority, Player player, Context context, Map<OperationSummaryType, List<ItemStack>> itemSummary) {
+    public void showBuildTooltip(UUID id, int priority, Player player, OperationTooltip tooltip) {
+        var context = tooltip.context();
+        var itemSummary = tooltip.itemStackSummary();
+
         if (player.getId() != getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuildTooltips()) {
                 return;
@@ -643,24 +646,28 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var allProducts = new ArrayList<ItemStack>();
             for (var entry : itemSummary.entrySet()) {
                 var products = entry.getValue();
-                if (!products.isEmpty()) {
-                    var color = switch (entry.getKey()) {
-                        case BLOCKS_PLACED -> ChatFormatting.WHITE;
-                        case BLOCKS_DESTROYED -> ChatFormatting.RED;
-                        case BLOCKS_INTERACTED -> ChatFormatting.YELLOW;
-                        case BLOCKS_NOT_PLACEABLE -> ChatFormatting.GRAY;
-                        case BLOCKS_NOT_BREAKABLE -> ChatFormatting.GRAY;
-                        case BLOCKS_NOT_INTERACTABLE -> ChatFormatting.GRAY;
-                        case BLOCKS_ITEMS_INSUFFICIENT -> ChatFormatting.RED;
-                        case BLOCKS_TOOLS_INSUFFICIENT -> ChatFormatting.GRAY;
-                        case BLOCKS_BLACKLISTED -> ChatFormatting.GRAY;
-                        case BLOCKS_NO_PERMISSION -> ChatFormatting.GRAY;
-                    };
-                    products = products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
-                    entries.add(products);
-                    entries.add(Text.translate("effortless.build.summary." + entry.getKey().name().toLowerCase(Locale.ROOT)).withStyle(color));
-                    allProducts.addAll(products);
+                if (products.isEmpty() || entry.getKey() == BlockSummary.HIDDEN) {
+                    continue;
                 }
+                var color = switch (entry.getKey()) {
+                    case HIDDEN -> ChatFormatting.DARK_GRAY;
+                    case BLOCKS_PLACED -> ChatFormatting.WHITE;
+                    case BLOCKS_DESTROYED -> ChatFormatting.RED;
+                    case BLOCKS_INTERACTED -> ChatFormatting.YELLOW;
+                    case BLOCKS_COPIED -> ChatFormatting.GREEN;
+                    case BLOCKS_NOT_PLACEABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_NOT_BREAKABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_NOT_INTERACTABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_NOT_COPYABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_ITEMS_INSUFFICIENT -> ChatFormatting.RED;
+                    case BLOCKS_TOOLS_INSUFFICIENT -> ChatFormatting.GRAY;
+                    case BLOCKS_BLACKLISTED -> ChatFormatting.GRAY;
+                    case BLOCKS_NO_PERMISSION -> ChatFormatting.GRAY;
+                };
+                products = products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
+                entries.add(products);
+                entries.add(Text.translate("effortless.build.summary." + entry.getKey().name().toLowerCase(Locale.ROOT)).withStyle(color));
+                allProducts.addAll(products);
             }
             if (allProducts.isEmpty()) {
                 entries.add(Text.translate("effortless.build.summary.no_item_summary").withStyle(ChatFormatting.GRAY));

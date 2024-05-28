@@ -1,8 +1,5 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.Collections;
-import java.util.List;
-
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
@@ -33,16 +30,16 @@ public class BlockBreakOperation extends BlockOperation {
     @Override
     public BlockBreakOperationResult commit() {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
-            return new BlockBreakOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, List.of(), List.of());
+            return new BlockBreakOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, null, null);
         }
 
-        var inputs = Collections.<ItemStack>emptyList();
-        var outputs = Collections.singletonList(getItemStack());
+        var oldBlockState = getBlockStateInWorld();
 
         var entityState = EntityState.get(player);
         EntityState.set(player, getEntityState());
         var result = destroyBlock();
         EntityState.set(player, entityState);
+        var newBlockState = getBlockStateInWorld();
 
         if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             if (result.success()) {
@@ -53,7 +50,7 @@ public class BlockBreakOperation extends BlockOperation {
             }
         }
 
-        return new BlockBreakOperationResult(this, result, inputs, outputs);
+        return new BlockBreakOperationResult(this, result, oldBlockState, newBlockState);
     }
 
     @Override

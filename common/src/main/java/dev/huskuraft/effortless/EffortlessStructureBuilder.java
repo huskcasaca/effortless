@@ -156,7 +156,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
                 case COPY_STRUCTURE -> ChatFormatting.GREEN;
                 case PASTE_STRUCTURE -> ChatFormatting.WHITE;
             }).withStyle(ChatFormatting.GOLD);
-            var affectedText = Text.text("[").append(String.valueOf(result.getSuccessItemsCount())).append("]").withStyle(ChatFormatting.AQUA);
+            var affectedText = Text.text("[").append(String.valueOf(result.getTooltip().getSuccessBlocks())).append("]").withStyle(ChatFormatting.AQUA);
             player.sendMessage(Effortless.getMessage(countText.append(" Undo ").append(buildStateText).append(" affected ").append(affectedText).append(" blocks!")));
         } catch (EmptyStackException e) {
             getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToUndo(), player);
@@ -182,7 +182,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
                 case COPY_STRUCTURE -> ChatFormatting.GREEN;
                 case PASTE_STRUCTURE -> ChatFormatting.WHITE;
             }).withStyle(ChatFormatting.GOLD);
-            var affectedText = Text.text("[").append(String.valueOf(result.getSuccessItemsCount())).append("]").withStyle(ChatFormatting.AQUA);
+            var affectedText = Text.text("[").append(String.valueOf(result.getTooltip().getSuccessBlocks())).append("]").withStyle(ChatFormatting.AQUA);
             player.sendMessage(Effortless.getMessage(countText.append(" Redo ").append(buildStateText).append(" affected ").append(affectedText).append(" blocks!")));
         } catch (EmptyStackException e) {
             getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToRedo(), player);

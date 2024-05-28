@@ -1,10 +1,7 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.List;
-
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
@@ -33,17 +30,10 @@ public class BlockPlaceOperation extends BlockOperation {
     @Override
     public BlockPlaceOperationResult commit() {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
-            return new BlockPlaceOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, List.of(), List.of());
+            return new BlockPlaceOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, null, null);
         }
 
-        var inputs = List.of(ItemStack.empty());
-        if (blockState != null) {
-            inputs = List.of(blockState.getItem().getDefaultStack());
-        }
-        var outputs = List.of(ItemStack.empty());
-        if (getWorld().getBlockState(getBlockPosition()) != null) {
-            outputs = List.of(getWorld().getBlockState(getBlockPosition()).getItem().getDefaultStack());
-        }
+        var oldBlockState = getWorld().getBlockState(getBlockPosition());
         var entityData = EntityState.get(player);
         EntityState.set(player, getEntityState());
         var result = placeBlock();
@@ -52,8 +42,11 @@ public class BlockPlaceOperation extends BlockOperation {
         if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
+        // FIXME: 28/5/24
+        var newBlockState = getWorld().getBlockState(getBlockPosition());
 
-        return new BlockPlaceOperationResult(this, result, inputs, outputs);
+        return new BlockPlaceOperationResult(this, result, oldBlockState, newBlockState);
+
     }
 
     @Override

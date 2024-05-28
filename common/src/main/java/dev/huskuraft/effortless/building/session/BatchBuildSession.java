@@ -123,7 +123,7 @@ public class BatchBuildSession implements BuildSession {
             return;
         }
         var blockSnapshots = new ArrayList<BlockSnapshot>();
-        for (var operationResult : lastResult.getResult()) {
+        for (var operationResult : lastResult.getResults()) {
             var blockCopyOperationResult = ((BlockCopyOperationResult) operationResult);
             blockSnapshots.add(blockCopyOperationResult.getBlockSnapshot());
         }
