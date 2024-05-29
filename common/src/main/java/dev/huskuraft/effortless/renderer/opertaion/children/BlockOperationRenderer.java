@@ -32,10 +32,10 @@ public class BlockOperationRenderer implements OperationRenderer {
     public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
         switch (blockOperationResult.getOperation().getType()) {
             case UPDATE -> {
-                if (blockOperationResult.getOldBlockState() == null || blockOperationResult.getNewBlockState() == null) {
+                if (blockOperationResult.getOriginalBlockState() == null || blockOperationResult.getCurrentBlockState() == null) {
                     return Color.GRAY;
                 }
-                if (!blockOperationResult.getOperation().getBlockState().isAir()) {
+                if (!blockOperationResult.getTargetBlockState().isAir()) {
                     return switch (blockOperationResult.result()) {
                         case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
                         case FAIL_PLACE_ITEM_INSUFFICIENT, FAIL_PLACE_ITEM_NOT_BLOCK -> BLOCK_PLACE_INSUFFICIENT_COLOR;
@@ -78,13 +78,17 @@ public class BlockOperationRenderer implements OperationRenderer {
         );
     }
 
+    public BlockOperationResult getResult() {
+        return result;
+    }
+
     @Override
     public void render(Renderer renderer, RenderContext renderContext, float deltaTick) {
         if (!renderContext.showBlockPreview()) {
             return;
         }
 
-        var operation = result.getOperation();
+        var operation = getResult().getOperation();
 
         if (renderContext.maxRenderVolume() < operation.getContext().getBoxVolume()) {
             return;
@@ -93,7 +97,7 @@ public class BlockOperationRenderer implements OperationRenderer {
         var world = operation.getWorld();
         var player = operation.getPlayer();
         var blockPosition = operation.getBlockPosition();
-        var blockState = operation.getBlockState();
+        var blockState = getResult().getRendererBlockState();
         if (world == null || blockState == null || player == null) {
             return;
         }
@@ -102,7 +106,7 @@ public class BlockOperationRenderer implements OperationRenderer {
 //            blockState = blockItem.updateBlockStateFromTag(blockPosition, level, itemStack, blockState);
 //        }
 
-        var color = getColorByOpResult(result);
+        var color = getColorByOpResult(getResult());
 
         if (color == null) {
             return;

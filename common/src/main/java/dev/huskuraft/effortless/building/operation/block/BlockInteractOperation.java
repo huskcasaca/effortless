@@ -36,11 +36,11 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_PLACE_BLACKLISTED;
         }
 
         if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_PLACE_BLACKLISTED;
         }
 
         if (player.getGameMode().isSpectator()) {

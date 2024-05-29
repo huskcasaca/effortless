@@ -12,8 +12,8 @@ import dev.huskuraft.effortless.api.renderer.RenderFadeEntry;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockCopyOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockInteractOperationResult;
+import dev.huskuraft.effortless.building.operation.block.BlockStateSaveOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockStateUpdateOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.children.BatchOperationRenderer;
 import dev.huskuraft.effortless.renderer.opertaion.children.BlockOperationRenderer;
@@ -51,7 +51,7 @@ public class OperationsRenderer {
 
     private void registerRenderers() {
         registerRenderer(BlockInteractOperationResult.class, BlockOperationRenderer::new);
-        registerRenderer(BlockCopyOperationResult.class, BlockOperationRenderer::new);
+        registerRenderer(BlockStateSaveOperationResult.class, BlockOperationRenderer::new);
         registerRenderer(BlockStateUpdateOperationResult.class, BlockOperationRenderer::new);
 
         registerRenderer(BatchOperationResult.class, BatchOperationRenderer::new);

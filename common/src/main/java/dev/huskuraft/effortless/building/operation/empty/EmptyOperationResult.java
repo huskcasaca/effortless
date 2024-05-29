@@ -1,9 +1,11 @@
 package dev.huskuraft.effortless.building.operation.empty;
 
-import dev.huskuraft.effortless.building.Context;
+import java.util.List;
+
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.operation.OperationTooltip;
 
 public class EmptyOperationResult extends OperationResult {
 
@@ -18,8 +20,8 @@ public class EmptyOperationResult extends OperationResult {
     }
 
     @Override
-    public OperationTooltip getTooltip() {
-        return OperationTooltip.build(Context.defaultSet());
+    public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
+        return List.of();
     }
 
 }

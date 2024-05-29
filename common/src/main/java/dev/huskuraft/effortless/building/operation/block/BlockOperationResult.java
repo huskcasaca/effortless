@@ -1,12 +1,7 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.List;
-import java.util.Map;
-
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.operation.OperationTooltip;
 
 public abstract class BlockOperationResult extends OperationResult {
 
@@ -31,20 +26,25 @@ public abstract class BlockOperationResult extends OperationResult {
         return operation;
     }
 
-    public final BlockState getOldBlockState() {
+    public final BlockState getOriginalBlockState() {
         return oldBlockState;
     }
 
-    public final BlockState getNewBlockState() {
+    public final BlockState getCurrentBlockState() {
         return newBlockState;
     }
 
-    @Override
-    public final OperationTooltip getTooltip() {
-        return OperationTooltip.build(getOperation().getContext(), getBlockSummary(), Map.of());
+    public final BlockState getTargetBlockState() {
+        return getOperation().getBlockState();
     }
 
-    public abstract Map<BlockSummary, List<BlockState>> getBlockSummary();
+    public final BlockState getRendererBlockState() {
+        if (!getOriginalBlockState().isAir() && getCurrentBlockState().isAir()) {
+            return getOriginalBlockState();
+        } else {
+            return getTargetBlockState();
+        }
+    }
 
     public Type result() {
         return result;
@@ -65,10 +65,10 @@ public abstract class BlockOperationResult extends OperationResult {
         FAIL_BREAK_TOOL_INSUFFICIENT,
         FAIL_BREAK_REPLACE_RULE,
 
-        FAIL_CONFIG_BREAK_BLACKLISTED,
-        FAIL_CONFIG_PLACE_BLACKLISTED,
-        FAIL_CONFIG_INTERACT_BLACKLISTED,
-        FAIL_CONFIG_COPY_BLACKLISTED,
+        FAIL_BREAK_BLACKLISTED,
+        FAIL_PLACE_BLACKLISTED,
+        FAIL_INTERACT_BLACKLISTED,
+        FAIL_COPY_BLACKLISTED,
 
         FAIL_BREAK_NO_PERMISSION,
         FAIL_PLACE_NO_PERMISSION,

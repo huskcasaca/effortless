@@ -25,7 +25,7 @@ public final class EmptyOperation implements Operation {
 
     @Override
     public Context getContext() {
-        return null;
+        return Context.defaultSet();
     }
 
     @Override

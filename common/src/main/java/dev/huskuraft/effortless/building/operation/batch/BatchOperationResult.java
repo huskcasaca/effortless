@@ -1,14 +1,14 @@
 package dev.huskuraft.effortless.building.operation.batch;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.operation.OperationTooltip;
 
 public class BatchOperationResult extends OperationResult {
 
@@ -49,13 +49,8 @@ public class BatchOperationResult extends OperationResult {
     }
 
     @Override
-    public OperationTooltip getTooltip() {
-        return new OperationTooltip(
-                OperationTooltip.Type.BUILD,
-                getOperation().getContext(),
-                getResults().stream().map(OperationResult::getTooltip).map(OperationTooltip::blockSummary).map(Map::entrySet).flatMap(Set::stream).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, BatchOperationResult::merge, LinkedHashMap::new)),
-                getResults().stream().map(OperationResult::getTooltip).map(OperationTooltip::entitySummary).map(Map::entrySet).flatMap(Set::stream).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, BatchOperationResult::merge, LinkedHashMap::new))
-        );
+    public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
+        return result.stream().map(result -> result.getBlockSummary(blockSummary)).flatMap(List::stream).collect(Collectors.toList());
     }
 
 }

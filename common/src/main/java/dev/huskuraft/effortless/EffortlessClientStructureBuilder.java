@@ -45,7 +45,6 @@ import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
-import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.OperationTooltip;
@@ -647,11 +646,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var allProducts = new ArrayList<ItemStack>();
             for (var entry : itemSummary.entrySet()) {
                 var products = entry.getValue();
-                if (products.isEmpty() || entry.getKey() == BlockSummary.HIDDEN) {
-                    continue;
-                }
                 var color = switch (entry.getKey()) {
-                    case HIDDEN -> ChatFormatting.DARK_GRAY;
                     case BLOCKS_PLACED -> ChatFormatting.WHITE;
                     case BLOCKS_DESTROYED -> ChatFormatting.RED;
                     case BLOCKS_INTERACTED -> ChatFormatting.YELLOW;

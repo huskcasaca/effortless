@@ -12,9 +12,9 @@ import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
 
-public class BlockCopyOperation extends BlockOperation {
+public class BlockStateSaveOperation extends BlockOperation {
 
-    public BlockCopyOperation(
+    public BlockStateSaveOperation(
             World world,
             Player player,
             Context context,
@@ -27,9 +27,9 @@ public class BlockCopyOperation extends BlockOperation {
 
 
     @Override
-    public BlockCopyOperationResult commit() {
+    public BlockStateSaveOperationResult commit() {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
-            return new BlockCopyOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, null, null);
+            return new BlockStateSaveOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, null, null);
         }
 
         var entityState = EntityState.get(player);
@@ -43,12 +43,12 @@ public class BlockCopyOperation extends BlockOperation {
         }
         var newBlockState = getBlockStateInWorld();
 
-        return new BlockCopyOperationResult(this, result, oldBlockState, newBlockState);
+        return new BlockStateSaveOperationResult(this, result, oldBlockState, newBlockState);
     }
 
     @Override
     public Operation move(MoveContext moveContext) {
-        return new BlockCopyOperation(world, player, context, storage, moveContext.move(interaction), entityState);
+        return new BlockStateSaveOperation(world, player, context, storage, moveContext.move(interaction), entityState);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class BlockCopyOperation extends BlockOperation {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation();
         }
-        return new BlockCopyOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(entityState));
+        return new BlockStateSaveOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(entityState));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class BlockCopyOperation extends BlockOperation {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation();
         }
-        return new BlockCopyOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(entityState));
+        return new BlockStateSaveOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(entityState));
     }
 
     @Override

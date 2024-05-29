@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless.building.operation.block;
 
 import java.util.List;
-import java.util.Map;
 
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.building.operation.BlockSummary;
@@ -31,28 +30,79 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
                 operation.getContext(),
                 operation.getStorage(),
                 operation.getInteraction(),
-                getOldBlockState(),
+                getOriginalBlockState(),
                 operation.getEntityState()
         );
     }
 
     @Override
-    public Map<BlockSummary, List<BlockState>> getBlockSummary() {
-        return Map.of();
-    }
+    public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
+        switch (blockSummary) {
+            case BLOCKS_PLACED -> {
+                switch (result) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                        return List.of(getOperation().getBlockState());
+                    }
+                };
+            }
+            case BLOCKS_DESTROYED -> {
+                switch (result) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                        return List.of(getOriginalBlockState());
+                    }
+                }
+            }
+            case BLOCKS_NOT_PLACEABLE -> {
+                switch (result) {
+                    case FAIL_PLACE_BLACKLISTED -> {
+                        return List.of(getOperation().getBlockState());
+                    }
+                }
 
-    public BlockSummary getSummaryType() {
-        return switch (result) {
-            case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BlockSummary.BLOCKS_DESTROYED;
-            case FAIL_BREAK_REPLACE_RULE, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT ->
-                    BlockSummary.BLOCKS_NOT_BREAKABLE;
-            case FAIL_PLACE_ITEM_INSUFFICIENT -> BlockSummary.BLOCKS_ITEMS_INSUFFICIENT;
-            case FAIL_BREAK_TOOL_INSUFFICIENT -> BlockSummary.BLOCKS_TOOLS_INSUFFICIENT;
-            case FAIL_CONFIG_BREAK_BLACKLISTED -> BlockSummary.BLOCKS_BLACKLISTED;
-            case FAIL_PLACE_NO_PERMISSION, FAIL_BREAK_NO_PERMISSION, FAIL_INTERACT_NO_PERMISSION ->
-                    BlockSummary.BLOCKS_NO_PERMISSION;
-            default -> BlockSummary.HIDDEN;
-        };
+            }
+            case BLOCKS_NOT_BREAKABLE -> {
+                switch (result) {
+                    case FAIL_BREAK_REPLACE_RULE -> {
+                        return List.of(getOriginalBlockState());
+                    }
+                }
+            }
+            case BLOCKS_ITEMS_INSUFFICIENT -> {
+                switch (result) {
+                    case FAIL_PLACE_ITEM_INSUFFICIENT -> {
+                        return List.of(getOperation().getBlockState());
+                    }
+                }
+            }
+            case BLOCKS_TOOLS_INSUFFICIENT -> {
+                switch (result) {
+                    case FAIL_BREAK_TOOL_INSUFFICIENT -> {
+                        return List.of(getOriginalBlockState());
+                    }
+                }
+            }
+            case BLOCKS_BLACKLISTED -> {
+                switch (result) {
+                    case FAIL_BREAK_BLACKLISTED -> {
+                        return List.of(getOriginalBlockState());
+                    }
+                    case FAIL_PLACE_BLACKLISTED -> {
+                        return List.of(getOperation().getBlockState());
+                    }
+                }
+            }
+            case BLOCKS_NO_PERMISSION -> {
+                switch (result) {
+                    case FAIL_BREAK_NO_PERMISSION -> {
+                        return List.of(getOriginalBlockState());
+                    }
+                    case FAIL_PLACE_NO_PERMISSION -> {
+                        return List.of(getOperation().getBlockState());
+                    }
+                }
+            }
+        }
+        return List.of();
     }
 
 

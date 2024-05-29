@@ -62,10 +62,10 @@ public class BlockStateUpdateOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
         }
         if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_PLACE_BLACKLISTED;
         }
         if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_PLACE_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_PLACE_BLACKLISTED;
         }
         if (player.getGameMode().isSpectator()) {
             return BlockOperationResult.Type.FAIL_PLAYER_GAME_MODE;
@@ -84,10 +84,10 @@ public class BlockStateUpdateOperation extends BlockOperation {
             return BlockOperationResult.Type.FAIL_BREAK_NO_PERMISSION;
         }
         if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockStateInWorld().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BREAK_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_BREAK_BLACKLISTED;
         }
         if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockStateInWorld().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_CONFIG_BREAK_BLACKLISTED;
+            return BlockOperationResult.Type.FAIL_BREAK_BLACKLISTED;
         }
 
         if (!getBlockState().isAir()) { // check replace for place
@@ -207,11 +207,12 @@ public class BlockStateUpdateOperation extends BlockOperation {
         var newBlockState = getBlockStateInWorld();
 
         if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
-            if (result.success()) {
-                getPlayer().getClient().getParticleEngine().destroy(getBlockPosition(), getBlockState());
-            } else {
+            if (getBlockState().isAir()) {
                 getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
-
+            } else {
+                if (result.success()) {
+                    getPlayer().getClient().getParticleEngine().destroy(getBlockPosition(), getBlockState());
+                }
             }
         }
         return new BlockStateUpdateOperationResult(this, result, oldBlockState, newBlockState);
