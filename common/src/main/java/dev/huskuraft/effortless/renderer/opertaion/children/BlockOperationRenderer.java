@@ -32,10 +32,10 @@ public class BlockOperationRenderer implements OperationRenderer {
     public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
         switch (blockOperationResult.getOperation().getType()) {
             case UPDATE -> {
-                if (blockOperationResult.getOriginalBlockState() == null || blockOperationResult.getCurrentBlockState() == null) {
+                if (blockOperationResult.getBlockStateBeforeOp() == null || blockOperationResult.getBlockStateAfterOp() == null) {
                     return Color.GRAY;
                 }
-                if (!blockOperationResult.getTargetBlockState().isAir()) {
+                if (!blockOperationResult.getBlockStateInOp().isAir()) {
                     return switch (blockOperationResult.result()) {
                         case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
                         case FAIL_PLACE_ITEM_INSUFFICIENT, FAIL_PLACE_ITEM_NOT_BLOCK -> BLOCK_PLACE_INSUFFICIENT_COLOR;
@@ -97,7 +97,7 @@ public class BlockOperationRenderer implements OperationRenderer {
         var world = operation.getWorld();
         var player = operation.getPlayer();
         var blockPosition = operation.getBlockPosition();
-        var blockState = getResult().getRendererBlockState();
+        var blockState = getResult().getBlockStateForRenderer();
         if (world == null || blockState == null || player == null) {
             return;
         }

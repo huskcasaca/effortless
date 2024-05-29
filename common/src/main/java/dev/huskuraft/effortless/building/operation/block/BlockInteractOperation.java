@@ -27,33 +27,33 @@ public class BlockInteractOperation extends BlockOperation {
         super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
     }
 
-    protected BlockOperationResult.Type interactBlock() {
+    protected BlockOperationResultType interactBlock() {
         if (getBlockState() == null) {
-            return BlockOperationResult.Type.FAIL_BLOCK_STATE_NULL;
+            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
         }
         if (!context.configs().constraintConfig().allowInteractBlocks()) {
-            return BlockOperationResult.Type.FAIL_INTERACT_NO_PERMISSION;
+            return BlockOperationResultType.FAIL_INTERACT_NO_PERMISSION;
         }
 
         if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_PLACE_BLACKLISTED;
+            return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
         }
 
         if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResult.Type.FAIL_PLACE_BLACKLISTED;
+            return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
         }
 
         if (player.getGameMode().isSpectator()) {
-            return BlockOperationResult.Type.FAIL_PLAYER_GAME_MODE;
+            return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
         }
 
         // world permission
         if (!isInBorderBound()) {
-            return BlockOperationResult.Type.FAIL_WORLD_BORDER;
+            return BlockOperationResultType.FAIL_WORLD_BORDER;
         }
 
         if (!isInHeightBound()) {
-            return BlockOperationResult.Type.FAIL_WORLD_HEIGHT;
+            return BlockOperationResultType.FAIL_WORLD_HEIGHT;
         }
 
         // action permission
@@ -70,11 +70,11 @@ public class BlockInteractOperation extends BlockOperation {
 
         if (context.isPreviewType() && player.getWorld().isClient()) {
             selectedItemStack.decrease(1);
-            return BlockOperationResult.Type.CONSUME;
+            return BlockOperationResultType.CONSUME;
         }
 
         if (world.isClient()) {
-            return BlockOperationResult.Type.CONSUME;
+            return BlockOperationResultType.CONSUME;
         }
         // compatible layer
         var originalItemStack = player.getItemStack(getHand());
@@ -84,7 +84,7 @@ public class BlockInteractOperation extends BlockOperation {
 //        }
 
         if (selectedItemStack.isDamageableItem() && selectedItemStack.getRemainingDamage() <= context.getReservedToolDurability()) {
-            return BlockOperationResult.Type.FAIL_PLACE_ITEM_INSUFFICIENT;
+            return BlockOperationResultType.FAIL_PLACE_ITEM_INSUFFICIENT;
         }
 
         player.setItemStack(getHand(), selectedItemStack);
@@ -98,17 +98,17 @@ public class BlockInteractOperation extends BlockOperation {
         }
         player.setItemStack(getHand(), originalItemStack);
         if (!interacted) {
-            return BlockOperationResult.Type.FAIL_UNKNOWN;
+            return BlockOperationResultType.FAIL_UNKNOWN;
         }
 
-        return BlockOperationResult.Type.SUCCESS;
+        return BlockOperationResultType.SUCCESS;
     }
 
 
     @Override
     public BlockInteractOperationResult commit() {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
-            return new BlockInteractOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, null, null);
+            return new BlockInteractOperationResult(this, BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM, null, null);
         }
 
         var entityState = EntityState.get(player);
@@ -132,7 +132,7 @@ public class BlockInteractOperation extends BlockOperation {
     @Override
     public Operation mirror(MirrorContext mirrorContext) {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
-            return new EmptyOperation();
+            return new EmptyOperation(context);
         }
         return new BlockInteractOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(entityState));
     }
@@ -140,7 +140,7 @@ public class BlockInteractOperation extends BlockOperation {
     @Override
     public Operation rotate(RotateContext rotateContext) {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
-            return new EmptyOperation();
+            return new EmptyOperation(context);
         }
         return new BlockInteractOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(entityState));
     }

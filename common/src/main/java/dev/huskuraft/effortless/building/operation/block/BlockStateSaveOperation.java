@@ -29,13 +29,13 @@ public class BlockStateSaveOperation extends BlockOperation {
     @Override
     public BlockStateSaveOperationResult commit() {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
-            return new BlockStateSaveOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, null, null);
+            return new BlockStateSaveOperationResult(this, BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM, null, null);
         }
 
         var entityState = EntityState.get(player);
         EntityState.set(player, getEntityState());
         var oldBlockState = getBlockStateInWorld();
-        var result = getWorld().isClient() ? BlockOperationResult.Type.CONSUME : BlockOperationResult.Type.SUCCESS;
+        var result = getWorld().isClient() ? BlockOperationResultType.CONSUME : BlockOperationResultType.SUCCESS;
         EntityState.set(player, entityState);
 
         if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
@@ -54,7 +54,7 @@ public class BlockStateSaveOperation extends BlockOperation {
     @Override
     public Operation mirror(MirrorContext mirrorContext) {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
-            return new EmptyOperation();
+            return new EmptyOperation(context);
         }
         return new BlockStateSaveOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(entityState));
     }
@@ -62,7 +62,7 @@ public class BlockStateSaveOperation extends BlockOperation {
     @Override
     public Operation rotate(RotateContext rotateContext) {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
-            return new EmptyOperation();
+            return new EmptyOperation(context);
         }
         return new BlockStateSaveOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(entityState));
     }

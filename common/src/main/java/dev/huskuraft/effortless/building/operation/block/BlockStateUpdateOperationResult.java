@@ -11,17 +11,17 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
 
     public BlockStateUpdateOperationResult(
             BlockStateUpdateOperation operation,
-            Type result,
-            BlockState oldBlockState,
-            BlockState newBlockState
+            BlockOperationResultType result,
+            BlockState blockStateBeforeOp,
+            BlockState blockStateAfterOp
     ) {
-        super(operation, result, oldBlockState, newBlockState);
+        super(operation, result, blockStateBeforeOp, blockStateAfterOp);
     }
 
     @Override
     public Operation getReverseOperation() {
         if (result().fail()) {
-            return new EmptyOperation();
+            return new EmptyOperation(operation.getContext());
         }
 
         return new BlockStateUpdateOperation(
@@ -30,7 +30,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
                 operation.getContext(),
                 operation.getStorage(),
                 operation.getInteraction(),
-                getOriginalBlockState(),
+                getBlockStateBeforeOp(),
                 operation.getEntityState()
         );
     }
@@ -48,7 +48,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             case BLOCKS_DESTROYED -> {
                 switch (result) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
@@ -63,7 +63,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             case BLOCKS_NOT_BREAKABLE -> {
                 switch (result) {
                     case FAIL_BREAK_REPLACE_RULE -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
@@ -77,14 +77,14 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             case BLOCKS_TOOLS_INSUFFICIENT -> {
                 switch (result) {
                     case FAIL_BREAK_TOOL_INSUFFICIENT -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
             case BLOCKS_BLACKLISTED -> {
                 switch (result) {
                     case FAIL_BREAK_BLACKLISTED -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                     case FAIL_PLACE_BLACKLISTED -> {
                         return List.of(getOperation().getBlockState());
@@ -94,7 +94,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             case BLOCKS_NO_PERMISSION -> {
                 switch (result) {
                     case FAIL_BREAK_NO_PERMISSION -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                     case FAIL_PLACE_NO_PERMISSION -> {
                         return List.of(getOperation().getBlockState());

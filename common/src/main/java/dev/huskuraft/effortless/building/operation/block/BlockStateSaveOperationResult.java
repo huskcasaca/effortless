@@ -13,16 +13,16 @@ public class BlockStateSaveOperationResult extends BlockOperationResult {
 
     public BlockStateSaveOperationResult(
             BlockStateSaveOperation operation,
-            Type result,
-            BlockState oldBlockState,
-            BlockState newBlockState
+            BlockOperationResultType result,
+            BlockState blockStateBeforeOp,
+            BlockState blockStateAfterOp
     ) {
-        super(operation, result, oldBlockState, newBlockState);
+        super(operation, result, blockStateBeforeOp, blockStateAfterOp);
     }
 
     @Override
     public Operation getReverseOperation() {
-        return new EmptyOperation();
+        return new EmptyOperation(operation.getContext());
     }
 
     public BlockPosition getRelativePosition() {
@@ -39,28 +39,28 @@ public class BlockStateSaveOperationResult extends BlockOperationResult {
             case BLOCKS_COPIED -> {
                 switch (result) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
             case BLOCKS_NOT_COPYABLE -> {
                 switch (result) {
                     case FAIL_BREAK_REPLACE_RULE, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
             case BLOCKS_BLACKLISTED -> {
                 switch (result) {
                     case FAIL_COPY_BLACKLISTED -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
             case BLOCKS_NO_PERMISSION -> {
                 switch (result) {
                     case FAIL_COPY_NO_PERMISSION -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }

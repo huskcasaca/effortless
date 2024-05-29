@@ -11,16 +11,16 @@ public class BlockInteractOperationResult extends BlockOperationResult {
 
     public BlockInteractOperationResult(
             BlockInteractOperation operation,
-            Type result,
-            BlockState oldBlockState,
-            BlockState newBlockState
+            BlockOperationResultType result,
+            BlockState blockStateBeforeOp,
+            BlockState blockStateAfterOp
     ) {
-        super(operation, result, oldBlockState, newBlockState);
+        super(operation, result, blockStateBeforeOp, blockStateAfterOp);
     }
 
     @Override
     public Operation getReverseOperation() {
-        return new EmptyOperation();
+        return new EmptyOperation(operation.getContext());
     }
 
     @Override
@@ -29,35 +29,35 @@ public class BlockInteractOperationResult extends BlockOperationResult {
             case BLOCKS_INTERACTED -> {
                 switch (result) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
             case BLOCKS_NOT_INTERACTABLE -> {
                 switch (result) {
                     case FAIL_BREAK_REPLACE_RULE, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
             case BLOCKS_BLACKLISTED -> {
                 switch (result) {
                     case FAIL_INTERACT_BLACKLISTED -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
             case BLOCKS_NO_PERMISSION -> {
                 switch (result) {
                     case FAIL_INTERACT_NO_PERMISSION -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }
             case BLOCKS_TOOLS_INSUFFICIENT -> {
                 switch (result) {
                     case FAIL_BREAK_TOOL_INSUFFICIENT -> {
-                        return List.of(getOriginalBlockState());
+                        return List.of(getBlockStateBeforeOp());
                     }
                 }
             }

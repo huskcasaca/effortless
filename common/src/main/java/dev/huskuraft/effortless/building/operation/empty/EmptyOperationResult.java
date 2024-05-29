@@ -9,14 +9,21 @@ import dev.huskuraft.effortless.building.operation.OperationResult;
 
 public class EmptyOperationResult extends OperationResult {
 
+    private final EmptyOperation operation;
+
+    public EmptyOperationResult(EmptyOperation operation) {
+
+        this.operation = operation;
+    }
+
     @Override
     public Operation getOperation() {
-        return new EmptyOperation();
+        return operation;
     }
 
     @Override
     public EmptyOperation getReverseOperation() {
-        return new EmptyOperation();
+        return operation;
     }
 
     @Override
