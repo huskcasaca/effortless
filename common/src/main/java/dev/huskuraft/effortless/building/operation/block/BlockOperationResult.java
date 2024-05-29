@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.building.operation.block;
 
+import javax.annotation.Nullable;
+
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 
@@ -26,19 +28,26 @@ public abstract class BlockOperationResult extends OperationResult {
         return operation;
     }
 
+    @Nullable
     public final BlockState getBlockStateBeforeOp() {
         return blockStateBeforeOp;
     }
 
+    @Nullable
     public final BlockState getBlockStateAfterOp() {
         return blockStateAfterOp;
     }
 
+    @Nullable
     public final BlockState getBlockStateInOp() {
         return getOperation().getBlockState();
     }
 
+    @Nullable
     public final BlockState getBlockStateForRenderer() {
+        if (getBlockStateBeforeOp() == null || getBlockStateInOp() == null) {
+            return null;
+        }
         if (!getBlockStateBeforeOp().isAir() && getBlockStateInOp().isAir()) {
             return getBlockStateBeforeOp();
         } else {

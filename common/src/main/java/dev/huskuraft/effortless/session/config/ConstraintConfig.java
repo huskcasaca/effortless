@@ -22,6 +22,10 @@ public record ConstraintConfig(
         return true;
     }
 
+    public int maxCopyPasteVolume() {
+        return 100;
+    }
+
     public static final boolean USE_COMMANDS_DEFAULT = false;
     public static final boolean ALLOW_USE_MOD_DEFAULT = true;
     public static final boolean ALLOW_BREAK_BLOCKS_DEFAULT = true;

@@ -284,8 +284,8 @@ public record Context(
         return switch (buildState()) {
             case IDLE -> 0;
             case BREAK_BLOCK -> configs().constraintConfig().maxBlockBreakVolume();
-            case PLACE_BLOCK, INTERACT_BLOCK, COPY_STRUCTURE, PASTE_STRUCTURE ->
-                    configs().constraintConfig().maxBlockPlaceVolume();
+            case PLACE_BLOCK, INTERACT_BLOCK -> configs().constraintConfig().maxBlockPlaceVolume();
+            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().maxCopyPasteVolume();
         };
     }
 

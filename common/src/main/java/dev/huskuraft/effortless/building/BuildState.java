@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building;
 
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 
@@ -38,7 +39,7 @@ public enum BuildState {
                     case COPY_STRUCTURE -> "copying_structure";
                     case PASTE_STRUCTURE -> "pasting_structure";
                 }
-        ), buildMode.getDisplayName());
+        ), buildMode.getDisplayName().withStyle(ChatFormatting.GOLD));
     }
 
 }

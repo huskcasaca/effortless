@@ -75,14 +75,14 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         public BlockSnapshot read(NetByteBuf byteBuf) {
             return new BlockSnapshot(
                     byteBuf.read(new BlockPositionSerializer()),
-                    byteBuf.readBlockState()
+                    byteBuf.readNullable(NetByteBuf::readBlockState)
             );
         }
 
         @Override
         public void write(NetByteBuf byteBuf, BlockSnapshot blockSnapshot) {
             byteBuf.write(blockSnapshot.relativePosition(), new BlockPositionSerializer());
-            byteBuf.writeBlockState(blockSnapshot.blockState());
+            byteBuf.writeNullable(blockSnapshot.blockState(), NetByteBuf::writeBlockState);
         }
     }
 
