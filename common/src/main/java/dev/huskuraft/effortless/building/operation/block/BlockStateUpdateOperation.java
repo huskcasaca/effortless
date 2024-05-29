@@ -55,17 +55,14 @@ public class BlockStateUpdateOperation extends BlockOperation {
     }
 
     protected BlockOperationResultType updateBlock() {
+        if (getBlockStateInWorld() == null || getBlockState() == null) {
+            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
+        }
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
             return BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM;
         }
         if (getBlockStateInWorld() == null || getBlockState() == null) {
             return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
-        }
-        if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
-        }
-        if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
         }
         if (player.getGameMode().isSpectator()) {
             return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
@@ -80,17 +77,8 @@ public class BlockStateUpdateOperation extends BlockOperation {
             return BlockOperationResultType.FAIL_BLOCK_STATE_AIR;
         }
 
-        if (!context.configs().constraintConfig().allowBreakBlocks()) {
-            return BlockOperationResultType.FAIL_BREAK_NO_PERMISSION;
-        }
-        if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockStateInWorld().getItem().getId())) {
-            return BlockOperationResultType.FAIL_BREAK_BLACKLISTED;
-        }
-        if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockStateInWorld().getItem().getId())) {
-            return BlockOperationResultType.FAIL_BREAK_BLACKLISTED;
-        }
-
         if (!getBlockState().isAir()) { // check replace for place
+
             switch (context.replaceMode()) {
                 case DISABLED -> {
                     if (!getBlockStateInWorld().canBeReplaced(player, getInteraction())) {
@@ -110,7 +98,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
                             return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;
                         }
                     } else {
-                        if (!context.extras().inventorySnapshot().offhandItems().stream().map(ItemStack::getItem).toList().contains(getBlockState().getItem())) {
+                        if (!context.extras().inventorySnapshot().offhandItems().stream().map(ItemStack::getItem).toList().contains(getBlockStateInWorld().getItem())) {
                             return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;
                         }
                     }
@@ -118,8 +106,20 @@ public class BlockStateUpdateOperation extends BlockOperation {
             }
         }
 
-
         if (!getBlockStateInWorld().isAir()) {
+            if (!context.configs().constraintConfig().allowBreakBlocks()) {
+                return BlockOperationResultType.FAIL_BREAK_NO_PERMISSION;
+            }
+            if (!player.getGameMode().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
+                return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;
+            }
+            if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockStateInWorld().getItem().getId()) && !getBlockStateInWorld().isAir()) {
+                return BlockOperationResultType.FAIL_BREAK_BLACKLISTED;
+            }
+            if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockStateInWorld().getItem().getId()) && !getBlockStateInWorld().isAir()) {
+                return BlockOperationResultType.FAIL_BREAK_BLACKLISTED;
+            }
+
             var reservedDurability = getContext().getReservedToolDurability();
             var useCorrectTool = !player.getGameMode().isCreative() && context.useCorrectTool();
             var correctTool = getStorage().contents().stream().filter(itemStack -> itemStack.getItem().isCorrectToolForDrops(getBlockStateInWorld())).filter(itemStack -> !itemStack.isDamageableItem() || itemStack.getRemainingDamage() > reservedDurability).findFirst();
@@ -153,6 +153,13 @@ public class BlockStateUpdateOperation extends BlockOperation {
 
 
         if (!getBlockState().isAir()) {
+            if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
+                return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
+            }
+            if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
+                return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
+            }
+
             var itemStack = storage.search(getBlockState().getItem()).orElse(null);
 
             if (itemStack == null || itemStack.isEmpty()) {
@@ -201,21 +208,20 @@ public class BlockStateUpdateOperation extends BlockOperation {
 
     @Override
     public BlockStateUpdateOperationResult commit() {
-
-        var oldBlockState = getBlockStateInWorld();
+        var entityStateBeforeOp = EntityState.get(getPlayer());
+        var blockStateBeforeOp = getBlockStateInWorld();
+        EntityState.set(getPlayer(), getEntityState());
         var result = updateBlock();
-        var newBlockState = getBlockStateInWorld();
+        EntityState.set(getPlayer(), entityStateBeforeOp);
+        var blockStateAfterOp = getBlockStateInWorld();
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
-            if (getBlockState().isAir()) {
-                getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
-            } else {
-                if (result.success()) {
-                    getPlayer().getClient().getParticleEngine().destroy(getBlockPosition(), getBlockState());
-                }
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
+            if (result.success()) {
+                getPlayer().getClient().getParticleEngine().destroy(getBlockPosition(), blockStateBeforeOp);
             }
+            getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
-        return new BlockStateUpdateOperationResult(this, result, oldBlockState, newBlockState);
+        return new BlockStateUpdateOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp);
 
     }
 

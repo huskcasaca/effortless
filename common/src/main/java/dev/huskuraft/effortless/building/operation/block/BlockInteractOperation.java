@@ -28,45 +28,35 @@ public class BlockInteractOperation extends BlockOperation {
     }
 
     protected BlockOperationResultType interactBlock() {
+        if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
+            return BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM;
+        }
         if (getBlockState() == null) {
             return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
         }
         if (!context.configs().constraintConfig().allowInteractBlocks()) {
             return BlockOperationResultType.FAIL_INTERACT_NO_PERMISSION;
         }
-
-        if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
+        if (!getBlockState().isAir()) {
+            if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
+                return BlockOperationResultType.FAIL_INTERACT_BLACKLISTED;
+            }
+            if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
+                return BlockOperationResultType.FAIL_INTERACT_BLACKLISTED;
+            }
         }
-
-        if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
-        }
-
         if (player.getGameMode().isSpectator()) {
             return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
         }
-
-        // world permission
         if (!isInBorderBound()) {
             return BlockOperationResultType.FAIL_WORLD_BORDER;
         }
-
         if (!isInHeightBound()) {
             return BlockOperationResultType.FAIL_WORLD_HEIGHT;
         }
 
         // action permission
         var selectedItemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
-
-//        if (selectedItemStack == null) {
-//            return BlockOperationResult.Type.FAIL_PLACE_ITEM_INSUFFICIENT;
-//        }
-//
-//
-//        if (!selectedItemStack.getItem().isBlockItem()) {
-//            return BlockOperationResult.Type.FAIL_PLACE_ITEM_NOT_BLOCK;
-//        }
 
         if (context.isPreviewType() && player.getWorld().isClient()) {
             selectedItemStack.decrease(1);
@@ -107,21 +97,17 @@ public class BlockInteractOperation extends BlockOperation {
 
     @Override
     public BlockInteractOperationResult commit() {
-        if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
-            return new BlockInteractOperationResult(this, BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM, null, null);
-        }
-
-        var entityState = EntityState.get(player);
-        var beforeBlockState = getBlockStateInWorld();
-        EntityState.set(player, getEntityState());
+        var entityStateBeforeOp = EntityState.get(getPlayer());
+        var blockStateBeforeOp = getBlockStateInWorld();
+        EntityState.set(getPlayer(), getEntityState());
         var result = interactBlock();
-        EntityState.set(player, entityState);
+        EntityState.set(getPlayer(), entityStateBeforeOp);
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
+        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
-        var afterBlockState = getBlockStateInWorld();
-        return new BlockInteractOperationResult(this, result, beforeBlockState, afterBlockState);
+        var blockStateAfterOp = getBlockStateInWorld();
+        return new BlockInteractOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp);
     }
 
     @Override

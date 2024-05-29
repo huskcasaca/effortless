@@ -45,6 +45,7 @@ import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.OperationTooltip;
@@ -149,31 +150,34 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 break;
             }
             if (operationResult instanceof BlockOperationResult blockOperationResult) {
+                if (blockOperationResult.getBlockStateForRenderer() == null) {
+                    continue;
+                }
                 switch (blockOperationResult.getOperation().getType()) {
                     case UPDATE -> {
-                        if (!blockOperationResult.getOperation().getBlockState().isAir()) {
+                        if (!blockOperationResult.getBlockStateForRenderer().isAir()) {
                             if (blockOperationResult.result().success()) {
-                                soundMap.compute(TypedBlockSound.placeSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                                soundMap.compute(TypedBlockSound.placeSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                             } else {
-                                soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                                soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                             }
                         } else {
                             if (blockOperationResult.result().success()) {
-                                soundMap.compute(TypedBlockSound.breakSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                                soundMap.compute(TypedBlockSound.breakSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                             } else {
-                                soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                                soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                             }
                         }
                     }
                     case INTERACT -> {
                         if (blockOperationResult.result().success()) {
-                            soundMap.compute(TypedBlockSound.hitSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            soundMap.compute(TypedBlockSound.hitSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                         } else {
-                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                         }
                     }
                     case COPY -> {
-                        soundMap.compute(TypedBlockSound.hitSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                        soundMap.compute(TypedBlockSound.hitSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                     }
                 }
             }
@@ -386,7 +390,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             if (!context.withBuildState(state).hasPermission()) {
                 if (state == BuildState.BREAK_BLOCK) {
                     player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permissio"), true);
+                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permission"), true);
                 }
                 if (state == BuildState.PLACE_BLOCK) {
                     player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_place_permission")));
@@ -644,9 +648,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         if (!itemSummary.isEmpty()) {
             var allProducts = new ArrayList<ItemStack>();
-            for (var entry : itemSummary.entrySet()) {
-                var products = entry.getValue();
-                var color = switch (entry.getKey()) {
+            for (var summary : BlockSummary.values()) {
+                var items = itemSummary.getOrDefault(summary, List.of());
+                if (items.isEmpty()) {
+                    continue;
+                }
+                var color = switch (summary) {
                     case BLOCKS_PLACED -> ChatFormatting.WHITE;
                     case BLOCKS_DESTROYED -> ChatFormatting.RED;
                     case BLOCKS_INTERACTED -> ChatFormatting.YELLOW;
@@ -660,10 +667,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     case BLOCKS_BLACKLISTED -> ChatFormatting.GRAY;
                     case BLOCKS_NO_PERMISSION -> ChatFormatting.GRAY;
                 };
-                products = products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
-                entries.add(products);
-                entries.add(Text.translate("effortless.build.summary." + entry.getKey().name().toLowerCase(Locale.ROOT)).withStyle(color));
-                allProducts.addAll(products);
+                items = items.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
+                entries.add(items);
+                entries.add(Text.translate("effortless.build.summary." + summary.name().toLowerCase(Locale.ROOT)).withStyle(color));
+                allProducts.addAll(items);
             }
             if (allProducts.isEmpty()) {
                 entries.add(Text.translate("effortless.build.summary.no_item_summary").withStyle(ChatFormatting.GRAY));

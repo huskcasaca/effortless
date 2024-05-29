@@ -39,7 +39,7 @@ public abstract class BlockOperationResult extends OperationResult {
     }
 
     public final BlockState getBlockStateForRenderer() {
-        if (!getBlockStateBeforeOp().isAir() && getBlockStateAfterOp().isAir()) {
+        if (!getBlockStateBeforeOp().isAir() && getBlockStateInOp().isAir()) {
             return getBlockStateBeforeOp();
         } else {
             return getBlockStateInOp();

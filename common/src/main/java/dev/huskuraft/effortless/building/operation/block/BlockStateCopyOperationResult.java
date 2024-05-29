@@ -9,10 +9,10 @@ import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
-public class BlockStateSaveOperationResult extends BlockOperationResult {
+public class BlockStateCopyOperationResult extends BlockOperationResult {
 
-    public BlockStateSaveOperationResult(
-            BlockStateSaveOperation operation,
+    public BlockStateCopyOperationResult(
+            BlockStateCopyOperation operation,
             BlockOperationResultType result,
             BlockState blockStateBeforeOp,
             BlockState blockStateAfterOp

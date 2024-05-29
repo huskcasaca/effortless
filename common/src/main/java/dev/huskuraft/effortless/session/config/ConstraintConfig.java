@@ -18,7 +18,7 @@ public record ConstraintConfig(
         List<ResourceLocation> blacklistedItems
 ) {
 
-    public boolean allowCopyPasteStructure() {
+    public boolean allowCopyPasteBlocks() {
         return true;
     }
 

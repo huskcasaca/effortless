@@ -24,8 +24,8 @@ import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockInteractOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockOperation;
-import dev.huskuraft.effortless.building.operation.block.BlockStateSaveOperation;
-import dev.huskuraft.effortless.building.operation.block.BlockStateSaveOperationResult;
+import dev.huskuraft.effortless.building.operation.block.BlockStateCopyOperation;
+import dev.huskuraft.effortless.building.operation.block.BlockStateCopyOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockStateUpdateOperation;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
@@ -61,7 +61,7 @@ public class BatchBuildSession implements BuildSession {
     }
 
     protected BlockOperation createBlockCopyOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockStateSaveOperation(world, player, context, storage, interaction, context.extras().entityState());
+        return new BlockStateCopyOperation(world, player, context, storage, interaction, context.extras().entityState());
     }
 
     protected BatchOperation create(World world, Player player, Context context) {
@@ -123,7 +123,7 @@ public class BatchBuildSession implements BuildSession {
         }
         var blockSnapshots = new ArrayList<BlockSnapshot>();
         for (var operationResult : lastResult.getResults()) {
-            var blockCopyOperationResult = ((BlockStateSaveOperationResult) operationResult);
+            var blockCopyOperationResult = ((BlockStateCopyOperationResult) operationResult);
             blockSnapshots.add(blockCopyOperationResult.getBlockSnapshot());
         }
         getStructureBuilder().setClipboard(player, Clipboard.of(true, Collections.unmodifiableList(blockSnapshots)));

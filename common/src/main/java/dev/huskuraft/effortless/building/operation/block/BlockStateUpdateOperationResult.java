@@ -41,7 +41,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             case BLOCKS_PLACED -> {
                 switch (result) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        return List.of(getOperation().getBlockState());
+                        return List.of(getBlockStateInOp());
                     }
                 };
             }
@@ -55,22 +55,21 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             case BLOCKS_NOT_PLACEABLE -> {
                 switch (result) {
                     case FAIL_PLACE_BLACKLISTED -> {
-                        return List.of(getOperation().getBlockState());
+                        return List.of(getBlockStateInOp());
                     }
                 }
-
             }
             case BLOCKS_NOT_BREAKABLE -> {
                 switch (result) {
                     case FAIL_BREAK_REPLACE_RULE -> {
-                        return List.of(getBlockStateBeforeOp());
+                        return List.of(getBlockStateInOp());
                     }
                 }
             }
             case BLOCKS_ITEMS_INSUFFICIENT -> {
                 switch (result) {
                     case FAIL_PLACE_ITEM_INSUFFICIENT -> {
-                        return List.of(getOperation().getBlockState());
+                        return List.of(getBlockStateInOp());
                     }
                 }
             }
@@ -87,7 +86,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
                         return List.of(getBlockStateBeforeOp());
                     }
                     case FAIL_PLACE_BLACKLISTED -> {
-                        return List.of(getOperation().getBlockState());
+                        return List.of(getBlockStateInOp());
                     }
                 }
             }
@@ -97,7 +96,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
                         return List.of(getBlockStateBeforeOp());
                     }
                     case FAIL_PLACE_NO_PERMISSION -> {
-                        return List.of(getOperation().getBlockState());
+                        return List.of(getBlockStateInOp());
                     }
                 }
             }

@@ -32,8 +32,8 @@ public class BlockOperationRenderer implements OperationRenderer {
     public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
         switch (blockOperationResult.getOperation().getType()) {
             case UPDATE -> {
-                if (blockOperationResult.getBlockStateBeforeOp() == null || blockOperationResult.getBlockStateAfterOp() == null) {
-                    return Color.GRAY;
+                if (blockOperationResult.getBlockStateBeforeOp() == null || blockOperationResult.getBlockStateInOp() == null) {
+                    return BLOCK_PLACE_FAIL_COLOR;
                 }
                 if (!blockOperationResult.getBlockStateInOp().isAir()) {
                     return switch (blockOperationResult.result()) {

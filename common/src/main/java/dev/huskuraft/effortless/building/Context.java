@@ -299,7 +299,7 @@ public record Context(
             case BREAK_BLOCK -> configs().constraintConfig().allowBreakBlocks();
             case PLACE_BLOCK -> configs().constraintConfig().allowPlaceBlocks();
             case INTERACT_BLOCK -> configs().constraintConfig().allowInteractBlocks();
-            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().allowCopyPasteStructure();
+            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().allowCopyPasteBlocks();
         };
     }
 
