@@ -29,7 +29,7 @@ public class ConstraintConfigSerializer implements NetByteBufSerializer<Constrai
         byteBuf.writeNullable(constraintConfig.allowBreakBlocks(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(constraintConfig.allowPlaceBlocks(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(constraintConfig.allowInteractBlocks(), NetByteBuf::writeBoolean);
-        byteBuf.writeNullable(constraintConfig.useCorrectTools(), NetByteBuf::writeBoolean);
+        byteBuf.writeNullable(constraintConfig.useProperTools(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(constraintConfig.maxReachDistance(), NetByteBuf::writeVarInt);
         byteBuf.writeNullable(constraintConfig.maxBlockBreakVolume(), NetByteBuf::writeVarInt);
         byteBuf.writeNullable(constraintConfig.maxBlockPlaceVolume(), NetByteBuf::writeVarInt);

@@ -26,7 +26,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
     private static final String KEY_ALLOW_BREAK_BLOCKS = "allowBreakBlocks";
     private static final String KEY_ALLOW_PLACE_BLOCKS = "allowPlaceBlocks";
     private static final String KEY_ALLOW_INTERACT_BLOCKS = "allowInteractBlocks";
-    private static final String KEY_USE_CORRECT_TOOLS = "useCorrectTools";
+    private static final String KEY_USE_CORRECT_TOOLS = "useProperTools";
     private static final String KEY_MAX_REACH_DISTANCE = "maxReachDistance";
     private static final String KEY_MAX_BOX_VOLUME_PER_BREAK = "maxBlockBreakVolume";
     private static final String KEY_MAX_BOX_VOLUME_PER_PLACE = "maxBlockPlaceVolume";
@@ -87,7 +87,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             spec.define(KEY_ALLOW_BREAK_BLOCKS, () -> ConstraintConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Objects::nonNull);
             spec.define(KEY_ALLOW_PLACE_BLOCKS, () -> ConstraintConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Objects::nonNull);
             spec.define(KEY_ALLOW_INTERACT_BLOCKS, () -> ConstraintConfig.ALLOW_INTERACT_BLOCKS_DEFAULT, Objects::nonNull);
-            spec.define(KEY_USE_CORRECT_TOOLS, () -> ConstraintConfig.USE_CORRECT_TOOLS_DEFAULT, Objects::nonNull);
+            spec.define(KEY_USE_CORRECT_TOOLS, () -> ConstraintConfig.USE_PROPER_TOOLS_DEFAULT, Objects::nonNull);
             spec.defineInRange(KEY_MAX_REACH_DISTANCE, ConstraintConfig.MAX_REACH_DISTANCE_DEFAULT, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_START, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_BREAK, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_DEFAULT, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
             spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_PLACE, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_DEFAULT, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
@@ -127,7 +127,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.set(KEY_ALLOW_BREAK_BLOCKS, constraintConfig.allowBreakBlocks());
             config.set(KEY_ALLOW_PLACE_BLOCKS, constraintConfig.allowPlaceBlocks());
             config.set(KEY_ALLOW_INTERACT_BLOCKS, constraintConfig.allowInteractBlocks());
-            config.set(KEY_USE_CORRECT_TOOLS, constraintConfig.useCorrectTools());
+            config.set(KEY_USE_CORRECT_TOOLS, constraintConfig.useProperTools());
             config.set(KEY_MAX_REACH_DISTANCE, constraintConfig.maxReachDistance());
             config.set(KEY_MAX_BOX_VOLUME_PER_BREAK, constraintConfig.maxBlockBreakVolume());
             config.set(KEY_MAX_BOX_VOLUME_PER_PLACE, constraintConfig.maxBlockPlaceVolume());
@@ -185,7 +185,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
                 spec.define(KEY_ALLOW_INTERACT_BLOCKS, () -> ConstraintConfig.ALLOW_INTERACT_BLOCKS_DEFAULT, Boolean.class::isInstance);
             }
             if (config.contains(KEY_USE_CORRECT_TOOLS)) {
-                spec.define(KEY_USE_CORRECT_TOOLS, () -> ConstraintConfig.USE_CORRECT_TOOLS_DEFAULT, Boolean.class::isInstance);
+                spec.define(KEY_USE_CORRECT_TOOLS, () -> ConstraintConfig.USE_PROPER_TOOLS_DEFAULT, Boolean.class::isInstance);
             }
             if (config.contains(KEY_MAX_REACH_DISTANCE)) {
                 spec.defineInRange(KEY_MAX_REACH_DISTANCE, ConstraintConfig.MAX_REACH_DISTANCE_DEFAULT, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_START, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_END);
@@ -235,7 +235,7 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             addOrRemove(config, KEY_ALLOW_BREAK_BLOCKS, constraintConfig.allowBreakBlocks());
             addOrRemove(config, KEY_ALLOW_PLACE_BLOCKS, constraintConfig.allowPlaceBlocks());
             addOrRemove(config, KEY_ALLOW_INTERACT_BLOCKS, constraintConfig.allowInteractBlocks());
-            addOrRemove(config, KEY_USE_CORRECT_TOOLS, constraintConfig.useCorrectTools());
+            addOrRemove(config, KEY_USE_CORRECT_TOOLS, constraintConfig.useProperTools());
             addOrRemove(config, KEY_MAX_REACH_DISTANCE, constraintConfig.maxReachDistance());
             addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_BREAK, constraintConfig.maxBlockBreakVolume());
             addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_PLACE, constraintConfig.maxBlockPlaceVolume());

@@ -10,7 +10,7 @@ public record ConstraintConfig(
         Boolean allowBreakBlocks,
         Boolean allowPlaceBlocks,
         Boolean allowInteractBlocks,
-        Boolean useCorrectTools,
+        Boolean useProperTools,
         Integer maxReachDistance,
         Integer maxBlockBreakVolume,
         Integer maxBlockPlaceVolume,
@@ -31,7 +31,7 @@ public record ConstraintConfig(
     public static final boolean ALLOW_BREAK_BLOCKS_DEFAULT = true;
     public static final boolean ALLOW_PLACE_BLOCKS_DEFAULT = true;
     public static final boolean ALLOW_INTERACT_BLOCKS_DEFAULT = true;
-    public static final boolean USE_CORRECT_TOOLS_DEFAULT = true;
+    public static final boolean USE_PROPER_TOOLS_DEFAULT = true;
 
     public static final int MAX_REACH_DISTANCE_DEFAULT = 128;
     public static final int MAX_REACH_DISTANCE_RANGE_START = 0;
@@ -54,7 +54,7 @@ public record ConstraintConfig(
             ALLOW_BREAK_BLOCKS_DEFAULT,
             ALLOW_PLACE_BLOCKS_DEFAULT,
             ALLOW_INTERACT_BLOCKS_DEFAULT,
-            USE_CORRECT_TOOLS_DEFAULT,
+            USE_PROPER_TOOLS_DEFAULT,
             MAX_REACH_DISTANCE_DEFAULT,
             MAX_BOX_VOLUME_PER_BREAK_DEFAULT,
             MAX_BOX_VOLUME_PER_PLACE_DEFAULT,

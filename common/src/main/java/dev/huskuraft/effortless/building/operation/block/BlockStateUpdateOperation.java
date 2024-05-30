@@ -47,9 +47,9 @@ public class BlockStateUpdateOperation extends BlockOperation {
         if (getPlayer().getGameMode().isCreative()) {
             return true;
         }
-        var correctTool = !blockState.requiresCorrectToolForDrops() || itemInHand.isCorrectToolForDrops(blockState);
+        var properTool = !blockState.requiresCorrectToolForDrops() || itemInHand.isCorrectToolForDrops(blockState);
         itemInHand.mineBlock(getWorld(), getPlayer(), getBlockPosition(), blockState);
-        if (removed && correctTool) {
+        if (removed && properTool) {
             blockState.getBlock().destroyEnd(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
         }
         return removed;
@@ -122,7 +122,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
             }
 
             var durabilityReserved = getContext().getReservedToolDurability();
-            var requireCorrectTool = !player.getGameMode().isCreative() && context.useCorrectTool();
+            var requireCorrectTool = !player.getGameMode().isCreative() && context.useProperTool();
             var miningTool = getStorage().contents().stream().filter(stack -> stack.getItem().isCorrectToolForDrops(getBlockStateInWorld())).filter(tool -> !tool.isDamageableItem() || tool.getRemainingDamage() > durabilityReserved).findFirst();
 
             if (miningTool.isEmpty()) {

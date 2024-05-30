@@ -43,8 +43,8 @@ public record Context(
         Extras extras
 ) {
 
-    public boolean useCorrectTool() {
-        return configs().constraintConfig().useCorrectTools();
+    public boolean useProperTool() {
+        return configs().constraintConfig().useProperTools();
     }
 
     public int getReservedToolDurability() {

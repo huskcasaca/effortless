@@ -41,31 +41,31 @@ public class EffortlessGlobalConstraintSettingsScreen extends AbstractPanelScree
 //            this.config = new ConstraintConfig(value, config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBoxSideLengthPerBreak(), config.maxBoxSideLengthPerPlace(), config.whitelistedItems(), config.blacklistedItems());
 //        });
         entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_use_mod"), null, config.allowUseMod(), (value) -> {
-            this.config = new ConstraintConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new ConstraintConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useProperTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_break_blocks"), null, config.allowBreakBlocks(), (value) -> {
-            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useProperTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_place_blocks"), null, config.allowPlaceBlocks(), (value) -> {
-            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.allowInteractBlocks(), config.useProperTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_interact_blocks"), null, config.allowInteractBlocks(), (value) -> {
-            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.useProperTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
-        entries.addSwitchEntry(Text.translate("effortless.constraint_settings.use_correct_tools"), null, config.useCorrectTools(), (value) -> {
+        entries.addSwitchEntry(Text.translate("effortless.constraint_settings.use_proper_tools"), null, config.useProperTools(), (value) -> {
             this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), value, config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_reach_distance"), null, config.maxReachDistance(), ConstraintConfig.MAX_REACH_DISTANCE_RANGE_START, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_END, (value) -> {
-            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), value, config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useProperTools(), value, config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_block_break_volume"), null, config.maxBlockBreakVolume(), ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END, (value) -> {
-            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), value, config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useProperTools(), config.maxReachDistance(), value, config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_block_place_volume"), null, config.maxBlockPlaceVolume(), ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END, (value) -> {
-            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), value, config.whitelistedItems(), config.blacklistedItems());
+            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useProperTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), value, config.whitelistedItems(), config.blacklistedItems());
         });
         entries.addTab(Text.translate("effortless.constraint_settings.whitelisted_items"), null, config.whitelistedItems(), (value) -> {
-            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), value, config.blacklistedItems());
+            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useProperTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), value, config.blacklistedItems());
         }, (entry, value) -> {
             entry.getButton().setOnPressListener(button1 -> {
                 new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.constraint_settings.whitelisted_items"), value.stream().map(Item::fromIdOptional).filter(Optional::isPresent).map(Optional::get).toList(), (value1) -> {
@@ -75,7 +75,7 @@ public class EffortlessGlobalConstraintSettingsScreen extends AbstractPanelScree
             entry.getButton().setMessage(Text.translate("effortless.constraint_settings.items", value.size()));
         });
         entries.addTab(Text.translate("effortless.constraint_settings.blacklisted_items"), null, config.blacklistedItems(), (value) -> {
-            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), value);
+            this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useProperTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), value);
         }, (entry, value) -> {
             entry.getButton().setOnPressListener(button1 -> {
                 new EffortlessItemsScreen(getEntrance(), Text.translate("effortless.constraint_settings.blacklisted_items"), value.stream().map(Item::fromIdOptional).filter(Optional::isPresent).map(Optional::get).toList(), (value1) -> {
