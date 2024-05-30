@@ -34,11 +34,30 @@ public interface Transformer {
         return Math.round(value);
     }
 
-    static Vector3d roundHalf(Vector3d vector3d) {
+    static Vector3d roundAllHalf(Vector3d vector3d) {
         if (roundHalf(vector3d.x()) % 1 != 0 || roundHalf(vector3d.y()) % 1 != 0 || roundHalf(vector3d.z()) % 1 != 0) {
             return new Vector3d(floorHalf(vector3d.x()), floorHalf(vector3d.y()), floorHalf(vector3d.z()));
         } else {
             return new Vector3d(round(vector3d.x()), round(vector3d.y()), round(vector3d.z()));
+        }
+    }
+
+
+    static boolean isCenter(Vector3d vector3d) {
+        var x = roundHalf(vector3d.x());
+        var y = roundHalf(vector3d.y());
+        var z = roundHalf(vector3d.z());
+        return x % 1 != 0 || y % 1 != 0 || z % 1 != 0;
+    }
+
+    static Vector3d roundHalf(Vector3d vector3d) {
+        var x = roundHalf(vector3d.x());
+        var y = roundHalf(vector3d.y());
+        var z = roundHalf(vector3d.z());
+        if (x % 1 != 0 || y % 1 != 0 || z % 1 != 0) {
+            return new Vector3d(Math.floor(vector3d.x()), Math.floor(vector3d.y()), Math.floor(vector3d.z()));
+        } else {
+            return new Vector3d(floorHalf(vector3d.x()), floorHalf(vector3d.y()), floorHalf(vector3d.z()));
         }
     }
 

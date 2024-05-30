@@ -35,7 +35,7 @@ public class TextSlot extends Slot {
         if (getMessage() == null) {
             return getWidth();
         }
-        return Math.max(getTypeface().measureWidth(getMessage()) + 1, getWidth());
+        return Math.max(getTypeface().measureWidth(getMessage()) + 3, getWidth());
     }
 
     @Override
@@ -43,9 +43,9 @@ public class TextSlot extends Slot {
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
 
         renderer.pushPose();
+        renderer.renderRect(getX(), getY(), getX() + getFullWidth(), getY() + getHeight(), color);
         renderer.translate(getFullWidth() - getWidth(), 0, 0);
 
-        renderer.renderRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), color);
 
         if (symbol != null) {
             renderer.pushPose();

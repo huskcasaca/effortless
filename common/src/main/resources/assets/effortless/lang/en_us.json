@@ -489,5 +489,6 @@
   "effortless.message.building.server.build_canceled": "Build canceled!",
   "effortless.message.building.server.paste_canceled": "Paste canceled!",
   "effortless.message.building.server.cannot_reach_target": "Cannot reach target!",
-  "effortless.message.building.server.cannot_reach_entity": "Cannot reach entity!"
+  "effortless.message.building.server.cannot_reach_entity": "Cannot reach entity!",
+  "effortless.position.move_to_center_or_corner": "Move To Center/Corner"
 }
