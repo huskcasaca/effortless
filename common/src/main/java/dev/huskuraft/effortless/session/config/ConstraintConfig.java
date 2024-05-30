@@ -10,40 +10,44 @@ public record ConstraintConfig(
         Boolean allowBreakBlocks,
         Boolean allowPlaceBlocks,
         Boolean allowInteractBlocks,
-        Boolean useProperTools,
+        Boolean allowCopyPasteStructures,
+        Boolean useProperToolsOnly,
         Integer maxReachDistance,
         Integer maxBlockBreakVolume,
         Integer maxBlockPlaceVolume,
+        Integer maxBlockInteractVolume,
+        Integer maxStructureCopyPasteVolume,
         List<ResourceLocation> whitelistedItems,
         List<ResourceLocation> blacklistedItems
 ) {
-
-    public boolean allowCopyPasteBlocks() {
-        return true;
-    }
-
-    public int maxCopyPasteVolume() {
-        return 100;
-    }
 
     public static final boolean USE_COMMANDS_DEFAULT = false;
     public static final boolean ALLOW_USE_MOD_DEFAULT = true;
     public static final boolean ALLOW_BREAK_BLOCKS_DEFAULT = true;
     public static final boolean ALLOW_PLACE_BLOCKS_DEFAULT = true;
     public static final boolean ALLOW_INTERACT_BLOCKS_DEFAULT = true;
-    public static final boolean USE_PROPER_TOOLS_DEFAULT = true;
+    public static final boolean ALLOW_COPY_PASTE_STRUCTURES_DEFAULT = true;
+    public static final boolean USE_PROPER_TOOLS_ONLY_DEFAULT = true;
 
     public static final int MAX_REACH_DISTANCE_DEFAULT = 128;
     public static final int MAX_REACH_DISTANCE_RANGE_START = 0;
     public static final int MAX_REACH_DISTANCE_RANGE_END = Short.MAX_VALUE;
 
-    public static final int MAX_BOX_VOLUME_PER_BREAK_DEFAULT = 1000 * 1000;
-    public static final int MAX_BOX_VOLUME_PER_BREAK_RANGE_START = 0;
-    public static final int MAX_BOX_VOLUME_PER_BREAK_RANGE_END = Integer.MAX_VALUE;
+    public static final int MAX_BLOCK_BREAK_VOLUME_DEFAULT = 10 * 1000;
+    public static final int MAX_BLOCK_BREAK_VOLUME_RANGE_START = 0;
+    public static final int MAX_BLOCK_BREAK_VOLUME_RANGE_END = 1000 * 1000;
 
-    public static final int MAX_BOX_VOLUME_PER_PLACE_DEFAULT = 1000 * 1000;
-    public static final int MAX_BOX_VOLUME_PER_PLACE_RANGE_START = 0;
-    public static final int MAX_BOX_VOLUME_PER_PLACE_RANGE_END = Integer.MAX_VALUE;
+    public static final int MAX_BLOCK_PLACE_VOLUME_DEFAULT = 10 * 1000;
+    public static final int MAX_BLOCK_PLACE_VOLUME_RANGE_START = 0;
+    public static final int MAX_BLOCK_PLACE_VOLUME_RANGE_END = 1000 * 1000;
+
+    public static final int MAX_BLOCK_INTERACT_VOLUME_DEFAULT = 10 * 1000;
+    public static final int MAX_BLOCK_INTERACT_VOLUME_RANGE_START = 0;
+    public static final int MAX_BLOCK_INTERACT_VOLUME_RANGE_END = 1000 * 1000;
+
+    public static final int MAX_STRUCTURE_COPY_PASTE_VOLUME_DEFAULT = 10 * 1000;
+    public static final int MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_START = 0;
+    public static final int MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_END = 1000 * 1000;
 
     public static final List<ResourceLocation> WHITELISTED_ITEMS_DEFAULT = List.of();
     public static final List<ResourceLocation> BLACKLISTED_ITEMS_DEFAULT = List.of();
@@ -54,10 +58,13 @@ public record ConstraintConfig(
             ALLOW_BREAK_BLOCKS_DEFAULT,
             ALLOW_PLACE_BLOCKS_DEFAULT,
             ALLOW_INTERACT_BLOCKS_DEFAULT,
-            USE_PROPER_TOOLS_DEFAULT,
+            ALLOW_COPY_PASTE_STRUCTURES_DEFAULT,
+            USE_PROPER_TOOLS_ONLY_DEFAULT,
             MAX_REACH_DISTANCE_DEFAULT,
-            MAX_BOX_VOLUME_PER_BREAK_DEFAULT,
-            MAX_BOX_VOLUME_PER_PLACE_DEFAULT,
+            MAX_BLOCK_BREAK_VOLUME_DEFAULT,
+            MAX_BLOCK_PLACE_VOLUME_DEFAULT,
+            MAX_BLOCK_INTERACT_VOLUME_DEFAULT,
+            MAX_STRUCTURE_COPY_PASTE_VOLUME_DEFAULT,
             WHITELISTED_ITEMS_DEFAULT,
             BLACKLISTED_ITEMS_DEFAULT
     );
@@ -69,6 +76,9 @@ public record ConstraintConfig(
             false,
             false,
             false,
+            false,
+            0,
+            0,
             0,
             0,
             0,
@@ -77,6 +87,9 @@ public record ConstraintConfig(
     );
 
     public static final ConstraintConfig NULL = new ConstraintConfig(
+            null,
+            null,
+            null,
             null,
             null,
             null,

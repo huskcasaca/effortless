@@ -44,7 +44,7 @@ public record Context(
 ) {
 
     public boolean useProperTool() {
-        return configs().constraintConfig().useProperTools();
+        return configs().constraintConfig().useProperToolsOnly();
     }
 
     public int getReservedToolDurability() {
@@ -283,21 +283,25 @@ public record Context(
         return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).map(BlockPosition::toVector3i).toArray(Vector3i[]::new)).getSize().toVector3i();
     }
 
-    public int getBoxVolume() {
+    public int getVolume() {
+        if (buildState() == BuildState.PASTE_STRUCTURE) {
+            return (int) (clipboard().volume() * pattern().volumeMultiplier());
+        }
         return (int) (structure().volume(this) * pattern().volumeMultiplier());
     }
 
-    public int getMaxBoxVolume() {
+    public int getMaxVolume() {
         return switch (buildState()) {
             case IDLE -> 0;
             case BREAK_BLOCK -> configs().constraintConfig().maxBlockBreakVolume();
-            case PLACE_BLOCK, INTERACT_BLOCK -> configs().constraintConfig().maxBlockPlaceVolume();
-            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().maxCopyPasteVolume();
+            case PLACE_BLOCK -> configs().constraintConfig().maxBlockPlaceVolume();
+            case INTERACT_BLOCK -> configs().constraintConfig().maxBlockInteractVolume();
+            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().maxStructureCopyPasteVolume();
         };
     }
 
-    public boolean isBoxVolumeInBounds() {
-        return getBoxVolume() <= getMaxBoxVolume();
+    public boolean isVolumeInBounds() {
+        return getVolume() <= getMaxVolume();
     }
 
     public boolean hasPermission() {
@@ -306,7 +310,7 @@ public record Context(
             case BREAK_BLOCK -> configs().constraintConfig().allowBreakBlocks();
             case PLACE_BLOCK -> configs().constraintConfig().allowPlaceBlocks();
             case INTERACT_BLOCK -> configs().constraintConfig().allowInteractBlocks();
-            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().allowCopyPasteBlocks();
+            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().allowCopyPasteStructures();
         };
     }
 

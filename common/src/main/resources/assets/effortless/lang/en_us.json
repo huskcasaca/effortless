@@ -482,5 +482,8 @@
   "effortless.message.build.structure_copy_volume_too_large": "Cannot copy structures! The estimated volume is too large!",
   "effortless.message.build.structure_paste_volume_too_large": "Cannot paste structures! The estimated volume is too large!",
   "effortless.state.copying_structure.build_mode": "Copying %s Structures",
-  "effortless.state.pasting_structure.build_mode": "Pasting %s Structures"
+  "effortless.state.pasting_structure.build_mode": "Pasting %s Structures",
+  "effortless.constraint_settings.allow_copy_paste_structures": "Allow Copy Paste Structures",
+  "effortless.constraint_settings.max_block_interact_volume": "Max Block Interact Volume",
+  "effortless.constraint_settings.max_structure_copy_paste_volume": "Max Structure Copy Paste Volume"
 }

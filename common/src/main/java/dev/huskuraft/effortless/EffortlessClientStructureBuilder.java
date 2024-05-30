@@ -412,25 +412,25 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 return context.newInteraction();
             }
 
-            if (!nextContext.isBoxVolumeInBounds()) {
+            if (!nextContext.isVolumeInBounds()) {
                 if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.block_break_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")")));
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.block_break_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
 //                    player.sendClientMessage(Text.translate("effortless.message.building.block_break_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.block_place_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")")));
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.block_place_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
 //                    player.sendClientMessage(Text.translate("effortless.message.building.block_place_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 if (nextContext.buildState() == BuildState.INTERACT_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.block_interact_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")")));
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.block_interact_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
 //                    player.sendClientMessage(Text.translate("effortless.message.building.block_interact_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 if (nextContext.buildState() == BuildState.COPY_STRUCTURE) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.structure_copy_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")")));
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.structure_copy_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
 //                    player.sendClientMessage(Text.translate("effortless.message.building.structure_copy_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 if (nextContext.buildState() == BuildState.PASTE_STRUCTURE) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.structure_paste_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")")));
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.build.structure_paste_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
 //                    player.sendClientMessage(Text.translate("effortless.message.building.structure_paste_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 return context.newInteraction();
@@ -555,7 +555,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var context1 = getContextTraced(player);
         var context = context1.withBuildType(BuildType.PREVIEW);
 
-        if (context.getBoxVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
+        if (context.getVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
             showBuildContextResult(player.getId(), 0, player, context, null);
             showBuildTooltip(player.getId(), 0, player, OperationTooltip.build(context));
         } else {
@@ -566,7 +566,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         showBuildMessage(player, context);
 
-        if (getHistoryContext(player).getBoxVolume() != context.getBoxVolume()) {
+        if (getHistoryContext(player).getVolume() != context.getVolume()) {
             putHistoryContext(player, context);
             var nearestInteraction = context.interactions().results().stream().filter(Objects::nonNull).min(Comparator.comparing(interaction1 -> interaction1.getBlockPosition().getCenter().distance(player.getEyePosition())));
             if (nearestInteraction.isEmpty()) {
@@ -744,7 +744,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     .append(Text.text(String.valueOf(context.getInteractionBox().z())).withStyle(ChatFormatting.WHITE))
                     .append(context.pattern().volumeMultiplier() > 1 ? "x" + new DecimalFormat("#.##").format(context.pattern().volumeMultiplier()) : "")
                     .append("=")
-                    .append(Text.text(String.valueOf(context.getBoxVolume())).withStyle(!context.isBoxVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE))
+                    .append(Text.text(String.valueOf(context.getVolume())).withStyle(!context.isVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE))
                     .append(")");
         } else {
             switch (context.tracingResult()) {

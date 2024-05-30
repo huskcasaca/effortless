@@ -60,8 +60,12 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
         return addEntry(new NumberEntry(getEntrance(), this, title, symbol, value, min, max, consumer));
     }
 
-    public IntegerEntry addIntegerEntry(Text title, Text symbol, Integer value, Integer min, Integer max, Consumer<Integer> consumer) {
+    public IntegerEntry addIntegerEntry(Text title, Text symbol, int value, int min, int max, Consumer<Integer> consumer) {
         return addEntry(new IntegerEntry(getEntrance(), this, title, symbol, value, min, max, consumer));
+    }
+
+    public IntegerEntry addIntegerEntry(Text title, Text symbol, int value, int min, int max, int step, Consumer<Integer> consumer) {
+        return addEntry(new IntegerEntry(getEntrance(), this, title, symbol, value, min, max, step, consumer));
     }
 
     public SelectorEntry<Boolean> addSwitchEntry(Text title, Text symbol, Boolean value, Consumer<Boolean> consumer) {
@@ -205,14 +209,20 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
 
     public static final class IntegerEntry extends SettingsEntry<Integer> {
 
-        private final Integer min;
-        private final Integer max;
+        private final int min;
+        private final int max;
+        private final int step;
         private NumberField numberField;
 
-        public IntegerEntry(Entrance entrance, SettingOptionsList entryList, Text title, Text symbol, Integer value, Integer min, Integer max, Consumer<Integer> consumer) {
+        public IntegerEntry(Entrance entrance, SettingOptionsList entryList, Text title, Text symbol, Integer value, int min, int max, Consumer<Integer> consumer) {
+            this(entrance, entryList, title, symbol, value, min, max, 1, consumer);
+        }
+
+        public IntegerEntry(Entrance entrance, SettingOptionsList entryList, Text title, Text symbol, Integer value, int min, int max, int step, Consumer<Integer> consumer) {
             super(entrance, entryList, title, symbol, value, consumer);
             this.min = min;
             this.max = max;
+            this.step = step;
         }
 
         @Override
@@ -225,6 +235,7 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
             this.numberField.setValueChangeListener(value -> {
                 super.setItem(value.intValue());
             });
+            this.numberField.setStep(step);
             this.titleTextWidget.setWidth(getInnerRight() - getInnerLeft() - 8 - numberField.getWidth());
 
         }

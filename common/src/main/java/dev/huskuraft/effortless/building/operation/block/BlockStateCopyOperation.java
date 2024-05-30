@@ -32,7 +32,7 @@ public class BlockStateCopyOperation extends BlockOperation {
         if (getBlockState() == null) {
             return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
         }
-        if (!context.configs().constraintConfig().allowCopyPasteBlocks()) {
+        if (!context.configs().constraintConfig().allowCopyPasteStructures()) {
             return BlockOperationResultType.FAIL_COPY_NO_PERMISSION;
         }
         if (getBlockState().isAir()) {

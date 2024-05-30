@@ -155,6 +155,9 @@ public class BlockStateUpdateOperation extends BlockOperation {
 
 
         if (!getBlockState().isAir()) {
+            if (!context.configs().constraintConfig().allowPlaceBlocks()) {
+                return BlockOperationResultType.FAIL_PLACE_NO_PERMISSION;
+            }
             if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
                 return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
             }

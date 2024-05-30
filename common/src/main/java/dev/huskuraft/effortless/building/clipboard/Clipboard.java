@@ -24,4 +24,8 @@ public record Clipboard(
         return blockSnapshots.isEmpty();
     }
 
+    public int volume() {
+        return blockSnapshots.size();
+    }
+
 }

@@ -96,7 +96,7 @@ public class BlockOperationRenderer implements OperationRenderer {
 
         var operation = getResult().getOperation();
 
-        if (renderContext.maxRenderVolume() < operation.getContext().getBoxVolume()) {
+        if (renderContext.maxRenderVolume() < operation.getContext().getVolume()) {
             return;
         }
 
