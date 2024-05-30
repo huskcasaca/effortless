@@ -29,21 +29,6 @@ public class BlockStateCopyOperation extends BlockOperation {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
             return BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM;
         }
-        if (getBlockState() == null) {
-            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
-        }
-        if (!context.configs().constraintConfig().allowCopyPasteStructures()) {
-            return BlockOperationResultType.FAIL_COPY_NO_PERMISSION;
-        }
-        if (getBlockState().isAir()) {
-            return BlockOperationResultType.FAIL_BLOCK_STATE_AIR;
-        }
-        if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResultType.FAIL_COPY_BLACKLISTED;
-        }
-        if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
-            return BlockOperationResultType.FAIL_COPY_BLACKLISTED;
-        }
         if (player.getGameMode().isSpectator()) {
             return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
         }
@@ -53,6 +38,23 @@ public class BlockStateCopyOperation extends BlockOperation {
         if (!isInHeightBound()) {
             return BlockOperationResultType.FAIL_WORLD_HEIGHT;
         }
+        if (getBlockState() == null) {
+            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
+        }
+        if (getBlockState().isAir() && !context.clipboard().copyAir()) {
+            return BlockOperationResultType.FAIL_BLOCK_STATE_AIR;
+        }
+
+        if (!context.configs().constraintConfig().allowCopyPasteStructures()) {
+            return BlockOperationResultType.FAIL_COPY_NO_PERMISSION;
+        }
+        if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
+            return BlockOperationResultType.FAIL_COPY_BLACKLISTED;
+        }
+        if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
+            return BlockOperationResultType.FAIL_COPY_BLACKLISTED;
+        }
+
         if (world.isClient()) {
             return BlockOperationResultType.CONSUME;
         }
@@ -68,7 +70,7 @@ public class BlockStateCopyOperation extends BlockOperation {
         EntityState.set(getPlayer(), entityStateBeforeOp);
         var blockStateAfterOp = getBlockStateInWorld();
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
+        if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
 

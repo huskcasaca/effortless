@@ -56,14 +56,9 @@ public class BlockStateUpdateOperation extends BlockOperation {
     }
 
     protected BlockOperationResultType updateBlock() {
-        if (getBlockStateInWorld() == null || getBlockState() == null) {
-            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
-        }
+
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
             return BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM;
-        }
-        if (getBlockStateInWorld() == null || getBlockState() == null) {
-            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
         }
         if (player.getGameMode().isSpectator()) {
             return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
@@ -74,9 +69,37 @@ public class BlockStateUpdateOperation extends BlockOperation {
         if (!isInHeightBound()) {
             return BlockOperationResultType.FAIL_WORLD_HEIGHT;
         }
+        if (getBlockStateInWorld() == null || getBlockState() == null) {
+            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
+        }
         if (getBlockStateInWorld().isAir() && getBlockState().isAir()) {
             return BlockOperationResultType.FAIL_BLOCK_STATE_AIR;
         }
+
+        if (!getBlockStateInWorld().isAir()) {
+            if (!context.configs().constraintConfig().allowBreakBlocks()) {
+                return BlockOperationResultType.FAIL_BREAK_NO_PERMISSION;
+            }
+            if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockStateInWorld().getItem().getId()) && !getBlockStateInWorld().isAir()) {
+                return BlockOperationResultType.FAIL_BREAK_BLACKLISTED;
+            }
+            if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockStateInWorld().getItem().getId()) && !getBlockStateInWorld().isAir()) {
+                return BlockOperationResultType.FAIL_BREAK_BLACKLISTED;
+            }
+        }
+
+        if (!getBlockState().isAir()) {
+            if (!context.configs().constraintConfig().allowPlaceBlocks()) {
+                return BlockOperationResultType.FAIL_PLACE_NO_PERMISSION;
+            }
+            if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
+                return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
+            }
+            if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
+                return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
+            }
+        }
+
 
         if (!getBlockState().isAir()) { // check replace for place
 
@@ -108,17 +131,8 @@ public class BlockStateUpdateOperation extends BlockOperation {
         }
 
         if (!getBlockStateInWorld().isAir()) {
-            if (!context.configs().constraintConfig().allowBreakBlocks()) {
-                return BlockOperationResultType.FAIL_BREAK_NO_PERMISSION;
-            }
             if (!player.getGameMode().isCreative() && player.getWorld().getBlockState(getBlockPosition()).hasTagFeatureCannotReplace()) {
-                return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;
-            }
-            if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockStateInWorld().getItem().getId()) && !getBlockStateInWorld().isAir()) {
-                return BlockOperationResultType.FAIL_BREAK_BLACKLISTED;
-            }
-            if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockStateInWorld().getItem().getId()) && !getBlockStateInWorld().isAir()) {
-                return BlockOperationResultType.FAIL_BREAK_BLACKLISTED;
+                return BlockOperationResultType.FAIL_BREAK_REPLACE_FLAGS;
             }
 
             var durabilityReserved = getContext().getReservedToolDurability();
@@ -133,7 +147,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
                 return BlockOperationResultType.FAIL_BREAK_TOOL_INSUFFICIENT;
             }
 
-            if (context.isPreviewType()) {
+            if (context.isPreviewType() || context.isBuildClientType()) {
                 if (requireCorrectTool) {
                     miningTool.get().damageBy(player, 1);
                 }
@@ -153,18 +167,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
             }
         }
 
-
         if (!getBlockState().isAir()) {
-            if (!context.configs().constraintConfig().allowPlaceBlocks()) {
-                return BlockOperationResultType.FAIL_PLACE_NO_PERMISSION;
-            }
-            if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
-                return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
-            }
-            if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
-                return BlockOperationResultType.FAIL_PLACE_BLACKLISTED;
-            }
-
             var itemStack = storage.search(getBlockState().getItem()).orElse(null);
 
             if (itemStack == null || itemStack.isEmpty()) {
@@ -175,7 +178,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
                 return BlockOperationResultType.FAIL_PLACE_ITEM_NOT_BLOCK;
             }
 
-            if (context.isPreviewType()) {
+            if (context.isPreviewType() || context.isBuildClientType()) {
                 itemStack.decrease(1);
                 return BlockOperationResultType.CONSUME;
             }
@@ -218,7 +221,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
         EntityState.set(getPlayer(), entityStateBeforeOp);
         var blockStateAfterOp = getBlockStateInWorld();
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
+        if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             if (result.success()) {
                 getPlayer().getClient().getParticleEngine().destroy(getBlockPosition(), blockStateBeforeOp);
             }

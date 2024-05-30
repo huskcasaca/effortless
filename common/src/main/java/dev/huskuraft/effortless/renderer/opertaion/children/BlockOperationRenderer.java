@@ -34,10 +34,10 @@ public class BlockOperationRenderer implements OperationRenderer {
     public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
         switch (blockOperationResult.getOperation().getType()) {
             case UPDATE -> {
-                if (blockOperationResult.getBlockStateBeforeOp() == null || blockOperationResult.getBlockStateInOp() == null) {
+                if (blockOperationResult.getBlockStateToBreak() == null || blockOperationResult.getBlockStateToPlace() == null) {
                     return BLOCK_HIDEEN_COLOR;
                 }
-                if (!blockOperationResult.getBlockStateInOp().isAir()) {
+                if (!blockOperationResult.getBlockStateToPlace().isAir()) {
                     return switch (blockOperationResult.result()) {
                         case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
                         case FAIL_PLACE_ITEM_INSUFFICIENT, FAIL_PLACE_ITEM_NOT_BLOCK -> BLOCK_PLACE_INSUFFICIENT_COLOR;

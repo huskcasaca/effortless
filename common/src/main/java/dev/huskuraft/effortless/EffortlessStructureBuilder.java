@@ -117,7 +117,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
             return;
         }
 
-        if (context.isPreviewType()) {
+        if (context.isPreviewType() || context.isBuildClientType()) {
             var server = player.getServer();
             for (var otherPlayer : server.getPlayerList().getPlayers()) {
                 if (otherPlayer.getId().equals(player.getId()) || otherPlayer.getPosition().distance(player.getPosition()) > 128) {

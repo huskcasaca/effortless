@@ -65,7 +65,7 @@ public class BatchBuildSession implements BuildSession {
     }
 
     protected BatchOperation create(World world, Player player, Context context) {
-        var storage = Storage.create(player, context.isPreviewType()); // TODO: 21/5/24 use storage from context
+        var storage = Storage.create(player, context.isPreviewType() || context.isBuildClientType()); // TODO: 21/5/24 use storage from context
         var inHandTransformer = ItemRandomizer.single(null, player.getItemStack(InteractionHand.MAIN).getItem());
         var operations = (BatchOperation) new DeferredBatchOperation(context, () -> switch (context.buildState()) {
             case IDLE -> Stream.<BlockOperation>empty();
@@ -115,7 +115,7 @@ public class BatchBuildSession implements BuildSession {
         if (context.buildState() != BuildState.COPY_STRUCTURE) {
             return;
         }
-        if (context.buildType() != BuildType.PREVIEW_ONCE) {
+        if (context.buildType() != BuildType.BUILD_CLIENT) {
             return;
         }
         if (!context.clipboard().enabled()) {

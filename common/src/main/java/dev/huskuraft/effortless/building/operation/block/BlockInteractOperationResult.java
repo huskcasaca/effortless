@@ -25,52 +25,40 @@ public class BlockInteractOperationResult extends BlockOperationResult {
                 operation.getContext(),
                 operation.getStorage(),
                 operation.getInteraction(),
-                getBlockStateBeforeOp(),
+                getBlockStateToBreak(),
                 operation.getEntityState()
         );
     }
 
     @Override
     public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
-        switch (blockSummary) {
-            case BLOCKS_INTERACTED -> {
-                switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        return List.of(getBlockStateBeforeOp());
-                    }
-                }
-            }
-            case BLOCKS_NOT_INTERACTABLE -> {
-                switch (result) {
-                    case FAIL_BREAK_REPLACE_RULE, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> {
-                        return List.of(getBlockStateBeforeOp());
-                    }
-                }
-            }
-            case BLOCKS_BLACKLISTED -> {
-                switch (result) {
-                    case FAIL_INTERACT_BLACKLISTED -> {
-                        return List.of(getBlockStateBeforeOp());
-                    }
-                }
-            }
-            case BLOCKS_NO_PERMISSION -> {
-                switch (result) {
-                    case FAIL_INTERACT_NO_PERMISSION -> {
-                        return List.of(getBlockStateBeforeOp());
-                    }
-                }
-            }
-            case BLOCKS_TOOLS_INSUFFICIENT -> {
-                switch (result) {
-                    case FAIL_BREAK_TOOL_INSUFFICIENT -> {
-                        return List.of(getBlockStateBeforeOp());
-                    }
-                }
-            }
-
+        var blockState = switch (blockSummary) {
+            case BLOCKS_INTERACTED -> switch (result) {
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> getBlockStateToBreak();
+                default -> null;
+            };
+            case BLOCKS_NOT_INTERACTABLE -> switch (result) {
+                case FAIL_UNKNOWN -> getBlockStateToBreak();
+                default -> null;
+            };
+            case BLOCKS_BLACKLISTED -> switch (result) {
+                case FAIL_INTERACT_BLACKLISTED -> getBlockStateToBreak();
+                default -> null;
+            };
+            case BLOCKS_NO_PERMISSION -> switch (result) {
+                case FAIL_INTERACT_NO_PERMISSION -> getBlockStateToBreak();
+                default -> null;
+            };
+            case BLOCKS_TOOLS_INSUFFICIENT -> switch (result) {
+                case FAIL_INTERACT_TOOL_INSUFFICIENT -> getBlockStateToBreak();
+                default -> null;
+            };
+            default -> null;
+        };
+        if (blockState == null) {
+            return List.of();
         }
-        return List.of();
+        return List.of(blockState);
     }
 
 

@@ -95,7 +95,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             setContext(player, getContext(getPlayer()).newInteraction());
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
-            var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_ONCE);
+            var previewContext = finalizedContext.withBuildType(BuildType.BUILD_CLIENT);
             var result = new BatchBuildSession(this, player, previewContext).commit();
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
             showBuildContextResult(context.id(), 1024, player, context, result);
@@ -461,7 +461,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         showBuildContextResult(player.getId(), 1024, player, context, result);
         showBuildTooltip(context.id(), 1024, player, result);
 
-        if (context.isPreviewOnceType()) {
+        if (context.isBuildClientType()) {
             playSoundInBatch(player, result);
         }
 

@@ -96,12 +96,12 @@ public record Context(
         return buildType() == BuildType.BUILD;
     }
 
-    public boolean isPreviewType() {
-        return buildType() == BuildType.PREVIEW || buildType() == BuildType.PREVIEW_ONCE;
+    public boolean isBuildClientType() {
+        return buildType() == BuildType.BUILD_CLIENT;
     }
 
-    public boolean isPreviewOnceType() {
-        return buildType() == BuildType.PREVIEW_ONCE;
+    public boolean isPreviewType() {
+        return buildType() == BuildType.PREVIEW;
     }
 
     public boolean isBuilding() {

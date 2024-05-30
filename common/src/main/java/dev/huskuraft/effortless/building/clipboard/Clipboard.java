@@ -28,4 +28,8 @@ public record Clipboard(
         return blockSnapshots.size();
     }
 
+    public boolean copyAir() {
+        return false;
+    }
+
 }

@@ -31,9 +31,19 @@ public class BlockInteractOperation extends BlockOperation {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
             return BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM;
         }
+        if (player.getGameMode().isSpectator()) {
+            return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
+        }
+        if (!isInBorderBound()) {
+            return BlockOperationResultType.FAIL_WORLD_BORDER;
+        }
+        if (!isInHeightBound()) {
+            return BlockOperationResultType.FAIL_WORLD_HEIGHT;
+        }
         if (getBlockState() == null) {
             return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
         }
+
         if (!context.configs().constraintConfig().allowInteractBlocks()) {
             return BlockOperationResultType.FAIL_INTERACT_NO_PERMISSION;
         }
@@ -45,50 +55,34 @@ public class BlockInteractOperation extends BlockOperation {
                 return BlockOperationResultType.FAIL_INTERACT_BLACKLISTED;
             }
         }
-        if (player.getGameMode().isSpectator()) {
-            return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
-        }
-        if (!isInBorderBound()) {
-            return BlockOperationResultType.FAIL_WORLD_BORDER;
-        }
-        if (!isInHeightBound()) {
-            return BlockOperationResultType.FAIL_WORLD_HEIGHT;
-        }
 
-        // action permission
-        var selectedItemStack = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
+        var itemStackToUse = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
 
-        if (context.isPreviewType() && player.getWorld().isClient()) {
-            selectedItemStack.decrease(1);
+        if (context.isPreviewType() || context.isBuildClientType()) {
+            itemStackToUse.decrease(1);
             return BlockOperationResultType.CONSUME;
         }
 
-        if (world.isClient()) {
-            return BlockOperationResultType.CONSUME;
-        }
-        // compatible layer
-        var originalItemStack = player.getItemStack(getHand());
-
-//        if (!(originalItemStack.getItem() instanceof BucketItem) && blockState.isAir()) {
+        if (context.isBuildType()) {
+            var itemStackBeforeInteract = player.getItemStack(getHand());
+//        if (!(itemStackBeforeInteract.getItem() instanceof BucketItem) && blockState.isAir()) {
 //            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
 //        }
-
-        if (selectedItemStack.isDamageableItem() && selectedItemStack.getRemainingDamage() <= context.getReservedToolDurability()) {
-            return BlockOperationResultType.FAIL_PLACE_ITEM_INSUFFICIENT;
-        }
-
-        player.setItemStack(getHand(), selectedItemStack);
-
-        var interacted = getBlockStateInWorld().use(player, interaction).consumesAction();
-        if (!interacted) {
-            interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();
-            if (interacted && !world.isClient()) {
-                player.awardStat(StatTypes.ITEM_USED.get(selectedItemStack.getItem()));
+            if (itemStackToUse.isDamageableItem() && itemStackToUse.getRemainingDamage() <= context.getReservedToolDurability()) {
+                return BlockOperationResultType.FAIL_INTERACT_TOOL_INSUFFICIENT;
             }
-        }
-        player.setItemStack(getHand(), originalItemStack);
-        if (!interacted) {
-            return BlockOperationResultType.FAIL_UNKNOWN;
+            player.setItemStack(getHand(), itemStackToUse);
+            var interacted = getBlockStateInWorld().use(player, interaction).consumesAction();
+            if (!interacted) {
+                interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();
+                if (interacted && !world.isClient()) {
+                    player.awardStat(StatTypes.ITEM_USED.get(itemStackToUse.getItem()));
+                }
+            }
+            player.setItemStack(getHand(), itemStackBeforeInteract);
+            if (!interacted) {
+                return BlockOperationResultType.FAIL_UNKNOWN;
+            }
         }
 
         return BlockOperationResultType.SUCCESS;
@@ -103,7 +97,7 @@ public class BlockInteractOperation extends BlockOperation {
         var result = interactBlock();
         EntityState.set(getPlayer(), entityStateBeforeOp);
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
+        if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
         var blockStateAfterOp = getBlockStateInWorld();

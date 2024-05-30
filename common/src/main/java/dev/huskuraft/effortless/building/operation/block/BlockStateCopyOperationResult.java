@@ -38,38 +38,29 @@ public class BlockStateCopyOperationResult extends BlockOperationResult {
 
     @Override
     public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
-        switch (blockSummary) {
-            case BLOCKS_COPIED -> {
-                switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        return List.of(getBlockStateBeforeOp());
-                    }
-                }
-            }
-            case BLOCKS_NOT_COPYABLE -> {
-                switch (result) {
-                    case FAIL_BREAK_REPLACE_RULE, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> {
-                        return List.of(getBlockStateBeforeOp());
-                    }
-                }
-            }
-            case BLOCKS_BLACKLISTED -> {
-                switch (result) {
-                    case FAIL_COPY_BLACKLISTED -> {
-                        return List.of(getBlockStateBeforeOp());
-                    }
-                }
-            }
-            case BLOCKS_NO_PERMISSION -> {
-                switch (result) {
-                    case FAIL_COPY_NO_PERMISSION -> {
-                        return List.of(getBlockStateBeforeOp());
-                    }
-                }
-            }
-
+        var blockState = switch (blockSummary) {
+            case BLOCKS_COPIED -> switch (result) {
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> getBlockStateToBreak();
+                default -> null;
+            };
+            case BLOCKS_NOT_COPYABLE -> switch (result) {
+                case FAIL_BREAK_REPLACE_RULE, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> getBlockStateToBreak();
+                default -> null;
+            };
+            case BLOCKS_BLACKLISTED -> switch (result) {
+                case FAIL_COPY_BLACKLISTED -> getBlockStateToBreak();
+                default -> null;
+            };
+            case BLOCKS_NO_PERMISSION -> switch (result) {
+                case FAIL_COPY_NO_PERMISSION -> getBlockStateToBreak();
+                default -> null;
+            };
+            default -> null;
+        };
+        if (blockState == null) {
+            return List.of();
         }
-        return List.of();
+        return List.of(blockState);
     }
 
 }

@@ -29,29 +29,29 @@ public abstract class BlockOperationResult extends OperationResult {
     }
 
     @Nullable
-    public final BlockState getBlockStateBeforeOp() {
+    public final BlockState getBlockStateToBreak() {
         return blockStateBeforeOp;
     }
 
     @Nullable
-    public final BlockState getBlockStateAfterOp() {
+    public final BlockState getBlockStatePlaced() {
         return blockStateAfterOp;
     }
 
     @Nullable
-    public final BlockState getBlockStateInOp() {
+    public final BlockState getBlockStateToPlace() {
         return getOperation().getBlockState();
     }
 
     @Nullable
     public final BlockState getBlockStateForRenderer() {
-        if (getBlockStateBeforeOp() == null || getBlockStateInOp() == null) {
+        if (getBlockStateToBreak() == null || getBlockStateToPlace() == null) {
             return null;
         }
-        if (!getBlockStateBeforeOp().isAir() && getBlockStateInOp().isAir()) {
-            return getBlockStateBeforeOp();
+        if (!getBlockStateToBreak().isAir() && getBlockStateToPlace().isAir()) {
+            return getBlockStateToBreak();
         } else {
-            return getBlockStateInOp();
+            return getBlockStateToPlace();
         }
     }
 
