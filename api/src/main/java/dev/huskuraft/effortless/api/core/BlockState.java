@@ -18,7 +18,7 @@ public interface BlockState extends StateHolder {
 
     boolean isReplaceable();
 
-    boolean isDestroyable();
+    boolean hasTagFeatureCannotReplace();
 
     SoundSet getSoundSet();
 

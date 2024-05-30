@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.building.operation.block;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.DiggerItem;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
@@ -110,7 +111,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
             if (!context.configs().constraintConfig().allowBreakBlocks()) {
                 return BlockOperationResultType.FAIL_BREAK_NO_PERMISSION;
             }
-            if (!player.getGameMode().isCreative() && !player.getWorld().getBlockState(getBlockPosition()).isDestroyable()) {
+            if (!player.getGameMode().isCreative() && player.getWorld().getBlockState(getBlockPosition()).hasTagFeatureCannotReplace()) {
                 return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;
             }
             if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockStateInWorld().getItem().getId()) && !getBlockStateInWorld().isAir()) {
@@ -125,6 +126,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
             var miningTool = getStorage().contents().stream().filter(stack -> stack.getItem().isCorrectToolForDrops(getBlockStateInWorld())).filter(tool -> !tool.isDamageableItem() || tool.getRemainingDamage() > durabilityReserved).findFirst();
 
             if (miningTool.isEmpty()) {
+                miningTool = getStorage().contents().stream().filter(tool -> tool.getItem() instanceof DiggerItem).filter(tool -> !tool.isDamageableItem() || tool.getRemainingDamage() > durabilityReserved).findFirst();
             }
 
             if (requireCorrectTool && miningTool.isEmpty()) {
