@@ -5,7 +5,6 @@ import java.util.List;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
-import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
 public class BlockInteractOperationResult extends BlockOperationResult {
 
@@ -20,7 +19,15 @@ public class BlockInteractOperationResult extends BlockOperationResult {
 
     @Override
     public Operation getReverseOperation() {
-        return new EmptyOperation(operation.getContext());
+        return new BlockStateUpdateOperation(
+                operation.getWorld(),
+                operation.getPlayer(),
+                operation.getContext(),
+                operation.getStorage(),
+                operation.getInteraction(),
+                getBlockStateBeforeOp(),
+                operation.getEntityState()
+        );
     }
 
     @Override
