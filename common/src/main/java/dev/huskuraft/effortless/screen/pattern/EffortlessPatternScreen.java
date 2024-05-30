@@ -121,7 +121,7 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
 
     @Override
     public void onReload() {
-        this.lastSettings = new Pattern(lastSettings.id(), lastSettings.enabled(), entries.items());
+        this.lastSettings = new Pattern(lastSettings.enabled(), entries.items());
         this.entries.setVisible(lastSettings.enabled());
 
         this.upButton.setActive(entries.hasSelected() && entries.indexOfSelected() > 0);

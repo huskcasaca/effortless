@@ -13,7 +13,6 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 public class PatternConfigSerializer implements ConfigSerializer<Pattern> {
 
     public static final PatternConfigSerializer INSTANCE = new PatternConfigSerializer();
-    private static final String KEY_ID = "id";
     private static final String KEY_ENABLED = "enabled";
     private static final String KEY_TRANSFORMERS = "transformers";
 
@@ -36,7 +35,6 @@ public class PatternConfigSerializer implements ConfigSerializer<Pattern> {
     @Override
     public ConfigSpec getSpec(Config config) {
         var spec = new ConfigSpec();
-        spec.define(KEY_ID, PatternConfigSerializer::randomIdString, PatternConfigSerializer::isIdCorrect);
         spec.define(KEY_ENABLED, () -> getDefault().enabled(), Boolean.class::isInstance);
         spec.defineList(KEY_TRANSFORMERS, () -> getDefault().transformers(), Config.class::isInstance);
         return spec;
@@ -46,7 +44,6 @@ public class PatternConfigSerializer implements ConfigSerializer<Pattern> {
     public Pattern deserialize(Config config) {
         validate(config);
         return new Pattern(
-                UUID.fromString(config.get(KEY_ID)),
                 config.get(KEY_ENABLED),
                 config.<List<Config>>get(KEY_TRANSFORMERS).stream().map(TransformerConfigSerializer.INSTANCE::deserialize).filter(Objects::nonNull).toList()
         );
@@ -55,7 +52,6 @@ public class PatternConfigSerializer implements ConfigSerializer<Pattern> {
     @Override
     public Config serialize(Pattern pattern) {
         var config = Config.inMemory();
-        config.set(KEY_ID, pattern.id().toString());
         config.set(KEY_ENABLED, pattern.enabled());
         config.set(KEY_TRANSFORMERS, pattern.transformers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList());
         validate(config);

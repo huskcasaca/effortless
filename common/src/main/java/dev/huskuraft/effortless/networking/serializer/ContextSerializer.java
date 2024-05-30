@@ -93,7 +93,6 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         @Override
         public Pattern read(NetByteBuf byteBuf) {
             return new Pattern(
-                    byteBuf.readUUID(),
                     byteBuf.readBoolean(),
                     byteBuf.readList(new TransformerSerializer())
             );
@@ -101,7 +100,6 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
 
         @Override
         public void write(NetByteBuf byteBuf, Pattern pattern) {
-            byteBuf.writeUUID(pattern.id());
             byteBuf.writeBoolean(pattern.enabled());
             byteBuf.writeList(pattern.transformers(), new TransformerSerializer());
         }
