@@ -120,31 +120,31 @@ public class BlockStateUpdateOperation extends BlockOperation {
                 return BlockOperationResultType.FAIL_BREAK_BLACKLISTED;
             }
 
-            var reservedDurability = getContext().getReservedToolDurability();
-            var useCorrectTool = !player.getGameMode().isCreative() && context.useCorrectTool();
-            var correctTool = getStorage().contents().stream().filter(itemStack -> itemStack.getItem().isCorrectToolForDrops(getBlockStateInWorld())).filter(itemStack -> !itemStack.isDamageableItem() || itemStack.getRemainingDamage() > reservedDurability).findFirst();
+            var durabilityReserved = getContext().getReservedToolDurability();
+            var requireCorrectTool = !player.getGameMode().isCreative() && context.useCorrectTool();
+            var miningTool = getStorage().contents().stream().filter(stack -> stack.getItem().isCorrectToolForDrops(getBlockStateInWorld())).filter(tool -> !tool.isDamageableItem() || tool.getRemainingDamage() > durabilityReserved).findFirst();
 
-            if (useCorrectTool && correctTool.isEmpty()) {
+            if (miningTool.isEmpty()) {
+            }
+
+            if (requireCorrectTool && miningTool.isEmpty()) {
                 return BlockOperationResultType.FAIL_BREAK_TOOL_INSUFFICIENT;
             }
 
             if (context.isPreviewType()) {
-                if (useCorrectTool) {
-                    correctTool.get().damageBy(player, 1);
+                if (requireCorrectTool) {
+                    miningTool.get().damageBy(player, 1);
                 }
             }
             if (context.isBuildType()) {
-                var oldItem = player.getItemStack(InteractionHand.MAIN);
-                if (useCorrectTool) {
-                    player.setItemStack(InteractionHand.MAIN, correctTool.get());
+                var itemStackBeforeBreak = player.getItemStack(InteractionHand.MAIN);
+                if (requireCorrectTool) {
+                    player.setItemStack(InteractionHand.MAIN, miningTool.get());
                 }
-
                 var destroyed = destroyBlockInternal();
-
-                if (useCorrectTool) {
-                    player.setItemStack(InteractionHand.MAIN, oldItem);
+                if (requireCorrectTool) {
+                    player.setItemStack(InteractionHand.MAIN, itemStackBeforeBreak);
                 }
-
                 if (!destroyed) {
                     return BlockOperationResultType.FAIL_UNKNOWN;
                 }
@@ -197,9 +197,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
                 if (!placed) {
                     return BlockOperationResultType.FAIL_UNKNOWN;
                 }
-                if (!world.isClient()) {
-                    player.awardStat(StatTypes.ITEM_USED.get(itemStack.getItem()));
-                }
+                player.awardStat(StatTypes.ITEM_USED.get(itemStack.getItem()));
                 return BlockOperationResultType.SUCCESS;
             }
         }

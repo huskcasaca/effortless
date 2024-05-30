@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.InventorySnapshot;
 import dev.huskuraft.effortless.building.clipboard.BlockSnapshot;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
+import dev.huskuraft.effortless.building.config.BuilderConfig;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
@@ -30,7 +31,8 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                 byteBuf.read(new PatternSerializer()),
                 byteBuf.read(new ReplaceSerializer()),
                 new Context.Configs(
-                        byteBuf.read(new ConstraintConfigSerializer())
+                        byteBuf.read(new ConstraintConfigSerializer()),
+                        byteBuf.read(new BuilderConfigSerializer())
                 ),
                 byteBuf.readNullable(new ExtrasSerializer())
         );
@@ -49,6 +51,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.write(context.replace(), new ReplaceSerializer());
 
         byteBuf.write(context.configs().constraintConfig(), new ConstraintConfigSerializer());
+        byteBuf.write(context.configs().builderConfig(), new BuilderConfigSerializer());
         byteBuf.writeNullable(context.extras(), new ExtrasSerializer());
 
 
@@ -183,6 +186,23 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
             byteBuf.writeEnum(replace.replaceMode());
             byteBuf.writeList(replace.replaceList(), NetByteBuf::writeItemStack);
             byteBuf.writeBoolean(replace.isQuick());
+        }
+
+    }
+
+    public static class BuilderConfigSerializer implements NetByteBufSerializer<BuilderConfig> {
+        @Override
+        public BuilderConfig read(NetByteBuf byteBuf) {
+            return new BuilderConfig(
+                    byteBuf.readVarInt(),
+                    byteBuf.readBoolean()
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, BuilderConfig builderConfig) {
+            byteBuf.writeVarInt(builderConfig.reservedToolDurability());
+            byteBuf.writeBoolean(builderConfig.passiveMode());
         }
 
     }

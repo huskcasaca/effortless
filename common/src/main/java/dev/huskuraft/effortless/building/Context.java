@@ -18,6 +18,7 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
+import dev.huskuraft.effortless.building.config.BuilderConfig;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
@@ -47,7 +48,7 @@ public record Context(
     }
 
     public int getReservedToolDurability() {
-        return 1;
+        return configs().builderConfig().reservedToolDurability();
     }
 
     public boolean useLegacyBlockPlace() {
@@ -65,7 +66,8 @@ public record Context(
                 Pattern.DISABLED,
                 Replace.DISABLED,
                 new Configs(
-                        ConstraintConfig.DEFAULT
+                        ConstraintConfig.DEFAULT,
+                        BuilderConfig.DEFAULT
                 ), null
         );
     }
@@ -266,7 +268,12 @@ public record Context(
 
     public Context withConstraintConfig(ConstraintConfig config) {
         // FIXME: 4/4/24 commands
-        return withReachParams(new Configs(config));
+        return withReachParams(new Configs(config, configs().builderConfig()));
+    }
+
+    public Context withBuilderConfig(BuilderConfig config) {
+        // FIXME: 4/4/24 commands
+        return withReachParams(new Configs(configs().constraintConfig(), config));
     }
 
     public Vector3i getInteractionBox() {
@@ -345,7 +352,8 @@ public record Context(
     }
 
     public record Configs(
-            ConstraintConfig constraintConfig
+            ConstraintConfig constraintConfig,
+            BuilderConfig builderConfig
     ) {
     }
 

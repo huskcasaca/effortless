@@ -222,11 +222,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public Context getDefaultContext(Player player) {
-        var serverSessionConfig = getEntrance().getSessionManager().getServerSessionConfig();
-        if (serverSessionConfig == null) {
-            return Context.defaultSet().withConstraintConfig(ConstraintConfig.EMPTY);
+        var constraintConfig = getEntrance().getSessionManager().getServerSessionConfig();
+        var builderConfig = getEntrance().getConfigStorage().get().builderConfig();
+        if (constraintConfig == null) {
+            return Context.defaultSet().withConstraintConfig(ConstraintConfig.EMPTY).withBuilderConfig(builderConfig);
         }
-        return Context.defaultSet().withConstraintConfig(serverSessionConfig.getByPlayer(player));
+        return Context.defaultSet().withConstraintConfig(constraintConfig.getByPlayer(player)).withBuilderConfig(builderConfig);
     }
 
     @Override
@@ -716,7 +717,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         entries.add(texts);
 
         entries.add(context.buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries, context.buildType() == BuildType.BUILD);
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries, context.isBuildType());
 
     }
 

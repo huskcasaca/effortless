@@ -66,6 +66,16 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
 
     private class ClientPacketListener implements AllPacketListener {
 
+        private boolean isValidReceiver() {
+            if (getEntrance().getClient() == null) {
+                return false;
+            }
+            if (getEntrance().getClient().getWorld() == null) {
+                return false;
+            }
+            return true;
+        }
+
         @Override
         public void handle(PlayerCommandPacket packet, Player player) {
             switch (packet.action()) {
@@ -85,40 +95,46 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
 
         @Override
         public void handle(PlayerBuildPreviewPacket packet, Player player) {
-
-            if (getEntrance().getClient() == null) {
+            if (!isValidReceiver()) {
                 return;
             }
-
-            if (getEntrance().getClient().getWorld() == null) {
-                return;
-            }
-
             var owner = getEntrance().getClient().getWorld().getPlayer(packet.playerId());
             if (owner == null) {
                 return;
             }
-            getEntrance().getStructureBuilder().onContextReceived(owner, packet.context());
+            getEntrance().getClient().execute(() -> getEntrance().getStructureBuilder().onContextReceived(owner, packet.context()));
         }
 
         @Override
         public void handle(PlayerPermissionCheckPacket packet, Player player) {
+            if (!isValidReceiver()) {
+                return;
+            }
         }
 
         @Override
         public void handle(PlayerBuildTooltipPacket packet, Player player) {
-            getEntrance().getStructureBuilder().onHistoryResultReceived(player, packet.operationTooltip());
+            if (!isValidReceiver()) {
+                return;
+            }
+            getEntrance().getClient().execute(() -> getEntrance().getStructureBuilder().onHistoryResultReceived(player, packet.operationTooltip()));
 
         }
 
         @Override
         public void handle(SessionPacket packet, Player player) {
-            getEntrance().getSessionManager().onSession(packet.session(), player);
+            if (!isValidReceiver()) {
+                return;
+            }
+            getEntrance().getClient().execute(() -> getEntrance().getSessionManager().onSession(packet.session(), player));
         }
 
         @Override
         public void handle(SessionConfigPacket packet, Player player) {
-            getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player);
+            if (!isValidReceiver()) {
+                return;
+            }
+            getEntrance().getClient().execute(() -> getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player));
 
         }
     }

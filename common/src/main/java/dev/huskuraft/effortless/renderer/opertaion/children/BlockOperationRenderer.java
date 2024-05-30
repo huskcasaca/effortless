@@ -23,6 +23,8 @@ public class BlockOperationRenderer implements OperationRenderer {
     public static final Color BLOCK_COPY_SUCCESS_COLOR = new Color(0, 235, 0);
     public static final Color BLOCK_COPY_FAIL_COLOR = BLOCK_PLACE_FAIL_COLOR;
 
+    public static final Color BLOCK_HIDEEN_COLOR = null;
+
     private final BlockOperationResult result;
 
     public BlockOperationRenderer(OperationsRenderer operationsRenderer, BlockOperationResult result) {
@@ -33,17 +35,19 @@ public class BlockOperationRenderer implements OperationRenderer {
         switch (blockOperationResult.getOperation().getType()) {
             case UPDATE -> {
                 if (blockOperationResult.getBlockStateBeforeOp() == null || blockOperationResult.getBlockStateInOp() == null) {
-                    return BLOCK_PLACE_FAIL_COLOR;
+                    return BLOCK_HIDEEN_COLOR;
                 }
                 if (!blockOperationResult.getBlockStateInOp().isAir()) {
                     return switch (blockOperationResult.result()) {
                         case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
                         case FAIL_PLACE_ITEM_INSUFFICIENT, FAIL_PLACE_ITEM_NOT_BLOCK -> BLOCK_PLACE_INSUFFICIENT_COLOR;
+                        case FAIL_WORLD_HEIGHT, FAIL_WORLD_BORDER, FAIL_WORLD_INCORRECT_DIM -> BLOCK_HIDEEN_COLOR;
                         default -> BLOCK_PLACE_FAIL_COLOR;
                     };
                 }
                 return switch (blockOperationResult.result()) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_BREAK_SUCCESS_COLOR;
+                    case FAIL_WORLD_HEIGHT, FAIL_WORLD_BORDER, FAIL_WORLD_INCORRECT_DIM -> BLOCK_HIDEEN_COLOR;
                     default -> BLOCK_BREAK_FAIL_COLOR;
                 };
 
@@ -51,17 +55,19 @@ public class BlockOperationRenderer implements OperationRenderer {
             case INTERACT -> {
                 return switch (blockOperationResult.result()) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_INTERACT_SUCCESS_COLOR;
+                    case FAIL_WORLD_HEIGHT, FAIL_WORLD_BORDER, FAIL_WORLD_INCORRECT_DIM -> BLOCK_HIDEEN_COLOR;
                     default -> BLOCK_INTERACT_FAIL_COLOR;
                 };
             }
             case COPY -> {
                 return switch (blockOperationResult.result()) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_COPY_SUCCESS_COLOR;
+                    case FAIL_WORLD_HEIGHT, FAIL_WORLD_BORDER, FAIL_WORLD_INCORRECT_DIM -> BLOCK_HIDEEN_COLOR;
                     default -> BLOCK_COPY_FAIL_COLOR;
                 };
             }
         }
-        return null;
+        return BLOCK_HIDEEN_COLOR;
     }
 
     public static List<Color> getAllColors() {
