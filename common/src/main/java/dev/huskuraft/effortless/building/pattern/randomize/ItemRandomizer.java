@@ -483,7 +483,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     }
 
     public ItemRandomizer withChances(Collection<Chance<Item>> items) {
-        return new ItemRandomizer(id, name, order, target, source, items.stream().filter(chance -> chance.content() instanceof BlockItem).toList());
+        return new ItemRandomizer(id, name, order, target, source, items);
     }
 
     @Override

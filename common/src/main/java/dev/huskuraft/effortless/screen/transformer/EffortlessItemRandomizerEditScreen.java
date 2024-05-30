@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import dev.huskuraft.effortless.api.core.BlockItem;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -17,7 +19,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.randomize.Chance;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 import dev.huskuraft.effortless.building.pattern.randomize.Randomizer;
-import dev.huskuraft.effortless.screen.item.EffortlessBlockItemPickerScreen;
+import dev.huskuraft.effortless.screen.item.EffortlessItemPickerScreen;
 
 public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
 
@@ -94,10 +96,11 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
             entries.deleteSelected();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.25f).build());
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.randomizer.edit.add"), button -> {
-            new EffortlessBlockItemPickerScreen(
+            new EffortlessItemPickerScreen(
                     getEntrance(),
+                    item -> item instanceof BlockItem || item.equals(Items.AIR.item()),
                     item -> {
-                        entries.insertSelected(Chance.of(item, (byte) 1));
+                        entries.insertSelected(Chance.of(item, 1));
                         onReload();
                     }
             ).attach();
