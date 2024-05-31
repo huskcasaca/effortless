@@ -1,5 +1,26 @@
 ## Changelog
 
+
+----------
+
+### 3.0.0-alpha.1
+
+- Add passive mode ([#118](https://github.com/huskcasaca/effortless/pull/118))
+- Reorder session packets ([#119](https://github.com/huskcasaca/effortless/pull/119))
+- Fix tooltip item count ([#120](https://github.com/huskcasaca/effortless/pull/120))
+- Add limitation for block stack size ([#121](https://github.com/huskcasaca/effortless/pull/121))
+- Fix block tracing issues ([#123](https://github.com/huskcasaca/effortless/pull/123))
+- Revamp Patterns UI ([#125](https://github.com/huskcasaca/effortless/pull/125))
+- Revamp Build Mode ([#126](https://github.com/huskcasaca/effortless/pull/126))
+- Revamp Settings UI ([#127](https://github.com/huskcasaca/effortless/pull/127))
+- Add use correct tool only ([#128](https://github.com/huskcasaca/effortless/pull/128))
+- Revamp Sound ([#129](https://github.com/huskcasaca/effortless/pull/129))
+- Add player state when build ([#130](https://github.com/huskcasaca/effortless/pull/130))
+- Revamp Undo/Redo ([#131](https://github.com/huskcasaca/effortless/pull/131))
+- Revamp Transformers ([#132](https://github.com/huskcasaca/effortless/pull/132))
+- Add some replace modes ([#134](https://github.com/huskcasaca/effortless/pull/134))
+- Add clipboard for copy and paste ([#135](https://github.com/huskcasaca/effortless/pull/135))
+
 ----------
 
 ### 2.4.1
