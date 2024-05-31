@@ -4,10 +4,7 @@ import java.awt.*;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.renderer.Renderer;
-import dev.huskuraft.effortless.building.operation.block.BlockBreakOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockInteractOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
-import dev.huskuraft.effortless.building.operation.block.BlockPlaceOperationResult;
 import dev.huskuraft.effortless.renderer.opertaion.BlockRenderLayers;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 
@@ -18,7 +15,15 @@ public class BlockOperationRenderer implements OperationRenderer {
     public static final Color BLOCK_PLACE_FAIL_COLOR = new Color(128, 128, 128);
 
     public static final Color BLOCK_BREAK_SUCCESS_COLOR = new Color(235, 0, 0);
-    public static final Color BLOCK_BREAK_FAIL_COLOR = new Color(128, 128, 128);
+    public static final Color BLOCK_BREAK_FAIL_COLOR = BLOCK_PLACE_FAIL_COLOR;
+
+    public static final Color BLOCK_INTERACT_SUCCESS_COLOR = Color.YELLOW;
+    public static final Color BLOCK_INTERACT_FAIL_COLOR = BLOCK_PLACE_FAIL_COLOR;
+
+    public static final Color BLOCK_COPY_SUCCESS_COLOR = new Color(0, 235, 0);
+    public static final Color BLOCK_COPY_FAIL_COLOR = BLOCK_PLACE_FAIL_COLOR;
+
+    public static final Color BLOCK_HIDEEN_COLOR = null;
 
     private final BlockOperationResult result;
 
@@ -27,32 +32,42 @@ public class BlockOperationRenderer implements OperationRenderer {
     }
 
     public static Color getColorByOpResult(BlockOperationResult blockOperationResult) {
-        if (blockOperationResult instanceof BlockPlaceOperationResult) {
-            if (blockOperationResult.getOperation().getBlockState() == null) {
-                return Color.GRAY;
+        switch (blockOperationResult.getOperation().getType()) {
+            case UPDATE -> {
+                if (blockOperationResult.getBlockStateToBreak() == null || blockOperationResult.getBlockStateToPlace() == null) {
+                    return BLOCK_HIDEEN_COLOR;
+                }
+                if (!blockOperationResult.getBlockStateToPlace().isAir()) {
+                    return switch (blockOperationResult.result()) {
+                        case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
+                        case FAIL_PLACE_ITEM_INSUFFICIENT, FAIL_PLACE_ITEM_NOT_BLOCK -> BLOCK_PLACE_INSUFFICIENT_COLOR;
+                        case FAIL_WORLD_HEIGHT, FAIL_WORLD_BORDER, FAIL_WORLD_INCORRECT_DIM -> BLOCK_HIDEEN_COLOR;
+                        default -> BLOCK_PLACE_FAIL_COLOR;
+                    };
+                }
+                return switch (blockOperationResult.result()) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_BREAK_SUCCESS_COLOR;
+                    case FAIL_WORLD_HEIGHT, FAIL_WORLD_BORDER, FAIL_WORLD_INCORRECT_DIM -> BLOCK_HIDEEN_COLOR;
+                    default -> BLOCK_BREAK_FAIL_COLOR;
+                };
+
             }
-            if (blockOperationResult.getOperation().getBlockState().isAir()) {
-                return Color.GRAY;
+            case INTERACT -> {
+                return switch (blockOperationResult.result()) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_INTERACT_SUCCESS_COLOR;
+                    case FAIL_WORLD_HEIGHT, FAIL_WORLD_BORDER, FAIL_WORLD_INCORRECT_DIM -> BLOCK_HIDEEN_COLOR;
+                    default -> BLOCK_INTERACT_FAIL_COLOR;
+                };
             }
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_PLACE_SUCCESS_COLOR;
-                case FAIL_ITEM_INSUFFICIENT -> BLOCK_PLACE_INSUFFICIENT_COLOR;
-                default -> BLOCK_PLACE_FAIL_COLOR;
-            };
+            case COPY -> {
+                return switch (blockOperationResult.result()) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_COPY_SUCCESS_COLOR;
+                    case FAIL_WORLD_HEIGHT, FAIL_WORLD_BORDER, FAIL_WORLD_INCORRECT_DIM -> BLOCK_HIDEEN_COLOR;
+                    default -> BLOCK_COPY_FAIL_COLOR;
+                };
+            }
         }
-        if (blockOperationResult instanceof BlockBreakOperationResult) {
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> BLOCK_BREAK_SUCCESS_COLOR;
-                default -> BLOCK_BREAK_FAIL_COLOR;
-            };
-        }
-        if (blockOperationResult instanceof BlockInteractOperationResult) {
-            return switch (blockOperationResult.result()) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> Color.YELLOW;
-                default -> BLOCK_BREAK_FAIL_COLOR;
-            };
-        }
-        return null;
+        return BLOCK_HIDEEN_COLOR;
     }
 
     public static List<Color> getAllColors() {
@@ -62,9 +77,15 @@ public class BlockOperationRenderer implements OperationRenderer {
                 BLOCK_PLACE_FAIL_COLOR,
                 BLOCK_BREAK_SUCCESS_COLOR,
                 BLOCK_BREAK_FAIL_COLOR,
-                Color.YELLOW,
-                Color.GRAY
+                BLOCK_INTERACT_SUCCESS_COLOR,
+                BLOCK_INTERACT_FAIL_COLOR,
+                BLOCK_COPY_SUCCESS_COLOR,
+                BLOCK_COPY_FAIL_COLOR
         );
+    }
+
+    public BlockOperationResult getResult() {
+        return result;
     }
 
     @Override
@@ -73,16 +94,16 @@ public class BlockOperationRenderer implements OperationRenderer {
             return;
         }
 
-        var operation = result.getOperation();
+        var operation = getResult().getOperation();
 
-        if (renderContext.maxRenderVolume() < operation.getContext().getBoxVolume()) {
+        if (renderContext.maxRenderVolume() < operation.getContext().getVolume()) {
             return;
         }
 
         var world = operation.getWorld();
         var player = operation.getPlayer();
         var blockPosition = operation.getBlockPosition();
-        var blockState = operation.getBlockState();
+        var blockState = getResult().getBlockStateForRenderer();
         if (world == null || blockState == null || player == null) {
             return;
         }
@@ -91,7 +112,7 @@ public class BlockOperationRenderer implements OperationRenderer {
 //            blockState = blockItem.updateBlockStateFromTag(blockPosition, level, itemStack, blockState);
 //        }
 
-        var color = getColorByOpResult(result);
+        var color = getColorByOpResult(getResult());
 
         if (color == null) {
             return;

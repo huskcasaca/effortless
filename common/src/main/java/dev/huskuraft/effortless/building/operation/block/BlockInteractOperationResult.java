@@ -2,55 +2,64 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import java.util.List;
 
-import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
-import dev.huskuraft.effortless.building.operation.OperationSummaryType;
-import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
 public class BlockInteractOperationResult extends BlockOperationResult {
 
     public BlockInteractOperationResult(
             BlockInteractOperation operation,
-            Type result,
-            List<ItemStack> inputs,
-            List<ItemStack> outputs
+            BlockOperationResultType result,
+            BlockState blockStateBeforeOp,
+            BlockState blockStateAfterOp
     ) {
-        super(operation, result, inputs, outputs);
+        super(operation, result, blockStateBeforeOp, blockStateAfterOp);
     }
 
     @Override
     public Operation getReverseOperation() {
-        if (result().fail()) {
-            return new EmptyOperation();
-        }
-        return new EmptyOperation();
+        return new BlockStateUpdateOperation(
+                operation.getWorld(),
+                operation.getPlayer(),
+                operation.getContext(),
+                operation.getStorage(),
+                operation.getInteraction(),
+                getBlockStateToBreak(),
+                operation.getEntityState()
+        );
     }
 
     @Override
-    public List<ItemStack> getSummary(OperationSummaryType type) {
-        return switch (type) {
+    public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
+        var blockState = switch (blockSummary) {
             case BLOCKS_INTERACTED -> switch (result) {
-                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> inputs;
-                default -> List.of();
+                case SUCCESS, SUCCESS_PARTIAL, CONSUME -> getBlockStateToBreak();
+                default -> null;
             };
             case BLOCKS_NOT_INTERACTABLE -> switch (result) {
-                case FAIL_PLAYER_CANNOT_INTERACT, FAIL_PLAYER_CANNOT_BREAK, FAIL_WORLD_BORDER, FAIL_WORLD_HEIGHT -> inputs;
-                default -> List.of();
-            };
-            case BLOCKS_TOOLS_INSUFFICIENT -> switch (result) {
-                case FAIL_TOOL_INSUFFICIENT -> inputs;
-                default -> List.of();
+                case FAIL_UNKNOWN -> getBlockStateToBreak();
+                default -> null;
             };
             case BLOCKS_BLACKLISTED -> switch (result) {
-                case FAIL_CONFIG_BLACKLISTED -> inputs;
-                default -> List.of();
+                case FAIL_INTERACT_BLACKLISTED -> getBlockStateToBreak();
+                default -> null;
             };
             case BLOCKS_NO_PERMISSION -> switch (result) {
-                case FAIL_CONFIG_INTERACT_PERMISSION -> inputs;
-                default -> List.of();
+                case FAIL_INTERACT_NO_PERMISSION -> getBlockStateToBreak();
+                default -> null;
             };
-            default -> List.of();
+            case BLOCKS_TOOLS_INSUFFICIENT -> switch (result) {
+                case FAIL_INTERACT_TOOL_INSUFFICIENT -> getBlockStateToBreak();
+                default -> null;
+            };
+            default -> null;
         };
+        if (blockState == null) {
+            return List.of();
+        }
+        return List.of(blockState);
     }
+
 
 }

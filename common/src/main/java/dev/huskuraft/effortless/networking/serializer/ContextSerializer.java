@@ -7,6 +7,9 @@ import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.InventorySnapshot;
+import dev.huskuraft.effortless.building.clipboard.BlockSnapshot;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
+import dev.huskuraft.effortless.building.config.BuilderConfig;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
@@ -24,10 +27,12 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
                         byteBuf.readList(buffer1 -> buffer1.readNullable(new BlockInteractionSerializer()))
                 ),
                 byteBuf.read(new StructureSerializer()),
+                byteBuf.read(new ClipboardSerializer()),
                 byteBuf.read(new PatternSerializer()),
                 byteBuf.read(new ReplaceSerializer()),
                 new Context.Configs(
-                        byteBuf.read(new ConstraintConfigSerializer())
+                        byteBuf.read(new ConstraintConfigSerializer()),
+                        byteBuf.read(new BuilderConfigSerializer())
                 ),
                 byteBuf.readNullable(new ExtrasSerializer())
         );
@@ -41,20 +46,53 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         byteBuf.writeList(context.interactions().results(), (buffer1, target) -> buffer1.writeNullable(target, new BlockInteractionSerializer()));
 
         byteBuf.write(context.structure(), new StructureSerializer());
+        byteBuf.write(context.clipboard(), new ClipboardSerializer());
         byteBuf.write(context.pattern(), new PatternSerializer());
         byteBuf.write(context.replace(), new ReplaceSerializer());
 
         byteBuf.write(context.configs().constraintConfig(), new ConstraintConfigSerializer());
+        byteBuf.write(context.configs().builderConfig(), new BuilderConfigSerializer());
         byteBuf.writeNullable(context.extras(), new ExtrasSerializer());
 
 
+    }
+
+    public static class ClipboardSerializer implements NetByteBufSerializer<Clipboard> {
+        @Override
+        public Clipboard read(NetByteBuf byteBuf) {
+            return new Clipboard(
+                    byteBuf.readBoolean(),
+                    byteBuf.readList(new BlockSnapshotSerializer())
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, Clipboard clipboard) {
+            byteBuf.writeBoolean(clipboard.enabled());
+            byteBuf.writeList(clipboard.blockSnapshots(), new BlockSnapshotSerializer());
+        }
+    }
+
+    public static class BlockSnapshotSerializer implements NetByteBufSerializer<BlockSnapshot> {
+        @Override
+        public BlockSnapshot read(NetByteBuf byteBuf) {
+            return new BlockSnapshot(
+                    byteBuf.read(new BlockPositionSerializer()),
+                    byteBuf.readNullable(NetByteBuf::readBlockState)
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, BlockSnapshot blockSnapshot) {
+            byteBuf.write(blockSnapshot.relativePosition(), new BlockPositionSerializer());
+            byteBuf.writeNullable(blockSnapshot.blockState(), NetByteBuf::writeBlockState);
+        }
     }
 
     public static class PatternSerializer implements NetByteBufSerializer<Pattern> {
         @Override
         public Pattern read(NetByteBuf byteBuf) {
             return new Pattern(
-                    byteBuf.readUUID(),
                     byteBuf.readBoolean(),
                     byteBuf.readList(new TransformerSerializer())
             );
@@ -62,7 +100,6 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
 
         @Override
         public void write(NetByteBuf byteBuf, Pattern pattern) {
-            byteBuf.writeUUID(pattern.id());
             byteBuf.writeBoolean(pattern.enabled());
             byteBuf.writeList(pattern.transformers(), new TransformerSerializer());
         }
@@ -147,6 +184,23 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
             byteBuf.writeEnum(replace.replaceMode());
             byteBuf.writeList(replace.replaceList(), NetByteBuf::writeItemStack);
             byteBuf.writeBoolean(replace.isQuick());
+        }
+
+    }
+
+    public static class BuilderConfigSerializer implements NetByteBufSerializer<BuilderConfig> {
+        @Override
+        public BuilderConfig read(NetByteBuf byteBuf) {
+            return new BuilderConfig(
+                    byteBuf.readVarInt(),
+                    byteBuf.readBoolean()
+            );
+        }
+
+        @Override
+        public void write(NetByteBuf byteBuf, BuilderConfig builderConfig) {
+            byteBuf.writeVarInt(builderConfig.reservedToolDurability());
+            byteBuf.writeBoolean(builderConfig.passiveMode());
         }
 
     }

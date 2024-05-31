@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.api.core;
 import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.platform.PlatformReference;
-import dev.huskuraft.effortless.api.platform.RegistryFactory;
 
 public interface Registry<T extends PlatformReference> extends Iterable<T>, PlatformReference {
 
@@ -22,7 +21,5 @@ public interface Registry<T extends PlatformReference> extends Iterable<T>, Plat
             return $$1;
         }
     }
-
-    Registry<Item> ITEM = RegistryFactory.getInstance().getRegistry();
 
 }

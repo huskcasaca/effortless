@@ -1,9 +1,7 @@
 package dev.huskuraft.effortless;
 
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -12,9 +10,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
@@ -44,12 +42,13 @@ import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.StructureBuilder;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.ClientConfig;
-import dev.huskuraft.effortless.building.history.BuildTooltip;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.operation.OperationSummaryType;
+import dev.huskuraft.effortless.building.operation.OperationTooltip;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
 import dev.huskuraft.effortless.building.operation.block.BlockOperation;
 import dev.huskuraft.effortless.building.operation.block.BlockOperationResult;
@@ -93,17 +92,17 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public BuildResult updateContext(Player player, UnaryOperator<Context> updater) {
         var context = updater.apply(getContext(player));
         if (context.isFulfilled()) {
+            setContext(player, getContext(getPlayer()).newInteraction());
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
-            var previewContext = finalizedContext.withBuildType(BuildType.PREVIEW_ONCE);
-            var result = new BatchBuildSession(player, previewContext).commit();
+            var previewContext = finalizedContext.withBuildType(BuildType.BUILD_CLIENT);
+            var result = new BatchBuildSession(this, player, previewContext).commit();
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(finalizedContext));
             showBuildContextResult(context.id(), 1024, player, context, result);
 
             playSoundInBatch(player, result);
 //            showBuildTooltip(context.id(), 1024, player, previewContext, result);
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
-            setContext(player, context.newInteraction());
 
             return BuildResult.COMPLETED;
         } else {
@@ -146,32 +145,39 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     private void playSoundInBatch(Player player, BatchOperationResult batchOperationResult) {
         var soundMap = new HashMap<TypedBlockSound, Integer>();
-        for (var operationResult : batchOperationResult.getResult()) {
+        for (var operationResult : batchOperationResult.getResults()) {
             if (soundMap.size() >= 4) {
                 break;
             }
             if (operationResult instanceof BlockOperationResult blockOperationResult) {
+                if (blockOperationResult.getBlockStateForRenderer() == null) {
+                    continue;
+                }
                 switch (blockOperationResult.getOperation().getType()) {
-                    case BREAK -> {
-                        if (blockOperationResult.result().success()) {
-                            soundMap.compute(TypedBlockSound.breakSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                    case UPDATE -> {
+                        if (!blockOperationResult.getBlockStateForRenderer().isAir()) {
+                            if (blockOperationResult.result().success()) {
+                                soundMap.compute(TypedBlockSound.placeSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
+                            } else {
+                                soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
+                            }
                         } else {
-                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
-                        }
-                    }
-                    case PLACE -> {
-                        if (blockOperationResult.result().success()) {
-                            soundMap.compute(TypedBlockSound.placeSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
-                        } else {
-                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            if (blockOperationResult.result().success()) {
+                                soundMap.compute(TypedBlockSound.breakSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
+                            } else {
+                                soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
+                            }
                         }
                     }
                     case INTERACT -> {
                         if (blockOperationResult.result().success()) {
-                            soundMap.compute(TypedBlockSound.hitSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            soundMap.compute(TypedBlockSound.hitSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                         } else {
-                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getOperation().getBlockState()), (o, i) -> i == null ? 1 : i + 1);
+                            soundMap.compute(TypedBlockSound.failSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                         }
+                    }
+                    case COPY -> {
+                        soundMap.compute(TypedBlockSound.hitSound(blockOperationResult.getBlockStateForRenderer()), (o, i) -> i == null ? 1 : i + 1);
                     }
                 }
             }
@@ -216,11 +222,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     @Override
     public Context getDefaultContext(Player player) {
-        var serverSessionConfig = getEntrance().getSessionManager().getServerSessionConfig();
-        if (serverSessionConfig == null) {
-            return Context.defaultSet().withConstraintConfig(ConstraintConfig.EMPTY);
+        var constraintConfig = getEntrance().getSessionManager().getServerSessionConfig();
+        var builderConfig = getEntrance().getConfigStorage().get().builderConfig();
+        if (constraintConfig == null) {
+            return Context.defaultSet().withConstraintConfig(ConstraintConfig.EMPTY).withBuilderConfig(builderConfig);
         }
-        return Context.defaultSet().withConstraintConfig(serverSessionConfig.getByPlayer(player));
+        return Context.defaultSet().withConstraintConfig(constraintConfig.getByPlayer(player)).withBuilderConfig(builderConfig);
     }
 
     @Override
@@ -240,10 +247,18 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public Context getContextTraced(Player player) {
         var context = getContext(player).finalize(player, BuildStage.INTERACT);
         if (context.isInteractionEmpty()) {
-            if (player.getItemStack(InteractionHand.MAIN).isEmpty() || !player.getItemStack(InteractionHand.MAIN).isBlock()) {
-                context = context.withBuildState(BuildState.INTERACT_BLOCK);
+            if (context.clipboard().enabled()) {
+                if (context.clipboard().blockSnapshots().isEmpty()) {
+                    context = context.withBuildState(BuildState.COPY_STRUCTURE);
+                } else {
+                    context = context.withBuildState(BuildState.PASTE_STRUCTURE);
+                }
             } else {
-                context = context.withBuildState(BuildState.PLACE_BLOCK);
+                if (player.getItemStack(InteractionHand.MAIN).isEmpty() || !player.getItemStack(InteractionHand.MAIN).isBlock()) {
+                    context = context.withBuildState(BuildState.INTERACT_BLOCK);
+                } else {
+                    context = context.withBuildState(BuildState.PLACE_BLOCK);
+                }
             }
         }
         return context.withNextInteraction(context.trace(player));
@@ -266,7 +281,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             return false;
         }
         if (!isPermissionGranted(player)) {
-            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_permission")));
+            player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.no_permission")));
             return false;
         }
         return true;
@@ -277,7 +292,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (!checkPermission(player)) {
             return false;
         }
-        updateContext(player, context -> context.withNoInteraction().withStructure(structure));
+        updateContext(player, context -> context.withNoInteraction().withStructure(structure).withEmptyClipboard());
         if (structure.getMode().isDisabled()) {
             getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
             updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
@@ -286,11 +301,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     @Override
-    public boolean setReplace(Player player, Replace replace) {
+    public boolean setClipboard(Player player, Clipboard clipboard) {
         if (!checkPermission(player)) {
             return false;
         }
-        updateContext(player, context -> context.withReplace(replace));
+        updateContext(player, context -> context.newInteraction().withClipboard(clipboard));
         return true;
     }
 
@@ -300,6 +315,15 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             return false;
         }
         updateContext(player, context -> context.withPattern(pattern).finalize(player, BuildStage.SET_PATTERN));
+        return true;
+    }
+
+    @Override
+    public boolean setReplace(Player player, Replace replace) {
+        if (!checkPermission(player)) {
+            return false;
+        }
+        updateContext(player, context -> context.withReplace(replace));
         return true;
     }
 
@@ -320,12 +344,22 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var buildResult = updateContext(player, context -> {
 
             var state = switch (type) {
-                case ATTACK -> BuildState.BREAK_BLOCK;
-                case USE_ITEM -> {
-                    if (player.getItemStack(hand).isEmpty() || !player.getItemStack(hand).isBlock()) {
-                        yield BuildState.INTERACT_BLOCK;
+                case ATTACK -> {
+                    if (context.clipboard().enabled()) {
+                        yield BuildState.COPY_STRUCTURE;
+                    } else {
+                        yield BuildState.BREAK_BLOCK;
                     }
-                    yield BuildState.PLACE_BLOCK;
+                }
+                case USE_ITEM -> {
+                    if (context.clipboard().enabled()) {
+                        yield BuildState.PASTE_STRUCTURE;
+                    } else {
+                        if (player.getItemStack(hand).isEmpty() || !player.getItemStack(hand).isBlock()) {
+                            yield BuildState.INTERACT_BLOCK;
+                        }
+                        yield BuildState.PLACE_BLOCK;
+                    }
                 }
                 case UNKNOWN -> BuildState.IDLE;
             };
@@ -339,43 +373,75 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             if (interaction.getTarget() == Interaction.Target.MISS) {
                 var traced = player.raytrace(Short.MAX_VALUE, 0f, false);
                 var message = Text.empty().append(" (").append(Text.text(String.valueOf(MathUtils.round(traced.getPosition().distance(player.getEyePosition())))).withStyle(ChatFormatting.RED)).append(Text.text("/")).append(Text.text(String.valueOf(context.configs().constraintConfig().maxReachDistance()))).append(Text.text(")"));
-                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_target").append(message), true);
+                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.cannot_reach_target").append(message)));
+//                player.sendClientMessage(Text.translate("effortless.message.building.client.cannot_reach_target").append(message), true);
                 return context.newInteraction();
             }
             if (interaction.getTarget() == Interaction.Target.ENTITY) {
-                player.sendClientMessage(Text.translate("effortless.message.building.cannot_reach_entity"), true);
+                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.cannot_reach_entity")));
+//                player.sendClientMessage(Text.translate("effortless.message.building.client.cannot_reach_entity"), true);
                 return context.newInteraction();
             }
             if (context.isBuilding() && context.buildState() != state) {
-                player.sendClientMessage(Text.translate("effortless.message.building.build_canceled"), true);
+                switch (context.buildState()) {
+                    case BREAK_BLOCK -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.block_breaking_canceled")));
+                    case PLACE_BLOCK -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.block_placing_canceled")));
+                    case INTERACT_BLOCK -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.block_interacting_canceled")));
+                    case COPY_STRUCTURE -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.structure_copying_canceled")));
+                    case PASTE_STRUCTURE -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.structure_pasting_canceled")));
+                }
                 return context.newInteraction();
+            }
+            if (context.buildState() == BuildState.IDLE && state == BuildState.COPY_STRUCTURE && !context.clipboard().isEmpty()) {
+                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.structure_pasting_canceled")));
+//                player.sendClientMessage(Text.translate("effortless.message.building.client.structure_pasting_canceled"), true);
+                return context.newInteraction().withEmptyClipboard();
             }
 
             if (!context.withBuildState(state).hasPermission()) {
                 if (state == BuildState.BREAK_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_break_permission")));
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_no_permissio"), true);
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.no_block_break_permission")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.no_block_break_permission"), true);
                 }
                 if (state == BuildState.PLACE_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_place_permission")));
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_no_permission"), true);
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.no_block_place_permission")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.no_block_place_permission"), true);
                 }
                 if (state == BuildState.INTERACT_BLOCK) {
-                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.permissions.no_interact_permission")));
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_interact_blocks_no_permission"), true);
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.no_block_interact_permission")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.no_block_interact_permission"), true);
+                }
+                if (state == BuildState.COPY_STRUCTURE) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.no_structure_copy_permission")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.no_structure_copy_permission"), true);
+                }
+                if (state == BuildState.PASTE_STRUCTURE) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.no_structure_paste_permission")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.no_structure_paste_permission"), true);
                 }
                 return context.newInteraction();
             }
 
-            if (!nextContext.isBoxVolumeInBounds()) {
+            if (!nextContext.isVolumeInBounds()) {
                 if (nextContext.buildState() == BuildState.BREAK_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_break_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.block_break_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.block_break_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_place_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.block_place_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.block_place_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
-                if (nextContext.buildState() == BuildState.PLACE_BLOCK) {
-                    player.sendClientMessage(Text.translate("effortless.message.building.cannot_interact_blocks_box_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
+                if (nextContext.buildState() == BuildState.INTERACT_BLOCK) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.block_interact_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.block_interact_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
+                }
+                if (nextContext.buildState() == BuildState.COPY_STRUCTURE) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.structure_copy_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.structure_copy_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
+                }
+                if (nextContext.buildState() == BuildState.PASTE_STRUCTURE) {
+                    player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.structure_paste_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxVolume())).append(")")));
+//                    player.sendClientMessage(Text.translate("effortless.message.building.client.structure_paste_volume_too_large").append(" (").append(Text.text(String.valueOf(nextContext.getBoxVolume())).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(nextContext.getMaxBoxVolume())).append(")"), true);
                 }
                 return context.newInteraction();
             }
@@ -395,34 +461,34 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (context.isBuildType()) {
             return; // handle on server
         }
-        var result = new BatchBuildSession(player, context).commit();
+        var result = new BatchBuildSession(this, player, context).commit();
 
         showBuildContextResult(player.getId(), 1024, player, context, result);
-        showBuildTooltip(context.id(), 1024, player, context, result);
+        showBuildTooltip(context.id(), 1024, player, result);
 
-        if (context.isPreviewOnceType()) {
+        if (context.isBuildClientType()) {
             playSoundInBatch(player, result);
         }
 
     }
 
-    public void onHistoryResultReceived(Player player, BuildTooltip buildTooltip) {
-        switch (buildTooltip.type()) {
-            case BUILD_SUCCESS -> {
+    public void onHistoryResultReceived(Player player, OperationTooltip operationTooltip) {
+        switch (operationTooltip.type()) {
+            case BUILD -> {
 //        showBuildContextResult(player.getId(), 1024, player, context, result);
-                showBuildTooltip(buildTooltip.context().id(), 1024, player, buildTooltip.context(), buildTooltip.itemSummary());
+                showBuildTooltip(operationTooltip.context().id(), 1024, player, operationTooltip);
 
             }
             default -> {
 
-                if (buildTooltip.context().buildMode() == BuildMode.DISABLED) { // nothing
+                if (operationTooltip.context().buildMode() == BuildMode.DISABLED) { // nothing
                     var entries = new ArrayList<>();
-                    entries.add(buildTooltip.itemSummary().values().stream().flatMap(List::stream).toList());
-                    entries.add(Text.translate("effortless.history." + buildTooltip.type().getName()));
-                    entries.add(buildTooltip.context().buildMode().getIcon());
+                    entries.add(operationTooltip.itemStackSummary().values().stream().flatMap(List::stream).toList());
+                    entries.add(Text.translate("effortless.history." + operationTooltip.type().getName()));
+                    entries.add(operationTooltip.context().buildMode().getIcon());
                     getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1024 + 1, entries, true);
                 } else {
-                    showBuildTooltip(buildTooltip.context().id(), 1024, player, buildTooltip.context(), buildTooltip.itemSummary());
+                    showBuildTooltip(operationTooltip.context().id(), 1024, player, operationTooltip);
                 }
 
 
@@ -499,18 +565,18 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var context1 = getContextTraced(player);
         var context = context1.withBuildType(BuildType.PREVIEW);
 
-        if (context.getBoxVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
+        if (context.getVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
             showBuildContextResult(player.getId(), 0, player, context, null);
-            showBuildTooltip(player.getId(), 0, player, context, Map.of());
+            showBuildTooltip(player.getId(), 0, player, OperationTooltip.build(context));
         } else {
-            var result = new BatchBuildSession(player, context.withBuildType(BuildType.PREVIEW)).commit();
+            var result = new BatchBuildSession(this, player, context.withBuildType(BuildType.PREVIEW)).commit();
             showBuildContextResult(player.getId(), 0, player, context, result);
-            showBuildTooltip(player.getId(), 0, player, context, result);
+            showBuildTooltip(player.getId(), 0, player, result.getTooltip());
         }
 
         showBuildMessage(player, context);
 
-        if (getHistoryContext(player).getBoxVolume() != context.getBoxVolume()) {
+        if (getHistoryContext(player).getVolume() != context.getVolume()) {
             putHistoryContext(player, context);
             var nearestInteraction = context.interactions().results().stream().filter(Objects::nonNull).min(Comparator.comparing(interaction1 -> interaction1.getBlockPosition().getCenter().distance(player.getEyePosition())));
             if (nearestInteraction.isEmpty()) {
@@ -572,7 +638,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (result instanceof BatchOperationResult batchOperationResult) {
             getEntrance().getClientManager().getOperationsRenderer().showResult(uuid, result);
 
-            var resultMap = batchOperationResult.getResult().stream().filter(BlockOperationResult.class::isInstance).map(BlockOperationResult.class::cast).filter(blockOperationResult -> BlockOperationRenderer.getColorByOpResult(blockOperationResult) != null).collect(Collectors.groupingBy(BlockOperationRenderer::getColorByOpResult));
+            var resultMap = batchOperationResult.getResults().stream().filter(BlockOperationResult.class::isInstance).map(BlockOperationResult.class::cast).filter(blockOperationResult -> BlockOperationRenderer.getColorByOpResult(blockOperationResult) != null).collect(Collectors.groupingBy(BlockOperationRenderer::getColorByOpResult));
 
             for (var allColor : BlockOperationRenderer.getAllColors()) {
                 if (resultMap.get(allColor) == null) {
@@ -595,41 +661,50 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
     }
 
-    public void showBuildTooltip(UUID id, int priority, Player player, Context context, OperationResult result) {
-        var itemSummary = Arrays.stream(OperationSummaryType.values()).collect(Collectors.toMap(Function.identity(), result::getSummary));
-        showBuildTooltip(id, priority, player, context, itemSummary);
+    public void showBuildTooltip(UUID id, int priority, Player player, OperationResult result) {
+        showBuildTooltip(id, priority, player, result.getTooltip());
     }
 
-    public void showBuildTooltip(UUID id, int priority, Player player, Context context, Map<OperationSummaryType, List<ItemStack>> itemSummary) {
+    public void showBuildTooltip(UUID id, int priority, Player player, OperationTooltip tooltip) {
+        var context = tooltip.context();
+        var itemSummary = tooltip.itemStackSummary();
+
         if (player.getId() != getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuildTooltips()) {
                 return;
             }
         }
+        if (player.getGameMode().isSpectator()) {
+            getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(id, Context.class), priority, false);
+            return;
+        }
         var entries = new ArrayList<>();
 
         if (!itemSummary.isEmpty()) {
             var allProducts = new ArrayList<ItemStack>();
-            for (var entry : itemSummary.entrySet()) {
-                var products = entry.getValue();
-                if (!products.isEmpty()) {
-                    var color = switch (entry.getKey()) {
-                        case BLOCKS_PLACED -> ChatFormatting.WHITE;
-                        case BLOCKS_DESTROYED -> ChatFormatting.RED;
-                        case BLOCKS_INTERACTED -> ChatFormatting.YELLOW;
-                        case BLOCKS_NOT_PLACEABLE -> ChatFormatting.GRAY;
-                        case BLOCKS_NOT_BREAKABLE -> ChatFormatting.GRAY;
-                        case BLOCKS_NOT_INTERACTABLE -> ChatFormatting.GRAY;
-                        case BLOCKS_ITEMS_INSUFFICIENT -> ChatFormatting.RED;
-                        case BLOCKS_TOOLS_INSUFFICIENT -> ChatFormatting.GRAY;
-                        case BLOCKS_BLACKLISTED -> ChatFormatting.GRAY;
-                        case BLOCKS_NO_PERMISSION -> ChatFormatting.GRAY;
-                    };
-                    products = products.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
-                    entries.add(products);
-                    entries.add(Text.translate("effortless.build.summary." + entry.getKey().name().toLowerCase(Locale.ROOT)).withStyle(color));
-                    allProducts.addAll(products);
+            for (var summary : BlockSummary.values()) {
+                var items = itemSummary.getOrDefault(summary, List.of());
+                if (items.isEmpty()) {
+                    continue;
                 }
+                var color = switch (summary) {
+                    case BLOCKS_PLACED -> ChatFormatting.WHITE;
+                    case BLOCKS_DESTROYED -> ChatFormatting.RED;
+                    case BLOCKS_INTERACTED -> ChatFormatting.YELLOW;
+                    case BLOCKS_COPIED -> ChatFormatting.GREEN;
+                    case BLOCKS_NOT_PLACEABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_NOT_BREAKABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_NOT_INTERACTABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_NOT_COPYABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_ITEMS_INSUFFICIENT -> ChatFormatting.RED;
+                    case BLOCKS_TOOLS_INSUFFICIENT -> ChatFormatting.GRAY;
+                    case BLOCKS_BLACKLISTED -> ChatFormatting.GRAY;
+                    case BLOCKS_NO_PERMISSION -> ChatFormatting.GRAY;
+                };
+                items = items.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
+                entries.add(items);
+                entries.add(Text.translate("effortless.build.summary." + summary.name().toLowerCase(Locale.ROOT)).withStyle(color));
+                allProducts.addAll(items);
             }
             if (allProducts.isEmpty()) {
                 entries.add(Text.translate("effortless.build.summary.no_item_summary").withStyle(ChatFormatting.GRAY));
@@ -656,7 +731,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         entries.add(texts);
 
         entries.add(context.buildMode().getIcon());
-        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries, context.buildType() == BuildType.BUILD);
+        getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(generateId(id, Context.class), priority, entries, context.isBuildType());
 
     }
 
@@ -671,38 +746,36 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildMessage(Player player, Context context) {
+        var dimensions = Stream.of(context.getInteractionBox().x(), context.getInteractionBox().y(), context.getInteractionBox().z()).filter(i -> i > 1).toList();
+        if (dimensions.isEmpty()) {
+            dimensions = List.of(1);
+        }
         var message = Text.empty();
         if (context.tracingResult().isSuccess()) {
-            message = message.append(context.buildState().getDisplayName())
-                    .append(" ")
-                    .append(context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD))
+            message = message.append(context.buildState().getDisplayName(context.buildMode()))
                     .append(" ")
                     .append("(")
-                    .append(Text.text(String.valueOf(context.getInteractionBox().x())).withStyle(ChatFormatting.WHITE))
-                    .append("x")
-                    .append(Text.text(String.valueOf(context.getInteractionBox().y())).withStyle(ChatFormatting.WHITE))
-                    .append("x")
-                    .append(Text.text(String.valueOf(context.getInteractionBox().z())).withStyle(ChatFormatting.WHITE))
-                    .append(context.pattern().volumeMultiplier() > 1 ? "x" + new DecimalFormat("#.##").format(context.pattern().volumeMultiplier()) : "")
+                    .append(dimensions.stream().map(String::valueOf).collect(Collectors.joining("x")))
                     .append("=")
-                    .append(Text.text(String.valueOf(context.getBoxVolume())).withStyle(!context.isBoxVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE))
+                    .append(Text.text(String.valueOf(context.getVolume())).withStyle(!context.isVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE))
                     .append(")");
         } else {
-            switch (context.tracingResult()) {
-                case SUCCESS_FULFILLED -> {
-                }
-                case SUCCESS_PARTIAL -> {
-                }
-                case PASS -> {
-                }
-                case FAILED -> {
-                    message = message.append(Text.translate("effortless.message.building.cannot_reach_target").withStyle(ChatFormatting.WHITE));
-                    var interaction = context.interactions().results().stream().filter(result -> result != null && result.getTarget() == Interaction.Target.MISS).findAny();
-                    if (interaction.isPresent()) {
-                        message = message.append(" (").append(Text.text(String.valueOf(MathUtils.round(interaction.get().getBlockPosition().toVector3i().distance(player.getPosition().toVector3i())))).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(context.configs().constraintConfig().maxReachDistance())).append(")");
-                    }
-                }
-            }
+            message = Text.empty();
+//            switch (context.tracingResult()) {
+//                case SUCCESS_FULFILLED -> {
+//                }
+//                case SUCCESS_PARTIAL -> {
+//                }
+//                case PASS -> {
+//                }
+//                case FAILED -> {
+//                    message = message.append(Text.translate("effortless.message.building.client.cannot_reach_target").withStyle(ChatFormatting.WHITE));
+//                    var interaction = context.interactions().results().stream().filter(result -> result != null && result.getTarget() == Interaction.Target.MISS).findAny();
+//                    if (interaction.isPresent()) {
+//                        message = message.append(" (").append(Text.text(String.valueOf(MathUtils.round(interaction.get().getBlockPosition().toVector3i().distance(player.getPosition().toVector3i())))).withStyle(ChatFormatting.RED)).append("/").append(String.valueOf(context.configs().constraintConfig().maxReachDistance())).append(")");
+//                    }
+//                }
+//            }
         }
 
         player.sendClientMessage(message, true);

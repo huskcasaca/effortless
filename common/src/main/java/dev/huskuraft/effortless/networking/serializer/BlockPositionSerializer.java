@@ -9,18 +9,18 @@ public class BlockPositionSerializer implements NetByteBufSerializer<BlockPositi
     @Override
     public BlockPosition read(NetByteBuf byteBuf) {
         return BlockPosition.at(
-                byteBuf.readInt(),
-                byteBuf.readInt(),
-                byteBuf.readInt()
+                byteBuf.readVarInt(),
+                byteBuf.readVarInt(),
+                byteBuf.readVarInt()
         );
     }
 
 
     @Override
     public void write(NetByteBuf byteBuf, BlockPosition blockPosition) {
-        byteBuf.writeInt(blockPosition.x());
-        byteBuf.writeInt(blockPosition.y());
-        byteBuf.writeInt(blockPosition.z());
+        byteBuf.writeVarInt(blockPosition.x());
+        byteBuf.writeVarInt(blockPosition.y());
+        byteBuf.writeVarInt(blockPosition.z());
     }
 
 }

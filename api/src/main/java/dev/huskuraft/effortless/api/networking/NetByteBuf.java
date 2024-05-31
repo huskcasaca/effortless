@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Registry;
@@ -72,7 +73,7 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public Item readItem() {
-        return readId(Registry.ITEM);
+        return readId(Item.REGISTRY);
     }
 
     public <T extends PlatformReference> T readId(Registry<T> registry) {
@@ -91,7 +92,7 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public <T> List<T> readList(NetByteBufReader<T> reader) {
-        var i = readInt();
+        var i = readVarInt();
         var list = new ArrayList<T>();
 
         for (int j = 0; j < i; ++j) {
@@ -101,7 +102,7 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public <K, V> Map<K, V> readMap(NetByteBufReader<K> keyReader, NetByteBufReader<V> valueReader) {
-        var i = readInt();
+        var i = readVarInt();
         var map = new LinkedHashMap<K, V>();
 
         for (int j = 0; j < i; ++j) {
@@ -148,7 +149,7 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public void writeItem(Item value) {
-        writeId(Registry.ITEM, value);
+        writeId(Item.REGISTRY, value);
     }
 
     public <T extends PlatformReference> void writeId(Registry<T> registry, T value) {
@@ -166,14 +167,14 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public <T> void writeList(Collection<T> collection, NetByteBufWriter<T> writer) {
-        writeInt(collection.size());
+        writeVarInt(collection.size());
         for (var object : collection) {
             write(object, writer);
         }
     }
 
     public <K, V> void writeMap(Map<K, V> map, NetByteBufWriter<K> keyWriter, NetByteBufWriter<V> valueWriter) {
-        writeInt(map.size());
+        writeVarInt(map.size());
         for (var entry : map.entrySet()) {
             keyWriter.write(this, entry.getKey());
             valueWriter.write(this, entry.getValue());
@@ -200,22 +201,22 @@ public final class NetByteBuf extends WrappedByteBuf {
     }
 
     public Vector3i readVector3i() {
-        return new Vector3i(readInt(), readInt(), readInt());
+        return new Vector3i(readVarInt(), readVarInt(), readVarInt());
     }
 
     public void writeVector3i(Vector3i vector) {
-        writeInt(vector.x());
-        writeInt(vector.y());
-        writeInt(vector.z());
+        writeVarInt(vector.x());
+        writeVarInt(vector.y());
+        writeVarInt(vector.z());
     }
 
     public Vector2i readVector2i() {
-        return new Vector2i(readInt(), readInt());
+        return new Vector2i(readVarInt(), readVarInt());
     }
 
     public void writeVector2i(Vector2i vector) {
-        writeInt(vector.x());
-        writeInt(vector.y());
+        writeVarInt(vector.x());
+        writeVarInt(vector.y());
     }
 
     public ResourceLocation readResourceLocation() {
@@ -225,6 +226,14 @@ public final class NetByteBuf extends WrappedByteBuf {
     public void writeResourceLocation(ResourceLocation resourceLocation) {
         writeString(resourceLocation.getNamespace());
         writeString(resourceLocation.getPath());
+    }
+
+    public BlockState readBlockState() {
+        return readId(BlockState.REGISTRY);
+    }
+
+    public void writeBlockState(BlockState blockState) {
+        writeId(BlockState.REGISTRY, blockState);
     }
 
 }

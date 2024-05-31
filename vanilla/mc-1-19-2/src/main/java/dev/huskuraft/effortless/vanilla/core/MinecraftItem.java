@@ -14,6 +14,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.context.UseOnContext;
 
 public record MinecraftItem(net.minecraft.world.item.Item refs) implements Item {
@@ -21,6 +22,7 @@ public record MinecraftItem(net.minecraft.world.item.Item refs) implements Item 
     public static Item ofNullable(net.minecraft.world.item.Item reference) {
         if (reference == null) return null;
         if (reference instanceof BlockItem blockItem) return new MinecraftBlockItem(blockItem);
+        if (reference instanceof DiggerItem diggerItem) return new MinecraftDiggerItem(diggerItem);
         if (reference instanceof BucketItem bucketItem) return new MinecraftBucketItem(bucketItem);
         return new MinecraftItem(reference);
     }

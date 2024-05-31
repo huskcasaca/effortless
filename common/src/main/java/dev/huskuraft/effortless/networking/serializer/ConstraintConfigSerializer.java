@@ -15,6 +15,9 @@ public class ConstraintConfigSerializer implements NetByteBufSerializer<Constrai
                 byteBuf.readNullable(NetByteBuf::readBoolean),
                 byteBuf.readNullable(NetByteBuf::readBoolean),
                 byteBuf.readNullable(NetByteBuf::readBoolean),
+                byteBuf.readNullable(NetByteBuf::readBoolean),
+                byteBuf.readNullable(NetByteBuf::readVarInt),
+                byteBuf.readNullable(NetByteBuf::readVarInt),
                 byteBuf.readNullable(NetByteBuf::readVarInt),
                 byteBuf.readNullable(NetByteBuf::readVarInt),
                 byteBuf.readNullable(NetByteBuf::readVarInt),
@@ -29,10 +32,13 @@ public class ConstraintConfigSerializer implements NetByteBufSerializer<Constrai
         byteBuf.writeNullable(constraintConfig.allowBreakBlocks(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(constraintConfig.allowPlaceBlocks(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(constraintConfig.allowInteractBlocks(), NetByteBuf::writeBoolean);
-        byteBuf.writeNullable(constraintConfig.useCorrectTools(), NetByteBuf::writeBoolean);
+        byteBuf.writeNullable(constraintConfig.allowCopyPasteStructures(), NetByteBuf::writeBoolean);
+        byteBuf.writeNullable(constraintConfig.useProperToolsOnly(), NetByteBuf::writeBoolean);
         byteBuf.writeNullable(constraintConfig.maxReachDistance(), NetByteBuf::writeVarInt);
         byteBuf.writeNullable(constraintConfig.maxBlockBreakVolume(), NetByteBuf::writeVarInt);
         byteBuf.writeNullable(constraintConfig.maxBlockPlaceVolume(), NetByteBuf::writeVarInt);
+        byteBuf.writeNullable(constraintConfig.maxBlockInteractVolume(), NetByteBuf::writeVarInt);
+        byteBuf.writeNullable(constraintConfig.maxStructureCopyPasteVolume(), NetByteBuf::writeVarInt);
         byteBuf.writeNullable(constraintConfig.whitelistedItems(), (buffer1, list) -> buffer1.writeList(list, NetByteBuf::writeResourceLocation));
         byteBuf.writeNullable(constraintConfig.blacklistedItems(), (buffer1, list) -> buffer1.writeList(list, NetByteBuf::writeResourceLocation));
 

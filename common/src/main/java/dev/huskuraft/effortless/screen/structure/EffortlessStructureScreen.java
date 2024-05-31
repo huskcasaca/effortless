@@ -13,6 +13,7 @@ import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.Feature;
 import dev.huskuraft.effortless.building.Option;
+import dev.huskuraft.effortless.building.clipboard.Clipboards;
 import dev.huskuraft.effortless.building.config.PassiveMode;
 import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.pattern.Patterns;
@@ -26,7 +27,7 @@ import dev.huskuraft.effortless.screen.wheel.AbstractWheelScreen;
 
 public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Option> {
 
-    private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO, false);
+    private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
     private static final Button<Option> SETTING_OPTION = button(Settings.SETTINGS);
     private static final Button<Option> PATTERN_DISABLED_OPTION = button(Patterns.DISABLED, false);
@@ -80,6 +81,19 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
             return PASSIVE_MODE_ENABLED_OPTION;
         } else {
             return PASSIVE_MODE_DISABLED_OPTION;
+        }
+    });
+
+    private static final Button<Option> CLIPBOARD_DISABLED_OPTION = button(Clipboards.ENABLED, false);
+    private static final Button<Option> CLIPBOARD_ENABLED_OPTION = button(Clipboards.ENABLED, true);
+
+    private static final Button<Option> CLIPBOARD_OPTION = lazyButton(() -> {
+        var entrance = EffortlessClient.getInstance();
+        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+        if (context.clipboard().enabled()) {
+            return CLIPBOARD_ENABLED_OPTION;
+        } else {
+            return CLIPBOARD_DISABLED_OPTION;
         }
     });
 
@@ -148,6 +162,11 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                     return;
                 }
             }
+            if (entry.getContent() instanceof Clipboards clipboards) {
+                var clipboard= getEntrance().getStructureBuilder().getContext(getPlayer()).clipboard();
+                getEntrance().getStructureBuilder().setClipboard(getPlayer(), clipboard.withEnabled(!clipboard.enabled()));
+
+            }
             if (entry.getContent() instanceof UndoRedo undoRedo) {
                 switch (undoRedo) {
                     case UNDO -> {
@@ -190,7 +209,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         setSelectedSlots(slot(structure));
         setLeftButtons(
                 buttonSet(REPLACE_OPTION, REDO_OPTION, UNDO_OPTION),
-                buttonSet(PASSIVE_MODE_OPTION, PATTERN_OPTION, SETTING_OPTION)
+                buttonSet(CLIPBOARD_OPTION, PATTERN_OPTION, SETTING_OPTION)
         );
         setRightButtons(
                 structure.getSupportedFeatures().stream().map(feature -> buttonSet(Arrays.stream(feature.getEntries()).map((Feature option) -> button((Option) option, structure.getFeatures().contains(option))).toList())).toList()

@@ -65,7 +65,7 @@ public class EffortlessPlayerConstraintSettingsScreen extends AbstractPanelScree
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_use_mod"), null, null, null),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockPlaceVolume(), config.maxBlockBreakVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), value, config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockPlaceVolume(), config.maxBlockBreakVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowUseMod(),
                 () -> config.allowUseMod()
@@ -73,7 +73,7 @@ public class EffortlessPlayerConstraintSettingsScreen extends AbstractPanelScree
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_break_blocks"), null, null, null),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), value, config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowBreakBlocks(),
                 () -> config.allowBreakBlocks()
@@ -81,7 +81,7 @@ public class EffortlessPlayerConstraintSettingsScreen extends AbstractPanelScree
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_place_blocks"), null, null, null),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), value, config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowPlaceBlocks(),
                 () -> config.allowPlaceBlocks()
@@ -89,42 +89,66 @@ public class EffortlessPlayerConstraintSettingsScreen extends AbstractPanelScree
         bindEntry(
                 entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_interact_blocks"), null, null, null),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), value, config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.allowInteractBlocks(),
                 () -> config.allowInteractBlocks()
         );
         bindEntry(
-                entries.addSwitchEntry(Text.translate("effortless.constraint_settings.use_correct_tools"), null, null, null),
+                entries.addSwitchEntry(Text.translate("effortless.constraint_settings.allow_copy_paste_structures"), null, null, null),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), value, config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), value, config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
-                () -> globalConfig.useCorrectTools(),
-                () -> config.useCorrectTools()
+                () -> globalConfig.allowCopyPasteStructures(),
+                () -> config.allowCopyPasteStructures()
         );
         bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_reach_distance"), null, null, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_START, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_END, null),
+                entries.addSwitchEntry(Text.translate("effortless.constraint_settings.use_proper_tools"), null, null, null),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), value, config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), value, config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
+                },
+                () -> globalConfig.useProperToolsOnly(),
+                () -> config.useProperToolsOnly()
+        );
+        bindEntry(
+                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_reach_distance"), null, 0, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_START, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_END, 8, null),
+                (value) -> {
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), value, config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxReachDistance(),
                 () -> config.maxReachDistance()
         );
         bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_block_break_volume"), null, null, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_block_break_volume"), null, 0, ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_RANGE_START, ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_RANGE_END, 100, null),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), value, config.maxBlockPlaceVolume(), config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), value, config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxBlockBreakVolume(),
                 () -> config.maxBlockBreakVolume()
         );
         bindEntry(
-                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_block_place_volume"), null, null, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END, null),
+                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_block_place_volume"), null, 0, ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_RANGE_START, ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_RANGE_END, 100, null),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), value, config.whitelistedItems(), config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockBreakVolume(), value, config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
                 },
                 () -> globalConfig.maxBlockPlaceVolume(),
                 () -> config.maxBlockPlaceVolume()
+        );
+        bindEntry(
+                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_block_interact_volume"), null, 0, ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_RANGE_START, ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_RANGE_END, 100, null),
+                (value) -> {
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), value, config.maxStructureCopyPasteVolume(), config.whitelistedItems(), config.blacklistedItems());
+                },
+                () -> globalConfig.maxBlockInteractVolume(),
+                () -> config.maxBlockInteractVolume()
+        );
+        bindEntry(
+                entries.addIntegerEntry(Text.translate("effortless.constraint_settings.max_structure_copy_paste_volume"), null, 0, ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_START, ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_END, 100, null),
+                (value) -> {
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), value, config.whitelistedItems(), config.blacklistedItems());
+                },
+                () -> globalConfig.maxStructureCopyPasteVolume(),
+                () -> config.maxStructureCopyPasteVolume()
         );
         bindEntry(
                 entries.addTab(Text.translate("effortless.constraint_settings.whitelisted_items"), null, null, null, (entry, value) -> {
@@ -136,7 +160,7 @@ public class EffortlessPlayerConstraintSettingsScreen extends AbstractPanelScree
                     entry.getButton().setMessage(Text.translate("effortless.constraint_settings.items", value == null ? null : value.size()));
                 }),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), value, config.blacklistedItems());
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), value, config.blacklistedItems());
                 },
                 () -> globalConfig.whitelistedItems(),
                 () -> config.whitelistedItems()
@@ -153,7 +177,7 @@ public class EffortlessPlayerConstraintSettingsScreen extends AbstractPanelScree
                     entry.getButton().setMessage(Text.translate("effortless.constraint_settings.items", value == null ? null : value.size()));
                 }),
                 (value) -> {
-                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.useCorrectTools(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.whitelistedItems(), value);
+                    this.config = new ConstraintConfig(config.useCommands(), config.allowUseMod(), config.allowBreakBlocks(), config.allowPlaceBlocks(), config.allowInteractBlocks(), config.allowCopyPasteStructures(), config.useProperToolsOnly(), config.maxReachDistance(), config.maxBlockBreakVolume(), config.maxBlockPlaceVolume(), config.maxBlockInteractVolume(), config.maxStructureCopyPasteVolume(), config.whitelistedItems(), value);
                 },
                 () -> globalConfig.blacklistedItems(),
                 () -> config.blacklistedItems()

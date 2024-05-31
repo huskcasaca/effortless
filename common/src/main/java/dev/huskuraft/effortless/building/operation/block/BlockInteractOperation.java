@@ -1,11 +1,9 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.Collections;
-import java.util.List;
-
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
@@ -29,24 +27,81 @@ public class BlockInteractOperation extends BlockOperation {
         super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
     }
 
+    protected BlockOperationResultType interactBlock() {
+        if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
+            return BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM;
+        }
+        if (player.getGameMode().isSpectator()) {
+            return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
+        }
+        if (!isInBorderBound()) {
+            return BlockOperationResultType.FAIL_WORLD_BORDER;
+        }
+        if (!isInHeightBound()) {
+            return BlockOperationResultType.FAIL_WORLD_HEIGHT;
+        }
+        if (getBlockState() == null) {
+            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
+        }
+
+        if (!context.configs().constraintConfig().allowInteractBlocks()) {
+            return BlockOperationResultType.FAIL_INTERACT_NO_PERMISSION;
+        }
+        if (!getBlockState().isAir()) {
+            if (!context.configs().constraintConfig().whitelistedItems().isEmpty() && !context.configs().constraintConfig().whitelistedItems().contains(getBlockState().getItem().getId())) {
+                return BlockOperationResultType.FAIL_INTERACT_BLACKLISTED;
+            }
+            if (!context.configs().constraintConfig().blacklistedItems().isEmpty() && context.configs().constraintConfig().blacklistedItems().contains(getBlockState().getItem().getId())) {
+                return BlockOperationResultType.FAIL_INTERACT_BLACKLISTED;
+            }
+        }
+
+        var itemStackToUse = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
+
+        if (context.isPreviewType() || context.isBuildClientType()) {
+            itemStackToUse.decrease(1);
+            return BlockOperationResultType.CONSUME;
+        }
+
+        if (context.isBuildType()) {
+            var itemStackBeforeInteract = player.getItemStack(getHand());
+//        if (!(itemStackBeforeInteract.getItem() instanceof BucketItem) && blockState.isAir()) {
+//            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
+//        }
+            if (itemStackToUse.isDamageableItem() && itemStackToUse.getRemainingDamage() <= context.getReservedToolDurability()) {
+                return BlockOperationResultType.FAIL_INTERACT_TOOL_INSUFFICIENT;
+            }
+            player.setItemStack(getHand(), itemStackToUse);
+            var interacted = getBlockStateInWorld().use(player, interaction).consumesAction();
+            if (!interacted) {
+                interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();
+                if (interacted && !world.isClient()) {
+                    player.awardStat(StatTypes.ITEM_USED.get(itemStackToUse.getItem()));
+                }
+            }
+            player.setItemStack(getHand(), itemStackBeforeInteract);
+            if (!interacted) {
+                return BlockOperationResultType.FAIL_UNKNOWN;
+            }
+        }
+
+        return BlockOperationResultType.SUCCESS;
+    }
+
+
     @Override
     public BlockInteractOperationResult commit() {
-        if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
-            return new BlockInteractOperationResult(this, BlockOperationResult.Type.FAIL_WORLD_INCORRECT_DIM, List.of(), List.of());
-        }
-
-        var inputs = blockState != null ? Collections.singletonList(blockState.getItem().getDefaultStack()) : Collections.<ItemStack>emptyList();
-        var outputs = Collections.<ItemStack>emptyList();
-
-        var entityState = EntityState.get(player);
-        EntityState.set(player, getEntityState());
+        var entityStateBeforeOp = EntityState.get(getPlayer());
+        var blockStateBeforeOp = getBlockStateInWorld();
+        EntityState.set(getPlayer(), getEntityState());
         var result = interactBlock();
-        EntityState.set(player, entityState);
+        EntityState.set(getPlayer(), entityStateBeforeOp);
 
-        if (getWorld().isClient() && getContext().isPreviewOnceType() && getBlockPosition().toVector3d().distance(player.getEyePosition()) <= 32) {
+        if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
-        return new BlockInteractOperationResult(this, result, inputs, outputs);
+        var blockStateAfterOp = getBlockStateInWorld();
+        return new BlockInteractOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp);
     }
 
     @Override
@@ -57,7 +112,7 @@ public class BlockInteractOperation extends BlockOperation {
     @Override
     public Operation mirror(MirrorContext mirrorContext) {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
-            return new EmptyOperation();
+            return new EmptyOperation(context);
         }
         return new BlockInteractOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(entityState));
     }
@@ -65,7 +120,7 @@ public class BlockInteractOperation extends BlockOperation {
     @Override
     public Operation rotate(RotateContext rotateContext) {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
-            return new EmptyOperation();
+            return new EmptyOperation(context);
         }
         return new BlockInteractOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(entityState));
     }

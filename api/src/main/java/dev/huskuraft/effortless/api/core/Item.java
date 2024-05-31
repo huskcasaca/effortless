@@ -4,9 +4,12 @@ import java.util.Optional;
 
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
+import dev.huskuraft.effortless.api.platform.RegistryFactory;
 import dev.huskuraft.effortless.api.text.Text;
 
 public interface Item extends PlatformReference {
+
+    Registry<Item> REGISTRY = RegistryFactory.getInstance().getRegistry();
 
     static Item fromId(ResourceLocation id) {
         return ContentFactory.getInstance().newItem(id);

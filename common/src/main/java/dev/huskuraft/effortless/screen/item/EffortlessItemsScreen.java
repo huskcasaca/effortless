@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
@@ -50,7 +51,7 @@ public class EffortlessItemsScreen extends AbstractPanelScreen {
             entries.clear();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 1 / 3f, 1 / 3f).build());
         this.addButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.add"), button -> {
-            new EffortlessItemPickerScreen(getEntrance(), (item) -> {
+            new EffortlessItemPickerScreen(getEntrance(), item -> item != Items.AIR.item(), (item) -> {
                 if (item != null && !items.contains(item)) {
                     entries.insertSelected(item.getDefaultStack());
                     onReload();

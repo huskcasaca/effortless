@@ -10,7 +10,10 @@ import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public final class EmptyOperation implements Operation {
 
-    public EmptyOperation() {
+    private final Context context;
+
+    public EmptyOperation(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -25,12 +28,12 @@ public final class EmptyOperation implements Operation {
 
     @Override
     public Context getContext() {
-        return null;
+        return context;
     }
 
     @Override
     public OperationResult commit() {
-        return new EmptyOperationResult();
+        return new EmptyOperationResult(this);
     }
 
     @Override

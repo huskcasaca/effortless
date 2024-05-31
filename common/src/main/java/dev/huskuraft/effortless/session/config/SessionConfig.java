@@ -42,10 +42,13 @@ public record SessionConfig(
                 getPlayerOrGlobalEntry(id, ConstraintConfig::allowBreakBlocks),
                 getPlayerOrGlobalEntry(id, ConstraintConfig::allowPlaceBlocks),
                 getPlayerOrGlobalEntry(id, ConstraintConfig::allowInteractBlocks),
-                getPlayerOrGlobalEntry(id, ConstraintConfig::useCorrectTools),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::allowCopyPasteStructures),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::useProperToolsOnly),
                 getPlayerOrGlobalEntry(id, ConstraintConfig::maxReachDistance),
                 getPlayerOrGlobalEntry(id, ConstraintConfig::maxBlockBreakVolume),
                 getPlayerOrGlobalEntry(id, ConstraintConfig::maxBlockPlaceVolume),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::maxBlockInteractVolume),
+                getPlayerOrGlobalEntry(id, ConstraintConfig::maxStructureCopyPasteVolume),
                 getPlayerOrGlobalEntry(id, ConstraintConfig::whitelistedItems),
                 getPlayerOrGlobalEntry(id, ConstraintConfig::blacklistedItems)
         );
@@ -62,10 +65,13 @@ public record SessionConfig(
                 getPlayerOrNullEntry(id, ConstraintConfig::allowBreakBlocks),
                 getPlayerOrNullEntry(id, ConstraintConfig::allowPlaceBlocks),
                 getPlayerOrNullEntry(id, ConstraintConfig::allowInteractBlocks),
-                getPlayerOrNullEntry(id, ConstraintConfig::useCorrectTools),
+                getPlayerOrNullEntry(id, ConstraintConfig::allowCopyPasteStructures),
+                getPlayerOrNullEntry(id, ConstraintConfig::useProperToolsOnly),
                 getPlayerOrNullEntry(id, ConstraintConfig::maxReachDistance),
                 getPlayerOrNullEntry(id, ConstraintConfig::maxBlockBreakVolume),
                 getPlayerOrNullEntry(id, ConstraintConfig::maxBlockPlaceVolume),
+                getPlayerOrNullEntry(id, ConstraintConfig::maxBlockInteractVolume),
+                getPlayerOrNullEntry(id, ConstraintConfig::maxStructureCopyPasteVolume),
                 getPlayerOrNullEntry(id, ConstraintConfig::whitelistedItems),
                 getPlayerOrNullEntry(id, ConstraintConfig::blacklistedItems));
     }

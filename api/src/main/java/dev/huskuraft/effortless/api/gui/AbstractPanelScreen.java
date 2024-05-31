@@ -10,7 +10,7 @@ import dev.huskuraft.effortless.api.texture.TextureSprite;
 
 public abstract class AbstractPanelScreen extends AbstractScreen {
 
-    public static final int PANEL_WIDTH_EXPANDED = 56 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
+    public static final int PANEL_WIDTH_EXPANDED = 64 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
     public static final int PANEL_WIDTH = 42 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
 
     public static final int PANEL_HEIGHT_270 = 270;

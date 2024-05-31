@@ -1,27 +1,26 @@
 package dev.huskuraft.effortless.building.operation.block;
 
-import java.util.List;
+import javax.annotation.Nullable;
 
-import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 
 public abstract class BlockOperationResult extends OperationResult {
 
     protected final BlockOperation operation;
-    protected final Type result;
-    protected final List<ItemStack> inputs;
-    protected final List<ItemStack> outputs;
+    protected final BlockOperationResultType result;
+    protected final BlockState blockStateBeforeOp;
+    protected final BlockState blockStateAfterOp;
 
     protected BlockOperationResult(
             BlockOperation operation,
-            Type result,
-            List<ItemStack> inputs,
-            List<ItemStack> outputs
-    ) {
+            BlockOperationResultType result,
+            BlockState blockStateBeforeOp,
+            BlockState blockStateAfterOp) {
         this.operation = operation;
         this.result = result;
-        this.inputs = inputs;
-        this.outputs = outputs;
+        this.blockStateBeforeOp = blockStateBeforeOp;
+        this.blockStateAfterOp = blockStateAfterOp;
     }
 
     @Override
@@ -29,63 +28,35 @@ public abstract class BlockOperationResult extends OperationResult {
         return operation;
     }
 
-    public Type result() {
+    @Nullable
+    public final BlockState getBlockStateToBreak() {
+        return blockStateBeforeOp;
+    }
+
+    @Nullable
+    public final BlockState getBlockStatePlaced() {
+        return blockStateAfterOp;
+    }
+
+    @Nullable
+    public final BlockState getBlockStateToPlace() {
+        return getOperation().getBlockState();
+    }
+
+    @Nullable
+    public final BlockState getBlockStateForRenderer() {
+        if (getBlockStateToBreak() == null || getBlockStateToPlace() == null) {
+            return null;
+        }
+        if (!getBlockStateToBreak().isAir() && getBlockStateToPlace().isAir()) {
+            return getBlockStateToBreak();
+        } else {
+            return getBlockStateToPlace();
+        }
+    }
+
+    public BlockOperationResultType result() {
         return result;
     }
 
-    public List<ItemStack> inputs() {
-        return inputs;
-    }
-
-    public List<ItemStack> outputs() {
-        return outputs;
-    }
-
-    public enum Type {
-        SUCCESS,
-        SUCCESS_PARTIAL,
-        CONSUME,
-
-        FAIL_WORLD_HEIGHT,
-        FAIL_WORLD_BORDER,
-        FAIL_WORLD_INCORRECT_DIM,
-
-        FAIL_PLAYER_GAME_MODE,
-        FAIL_PLAYER_CANNOT_BREAK,
-        FAIL_PLAYER_CANNOT_INTERACT,
-
-        FAIL_ITEM_INSUFFICIENT,
-        FAIL_ITEM_NOT_BLOCK,
-        FAIL_TOOL_INSUFFICIENT,
-
-        FAIL_CONFIG_BLACKLISTED,
-        FAIL_CONFIG_BREAK_PERMISSION,
-        FAIL_CONFIG_PLACE_PERMISSION,
-        FAIL_CONFIG_INTERACT_PERMISSION,
-
-        FAIL_BLOCK_STATE_AIR,
-        FAIL_BLOCK_STATE_NULL,
-
-        FAIL_UNKNOWN;
-
-        public boolean consumesAction() {
-            return this == SUCCESS || this == SUCCESS_PARTIAL || this == CONSUME;
-        }
-
-        public boolean success() {
-            return this == SUCCESS || this == SUCCESS_PARTIAL || this == CONSUME;
-        }
-
-        public boolean fail() {
-            return this != SUCCESS && this != SUCCESS_PARTIAL && this != CONSUME;
-        }
-
-        public boolean shouldSwing() {
-            return this == SUCCESS || this == SUCCESS_PARTIAL;
-        }
-
-        public boolean shouldAwardStats() {
-            return this == SUCCESS || this == SUCCESS_PARTIAL;
-        }
-    }
 }

@@ -1,28 +1,34 @@
 package dev.huskuraft.effortless.building.operation.empty;
 
-import java.util.Collections;
 import java.util.List;
 
-import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.operation.OperationSummaryType;
 
 public class EmptyOperationResult extends OperationResult {
 
+    private final EmptyOperation operation;
+
+    public EmptyOperationResult(EmptyOperation operation) {
+
+        this.operation = operation;
+    }
+
     @Override
     public Operation getOperation() {
-        return new EmptyOperation();
+        return operation;
     }
 
     @Override
     public EmptyOperation getReverseOperation() {
-        return new EmptyOperation();
+        return operation;
     }
 
     @Override
-    public List<ItemStack> getSummary(OperationSummaryType type) {
-        return Collections.emptyList();
+    public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
+        return List.of();
     }
 
 }

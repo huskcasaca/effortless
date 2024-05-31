@@ -27,6 +27,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
     private TransformerList transformerEntries;
     private SettingOptionsList entries;
     private Button moveToPlayerButton;
+    private Button moveToCornerOrCenterButton;
     private Button saveButton;
     private Button cancelButton;
     private TextSlot textSlot;
@@ -62,13 +63,37 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
             var playerPosition = getEntrance().getClient().getPlayer().getPosition();
             this.transformer = switch (transformer.getType()) {
                 case ARRAY -> transformer;
-                case MIRROR -> ((MirrorTransformer) transformer).withPosition(Transformer.roundHalf(playerPosition));
-                case RADIAL -> ((RadialTransformer) transformer).withPosition(Transformer.roundHalf(playerPosition));
+                case MIRROR -> ((MirrorTransformer) transformer).withPosition(Transformer.roundAllHalf(playerPosition));
+                case RADIAL -> ((RadialTransformer) transformer).withPosition(Transformer.roundAllHalf(playerPosition));
                 case RANDOMIZER -> transformer;
             };
             recreate();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 0.5f).build());
         this.moveToPlayerButton.setVisible(transformer.getType() == Transformers.MIRROR || transformer.getType() == Transformers.RADIAL);
+
+        this.moveToPlayerButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.position.move_to_player"), button -> {
+            var playerPosition = getEntrance().getClient().getPlayer().getPosition();
+            this.transformer = switch (transformer.getType()) {
+                case ARRAY -> transformer;
+                case MIRROR -> ((MirrorTransformer) transformer).withPosition(Transformer.roundAllHalf(playerPosition));
+                case RADIAL -> ((RadialTransformer) transformer).withPosition(Transformer.roundAllHalf(playerPosition));
+                case RANDOMIZER -> transformer;
+            };
+            recreate();
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 0.5f).build());
+        this.moveToPlayerButton.setVisible(transformer.getType() == Transformers.MIRROR || transformer.getType() == Transformers.RADIAL);
+
+        this.moveToCornerOrCenterButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.position.move_to_center_or_corner"), button -> {
+            this.transformer = switch (transformer.getType()) {
+                case ARRAY -> transformer;
+                case MIRROR -> ((MirrorTransformer) transformer).withPosition(Transformer.roundHalf(((MirrorTransformer) transformer).position()));
+                case RADIAL -> ((RadialTransformer) transformer).withPosition(Transformer.roundHalf(((RadialTransformer) transformer).position()));
+                case RANDOMIZER -> transformer;
+            };
+            recreate();
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0.5f, 0.5f).build());
+        this.moveToCornerOrCenterButton.setVisible(transformer.getType() == Transformers.MIRROR || transformer.getType() == Transformers.RADIAL);
+
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.transformer.edit.cancel"), button -> {
             detach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 0.5f).build());

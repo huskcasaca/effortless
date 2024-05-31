@@ -26,10 +26,13 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
     private static final String KEY_ALLOW_BREAK_BLOCKS = "allowBreakBlocks";
     private static final String KEY_ALLOW_PLACE_BLOCKS = "allowPlaceBlocks";
     private static final String KEY_ALLOW_INTERACT_BLOCKS = "allowInteractBlocks";
-    private static final String KEY_USE_CORRECT_TOOLS = "useCorrectTools";
+    private static final String KEY_ALLOW_COPY_PASTE_STRUCTURE = "allowCopyPasteStructure";
+    private static final String KEY_USE_PROPER_TOOLS_ONLY = "useProperToolsOnly";
     private static final String KEY_MAX_REACH_DISTANCE = "maxReachDistance";
-    private static final String KEY_MAX_BOX_VOLUME_PER_BREAK = "maxBlockBreakVolume";
-    private static final String KEY_MAX_BOX_VOLUME_PER_PLACE = "maxBlockPlaceVolume";
+    private static final String KEY_MAX_BLOCK_BREAK_VOLUME = "maxBlockBreakVolume";
+    private static final String KEY_MAX_BLOCK_PLACE_VOLUME = "maxBlockPlaceVolume";
+    private static final String KEY_MAX_BLOCK_INTERACT_VOLUME = "maxBlockInteractVolume";
+    private static final String KEY_MAX_STRUCTURE_COPY_PASTE_VOLUME = "maxStructureCopyPasteVolume";
     private static final String KEY_WHITELISTED_ITEMS = "whitelistedItems";
     private static final String KEY_BLACKLISTED_ITEMS = "blacklistedItems";
 
@@ -87,10 +90,13 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             spec.define(KEY_ALLOW_BREAK_BLOCKS, () -> ConstraintConfig.ALLOW_BREAK_BLOCKS_DEFAULT, Objects::nonNull);
             spec.define(KEY_ALLOW_PLACE_BLOCKS, () -> ConstraintConfig.ALLOW_PLACE_BLOCKS_DEFAULT, Objects::nonNull);
             spec.define(KEY_ALLOW_INTERACT_BLOCKS, () -> ConstraintConfig.ALLOW_INTERACT_BLOCKS_DEFAULT, Objects::nonNull);
-            spec.define(KEY_USE_CORRECT_TOOLS, () -> ConstraintConfig.USE_CORRECT_TOOLS_DEFAULT, Objects::nonNull);
+            spec.define(KEY_ALLOW_COPY_PASTE_STRUCTURE, () -> ConstraintConfig.ALLOW_COPY_PASTE_STRUCTURES_DEFAULT, Objects::nonNull);
+            spec.define(KEY_USE_PROPER_TOOLS_ONLY, () -> ConstraintConfig.USE_PROPER_TOOLS_ONLY_DEFAULT, Objects::nonNull);
             spec.defineInRange(KEY_MAX_REACH_DISTANCE, ConstraintConfig.MAX_REACH_DISTANCE_DEFAULT, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_START, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_END);
-            spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_BREAK, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_DEFAULT, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
-            spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_PLACE, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_DEFAULT, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
+            spec.defineInRange(KEY_MAX_BLOCK_BREAK_VOLUME, ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_DEFAULT, ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_RANGE_START, ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_RANGE_END);
+            spec.defineInRange(KEY_MAX_BLOCK_PLACE_VOLUME, ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_DEFAULT, ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_RANGE_START, ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_RANGE_END);
+            spec.defineInRange(KEY_MAX_BLOCK_INTERACT_VOLUME, ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_DEFAULT, ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_RANGE_START, ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_RANGE_END);
+            spec.defineInRange(KEY_MAX_STRUCTURE_COPY_PASTE_VOLUME, ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_DEFAULT, ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_START, ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_END);
             spec.defineList(KEY_WHITELISTED_ITEMS, () -> ConstraintConfig.WHITELISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
             spec.defineList(KEY_BLACKLISTED_ITEMS, () -> ConstraintConfig.BLACKLISTED_ITEMS_DEFAULT.stream().map(ResourceLocation::getString).toList(), Objects::nonNull);
             return spec;
@@ -110,10 +116,13 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
                     config.get(KEY_ALLOW_BREAK_BLOCKS),
                     config.get(KEY_ALLOW_PLACE_BLOCKS),
                     config.get(KEY_ALLOW_INTERACT_BLOCKS),
-                    config.get(KEY_USE_CORRECT_TOOLS),
+                    config.get(KEY_ALLOW_COPY_PASTE_STRUCTURE),
+                    config.get(KEY_USE_PROPER_TOOLS_ONLY),
                     config.get(KEY_MAX_REACH_DISTANCE),
-                    config.get(KEY_MAX_BOX_VOLUME_PER_BREAK),
-                    config.get(KEY_MAX_BOX_VOLUME_PER_PLACE),
+                    config.get(KEY_MAX_BLOCK_BREAK_VOLUME),
+                    config.get(KEY_MAX_BLOCK_PLACE_VOLUME),
+                    config.get(KEY_MAX_BLOCK_INTERACT_VOLUME),
+                    config.get(KEY_MAX_STRUCTURE_COPY_PASTE_VOLUME),
                     config.get(KEY_WHITELISTED_ITEMS) == null ? null : config.<List<String>>get(KEY_WHITELISTED_ITEMS).stream().map(ResourceLocation::decompose).toList(),
                     config.get(KEY_BLACKLISTED_ITEMS) == null ? null : config.<List<String>>get(KEY_BLACKLISTED_ITEMS).stream().map(ResourceLocation::decompose).toList()
             );
@@ -127,10 +136,13 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.set(KEY_ALLOW_BREAK_BLOCKS, constraintConfig.allowBreakBlocks());
             config.set(KEY_ALLOW_PLACE_BLOCKS, constraintConfig.allowPlaceBlocks());
             config.set(KEY_ALLOW_INTERACT_BLOCKS, constraintConfig.allowInteractBlocks());
-            config.set(KEY_USE_CORRECT_TOOLS, constraintConfig.useCorrectTools());
+            config.set(KEY_ALLOW_COPY_PASTE_STRUCTURE, constraintConfig.allowCopyPasteStructures());
+            config.set(KEY_USE_PROPER_TOOLS_ONLY, constraintConfig.useProperToolsOnly());
             config.set(KEY_MAX_REACH_DISTANCE, constraintConfig.maxReachDistance());
-            config.set(KEY_MAX_BOX_VOLUME_PER_BREAK, constraintConfig.maxBlockBreakVolume());
-            config.set(KEY_MAX_BOX_VOLUME_PER_PLACE, constraintConfig.maxBlockPlaceVolume());
+            config.set(KEY_MAX_BLOCK_BREAK_VOLUME, constraintConfig.maxBlockBreakVolume());
+            config.set(KEY_MAX_BLOCK_PLACE_VOLUME, constraintConfig.maxBlockPlaceVolume());
+            config.set(KEY_MAX_BLOCK_INTERACT_VOLUME, constraintConfig.maxBlockInteractVolume());
+            config.set(KEY_MAX_STRUCTURE_COPY_PASTE_VOLUME, constraintConfig.maxStructureCopyPasteVolume());
             config.set(KEY_WHITELISTED_ITEMS, constraintConfig.whitelistedItems() == null ? null : constraintConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
             config.set(KEY_BLACKLISTED_ITEMS, constraintConfig.blacklistedItems() == null ? null : constraintConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
 
@@ -139,12 +151,15 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             config.setComment(KEY_ALLOW_BREAK_BLOCKS, "Should allow players to break blocks using this mod.");
             config.setComment(KEY_ALLOW_PLACE_BLOCKS, "Should allow players to place blocks using this mod.");
             config.setComment(KEY_ALLOW_INTERACT_BLOCKS, "Should allow players to interact blocks using this mod.");
-            config.setComment(KEY_USE_CORRECT_TOOLS, "Should allow players to break blocks with correct tools only in survival mode.");
+            config.setComment(KEY_ALLOW_COPY_PASTE_STRUCTURE, "Should allow players to copy and paste structures using this mod.");
+            config.setComment(KEY_USE_PROPER_TOOLS_ONLY, "Should allow players to break blocks with proper tools only in survival mode.");
             config.setComment(KEY_MAX_REACH_DISTANCE, "The maximum distance a player can reach when building using this mod. \nRange: " + ConstraintConfig.MAX_REACH_DISTANCE_RANGE_START + " ~ " + ConstraintConfig.MAX_REACH_DISTANCE_RANGE_END);
-            config.setComment(KEY_MAX_BOX_VOLUME_PER_BREAK, "The maximum box volume a player can break at once when building using this mod.. \nRange: " + ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START + " ~ " + ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
-            config.setComment(KEY_MAX_BOX_VOLUME_PER_PLACE, "The maximum box volume a player can place at once  when building using this mod. \nRange: " + ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START + " ~ " + ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
-            config.setComment(KEY_WHITELISTED_ITEMS, "The list of items that players are allowed to use when building using this mod. \nIf the whitelist is empty, all items are allowed. \nIf the whitelist is not empty, only the items in the whitelist are allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
-            config.setComment(KEY_BLACKLISTED_ITEMS, "The list of items that players are not allowed to use when building using this mod. \nIf the blacklist is empty, no items are not allowed. \nIf an item exists both in the blacklist and the whitelist, it will not be allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
+            config.setComment(KEY_MAX_BLOCK_BREAK_VOLUME, "The maximum block volume a player can break at once when building using this mod. \nRange: " + ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_RANGE_START + " ~ " + ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_RANGE_END);
+            config.setComment(KEY_MAX_BLOCK_PLACE_VOLUME, "The maximum block volume a player can place at once when building using this mod. \nRange: " + ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_RANGE_START + " ~ " + ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_RANGE_END);
+            config.setComment(KEY_MAX_BLOCK_INTERACT_VOLUME, "The maximum block volume a player can interact at once when building using this mod. \nRange: " + ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_RANGE_START + " ~ " + ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_RANGE_END);
+            config.setComment(KEY_MAX_STRUCTURE_COPY_PASTE_VOLUME, "The maximum structure volume a player can copy and paste at once when building using this mod. \nRange: " + ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_START + " ~ " + ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_END);
+            config.setComment(KEY_WHITELISTED_ITEMS, "The list of items that players are allowed to break/place/interact when building using this mod. \nIf the whitelist is empty, all items are allowed. \nIf the whitelist is not empty, only the items in the whitelist are allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
+            config.setComment(KEY_BLACKLISTED_ITEMS, "The list of items that players are not allowed to break/place/interact when building using this mod. \nIf the blacklist is empty, no items are not allowed. \nIf an item exists both in the blacklist and the whitelist, it will not be allowed. \nThe value must be a list of item resource locations like [\"minecraft:stone\", \"minecraft:dirt\"].");
             validate(config);
             return config;
         }
@@ -184,17 +199,26 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             if (config.contains(KEY_ALLOW_INTERACT_BLOCKS)) {
                 spec.define(KEY_ALLOW_INTERACT_BLOCKS, () -> ConstraintConfig.ALLOW_INTERACT_BLOCKS_DEFAULT, Boolean.class::isInstance);
             }
-            if (config.contains(KEY_USE_CORRECT_TOOLS)) {
-                spec.define(KEY_USE_CORRECT_TOOLS, () -> ConstraintConfig.USE_CORRECT_TOOLS_DEFAULT, Boolean.class::isInstance);
+            if (config.contains(KEY_ALLOW_COPY_PASTE_STRUCTURE)) {
+                spec.define(KEY_ALLOW_COPY_PASTE_STRUCTURE, () -> ConstraintConfig.ALLOW_COPY_PASTE_STRUCTURES_DEFAULT, Boolean.class::isInstance);
+            }
+            if (config.contains(KEY_USE_PROPER_TOOLS_ONLY)) {
+                spec.define(KEY_USE_PROPER_TOOLS_ONLY, () -> ConstraintConfig.USE_PROPER_TOOLS_ONLY_DEFAULT, Boolean.class::isInstance);
             }
             if (config.contains(KEY_MAX_REACH_DISTANCE)) {
                 spec.defineInRange(KEY_MAX_REACH_DISTANCE, ConstraintConfig.MAX_REACH_DISTANCE_DEFAULT, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_START, ConstraintConfig.MAX_REACH_DISTANCE_RANGE_END);
             }
-            if (config.contains(KEY_MAX_BOX_VOLUME_PER_BREAK)) {
-                spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_BREAK, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_DEFAULT, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_BREAK_RANGE_END);
+            if (config.contains(KEY_MAX_BLOCK_BREAK_VOLUME)) {
+                spec.defineInRange(KEY_MAX_BLOCK_BREAK_VOLUME, ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_DEFAULT, ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_RANGE_START, ConstraintConfig.MAX_BLOCK_BREAK_VOLUME_RANGE_END);
             }
-            if (config.contains(KEY_MAX_BOX_VOLUME_PER_PLACE)) {
-                spec.defineInRange(KEY_MAX_BOX_VOLUME_PER_PLACE, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_DEFAULT, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_START, ConstraintConfig.MAX_BOX_VOLUME_PER_PLACE_RANGE_END);
+            if (config.contains(KEY_MAX_BLOCK_PLACE_VOLUME)) {
+                spec.defineInRange(KEY_MAX_BLOCK_PLACE_VOLUME, ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_DEFAULT, ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_RANGE_START, ConstraintConfig.MAX_BLOCK_PLACE_VOLUME_RANGE_END);
+            }
+            if (config.contains(KEY_MAX_BLOCK_INTERACT_VOLUME)) {
+                spec.defineInRange(KEY_MAX_BLOCK_INTERACT_VOLUME, ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_DEFAULT, ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_RANGE_START, ConstraintConfig.MAX_BLOCK_INTERACT_VOLUME_RANGE_END);
+            }
+            if (config.contains(KEY_MAX_STRUCTURE_COPY_PASTE_VOLUME)) {
+                spec.defineInRange(KEY_MAX_STRUCTURE_COPY_PASTE_VOLUME, ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_DEFAULT, ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_START, ConstraintConfig.MAX_STRUCTURE_COPY_PASTE_VOLUME_RANGE_END);
             }
             if (config.contains(KEY_WHITELISTED_ITEMS)) {
                 spec.defineList(KEY_WHITELISTED_ITEMS, () -> ConstraintConfig.WHITELISTED_ITEMS_DEFAULT, Objects::nonNull);
@@ -219,10 +243,13 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
                     config.get(KEY_ALLOW_BREAK_BLOCKS),
                     config.get(KEY_ALLOW_PLACE_BLOCKS),
                     config.get(KEY_ALLOW_INTERACT_BLOCKS),
-                    config.get(KEY_USE_CORRECT_TOOLS),
+                    config.get(KEY_ALLOW_COPY_PASTE_STRUCTURE),
+                    config.get(KEY_USE_PROPER_TOOLS_ONLY),
                     config.get(KEY_MAX_REACH_DISTANCE),
-                    config.get(KEY_MAX_BOX_VOLUME_PER_BREAK),
-                    config.get(KEY_MAX_BOX_VOLUME_PER_PLACE),
+                    config.get(KEY_MAX_BLOCK_BREAK_VOLUME),
+                    config.get(KEY_MAX_BLOCK_PLACE_VOLUME),
+                    config.get(KEY_MAX_BLOCK_INTERACT_VOLUME),
+                    config.get(KEY_MAX_STRUCTURE_COPY_PASTE_VOLUME),
                     config.get(KEY_WHITELISTED_ITEMS) == null ? null : config.<List<String>>get(KEY_WHITELISTED_ITEMS).stream().map(ResourceLocation::decompose).toList(),
                     config.get(KEY_BLACKLISTED_ITEMS) == null ? null : config.<List<String>>get(KEY_BLACKLISTED_ITEMS).stream().map(ResourceLocation::decompose).toList());
         }
@@ -235,10 +262,13 @@ public class SessionConfigSerializer implements ConfigSerializer<SessionConfig> 
             addOrRemove(config, KEY_ALLOW_BREAK_BLOCKS, constraintConfig.allowBreakBlocks());
             addOrRemove(config, KEY_ALLOW_PLACE_BLOCKS, constraintConfig.allowPlaceBlocks());
             addOrRemove(config, KEY_ALLOW_INTERACT_BLOCKS, constraintConfig.allowInteractBlocks());
-            addOrRemove(config, KEY_USE_CORRECT_TOOLS, constraintConfig.useCorrectTools());
+            addOrRemove(config, KEY_ALLOW_COPY_PASTE_STRUCTURE, constraintConfig.allowCopyPasteStructures());
+            addOrRemove(config, KEY_USE_PROPER_TOOLS_ONLY, constraintConfig.useProperToolsOnly());
             addOrRemove(config, KEY_MAX_REACH_DISTANCE, constraintConfig.maxReachDistance());
-            addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_BREAK, constraintConfig.maxBlockBreakVolume());
-            addOrRemove(config, KEY_MAX_BOX_VOLUME_PER_PLACE, constraintConfig.maxBlockPlaceVolume());
+            addOrRemove(config, KEY_MAX_BLOCK_BREAK_VOLUME, constraintConfig.maxBlockBreakVolume());
+            addOrRemove(config, KEY_MAX_BLOCK_PLACE_VOLUME, constraintConfig.maxBlockPlaceVolume());
+            addOrRemove(config, KEY_MAX_BLOCK_INTERACT_VOLUME, constraintConfig.maxBlockInteractVolume());
+            addOrRemove(config, KEY_MAX_STRUCTURE_COPY_PASTE_VOLUME, constraintConfig.maxStructureCopyPasteVolume());
             addOrRemove(config, KEY_WHITELISTED_ITEMS, constraintConfig.whitelistedItems() == null ? null : constraintConfig.whitelistedItems().stream().map(ResourceLocation::getString).toList());
             addOrRemove(config, KEY_BLACKLISTED_ITEMS, constraintConfig.blacklistedItems() == null ? null : constraintConfig.blacklistedItems().stream().map(ResourceLocation::getString).toList());
             validate(config);

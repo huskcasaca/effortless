@@ -2,11 +2,13 @@ package dev.huskuraft.effortless.building.operation.batch;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
-import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.building.operation.ItemStackUtils;
+import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.operation.OperationSummaryType;
 
 public class BatchOperationResult extends OperationResult {
 
@@ -16,6 +18,17 @@ public class BatchOperationResult extends OperationResult {
     BatchOperationResult(BatchOperation operation, Collection<? extends OperationResult> result) {
         this.operation = operation;
         this.result = result;
+    }
+
+    private static <K> Map<K, Integer> merge(Map<K, Integer> a, Map<K, Integer> b) {
+        return merge(a, b, Integer::sum);
+    }
+
+    private static <K, V> Map<K, V> merge(Map<K, V> a, Map<K, V> b, BiFunction<V, V, V> merge) {
+        for (var entry : b.entrySet()) {
+            a.compute(entry.getKey(), (k, v) -> v == null ? entry.getValue() : merge.apply(v, entry.getValue()));
+        }
+        return a;
     }
 
     @Override
@@ -31,19 +44,13 @@ public class BatchOperationResult extends OperationResult {
         );
     }
 
-    @Override
-    public List<ItemStack> getSummary(OperationSummaryType type) {
-        return ItemStackUtils.reduceStack(result.stream().map(result -> result.getSummary(type)).flatMap(Collection::stream).toList());
-    }
-
-
-    public Collection<? extends OperationResult> getResult() {
+    public Collection<? extends OperationResult> getResults() {
         return result;
     }
 
-//    public List<BlockPosition> locations() {
-//        return result.stream().map(OperationResult::getOperation).filter(BlockPositionLocatable.class::isInstance).map(BlockPositionLocatable.class::cast).map(BlockPositionLocatable::locate).filter(Objects::nonNull).toList();
-//    }
-
+    @Override
+    public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
+        return result.stream().map(result -> result.getBlockSummary(blockSummary)).flatMap(List::stream).collect(Collectors.toList());
+    }
 
 }

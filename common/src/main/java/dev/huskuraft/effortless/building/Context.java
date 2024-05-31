@@ -15,15 +15,14 @@ import dev.huskuraft.effortless.api.core.GameMode;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
-import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
+import dev.huskuraft.effortless.building.config.BuilderConfig;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
-import dev.huskuraft.effortless.building.session.BatchBuildSession;
-import dev.huskuraft.effortless.building.session.BuildSession;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
@@ -36,6 +35,7 @@ public record Context(
         Interactions interactions,
 
         Structure structure,
+        Clipboard clipboard,
         Pattern pattern,
         Replace replace,
 
@@ -43,12 +43,12 @@ public record Context(
         Extras extras
 ) {
 
-    public boolean useCorrectTool() {
-        return configs().constraintConfig().useCorrectTools();
+    public boolean useProperTool() {
+        return configs().constraintConfig().useProperToolsOnly();
     }
 
     public int getReservedToolDurability() {
-        return 1;
+        return configs().builderConfig().reservedToolDurability();
     }
 
     public boolean useLegacyBlockPlace() {
@@ -62,10 +62,12 @@ public record Context(
                 BuildType.BUILD,
                 Interactions.EMPTY,
                 Structure.DISABLED,
+                Clipboard.DISABLED,
                 Pattern.DISABLED,
                 Replace.DISABLED,
                 new Configs(
-                        ConstraintConfig.DEFAULT
+                        ConstraintConfig.DEFAULT,
+                        BuilderConfig.DEFAULT
                 ), null
         );
     }
@@ -94,12 +96,12 @@ public record Context(
         return buildType() == BuildType.BUILD;
     }
 
-    public boolean isPreviewType() {
-        return buildType() == BuildType.PREVIEW || buildType() == BuildType.PREVIEW_ONCE;
+    public boolean isBuildClientType() {
+        return buildType() == BuildType.BUILD_CLIENT;
     }
 
-    public boolean isPreviewOnceType() {
-        return buildType() == BuildType.PREVIEW_ONCE;
+    public boolean isPreviewType() {
+        return buildType() == BuildType.PREVIEW;
     }
 
     public boolean isBuilding() {
@@ -115,7 +117,7 @@ public record Context(
     }
 
     public boolean isFulfilled() {
-        return isBuilding() && structure().traceSize(this) == interactionsSize();
+        return isBuilding() && ((buildState() == BuildState.PASTE_STRUCTURE && interactionsSize() == 1) || structure().traceSize(this) == interactionsSize());
     }
 
     public int interactionsSize() {
@@ -177,39 +179,47 @@ public record Context(
     }
 
     public Context withBuildState(BuildState state) {
-        return new Context(id, state, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, state, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withBuildType(BuildType type) {
-        return new Context(id, buildState, type, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, type, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withNextInteraction(BlockInteraction interaction) {
-        return new Context(id, buildState, buildType, interactions.put(interaction), structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions.put(interaction), structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withNoInteraction() {
-        return new Context(id, buildState, buildType, Interactions.EMPTY, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, Interactions.EMPTY, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withStructure(Structure structure) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
+    }
+
+    public Context withClipboard(Clipboard clipboard) {
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
+    }
+
+    public Context withEmptyClipboard() {
+        return new Context(id, buildState, buildType, interactions, structure, clipboard.withBlockSnapshots(List.of()), pattern, replace, configs, extras);
     }
 
     public Context withPattern(Pattern pattern) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withReplace(Replace replace) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withExtras(Extras extras) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withPlayerExtras(Player player) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, new Extras(player));
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, new Extras(player));
     }
 
     public Context finalize(Player player, BuildStage stage) {
@@ -229,15 +239,12 @@ public record Context(
                 buildType,
                 Interactions.EMPTY,
                 structure,
+                clipboard,
                 pattern,
                 replace,
                 configs,
                 extras
         );
-    }
-
-    public BuildSession createSession(World world, Player player) {
-        return new BatchBuildSession(player, this);
     }
 
     // for build mode only
@@ -256,12 +263,17 @@ public record Context(
     }
 
     public Context withReachParams(Configs configs) {
-        return new Context(id, buildState, buildType, interactions, structure, pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard, pattern, replace, configs, extras);
     }
 
     public Context withConstraintConfig(ConstraintConfig config) {
         // FIXME: 4/4/24 commands
-        return withReachParams(new Configs(config));
+        return withReachParams(new Configs(config, configs().builderConfig()));
+    }
+
+    public Context withBuilderConfig(BuilderConfig config) {
+        // FIXME: 4/4/24 commands
+        return withReachParams(new Configs(configs().constraintConfig(), config));
     }
 
     public Vector3i getInteractionBox() {
@@ -271,21 +283,25 @@ public record Context(
         return BoundingBox3d.fromLowerCornersOf(interactions().results().stream().map(BlockInteraction::getBlockPosition).map(BlockPosition::toVector3i).toArray(Vector3i[]::new)).getSize().toVector3i();
     }
 
-    public int getBoxVolume() {
+    public int getVolume() {
+        if (buildState() == BuildState.PASTE_STRUCTURE) {
+            return (int) (clipboard().volume() * pattern().volumeMultiplier());
+        }
         return (int) (structure().volume(this) * pattern().volumeMultiplier());
     }
 
-    public int getMaxBoxVolume() {
+    public int getMaxVolume() {
         return switch (buildState()) {
             case IDLE -> 0;
             case BREAK_BLOCK -> configs().constraintConfig().maxBlockBreakVolume();
             case PLACE_BLOCK -> configs().constraintConfig().maxBlockPlaceVolume();
-            case INTERACT_BLOCK -> configs().constraintConfig().maxBlockPlaceVolume();
+            case INTERACT_BLOCK -> configs().constraintConfig().maxBlockInteractVolume();
+            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().maxStructureCopyPasteVolume();
         };
     }
 
-    public boolean isBoxVolumeInBounds() {
-        return getBoxVolume() <= getMaxBoxVolume();
+    public boolean isVolumeInBounds() {
+        return getVolume() <= getMaxVolume();
     }
 
     public boolean hasPermission() {
@@ -294,6 +310,7 @@ public record Context(
             case BREAK_BLOCK -> configs().constraintConfig().allowBreakBlocks();
             case PLACE_BLOCK -> configs().constraintConfig().allowPlaceBlocks();
             case INTERACT_BLOCK -> configs().constraintConfig().allowInteractBlocks();
+            case COPY_STRUCTURE, PASTE_STRUCTURE -> configs().constraintConfig().allowCopyPasteStructures();
         };
     }
 
@@ -339,7 +356,8 @@ public record Context(
     }
 
     public record Configs(
-            ConstraintConfig constraintConfig
+            ConstraintConfig constraintConfig,
+            BuilderConfig builderConfig
     ) {
     }
 

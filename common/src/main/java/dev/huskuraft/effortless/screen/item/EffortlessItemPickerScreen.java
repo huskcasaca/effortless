@@ -1,9 +1,13 @@
 package dev.huskuraft.effortless.screen.item;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.Item;
+import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.input.EditBox;
@@ -11,11 +15,13 @@ import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.ClientContentFactory;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.platform.SearchBy;
+import dev.huskuraft.effortless.api.platform.SearchTree;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.pattern.randomize.ItemRandomizer;
 
 public class EffortlessItemPickerScreen extends AbstractPanelScreen {
 
+    private final Predicate<Item> filter;
     protected final Consumer<Item> consumer;
     protected TextWidget titleTextWidget;
     protected ItemStackList entries;
@@ -23,8 +29,9 @@ public class EffortlessItemPickerScreen extends AbstractPanelScreen {
     protected Button addButton;
     protected Button cancelButton;
 
-    public EffortlessItemPickerScreen(Entrance entrance, Consumer<Item> consumer) {
+    public EffortlessItemPickerScreen(Entrance entrance, Predicate<Item> filter, Consumer<Item> consumer) {
         super(entrance, Text.translate("effortless.item.picker.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        this.filter = filter;
         this.consumer = consumer;
     }
 
@@ -66,10 +73,16 @@ public class EffortlessItemPickerScreen extends AbstractPanelScreen {
     protected void setSearchResult(String string) {
         if (string.startsWith("#")) {
             var searchTree = ClientContentFactory.getInstance().searchItemStack(SearchBy.TAG);
-            entries.reset(searchTree.search(string.substring(1).toLowerCase(Locale.ROOT)));
+            entries.reset(searchTree.search(string.substring(1).toLowerCase(Locale.ROOT)).stream().filter(itemStack -> filter.test(itemStack.getItem())).toList());
         } else {
+            var airSearchTree = SearchTree.of(List.of(Items.AIR.item().getDefaultStack()), items -> Stream.of(items.getName().getString().toLowerCase(Locale.ROOT)));
             var searchTree = ClientContentFactory.getInstance().searchItemStack(SearchBy.NAME);
-            entries.reset(searchTree.search(string.toLowerCase(Locale.ROOT)));
+            entries.reset(
+                    Stream.concat(
+                            airSearchTree.search(string.toLowerCase(Locale.ROOT)).stream().filter(itemStack -> filter.test(itemStack.getItem())),
+                            searchTree.search(string.toLowerCase(Locale.ROOT)).stream().filter(itemStack -> filter.test(itemStack.getItem()))
+                    ).toList()
+            );
         }
         entries.setSelected(null);
         entries.setScrollAmount(0);

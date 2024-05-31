@@ -127,8 +127,8 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
     }
 
     @Override
-    public boolean isDestroyable() {
-        return !refs.is(BlockTags.FEATURES_CANNOT_REPLACE);
+    public boolean hasTagFeatureCannotReplace() {
+        return refs.is(BlockTags.FEATURES_CANNOT_REPLACE);
     }
 
     @Override

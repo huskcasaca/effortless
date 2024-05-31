@@ -4,14 +4,15 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.Packet;
-import dev.huskuraft.effortless.building.history.BuildTooltip;
+import dev.huskuraft.effortless.building.operation.BlockSummary;
+import dev.huskuraft.effortless.building.operation.EntitySummary;
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.operation.OperationSummaryType;
+import dev.huskuraft.effortless.building.operation.OperationTooltip;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.serializer.ContextSerializer;
 
 public record PlayerBuildTooltipPacket(
-        BuildTooltip buildTooltip
+        OperationTooltip operationTooltip
 ) implements Packet<AllPacketListener> {
 
 
@@ -25,62 +26,55 @@ public record PlayerBuildTooltipPacket(
         @Override
         public PlayerBuildTooltipPacket read(NetByteBuf byteBuf) {
             return new PlayerBuildTooltipPacket(
-                    new BuildTooltip(
-                            byteBuf.readEnum(BuildTooltip.Type.class),
+                    new OperationTooltip(
+                            byteBuf.readEnum(OperationTooltip.Type.class),
                             byteBuf.read(new ContextSerializer()),
-                            byteBuf.readMap((buffer1) -> buffer1.readEnum(OperationSummaryType.class), (buffer1) -> buffer1.readList(NetByteBuf::readItemStack)))
-            );
+                            byteBuf.readMap((buffer1) -> buffer1.readEnum(BlockSummary.class), (buffer1) -> buffer1.readMap((NetByteBuf::readBlockState), NetByteBuf::readVarInt)),
+                            byteBuf.readMap((buffer1) -> buffer1.readEnum(EntitySummary.class), (buffer1) -> buffer1.readMap((NetByteBuf::readBlockState), NetByteBuf::readVarInt))
+                    ));
 
         }
 
         @Override
         public void write(NetByteBuf byteBuf, PlayerBuildTooltipPacket packet) {
-            byteBuf.writeEnum(packet.buildTooltip().type());
-            byteBuf.write(packet.buildTooltip().context(), new ContextSerializer());
-            byteBuf.writeMap(packet.buildTooltip().itemSummary(), NetByteBuf::writeEnum, ((buffer1, itemStacks) -> buffer1.writeList(itemStacks, NetByteBuf::writeItemStack)));
+            byteBuf.writeEnum(packet.operationTooltip().type());
+            byteBuf.write(packet.operationTooltip().context(), new ContextSerializer());
+            byteBuf.writeMap(packet.operationTooltip().blockSummary(), NetByteBuf::writeEnum, ((buffer1, blockStateMap) -> buffer1.writeMap(blockStateMap, NetByteBuf::writeBlockState, NetByteBuf::writeVarInt)));
+            byteBuf.writeMap(packet.operationTooltip().entitySummary(), NetByteBuf::writeEnum, ((buffer1, blockStateMap) -> buffer1.writeMap(blockStateMap, NetByteBuf::writeBlockState, NetByteBuf::writeVarInt)));
         }
 
     }
 
-    public static PlayerBuildTooltipPacket buildSuccess(OperationResult operationResult) {
+    public static PlayerBuildTooltipPacket build(OperationResult operationResult) {
         return new PlayerBuildTooltipPacket(
-                new BuildTooltip(
-                        BuildTooltip.Type.BUILD_SUCCESS,
-                        operationResult
-                )
+                operationResult.getTooltip().withType(OperationTooltip.Type.BUILD)
         );
     }
 
-    public static PlayerBuildTooltipPacket undoSuccess(OperationResult operationResult) {
+    public static PlayerBuildTooltipPacket undo(OperationResult operationResult) {
         return new PlayerBuildTooltipPacket(
-                new BuildTooltip(
-                        BuildTooltip.Type.UNDO_SUCCESS,
-                        operationResult
-                )
+                operationResult.getTooltip().withType(OperationTooltip.Type.UNDO_SUCCESS)
         );
     }
 
-    public static PlayerBuildTooltipPacket redoSuccess(OperationResult operationResult) {
+    public static PlayerBuildTooltipPacket redo(OperationResult operationResult) {
         return new PlayerBuildTooltipPacket(
-                new BuildTooltip(
-                        BuildTooltip.Type.REDO_SUCCESS,
-                        operationResult
-                )
+                operationResult.getTooltip().withType(OperationTooltip.Type.REDO_SUCCESS)
         );
     }
 
     public static PlayerBuildTooltipPacket nothingToUndo() {
         return new PlayerBuildTooltipPacket(
-                new BuildTooltip(
-                        BuildTooltip.Type.NOTHING_TO_UNDO
+                OperationTooltip.empty(
+                        OperationTooltip.Type.NOTHING_TO_UNDO
                 )
         );
     }
 
     public static PlayerBuildTooltipPacket nothingToRedo() {
         return new PlayerBuildTooltipPacket(
-                new BuildTooltip(
-                        BuildTooltip.Type.NOTHING_TO_REDO
+                OperationTooltip.empty(
+                        OperationTooltip.Type.NOTHING_TO_REDO
                 )
         );
     }

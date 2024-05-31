@@ -22,8 +22,9 @@ public class NumberField extends AbstractContainerWidget {
     private final Button plusButton;
     private final NumberFormat format;
     private final int type;
-    private final int ctrlPressedStep = 5;
-    private final int shiftPressedStep = 10;
+    private final int ctrlMultiplier = 5;
+    private final int shiftMultiplier = 10;
+    private int step = 1;
     private Range range;
 
     public NumberField(Entrance entrance, int x, int y, int width, int height, int type) {
@@ -39,16 +40,16 @@ public class NumberField extends AbstractContainerWidget {
 
         this.textField = addWidget(new EditBox(entrance, x + buttonWidth, y + 1, width - 2 * buttonWidth, height - 2, Text.empty()));
         this.minusButton = addWidget(new Button(entrance, x, y, buttonWidth, height, Text.text("-"), button -> {
-            float valueChanged = 1f;
-            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = ctrlPressedStep;
-            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = shiftPressedStep;
+            var valueChanged = step;
+            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = ctrlMultiplier * step;
+            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = shiftMultiplier * step;
 
             setValue(getNumber().doubleValue() - valueChanged);
         }));
         this.plusButton = addWidget(new Button(entrance, x + width - buttonWidth, y, buttonWidth, height, Text.text("+"), button -> {
-            float valueChanged = 1f;
-            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = ctrlPressedStep;
-            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = shiftPressedStep;
+            var valueChanged = step;
+            if (getEntrance().getClient().getWindow().isControlDown()) valueChanged = ctrlMultiplier * step;
+            if (getEntrance().getClient().getWindow().isShiftDown()) valueChanged = shiftMultiplier * step;
 
             setValue(getNumber().doubleValue() + valueChanged);
         }));
@@ -118,6 +119,10 @@ public class NumberField extends AbstractContainerWidget {
 
     public void setValueRange(Number min, Number max) {
         this.range = new Range(min, max);
+    }
+
+    public void setStep(int step) {
+        this.step = step;
     }
 
     public void setTooltipMessage(Text tooltip) {

@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building;
 
+import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 
@@ -7,7 +8,9 @@ public enum BuildState {
     IDLE,
     BREAK_BLOCK,
     PLACE_BLOCK,
-    INTERACT_BLOCK;
+    INTERACT_BLOCK,
+    COPY_STRUCTURE,
+    PASTE_STRUCTURE;
 
     public boolean isIdle() {
         return this == IDLE;
@@ -20,6 +23,8 @@ public enum BuildState {
                     case BREAK_BLOCK -> "breaking_block";
                     case PLACE_BLOCK -> "placing_block";
                     case INTERACT_BLOCK -> "interacting_block";
+                    case COPY_STRUCTURE -> "copying_structure";
+                    case PASTE_STRUCTURE -> "pasting_structure";
                 }
         ));
     }
@@ -31,8 +36,10 @@ public enum BuildState {
                     case BREAK_BLOCK -> "breaking_block";
                     case PLACE_BLOCK -> "placing_block";
                     case INTERACT_BLOCK -> "interacting_block";
+                    case COPY_STRUCTURE -> "copying_structure";
+                    case PASTE_STRUCTURE -> "pasting_structure";
                 }
-        ), buildMode.getDisplayName());
+        ), buildMode.getDisplayName().withStyle(ChatFormatting.GOLD));
     }
 
 }

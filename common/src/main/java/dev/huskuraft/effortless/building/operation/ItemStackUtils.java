@@ -14,7 +14,7 @@ public class ItemStackUtils {
     private ItemStackUtils() {
     }
 
-    public static List<ItemStack> reduceStack(List<ItemStack> stacks) {
+    public static List<ItemStack> flattenStack(List<ItemStack> stacks) {
         record Pair<A, B>(A first, B second) {
         }
         var map = new HashMap<Pair<Item, TagRecord>, ItemStack>();

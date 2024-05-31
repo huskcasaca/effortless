@@ -15,6 +15,7 @@ import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.BuildStage;
+import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.batch.DeferredBatchOperation;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
@@ -420,6 +421,9 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
 
     @Override
     public Operation transform(Operation operation) {
+        if (operation.getContext().buildState() != BuildState.PLACE_BLOCK) {
+            return operation;
+        }
         if (!isValid()) {
             return new DeferredBatchOperation(operation.getContext(), () -> Stream.of(operation));
         }
@@ -483,7 +487,7 @@ public record ItemRandomizer(UUID id, Text name, Order order, Target target, Sou
     }
 
     public ItemRandomizer withChances(Collection<Chance<Item>> items) {
-        return new ItemRandomizer(id, name, order, target, source, items.stream().filter(chance -> chance.content() instanceof BlockItem).toList());
+        return new ItemRandomizer(id, name, order, target, source, items);
     }
 
     @Override
