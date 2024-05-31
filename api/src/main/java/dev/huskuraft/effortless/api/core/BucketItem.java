@@ -6,30 +6,29 @@ import dev.huskuraft.effortless.api.core.fluid.Fluids;
 public interface BucketItem extends Item {
 
     static ItemStack createFilledResult(Player player, ItemStack emptyItemStack, ItemStack filledItemStack, boolean preventDuplicates) {
-        var isCreative = player.getGameMode().isCreative(); // player.getAbilities().instabuild;
-        if (preventDuplicates && isCreative) {
-            if (!player.getInventory().contains(filledItemStack)) {
-                player.getInventory().addItem(filledItemStack);
+        var isCreative = player.getGameMode().isCreative();
+        if (!isCreative) {
+            emptyItemStack.decrease(1);
+        }
+        if (isCreative && preventDuplicates) {
+//            if (!player.getInventory().contains(filledItemStack)) {
+//                player.getInventory().addItem(filledItemStack);
+//            }
+            return emptyItemStack;
+        }
+
+        if (emptyItemStack.isEmpty()) {
+            return filledItemStack;
+        } else {
+            if (!player.getInventory().addItem(filledItemStack)) {
+                player.drop(filledItemStack, false, false);
             }
             return emptyItemStack;
-        } else {
-            if (!isCreative) {
-                emptyItemStack.decrease(1);
-            }
-
-            if (emptyItemStack.isEmpty()) {
-                return filledItemStack;
-            } else {
-                if (!player.getInventory().addItem(filledItemStack)) {
-                    player.drop(filledItemStack, false, false);
-                }
-                return emptyItemStack;
-            }
         }
     }
 
-    static ItemStack createFilledResult(Player pPlayer, ItemStack emptyItemStack, ItemStack filledItemStack) {
-        return createFilledResult(pPlayer, emptyItemStack, filledItemStack, true);
+    static ItemStack createFilledResult(Player player, ItemStack emptyItemStack, ItemStack filledItemStack) {
+        return createFilledResult(player, emptyItemStack, filledItemStack, true);
     }
 
     Fluid getContent();
