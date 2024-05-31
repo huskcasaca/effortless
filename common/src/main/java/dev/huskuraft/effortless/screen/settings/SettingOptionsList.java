@@ -314,7 +314,7 @@ public class SettingOptionsList extends AbstractEntryList<SettingOptionsList.Ent
 
         @Override
         public void onCreate() {
-            this.textSlot = addWidget(new TextSlot(getEntrance(), getLeft() + 1, getTop() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, getSymbol()));
+            this.textSlot = addWidget(new TextSlot(getEntrance(), getLeft() + 1, getTop() + 1, Dimens.SLOT_WIDTH, Dimens.SLOT_HEIGHT, Text.empty(), getSymbol()));
             this.textSlot.setVisible(this.getEntryList().isShowIcon());
 
             this.altButton = addWidget(new Button(getEntrance(), getRight() - 20, getTop(), 20, 20, Text.empty()));
