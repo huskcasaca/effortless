@@ -45,19 +45,19 @@ public record PlayerBuildTooltipPacket(
 
     }
 
-    public static PlayerBuildTooltipPacket buildSuccess(OperationResult operationResult) {
+    public static PlayerBuildTooltipPacket build(OperationResult operationResult) {
         return new PlayerBuildTooltipPacket(
                 operationResult.getTooltip().withType(OperationTooltip.Type.BUILD)
         );
     }
 
-    public static PlayerBuildTooltipPacket undoSuccess(OperationResult operationResult) {
+    public static PlayerBuildTooltipPacket undo(OperationResult operationResult) {
         return new PlayerBuildTooltipPacket(
                 operationResult.getTooltip().withType(OperationTooltip.Type.UNDO_SUCCESS)
         );
     }
 
-    public static PlayerBuildTooltipPacket redoSuccess(OperationResult operationResult) {
+    public static PlayerBuildTooltipPacket redo(OperationResult operationResult) {
         return new PlayerBuildTooltipPacket(
                 operationResult.getTooltip().withType(OperationTooltip.Type.REDO_SUCCESS)
         );

@@ -126,8 +126,9 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
                 getEntrance().getChannel().sendPacket(new PlayerBuildPreviewPacket(player.getId(), context), otherPlayer);
             }
         } else {
+            Effortless.LOGGER.debug("Received build request from %s".formatted(player.getProfile().getName()));
             getEntrance().getChannel().sendPacket(
-                    PlayerBuildTooltipPacket.buildSuccess(
+                    PlayerBuildTooltipPacket.build(
                             getOperationResultStack(player).pushSession(new BatchBuildSession(this, player, context))
                     ), player
             );
@@ -141,12 +142,13 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
 
     @Override
     public void undo(Player player) {
+        Effortless.LOGGER.debug("Received undo request from %s".formatted(player.getProfile().getName()));
         var stack = getOperationResultStack(player);
         try {
             var result = stack.undo();
             var context = result.getOperation().getContext();
 
-            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undoSuccess(result), player);
+            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undo(result), player);
             var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
             var buildStateText = Text.text("[").append(context.buildState().getDisplayName(context.buildMode())).append("]").withStyle(switch (context.buildState()) {
                 case IDLE -> ChatFormatting.RESET;
@@ -167,12 +169,13 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
 
     @Override
     public void redo(Player player) {
+        Effortless.LOGGER.debug("Received redo request from %s".formatted(player.getProfile().getName()));
         var stack = getOperationResultStack(player);
         try {
             var result = stack.redo();
             var context = result.getOperation().getContext();
 
-            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undoSuccess(result), player);
+            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undo(result), player);
             var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
             var buildStateText = Text.text("[").append(context.buildState().getDisplayName(context.buildMode())).append("]").withStyle(switch (context.buildState()) {
                 case IDLE -> ChatFormatting.RESET;
