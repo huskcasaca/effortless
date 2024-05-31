@@ -1,7 +1,6 @@
 package dev.huskuraft.effortless;
 
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,6 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
@@ -305,7 +305,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (!checkPermission(player)) {
             return false;
         }
-        updateContext(player, context -> context.withClipboard(clipboard));
+        updateContext(player, context -> context.newInteraction().withClipboard(clipboard));
         return true;
     }
 
@@ -383,13 +383,18 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 return context.newInteraction();
             }
             if (context.isBuilding() && context.buildState() != state) {
-                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.build_canceled")));
-//                player.sendClientMessage(Text.translate("effortless.message.building.client.build_canceled"), true);
+                switch (context.buildState()) {
+                    case BREAK_BLOCK -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.block_breaking_canceled")));
+                    case PLACE_BLOCK -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.block_placing_canceled")));
+                    case INTERACT_BLOCK -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.block_interacting_canceled")));
+                    case COPY_STRUCTURE -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.structure_copying_canceled")));
+                    case PASTE_STRUCTURE -> player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.structure_pasting_canceled")));
+                }
                 return context.newInteraction();
             }
             if (context.buildState() == BuildState.IDLE && state == BuildState.COPY_STRUCTURE && !context.clipboard().isEmpty()) {
-                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.paste_canceled")));
-//                player.sendClientMessage(Text.translate("effortless.message.building.client.paste_canceled"), true);
+                player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.structure_pasting_canceled")));
+//                player.sendClientMessage(Text.translate("effortless.message.building.client.structure_pasting_canceled"), true);
                 return context.newInteraction().withEmptyClipboard();
             }
 
@@ -737,17 +742,16 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     }
 
     public void showBuildMessage(Player player, Context context) {
+        var dimensions = Stream.of(context.getInteractionBox().x(), context.getInteractionBox().y(), context.getInteractionBox().z()).filter(i -> i > 1).toList();
+        if (dimensions.isEmpty()) {
+            dimensions = List.of(1);
+        }
         var message = Text.empty();
         if (context.tracingResult().isSuccess()) {
             message = message.append(context.buildState().getDisplayName(context.buildMode()))
                     .append(" ")
                     .append("(")
-                    .append(Text.text(String.valueOf(context.getInteractionBox().x())).withStyle(ChatFormatting.WHITE))
-                    .append("x")
-                    .append(Text.text(String.valueOf(context.getInteractionBox().y())).withStyle(ChatFormatting.WHITE))
-                    .append("x")
-                    .append(Text.text(String.valueOf(context.getInteractionBox().z())).withStyle(ChatFormatting.WHITE))
-                    .append(context.pattern().volumeMultiplier() > 1 ? "x" + new DecimalFormat("#.##").format(context.pattern().volumeMultiplier()) : "")
+                    .append(dimensions.stream().map(String::valueOf).collect(Collectors.joining("x")))
                     .append("=")
                     .append(Text.text(String.valueOf(context.getVolume())).withStyle(!context.isVolumeInBounds() ? ChatFormatting.RED : ChatFormatting.WHITE))
                     .append(")");
