@@ -674,6 +674,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 return;
             }
         }
+        if (player.getGameMode().isSpectator()) {
+            getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(id, Context.class), priority, false);
+            return;
+        }
         var entries = new ArrayList<>();
 
         if (!itemSummary.isEmpty()) {
