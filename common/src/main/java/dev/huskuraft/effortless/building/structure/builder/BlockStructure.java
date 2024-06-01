@@ -9,7 +9,7 @@ import com.google.common.collect.Sets;
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
@@ -298,7 +298,7 @@ public interface BlockStructure extends Structure {
 
         protected BlockInteraction convert(BlockPosition blockPosition) {
             var vec3 = eye.add(look.mul(0.001));
-            return new BlockInteraction(vec3, Orientation.getNearest(look.x(), look.y(), look.z()).getOpposite(), blockPosition, true);
+            return new BlockInteraction(vec3, Direction.getNearest(look.x(), look.y(), look.z()).getOpposite(), blockPosition, true);
         }
 
     }

@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.renderer.outliner;
 import java.awt.*;
 
 import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
@@ -57,16 +57,16 @@ public class BlockBoundingBoxOutline extends Outline {
         renderAACuboidLine(renderer, start, xyZ);
         renderAACuboidLine(renderer, start, xYz);
 
-        renderFace(renderer, Orientation.NORTH, xYz, XYz, Xyz, xyz, noCull);
-        renderFace(renderer, Orientation.SOUTH, XYZ, xYZ, xyZ, XyZ, noCull);
-        renderFace(renderer, Orientation.EAST, XYz, XYZ, XyZ, Xyz, noCull);
-        renderFace(renderer, Orientation.WEST, xYZ, xYz, xyz, xyZ, noCull);
-        renderFace(renderer, Orientation.UP, xYZ, XYZ, XYz, xYz, noCull);
-        renderFace(renderer, Orientation.DOWN, xyz, Xyz, XyZ, xyZ, noCull);
+        renderFace(renderer, Direction.NORTH, xYz, XYz, Xyz, xyz, noCull);
+        renderFace(renderer, Direction.SOUTH, XYZ, xYZ, xyZ, XyZ, noCull);
+        renderFace(renderer, Direction.EAST, XYz, XYZ, XyZ, Xyz, noCull);
+        renderFace(renderer, Direction.WEST, xYZ, xYz, xyz, xyZ, noCull);
+        renderFace(renderer, Direction.UP, xYZ, XYZ, XYz, xYz, noCull);
+        renderFace(renderer, Direction.DOWN, xyz, Xyz, XyZ, xyZ, noCull);
 
     }
 
-    protected void renderFace(Renderer renderer, Orientation orientation, Vector3d p1, Vector3d p2,
+    protected void renderFace(Renderer renderer, Direction direction, Vector3d p1, Vector3d p2,
                               Vector3d p3, Vector3d p4, boolean noCull) {
         if (!params.faceTexture.isPresent())
             return;
@@ -74,17 +74,17 @@ public class BlockBoundingBoxOutline extends Outline {
         var faceTexture = params.faceTexture.get();
         var alphaBefore = params.alpha;
         params.alpha =
-                orientation == params.getHighlightedFace() && params.highlightedFaceTexture.isPresent() ? 1 : 0.5f;
+                direction == params.getHighlightedFace() && params.highlightedFaceTexture.isPresent() ? 1 : 0.5f;
 
         var renderLayer = OutlineRenderLayers.outlineTranslucent(faceTexture, !noCull);
         renderer.pushLayer();
 
-        var axis = orientation.getAxis();
+        var axis = direction.getAxis();
         var uDiff = p2.sub(p1);
         var vDiff = p4.sub(p1);
         var maxU = (float) MathUtils.abs(axis == Axis.X ? uDiff.z() : uDiff.x());
         var maxV = (float) MathUtils.abs(axis == Axis.Y ? vDiff.z() : vDiff.y());
-        renderer.renderQuadUV(renderLayer, p1, p2, p3, p4, 0, 0, maxU, maxV, getParams().getLightMap(), new Color(0, 0, 0, 200).getRGB(), Orientation.UP);
+        renderer.renderQuadUV(renderLayer, p1, p2, p3, p4, 0, 0, maxU, maxV, getParams().getLightMap(), new Color(0, 0, 0, 200).getRGB(), Direction.UP);
 
         params.alpha = alphaBefore;
 

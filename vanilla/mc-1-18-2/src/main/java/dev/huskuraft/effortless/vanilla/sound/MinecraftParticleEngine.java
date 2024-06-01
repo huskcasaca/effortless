@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.vanilla.sound;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.platform.ParticleEngine;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 
@@ -16,8 +16,8 @@ public record MinecraftParticleEngine(
     }
 
     @Override
-    public void crack(BlockPosition blockPosition, Orientation orientation) {
-        refs.crack(MinecraftConvertor.toPlatformBlockPosition(blockPosition), MinecraftConvertor.toPlatformOrientation(orientation));
+    public void crack(BlockPosition blockPosition, Direction direction) {
+        refs.crack(MinecraftConvertor.toPlatformBlockPosition(blockPosition), MinecraftConvertor.toPlatformDirection(direction));
     }
 
 }

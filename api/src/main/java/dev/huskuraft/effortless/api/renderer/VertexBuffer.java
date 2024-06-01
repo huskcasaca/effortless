@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.renderer;
 
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.math.Matrix3f;
 import dev.huskuraft.effortless.api.math.Matrix4f;
 import dev.huskuraft.effortless.api.math.Vector3d;
@@ -58,7 +58,7 @@ public interface VertexBuffer extends PlatformReference {
         return this.normal(vector3f.x(), vector3f.y(), vector3f.z());
     }
 
-    default VertexBuffer normal(Matrix3f matrix, Orientation normal) {
+    default VertexBuffer normal(Matrix3f matrix, Direction normal) {
         var xOffset = normal != null ? normal.getStepX() : 0;
         var yOffset = normal != null ? normal.getStepY() : 0;
         var zOffset = normal != null ? normal.getStepZ() : 0;

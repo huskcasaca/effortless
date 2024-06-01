@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
@@ -62,7 +62,7 @@ public abstract class Outline {
 
         var extension = diff.normalize().mul(lineWidth / 2);
         var plane = RenderUtils.calculateAxisAlignedPlane(diff);
-        var face = Orientation.getNearest(diff.x(), diff.y(), diff.z());
+        var face = Direction.getNearest(diff.x(), diff.y(), diff.z());
         var axis = face.getAxis();
 
         start = start.sub(extension);
@@ -82,7 +82,7 @@ public abstract class Outline {
         var b4 = plane.add(end);
 
         if (getParams().disableNormals) {
-            face = Orientation.UP;
+            face = Direction.UP;
             renderer.renderQuad(renderLayer, b4, b3, b2, b1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
             renderer.renderQuad(renderLayer, a1, a2, a3, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
             renderer.renderQuad(renderLayer, a1, b1, b2, a2, getParams().getLightMap(), getParams().getColor().getRGB(), face);
@@ -95,23 +95,23 @@ public abstract class Outline {
         renderer.renderQuad(renderLayer, b4, b3, b2, b1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         renderer.renderQuad(renderLayer, a1, a2, a3, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face.getOpposite());
         var vec = a1.sub(a4);
-        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
+        face = Direction.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a1, b1, b2, a2, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         vec = RenderUtils.rotate(vec, -90, axis);
-        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
+        face = Direction.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a2, b2, b3, a3, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         vec = RenderUtils.rotate(vec, -90, axis);
-        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
+        face = Direction.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a3, b3, b4, a4, getParams().getLightMap(), getParams().getColor().getRGB(), face);
         vec = RenderUtils.rotate(vec, -90, axis);
-        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
+        face = Direction.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a4, b4, b1, a1, getParams().getLightMap(), getParams().getColor().getRGB(), face);
     }
 
     public static class OutlineParams {
         protected Optional<ResourceLocation> faceTexture;
         protected Optional<ResourceLocation> highlightedFaceTexture;
-        protected Orientation highlightedFace;
+        protected Direction highlightedFace;
         protected boolean fadeLineWidth;
         protected boolean disableCull;
         protected boolean disableNormals;
@@ -176,7 +176,7 @@ public abstract class Outline {
             return this;
         }
 
-        public OutlineParams highlightFace(@Nullable Orientation face) {
+        public OutlineParams highlightFace(@Nullable Direction face) {
             highlightedFace = face;
             return this;
         }
@@ -197,7 +197,7 @@ public abstract class Outline {
             return fadeLineWidth ? alpha * lineWidth : lineWidth;
         }
 
-        public Orientation getHighlightedFace() {
+        public Direction getHighlightedFace() {
             return highlightedFace;
         }
 

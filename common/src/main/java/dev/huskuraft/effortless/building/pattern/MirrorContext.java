@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
@@ -28,8 +28,8 @@ public record MirrorContext(
         return BlockPosition.at(vector);
     }
 
-    public Orientation mirror(Orientation orientation) {
-        return orientation.getAxis() != axis ? orientation : orientation.getOpposite();
+    public Direction mirror(Direction direction) {
+        return direction.getAxis() != axis ? direction : direction.getOpposite();
     }
 
     public BlockInteraction mirror(BlockInteraction blockInteraction) {
