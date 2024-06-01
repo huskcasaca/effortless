@@ -17,22 +17,22 @@ import dev.huskuraft.effortless.building.structure.PlaneLength;
 import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
 
-public record Cube(
+public record Cuboid(
         CubeFilling cubeFilling,
         PlaneFacing planeFacing,
         PlaneLength planeLength
 ) implements BlockStructure {
 
-    public Cube() {
+    public Cuboid() {
         this(CubeFilling.FILLED, PlaneFacing.BOTH, PlaneLength.VARIABLE);
     }
 
     @Override
     public Structure withFeature(BuildFeature feature) {
         return switch (feature.getType()) {
-            case CUBE_FILLING -> new Cube((CubeFilling) feature, planeFacing, planeLength);
-            case PLANE_FACING -> new Cube(cubeFilling, (PlaneFacing) feature, planeLength);
-            case PLANE_LENGTH -> new Cube(cubeFilling, planeFacing, (PlaneLength) feature);
+            case CUBE_FILLING -> new Cuboid((CubeFilling) feature, planeFacing, planeLength);
+            case PLANE_FACING -> new Cuboid(cubeFilling, (PlaneFacing) feature, planeLength);
+            case PLANE_LENGTH -> new Cuboid(cubeFilling, planeFacing, (PlaneLength) feature);
             default -> this;
         };
     }
@@ -133,8 +133,8 @@ public record Cube(
     public Stream<BlockPosition> collect(Context context, int index) {
         return switch (index) {
             case 1 -> Single.collectSingleBlocks(context);
-            case 2 -> Cube.collectCubePlaneBlocks(context, cubeFilling);
-            case 3 -> Cube.collectCubeBlocks(context, cubeFilling);
+            case 2 -> Cuboid.collectCubePlaneBlocks(context, cubeFilling);
+            case 3 -> Cuboid.collectCubeBlocks(context, cubeFilling);
             default -> Stream.empty();
         };
     }
@@ -146,6 +146,6 @@ public record Cube(
 
     @Override
     public BuildMode getMode() {
-        return BuildMode.CUBE;
+        return BuildMode.CUBOID;
     }
 }

@@ -16,7 +16,7 @@ import dev.huskuraft.effortless.building.structure.RaisedEdge;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.building.structure.builder.standard.Circle;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cone;
-import dev.huskuraft.effortless.building.structure.builder.standard.Cube;
+import dev.huskuraft.effortless.building.structure.builder.standard.Cuboid;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cylinder;
 import dev.huskuraft.effortless.building.structure.builder.standard.DiagonalLine;
 import dev.huskuraft.effortless.building.structure.builder.standard.DiagonalWall;
@@ -39,7 +39,7 @@ public class StructureSerializer implements NetByteBufSerializer<Structure> {
             case LINE -> new Line();
             case WALL -> new Wall();
             case FLOOR -> new Floor();
-            case CUBE -> new Cube();
+            case CUBOID -> new Cuboid();
             case DIAGONAL_LINE -> new DiagonalLine();
             case DIAGONAL_WALL -> new DiagonalWall();
             case SLOPE_FLOOR -> new SlopeFloor();
