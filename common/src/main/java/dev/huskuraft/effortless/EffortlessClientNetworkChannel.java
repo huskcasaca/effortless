@@ -107,9 +107,6 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
 
         @Override
         public void handle(PlayerPermissionCheckPacket packet, Player player) {
-            if (!isValidReceiver()) {
-                return;
-            }
         }
 
         @Override
@@ -123,17 +120,11 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
 
         @Override
         public void handle(SessionPacket packet, Player player) {
-            if (!isValidReceiver()) {
-                return;
-            }
             getEntrance().getClient().execute(() -> getEntrance().getSessionManager().onSession(packet.session(), player));
         }
 
         @Override
         public void handle(SessionConfigPacket packet, Player player) {
-            if (!isValidReceiver()) {
-                return;
-            }
             getEntrance().getClient().execute(() -> getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player));
 
         }
