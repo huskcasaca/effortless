@@ -36,15 +36,15 @@ public enum Revolve {
         };
     }
 
-    public Orientation rotate(Orientation orientation) {
-        if (orientation.getAxis() == Axis.Y) {
-            return orientation;
+    public Direction rotate(Direction direction) {
+        if (direction.getAxis() == Axis.Y) {
+            return direction;
         } else {
             return switch (this) {
-                case CLOCKWISE_90 -> orientation.getClockWise();
-                case CLOCKWISE_180 -> orientation.getOpposite();
-                case COUNTERCLOCKWISE_90 -> orientation.getCounterClockWise();
-                default -> orientation;
+                case CLOCKWISE_90 -> direction.getClockWise();
+                case CLOCKWISE_180 -> direction.getOpposite();
+                case COUNTERCLOCKWISE_90 -> direction.getCounterClockWise();
+                default -> direction;
             };
         }
     }

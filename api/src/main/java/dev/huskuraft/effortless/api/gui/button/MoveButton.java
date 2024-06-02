@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.gui.button;
 
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.gui.AbstractButton;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -16,24 +16,24 @@ public class MoveButton extends AbstractButton {
     private static final int SELECTION_MOVE_END = (SELECTION_TOTAL_WIDTH + SELECTION_WIDTH) / 2;
 
     private OnMove listener;
-    private Orientation[] orientations;
+    private Direction[] directions;
 
-    public MoveButton(Entrance entrance, OnMove listener, Orientation... orientations) {
-        this(entrance, 0, 0, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, listener, orientations);
+    public MoveButton(Entrance entrance, OnMove listener, Direction... directions) {
+        this(entrance, 0, 0, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, listener, directions);
     }
 
-    public MoveButton(Entrance entrance, int x, int y, OnMove listener, Orientation... orientations) {
-        this(entrance, x, y, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, listener, orientations);
+    public MoveButton(Entrance entrance, int x, int y, OnMove listener, Direction... directions) {
+        this(entrance, x, y, Dimens.ICON_WIDTH, Dimens.ICON_HEIGHT, listener, directions);
     }
 
-    public MoveButton(Entrance entrance, int x, int y, int width, int height, OnMove listener, Orientation... orientations) {
+    public MoveButton(Entrance entrance, int x, int y, int width, int height, OnMove listener, Direction... directions) {
         super(entrance, x, y, width, height, Text.empty());
         this.listener = listener;
-        this.orientations = orientations;
+        this.directions = directions;
     }
 
-    public void setDirections(Orientation... orientations) {
-        this.orientations = orientations;
+    public void setDirections(Direction... directions) {
+        this.directions = directions;
     }
 
     public void setOnMoveListener(OnMove onMove) {
@@ -49,11 +49,11 @@ public class MoveButton extends AbstractButton {
 //        int w = mouseY - getY();
 //
 //        if (v > 0 && v < getWidth() && w > 0 && w < getHeight()) {
-//            for (Orientation orientation : orientations) {
-//                if (orientation == Orientation.UP) {
+//            for (Direction direction : directions) {
+//                if (direction == Direction.UP) {
 //                    renderer.drawMoveButtonTexture(getX() - 7, getY(), true, SELECTION_MOVE_START < v && v < SELECTION_MOVE_END && w < 16);
 //                }
-//                if (orientation == Orientation.DOWN) {
+//                if (direction == Direction.DOWN) {
 //                    renderer.drawMoveButtonTexture(getX() - 7, getY(), false, SELECTION_MOVE_START < v && v < SELECTION_MOVE_END && w > 16);
 //                }
 //            }
@@ -71,11 +71,11 @@ public class MoveButton extends AbstractButton {
         var w = mouseY - getY();
         if (v > 0 && v < getWidth() && w > 0 && w < getHeight()) {
             if (SELECTION_MOVE_START < v && v < SELECTION_MOVE_END && w < 16) { // move down
-                listener.move(Orientation.UP);
+                listener.move(Direction.UP);
                 return true;
             }
             if (SELECTION_MOVE_START < v && v < SELECTION_MOVE_END && w > 16) { // move up
-                listener.move(Orientation.DOWN);
+                listener.move(Direction.DOWN);
                 return true;
             }
         }
@@ -89,6 +89,6 @@ public class MoveButton extends AbstractButton {
 
     @FunctionalInterface
     public interface OnMove {
-        void move(Orientation orientation);
+        void move(Direction direction);
     }
 }

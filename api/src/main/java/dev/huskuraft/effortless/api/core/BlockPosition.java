@@ -55,59 +55,59 @@ public record BlockPosition(int x, int y, int z) {
     }
 
     public BlockPosition above() {
-        return this.relative(Orientation.UP);
+        return this.relative(Direction.UP);
     }
 
     public BlockPosition above(int i) {
-        return this.relative(Orientation.UP, i);
+        return this.relative(Direction.UP, i);
     }
 
     public BlockPosition below() {
-        return this.relative(Orientation.DOWN);
+        return this.relative(Direction.DOWN);
     }
 
     public BlockPosition below(int i) {
-        return this.relative(Orientation.DOWN, i);
+        return this.relative(Direction.DOWN, i);
     }
 
     public BlockPosition north() {
-        return this.relative(Orientation.NORTH);
+        return this.relative(Direction.NORTH);
     }
 
     public BlockPosition north(int i) {
-        return this.relative(Orientation.NORTH, i);
+        return this.relative(Direction.NORTH, i);
     }
 
     public BlockPosition south() {
-        return this.relative(Orientation.SOUTH);
+        return this.relative(Direction.SOUTH);
     }
 
     public BlockPosition south(int i) {
-        return this.relative(Orientation.SOUTH, i);
+        return this.relative(Direction.SOUTH, i);
     }
 
     public BlockPosition west() {
-        return this.relative(Orientation.WEST);
+        return this.relative(Direction.WEST);
     }
 
     public BlockPosition west(int i) {
-        return this.relative(Orientation.WEST, i);
+        return this.relative(Direction.WEST, i);
     }
 
     public BlockPosition east() {
-        return this.relative(Orientation.EAST);
+        return this.relative(Direction.EAST);
     }
 
     public BlockPosition east(int i) {
-        return this.relative(Orientation.EAST, i);
+        return this.relative(Direction.EAST, i);
     }
 
-    public BlockPosition relative(Orientation orientation) {
-        return new BlockPosition(x() + orientation.getStepX(), y() + orientation.getStepY(), z() + orientation.getStepZ());
+    public BlockPosition relative(Direction direction) {
+        return new BlockPosition(x() + direction.getStepX(), y() + direction.getStepY(), z() + direction.getStepZ());
     }
 
-    public BlockPosition relative(Orientation orientation, int i) {
-        return i == 0 ? this : new BlockPosition(x() + orientation.getStepX() * i, y() + orientation.getStepY() * i, z() + orientation.getStepZ() * i);
+    public BlockPosition relative(Direction direction, int i) {
+        return i == 0 ? this : new BlockPosition(x() + direction.getStepX() * i, y() + direction.getStepY() * i, z() + direction.getStepZ() * i);
     }
 
     public BlockPosition relative(Axis axis, int i) {

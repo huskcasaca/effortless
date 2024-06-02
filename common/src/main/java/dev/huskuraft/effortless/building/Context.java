@@ -277,6 +277,9 @@ public record Context(
     }
 
     public Vector3i getInteractionBox() {
+        if (buildState() == BuildState.PASTE_STRUCTURE) {
+            return clipboard().box();
+        }
         if (interactions().isEmpty() || interactions().isMissing()) {
             return Vector3i.ZERO;
         }

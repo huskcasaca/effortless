@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.building.structure.builder.standard.Circle;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cone;
-import dev.huskuraft.effortless.building.structure.builder.standard.Cube;
+import dev.huskuraft.effortless.building.structure.builder.standard.Cuboid;
 import dev.huskuraft.effortless.building.structure.builder.standard.Cylinder;
 import dev.huskuraft.effortless.building.structure.builder.standard.DiagonalLine;
 import dev.huskuraft.effortless.building.structure.builder.standard.DiagonalWall;
@@ -30,7 +30,7 @@ public enum BuildMode {
 //    SQUARE("square", new Square(), Category.SQUARE, false, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_FACING),
     WALL("wall", new Wall(), Category.SQUARE, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_LENGTH),
     FLOOR("floor", new Floor(), Category.SQUARE, BuildFeatures.PLANE_FILLING, BuildFeatures.PLANE_LENGTH),
-    CUBE("cube", new Cube(), Category.SQUARE, BuildFeatures.CUBE_FILLING, BuildFeatures.PLANE_FACING, BuildFeatures.PLANE_LENGTH),
+    CUBOID("cuboid", new Cuboid(), Category.SQUARE, BuildFeatures.CUBE_FILLING, BuildFeatures.PLANE_FACING, BuildFeatures.PLANE_LENGTH),
 
     DIAGONAL_LINE("diagonal_line", new DiagonalLine(), Category.DIAGONAL),
     DIAGONAL_WALL("diagonal_wall", new DiagonalWall(), Category.DIAGONAL, BuildFeatures.PLANE_LENGTH),

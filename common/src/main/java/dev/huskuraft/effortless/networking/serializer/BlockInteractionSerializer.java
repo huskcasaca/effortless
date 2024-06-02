@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.networking.serializer;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 
@@ -11,7 +11,7 @@ public class BlockInteractionSerializer implements NetByteBufSerializer<BlockInt
     public BlockInteraction read(NetByteBuf byteBuf) {
         return new BlockInteraction(
                 byteBuf.read(new Vector3dSerializer()),
-                byteBuf.readEnum(Orientation.class),
+                byteBuf.readEnum(Direction.class),
                 byteBuf.read(new BlockPositionSerializer()),
                 byteBuf.readBoolean()
         );

@@ -11,7 +11,7 @@ import java.util.Set;
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.AxisDirection;
 import dev.huskuraft.effortless.api.core.BlockPosition;
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.Renderer;
@@ -38,7 +38,7 @@ public class BlockClusterOutline extends Outline {
     public void render(Renderer renderer, float deltaTick) {
         cluster.visibleEdges.forEach(edge -> {
             var start = edge.blockPosition.toVector3d();
-            var direction = Orientation.get(AxisDirection.POSITIVE, edge.axis);
+            var direction = Direction.get(AxisDirection.POSITIVE, edge.axis);
             renderAACuboidLine(renderer, start, edge.blockPosition.relative(direction).toVector3d());
         });
 
@@ -50,7 +50,7 @@ public class BlockClusterOutline extends Outline {
 
         var renderLayer = OutlineRenderLayers.outlineTranslucent(faceTexture.get(), true);
         cluster.visibleFaces.forEach((face, axisDirection) -> {
-            var direction = Orientation.get(axisDirection, face.axis);
+            var direction = Direction.get(axisDirection, face.axis);
             var pos = face.blockPosition;
             if (axisDirection == AxisDirection.POSITIVE)
                 pos = pos.relative(direction.getOpposite());
@@ -60,7 +60,7 @@ public class BlockClusterOutline extends Outline {
         renderer.popLayer();
     }
 
-    protected void renderBlockFace(Renderer renderer, RenderLayer renderLayer, BlockPosition blockPosition, Orientation face) {
+    protected void renderBlockFace(Renderer renderer, RenderLayer renderLayer, BlockPosition blockPosition, Direction face) {
         var camera = renderer.camera().position();
         var center = blockPosition.getCenter();
         var offset = face.getNormal().toVector3d();
@@ -102,7 +102,7 @@ public class BlockClusterOutline extends Outline {
 
             // 6 FACES
             for (var axis : Iterate.axes) {
-                var direction = Orientation.get(AxisDirection.POSITIVE, axis);
+                var direction = Direction.get(AxisDirection.POSITIVE, axis);
                 for (var offset : Iterate.zeroAndOne) {
                     var entry = new MergeEntry(axis, blockPosition.relative(direction, offset));
                     if (visibleFaces.remove(entry) == null)
@@ -121,8 +121,8 @@ public class BlockClusterOutline extends Outline {
                         if (axis2 == axis3)
                             continue;
 
-                        var direction = Orientation.get(AxisDirection.POSITIVE, axis2);
-                        var direction2 = Orientation.get(AxisDirection.POSITIVE, axis3);
+                        var direction = Direction.get(AxisDirection.POSITIVE, axis2);
+                        var direction2 = Direction.get(AxisDirection.POSITIVE, axis3);
 
                         for (var offset : Iterate.zeroAndOne) {
                             var entryPos = blockPosition.relative(direction, offset);
@@ -175,23 +175,23 @@ public class BlockClusterOutline extends Outline {
         public static final boolean[] falseAndTrue = {false, true};
         public static final int[] zeroAndOne = {0, 1};
         public static final int[] positiveAndNegative = {1, -1};
-        public static final Orientation[] orientations = Orientation.values();
-        public static final Orientation[] horizontalOrientation = getHorizontals();
+        public static final Direction[] DIRECTIONS = Direction.values();
+        public static final Direction[] HORIZONTAL_DIRECTION = getHorizontals();
         public static final Axis[] axes = Axis.values();
         public static final EnumSet<Axis> axisSet = EnumSet.allOf(Axis.class);
 
-        private static Orientation[] getHorizontals() {
-            Orientation[] orientations = new Orientation[4];
+        private static Direction[] getHorizontals() {
+            Direction[] directions = new Direction[4];
             for (int i = 0; i < 4; i++)
-                orientations[i] = Orientation.from2DDataValue(i);
-            return orientations;
+                directions[i] = Direction.from2DDataValue(i);
+            return directions;
         }
 
-        public static Orientation[] directionsInAxis(Axis axis) {
+        public static Direction[] directionsInAxis(Axis axis) {
             return switch (axis) {
-                case X -> new Orientation[]{Orientation.EAST, Orientation.WEST};
-                case Y -> new Orientation[]{Orientation.UP, Orientation.DOWN};
-                default -> new Orientation[]{Orientation.SOUTH, Orientation.NORTH};
+                case X -> new Direction[]{Direction.EAST, Direction.WEST};
+                case Y -> new Direction[]{Direction.UP, Direction.DOWN};
+                default -> new Direction[]{Direction.SOUTH, Direction.NORTH};
             };
         }
 

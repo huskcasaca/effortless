@@ -43,6 +43,7 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
+import dev.huskuraft.effortless.building.clipboard.ClipboardAction;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.BlockSummary;
@@ -470,6 +471,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             playSoundInBatch(player, result);
         }
 
+    }
+
+    public void updateClipboard(Player player, ClipboardAction action) {
+        updateContext(player, context -> context.withClipboard(context.clipboard().update(action)));
     }
 
     public void onHistoryResultReceived(Player player, OperationTooltip operationTooltip) {

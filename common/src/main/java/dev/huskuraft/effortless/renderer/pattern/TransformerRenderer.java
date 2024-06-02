@@ -4,7 +4,7 @@ import java.awt.*;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.Axis;
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
@@ -128,7 +128,7 @@ public abstract class TransformerRenderer {
         renderer.popPose();
     }
 
-    protected void renderFace(Renderer renderer, Orientation orientation, Vector3d p1, Vector3d p2, Vector3d p3, Vector3d p4, int color) {
+    protected void renderFace(Renderer renderer, Direction direction, Vector3d p1, Vector3d p2, Vector3d p3, Vector3d p4, int color) {
         renderer.renderQuad(BlockRenderLayers.planes(), p1, p2, p3, p4, 0, color, null);
     }
 
@@ -149,12 +149,12 @@ public abstract class TransformerRenderer {
 
         renderer.pushPose();
         renderer.translate(center.sub(cam));
-        renderFace(renderer, Orientation.NORTH, xYz, XYz, Xyz, xyz, color);
-        renderFace(renderer, Orientation.SOUTH, XYZ, xYZ, xyZ, XyZ, color);
-        renderFace(renderer, Orientation.EAST, XYz, XYZ, XyZ, Xyz, color);
-        renderFace(renderer, Orientation.WEST, xYZ, xYz, xyz, xyZ, color);
-        renderFace(renderer, Orientation.UP, xYZ, XYZ, XYz, xYz, color);
-        renderFace(renderer, Orientation.DOWN, xyz, Xyz, XyZ, xyZ, color);
+        renderFace(renderer, Direction.NORTH, xYz, XYz, Xyz, xyz, color);
+        renderFace(renderer, Direction.SOUTH, XYZ, xYZ, xyZ, XyZ, color);
+        renderFace(renderer, Direction.EAST, XYz, XYZ, XyZ, Xyz, color);
+        renderFace(renderer, Direction.WEST, xYZ, xYz, xyz, xyZ, color);
+        renderFace(renderer, Direction.UP, xYZ, XYZ, XYz, xYz, color);
+        renderFace(renderer, Direction.DOWN, xyz, Xyz, XyZ, xyZ, color);
 
         renderer.popPose();
 
@@ -208,7 +208,7 @@ public abstract class TransformerRenderer {
 
         var extension = diff.normalize().mul(width / 2);
         var plane = RenderUtils.calculateAxisAlignedPlane(diff);
-        var face = Orientation.getNearest(diff.x(), diff.y(), diff.z());
+        var face = Direction.getNearest(diff.x(), diff.y(), diff.z());
         var axis = face.getAxis();
 
         start = start.sub(extension);
@@ -228,7 +228,7 @@ public abstract class TransformerRenderer {
         var b4 = plane.add(end);
 
         if (disableNormals) {
-            face = Orientation.UP;
+            face = Direction.UP;
             renderer.renderQuad(renderLayer, b4, b3, b2, b1, LightTexture.FULL_BLOCK, color, face);
             renderer.renderQuad(renderLayer, a1, a2, a3, a4, LightTexture.FULL_BLOCK, color, face);
             renderer.renderQuad(renderLayer, a1, b1, b2, a2, LightTexture.FULL_BLOCK, color, face);
@@ -241,16 +241,16 @@ public abstract class TransformerRenderer {
         renderer.renderQuad(renderLayer, b4, b3, b2, b1, LightTexture.FULL_BLOCK, color, face);
         renderer.renderQuad(renderLayer, a1, a2, a3, a4, LightTexture.FULL_BLOCK, color, face.getOpposite());
         var vec = a1.sub(a4);
-        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
+        face = Direction.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a1, b1, b2, a2, LightTexture.FULL_BLOCK, color, face);
         vec = RenderUtils.rotate(vec, -90, axis);
-        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
+        face = Direction.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a2, b2, b3, a3, LightTexture.FULL_BLOCK, color, face);
         vec = RenderUtils.rotate(vec, -90, axis);
-        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
+        face = Direction.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a3, b3, b4, a4, LightTexture.FULL_BLOCK, color, face);
         vec = RenderUtils.rotate(vec, -90, axis);
-        face = Orientation.getNearest(vec.x(), vec.y(), vec.z());
+        face = Direction.getNearest(vec.x(), vec.y(), vec.z());
         renderer.renderQuad(renderLayer, a4, b4, b1, a1, LightTexture.FULL_BLOCK, color, face);
     }
 

@@ -4,7 +4,7 @@ import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.api.core.Orientation;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
@@ -14,6 +14,10 @@ public record MirrorContext(
        BoundingBox3d bounds,
        Axis axis
 ) implements PositionBounded {
+
+    public static MirrorContext MIRROR_X = new MirrorContext(new Vector3d(0.5, 0.5, 0.5), new BoundingBox3d(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), Axis.X);
+    public static MirrorContext MIRROR_Y = new MirrorContext(new Vector3d(0.5, 0.5, 0.5), new BoundingBox3d(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), Axis.Y);
+    public static MirrorContext MIRROR_Z = new MirrorContext(new Vector3d(0.5, 0.5, 0.5), new BoundingBox3d(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), Axis.Z);
 
     public Vector3d mirror(Vector3d vec) {
         return switch (axis) {
@@ -28,8 +32,8 @@ public record MirrorContext(
         return BlockPosition.at(vector);
     }
 
-    public Orientation mirror(Orientation orientation) {
-        return orientation.getAxis() != axis ? orientation : orientation.getOpposite();
+    public Direction mirror(Direction direction) {
+        return direction.getAxis() != axis ? direction : direction.getOpposite();
     }
 
     public BlockInteraction mirror(BlockInteraction blockInteraction) {
@@ -47,7 +51,7 @@ public record MirrorContext(
     }
 
     public EntityState mirror(EntityState entityState) {
-        // TODO: 23/5/24  
+        // TODO: 23/5/24
         return entityState;
     }
 

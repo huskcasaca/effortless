@@ -2,18 +2,17 @@ package dev.huskuraft.effortless.vanilla.core;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.core.EntityInteraction;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.InteractionResult;
-import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.math.Matrix3f;
 import dev.huskuraft.effortless.api.math.Matrix4f;
 import dev.huskuraft.effortless.api.math.Quaternionf;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -112,7 +111,7 @@ public final class MinecraftConvertor {
         if (blockHitResult == null) {
             return null;
         }
-        return new BlockInteraction(fromPlatformVector3d(blockHitResult.getLocation()), fromPlatformOrientation(blockHitResult.getDirection()), toPlatformBlockPosition(blockHitResult.getBlockPos()), blockHitResult.isInside(), blockHitResult.getType() == BlockHitResult.Type.MISS);
+        return new BlockInteraction(fromPlatformVector3d(blockHitResult.getLocation()), fromPlatformDirection(blockHitResult.getDirection()), toPlatformBlockPosition(blockHitResult.getBlockPos()), blockHitResult.isInside(), blockHitResult.getType() == BlockHitResult.Type.MISS);
     }
 
     public static BlockHitResult toPlatformBlockInteraction(BlockInteraction blockInteraction) {
@@ -121,7 +120,7 @@ public final class MinecraftConvertor {
         }
         return new BlockHitResult(
                 toPlatformVector3d(blockInteraction.getPosition()),
-                toPlatformOrientation(blockInteraction.getDirection()),
+                toPlatformDirection(blockInteraction.getDirection()),
                 toPlatformBlockPosition(blockInteraction.getBlockPosition()),
                 blockInteraction.isInside());
     }
@@ -140,25 +139,25 @@ public final class MinecraftConvertor {
         };
     }
 
-    public static Orientation fromPlatformOrientation(Direction orientation) {
-        return switch (orientation) {
-            case DOWN -> Orientation.DOWN;
-            case UP -> Orientation.UP;
-            case NORTH -> Orientation.NORTH;
-            case SOUTH -> Orientation.SOUTH;
-            case WEST -> Orientation.WEST;
-            case EAST -> Orientation.EAST;
-        };
-    }
-
-    public static Direction toPlatformOrientation(Orientation orientation) {
-        return switch (orientation) {
+    public static Direction fromPlatformDirection(net.minecraft.core.Direction direction) {
+        return switch (direction) {
             case DOWN -> Direction.DOWN;
             case UP -> Direction.UP;
             case NORTH -> Direction.NORTH;
             case SOUTH -> Direction.SOUTH;
             case WEST -> Direction.WEST;
             case EAST -> Direction.EAST;
+        };
+    }
+
+    public static net.minecraft.core.Direction toPlatformDirection(Direction direction) {
+        return switch (direction) {
+            case DOWN -> net.minecraft.core.Direction.DOWN;
+            case UP -> net.minecraft.core.Direction.UP;
+            case NORTH -> net.minecraft.core.Direction.NORTH;
+            case SOUTH -> net.minecraft.core.Direction.SOUTH;
+            case WEST -> net.minecraft.core.Direction.WEST;
+            case EAST -> net.minecraft.core.Direction.EAST;
         };
     }
 

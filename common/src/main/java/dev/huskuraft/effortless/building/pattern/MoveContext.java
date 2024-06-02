@@ -34,14 +34,14 @@ public class MoveContext {
         return new BlockInteraction(location, direction, blockPosition, blockInteraction.isInside());
     }
 
-    private Vector3i move(Vector3i vector) {
+    public Vector3i move(Vector3i vector) {
         return switch (positionType) {
             case RELATIVE -> vector.add(amount);
             case ABSOLUTE -> amount;
         };
     }
 
-    private BlockPosition move(BlockPosition blockPosition) {
+    public BlockPosition move(BlockPosition blockPosition) {
         return switch (positionType) {
             case RELATIVE -> blockPosition.add(amount);
             case ABSOLUTE -> BlockPosition.at(amount);

@@ -10,8 +10,8 @@ import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.core.Orientation;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Typeface;
@@ -266,12 +266,12 @@ public abstract class Renderer {
         buffer.vertex(pose, x4, y4, offset).color(color).endVertex();
     }
 
-    public final void renderQuad(RenderLayer renderLayer, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Orientation normal) {
+    public final void renderQuad(RenderLayer renderLayer, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, int uv2, int color, Direction normal) {
         this.renderQuadUV(renderLayer, v1, v2, v3, v4, 0, 0, 1, 1, uv2, color, normal);
     }
 
     public final void renderQuadUV(RenderLayer renderLayer, Vector3d v1, Vector3d v2, Vector3d v3, Vector3d v4, float minU,
-                                   float minV, float maxU, float maxV, int uv2, int color, Orientation normal) {
+                                   float minV, float maxU, float maxV, int uv2, int color, Direction normal) {
         var buffer = this.vertexBuffer(renderLayer);
         var pose = lastMatrixPose();
         buffer.vertex(pose, v1).color(color).uv(minU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
