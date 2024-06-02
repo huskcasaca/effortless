@@ -2,9 +2,11 @@ package dev.huskuraft.effortless;
 
 import java.util.Stack;
 
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.InteractionType;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.events.EventResult;
 import dev.huskuraft.effortless.api.events.input.KeyRegistry;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
@@ -18,6 +20,7 @@ import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.renderer.Shaders;
+import dev.huskuraft.effortless.building.clipboard.ClipboardAction;
 import dev.huskuraft.effortless.renderer.BlockShaders;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
@@ -65,6 +68,10 @@ public final class EffortlessClientManager implements ClientManager {
 
     private EffortlessClient getEntrance() {
         return entrance;
+    }
+
+    private Player getPlayer() {
+        return getEntrance().getClient().getPlayer();
     }
 
     @Override
@@ -177,6 +184,77 @@ public final class EffortlessClientManager implements ClientManager {
             getEntrance().getStructureBuilder().setReplace(getRunningClient().getPlayer(), getEntrance().getStructureBuilder().getContext(getRunningClient().getPlayer()).replace().next());
         }
 
+        if (EffortlessKeys.ROTATE_X.getBinding().consumeClick()) {
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.ROTATE_X);
+        }
+
+        if (EffortlessKeys.ROTATE_Y.getBinding().consumeClick()) {
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.ROTATE_Y);
+        }
+
+        if (EffortlessKeys.ROTATE_Z.getBinding().consumeClick()) {
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.ROTATE_Z);
+        }
+
+        if (EffortlessKeys.MOVE_BACKWARD.getBinding().consumeClick()) {
+            switch (Direction.fromYRot(getPlayer().getYRot())) {
+                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Z);
+                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Z);
+                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_X);
+                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_X);
+            }
+        }
+
+        if (EffortlessKeys.MOVE_FORWARD.getBinding().consumeClick()) {
+            switch (Direction.fromYRot(getPlayer().getYRot())) {
+                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Z);
+                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Z);
+                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_X);
+                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_X);
+            }
+        }
+
+        if (EffortlessKeys.MOVE_LEFT.getBinding().consumeClick()) {
+            switch (Direction.fromYRot(getPlayer().getYRot())) {
+                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_X);
+                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_X);
+                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Z);
+                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Z);
+            }
+        }
+
+        if (EffortlessKeys.MOVE_RIGHT.getBinding().consumeClick()) {
+            switch (Direction.fromYRot(getPlayer().getYRot())) {
+                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_X);
+                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_X);
+                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Z);
+                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Z);
+            }
+        }
+
+        if (EffortlessKeys.MOVE_UP.getBinding().consumeClick()) {
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Y);
+        }
+
+        if (EffortlessKeys.MOVE_DOWN.getBinding().consumeClick()) {
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Y);
+        }
+
+        if (EffortlessKeys.MIRROR_X.getBinding().consumeClick()) {
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.MIRROR_X);
+        }
+
+        if (EffortlessKeys.MIRROR_Y.getBinding().consumeClick()) {
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.MIRROR_Y);
+        }
+
+        if (EffortlessKeys.MIRROR_Z.getBinding().consumeClick()) {
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.MIRROR_Z);
+        }
+
+        if (Keys.KEY_ESCAPE.getBinding().isKeyDown()) {
+            getEntrance().getStructureBuilder().resetContextInteractions(getRunningClient().getPlayer());
+        }
         if (Platform.getInstance().isDevelopment()) {
             if (Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown() && Keys.KEY_ENTER.getBinding().isKeyDown()) {
                 getEntrance().getClient().getSoundManager().playButtonClickSound();

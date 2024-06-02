@@ -18,6 +18,10 @@ public record RotateContext(
         int length
 ) implements PositionBounded {
 
+    public static RotateContext CLOCKWISE_X_90 = new RotateContext(Axis.X, Vector3d.ZERO.add(0.5, 0.5, 0.5), MathUtils.PI / 2, Integer.MAX_VALUE, Integer.MAX_VALUE);
+    public static RotateContext CLOCKWISE_Y_90 = new RotateContext(Axis.Y, Vector3d.ZERO.add(0.5, 0.5, 0.5), MathUtils.PI / 2, Integer.MAX_VALUE, Integer.MAX_VALUE);
+    public static RotateContext CLOCKWISE_Z_90 = new RotateContext(Axis.Z, Vector3d.ZERO.add(0.5, 0.5, 0.5), MathUtils.PI / 2, Integer.MAX_VALUE, Integer.MAX_VALUE);
+
     private static BlockState rotateOriginalBlockState(double startAngleToCenter, BlockState blockState) {
         BlockState newBlockState = blockState;
 
@@ -101,6 +105,14 @@ public record RotateContext(
             case X -> rotateX(blockInteraction, center, angle);
             case Y -> rotateY(blockInteraction, center, angle);
             case Z -> rotateZ(blockInteraction, center, angle);
+        };
+    }
+
+    public BlockPosition rotate(BlockPosition blockPosition) {
+        return switch (axis) {
+            case X -> BlockPosition.at(center.add(blockPosition.getCenter().sub(center).rotX(angle)));
+            case Y -> BlockPosition.at(center.add(blockPosition.getCenter().sub(center).rotY(angle)));
+            case Z -> BlockPosition.at(center.add(blockPosition.getCenter().sub(center).rotZ(angle)));
         };
     }
 

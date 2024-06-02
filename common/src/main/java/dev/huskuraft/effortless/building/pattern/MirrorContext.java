@@ -15,6 +15,10 @@ public record MirrorContext(
        Axis axis
 ) implements PositionBounded {
 
+    public static MirrorContext MIRROR_X = new MirrorContext(new Vector3d(0.5, 0.5, 0.5), new BoundingBox3d(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), Axis.X);
+    public static MirrorContext MIRROR_Y = new MirrorContext(new Vector3d(0.5, 0.5, 0.5), new BoundingBox3d(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), Axis.Y);
+    public static MirrorContext MIRROR_Z = new MirrorContext(new Vector3d(0.5, 0.5, 0.5), new BoundingBox3d(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE), Axis.Z);
+
     public Vector3d mirror(Vector3d vec) {
         return switch (axis) {
             case Y -> new Vector3d(vec.x(), center.y() + (center.y() - vec.y()), vec.z());
@@ -47,7 +51,7 @@ public record MirrorContext(
     }
 
     public EntityState mirror(EntityState entityState) {
-        // TODO: 23/5/24  
+        // TODO: 23/5/24
         return entityState;
     }
 

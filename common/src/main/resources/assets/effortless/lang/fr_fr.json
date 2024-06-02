@@ -463,7 +463,7 @@
   "effortless.transformer_presets.title": "Préréglages du Transformateur",
   "key.effortless.build_mode_radial.desc": "Afficher le Radial du Mode de Construction",
   "key.effortless.build_mode_settings.desc": "Ouvrir les Paramètres du Mode de Construction",
-  "key.effortless.category": "Effortless Structure",
+  "key.effortless.category.default": "Effortless Structure",
   "key.effortless.control.desc": "Ctrl",
   "key.effortless.cycle_replace.desc": "Cycle de Remplacement",
   "key.effortless.left_control.desc": "Ctrl gauche",

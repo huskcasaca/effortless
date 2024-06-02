@@ -43,6 +43,16 @@ public enum Direction {
         return BY_2D_DATA[MathUtils.abs(i % BY_2D_DATA.length)];
     }
 
+
+    public static Direction fromYRot(double angle) {
+        return from2DDataValue((int) Math.floor(angle / 90.0D + 0.5D) & 3);
+    }
+
+
+    public static Direction getNearest(Vector3d vector3d) {
+        return getNearest(vector3d.x(), vector3d.y(), vector3d.z());
+    }
+
     public static Direction getNearest(double d, double e, double f) {
         return getNearest((float) d, (float) e, (float) f);
     }

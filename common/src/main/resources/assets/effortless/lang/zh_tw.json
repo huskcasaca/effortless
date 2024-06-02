@@ -463,7 +463,7 @@
   "effortless.transformer_presets.title": "變壓器預設",
   "key.effortless.build_mode_radial.desc": "顯示構建模式徑向",
   "key.effortless.build_mode_settings.desc": "打開構建模式設置",
-  "key.effortless.category": "輕鬆建造",
+  "key.effortless.category.default": "輕鬆建造",
   "key.effortless.control.desc": "Control",
   "key.effortless.cycle_replace.desc": "循環替換",
   "key.effortless.left_control.desc": "左 Control",
