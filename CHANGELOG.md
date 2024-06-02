@@ -3,6 +3,13 @@
 
 ----------
 
+### 3.0.0-alpha.2
+
+- Add shortcut keys to mirror/rotate/move clipboard ([#138](https://github.com/huskcasaca/effortless/pull/138))
+- Fix mod not found on server ([#139](https://github.com/huskcasaca/effortless/pull/139))
+
+----------
+
 ### 3.0.0-alpha.1
 
 - Add passive mode ([#118](https://github.com/huskcasaca/effortless/pull/118))
