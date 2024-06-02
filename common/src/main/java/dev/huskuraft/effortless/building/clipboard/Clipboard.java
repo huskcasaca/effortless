@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.building.clipboard;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
@@ -30,7 +31,18 @@ public record Clipboard(
     }
 
     public int volume() {
-        return blockSnapshots.size();
+        return box().volume();
+    }
+
+    public Vector3i box() {
+        if (blockSnapshots.isEmpty()) {
+            return Vector3i.ZERO;
+        }
+        return new Vector3i(
+                blockSnapshots.stream().mapToInt(blockSnapshot -> blockSnapshot.relativePosition().x()).max().getAsInt() - blockSnapshots.stream().mapToInt(blockSnapshot -> blockSnapshot.relativePosition().x()).min().getAsInt() + 1,
+                blockSnapshots.stream().mapToInt(blockSnapshot -> blockSnapshot.relativePosition().y()).max().getAsInt() - blockSnapshots.stream().mapToInt(blockSnapshot -> blockSnapshot.relativePosition().y()).min().getAsInt() + 1,
+                blockSnapshots.stream().mapToInt(blockSnapshot -> blockSnapshot.relativePosition().z()).max().getAsInt() - blockSnapshots.stream().mapToInt(blockSnapshot -> blockSnapshot.relativePosition().z()).min().getAsInt() + 1
+        );
     }
 
     public boolean copyAir() {
