@@ -721,7 +721,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         var texts = new ArrayList<Tuple2<Text, Text>>();
         texts.add(new Tuple2<>(Text.translate("effortless.build.summary.structure").withStyle(ChatFormatting.WHITE), context.buildMode().getDisplayName().withStyle(ChatFormatting.GOLD)));
-        texts.add(new Tuple2<>(AbstractWheelScreen.button(context.replaceMode()).getCategory().withStyle(ChatFormatting.WHITE), AbstractWheelScreen.button(context.replaceMode()).getName().withStyle(ChatFormatting.GOLD)));
+        texts.add(new Tuple2<>(AbstractWheelScreen.button(context.replaceStrategy()).getCategory().withStyle(ChatFormatting.WHITE), AbstractWheelScreen.button(context.replaceStrategy()).getName().withStyle(ChatFormatting.GOLD)));
 
         for (var supportedFeature : context.structure().getSupportedFeatures()) {
             var option = context.buildFeatures().stream().filter(feature -> Objects.equals(feature.getCategory(), supportedFeature.getName())).findFirst();

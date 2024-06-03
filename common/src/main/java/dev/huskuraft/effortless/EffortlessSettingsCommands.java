@@ -17,10 +17,10 @@ public final class EffortlessSettingsCommands {
 //            }));
 //        });
 //
-//        var replaceCommand = Commands.literal("replacemode").executes(context -> {
+//        var replaceCommand = Commands.literal("replaceStrategy").executes(context -> {
 //            var player = context.getSource().getPlayer();
 //            try {
-//                var mode = EffortlessBuilder.getInstance().getReplaceMode(player);
+//                var mode = EffortlessBuilder.getInstance().getReplaceStrategy(player);
 //                context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
 //            } catch (Exception e) {
 //                context.getSource().sendFailure(Component.translatable("commands.reserved"));
@@ -29,11 +29,11 @@ public final class EffortlessSettingsCommands {
 //            return 0;
 //        });
 //
-//        Arrays.stream(ReplaceMode.values()).forEach(mode -> {
+//        Arrays.stream(ReplaceStrategy.values()).forEach(mode -> {
 //            replaceCommand.then(Commands.literal(mode.getCommandName()).executes(context -> {
 //                var player = context.getSource().getPlayer();
 //                try {
-//                    EffortlessBuilder.getInstance().setReplaceMode(player, mode);
+//                    EffortlessBuilder.getInstance().setReplaceStrategy(player, mode);
 //                    EffortlessBuilder.getInstance().sync(player);
 //                    context.getSource().sendSuccess(Component.translatable("commands.reserved"), true);
 //                } catch (Exception e) {

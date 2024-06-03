@@ -103,7 +103,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
 
         if (!getBlockState().isAir()) { // check replace for place
 
-            switch (context.replaceMode()) {
+            switch (context.replaceStrategy()) {
                 case DISABLED -> {
                     if (!getBlockStateInWorld().canBeReplaced(player, getInteraction())) {
                         return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;

@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.building.config.BuilderConfig;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
-import dev.huskuraft.effortless.building.replace.ReplaceMode;
+import dev.huskuraft.effortless.building.replace.ReplaceStrategy;
 
 public class ContextSerializer implements NetByteBufSerializer<Context> {
 
@@ -173,7 +173,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         @Override
         public Replace read(NetByteBuf byteBuf) {
             return new Replace(
-                    byteBuf.readEnum(ReplaceMode.class),
+                    byteBuf.readEnum(ReplaceStrategy.class),
                     byteBuf.readList(NetByteBuf::readItemStack),
                     byteBuf.readBoolean()
             );
@@ -181,7 +181,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
 
         @Override
         public void write(NetByteBuf byteBuf, Replace replace) {
-            byteBuf.writeEnum(replace.replaceMode());
+            byteBuf.writeEnum(replace.replaceStrategy());
             byteBuf.writeList(replace.replaceList(), NetByteBuf::writeItemStack);
             byteBuf.writeBoolean(replace.isQuick());
         }
