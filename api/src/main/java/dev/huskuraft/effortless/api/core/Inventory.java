@@ -3,30 +3,30 @@ package dev.huskuraft.effortless.api.core;
 import java.util.List;
 import java.util.stream.Stream;
 
-import dev.huskuraft.effortless.api.platform.PlatformReference;
+public interface Inventory extends Container {
 
-public interface Inventory extends PlatformReference {
+    default List<ItemStack> getItems() {
+        return Stream.of(getBagItems(), getArmorItems(), getOffhandItems()).flatMap(List::stream).toList();
+    }
 
-    List<ItemStack> getItems();
+    List<ItemStack> getBagItems();
 
     List<ItemStack> getArmorItems();
 
     List<ItemStack> getOffhandItems();
 
-    void setItem(int index, ItemStack itemStack);
+    void setBagItem(int index, ItemStack itemStack);
 
     void setArmorItem(int index, ItemStack itemStack);
 
     void setOffhandItem(int index, ItemStack itemStack);
 
-    boolean addItem(ItemStack itemStack);
-
     int getSelected();
 
     int getHotbarSize();
 
-    default ItemStack getItem(int index) {
-        return getItems().get(index);
+    default ItemStack getBagItem(int index) {
+        return getBagItems().get(index);
     }
 
     default ItemStack getArmorItem(int index) {
@@ -38,15 +38,11 @@ public interface Inventory extends PlatformReference {
     }
 
     default int getFreeSlotIndex() {
-        return getItems().stream().filter(ItemStack::isEmpty).findFirst().map(getItems()::indexOf).orElse(-1);
-    }
-
-    default int getSlotSize() {
-        return getItems().size() + getArmorItems().size() + getOffhandItems().size();
+        return getBagItems().stream().filter(ItemStack::isEmpty).findFirst().map(getBagItems()::indexOf).orElse(-1);
     }
 
     default boolean contains(ItemStack itemStack) {
-        return getItems().contains(itemStack) || getArmorItems().contains(itemStack) || getOffhandItems().contains(itemStack);
+        return getBagItems().contains(itemStack) || getArmorItems().contains(itemStack) || getOffhandItems().contains(itemStack);
     }
 
     default boolean isHotbarSlot(int index) {
@@ -55,7 +51,7 @@ public interface Inventory extends PlatformReference {
 
     default ItemStack getSelectedItem() {
         if (isHotbarSlot(getSelected())) {
-            return getItem(getSelected());
+            return getBagItem(getSelected());
         } else {
             return ItemStack.empty();
         }
@@ -66,7 +62,7 @@ public interface Inventory extends PlatformReference {
     }
 
     default void setSelectedItem(ItemStack itemStack) {
-        setItem(getSelected(), itemStack);
+        setBagItem(getSelected(), itemStack);
     }
 
     default void setOffhandItem(ItemStack itemStack) {
@@ -74,11 +70,7 @@ public interface Inventory extends PlatformReference {
     }
 
     default List<ItemStack> getHotbarItems() {
-        return getItems().subList(0, getHotbarSize());
-    }
-
-    default List<ItemStack> getAllItems() {
-        return Stream.of(getItems(), getArmorItems(), getOffhandItems()).flatMap(List::stream).toList();
+        return getBagItems().subList(0, getHotbarSize());
     }
 
 }

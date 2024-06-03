@@ -65,13 +65,13 @@ public interface Storage {
                 storage = switch (player.getGameMode()) {
                     case SURVIVAL, ADVENTURE -> {
                         if (copy) {
-                            yield Storage.create(player.getInventory().getAllItems().stream().map(ItemStack::copy).toList(), false);
+                            yield Storage.create(player.getInventory().getItems().stream().map(ItemStack::copy).toList(), false);
                         } else {
-                            yield Storage.create(player.getInventory().getAllItems(), false);
+                            yield Storage.create(player.getInventory().getItems(), false);
                         }
                     }
                     case CREATIVE -> Storage.merge(
-                            Storage.create(player.getInventory().getAllItems().stream().map(ItemStack::copy).toList(), true),
+                            Storage.create(player.getInventory().getItems().stream().map(ItemStack::copy).toList(), true),
                             full()
                     );
                     case SPECTATOR -> empty();

@@ -14,11 +14,11 @@ public record InventorySnapshot(
 ) implements Inventory {
 
     public InventorySnapshot(Inventory inventory) {
-        this(inventory.getItems(), inventory.getArmorItems(), inventory.getOffhandItems(), inventory.getSelected(), inventory.getHotbarSize());
+        this(inventory.getBagItems(), inventory.getArmorItems(), inventory.getOffhandItems(), inventory.getSelected(), inventory.getHotbarSize());
     }
 
     @Override
-    public List<ItemStack> getItems() {
+    public List<ItemStack> getBagItems() {
         return items;
     }
 
@@ -33,7 +33,7 @@ public record InventorySnapshot(
     }
 
     @Override
-    public void setItem(int index, ItemStack itemStack) {
+    public void setBagItem(int index, ItemStack itemStack) {
         throw new UnsupportedOperationException();
     }
 
@@ -48,7 +48,7 @@ public record InventorySnapshot(
     }
 
     @Override
-    public boolean addItem(ItemStack itemStack) {
+    public boolean addItem(int index, ItemStack itemStack) {
         throw new UnsupportedOperationException();
     }
 

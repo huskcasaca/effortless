@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 public record MinecraftInventory(net.minecraft.world.entity.player.Inventory refs) implements Inventory {
 
     @Override
-    public List<ItemStack> getItems() {
+    public List<ItemStack> getBagItems() {
         return refs.items.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
     }
 
@@ -24,7 +24,7 @@ public record MinecraftInventory(net.minecraft.world.entity.player.Inventory ref
     }
 
     @Override
-    public void setItem(int index, ItemStack itemStack) {
+    public void setBagItem(int index, ItemStack itemStack) {
         refs.items.set(index, itemStack.reference());
     }
 
@@ -39,8 +39,8 @@ public record MinecraftInventory(net.minecraft.world.entity.player.Inventory ref
     }
 
     @Override
-    public boolean addItem(ItemStack itemStack) {
-        return refs.add(itemStack.reference());
+    public boolean addItem(int index, ItemStack itemStack) {
+        return refs.add(index, itemStack.reference());
     }
 
     @Override
