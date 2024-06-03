@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import javax.annotation.Nullable;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 
@@ -11,6 +12,23 @@ public abstract class BlockOperationResult extends OperationResult {
     protected final BlockOperationResultType result;
     protected final BlockState blockStateBeforeOp;
     protected final BlockState blockStateAfterOp;
+    protected final BlockEntity blockEntityBeforeOp;
+    protected final BlockEntity blockEntityAfterOp;
+
+    protected BlockOperationResult(
+            BlockOperation operation,
+            BlockOperationResultType result,
+            BlockState blockStateBeforeOp,
+            BlockState blockStateAfterOp,
+            BlockEntity blockEntityBeforeOp,
+            BlockEntity blockEntityAfterOp) {
+        this.operation = operation;
+        this.result = result;
+        this.blockStateBeforeOp = blockStateBeforeOp;
+        this.blockStateAfterOp = blockStateAfterOp;
+        this.blockEntityBeforeOp = blockEntityBeforeOp;
+        this.blockEntityAfterOp = blockEntityAfterOp;
+    }
 
     protected BlockOperationResult(
             BlockOperation operation,
@@ -21,6 +39,8 @@ public abstract class BlockOperationResult extends OperationResult {
         this.result = result;
         this.blockStateBeforeOp = blockStateBeforeOp;
         this.blockStateAfterOp = blockStateAfterOp;
+        this.blockEntityBeforeOp = null;
+        this.blockEntityAfterOp = null;
     }
 
     @Override

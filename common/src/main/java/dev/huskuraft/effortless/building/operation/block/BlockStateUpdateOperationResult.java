@@ -3,7 +3,9 @@ package dev.huskuraft.effortless.building.operation.block;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.building.operation.BlockSummary;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.building.operation.BlockEntitySummary;
+import dev.huskuraft.effortless.building.operation.BlockStateSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
@@ -36,8 +38,8 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
     }
 
     @Override
-    public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
-        var blockState = switch (blockSummary) {
+    public List<BlockState> getBlockStateSummary(BlockStateSummary blockStateSummary) {
+        var blockState = switch (blockStateSummary) {
             case BLOCKS_PLACED -> switch (result) {
                 case SUCCESS, SUCCESS_PARTIAL, CONSUME -> getBlockStateToPlace();
                 default -> null;
@@ -81,6 +83,11 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             return List.of();
         }
         return List.of(blockState);
+    }
+
+    @Override
+    public List<ItemStack> getBlockEntitySummary(BlockEntitySummary blockEntitySummary) {
+        return List.of();
     }
 
 

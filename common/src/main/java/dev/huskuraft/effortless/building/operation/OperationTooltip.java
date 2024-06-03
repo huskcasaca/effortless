@@ -15,23 +15,22 @@ import dev.huskuraft.effortless.building.Context;
 public record OperationTooltip(
         Type type,
         Context context,
-        Map<BlockSummary, Map<BlockState, Integer>> blockSummary,
-        Map<EntitySummary, Map<BlockState, Integer>> entitySummary
+        Map<BlockStateSummary, Map<BlockState, Integer>> blockStateSummary,
+        Map<BlockEntitySummary, List<ItemStack>> blockEntitySummary
 ) {
 
     public static OperationTooltip reduce(
             Type type,
             Context context,
-            Map<BlockSummary, List<BlockState>> blockSummary,
-            Map<EntitySummary, List<BlockState>> entitySummary
+            Map<BlockStateSummary, List<BlockState>> blockStateSummary,
+            Map<BlockEntitySummary, List<ItemStack>> blockEntitySummary
     ) {
-        var flattenBlockSummary = blockSummary.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().stream().collect(Collectors.toMap(Function.identity(), e1 -> 1, Integer::sum, LinkedHashMap::new))));
-        var flattenEntitySummary = entitySummary.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().stream().collect(Collectors.toMap(Function.identity(), e1 -> 1, Integer::sum, LinkedHashMap::new))));
-        return new OperationTooltip(type, context, (Map) flattenBlockSummary, (Map) flattenEntitySummary);
+        var flattenBlockSummary = blockStateSummary.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().stream().collect(Collectors.toMap(Function.identity(), e1 -> 1, Integer::sum, LinkedHashMap::new))));
+        return new OperationTooltip(type, context, (Map) flattenBlockSummary, blockEntitySummary);
     }
 
-    public static OperationTooltip build(Context context, BlockSummary blockSummary, List<BlockState> blockStates) {
-        return reduce(Type.BUILD, context, Map.of(blockSummary, blockStates), Map.of());
+    public static OperationTooltip build(Context context, BlockStateSummary blockStateSummary, List<BlockState> blockStates) {
+        return reduce(Type.BUILD, context, Map.of(blockStateSummary, blockStates), Map.of());
     }
 
     public static OperationTooltip build(Context context) {
@@ -39,10 +38,10 @@ public record OperationTooltip(
     }
     public static OperationTooltip build(
             Context context,
-            Map<BlockSummary, List<BlockState>> blockSummary,
-            Map<EntitySummary, List<BlockState>> entitySummary
+            Map<BlockStateSummary, List<BlockState>> blockStateSummary,
+            Map<BlockEntitySummary, List<ItemStack>> blockEntitySummary
     ) {
-        return reduce(Type.BUILD, context, blockSummary, entitySummary);
+        return reduce(Type.BUILD, context, blockStateSummary, blockEntitySummary);
     }
 
     public static OperationTooltip empty(Type type) {
@@ -50,19 +49,19 @@ public record OperationTooltip(
     }
 
     public OperationTooltip withType(Type type) {
-        return new OperationTooltip(type, context, blockSummary, entitySummary);
+        return new OperationTooltip(type, context, blockStateSummary, blockEntitySummary);
     }
 
-    public Map<BlockSummary, List<ItemStack>> itemStackSummary() {
-        return Arrays.stream(BlockSummary.values()).map(b -> Map.entry(b, blockSummary.getOrDefault(b, Map.of()).entrySet().stream().map(e -> e.getKey().getItem().getDefaultStack().withCount(e.getValue())).toList())).collect(Collectors.toMap(Map.Entry::getKey, e -> ItemStackUtils.flattenStack(e.getValue())));
+    public Map<BlockStateSummary, List<ItemStack>> itemStackSummary() {
+        return Arrays.stream(BlockStateSummary.values()).map(b -> Map.entry(b, blockStateSummary.getOrDefault(b, Map.of()).entrySet().stream().map(e -> e.getKey().getItem().getDefaultStack().withCount(e.getValue())).toList())).collect(Collectors.toMap(Map.Entry::getKey, e -> ItemStackUtils.flattenStack(e.getValue())));
     }
 
     public int getSuccessBlocks() {
-        return blockSummary.entrySet().stream().filter(e -> e.getKey().isSuccess()).map(Map.Entry::getValue).map(Map::entrySet).flatMap(Set::stream).mapToInt(Map.Entry::getValue).sum();
+        return blockStateSummary.entrySet().stream().filter(e -> e.getKey().isSuccess()).map(Map.Entry::getValue).map(Map::entrySet).flatMap(Set::stream).mapToInt(Map.Entry::getValue).sum();
     }
 
     public int getFailedBlocks() {
-        return blockSummary.entrySet().stream().filter(e -> e.getKey().isSuccess()).map(Map.Entry::getValue).map(Map::entrySet).flatMap(Set::stream).mapToInt(Map.Entry::getValue).sum();
+        return blockStateSummary.entrySet().stream().filter(e -> e.getKey().isSuccess()).map(Map.Entry::getValue).map(Map::entrySet).flatMap(Set::stream).mapToInt(Map.Entry::getValue).sum();
     }
 
     public enum Type {

@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building.operation;
 
-public enum BlockSummary {
+public enum BlockStateSummary {
     BLOCKS_PLACED,
     BLOCKS_DESTROYED,
     BLOCKS_INTERACTED,

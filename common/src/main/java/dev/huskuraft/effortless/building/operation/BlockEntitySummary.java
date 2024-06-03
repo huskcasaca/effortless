@@ -1,7 +1,8 @@
 package dev.huskuraft.effortless.building.operation;
 
-public enum EntitySummary {
-    HIDDEN;
+public enum BlockEntitySummary {
+    CONTAINER_ADDED,
+    CONTAINER_REMOVED;
 
     public boolean isSuccess() {
         return false;

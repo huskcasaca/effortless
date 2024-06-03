@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.ItemStack;
 
 public abstract class OperationResult {
 
@@ -15,11 +16,11 @@ public abstract class OperationResult {
     public abstract Operation getReverseOperation();
 
     public final OperationTooltip getTooltip() {
-        return OperationTooltip.build(getOperation().getContext(), Arrays.stream(BlockSummary.values()).collect(Collectors.toMap(Function.identity(), this::getBlockSummary)), Map.of());
+        return OperationTooltip.build(getOperation().getContext(), Arrays.stream(BlockStateSummary.values()).collect(Collectors.toMap(Function.identity(), this::getBlockStateSummary)), Map.of());
     }
 
-    public abstract List<BlockState> getBlockSummary(BlockSummary blockSummary);
+    public abstract List<BlockState> getBlockStateSummary(BlockStateSummary blockStateSummary);
 
-//    public abstract List<BlockState> getEntitySummary(EntitySummary entitySummary);
+    public abstract List<ItemStack> getBlockEntitySummary(BlockEntitySummary blockEntitySummary);
 
 }

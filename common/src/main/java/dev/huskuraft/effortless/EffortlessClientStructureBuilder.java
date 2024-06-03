@@ -46,7 +46,7 @@ import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.clipboard.ClipboardAction;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
-import dev.huskuraft.effortless.building.operation.BlockSummary;
+import dev.huskuraft.effortless.building.operation.BlockStateSummary;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.OperationTooltip;
@@ -687,7 +687,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         if (!itemSummary.isEmpty()) {
             var allProducts = new ArrayList<ItemStack>();
-            for (var summary : BlockSummary.values()) {
+            for (var summary : BlockStateSummary.values()) {
                 var items = itemSummary.getOrDefault(summary, List.of());
                 if (items.isEmpty()) {
                     continue;
