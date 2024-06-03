@@ -5,21 +5,37 @@ import java.util.stream.Stream;
 
 public interface Inventory extends Container {
 
-    default List<ItemStack> getItems() {
-        return Stream.of(getBagItems(), getArmorItems(), getOffhandItems()).flatMap(List::stream).toList();
-    }
-
     List<ItemStack> getBagItems();
 
     List<ItemStack> getArmorItems();
 
     List<ItemStack> getOffhandItems();
 
+    default List<ItemStack> getItems() {
+        return Stream.of(getBagItems(), getArmorItems(), getOffhandItems()).flatMap(List::stream).toList();
+    }
+
     void setBagItem(int index, ItemStack itemStack);
 
     void setArmorItem(int index, ItemStack itemStack);
 
     void setOffhandItem(int index, ItemStack itemStack);
+
+    @Override
+    default void setItem(int index, ItemStack itemStack) {
+        if (index < getBagItems().size()) {
+            setBagItem(index, itemStack);
+            return;
+        }
+        if (index < getBagItems().size() + getArmorItems().size()) {
+            setArmorItem(index - getBagItems().size(), itemStack);
+            return;
+        }
+        if (index < getBagItems().size() + getArmorItems().size() + getOffhandItems().size()) {
+            setArmorItem(index - getBagItems().size() - getArmorItems().size(), itemStack);
+            return;
+        }
+    }
 
     int getSelected();
 

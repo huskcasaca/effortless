@@ -39,11 +39,6 @@ public record MinecraftInventory(net.minecraft.world.entity.player.Inventory ref
     }
 
     @Override
-    public boolean addItem(int index, ItemStack itemStack) {
-        return refs.add(index, itemStack.reference());
-    }
-
-    @Override
     public int getSelected() {
         return refs.selected;
     }
