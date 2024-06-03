@@ -13,13 +13,14 @@ import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.Feature;
 import dev.huskuraft.effortless.building.Option;
-import dev.huskuraft.effortless.building.clipboard.Clipboards;
+import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.PassiveMode;
 import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.pattern.Patterns;
+import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.replace.ReplaceStrategy;
-import dev.huskuraft.effortless.building.settings.Settings;
+import dev.huskuraft.effortless.building.settings.Misc;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
@@ -30,7 +31,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
 
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
-    private static final Button<Option> SETTING_OPTION = button(Settings.SETTINGS);
+    private static final Button<Option> SETTING_OPTION = button(Misc.SETTINGS);
     private static final Button<Option> PATTERN_DISABLED_OPTION = button(Patterns.DISABLED, false);
     private static final Button<Option> PATTERN_ENABLED_OPTION = button(Patterns.ENABLED, true);
     private static final Button<Option> PATTERN_OPTION = lazyButton(() -> {
@@ -88,38 +89,28 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     private static final Button<Option> REPLACE_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-        return button(Settings.REPLACE, context.replaceStrategy() != ReplaceStrategy.DISABLED || context.replace().isQuick());
+        return button(context.replace(), context.replace().replaceStrategy() != ReplaceStrategy.DISABLED || context.replace().isQuick());
     });
 
-
-    private static final Button<Option> PASSIVE_MODE_DISABLED_OPTION = button(PassiveMode.DISABLED, false);
-    private static final Button<Option> PASSIVE_MODE_ENABLED_OPTION = button(PassiveMode.ENABLED, true);
 
     private static final Button<Option> PASSIVE_MODE_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
-        if (entrance.getConfigStorage().get().builderConfig().passiveMode()) {
-            return PASSIVE_MODE_ENABLED_OPTION;
-        } else {
-            return PASSIVE_MODE_DISABLED_OPTION;
-        }
+        var builderConfig = entrance.getConfigStorage().get().builderConfig();
+        return button(builderConfig.passiveMode() ? PassiveMode.ENABLED : PassiveMode.DISABLED, builderConfig.passiveMode());
     });
-
-    private static final Button<Option> CLIPBOARD_DISABLED_OPTION = button(Clipboards.ENABLED, false);
-    private static final Button<Option> CLIPBOARD_ENABLED_OPTION = button(Clipboards.ENABLED, true);
 
     private static final Button<Option> CLIPBOARD_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-        if (context.clipboard().enabled()) {
-            return CLIPBOARD_ENABLED_OPTION;
-        } else {
-            return CLIPBOARD_DISABLED_OPTION;
-        }
+        return button(context.clipboard(), context.clipboard().enabled());
     });
+
+    private static final Button<Option> GO_BACK_OPTION = button(Misc.GO_BACK, false);
+
 
     private final Key assignedKey;
 
-    private AbstractWidget passiveMode;
+    private AbstractWidget passiveModeTextWidget;
 
     public EffortlessStructureScreen(Entrance entrance, Key assignedKey) {
         super(entrance, Text.translate("effortless.building.radial.title"));
@@ -157,8 +148,8 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
             getEntrance().getStructureBuilder().setStructure(getPlayer(), slot.getContent());
         });
         setRadialOptionSelectResponder((entry, click) -> {
-            if (entry.getContent() instanceof Settings settings) {
-                switch (settings) {
+            if (entry.getContent() instanceof Misc misc) {
+                switch (misc) {
                     case SETTINGS -> {
                         detach();
                         new EffortlessSettingsScreen(getEntrance()).attach();
@@ -169,6 +160,9 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                     }
                     case REPLACE -> {
                         setReplaceLeftButtons();
+                    }
+                    case GO_BACK -> {
+                        setLeftButtons();
                     }
                 }
                 return;
@@ -182,12 +176,12 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                 if (getEntrance().getStructureBuilder().checkPermission(getPlayer())) {
                     detach();
                     new EffortlessPatternScreen(getEntrance()).attach();
-                    return;
                 }
+                return;
             }
-            if (entry.getContent() instanceof Clipboards clipboards) {
-                var clipboard= getEntrance().getStructureBuilder().getContext(getPlayer()).clipboard();
+            if (entry.getContent() instanceof Clipboard clipboard) {
                 getEntrance().getStructureBuilder().setClipboard(getPlayer(), clipboard.withEnabled(!clipboard.enabled()));
+                return;
 
             }
             if (entry.getContent() instanceof UndoRedo undoRedo) {
@@ -199,6 +193,10 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                         getEntrance().getStructureBuilder().redo(getPlayer());
                     }
                 }
+                return;
+            }
+            if (entry.getContent() instanceof Replace replace) {
+                setReplaceLeftButtons();
                 return;
             }
             if (entry.getContent() instanceof ReplaceMode replaceMode) {
@@ -218,10 +216,11 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                 if (getEntrance().getStructureBuilder().setStructure(getPlayer(), structure)) {
                     getEntrance().getConfigStorage().setStructure(structure);
                 }
+                return;
             }
         });
 
-        this.passiveMode = addWidget(new TextWidget(getEntrance(), getX() + getWidth() - 10, getY() + getHeight() - 18, Text.translate("effortless.option.passive_mode"), TextWidget.Gravity.END));
+        this.passiveModeTextWidget = addWidget(new TextWidget(getEntrance(), getX() + getWidth() - 10, getY() + getHeight() - 18, Text.translate("effortless.option.passive_mode"), TextWidget.Gravity.END));
 
         setLeftButtons();
     }
@@ -235,14 +234,14 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
 
     private void setReplaceLeftButtons() {
         setLeftButtons(
-                buttonSet(REPLACE_STRATEGY_DISABLED_OPTION, REPLACE_STRATEGY_BLOCKS_AND_AIR_OPTION, REPLACE_STRATEGY_BLOCKS_ONLY_OPTION, REPLACE_STRATEGY_OFFHAND_ONLY_OPTION),
-                buttonSet(REPLACE_MODEL_OPTION)
+                buttonSet(GO_BACK_OPTION, REPLACE_MODEL_OPTION),
+                buttonSet(REPLACE_STRATEGY_DISABLED_OPTION, REPLACE_STRATEGY_BLOCKS_AND_AIR_OPTION, REPLACE_STRATEGY_BLOCKS_ONLY_OPTION, REPLACE_STRATEGY_OFFHAND_ONLY_OPTION)
         );
     }
 
     @Override
     public void onReload() {
-        passiveMode.setVisible(getEntrance().getConfigStorage().get().builderConfig().passiveMode());
+        passiveModeTextWidget.setVisible(getEntrance().getConfigStorage().get().builderConfig().passiveMode());
 
         setRadialSlots(getEntrance().getConfigStorage().get().structureMap().values().stream().map(EffortlessStructureScreen::slot).toList());
 

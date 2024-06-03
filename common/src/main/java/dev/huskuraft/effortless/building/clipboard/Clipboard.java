@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.building.Option;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
@@ -11,7 +12,7 @@ import dev.huskuraft.effortless.building.pattern.RotateContext;
 public record Clipboard(
         boolean enabled,
         List<BlockSnapshot> blockSnapshots
-) {
+) implements Option  {
     public static Clipboard DISABLED = new Clipboard(false, List.of());
 
     public static Clipboard of(boolean enabled, List<BlockSnapshot> blockSnapshots) {
@@ -91,4 +92,17 @@ public record Clipboard(
         return this;
     }
 
+    @Override
+    public String getName() {
+        if (enabled) {
+            return "clipboard_disabled";
+        } else {
+            return "clipboard_enabled";
+        }
+    }
+
+    @Override
+    public String getCategory() {
+        return "clipboard";
+    }
 }
