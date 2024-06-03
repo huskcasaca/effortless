@@ -31,7 +31,7 @@ public enum ReplaceStrategy implements SingleSelectFeature {
 
     @Override
     public String getCategory() {
-        return "replace";
+        return "replace_strategy";
     }
 
 }

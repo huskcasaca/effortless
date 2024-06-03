@@ -16,11 +16,11 @@ import dev.huskuraft.effortless.building.structure.builder.BlockStructure;
 public record Single() implements BlockStructure {
 
     protected static BlockInteraction traceSingle(Player player, Context context) {
-        return traceSingle(player, context.buildState(), !context.replace().isQuick(), context.maxReachDistance());
+        return traceSingle(player, context.buildState(), context.replace().isQuick(), context.maxReachDistance());
     }
 
     protected static BlockInteraction traceSingle(Player player, Context context, int maxReachDistance) {
-        return traceSingle(player, context.buildState(), !context.replace().isQuick(), maxReachDistance);
+        return traceSingle(player, context.buildState(), context.replace().isQuick(), maxReachDistance);
     }
 
     protected static BlockInteraction traceSingle(Player player, BuildState buildState, boolean relative, int maxReachDistance) {

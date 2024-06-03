@@ -17,6 +17,7 @@ import dev.huskuraft.effortless.building.clipboard.Clipboards;
 import dev.huskuraft.effortless.building.config.PassiveMode;
 import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.pattern.Patterns;
+import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.replace.ReplaceStrategy;
 import dev.huskuraft.effortless.building.settings.Settings;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
@@ -73,21 +74,22 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
         return button(ReplaceStrategy.OFFHAND_ONLY, context.replaceStrategy() == ReplaceStrategy.OFFHAND_ONLY);
     });
+    private static final Button<Option> REPLACE_MODEL_OPTION = lazyButton(() -> {
+        var entrance = EffortlessClient.getInstance();
+        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+        if (context.replace().isQuick()) {
+            return button(ReplaceMode.QUICK, true);
+        } else {
+            return button(ReplaceMode.NORMAL, false);
+        }
+    });
 //    private static final Button<Option> REPLACE_CUSTOM_LIST_ONLY_OPTION = button(ReplaceStrategy.CUSTOM_LIST_ONLY, true);
 
-    private static final Button<Option> REPLACE_OPTION = button(Settings.REPLACE, true);
-
-//    private static final Button<Option> REPLACE_OPTION = lazyButton(() -> {
-//        var entrance = EffortlessClient.getInstance();
-//        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-//        return switch (context.replaceStrategy()) {
-//            case DISABLED -> REPLACE_STRATEGY_DISABLED_OPTION;
-//            case BLOCKS_AND_AIR -> REPLACE_STRATEGY_BLOCKS_AND_AIR_OPTION;
-//            case BLOCKS_ONLY -> REPLACE_STRATEGY_BLOCKS_ONLY_OPTION;
-//            case OFFHAND_ONLY -> REPLACE_STRATEGY_OFFHAND_ONLY_OPTION;
-////            case CUSTOM_LIST_ONLY -> REPLACE_CUSTOM_LIST_ONLY_OPTION;
-//        };
-//    });
+    private static final Button<Option> REPLACE_OPTION = lazyButton(() -> {
+        var entrance = EffortlessClient.getInstance();
+        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+        return button(Settings.REPLACE, context.replaceStrategy() != ReplaceStrategy.DISABLED || context.replace().isQuick());
+    });
 
 
     private static final Button<Option> PASSIVE_MODE_DISABLED_OPTION = button(PassiveMode.DISABLED, false);
@@ -199,6 +201,10 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                 }
                 return;
             }
+            if (entry.getContent() instanceof ReplaceMode replaceMode) {
+                getEntrance().getStructureBuilder().setReplace(getPlayer(), getEntrance().getStructureBuilder().getContext(getPlayer()).replace().withReplaceMode(replaceMode.next()));
+                return;
+            }
             if (entry.getContent() instanceof ReplaceStrategy replaceStrategy) {
                 getEntrance().getStructureBuilder().setReplace(getPlayer(), getEntrance().getStructureBuilder().getContext(getPlayer()).replace().withReplaceStrategy(replaceStrategy));
                 return;
@@ -230,7 +236,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     private void setReplaceLeftButtons() {
         setLeftButtons(
                 buttonSet(REPLACE_STRATEGY_DISABLED_OPTION, REPLACE_STRATEGY_BLOCKS_AND_AIR_OPTION, REPLACE_STRATEGY_BLOCKS_ONLY_OPTION, REPLACE_STRATEGY_OFFHAND_ONLY_OPTION),
-                buttonSet()
+                buttonSet(REPLACE_MODEL_OPTION)
         );
     }
 
