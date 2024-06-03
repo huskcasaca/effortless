@@ -159,11 +159,11 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
                 case PASTE_STRUCTURE -> ChatFormatting.WHITE;
             }).withStyle(ChatFormatting.GOLD);
             var affectedText = Text.text("[").append(String.valueOf(result.getTooltip().getSuccessBlocks())).append("]").withStyle(ChatFormatting.AQUA);
-            player.sendMessage(Effortless.getMessage(countText.append(" Undo ").append(buildStateText).append(" affected ").append(affectedText).append(" blocks!")));
+            player.sendMessage(Effortless.getMessage(countText.append(" ").append(Text.translate("effortless.message.history.server.undo", buildStateText, affectedText))));
         } catch (EmptyStackException e) {
             getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToUndo(), player);
             var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
-            player.sendMessage(Effortless.getMessage(countText.append(Text.text(" Nothing to undo!"))));
+            player.sendMessage(Effortless.getMessage(countText.append(" ").append(Text.translate("effortless.history.nothing_to_undo"))));
         }
     }
 
@@ -186,11 +186,11 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
                 case PASTE_STRUCTURE -> ChatFormatting.WHITE;
             }).withStyle(ChatFormatting.GOLD);
             var affectedText = Text.text("[").append(String.valueOf(result.getTooltip().getSuccessBlocks())).append("]").withStyle(ChatFormatting.AQUA);
-            player.sendMessage(Effortless.getMessage(countText.append(" Redo ").append(buildStateText).append(" affected ").append(affectedText).append(" blocks!")));
+            player.sendMessage(Effortless.getMessage(countText.append(" ").append(Text.translate("effortless.message.history.server.redo", buildStateText, affectedText))));
         } catch (EmptyStackException e) {
             getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToRedo(), player);
             var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
-            player.sendMessage(Effortless.getMessage(countText.append(Text.text(" Nothing to redo!"))));
+            player.sendMessage(Effortless.getMessage(countText.append(" ").append(Text.translate("effortless.history.nothing_to_redo"))));
         }
     }
 

@@ -471,13 +471,13 @@
   "key.effortless.passive_build_modifier.desc": "Passive Build Modifier",
   "key.effortless.pattern_radial.desc": "Show Pattern Radial",
   "key.effortless.pattern_settings.desc": "Open Pattern Settings",
-  "key.effortless.redo.desc": "Build Action Redo",
+  "key.effortless.redo.desc": "Build History Redo",
   "key.effortless.settings.desc": "Basic Settings",
   "key.effortless.shift.desc": "Shift",
   "key.effortless.toggle_alt_place.desc": "Toggle Alternative Placement",
   "key.effortless.toggle_replace.desc": "Toggle Replace",
   "key.effortless.toggle_replace_quick.desc": "Toggle Quick Replace",
-  "key.effortless.undo.desc": "Build Action Undo",
+  "key.effortless.undo.desc": "Build History Undo",
   "key.effortless.move_left.desc": "Move Left",
   "key.effortless.move_right.desc": "Move Right",
   "key.effortless.move_forward.desc": "Move Forward",
@@ -498,5 +498,9 @@
   "effortless.action.replace_mode_normal.tooltip": "Start replacing from the block next to the one you are looking at",
   "effortless.action.replace_mode_quick.tooltip": "Start replacing from the block you are looking at",
   "effortless.option.replace_mode": "Replace Mode",
-  "effortless.option.replace_strategy": "Replace Strategy"
+  "effortless.option.replace_strategy": "Replace Strategy",
+  "effortless.message.history.server.nothing_to_undo": "Nothing to undo!",
+  "effortless.message.history.server.nothing_to_redo": "Nothing to redo!",
+  "effortless.message.history.server.undo": "Undo %s affected %s blocks!",
+  "effortless.message.history.server.redo": "Redo %s affected %s blocks!"
 }
