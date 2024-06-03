@@ -71,7 +71,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
     @Override
     public List<ItemStack> getBlockEntitySummary(BlockEntitySummary blockEntitySummary) {
         switch (blockEntitySummary) {
-            case CONTAINER_ADDED -> {
+            case CONTAINER_CONSUMED -> {
                 switch (result) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
                         if (getBlockEntityToAdd() instanceof ContainerBlockEntity containerBlockEntity) {
@@ -80,7 +80,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
                     }
                 }
             }
-            case CONTAINER_REMOVED -> {
+            case CONTAINER_DROPPED -> {
                 switch (result) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
                         if (getBlockEntityToRemove() instanceof ContainerBlockEntity containerBlockEntity) {

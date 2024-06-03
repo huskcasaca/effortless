@@ -24,4 +24,6 @@ public interface Block extends PlatformReference {
 
     Item asItem();
 
+    BlockEntity getEntity(BlockPosition blockPosition, BlockState blockState);
+
 }

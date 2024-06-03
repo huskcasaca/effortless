@@ -719,8 +719,8 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     continue;
                 }
                 var color = switch (summary) {
-                    case CONTAINER_ADDED -> ChatFormatting.WHITE;
-                    case CONTAINER_REMOVED -> ChatFormatting.WHITE;
+                    case CONTAINER_CONSUMED -> ChatFormatting.WHITE;
+                    case CONTAINER_DROPPED -> ChatFormatting.WHITE;
                 };
                 items = items.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
                 entries.add(items);
