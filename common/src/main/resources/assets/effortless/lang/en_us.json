@@ -475,7 +475,7 @@
   "key.effortless.settings.desc": "Basic Settings",
   "key.effortless.shift.desc": "Shift",
   "key.effortless.toggle_alt_place.desc": "Toggle Alternative Placement",
-  "key.effortless.toggle_replace.desc": "Toggle Replace",
+  "key.effortless.toggle_replace_strategy.desc": "Toggle Replace Strategy",
   "key.effortless.toggle_replace_quick.desc": "Toggle Quick Replace",
   "key.effortless.undo.desc": "Build History Undo",
   "key.effortless.move_left.desc": "Move Left",
