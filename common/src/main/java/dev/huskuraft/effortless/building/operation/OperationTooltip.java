@@ -52,7 +52,7 @@ public record OperationTooltip(
         return new OperationTooltip(type, context, blockStateSummary, blockEntitySummary);
     }
 
-    public Map<BlockStateSummary, List<ItemStack>> itemStackSummary() {
+    public Map<BlockStateSummary, List<ItemStack>> blockStateItemStackSummary() {
         return Arrays.stream(BlockStateSummary.values()).map(b -> Map.entry(b, blockStateSummary.getOrDefault(b, Map.of()).entrySet().stream().map(e -> e.getKey().getItem().getDefaultStack().withCount(e.getValue())).toList())).collect(Collectors.toMap(Map.Entry::getKey, e -> ItemStackUtils.flattenStack(e.getValue())));
     }
 

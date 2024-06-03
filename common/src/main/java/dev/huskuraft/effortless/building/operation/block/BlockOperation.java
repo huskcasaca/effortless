@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.operation.block;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
@@ -18,7 +19,28 @@ public abstract class BlockOperation implements Operation {
     protected final Storage storage;
     protected final BlockInteraction interaction;
     protected final BlockState blockState;
+    protected final BlockEntity blockEntity;
     protected final Extras extras;
+
+    protected BlockOperation(
+            World world,
+            Player player,
+            Context context,
+            Storage storage, // for preview
+            BlockInteraction interaction,
+            BlockState blockState,
+            BlockEntity blockEntity,
+            Extras extras
+    ) {
+        this.world = world;
+        this.player = player;
+        this.context = context;
+        this.storage = storage;
+        this.interaction = interaction;
+        this.blockState = blockState;
+        this.blockEntity = blockEntity;
+        this.extras = extras;
+    }
 
     protected BlockOperation(
             World world,
@@ -35,6 +57,7 @@ public abstract class BlockOperation implements Operation {
         this.storage = storage;
         this.interaction = interaction;
         this.blockState = blockState;
+        this.blockEntity = null;
         this.extras = extras;
     }
 
@@ -58,7 +81,11 @@ public abstract class BlockOperation implements Operation {
         return blockState;
     }
 
-    public Extras getEntityState() {
+    public BlockEntity getBlockEntity() {
+        return blockEntity;
+    }
+
+    public Extras getExtras() {
         return getContext().extras().extras();
     }
 
@@ -90,6 +117,14 @@ public abstract class BlockOperation implements Operation {
 
     public BlockState getBlockStateInWorld() {
         return getWorld().getBlockState(getBlockPosition());
+    }
+
+    public BlockEntity getBlockEntityInWorld() {
+        var blockEntity = getWorld().getBlockEntity(getBlockPosition());
+        if (blockEntity != null) {
+            blockEntity = blockEntity.copy();
+        }
+        return blockEntity;
     }
 
     public enum Type {

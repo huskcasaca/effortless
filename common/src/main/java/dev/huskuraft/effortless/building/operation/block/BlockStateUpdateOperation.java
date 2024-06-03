@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.operation.block;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockState;
@@ -29,7 +30,20 @@ public class BlockStateUpdateOperation extends BlockOperation {
             BlockState blockState,
             Extras extras
     ) {
-        super(world, player, context, storage, interaction, blockState, extras);
+        super(world, player, context, storage, interaction, blockState, null, extras);
+    }
+
+    public BlockStateUpdateOperation(
+            World world,
+            Player player,
+            Context context,
+            Storage storage,
+            BlockInteraction interaction,
+            BlockState blockState,
+            BlockEntity blockEntity,
+            Extras extras
+    ) {
+        super(world, player, context, storage, interaction, blockState, blockEntity, extras);
     }
 
     protected boolean destroyBlockInternal() {
@@ -216,10 +230,12 @@ public class BlockStateUpdateOperation extends BlockOperation {
     public BlockStateUpdateOperationResult commit() {
         var entityExtrasBeforeOp = Extras.get(getPlayer());
         var blockStateBeforeOp = getBlockStateInWorld();
-        Extras.set(getPlayer(), getEntityState());
+        var blockEntityBeforeOp = getBlockEntityInWorld();
+        Extras.set(getPlayer(), getExtras());
         var result = updateBlock();
         Extras.set(getPlayer(), entityExtrasBeforeOp);
         var blockStateAfterOp = getBlockStateInWorld();
+        var blockEntityAfterOp = getBlockEntityInWorld();
 
         if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             if (result.success()) {
@@ -227,7 +243,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
             }
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
-        return new BlockStateUpdateOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp);
+        return new BlockStateUpdateOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp, blockEntityBeforeOp, blockEntityAfterOp);
 
     }
 

@@ -65,7 +65,7 @@ public class BlockStateCopyOperation extends BlockOperation {
     public BlockStateCopyOperationResult commit() {
         var entityExtrasBeforeOp = Extras.get(getPlayer());
         var blockStateBeforeOp = getBlockStateInWorld();
-        Extras.set(getPlayer(), getEntityState());
+        Extras.set(getPlayer(), getExtras());
         var result = saveBlock();
         Extras.set(getPlayer(), entityExtrasBeforeOp);
         var blockStateAfterOp = getBlockStateInWorld();

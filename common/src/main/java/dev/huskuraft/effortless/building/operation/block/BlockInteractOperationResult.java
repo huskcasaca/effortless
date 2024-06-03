@@ -2,7 +2,9 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import java.util.List;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.ContainerBlockEntity;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.building.operation.BlockEntitySummary;
 import dev.huskuraft.effortless.building.operation.BlockStateSummary;
@@ -14,9 +16,11 @@ public class BlockInteractOperationResult extends BlockOperationResult {
             BlockInteractOperation operation,
             BlockOperationResultType result,
             BlockState blockStateBeforeOp,
-            BlockState blockStateAfterOp
+            BlockState blockStateAfterOp,
+            BlockEntity blockEntityBeforeOp,
+            BlockEntity blockEntityAfterOp
     ) {
-        super(operation, result, blockStateBeforeOp, blockStateAfterOp);
+        super(operation, result, blockStateBeforeOp, blockStateAfterOp, blockEntityBeforeOp, blockEntityAfterOp);
     }
 
     @Override
@@ -28,7 +32,8 @@ public class BlockInteractOperationResult extends BlockOperationResult {
                 operation.getStorage(),
                 operation.getInteraction(),
                 getBlockStateToBreak(),
-                operation.getEntityState()
+                getBlockEntityToRemove(),
+                operation.getExtras()
         );
     }
 
@@ -65,6 +70,26 @@ public class BlockInteractOperationResult extends BlockOperationResult {
 
     @Override
     public List<ItemStack> getBlockEntitySummary(BlockEntitySummary blockEntitySummary) {
+        switch (blockEntitySummary) {
+            case CONTAINER_ADDED -> {
+                switch (result) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                        if (getBlockEntityToAdd() instanceof ContainerBlockEntity containerBlockEntity) {
+                            return containerBlockEntity.getItems();
+                        }
+                    }
+                }
+            }
+            case CONTAINER_REMOVED -> {
+                switch (result) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                        if (getBlockEntityToRemove() instanceof ContainerBlockEntity containerBlockEntity) {
+                            return containerBlockEntity.getItems();
+                        }
+                    }
+                }
+            }
+        }
         return List.of();
     }
 

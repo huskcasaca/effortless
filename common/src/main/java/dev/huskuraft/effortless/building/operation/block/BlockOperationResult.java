@@ -64,6 +64,21 @@ public abstract class BlockOperationResult extends OperationResult {
     }
 
     @Nullable
+    public BlockEntity getBlockEntityToRemove() {
+        return blockEntityBeforeOp;
+    }
+
+    @Nullable
+    public BlockEntity getBlockEntityAdded() {
+        return blockEntityAfterOp;
+    }
+
+    @Nullable
+    public BlockEntity getBlockEntityToAdd() {
+        return getOperation().getBlockEntity();
+    }
+
+    @Nullable
     public final BlockState getBlockStateForRenderer() {
         if (getBlockStateToBreak() == null || getBlockStateToPlace() == null) {
             return null;

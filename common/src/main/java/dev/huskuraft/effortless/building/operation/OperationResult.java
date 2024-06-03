@@ -2,7 +2,6 @@ package dev.huskuraft.effortless.building.operation;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -16,7 +15,9 @@ public abstract class OperationResult {
     public abstract Operation getReverseOperation();
 
     public final OperationTooltip getTooltip() {
-        return OperationTooltip.build(getOperation().getContext(), Arrays.stream(BlockStateSummary.values()).collect(Collectors.toMap(Function.identity(), this::getBlockStateSummary)), Map.of());
+        return OperationTooltip.build(getOperation().getContext(),
+                Arrays.stream(BlockStateSummary.values()).collect(Collectors.toMap(Function.identity(), this::getBlockStateSummary)),
+                Arrays.stream(BlockEntitySummary.values()).collect(Collectors.toMap(Function.identity(), this::getBlockEntitySummary)));
     }
 
     public abstract List<BlockState> getBlockStateSummary(BlockStateSummary blockStateSummary);
