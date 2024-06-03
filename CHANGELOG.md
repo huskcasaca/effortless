@@ -3,6 +3,7 @@
 ----------
 
 ### 3.0.0-alpha.3
+
 - Add quick replace mode back ([#141](https://github.com/huskcasaca/effortless/pull/141))
 
 ----------
