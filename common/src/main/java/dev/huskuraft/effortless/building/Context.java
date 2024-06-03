@@ -22,7 +22,7 @@ import dev.huskuraft.effortless.building.config.BuilderConfig;
 import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
-import dev.huskuraft.effortless.building.replace.ReplaceMode;
+import dev.huskuraft.effortless.building.replace.ReplaceStrategy;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.BuildMode;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
@@ -72,8 +72,8 @@ public record Context(
         );
     }
 
-    public ReplaceMode replaceMode() {
-        return replace.replaceMode();
+    public ReplaceStrategy replaceStrategy() {
+        return replace.replaceStrategy();
     }
 
     private static BlockInteraction withPosition(BlockInteraction blockInteraction, BlockPosition blockPosition) {

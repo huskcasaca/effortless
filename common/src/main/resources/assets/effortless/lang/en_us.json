@@ -492,5 +492,11 @@
   "key.effortless.mirror_x.desc": "Mirror X",
   "key.effortless.mirror_y.desc": "Mirror Y",
   "key.effortless.mirror_z.desc": "Mirror Z",
-  "key.effortless.category.clipboard": "Effortless Structure Clipboard"
+  "key.effortless.category.clipboard": "Effortless Structure Clipboard",
+  "effortless.action.replace_mode_normal": "Normal",
+  "effortless.action.replace_mode_quick": "Quick",
+  "effortless.action.replace_mode_normal.tooltip": "Start replacing from the block next to the one you are looking at",
+  "effortless.action.replace_mode_quick.tooltip": "Start replacing from the block you are looking at",
+  "effortless.option.replace_mode": "Replace Mode",
+  "effortless.option.replace_strategy": "Replace Strategy"
 }

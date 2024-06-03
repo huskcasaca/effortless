@@ -4,8 +4,8 @@ import dev.huskuraft.effortless.building.Option;
 
 public enum Settings implements Option {
     SETTINGS("settings"),
-    MODE_SETTINGS("mode_settings"),
-    PATTERN_SETTINGS("pattern_settings"),
+    PATTERN("pattern_settings"),
+    REPLACE("replace_settings"),
     ;
 
     private final String name;
