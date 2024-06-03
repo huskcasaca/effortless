@@ -22,9 +22,9 @@ public class BlockInteractOperation extends BlockOperation {
             Context context,
             Storage storage,
             BlockInteraction interaction,
-            EntityState entityState
+            Extras extras
     ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
+        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), extras);
     }
 
     protected BlockOperationResultType interactBlock() {
@@ -91,11 +91,11 @@ public class BlockInteractOperation extends BlockOperation {
 
     @Override
     public BlockInteractOperationResult commit() {
-        var entityStateBeforeOp = EntityState.get(getPlayer());
+        var entityExtrasBeforeOp = Extras.get(getPlayer());
         var blockStateBeforeOp = getBlockStateInWorld();
-        EntityState.set(getPlayer(), getEntityState());
+        Extras.set(getPlayer(), getEntityState());
         var result = interactBlock();
-        EntityState.set(getPlayer(), entityStateBeforeOp);
+        Extras.set(getPlayer(), entityExtrasBeforeOp);
 
         if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
@@ -106,7 +106,7 @@ public class BlockInteractOperation extends BlockOperation {
 
     @Override
     public Operation move(MoveContext moveContext) {
-        return new BlockInteractOperation(world, player, context, storage, moveContext.move(interaction), entityState);
+        return new BlockInteractOperation(world, player, context, storage, moveContext.move(interaction), extras);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class BlockInteractOperation extends BlockOperation {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockInteractOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(entityState));
+        return new BlockInteractOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(extras));
     }
 
     @Override
@@ -122,7 +122,7 @@ public class BlockInteractOperation extends BlockOperation {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockInteractOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(entityState));
+        return new BlockInteractOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(extras));
     }
 
     @Override

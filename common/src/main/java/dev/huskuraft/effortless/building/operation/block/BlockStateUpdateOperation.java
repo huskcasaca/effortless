@@ -27,9 +27,9 @@ public class BlockStateUpdateOperation extends BlockOperation {
             Storage storage,
             BlockInteraction interaction,
             BlockState blockState,
-            EntityState entityState
+            Extras extras
     ) {
-        super(world, player, context, storage, interaction, blockState, entityState);
+        super(world, player, context, storage, interaction, blockState, extras);
     }
 
     protected boolean destroyBlockInternal() {
@@ -214,11 +214,11 @@ public class BlockStateUpdateOperation extends BlockOperation {
 
     @Override
     public BlockStateUpdateOperationResult commit() {
-        var entityStateBeforeOp = EntityState.get(getPlayer());
+        var entityExtrasBeforeOp = Extras.get(getPlayer());
         var blockStateBeforeOp = getBlockStateInWorld();
-        EntityState.set(getPlayer(), getEntityState());
+        Extras.set(getPlayer(), getEntityState());
         var result = updateBlock();
-        EntityState.set(getPlayer(), entityStateBeforeOp);
+        Extras.set(getPlayer(), entityExtrasBeforeOp);
         var blockStateAfterOp = getBlockStateInWorld();
 
         if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
@@ -233,7 +233,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
 
     @Override
     public Operation move(MoveContext moveContext) {
-        return new BlockStateUpdateOperation(world, player, context, storage, moveContext.move(interaction), blockState, entityState);
+        return new BlockStateUpdateOperation(world, player, context, storage, moveContext.move(interaction), blockState, extras);
     }
 
     @Override
@@ -241,7 +241,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockStateUpdateOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(blockState), mirrorContext.mirror(entityState));
+        return new BlockStateUpdateOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(blockState), mirrorContext.mirror(extras));
     }
 
     @Override
@@ -249,12 +249,12 @@ public class BlockStateUpdateOperation extends BlockOperation {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockStateUpdateOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(blockState), rotateContext.rotate(entityState));
+        return new BlockStateUpdateOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(blockState), rotateContext.rotate(extras));
     }
 
     @Override
     public Operation refactor(RefactorContext refactorContext) {
-        return new BlockStateUpdateOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()), entityState);
+        return new BlockStateUpdateOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()), extras);
     }
 
     @Override

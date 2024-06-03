@@ -19,7 +19,6 @@ import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.BuilderConfig;
-import dev.huskuraft.effortless.building.operation.block.EntityState;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.replace.ReplaceStrategy;
@@ -347,14 +346,14 @@ public record Context(
 
     public record Extras(
             ResourceLocation dimensionId,
-            EntityState entityState,
+            dev.huskuraft.effortless.building.operation.block.Extras extras,
             GameMode gameMode,
             long seed,
             InventorySnapshot inventorySnapshot
     ) {
 
         public Extras(Player player) {
-            this(player.getWorld().getDimensionId().location(), EntityState.get(player), player.getGameMode(), new Random().nextLong(), new InventorySnapshot(player.getInventory()));
+            this(player.getWorld().getDimensionId().location(), dev.huskuraft.effortless.building.operation.block.Extras.get(player), player.getGameMode(), new Random().nextLong(), new InventorySnapshot(player.getInventory()));
         }
     }
 

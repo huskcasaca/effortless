@@ -49,19 +49,19 @@ public class BatchBuildSession implements BuildSession {
     }
 
     protected BlockOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction, BlockState blockState) {
-        return new BlockStateUpdateOperation(world, player, context, storage, interaction, blockState, context.extras().entityState());
+        return new BlockStateUpdateOperation(world, player, context, storage, interaction, blockState, context.extras().extras());
     }
 
     protected BlockOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockStateUpdateOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState(), context.extras().entityState());
+        return new BlockStateUpdateOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState(), context.extras().extras());
     }
 
     protected BlockOperation createBlockInteractOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockInteractOperation(world, player, context, storage, interaction, context.extras().entityState());
+        return new BlockInteractOperation(world, player, context, storage, interaction, context.extras().extras());
     }
 
     protected BlockOperation createBlockCopyOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockStateCopyOperation(world, player, context, storage, interaction, context.extras().entityState());
+        return new BlockStateCopyOperation(world, player, context, storage, interaction, context.extras().extras());
     }
 
     protected BatchOperation create(World world, Player player, Context context) {

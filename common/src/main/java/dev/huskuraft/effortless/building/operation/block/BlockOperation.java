@@ -18,7 +18,7 @@ public abstract class BlockOperation implements Operation {
     protected final Storage storage;
     protected final BlockInteraction interaction;
     protected final BlockState blockState;
-    protected final EntityState entityState;
+    protected final Extras extras;
 
     protected BlockOperation(
             World world,
@@ -27,7 +27,7 @@ public abstract class BlockOperation implements Operation {
             Storage storage, // for preview
             BlockInteraction interaction,
             BlockState blockState,
-            EntityState entityState
+            Extras extras
     ) {
         this.world = world;
         this.player = player;
@@ -35,7 +35,7 @@ public abstract class BlockOperation implements Operation {
         this.storage = storage;
         this.interaction = interaction;
         this.blockState = blockState;
-        this.entityState = entityState;
+        this.extras = extras;
     }
 
     public World getWorld() {
@@ -58,8 +58,8 @@ public abstract class BlockOperation implements Operation {
         return blockState;
     }
 
-    public EntityState getEntityState() {
-        return getContext().extras().entityState();
+    public Extras getEntityState() {
+        return getContext().extras().extras();
     }
 
     public BlockInteraction getInteraction() {
