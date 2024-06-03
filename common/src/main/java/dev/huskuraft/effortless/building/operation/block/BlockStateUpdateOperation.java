@@ -117,12 +117,12 @@ public class BlockStateUpdateOperation extends BlockOperation {
                     }
                 }
                 case OFFHAND_ONLY -> {
-                    if (context.extras().inventorySnapshot().offhandItems().isEmpty()) {
+                    if (context.extras().inventorySnapshot().getOffhandItems().isEmpty()) {
                         if (getBlockStateInWorld().isAir()) {
                             return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;
                         }
                     } else {
-                        if (!context.extras().inventorySnapshot().offhandItems().stream().map(ItemStack::getItem).toList().contains(getBlockStateInWorld().getItem())) {
+                        if (!context.extras().inventorySnapshot().getOffhandItems().stream().map(ItemStack::getItem).toList().contains(getBlockStateInWorld().getItem())) {
                             return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;
                         }
                     }

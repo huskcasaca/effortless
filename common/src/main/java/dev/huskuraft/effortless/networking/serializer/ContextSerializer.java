@@ -129,19 +129,20 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         public InventorySnapshot read(NetByteBuf byteBuf) {
             return new InventorySnapshot(
                     byteBuf.readList(NetByteBuf::readItemStack),
-                    byteBuf.readList(NetByteBuf::readItemStack),
-                    byteBuf.readList(NetByteBuf::readItemStack),
                     byteBuf.readVarInt(),
-                    byteBuf.readVarInt()
-            );
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt());
         }
 
         @Override
         public void write(NetByteBuf byteBuf, InventorySnapshot inventorySnapshot) {
             byteBuf.writeList(inventorySnapshot.items(), NetByteBuf::writeItemStack);
-            byteBuf.writeList(inventorySnapshot.armorItems(), NetByteBuf::writeItemStack);
-            byteBuf.writeList(inventorySnapshot.offhandItems(), NetByteBuf::writeItemStack);
             byteBuf.writeVarInt(inventorySnapshot.selected());
+            byteBuf.writeVarInt(inventorySnapshot.bagSize());
+            byteBuf.writeVarInt(inventorySnapshot.armorSize());
+            byteBuf.writeVarInt(inventorySnapshot.offhandSize());
             byteBuf.writeVarInt(inventorySnapshot.hotbarSize());
         }
     }

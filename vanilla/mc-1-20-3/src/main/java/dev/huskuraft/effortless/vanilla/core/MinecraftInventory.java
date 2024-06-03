@@ -1,51 +1,43 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import dev.huskuraft.effortless.api.core.Inventory;
 import dev.huskuraft.effortless.api.core.ItemStack;
 
 public record MinecraftInventory(net.minecraft.world.entity.player.Inventory refs) implements Inventory {
 
     @Override
-    public List<ItemStack> getBagItems() {
-        return refs.items.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
+    public ItemStack getItem(int index) {
+        return new MinecraftContainer(refs).getItem(index);
     }
 
     @Override
-    public List<ItemStack> getArmorItems() {
-        return refs.armor.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
+    public void setItem(int index, ItemStack itemStack) {
+        new MinecraftContainer(refs).setItem(index, itemStack);
     }
 
     @Override
-    public List<ItemStack> getOffhandItems() {
-        return refs.offhand.stream().map(MinecraftItemStack::new).collect(Collectors.toList());
+    public int getBagSize() {
+        return refs.items.size();
     }
 
     @Override
-    public void setBagItem(int index, ItemStack itemStack) {
-        refs.items.set(index, itemStack.reference());
+    public int getArmorSize() {
+        return refs.armor.size();
     }
 
     @Override
-    public void setArmorItem(int index, ItemStack itemStack) {
-        refs.armor.set(index, itemStack.reference());
+    public int getOffhandSize() {
+        return refs.offhand.size();
     }
 
     @Override
-    public void setOffhandItem(int index, ItemStack itemStack) {
-        refs.offhand.set(index, itemStack.reference());
+    public int getHotbarSize() {
+        return net.minecraft.world.entity.player.Inventory.getSelectionSize();
     }
 
     @Override
     public int getSelected() {
         return refs.selected;
-    }
-
-    @Override
-    public int getHotbarSize() {
-        return refs.getSelectionSize();
     }
 
 }
