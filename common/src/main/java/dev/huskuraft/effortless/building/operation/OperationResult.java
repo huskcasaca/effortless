@@ -19,7 +19,7 @@ public abstract class OperationResult {
         );
     }
 
-    public abstract int getSuccessBlocks();
+    public abstract int getAffectedBlockCount();
 
     public abstract List<ItemStack> getItemSummary(ItemSummary itemSummary);
 

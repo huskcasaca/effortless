@@ -45,8 +45,8 @@ public class BatchOperationResult extends OperationResult {
     }
 
     @Override
-    public int getSuccessBlocks() {
-        return getResults().stream().mapToInt(OperationResult::getSuccessBlocks).sum();
+    public int getAffectedBlockCount() {
+        return getResults().stream().mapToInt(OperationResult::getAffectedBlockCount).sum();
     }
 
     public Collection<? extends OperationResult> getResults() {

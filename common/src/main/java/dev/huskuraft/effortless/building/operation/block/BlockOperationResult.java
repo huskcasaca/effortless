@@ -122,14 +122,11 @@ public abstract class BlockOperationResult extends OperationResult {
 
     @Nullable
     public final BlockEntity getBlockEntityForRenderer() {
-        if (getBlockEntityToBreak() != null) {
-            return getBlockEntityToBreak();
-        }
         return getBlockEntityToPlace();
     }
 
     @Override
-    public int getSuccessBlocks() {
+    public int getAffectedBlockCount() {
         return result().success() ? 1 : 0;
     }
 

@@ -27,7 +27,7 @@ public class EmptyOperationResult extends OperationResult {
     }
 
     @Override
-    public int getSuccessBlocks() {
+    public int getAffectedBlockCount() {
         return 0;
     }
 
