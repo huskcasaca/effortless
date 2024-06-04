@@ -309,14 +309,14 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         var result = false;
         if (isActive() && isVisible()) {
             if (radialSelectResponder != null && hoveredSlot != null) {
-                this.animationScaleTicks = 1;
+                this.animationScaleTicks = 1.5f;
                 radialSelectResponder.accept(hoveredSlot, button == 0);
                 playRadialMenuSound();
                 result = true;
             }
 
             if (radialOptionSelectResponder != null && hoveredButton != null) {
-                this.animationScaleTicks = 1;
+                this.animationScaleTicks = 1.5f;
                 radialOptionSelectResponder.accept(hoveredButton, button == 0);
                 playRadialMenuSound();
                 result = true;
