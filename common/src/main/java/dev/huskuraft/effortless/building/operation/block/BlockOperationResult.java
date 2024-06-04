@@ -125,6 +125,11 @@ public abstract class BlockOperationResult extends OperationResult {
         return null;
     }
 
+    @Override
+    public int getSuccessBlocks() {
+        return result().success() ? 1 : 0;
+    }
+
     public BlockOperationResultType result() {
         return result;
     }

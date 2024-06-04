@@ -6,8 +6,7 @@ import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ContainerBlockEntity;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.tag.RecordTag;
-import dev.huskuraft.effortless.building.operation.BlockEntitySummary;
-import dev.huskuraft.effortless.building.operation.BlockStateSummary;
+import dev.huskuraft.effortless.building.operation.ItemSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
@@ -43,8 +42,28 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
     }
 
     @Override
-    public List<BlockState> getBlockStateSummary(BlockStateSummary blockStateSummary) {
-        var blockState = switch (blockStateSummary) {
+    public List<ItemStack> getItemSummary(ItemSummary itemSummary) {
+        switch (itemSummary) {
+            case CONTAINER_CONSUMED -> {
+                switch (result) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                        if (getBlockEntityToPlace() instanceof ContainerBlockEntity containerBlockEntity) {
+                            return containerBlockEntity.getItems();
+                        }
+                    }
+                }
+            }
+            case CONTAINER_DROPPED -> {
+                switch (result) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                        if (getBlockEntityToBreak() instanceof ContainerBlockEntity containerBlockEntity) {
+                            return containerBlockEntity.getItems();
+                        }
+                    }
+                }
+            }
+        }
+        var blockState = switch (itemSummary) {
             case BLOCKS_PLACED -> switch (result) {
                 case SUCCESS, SUCCESS_PARTIAL, CONSUME -> getBlockStateToPlace();
                 default -> null;
@@ -83,37 +102,15 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
                 case FAIL_PLACE_NO_PERMISSION -> getBlockStateToPlace();
                 default -> null;
             };
+            case CONTAINER_CONSUMED -> null;
+            case CONTAINER_DROPPED -> null;
         };
         if (blockState == null) {
             return List.of();
         }
-        return List.of(blockState);
+        return List.of(blockState.getItem().getDefaultStack());
     }
 
-    @Override
-    public List<ItemStack> getBlockEntitySummary(BlockEntitySummary blockEntitySummary) {
-        switch (blockEntitySummary) {
-            case CONTAINER_CONSUMED -> {
-                switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        if (getBlockEntityToPlace() instanceof ContainerBlockEntity containerBlockEntity) {
-                            return containerBlockEntity.getItems();
-                        }
-                    }
-                }
-            }
-            case CONTAINER_DROPPED -> {
-                switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        if (getBlockEntityToBreak() instanceof ContainerBlockEntity containerBlockEntity) {
-                            return containerBlockEntity.getItems();
-                        }
-                    }
-                }
-            }
-        }
-        return List.of();
-    }
 
 
 }

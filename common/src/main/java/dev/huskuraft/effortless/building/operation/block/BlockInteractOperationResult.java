@@ -6,8 +6,7 @@ import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ContainerBlockEntity;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.tag.RecordTag;
-import dev.huskuraft.effortless.building.operation.BlockEntitySummary;
-import dev.huskuraft.effortless.building.operation.BlockStateSummary;
+import dev.huskuraft.effortless.building.operation.ItemSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
 
 public class BlockInteractOperationResult extends BlockOperationResult {
@@ -38,8 +37,28 @@ public class BlockInteractOperationResult extends BlockOperationResult {
     }
 
     @Override
-    public List<BlockState> getBlockStateSummary(BlockStateSummary blockStateSummary) {
-        var blockState = switch (blockStateSummary) {
+    public List<ItemStack> getItemSummary(ItemSummary itemSummary) {
+        switch (itemSummary) {
+            case CONTAINER_CONSUMED -> {
+                switch (result) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                        if (getEntityTagToPlace() instanceof ContainerBlockEntity containerBlockEntity) {
+                            return containerBlockEntity.getItems();
+                        }
+                    }
+                }
+            }
+            case CONTAINER_DROPPED -> {
+                switch (result) {
+                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                        if (getEntityTagToBreak() instanceof ContainerBlockEntity containerBlockEntity) {
+                            return containerBlockEntity.getItems();
+                        }
+                    }
+                }
+            }
+        }
+        var blockState = switch (itemSummary) {
             case BLOCKS_INTERACTED -> switch (result) {
                 case SUCCESS, SUCCESS_PARTIAL, CONSUME -> getBlockStateToBreak();
                 default -> null;
@@ -65,32 +84,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
         if (blockState == null) {
             return List.of();
         }
-        return List.of(blockState);
-    }
-
-    @Override
-    public List<ItemStack> getBlockEntitySummary(BlockEntitySummary blockEntitySummary) {
-        switch (blockEntitySummary) {
-            case CONTAINER_CONSUMED -> {
-                switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        if (getEntityTagToPlace() instanceof ContainerBlockEntity containerBlockEntity) {
-                            return containerBlockEntity.getItems();
-                        }
-                    }
-                }
-            }
-            case CONTAINER_DROPPED -> {
-                switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        if (getEntityTagToBreak() instanceof ContainerBlockEntity containerBlockEntity) {
-                            return containerBlockEntity.getItems();
-                        }
-                    }
-                }
-            }
-        }
-        return List.of();
+        return List.of(blockState.getItem().getDefaultStack());
     }
 
 

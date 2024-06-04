@@ -4,8 +4,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
 import dev.huskuraft.effortless.api.networking.Packet;
-import dev.huskuraft.effortless.building.operation.BlockEntitySummary;
-import dev.huskuraft.effortless.building.operation.BlockStateSummary;
+import dev.huskuraft.effortless.building.operation.ItemSummary;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.OperationTooltip;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
@@ -29,8 +28,7 @@ public record PlayerOperationTooltipPacket(
                     new OperationTooltip(
                             byteBuf.readEnum(OperationTooltip.Type.class),
                             byteBuf.read(new ContextSerializer()),
-                            byteBuf.readMap((buffer1) -> buffer1.readEnum(BlockStateSummary.class), (buffer1) -> buffer1.readMap((NetByteBuf::readBlockState), NetByteBuf::readVarInt)),
-                            byteBuf.readMap((buffer1) -> buffer1.readEnum(BlockEntitySummary.class), (buffer1) -> buffer1.readList((NetByteBuf::readItemStack)))
+                            byteBuf.readMap((buffer1) -> buffer1.readEnum(ItemSummary.class), (buffer1) -> buffer1.readList((NetByteBuf::readItemStack)))
                     ));
 
         }
@@ -39,8 +37,7 @@ public record PlayerOperationTooltipPacket(
         public void write(NetByteBuf byteBuf, PlayerOperationTooltipPacket packet) {
             byteBuf.writeEnum(packet.operationTooltip().type());
             byteBuf.write(packet.operationTooltip().context(), new ContextSerializer());
-            byteBuf.writeMap(packet.operationTooltip().blockStateSummary(), NetByteBuf::writeEnum, ((buffer1, blockStateMap) -> buffer1.writeMap(blockStateMap, NetByteBuf::writeBlockState, NetByteBuf::writeVarInt)));
-            byteBuf.writeMap(packet.operationTooltip().blockEntitySummary(), NetByteBuf::writeEnum, ((buffer1, blockStateMap) -> buffer1.writeList(blockStateMap, NetByteBuf::writeItemStack)));
+            byteBuf.writeMap(packet.operationTooltip().itemSummary(), NetByteBuf::writeEnum, ((buffer1, blockStateMap) -> buffer1.writeList(blockStateMap, NetByteBuf::writeItemStack)));
         }
 
     }

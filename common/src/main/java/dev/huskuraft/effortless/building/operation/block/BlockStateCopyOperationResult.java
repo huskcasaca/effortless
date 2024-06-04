@@ -6,8 +6,7 @@ import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.building.clipboard.BlockSnapshot;
-import dev.huskuraft.effortless.building.operation.BlockEntitySummary;
-import dev.huskuraft.effortless.building.operation.BlockStateSummary;
+import dev.huskuraft.effortless.building.operation.ItemSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
@@ -39,8 +38,8 @@ public class BlockStateCopyOperationResult extends BlockOperationResult {
     }
 
     @Override
-    public List<BlockState> getBlockStateSummary(BlockStateSummary blockStateSummary) {
-        var blockState = switch (blockStateSummary) {
+    public List<ItemStack> getItemSummary(ItemSummary itemSummary) {
+        var blockState = switch (itemSummary) {
             case BLOCKS_COPIED -> switch (result) {
                 case SUCCESS, SUCCESS_PARTIAL, CONSUME -> getBlockStateToBreak();
                 default -> null;
@@ -62,12 +61,7 @@ public class BlockStateCopyOperationResult extends BlockOperationResult {
         if (blockState == null) {
             return List.of();
         }
-        return List.of(blockState);
-    }
-
-    @Override
-    public List<ItemStack> getBlockEntitySummary(BlockEntitySummary blockEntitySummary) {
-        return List.of();
+        return List.of(blockState.getItem().getDefaultStack());
     }
 
 }

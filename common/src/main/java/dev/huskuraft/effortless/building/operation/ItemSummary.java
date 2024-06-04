@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building.operation;
 
-public enum BlockStateSummary {
+public enum ItemSummary {
     BLOCKS_PLACED,
     BLOCKS_DESTROYED,
     BLOCKS_INTERACTED,
@@ -15,7 +15,10 @@ public enum BlockStateSummary {
     BLOCKS_TOOLS_INSUFFICIENT,
 
     BLOCKS_BLACKLISTED,
-    BLOCKS_NO_PERMISSION;
+    BLOCKS_NO_PERMISSION,
+
+    CONTAINER_CONSUMED,
+    CONTAINER_DROPPED;
 
     public boolean isSuccess() {
         return this == BLOCKS_PLACED || this == BLOCKS_DESTROYED || this == BLOCKS_INTERACTED;

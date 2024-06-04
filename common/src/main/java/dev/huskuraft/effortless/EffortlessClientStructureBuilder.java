@@ -46,9 +46,8 @@ import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.clipboard.ClipboardAction;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
-import dev.huskuraft.effortless.building.operation.BlockEntitySummary;
-import dev.huskuraft.effortless.building.operation.BlockStateSummary;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
+import dev.huskuraft.effortless.building.operation.ItemSummary;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.OperationTooltip;
 import dev.huskuraft.effortless.building.operation.batch.BatchOperationResult;
@@ -489,7 +488,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
                 if (operationTooltip.context().buildMode() == BuildMode.DISABLED) { // nothing
                     var entries = new ArrayList<>();
-                    entries.add(operationTooltip.blockStateItemStackSummary().values().stream().flatMap(List::stream).toList());
+                    entries.add(operationTooltip.itemSummary().values().stream().flatMap(List::stream).toList());
                     entries.add(Text.translate("effortless.history." + operationTooltip.type().getName()));
                     entries.add(operationTooltip.context().buildMode().getIcon());
                     getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1024 + 1, entries, true);
@@ -685,11 +684,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
         var entries = new ArrayList<>();
 
-        var blockStateSummary = tooltip.blockStateItemStackSummary();
-        var blockEntitySummary = tooltip.blockEntitySummary();
-        if (!blockStateSummary.isEmpty() || !blockEntitySummary.isEmpty()) {
+        var blockStateSummary = tooltip.itemSummary();
+        if (!blockStateSummary.isEmpty()) {
             var allProducts = new ArrayList<ItemStack>();
-            for (var summary : BlockStateSummary.values()) {
+            for (var summary : ItemSummary.values()) {
                 var items = blockStateSummary.getOrDefault(summary, List.of());
                 if (items.isEmpty()) {
                     continue;
@@ -707,18 +705,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     case BLOCKS_TOOLS_INSUFFICIENT -> ChatFormatting.GRAY;
                     case BLOCKS_BLACKLISTED -> ChatFormatting.GRAY;
                     case BLOCKS_NO_PERMISSION -> ChatFormatting.GRAY;
-                };
-                items = items.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
-                entries.add(items);
-                entries.add(Text.translate("effortless.build.summary." + summary.name().toLowerCase(Locale.ROOT)).withStyle(color));
-                allProducts.addAll(items);
-            }
-            for (var summary : BlockEntitySummary.values()) {
-                var items = ItemStackUtils.flattenStack(blockEntitySummary.getOrDefault(summary, List.of()));
-                if (items.isEmpty()) {
-                    continue;
-                }
-                var color = switch (summary) {
+
                     case CONTAINER_CONSUMED -> ChatFormatting.WHITE;
                     case CONTAINER_DROPPED -> ChatFormatting.WHITE;
                 };
