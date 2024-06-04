@@ -23,7 +23,7 @@ public class BlockBoundingBoxOutline extends Outline {
     }
 
     public void renderBB(Renderer renderer, BoundingBox3d bb) {
-        var projectedView = renderer.camera().position();
+        var projectedView = renderer.getCamera().position();
         var noCull = bb.contains(projectedView);
         bb = bb.inflate(noCull ? -1 / 128d : 1 / 128d);
         noCull |= params.disableCull;
@@ -77,7 +77,6 @@ public class BlockBoundingBoxOutline extends Outline {
                 direction == params.getHighlightedFace() && params.highlightedFaceTexture.isPresent() ? 1 : 0.5f;
 
         var renderLayer = OutlineRenderLayers.outlineTranslucent(faceTexture, !noCull);
-        renderer.pushLayer();
 
         var axis = direction.getAxis();
         var uDiff = p2.sub(p1);
@@ -88,7 +87,6 @@ public class BlockBoundingBoxOutline extends Outline {
 
         params.alpha = alphaBefore;
 
-        renderer.popLayer();
     }
 
     public void setBounds(BoundingBox3d bb) {

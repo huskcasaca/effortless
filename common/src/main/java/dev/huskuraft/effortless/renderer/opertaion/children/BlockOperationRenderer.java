@@ -124,13 +124,13 @@ public class BlockOperationRenderer implements OperationRenderer {
         }
 
         var scale = 129f / 128f;
-        var camera = renderer.camera().position();
+        var camera = renderer.getCamera().position();
 
         renderer.pushPose();
         renderer.translate(blockPosition.toVector3d().sub(camera));
         renderer.translate((scale - 1) / -2f, (scale - 1) / -2f, (scale - 1) / -2f);
         renderer.scale(scale, scale, scale);
-        renderer.renderBlockInWorld(BlockRenderLayers.block(color.getRGB()), world, blockPosition, blockState);
+        renderer.renderBlockState(BlockRenderLayers.block(color.getRGB()), world, blockPosition, blockState);
         renderer.popPose();
 
     }

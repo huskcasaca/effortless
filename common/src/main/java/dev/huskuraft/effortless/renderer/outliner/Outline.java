@@ -43,7 +43,7 @@ public abstract class Outline {
     }
 
     public void renderAACuboidLine(Renderer renderer, Vector3d start, Vector3d end) {
-        var camera = renderer.camera().position();
+        var camera = renderer.getCamera().position();
         start = start.sub(camera);
         end = end.sub(camera);
         var lineWidth = getParams().getLineWidth();

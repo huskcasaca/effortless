@@ -21,7 +21,7 @@ import dev.huskuraft.effortless.api.math.Matrix4f;
 import dev.huskuraft.effortless.api.math.Quaternionf;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector4f;
-import dev.huskuraft.effortless.api.platform.Client;
+import dev.huskuraft.effortless.api.platform.ClientEntrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.api.texture.SpriteScaling;
 import dev.huskuraft.effortless.api.texture.TextureSprite;
@@ -35,25 +35,17 @@ public abstract class Renderer {
         return new Color(0f, 0f, 0f, 0.95f * alpha).getRGB();
     }
 
-    public abstract Client client();
-
-    public Window window() {
-        return client().getWindow();
+    public final Window getWindow() {
+        return ClientEntrance.getInstance().getClient().getWindow();
     }
 
-    public Camera camera() {
-        return client().getCamera();
+    public final Camera getCamera() {
+        return ClientEntrance.getInstance().getClient().getCamera();
     }
 
     public abstract MatrixStack matrixStack();
 
     public abstract BufferSource bufferSource();
-
-    public void pushLayer() {
-    }
-
-    public void popLayer() {
-    }
 
     public final void pushPose() {
         matrixStack().push();
@@ -137,8 +129,8 @@ public abstract class Renderer {
         if (rect == null) {
             disableScissor();
         } else {
-            var height = window().getHeight();
-            var scale = window().getGuiScaledFactor();
+            var height = getWindow().getHeight();
+            var scale = getWindow().getGuiScaledFactor();
             var d1 = rect.left() * scale;
             var d2 = height - rect.bottom() * scale;
             var d3 = rect.width() * scale;
@@ -466,7 +458,7 @@ public abstract class Renderer {
 
     public abstract void renderTooltip(Typeface typeface, List<Text> list, int x, int y);
 
-    public abstract void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState);
+    public abstract void renderBlockState(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState);
 
     private static class ScissorStack {
 
