@@ -2,8 +2,8 @@ package dev.huskuraft.effortless.vanilla.tag;
 
 import java.util.stream.Stream;
 
-import dev.huskuraft.effortless.api.tag.Tag;
 import dev.huskuraft.effortless.api.tag.ListTag;
+import dev.huskuraft.effortless.api.tag.Tag;
 
 public record MinecraftListTag(net.minecraft.nbt.ListTag refs) implements ListTag {
 
@@ -16,7 +16,6 @@ public record MinecraftListTag(net.minecraft.nbt.ListTag refs) implements ListTa
     public String getAsString() {
         return new MinecraftTag(refs).getAsString();
     }
-
 
     @Override
     public boolean addTag(int index, Tag tag) {

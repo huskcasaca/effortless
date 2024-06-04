@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.tag;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 
 import dev.huskuraft.effortless.api.platform.TagFactory;
@@ -11,7 +11,7 @@ public interface ListTag extends Tag {
         return TagFactory.getInstance().newList();
     }
 
-    static ListTag of(Collection<Tag> tags) {
+    static ListTag of(List<? extends Tag> tags) {
         var tag = TagFactory.getInstance().newList();
         tags.forEach(tag::addTag);
         return tag;

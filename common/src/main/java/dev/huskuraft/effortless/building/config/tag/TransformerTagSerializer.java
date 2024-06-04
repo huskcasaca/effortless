@@ -6,10 +6,10 @@ import java.util.UUID;
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.Items;
-import dev.huskuraft.effortless.api.tag.Tag;
 import dev.huskuraft.effortless.api.tag.ListTag;
-import dev.huskuraft.effortless.api.tag.StringTag;
 import dev.huskuraft.effortless.api.tag.RecordTag;
+import dev.huskuraft.effortless.api.tag.StringTag;
+import dev.huskuraft.effortless.api.tag.Tag;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
 import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.pattern.Transformer;
@@ -107,9 +107,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
 
         @Override
         public Tag encode(PositionType[] positionTypeList) {
-            var tag = ListTag.newList();
-            Arrays.stream(positionTypeList).map(StringTag::of).forEach(tag::addTag);
-            return tag;
+            return ListTag.of(Arrays.stream(positionTypeList).map(StringTag::of).toList());
         }
 
         @Override

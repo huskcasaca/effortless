@@ -28,18 +28,6 @@ public class BlockStateUpdateOperation extends BlockOperation {
             Storage storage,
             BlockInteraction interaction,
             BlockState blockState,
-            Extras extras
-    ) {
-        super(world, player, context, storage, interaction, blockState, null, extras);
-    }
-
-    public BlockStateUpdateOperation(
-            World world,
-            Player player,
-            Context context,
-            Storage storage,
-            BlockInteraction interaction,
-            BlockState blockState,
             RecordTag blockTag,
             Extras extras
     ) {

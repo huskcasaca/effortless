@@ -18,6 +18,7 @@ import dev.huskuraft.effortless.api.core.fluid.LiquidPlaceable;
 import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSound;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 
 public record MinecraftBlock(
@@ -99,5 +100,13 @@ public record MinecraftBlock(
     @Override
     public Item asItem() {
         return MinecraftItem.ofNullable(refs.asItem());
+    }
+
+    @Override
+    public BlockEntity getEntity(BlockPosition blockPosition, BlockState blockState) {
+        if (refs instanceof EntityBlock entityBlock) {
+            return MinecraftBlockEntity.ofNullable(entityBlock.newBlockEntity(MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockState.reference()));
+        }
+        return null;
     }
 }

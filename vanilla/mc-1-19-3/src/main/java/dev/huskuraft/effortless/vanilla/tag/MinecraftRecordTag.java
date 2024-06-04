@@ -1,7 +1,9 @@
 package dev.huskuraft.effortless.vanilla.tag;
 
-import dev.huskuraft.effortless.api.tag.Tag;
+import java.util.Set;
+
 import dev.huskuraft.effortless.api.tag.RecordTag;
+import dev.huskuraft.effortless.api.tag.Tag;
 import net.minecraft.nbt.CompoundTag;
 
 public record MinecraftRecordTag(CompoundTag refs) implements RecordTag {
@@ -18,6 +20,11 @@ public record MinecraftRecordTag(CompoundTag refs) implements RecordTag {
     @Override
     public String getAsString() {
         return new MinecraftTag(refs).getAsString();
+    }
+
+    @Override
+    public Set<String> keySet() {
+        return refs.getAllKeys();
     }
 
     @Override

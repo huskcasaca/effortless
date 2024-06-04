@@ -15,4 +15,9 @@ public record MinecraftContainer(net.minecraft.world.Container refs) implements 
         refs.setItem(index, itemStack.reference());
     }
 
+    @Override
+    public int getContainerSize() {
+        return refs.getContainerSize();
+    }
+
 }

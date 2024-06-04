@@ -3,8 +3,12 @@ package dev.huskuraft.effortless.api.tag;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
@@ -21,6 +25,13 @@ public interface RecordTag extends Tag {
         return TagFactory.getInstance().newRecord();
     }
 
+    static RecordTag of(Map<String, Tag> tags) {
+        var tag = TagFactory.getInstance().newRecord();
+        tags.forEach(tag::putTag);
+        return tag;
+    }
+
+    Set<String> keySet();
 
     Tag getTag(String key);
 
@@ -28,6 +39,9 @@ public interface RecordTag extends Tag {
 
     void remove(String key);
 
+    default Map<String, Tag> getTags() {
+        return keySet().stream().collect(Collectors.toMap(Function.identity(), this::getTag));
+    }
 
     default String getString(String key) {
         return getTag(key).asString().getAsString();

@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Items;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
@@ -48,12 +49,12 @@ public class BatchBuildSession implements BuildSession {
         return builder;
     }
 
-    protected BlockOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction, BlockState blockState) {
-        return new BlockStateUpdateOperation(world, player, context, storage, interaction, blockState, context.extras().extras());
+    protected BlockOperation createBlockPlaceOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction, BlockState blockState, RecordTag entityTag) {
+        return new BlockStateUpdateOperation(world, player, context, storage, interaction, blockState, entityTag, context.extras().extras());
     }
 
     protected BlockOperation createBlockBreakOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
-        return new BlockStateUpdateOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState(), context.extras().extras());
+        return new BlockStateUpdateOperation(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState(), null, context.extras().extras());
     }
 
     protected BlockOperation createBlockInteractOperationFromHit(World world, Player player, Context context, Storage storage, BlockInteraction interaction) {
@@ -72,7 +73,7 @@ public class BatchBuildSession implements BuildSession {
             case BREAK_BLOCK ->
                     context.collectInteractions().map(interaction -> createBlockBreakOperationFromHit(world, player, context, storage, interaction));
             case PLACE_BLOCK ->
-                    context.collectInteractions().map(interaction -> createBlockPlaceOperationFromHit(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState()));
+                    context.collectInteractions().map(interaction -> createBlockPlaceOperationFromHit(world, player, context, storage, interaction, Items.AIR.item().getBlock().getDefaultBlockState(), null));
             case INTERACT_BLOCK ->
                     context.collectInteractions().map(interaction -> createBlockInteractOperationFromHit(world, player, context, storage, interaction));
             case COPY_STRUCTURE ->
@@ -80,7 +81,7 @@ public class BatchBuildSession implements BuildSession {
             case PASTE_STRUCTURE -> {
                 yield context.clipboard().blockSnapshots().stream().map(blockSnapshot -> {
                     var interaction = context.getInteraction(0).withBlockPosition(context.getInteraction(0).blockPosition().add(blockSnapshot.relativePosition()));
-                    return createBlockPlaceOperationFromHit(world, player, context, storage, interaction, blockSnapshot.blockState());
+                    return createBlockPlaceOperationFromHit(world, player, context, storage, interaction, blockSnapshot.blockState(), blockSnapshot.entityTag());
                 });
             }
         });
