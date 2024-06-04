@@ -122,7 +122,10 @@ public abstract class BlockOperationResult extends OperationResult {
 
     @Nullable
     public final BlockEntity getBlockEntityForRenderer() {
-        return null;
+        if (getBlockEntityToBreak() != null) {
+            return getBlockEntityToBreak();
+        }
+        return getBlockEntityToPlace();
     }
 
     @Override

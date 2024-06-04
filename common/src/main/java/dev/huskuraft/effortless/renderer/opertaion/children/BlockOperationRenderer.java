@@ -104,13 +104,18 @@ public class BlockOperationRenderer implements OperationRenderer {
         var player = operation.getPlayer();
         var blockPosition = operation.getBlockPosition();
         var blockState = getResult().getBlockStateForRenderer();
-        if (world == null || blockState == null || player == null) {
+        var blockEntity = getResult().getBlockEntityForRenderer();
+        if (world == null || player == null) {
             return;
         }
 
-//        if (item instanceof BlockItem blockItem && itemStack.is(item)) {
-//            blockState = blockItem.updateBlockStateFromTag(blockPosition, level, itemStack, blockState);
-//        }
+        var scale = 129f / 128f;
+        var camera = renderer.getCamera().position();
+
+        var distance = player.getPosition().distance(blockPosition.toVector3d());
+        if (distance > renderContext.maxRenderDistance()) {
+            return;
+        }
 
         var color = getColorByOpResult(getResult());
 
@@ -118,19 +123,18 @@ public class BlockOperationRenderer implements OperationRenderer {
             return;
         }
 
-        var distance = player.getPosition().distance(blockPosition.toVector3d());
-        if (distance > renderContext.maxRenderDistance()) {
-            return;
-        }
-
-        var scale = 129f / 128f;
-        var camera = renderer.getCamera().position();
-
         renderer.pushPose();
         renderer.translate(blockPosition.toVector3d().sub(camera));
-        renderer.translate((scale - 1) / -2f, (scale - 1) / -2f, (scale - 1) / -2f);
-        renderer.scale(scale, scale, scale);
-        renderer.renderBlockState(BlockRenderLayers.block(color.getRGB()), world, blockPosition, blockState);
+        if (blockEntity != null) {
+            renderer.renderBlockEntity(BlockRenderLayers.block(color.getRGB()), world, blockPosition, blockEntity);
+        }
+
+        if (blockState != null) {
+            renderer.translate((scale - 1) / -2f, (scale - 1) / -2f, (scale - 1) / -2f);
+            renderer.scale(scale, scale, scale);
+            renderer.renderBlockState(BlockRenderLayers.block(color.getRGB()), world, blockPosition, blockState);
+        }
+
         renderer.popPose();
 
     }

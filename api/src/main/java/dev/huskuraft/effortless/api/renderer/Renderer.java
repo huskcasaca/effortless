@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Direction;
@@ -459,6 +460,8 @@ public abstract class Renderer {
     public abstract void renderTooltip(Typeface typeface, List<Text> list, int x, int y);
 
     public abstract void renderBlockState(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState);
+
+    public abstract void renderBlockEntity(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockEntity blockEntity);
 
     private static class ScissorStack {
 
