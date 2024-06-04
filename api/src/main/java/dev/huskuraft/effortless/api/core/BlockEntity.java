@@ -17,7 +17,7 @@ public interface BlockEntity extends PlatformReference {
 
     default BlockEntity copy() {
         var tag = getTag();
-        var newBlockEntity = getBlockState().getBlock().getEntity(getBlockPosition(), getBlockState());
+        var newBlockEntity = getBlockState().getEntity(getBlockPosition());
         if (newBlockEntity != null) {
             newBlockEntity.setTag(tag);
         }

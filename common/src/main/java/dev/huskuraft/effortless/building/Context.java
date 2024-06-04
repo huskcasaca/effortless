@@ -42,6 +42,10 @@ public record Context(
         Extras extras
 ) {
 
+    public boolean fillContainers() {
+        return true;
+    }
+
     public boolean useProperTool() {
         return configs().constraintConfig().useProperToolsOnly();
     }

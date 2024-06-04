@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.pattern;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
@@ -48,6 +49,10 @@ public record MirrorContext(
             return blockState;
         }
         return blockState.mirror(axis);
+    }
+
+    public BlockEntity mirror(BlockEntity blockEntity) {
+        return blockEntity;
     }
 
     public Extras mirror(Extras extras) {

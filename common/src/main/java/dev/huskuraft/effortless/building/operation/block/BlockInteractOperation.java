@@ -93,7 +93,7 @@ public class BlockInteractOperation extends BlockOperation {
     public BlockInteractOperationResult commit() {
         var entityExtrasBeforeOp = Extras.get(getPlayer());
         var blockStateBeforeOp = getBlockStateInWorld();
-        var blockEntityBeforeOp = getBlockEntityInWorld();
+        var blockEntityBeforeOp = getBlockEntityInWorldCopied();
         Extras.set(getPlayer(), getExtras());
         var result = interactBlock();
         Extras.set(getPlayer(), entityExtrasBeforeOp);
@@ -102,7 +102,7 @@ public class BlockInteractOperation extends BlockOperation {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
         var blockStateAfterOp = getBlockStateInWorld();
-        var blockEntityAfterOp = getBlockEntityInWorld();
+        var blockEntityAfterOp = getBlockEntityInWorldCopied();
         return new BlockInteractOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp, blockEntityBeforeOp, blockEntityAfterOp);
     }
 

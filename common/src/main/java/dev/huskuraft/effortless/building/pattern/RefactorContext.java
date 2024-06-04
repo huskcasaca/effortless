@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.pattern;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Item;
@@ -22,6 +23,10 @@ public class RefactorContext {
             return null;
         }
         return item.getBlock().getBlockState(player, blockInteraction);
+    }
+
+    public BlockEntity refactor(BlockEntity blockEntity, BlockInteraction blockInteraction) {
+        return blockEntity;
     }
 
 }

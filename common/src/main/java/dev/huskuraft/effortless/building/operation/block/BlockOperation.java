@@ -120,11 +120,11 @@ public abstract class BlockOperation implements Operation {
     }
 
     public BlockEntity getBlockEntityInWorld() {
-        var blockEntity = getWorld().getBlockEntity(getBlockPosition());
-        if (blockEntity != null) {
-            blockEntity = blockEntity.copy();
-        }
-        return blockEntity;
+        return getWorld().getBlockEntity(getBlockPosition());
+    }
+
+    public BlockEntity getBlockEntityInWorldCopied() {
+        return getWorld().getBlockEntityCopied(getBlockPosition());
     }
 
     public enum Type {

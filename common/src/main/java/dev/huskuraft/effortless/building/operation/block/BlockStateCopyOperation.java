@@ -22,7 +22,7 @@ public class BlockStateCopyOperation extends BlockOperation {
             BlockInteraction interaction,
             Extras extras
     ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), extras);
+        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), world.getBlockEntityCopied(interaction.getBlockPosition()) , extras);
     }
 
     protected BlockOperationResultType saveBlock() {

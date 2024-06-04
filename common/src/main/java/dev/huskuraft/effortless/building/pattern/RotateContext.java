@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.pattern;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
@@ -114,6 +115,10 @@ public record RotateContext(
             case Y -> BlockPosition.at(center.add(blockPosition.getCenter().sub(center).rotY(angle)));
             case Z -> BlockPosition.at(center.add(blockPosition.getCenter().sub(center).rotZ(angle)));
         };
+    }
+
+    public BlockEntity rotate(BlockEntity blockEntity) {
+        return blockEntity;
     }
 
     public BlockState rotate(BlockState blockState) {
