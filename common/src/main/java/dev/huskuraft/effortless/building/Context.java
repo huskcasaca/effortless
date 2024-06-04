@@ -18,6 +18,7 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
+import dev.huskuraft.effortless.building.clipboard.Snapshot;
 import dev.huskuraft.effortless.building.config.BuilderConfig;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
@@ -206,7 +207,7 @@ public record Context(
     }
 
     public Context withEmptyClipboard() {
-        return new Context(id, buildState, buildType, interactions, structure, clipboard.withBlockSnapshots(List.of()), pattern, replace, configs, extras);
+        return new Context(id, buildState, buildType, interactions, structure, clipboard.withSnapshot(Snapshot.EMPTY), pattern, replace, configs, extras);
     }
 
     public Context withPattern(Pattern pattern) {
@@ -281,7 +282,7 @@ public record Context(
 
     public Vector3i getInteractionBox() {
         if (buildState() == BuildState.PASTE_STRUCTURE) {
-            return clipboard().box();
+            return clipboard().snapshot().box();
         }
         if (interactions().isEmpty() || interactions().isMissing()) {
             return Vector3i.ZERO;
@@ -291,7 +292,7 @@ public record Context(
 
     public int getVolume() {
         if (buildState() == BuildState.PASTE_STRUCTURE) {
-            return (int) (clipboard().volume() * pattern().volumeMultiplier());
+            return (int) (clipboard().snapshot().volume() * pattern().volumeMultiplier());
         }
         return (int) (structure().volume(this) * pattern().volumeMultiplier());
     }

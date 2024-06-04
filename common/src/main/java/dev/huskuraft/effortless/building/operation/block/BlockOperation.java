@@ -59,6 +59,7 @@ public abstract class BlockOperation implements Operation {
         this.blockState = world.getBlockState(interaction.getBlockPosition());
         var blockEntity = world.getBlockEntity(interaction.getBlockPosition());
         if (blockEntity != null) {
+            // TODO: 4/6/24 clear position & id tags in 1.17.1
             this.entityTag = blockEntity.getTag();
         } else {
             this.entityTag = null;

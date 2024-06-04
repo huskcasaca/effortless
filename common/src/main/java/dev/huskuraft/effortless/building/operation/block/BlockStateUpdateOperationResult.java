@@ -46,7 +46,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
         switch (itemSummary) {
             case CONTAINER_CONSUMED -> {
                 switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                    case SUCCESS, CONSUME -> {
                         if (getBlockEntityToPlace() instanceof ContainerBlockEntity containerBlockEntity) {
                             return containerBlockEntity.getItems();
                         }
@@ -55,7 +55,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             }
             case CONTAINER_DROPPED -> {
                 switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                    case SUCCESS, CONSUME -> {
                         if (getBlockEntityToBreak() instanceof ContainerBlockEntity containerBlockEntity) {
                             return containerBlockEntity.getItems();
                         }

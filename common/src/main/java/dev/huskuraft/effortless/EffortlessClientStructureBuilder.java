@@ -43,7 +43,8 @@ import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.SingleCommand;
 import dev.huskuraft.effortless.building.StructureBuilder;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
-import dev.huskuraft.effortless.building.clipboard.ClipboardAction;
+import dev.huskuraft.effortless.building.clipboard.Snapshot;
+import dev.huskuraft.effortless.building.clipboard.SnapshotTransform;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
@@ -97,7 +98,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
             var previewContext = finalizedContext.withBuildType(BuildType.BUILD_CLIENT);
-            var result = new BatchBuildSession(this, player, previewContext).commit();
+            var result = new BatchBuildSession(getEntrance(), player, previewContext).commit();
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(getPlayer().getId(), finalizedContext));
             showBuildContextResult(context.id(), 1024, player, context, result);
 
@@ -249,7 +250,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var context = getContext(player).finalize(player, BuildStage.INTERACT);
         if (context.isInteractionEmpty()) {
             if (context.clipboard().enabled()) {
-                if (context.clipboard().blockSnapshots().isEmpty()) {
+                if (context.clipboard().isEmpty()) {
                     context = context.withBuildState(BuildState.COPY_STRUCTURE);
                 } else {
                     context = context.withBuildState(BuildState.PASTE_STRUCTURE);
@@ -393,7 +394,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 }
                 return context.newInteraction();
             }
-            if (context.buildState() == BuildState.IDLE && state == BuildState.COPY_STRUCTURE && !context.clipboard().isEmpty()) {
+            if (context.buildState() == BuildState.IDLE && state == BuildState.COPY_STRUCTURE && !context.clipboard().snapshot().isEmpty()) {
                 player.sendMessage(Effortless.getSystemMessage(Text.translate("effortless.message.building.server.structure_pasting_canceled")));
 //                player.sendClientMessage(Text.translate("effortless.message.building.client.structure_pasting_canceled"), true);
                 return context.newInteraction().withEmptyClipboard();
@@ -462,7 +463,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         if (context.isBuildType()) {
             return; // handle on server
         }
-        var result = new BatchBuildSession(this, player, context).commit();
+        var result = new BatchBuildSession(getEntrance(), player, context).commit();
 
         showBuildContextResult(player.getId(), 1024, player, context, result);
         showBuildTooltip(context.id(), 1024, player, result);
@@ -473,8 +474,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     }
 
-    public void updateClipboard(Player player, ClipboardAction action) {
-        updateContext(player, context -> context.withClipboard(context.clipboard().update(action)));
+    public void onSnapshotCaptured(Player player, Snapshot snapshot) {
+        updateContext(player, context -> context.withClipboard(context.clipboard().withSnapshot(snapshot)));
+    }
+
+    public void updateClipboard(Player player, SnapshotTransform action) {
+        updateContext(player, context -> context.withClipboard(context.clipboard().withSnapshot(context.clipboard().snapshot().update(action))));
     }
 
     public void onHistoryResultReceived(Player player, OperationTooltip operationTooltip) {
@@ -574,7 +579,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             showBuildContextResult(player.getId(), 0, player, context, null);
             showBuildTooltip(player.getId(), 0, player, OperationTooltip.build(context));
         } else {
-            var result = new BatchBuildSession(this, player, context.withBuildType(BuildType.PREVIEW)).commit();
+            var result = new BatchBuildSession(getEntrance(), player, context.withBuildType(BuildType.PREVIEW)).commit();
             showBuildContextResult(player.getId(), 0, player, context, result);
             showBuildTooltip(player.getId(), 0, player, result.getTooltip());
         }

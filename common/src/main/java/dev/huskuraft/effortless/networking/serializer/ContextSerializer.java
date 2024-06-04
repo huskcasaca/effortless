@@ -7,7 +7,6 @@ import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.InventorySnapshot;
-import dev.huskuraft.effortless.building.clipboard.BlockSnapshot;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.BuilderConfig;
 import dev.huskuraft.effortless.building.operation.block.Extras;
@@ -62,32 +61,14 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         public Clipboard read(NetByteBuf byteBuf) {
             return new Clipboard(
                     byteBuf.readBoolean(),
-                    byteBuf.readList(new BlockSnapshotSerializer())
+                    byteBuf.read(new SnapshotSerializer())
             );
         }
 
         @Override
         public void write(NetByteBuf byteBuf, Clipboard clipboard) {
             byteBuf.writeBoolean(clipboard.enabled());
-            byteBuf.writeList(clipboard.blockSnapshots(), new BlockSnapshotSerializer());
-        }
-    }
-
-    public static class BlockSnapshotSerializer implements NetByteBufSerializer<BlockSnapshot> {
-        @Override
-        public BlockSnapshot read(NetByteBuf byteBuf) {
-            return new BlockSnapshot(
-                    byteBuf.read(new BlockPositionSerializer()),
-                    byteBuf.readNullable(NetByteBuf::readBlockState),
-                    byteBuf.readNullable(NetByteBuf::readRecordTag)
-            );
-        }
-
-        @Override
-        public void write(NetByteBuf byteBuf, BlockSnapshot blockSnapshot) {
-            byteBuf.write(blockSnapshot.relativePosition(), new BlockPositionSerializer());
-            byteBuf.writeNullable(blockSnapshot.blockState(), NetByteBuf::writeBlockState);
-            byteBuf.writeNullable(blockSnapshot.entityTag(), NetByteBuf::writeRecordTag);
+            byteBuf.write(clipboard.snapshot(), new SnapshotSerializer());
         }
     }
 

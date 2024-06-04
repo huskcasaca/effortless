@@ -65,16 +65,18 @@ public class BlockStateCopyOperation extends BlockOperation {
     public BlockStateCopyOperationResult commit() {
         var entityExtrasBeforeOp = Extras.get(getPlayer());
         var blockStateBeforeOp = getBlockStateInWorld();
+        var entityTagBeforeOp = getEntityTagInWorld();
         Extras.set(getPlayer(), getExtras());
         var result = saveBlock();
         Extras.set(getPlayer(), entityExtrasBeforeOp);
         var blockStateAfterOp = getBlockStateInWorld();
+        var entityTagAfterOp = getEntityTagInWorld();
 
         if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
 
-        return new BlockStateCopyOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp);
+        return new BlockStateCopyOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp, entityTagBeforeOp, entityTagAfterOp);
     }
 
     @Override

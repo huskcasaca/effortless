@@ -129,7 +129,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
             Effortless.LOGGER.debug("Received build request from %s".formatted(player.getProfile().getName()));
             getEntrance().getChannel().sendPacket(
                     PlayerOperationTooltipPacket.build(
-                            getOperationResultStack(player).pushSession(new BatchBuildSession(this, player, context))
+                            getOperationResultStack(player).pushSession(new BatchBuildSession(getEntrance(), player, context))
                     ), player
             );
         }

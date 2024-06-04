@@ -41,7 +41,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
         switch (itemSummary) {
             case CONTAINER_CONSUMED -> {
                 switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                    case SUCCESS, CONSUME -> {
                         if (getEntityTagToPlace() instanceof ContainerBlockEntity containerBlockEntity) {
                             return containerBlockEntity.getItems();
                         }
@@ -50,7 +50,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
             }
             case CONTAINER_DROPPED -> {
                 switch (result) {
-                    case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
+                    case SUCCESS, CONSUME -> {
                         if (getEntityTagToBreak() instanceof ContainerBlockEntity containerBlockEntity) {
                             return containerBlockEntity.getItems();
                         }

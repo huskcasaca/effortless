@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.building.clipboard;
 
-public enum ClipboardAction {
+public enum SnapshotTransform {
     ROTATE_X,
     ROTATE_Y,
     ROTATE_Z,

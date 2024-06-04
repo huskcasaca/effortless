@@ -30,7 +30,7 @@ public class ItemStackUtils {
         var result = new ArrayList<ItemStack>();
         for (var stack : map.values()) {
             var count = stack.getCount();
-            var maxStackSize = stack.getMaxStackSize();
+            var maxStackSize = Math.max(64, stack.getMaxStackSize());
             while (count > 0) {
                 var newStack = stack.copy();
                 newStack.setCount(MathUtils.min(count, maxStackSize));

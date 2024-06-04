@@ -14,6 +14,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerOperationTooltipPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerSnapshotCapturePacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 
@@ -41,6 +42,7 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         registerPacket(PlayerBuildPacket.class, new PlayerBuildPacket.Serializer());
         registerPacket(PlayerPermissionCheckPacket.class, new PlayerPermissionCheckPacket.Serializer());
         registerPacket(PlayerOperationTooltipPacket.class, new PlayerOperationTooltipPacket.Serializer());
+        registerPacket(PlayerSnapshotCapturePacket.class, new PlayerSnapshotCapturePacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
     }
@@ -122,6 +124,11 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
             getEntrance().getServer().execute(() -> {
                 getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player);
             });
+        }
+
+        @Override
+        public void handle(PlayerSnapshotCapturePacket packet, Player player) {
+
         }
     }
 

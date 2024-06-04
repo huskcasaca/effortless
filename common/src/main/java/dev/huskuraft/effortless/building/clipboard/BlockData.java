@@ -10,34 +10,34 @@ import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
 
-public record BlockSnapshot(
-        BlockPosition relativePosition,
+public record BlockData(
+        BlockPosition blockPosition,
         BlockState blockState,
         RecordTag entityTag
-) implements Rotatable<BlockSnapshot>, Movable<BlockSnapshot>, Mirrorable<BlockSnapshot> {
+) implements Rotatable<BlockData>, Movable<BlockData>, Mirrorable<BlockData> {
 
     @Override
-    public BlockSnapshot rotate(RotateContext rotateContext) {
-        return new BlockSnapshot(
-                rotateContext.rotate(relativePosition),
+    public BlockData rotate(RotateContext rotateContext) {
+        return new BlockData(
+                rotateContext.rotate(blockPosition),
                 rotateContext.rotate(blockState),
                 entityTag
         );
     }
 
     @Override
-    public BlockSnapshot move(MoveContext moveContext) {
-        return new BlockSnapshot(
-                moveContext.move(relativePosition),
+    public BlockData move(MoveContext moveContext) {
+        return new BlockData(
+                moveContext.move(blockPosition),
                 blockState,
                 entityTag
         );
     }
 
     @Override
-    public BlockSnapshot mirror(MirrorContext mirrorContext) {
-        return new BlockSnapshot(
-                mirrorContext.mirror(relativePosition),
+    public BlockData mirror(MirrorContext mirrorContext) {
+        return new BlockData(
+                mirrorContext.mirror(blockPosition),
                 mirrorContext.mirror(blockState),
                 entityTag
         );
