@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.api.core;
 
 import dev.huskuraft.effortless.api.platform.PlatformReference;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 
 public interface BlockEntity extends PlatformReference {
 
@@ -11,9 +11,9 @@ public interface BlockEntity extends PlatformReference {
 
     World getWorld();
 
-    TagRecord getTag();
+    RecordTag getTag();
 
-    void setTag(TagRecord tagRecord);
+    void setTag(RecordTag recordTag);
 
     default BlockEntity copy() {
         var tag = getTag();

@@ -4,7 +4,7 @@ import java.util.List;
 
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.api.text.Text;
 
 public interface ItemStack extends PlatformReference {
@@ -32,16 +32,16 @@ public interface ItemStack extends PlatformReference {
 
     ItemStack copy();
 
-    TagRecord getTag();
+    RecordTag getTag();
 
-    default TagRecord getOrCreateTag() {
+    default RecordTag getOrCreateTag() {
         if (getTag() == null) {
-            setTag(TagRecord.newRecord());
+            setTag(RecordTag.newRecord());
         }
         return getTag();
     };
 
-    void setTag(TagRecord tagRecord);
+    void setTag(RecordTag recordTag);
 
     default int getMaxStackSize() {
         return getItem().getMaxStackSize();

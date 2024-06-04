@@ -26,7 +26,7 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.core.MinecraftResourceLocation;
 import dev.huskuraft.effortless.vanilla.core.MinecraftText;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSound;
-import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
+import dev.huskuraft.effortless.vanilla.tag.MinecraftRecordTag;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.NbtAccounter;
@@ -80,7 +80,7 @@ public class MinecraftContentFactory implements ContentFactory {
 
     @Override
     public InputStreamTagReader getInputStreamTagReader() {
-        return input -> new MinecraftTagRecord(NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap()));
+        return input -> new MinecraftRecordTag(NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap()));
     }
 
     @Override

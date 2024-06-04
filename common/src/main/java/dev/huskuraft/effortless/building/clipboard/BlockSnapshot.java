@@ -2,7 +2,7 @@ package dev.huskuraft.effortless.building.clipboard;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.building.operation.Mirrorable;
 import dev.huskuraft.effortless.building.operation.Movable;
 import dev.huskuraft.effortless.building.operation.Rotatable;
@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.building.pattern.RotateContext;
 public record BlockSnapshot(
         BlockPosition relativePosition,
         BlockState blockState,
-        TagRecord entityTag
+        RecordTag entityTag
 ) implements Rotatable<BlockSnapshot>, Movable<BlockSnapshot>, Mirrorable<BlockSnapshot> {
 
     @Override

@@ -18,7 +18,7 @@ import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.api.text.Style;
 import dev.huskuraft.effortless.api.text.Text;
 import io.netty.buffer.ByteBuf;
@@ -237,11 +237,11 @@ public final class NetByteBuf extends WrappedByteBuf {
         writeId(BlockState.REGISTRY, blockState);
     }
 
-    public TagRecord readTagRecord() {
-        return TagRecord.newRecord();
+    public RecordTag readRecordTag() {
+        return RecordTag.newRecord();
     }
 
-    public void writeTagRecord(TagRecord tagRecord) {
+    public void writeRecordTag(RecordTag tag) {
     }
 
 }

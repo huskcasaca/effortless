@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 
 public abstract class BlockOperationResult extends OperationResult {
@@ -13,16 +13,16 @@ public abstract class BlockOperationResult extends OperationResult {
     protected final BlockOperationResultType result;
     protected final BlockState blockStateBeforeOp;
     protected final BlockState blockStateAfterOp;
-    protected final TagRecord entityTagBeforeOp;
-    protected final TagRecord entityTagAfterOp;
+    protected final RecordTag entityTagBeforeOp;
+    protected final RecordTag entityTagAfterOp;
 
     protected BlockOperationResult(
             BlockOperation operation,
             BlockOperationResultType result,
             BlockState blockStateBeforeOp,
             BlockState blockStateAfterOp,
-            TagRecord entityTagBeforeOp,
-            TagRecord entityTagAfterOp) {
+            RecordTag entityTagBeforeOp,
+            RecordTag entityTagAfterOp) {
         this.operation = operation;
         this.result = result;
         this.blockStateBeforeOp = blockStateBeforeOp;
@@ -65,17 +65,17 @@ public abstract class BlockOperationResult extends OperationResult {
     }
 
     @Nullable
-    public TagRecord getEntityTagToBreak() {
+    public RecordTag getEntityTagToBreak() {
         return entityTagBeforeOp;
     }
 
     @Nullable
-    public TagRecord getEntityTagPlaced() {
+    public RecordTag getEntityTagPlaced() {
         return entityTagAfterOp;
     }
 
     @Nullable
-    public TagRecord getEntityTagToPlace() {
+    public RecordTag getEntityTagToPlace() {
         return getOperation().getEntityTag();
     }
 
@@ -94,7 +94,7 @@ public abstract class BlockOperationResult extends OperationResult {
         return getBlockEntity(getBlockStateToPlace(), getEntityTagToPlace());
     }
 
-    private BlockEntity getBlockEntity(BlockState blockState, TagRecord entityTag) {
+    private BlockEntity getBlockEntity(BlockState blockState, RecordTag entityTag) {
         if (blockState == null) {
             return null;
         }

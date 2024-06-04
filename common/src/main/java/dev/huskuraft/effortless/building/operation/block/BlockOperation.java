@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.Operation;
@@ -20,7 +20,7 @@ public abstract class BlockOperation implements Operation {
     protected final Storage storage;
     protected final BlockInteraction interaction;
     protected final BlockState blockState;
-    protected final TagRecord entityTag;
+    protected final RecordTag entityTag;
     protected final Extras extras;
 
     protected BlockOperation(
@@ -30,7 +30,7 @@ public abstract class BlockOperation implements Operation {
             Storage storage, // for preview
             BlockInteraction interaction,
             BlockState blockState,
-            TagRecord entityTag,
+            RecordTag entityTag,
             Extras extras
     ) {
         this.world = world;
@@ -86,7 +86,7 @@ public abstract class BlockOperation implements Operation {
         return blockState;
     }
 
-    public TagRecord getEntityTag() {
+    public RecordTag getEntityTag() {
         return entityTag;
     }
 
@@ -128,7 +128,7 @@ public abstract class BlockOperation implements Operation {
         return getWorld().getBlockEntity(getBlockPosition());
     }
 
-    public TagRecord getEntityTagInWorld() {
+    public RecordTag getEntityTagInWorld() {
         var blockEntity = getWorld().getBlockEntity(getBlockPosition());
         if (blockEntity == null) {
             return null;

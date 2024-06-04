@@ -5,7 +5,7 @@ import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ContainerBlockEntity;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 
 public record MinecraftContainerBlockEntity(net.minecraft.world.level.block.entity.BaseContainerBlockEntity refs) implements ContainerBlockEntity {
 
@@ -40,12 +40,12 @@ public record MinecraftContainerBlockEntity(net.minecraft.world.level.block.enti
     }
 
     @Override
-    public TagRecord getTag() {
+    public RecordTag getTag() {
         return new MinecraftBlockEntity(refs).getTag();
     }
 
     @Override
-    public void setTag(TagRecord tagRecord) {
-        new MinecraftBlockEntity(refs).setTag(tagRecord);
+    public void setTag(RecordTag recordTag) {
+        new MinecraftBlockEntity(refs).setTag(recordTag);
     }
 }

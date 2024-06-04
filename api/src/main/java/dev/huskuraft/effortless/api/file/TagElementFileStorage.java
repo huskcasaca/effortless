@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.api.file;
 import java.io.File;
 import java.io.IOException;
 
-import dev.huskuraft.effortless.api.tag.TagElement;
+import dev.huskuraft.effortless.api.tag.Tag;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
 
 public abstract class TagElementFileStorage<T> extends FileStorage<T> {
@@ -17,7 +17,7 @@ public abstract class TagElementFileStorage<T> extends FileStorage<T> {
 
     @Override
     protected T read(File config) throws IOException {
-        return serializer.decode((TagElement) getFileType().getAdapter().read(config), true);
+        return serializer.decode((Tag) getFileType().getAdapter().read(config), true);
     }
 
     @Override

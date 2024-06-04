@@ -7,7 +7,7 @@ import java.util.List;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.math.MathUtils;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 
 public class ItemStackUtils {
 
@@ -17,7 +17,7 @@ public class ItemStackUtils {
     public static List<ItemStack> flattenStack(List<ItemStack> stacks) {
         record Pair<A, B>(A first, B second) {
         }
-        var map = new HashMap<Pair<Item, TagRecord>, ItemStack>();
+        var map = new HashMap<Pair<Item, RecordTag>, ItemStack>();
         for (var stack : stacks) {
             var item = stack.getItem();
             var key = new Pair<>(item, stack.getOrCreateTag());

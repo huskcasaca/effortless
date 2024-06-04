@@ -6,10 +6,10 @@ import java.util.UUID;
 import dev.huskuraft.effortless.api.core.Axis;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.Items;
-import dev.huskuraft.effortless.api.tag.TagElement;
-import dev.huskuraft.effortless.api.tag.TagList;
-import dev.huskuraft.effortless.api.tag.TagLiteral;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.Tag;
+import dev.huskuraft.effortless.api.tag.ListTag;
+import dev.huskuraft.effortless.api.tag.StringTag;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
 import dev.huskuraft.effortless.building.PositionType;
 import dev.huskuraft.effortless.building.pattern.Transformer;
@@ -27,7 +27,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
     private static final String TAG_TYPE = "Type";
 
     @Override
-    public Transformer decode(TagElement tag) {
+    public Transformer decode(Tag tag) {
         return switch (tag.asRecord().getEnum(TAG_TYPE, Transformers.class)) {
             case ARRAY -> new ArrayTransformerTagSerializer().decode(tag);
             case MIRROR -> new MirrorTransformerTagSerializer().decode(tag);
@@ -37,7 +37,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
     }
 
     @Override
-    public TagElement encode(Transformer transformer) {
+    public Tag encode(Transformer transformer) {
         var tag = switch (transformer.getType()) {
             case ARRAY -> new ArrayTransformerTagSerializer().encode((ArrayTransformer) transformer);
             case MIRROR -> new MirrorTransformerTagSerializer().encode((MirrorTransformer) transformer);
@@ -66,7 +66,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         private static final String TAG_COUNT = "Count";
 
         @Override
-        public ArrayTransformer decode(TagElement tag) {
+        public ArrayTransformer decode(Tag tag) {
             return new ArrayTransformer(
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
@@ -76,8 +76,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         }
 
         @Override
-        public TagElement encode(ArrayTransformer transformer) {
-            var tag = TagRecord.newRecord();
+        public Tag encode(ArrayTransformer transformer) {
+            var tag = RecordTag.newRecord();
             tag.putUUID(TAG_ID, transformer.getId());
             tag.putText(TAG_NAME, transformer.getName());
             tag.putVector3d(TAG_OFFSET, transformer.offset().toVector3d());
@@ -101,14 +101,14 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
     public static class PositionTypeArrayTagSerializer implements TagSerializer<PositionType[]> {
 
         @Override
-        public PositionType[] decode(TagElement tag) {
-            return tag.asList().stream().map((tag1) -> tag1.asLiteral().getAsEnum(PositionType.class)).toArray(PositionType[]::new);
+        public PositionType[] decode(Tag tag) {
+            return tag.asList().stream().map((tag1) -> tag1.asString().getAsEnum(PositionType.class)).toArray(PositionType[]::new);
         }
 
         @Override
-        public TagElement encode(PositionType[] positionTypeList) {
-            var tag = TagList.newList();
-            Arrays.stream(positionTypeList).map(TagLiteral::of).forEach(tag::addTag);
+        public Tag encode(PositionType[] positionTypeList) {
+            var tag = ListTag.newList();
+            Arrays.stream(positionTypeList).map(StringTag::of).forEach(tag::addTag);
             return tag;
         }
 
@@ -126,7 +126,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
 
 
         @Override
-        public MirrorTransformer decode(TagElement tag) {
+        public MirrorTransformer decode(Tag tag) {
             return new MirrorTransformer(
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
@@ -137,8 +137,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         }
 
         @Override
-        public TagElement encode(MirrorTransformer transformer) {
-            var tag = TagRecord.newRecord();
+        public Tag encode(MirrorTransformer transformer) {
+            var tag = RecordTag.newRecord();
             tag.asRecord().putUUID(TAG_ID, transformer.getId());
             tag.asRecord().putText(TAG_NAME, transformer.getName());
             tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
@@ -170,7 +170,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         private static final String TAG_LENGTH = "Length";
 
         @Override
-        public RadialTransformer decode(TagElement tag) {
+        public RadialTransformer decode(Tag tag) {
             return new RadialTransformer(
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
@@ -183,8 +183,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         }
 
         @Override
-        public TagElement encode(RadialTransformer transformer) {
-            var tag = TagRecord.newRecord();
+        public Tag encode(RadialTransformer transformer) {
+            var tag = RecordTag.newRecord();
             tag.asRecord().putUUID(TAG_ID, transformer.getId());
             tag.asRecord().putText(TAG_NAME, transformer.getName());
             tag.asRecord().putVector3d(TAG_POSITION, transformer.position());
@@ -222,7 +222,7 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         private static final String TAG_CHANCES = "Chances";
 
         @Override
-        public ItemRandomizer decode(TagElement tag) {
+        public ItemRandomizer decode(Tag tag) {
             return new ItemRandomizer(
                     tag.asRecord().getUUID(TAG_ID),
                     tag.asRecord().getText(TAG_NAME),
@@ -234,8 +234,8 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         }
 
         @Override
-        public TagElement encode(ItemRandomizer randomizer) {
-            var tag = TagRecord.newRecord();
+        public Tag encode(ItemRandomizer randomizer) {
+            var tag = RecordTag.newRecord();
             tag.asRecord().putUUID(TAG_ID, randomizer.getId());
             tag.asRecord().putText(TAG_NAME, randomizer.getName());
             tag.asRecord().putEnum(TAG_ORDER, randomizer.getOrder());
@@ -267,13 +267,13 @@ public class TransformerTagSerializer implements TagSerializer<Transformer> {
         private static final String TAG_CHANCE = "Chance";
 
         @Override
-        public Chance<Item> decode(TagElement tag) {
+        public Chance<Item> decode(Tag tag) {
             return Chance.of(tag.asRecord().getItem(TAG_CONTENT), tag.asRecord().getInt(TAG_CHANCE));
         }
 
         @Override
-        public TagElement encode(Chance<Item> chance) {
-            var tag = TagRecord.newRecord();
+        public Tag encode(Chance<Item> chance) {
+            var tag = RecordTag.newRecord();
             tag.asRecord().putItem(TAG_CONTENT, chance.content());
             tag.asRecord().putInt(TAG_CHANCE, chance.chance());
             return tag;

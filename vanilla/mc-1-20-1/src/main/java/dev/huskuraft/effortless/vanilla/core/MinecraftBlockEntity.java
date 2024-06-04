@@ -4,8 +4,8 @@ import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.tag.TagRecord;
-import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
+import dev.huskuraft.effortless.vanilla.tag.MinecraftRecordTag;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 
 public record MinecraftBlockEntity(net.minecraft.world.level.block.entity.BlockEntity refs) implements BlockEntity {
@@ -32,12 +32,12 @@ public record MinecraftBlockEntity(net.minecraft.world.level.block.entity.BlockE
     }
 
     @Override
-    public TagRecord getTag() {
-        return MinecraftTagRecord.ofNullable(refs.saveWithoutMetadata());
+    public RecordTag getTag() {
+        return MinecraftRecordTag.ofNullable(refs.saveWithoutMetadata());
     }
 
     @Override
-    public void setTag(TagRecord tagRecord) {
-        refs.load(tagRecord.reference());
+    public void setTag(RecordTag recordTag) {
+        refs.load(recordTag.reference());
     }
 }

@@ -9,7 +9,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.Operation;
@@ -40,7 +40,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
             Storage storage,
             BlockInteraction interaction,
             BlockState blockState,
-            TagRecord blockTag,
+            RecordTag blockTag,
             Extras extras
     ) {
         super(world, player, context, storage, interaction, blockState, blockTag, extras);

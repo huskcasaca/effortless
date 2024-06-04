@@ -5,7 +5,7 @@ import java.util.List;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ContainerBlockEntity;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.building.operation.BlockEntitySummary;
 import dev.huskuraft.effortless.building.operation.BlockStateSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
@@ -18,8 +18,8 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             BlockOperationResultType result,
             BlockState blockStateBeforeOp,
             BlockState blockStateAfterOp,
-            TagRecord entityTagBeforeOp,
-            TagRecord entityTagAfterOp
+            RecordTag entityTagBeforeOp,
+            RecordTag entityTagAfterOp
     ) {
         super(operation, result, blockStateBeforeOp, blockStateAfterOp, entityTagBeforeOp, entityTagAfterOp);
     }
