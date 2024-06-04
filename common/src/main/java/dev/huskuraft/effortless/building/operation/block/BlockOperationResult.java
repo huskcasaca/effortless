@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 
 public abstract class BlockOperationResult extends OperationResult {
@@ -12,22 +13,22 @@ public abstract class BlockOperationResult extends OperationResult {
     protected final BlockOperationResultType result;
     protected final BlockState blockStateBeforeOp;
     protected final BlockState blockStateAfterOp;
-    protected final BlockEntity blockEntityBeforeOp;
-    protected final BlockEntity blockEntityAfterOp;
+    protected final TagRecord entityTagBeforeOp;
+    protected final TagRecord entityTagAfterOp;
 
     protected BlockOperationResult(
             BlockOperation operation,
             BlockOperationResultType result,
             BlockState blockStateBeforeOp,
             BlockState blockStateAfterOp,
-            BlockEntity blockEntityBeforeOp,
-            BlockEntity blockEntityAfterOp) {
+            TagRecord entityTagBeforeOp,
+            TagRecord entityTagAfterOp) {
         this.operation = operation;
         this.result = result;
         this.blockStateBeforeOp = blockStateBeforeOp;
         this.blockStateAfterOp = blockStateAfterOp;
-        this.blockEntityBeforeOp = blockEntityBeforeOp;
-        this.blockEntityAfterOp = blockEntityAfterOp;
+        this.entityTagBeforeOp = entityTagBeforeOp;
+        this.entityTagAfterOp = entityTagAfterOp;
     }
 
     protected BlockOperationResult(
@@ -39,8 +40,8 @@ public abstract class BlockOperationResult extends OperationResult {
         this.result = result;
         this.blockStateBeforeOp = blockStateBeforeOp;
         this.blockStateAfterOp = blockStateAfterOp;
-        this.blockEntityBeforeOp = null;
-        this.blockEntityAfterOp = null;
+        this.entityTagBeforeOp = null;
+        this.entityTagAfterOp = null;
     }
 
     @Override
@@ -64,18 +65,47 @@ public abstract class BlockOperationResult extends OperationResult {
     }
 
     @Nullable
-    public BlockEntity getBlockEntityToRemove() {
-        return blockEntityBeforeOp;
+    public TagRecord getEntityTagToBreak() {
+        return entityTagBeforeOp;
     }
 
     @Nullable
-    public BlockEntity getBlockEntityAdded() {
-        return blockEntityAfterOp;
+    public TagRecord getEntityTagPlaced() {
+        return entityTagAfterOp;
     }
 
     @Nullable
-    public BlockEntity getBlockEntityToAdd() {
-        return getOperation().getBlockEntity();
+    public TagRecord getEntityTagToPlace() {
+        return getOperation().getEntityTag();
+    }
+
+    @Nullable
+    public BlockEntity getBlockEntityToBreak() {
+        return getBlockEntity(getBlockStateToBreak(), getEntityTagToBreak());
+    }
+
+    @Nullable
+    public BlockEntity getBlockEntityPlaced() {
+        return getBlockEntity(getBlockStatePlaced(), getEntityTagPlaced());
+    }
+
+    @Nullable
+    public BlockEntity getBlockEntityToPlace() {
+        return getBlockEntity(getBlockStateToPlace(), getEntityTagToPlace());
+    }
+
+    private BlockEntity getBlockEntity(BlockState blockState, TagRecord entityTag) {
+        if (blockState == null) {
+            return null;
+        }
+        var blockEntity = blockState.getEntity(getOperation().getBlockPosition());
+        if (blockEntity == null) {
+            return null;
+        }
+        if (entityTag != null) {
+            blockEntity.setTag(entityTag);
+        }
+        return blockEntity;
     }
 
     @Nullable
@@ -88,6 +118,11 @@ public abstract class BlockOperationResult extends OperationResult {
         } else {
             return getBlockStateToPlace();
         }
+    }
+
+    @Nullable
+    public final BlockEntity getBlockEntityForRenderer() {
+        return null;
     }
 
     public BlockOperationResultType result() {

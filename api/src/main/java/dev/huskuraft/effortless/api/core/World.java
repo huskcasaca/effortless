@@ -14,13 +14,6 @@ public interface World extends PlatformReference {
 
     BlockEntity getBlockEntity(BlockPosition blockPosition);
 
-    default BlockEntity getBlockEntityCopied(BlockPosition blockPosition) {
-        if (getBlockEntity(blockPosition) == null) {
-            return null;
-        }
-        return getBlockEntity(blockPosition).copy();
-    }
-
     boolean setBlock(BlockPosition blockPosition, BlockState blockState, int flags, int recursionLeft);
 
     default boolean setBlock(BlockPosition blockPosition, BlockState blockState, int flags) {

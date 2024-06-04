@@ -33,9 +33,9 @@ public class BlockStateCopyOperationResult extends BlockOperationResult {
 
     public BlockSnapshot getBlockSnapshot() {
         if (getOperation().getBlockState().isAir()) {
-            return new BlockSnapshot(getRelativePosition(), null);
+            return new BlockSnapshot(getRelativePosition(), null, null);
         }
-        return new BlockSnapshot(getRelativePosition(), getOperation().getBlockState());
+        return new BlockSnapshot(getRelativePosition(), getOperation().getBlockState(), getOperation().getEntityTag());
     }
 
     @Override

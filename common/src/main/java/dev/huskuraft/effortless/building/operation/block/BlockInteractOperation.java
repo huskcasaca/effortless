@@ -24,7 +24,7 @@ public class BlockInteractOperation extends BlockOperation {
             BlockInteraction interaction,
             Extras extras
     ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), extras);
+        super(world, player, context, storage, interaction, extras);
     }
 
     protected BlockOperationResultType interactBlock() {
@@ -93,7 +93,7 @@ public class BlockInteractOperation extends BlockOperation {
     public BlockInteractOperationResult commit() {
         var entityExtrasBeforeOp = Extras.get(getPlayer());
         var blockStateBeforeOp = getBlockStateInWorld();
-        var blockEntityBeforeOp = getBlockEntityInWorldCopied();
+        var entityTagBeforeOp = getEntityTagInWorld();
         Extras.set(getPlayer(), getExtras());
         var result = interactBlock();
         Extras.set(getPlayer(), entityExtrasBeforeOp);
@@ -102,8 +102,8 @@ public class BlockInteractOperation extends BlockOperation {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
         var blockStateAfterOp = getBlockStateInWorld();
-        var blockEntityAfterOp = getBlockEntityInWorldCopied();
-        return new BlockInteractOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp, blockEntityBeforeOp, blockEntityAfterOp);
+        var entityTagAfterOp = getEntityTagInWorld();
+        return new BlockInteractOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp, entityTagBeforeOp, entityTagAfterOp);
     }
 
     @Override

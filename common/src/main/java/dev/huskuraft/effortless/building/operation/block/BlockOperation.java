@@ -7,6 +7,7 @@ import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.Operation;
@@ -19,7 +20,7 @@ public abstract class BlockOperation implements Operation {
     protected final Storage storage;
     protected final BlockInteraction interaction;
     protected final BlockState blockState;
-    protected final BlockEntity blockEntity;
+    protected final TagRecord entityTag;
     protected final Extras extras;
 
     protected BlockOperation(
@@ -29,7 +30,7 @@ public abstract class BlockOperation implements Operation {
             Storage storage, // for preview
             BlockInteraction interaction,
             BlockState blockState,
-            BlockEntity blockEntity,
+            TagRecord entityTag,
             Extras extras
     ) {
         this.world = world;
@@ -38,7 +39,7 @@ public abstract class BlockOperation implements Operation {
         this.storage = storage;
         this.interaction = interaction;
         this.blockState = blockState;
-        this.blockEntity = blockEntity;
+        this.entityTag = entityTag;
         this.extras = extras;
     }
 
@@ -48,7 +49,6 @@ public abstract class BlockOperation implements Operation {
             Context context,
             Storage storage, // for preview
             BlockInteraction interaction,
-            BlockState blockState,
             Extras extras
     ) {
         this.world = world;
@@ -56,8 +56,13 @@ public abstract class BlockOperation implements Operation {
         this.context = context;
         this.storage = storage;
         this.interaction = interaction;
-        this.blockState = blockState;
-        this.blockEntity = null;
+        this.blockState = world.getBlockState(interaction.getBlockPosition());
+        var blockEntity = world.getBlockEntity(interaction.getBlockPosition());
+        if (blockEntity != null) {
+            this.entityTag = blockEntity.getTag();
+        } else {
+            this.entityTag = null;
+        }
         this.extras = extras;
     }
 
@@ -81,8 +86,8 @@ public abstract class BlockOperation implements Operation {
         return blockState;
     }
 
-    public BlockEntity getBlockEntity() {
-        return blockEntity;
+    public TagRecord getEntityTag() {
+        return entityTag;
     }
 
     public Extras getExtras() {
@@ -123,8 +128,12 @@ public abstract class BlockOperation implements Operation {
         return getWorld().getBlockEntity(getBlockPosition());
     }
 
-    public BlockEntity getBlockEntityInWorldCopied() {
-        return getWorld().getBlockEntityCopied(getBlockPosition());
+    public TagRecord getEntityTagInWorld() {
+        var blockEntity = getWorld().getBlockEntity(getBlockPosition());
+        if (blockEntity == null) {
+            return null;
+        }
+        return blockEntity.getTag();
     }
 
     public enum Type {

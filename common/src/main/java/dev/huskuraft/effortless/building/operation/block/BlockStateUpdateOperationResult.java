@@ -2,10 +2,10 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import java.util.List;
 
-import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ContainerBlockEntity;
 import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.tag.TagRecord;
 import dev.huskuraft.effortless.building.operation.BlockEntitySummary;
 import dev.huskuraft.effortless.building.operation.BlockStateSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
@@ -18,10 +18,10 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             BlockOperationResultType result,
             BlockState blockStateBeforeOp,
             BlockState blockStateAfterOp,
-            BlockEntity blockEntityBeforeOp,
-            BlockEntity blockEntityAfterOp
+            TagRecord entityTagBeforeOp,
+            TagRecord entityTagAfterOp
     ) {
-        super(operation, result, blockStateBeforeOp, blockStateAfterOp, blockEntityBeforeOp, blockEntityAfterOp);
+        super(operation, result, blockStateBeforeOp, blockStateAfterOp, entityTagBeforeOp, entityTagAfterOp);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
                 operation.getStorage(),
                 operation.getInteraction(),
                 getBlockStateToBreak(),
-                getBlockEntityToRemove(),
+                getEntityTagToBreak(),
                 operation.getExtras()
         );
     }
@@ -96,7 +96,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             case CONTAINER_CONSUMED -> {
                 switch (result) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        if (getBlockEntityToAdd() instanceof ContainerBlockEntity containerBlockEntity) {
+                        if (getBlockEntityToPlace() instanceof ContainerBlockEntity containerBlockEntity) {
                             return containerBlockEntity.getItems();
                         }
                     }
@@ -105,7 +105,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             case CONTAINER_DROPPED -> {
                 switch (result) {
                     case SUCCESS, SUCCESS_PARTIAL, CONSUME -> {
-                        if (getBlockEntityToRemove() instanceof ContainerBlockEntity containerBlockEntity) {
+                        if (getBlockEntityToBreak() instanceof ContainerBlockEntity containerBlockEntity) {
                             return containerBlockEntity.getItems();
                         }
                     }
