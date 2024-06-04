@@ -21,8 +21,8 @@ import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.session.BatchBuildSession;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
-import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
-import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerOperationTooltipPacket;
 
 public final class EffortlessStructureBuilder extends StructureBuilder {
 
@@ -123,12 +123,12 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
                 if (otherPlayer.getId().equals(player.getId()) || otherPlayer.getPosition().distance(player.getPosition()) > 128) {
                     continue;
                 }
-                getEntrance().getChannel().sendPacket(new PlayerBuildPreviewPacket(player.getId(), context), otherPlayer);
+                getEntrance().getChannel().sendPacket(new PlayerBuildPacket(player.getId(), context), otherPlayer);
             }
         } else {
             Effortless.LOGGER.debug("Received build request from %s".formatted(player.getProfile().getName()));
             getEntrance().getChannel().sendPacket(
-                    PlayerBuildTooltipPacket.build(
+                    PlayerOperationTooltipPacket.build(
                             getOperationResultStack(player).pushSession(new BatchBuildSession(this, player, context))
                     ), player
             );
@@ -148,7 +148,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
             var result = stack.undo();
             var context = result.getOperation().getContext();
 
-            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undo(result), player);
+            getEntrance().getChannel().sendPacket(PlayerOperationTooltipPacket.undo(result), player);
             var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
             var buildStateText = Text.text("[").append(context.buildState().getDisplayName(context.buildMode())).append("]").withStyle(switch (context.buildState()) {
                 case IDLE -> ChatFormatting.RESET;
@@ -161,7 +161,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
             var affectedText = Text.text("[").append(String.valueOf(result.getTooltip().getSuccessBlocks())).append("]").withStyle(ChatFormatting.AQUA);
             player.sendMessage(Effortless.getMessage(countText.append(" ").append(Text.translate("effortless.message.history.server.undo", buildStateText, affectedText))));
         } catch (EmptyStackException e) {
-            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToUndo(), player);
+            getEntrance().getChannel().sendPacket(PlayerOperationTooltipPacket.nothingToUndo(), player);
             var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
             player.sendMessage(Effortless.getMessage(countText.append(" ").append(Text.translate("effortless.history.nothing_to_undo"))));
         }
@@ -175,7 +175,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
             var result = stack.redo();
             var context = result.getOperation().getContext();
 
-            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.undo(result), player);
+            getEntrance().getChannel().sendPacket(PlayerOperationTooltipPacket.undo(result), player);
             var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
             var buildStateText = Text.text("[").append(context.buildState().getDisplayName(context.buildMode())).append("]").withStyle(switch (context.buildState()) {
                 case IDLE -> ChatFormatting.RESET;
@@ -188,7 +188,7 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
             var affectedText = Text.text("[").append(String.valueOf(result.getTooltip().getSuccessBlocks())).append("]").withStyle(ChatFormatting.AQUA);
             player.sendMessage(Effortless.getMessage(countText.append(" ").append(Text.translate("effortless.message.history.server.redo", buildStateText, affectedText))));
         } catch (EmptyStackException e) {
-            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.nothingToRedo(), player);
+            getEntrance().getChannel().sendPacket(PlayerOperationTooltipPacket.nothingToRedo(), player);
             var countText = Text.text("[").append(String.valueOf(stack.undoSize())).append("/").append(String.valueOf(stack.redoSize())).append("]").withStyle(ChatFormatting.WHITE);
             player.sendMessage(Effortless.getMessage(countText.append(" ").append(Text.translate("effortless.history.nothing_to_redo"))));
         }

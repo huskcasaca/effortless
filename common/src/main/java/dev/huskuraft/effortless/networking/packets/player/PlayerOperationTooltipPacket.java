@@ -11,7 +11,7 @@ import dev.huskuraft.effortless.building.operation.OperationTooltip;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.serializer.ContextSerializer;
 
-public record PlayerBuildTooltipPacket(
+public record PlayerOperationTooltipPacket(
         OperationTooltip operationTooltip
 ) implements Packet<AllPacketListener> {
 
@@ -21,11 +21,11 @@ public record PlayerBuildTooltipPacket(
         packetListener.handle(this, sender);
     }
 
-    public static class Serializer implements NetByteBufSerializer<PlayerBuildTooltipPacket> {
+    public static class Serializer implements NetByteBufSerializer<PlayerOperationTooltipPacket> {
 
         @Override
-        public PlayerBuildTooltipPacket read(NetByteBuf byteBuf) {
-            return new PlayerBuildTooltipPacket(
+        public PlayerOperationTooltipPacket read(NetByteBuf byteBuf) {
+            return new PlayerOperationTooltipPacket(
                     new OperationTooltip(
                             byteBuf.readEnum(OperationTooltip.Type.class),
                             byteBuf.read(new ContextSerializer()),
@@ -36,7 +36,7 @@ public record PlayerBuildTooltipPacket(
         }
 
         @Override
-        public void write(NetByteBuf byteBuf, PlayerBuildTooltipPacket packet) {
+        public void write(NetByteBuf byteBuf, PlayerOperationTooltipPacket packet) {
             byteBuf.writeEnum(packet.operationTooltip().type());
             byteBuf.write(packet.operationTooltip().context(), new ContextSerializer());
             byteBuf.writeMap(packet.operationTooltip().blockStateSummary(), NetByteBuf::writeEnum, ((buffer1, blockStateMap) -> buffer1.writeMap(blockStateMap, NetByteBuf::writeBlockState, NetByteBuf::writeVarInt)));
@@ -45,34 +45,34 @@ public record PlayerBuildTooltipPacket(
 
     }
 
-    public static PlayerBuildTooltipPacket build(OperationResult operationResult) {
-        return new PlayerBuildTooltipPacket(
+    public static PlayerOperationTooltipPacket build(OperationResult operationResult) {
+        return new PlayerOperationTooltipPacket(
                 operationResult.getTooltip().withType(OperationTooltip.Type.BUILD)
         );
     }
 
-    public static PlayerBuildTooltipPacket undo(OperationResult operationResult) {
-        return new PlayerBuildTooltipPacket(
+    public static PlayerOperationTooltipPacket undo(OperationResult operationResult) {
+        return new PlayerOperationTooltipPacket(
                 operationResult.getTooltip().withType(OperationTooltip.Type.UNDO_SUCCESS)
         );
     }
 
-    public static PlayerBuildTooltipPacket redo(OperationResult operationResult) {
-        return new PlayerBuildTooltipPacket(
+    public static PlayerOperationTooltipPacket redo(OperationResult operationResult) {
+        return new PlayerOperationTooltipPacket(
                 operationResult.getTooltip().withType(OperationTooltip.Type.REDO_SUCCESS)
         );
     }
 
-    public static PlayerBuildTooltipPacket nothingToUndo() {
-        return new PlayerBuildTooltipPacket(
+    public static PlayerOperationTooltipPacket nothingToUndo() {
+        return new PlayerOperationTooltipPacket(
                 OperationTooltip.empty(
                         OperationTooltip.Type.NOTHING_TO_UNDO
                 )
         );
     }
 
-    public static PlayerBuildTooltipPacket nothingToRedo() {
-        return new PlayerBuildTooltipPacket(
+    public static PlayerOperationTooltipPacket nothingToRedo() {
+        return new PlayerOperationTooltipPacket(
                 OperationTooltip.empty(
                         OperationTooltip.Type.NOTHING_TO_REDO
                 )

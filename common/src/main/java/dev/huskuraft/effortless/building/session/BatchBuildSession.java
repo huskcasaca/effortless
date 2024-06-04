@@ -110,13 +110,13 @@ public class BatchBuildSession implements BuildSession {
     }
 
     protected void saveClipboard() {
-        if (!world.isClient()) {
+        if (world.isClient()) {
             return;
         }
         if (context.buildState() != BuildState.COPY_STRUCTURE) {
             return;
         }
-        if (context.buildType() != BuildType.BUILD_CLIENT) {
+        if (context.buildType() != BuildType.BUILD) {
             return;
         }
         if (!context.clipboard().enabled()) {
