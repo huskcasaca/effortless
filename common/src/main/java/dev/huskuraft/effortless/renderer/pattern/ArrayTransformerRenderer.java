@@ -39,13 +39,13 @@ public class ArrayTransformerRenderer extends TransformerRenderer {
                 var v1 = interactionPosition.add(transformer.offset().mul(i).toVector3d());
                 var v2 = interactionPosition.add(transformer.offset().mul(i + 1).toVector3d());
                 renderAACuboidLine(renderer, v1, v2, 1 / 32f, 0xFFFFFF, true);
-                var cam = renderer.camera().position();
+                var cam = renderer.getCamera().position();
                 renderer.pushPose();
                 var mid = v1.add(v2).div(2);
                 renderer.translate(mid.sub(cam));
                 renderer.pushPose();
 
-                renderer.rotate(renderer.camera().rotation());
+                renderer.rotate(renderer.getCamera().rotation());
                 renderer.scale(-0.025F, -0.025F, 0.025F);
                 var text = Text.text(transformer.offset().toString());
                 renderer.renderText(typeface, text, -typeface.measureWidth(text) / 2, 0, 0xFFFFFFFF, 0, false, false, LightTexture.FULL_BRIGHT);

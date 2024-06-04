@@ -63,6 +63,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
     // TODO: 20/2/23 rename
     private float visibility = 1;
     private float animationTicks = 0;
+    private float animationScaleTicks = 0;
     private boolean detached = false;
 
     public AbstractWheelScreen(Entrance entrance, Text text) {
@@ -254,6 +255,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
     public void onAnimateTick(float partialTick) {
         this.detached = !getAssignedKey().getBinding().isKeyDown();
         this.animationTicks = Math.min(Math.max(animationTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);
+        this.animationScaleTicks = Math.min(Math.max(animationScaleTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);
         if (detached && animationTicks == 0) {
             detach();
         }
@@ -284,11 +286,11 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
 
         renderer.pushPose();
-        renderer.translate(0, 0 * getAnimationFactor() * ANIMATION_OFFSET_Y, 0);
+        renderer.translate(0, 0 * getAnimationScaleFactor() * ANIMATION_OFFSET_Y, 0);
         renderer.translate(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0);
-        renderer.scale(MathUtils.lerp(getAnimationFactor(), 0.92, 1));
+        renderer.scale(MathUtils.lerp(getAnimationScaleFactor(), 0.92, 1));
         renderer.translate(-getX() - getWidth() / 2f, -getY() - getHeight() / 2f, 0);
-        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, getAnimationFactor());
+        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, getAnimationScaleFactor());
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
         hoveredSlot = null;
         hoveredButton = null;
@@ -307,12 +309,14 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         var result = false;
         if (isActive() && isVisible()) {
             if (radialSelectResponder != null && hoveredSlot != null) {
+                this.animationScaleTicks = 1.5f;
                 radialSelectResponder.accept(hoveredSlot, button == 0);
                 playRadialMenuSound();
                 result = true;
             }
 
             if (radialOptionSelectResponder != null && hoveredButton != null) {
+                this.animationScaleTicks = 1.5f;
                 radialOptionSelectResponder.accept(hoveredButton, button == 0);
                 playRadialMenuSound();
                 result = true;
@@ -567,6 +571,14 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     private float getAnimationFactor() {
         var fac = 1f - Math.min(animationTicks, MAX_ANIMATION_TICKS) / MAX_ANIMATION_TICKS;
+        if (detached) {
+            return 1 - MathUtils.lerp((1 - fac) * (1 - fac), 1f, 0f);
+        }
+        return 1 - MathUtils.lerp(fac * fac, 0f, 1f);
+    }
+
+    private float getAnimationScaleFactor() {
+        var fac = 1f - Math.min(animationScaleTicks, MAX_ANIMATION_TICKS) / MAX_ANIMATION_TICKS;
         if (detached) {
             return 1 - MathUtils.lerp((1 - fac) * (1 - fac), 1f, 0f);
         }

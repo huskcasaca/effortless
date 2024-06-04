@@ -10,11 +10,11 @@ import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.api.networking.Side;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
-import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPreviewPacket;
-import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerOperationTooltipPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerSnapshotCapturePacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 
@@ -40,9 +40,9 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         registerPacket(PlayerCommandPacket.class, new PlayerCommandPacket.Serializer());
         registerPacket(PlayerSettingsPacket.class, new PlayerSettingsPacket.Serializer());
         registerPacket(PlayerBuildPacket.class, new PlayerBuildPacket.Serializer());
-        registerPacket(PlayerBuildPreviewPacket.class, new PlayerBuildPreviewPacket.Serializer());
         registerPacket(PlayerPermissionCheckPacket.class, new PlayerPermissionCheckPacket.Serializer());
-        registerPacket(PlayerBuildTooltipPacket.class, new PlayerBuildTooltipPacket.Serializer());
+        registerPacket(PlayerOperationTooltipPacket.class, new PlayerOperationTooltipPacket.Serializer());
+        registerPacket(PlayerSnapshotCapturePacket.class, new PlayerSnapshotCapturePacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
     }
@@ -86,18 +86,14 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         }
 
         @Override
-        public void handle(PlayerBuildPacket packet, Player player) {
-            getEntrance().getServer().execute(() -> {
-                getEntrance().getStructureBuilder().onContextReceived(player, packet.context());
-            });
-        }
-
-        @Override
         public void handle(PlayerSettingsPacket packet, Player player) {
         }
 
         @Override
-        public void handle(PlayerBuildPreviewPacket packet, Player player) {
+        public void handle(PlayerBuildPacket packet, Player player) {
+            getEntrance().getServer().execute(() -> {
+                getEntrance().getStructureBuilder().onContextReceived(player, packet.context());
+            });
 
         }
 
@@ -112,7 +108,7 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         }
 
         @Override
-        public void handle(PlayerBuildTooltipPacket packet, Player player) {
+        public void handle(PlayerOperationTooltipPacket packet, Player player) {
 
         }
 
@@ -128,6 +124,11 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
             getEntrance().getServer().execute(() -> {
                 getEntrance().getSessionManager().onSessionConfig(packet.sessionConfig(), player);
             });
+        }
+
+        @Override
+        public void handle(PlayerSnapshotCapturePacket packet, Player player) {
+
         }
     }
 

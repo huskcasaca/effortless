@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.vanilla.tag.MinecraftTagRecord;
+import dev.huskuraft.effortless.vanilla.tag.MinecraftRecordTag;
 import net.minecraft.world.item.TooltipFlag;
 
 public record MinecraftItemStack(
@@ -52,13 +52,13 @@ public record MinecraftItemStack(
     }
 
     @Override
-    public TagRecord getTag() {
-        return MinecraftTagRecord.ofNullable(refs.getTag());
+    public RecordTag getTag() {
+        return MinecraftRecordTag.ofNullable(refs.getTag());
     }
 
     @Override
-    public void setTag(TagRecord tagRecord) {
-        refs.setTag(tagRecord.reference());
+    public void setTag(RecordTag recordTag) {
+        refs.setTag(recordTag.reference());
     }
 
     @Override

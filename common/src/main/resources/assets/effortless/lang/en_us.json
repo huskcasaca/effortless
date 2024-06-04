@@ -502,5 +502,9 @@
   "effortless.message.history.server.nothing_to_undo": "Nothing to undo!",
   "effortless.message.history.server.nothing_to_redo": "Nothing to redo!",
   "effortless.message.history.server.undo": "Undo %s affected %s blocks!",
-  "effortless.message.history.server.redo": "Redo %s affected %s blocks!"
+  "effortless.message.history.server.redo": "Redo %s affected %s blocks!",
+  "effortless.action.go_back": "Go Back",
+  "effortless.action.replace": "Replace",
+  "effortless.build.summary.container_consumed": "Container Consumed",
+  "effortless.build.summary.container_dropped": "Container Dropped"
 }

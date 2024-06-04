@@ -6,30 +6,16 @@ import dev.huskuraft.effortless.api.core.Inventory;
 import dev.huskuraft.effortless.api.core.ItemStack;
 
 public record InventorySnapshot(
-        List<ItemStack> items,
-        List<ItemStack> armorItems,
-        List<ItemStack> offhandItems,
-        int selected,
-        int hotbarSize
+        List<ItemStack> items, int selected, int bagSize, int armorSize, int offhandSize, int hotbarSize
 ) implements Inventory {
 
     public InventorySnapshot(Inventory inventory) {
-        this(inventory.getItems(), inventory.getArmorItems(), inventory.getOffhandItems(), inventory.getSelected(), inventory.getHotbarSize());
+        this(inventory.getItems(), inventory.getSelected(), inventory.getBagSize(), inventory.getArmorSize(), inventory.getOffhandSize(), inventory.getHotbarSize());
     }
 
     @Override
-    public List<ItemStack> getItems() {
-        return items;
-    }
-
-    @Override
-    public List<ItemStack> getArmorItems() {
-        return armorItems;
-    }
-
-    @Override
-    public List<ItemStack> getOffhandItems() {
-        return offhandItems;
+    public ItemStack getItem(int index) {
+        return items.get(index);
     }
 
     @Override
@@ -38,23 +24,23 @@ public record InventorySnapshot(
     }
 
     @Override
-    public void setArmorItem(int index, ItemStack itemStack) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setOffhandItem(int index, ItemStack itemStack) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean addItem(ItemStack itemStack) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public int getSelected() {
         return selected;
+    }
+
+    @Override
+    public int getBagSize() {
+        return bagSize;
+    }
+
+    @Override
+    public int getArmorSize() {
+        return armorSize;
+    }
+
+    @Override
+    public int getOffhandSize() {
+        return offhandSize;
     }
 
     @Override

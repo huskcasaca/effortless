@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.building.operation.BlockSummary;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.building.operation.ItemSummary;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 
 public class BatchOperationResult extends OperationResult {
@@ -44,13 +44,18 @@ public class BatchOperationResult extends OperationResult {
         );
     }
 
+    @Override
+    public int getAffectedBlockCount() {
+        return getResults().stream().mapToInt(OperationResult::getAffectedBlockCount).sum();
+    }
+
     public Collection<? extends OperationResult> getResults() {
         return result;
     }
 
     @Override
-    public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
-        return result.stream().map(result -> result.getBlockSummary(blockSummary)).flatMap(List::stream).collect(Collectors.toList());
+    public List<ItemStack> getItemSummary(ItemSummary itemSummary) {
+        return result.stream().map(result -> result.getItemSummary(itemSummary)).flatMap(List::stream).collect(Collectors.toList());
     }
 
 }

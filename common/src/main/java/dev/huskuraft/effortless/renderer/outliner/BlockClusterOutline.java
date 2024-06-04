@@ -46,8 +46,6 @@ public class BlockClusterOutline extends Outline {
         if (!faceTexture.isPresent())
             return;
 
-        renderer.pushLayer();
-
         var renderLayer = OutlineRenderLayers.outlineTranslucent(faceTexture.get(), true);
         cluster.visibleFaces.forEach((face, axisDirection) -> {
             var direction = Direction.get(axisDirection, face.axis);
@@ -57,11 +55,10 @@ public class BlockClusterOutline extends Outline {
 //            var buffer = renderer.buffer().getBuffer(renderLayer);
             renderBlockFace(renderer, renderLayer, pos, direction);
         });
-        renderer.popLayer();
     }
 
     protected void renderBlockFace(Renderer renderer, RenderLayer renderLayer, BlockPosition blockPosition, Direction face) {
-        var camera = renderer.camera().position();
+        var camera = renderer.getCamera().position();
         var center = blockPosition.getCenter();
         var offset = face.getNormal().toVector3d();
         offset = offset.mul(1 / 128d);

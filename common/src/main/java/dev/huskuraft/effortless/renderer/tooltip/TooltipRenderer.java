@@ -170,7 +170,7 @@ public class TooltipRenderer {
         var contentGravity = AxisDirection.NEGATIVE;
         renderer.pushPose();
         renderer.translate(0, 0, -200);
-        renderer.translate(0f, renderer.window().getGuiScaledHeight() * 1f, 0);
+        renderer.translate(0f, renderer.getWindow().getGuiScaledHeight() * 1f, 0);
         renderer.translate(-1f * contentSide.getStep(), 0, 0);
         renderer.translate(0, -8, 0);
         synchronized (prioritiedMap) {
@@ -192,7 +192,7 @@ public class TooltipRenderer {
                     }
 
                     if (contentSide == AxisDirection.POSITIVE) {
-                        renderer.translate(renderer.window().getGuiScaledWidth() - entry.getWidth(), 0, 0);
+                        renderer.translate(renderer.getWindow().getGuiScaledWidth() - entry.getWidth(), 0, 0);
                     }
                     renderer.renderRect(0, 0, entry.getWidth(), -entry.getHeight() - 8, renderer.optionColor(0.8f * entry.getAlpha()));
                     renderer.translate(0, -4, 0);

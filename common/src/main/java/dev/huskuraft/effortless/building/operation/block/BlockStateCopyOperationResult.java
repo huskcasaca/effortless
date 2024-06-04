@@ -4,8 +4,11 @@ import java.util.List;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
-import dev.huskuraft.effortless.building.clipboard.BlockSnapshot;
-import dev.huskuraft.effortless.building.operation.BlockSummary;
+import dev.huskuraft.effortless.api.core.ContainerBlockEntity;
+import dev.huskuraft.effortless.api.core.ItemStack;
+import dev.huskuraft.effortless.api.tag.RecordTag;
+import dev.huskuraft.effortless.building.clipboard.BlockData;
+import dev.huskuraft.effortless.building.operation.ItemSummary;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
 
@@ -15,9 +18,11 @@ public class BlockStateCopyOperationResult extends BlockOperationResult {
             BlockStateCopyOperation operation,
             BlockOperationResultType result,
             BlockState blockStateBeforeOp,
-            BlockState blockStateAfterOp
+            BlockState blockStateAfterOp,
+            RecordTag entityTagBeforeOp,
+            RecordTag entityTagAfterOp
     ) {
-        super(operation, result, blockStateBeforeOp, blockStateAfterOp);
+        super(operation, result, blockStateBeforeOp, blockStateAfterOp, entityTagBeforeOp, entityTagAfterOp);
     }
 
     @Override
@@ -29,16 +34,36 @@ public class BlockStateCopyOperationResult extends BlockOperationResult {
         return getOperation().getInteraction().blockPosition().sub(getOperation().getContext().getInteractions().get(0).blockPosition());
     }
 
-    public BlockSnapshot getBlockSnapshot() {
+    public BlockData getBlockData() {
         if (getOperation().getBlockState().isAir()) {
-            return new BlockSnapshot(getRelativePosition(), null);
+            return new BlockData(getRelativePosition(), null, null);
         }
-        return new BlockSnapshot(getRelativePosition(), getOperation().getBlockState());
+        return new BlockData(getRelativePosition(), getOperation().getBlockState(), getOperation().getEntityTag());
     }
 
     @Override
-    public List<BlockState> getBlockSummary(BlockSummary blockSummary) {
-        var blockState = switch (blockSummary) {
+    public List<ItemStack> getItemSummary(ItemSummary itemSummary) {
+        switch (itemSummary) {
+            case CONTAINER_CONSUMED -> {
+                switch (result) {
+                    case SUCCESS, CONSUME -> {
+                        if (getEntityTagToPlace() instanceof ContainerBlockEntity containerBlockEntity) {
+                            return containerBlockEntity.getItems();
+                        }
+                    }
+                }
+            }
+            case CONTAINER_DROPPED -> {
+                switch (result) {
+                    case SUCCESS, CONSUME -> {
+                        if (getEntityTagToBreak() instanceof ContainerBlockEntity containerBlockEntity) {
+                            return containerBlockEntity.getItems();
+                        }
+                    }
+                }
+            }
+        }
+        var blockState = switch (itemSummary) {
             case BLOCKS_COPIED -> switch (result) {
                 case SUCCESS, SUCCESS_PARTIAL, CONSUME -> getBlockStateToBreak();
                 default -> null;
@@ -60,7 +85,7 @@ public class BlockStateCopyOperationResult extends BlockOperationResult {
         if (blockState == null) {
             return List.of();
         }
-        return List.of(blockState);
+        return List.of(blockState.getItem().getDefaultStack());
     }
 
 }

@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.core.World;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.Operation;
@@ -27,9 +28,10 @@ public class BlockStateUpdateOperation extends BlockOperation {
             Storage storage,
             BlockInteraction interaction,
             BlockState blockState,
-            EntityState entityState
+            RecordTag blockTag,
+            Extras extras
     ) {
-        super(world, player, context, storage, interaction, blockState, entityState);
+        super(world, player, context, storage, interaction, blockState, blockTag, extras);
     }
 
     protected boolean destroyBlockInternal() {
@@ -117,12 +119,12 @@ public class BlockStateUpdateOperation extends BlockOperation {
                     }
                 }
                 case OFFHAND_ONLY -> {
-                    if (context.extras().inventorySnapshot().offhandItems().isEmpty()) {
+                    if (context.extras().inventorySnapshot().getOffhandItems().isEmpty()) {
                         if (getBlockStateInWorld().isAir()) {
                             return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;
                         }
                     } else {
-                        if (!context.extras().inventorySnapshot().offhandItems().stream().map(ItemStack::getItem).toList().contains(getBlockStateInWorld().getItem())) {
+                        if (!context.extras().inventorySnapshot().getOffhandItems().stream().map(ItemStack::getItem).toList().contains(getBlockStateInWorld().getItem())) {
                             return BlockOperationResultType.FAIL_BREAK_REPLACE_RULE;
                         }
                     }
@@ -205,21 +207,36 @@ public class BlockStateUpdateOperation extends BlockOperation {
                 if (!placed) {
                     return BlockOperationResultType.FAIL_UNKNOWN;
                 }
+
                 player.awardStat(StatTypes.ITEM_USED.get(itemStack.getItem()));
+
+                if (context.fillContainers()) {
+                    if (getEntityTag() != null && getBlockEntityInWorld() != null) {
+                        if (getPlayer().getGameMode().isCreative()) {
+                            getBlockEntityInWorld().setTag(getEntityTag());
+                            return BlockOperationResultType.SUCCESS;
+                        } else {
+                            return BlockOperationResultType.SUCCESS_PARTIAL;
+                        }
+                    }
+                    return BlockOperationResultType.SUCCESS_PARTIAL;
+                }
                 return BlockOperationResultType.SUCCESS;
             }
         }
-        return BlockOperationResultType.SUCCESS;
+        return BlockOperationResultType.CONSUME;
     }
 
     @Override
     public BlockStateUpdateOperationResult commit() {
-        var entityStateBeforeOp = EntityState.get(getPlayer());
+        var entityExtrasBeforeOp = Extras.get(getPlayer());
         var blockStateBeforeOp = getBlockStateInWorld();
-        EntityState.set(getPlayer(), getEntityState());
+        var entityTagBeforeOp = getEntityTagInWorld();
+        Extras.set(getPlayer(), getExtras());
         var result = updateBlock();
-        EntityState.set(getPlayer(), entityStateBeforeOp);
+        Extras.set(getPlayer(), entityExtrasBeforeOp);
         var blockStateAfterOp = getBlockStateInWorld();
+        var entityTagAfterOp = getEntityTagInWorld();
 
         if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             if (result.success()) {
@@ -227,13 +244,13 @@ public class BlockStateUpdateOperation extends BlockOperation {
             }
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
-        return new BlockStateUpdateOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp);
+        return new BlockStateUpdateOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp, entityTagBeforeOp, entityTagAfterOp);
 
     }
 
     @Override
     public Operation move(MoveContext moveContext) {
-        return new BlockStateUpdateOperation(world, player, context, storage, moveContext.move(interaction), blockState, entityState);
+        return new BlockStateUpdateOperation(world, player, context, storage, moveContext.move(interaction), blockState, entityTag, extras);
     }
 
     @Override
@@ -241,7 +258,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockStateUpdateOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(blockState), mirrorContext.mirror(entityState));
+        return new BlockStateUpdateOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(blockState), entityTag, mirrorContext.mirror(extras));
     }
 
     @Override
@@ -249,12 +266,12 @@ public class BlockStateUpdateOperation extends BlockOperation {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockStateUpdateOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(blockState), rotateContext.rotate(entityState));
+        return new BlockStateUpdateOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(blockState), entityTag, rotateContext.rotate(extras));
     }
 
     @Override
     public Operation refactor(RefactorContext refactorContext) {
-        return new BlockStateUpdateOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()), entityState);
+        return new BlockStateUpdateOperation(world, player, context, storage, interaction, refactorContext.refactor(player, getInteraction()), entityTag, extras);
     }
 
     @Override

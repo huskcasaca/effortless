@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.pattern;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.math.Vector3i;
@@ -46,6 +47,10 @@ public class MoveContext {
             case RELATIVE -> blockPosition.add(amount);
             case ABSOLUTE -> BlockPosition.at(amount);
         };
+    }
+
+    public BlockEntity move(BlockEntity blockEntity) {
+        return blockEntity;
     }
 
     public enum PositionType {

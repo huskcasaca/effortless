@@ -31,23 +31,11 @@ public enum BlockOperationResultType {
     FAIL_BLOCK_STATE_AIR,
     FAIL_UNKNOWN;
 
-    public boolean consumesAction() {
-        return this == SUCCESS || this == SUCCESS_PARTIAL || this == CONSUME;
-    }
-
     public boolean success() {
         return this == SUCCESS || this == SUCCESS_PARTIAL || this == CONSUME;
     }
 
     public boolean fail() {
-        return this != SUCCESS && this != SUCCESS_PARTIAL && this != CONSUME;
-    }
-
-    public boolean shouldSwing() {
-        return this == SUCCESS || this == SUCCESS_PARTIAL;
-    }
-
-    public boolean shouldAwardStats() {
-        return this == SUCCESS || this == SUCCESS_PARTIAL;
+        return !success();
     }
 }

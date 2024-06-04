@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.networking.packets.player;
 
+import java.util.UUID;
+
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufSerializer;
@@ -9,6 +11,7 @@ import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.serializer.ContextSerializer;
 
 public record PlayerBuildPacket(
+        UUID playerId,
         Context context
 ) implements Packet<AllPacketListener> {
 
@@ -21,13 +24,15 @@ public record PlayerBuildPacket(
 
         @Override
         public PlayerBuildPacket read(NetByteBuf byteBuf) {
-            return new PlayerBuildPacket(byteBuf.read(new ContextSerializer()));
+            return new PlayerBuildPacket(byteBuf.readUUID(), byteBuf.read(new ContextSerializer()));
         }
 
         @Override
         public void write(NetByteBuf byteBuf, PlayerBuildPacket packet) {
+            byteBuf.writeUUID(packet.playerId());
             byteBuf.write(packet.context(), new ContextSerializer());
         }
 
     }
+
 }

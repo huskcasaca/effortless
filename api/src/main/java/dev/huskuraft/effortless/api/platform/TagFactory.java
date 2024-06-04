@@ -1,9 +1,9 @@
 package dev.huskuraft.effortless.api.platform;
 
-import dev.huskuraft.effortless.api.tag.TagList;
-import dev.huskuraft.effortless.api.tag.TagLiteral;
-import dev.huskuraft.effortless.api.tag.TagPrimitive;
-import dev.huskuraft.effortless.api.tag.TagRecord;
+import dev.huskuraft.effortless.api.tag.ListTag;
+import dev.huskuraft.effortless.api.tag.StringTag;
+import dev.huskuraft.effortless.api.tag.NumericTag;
+import dev.huskuraft.effortless.api.tag.RecordTag;
 
 public interface TagFactory {
 
@@ -11,25 +11,25 @@ public interface TagFactory {
         return PlatformLoader.getSingleton();
     }
 
-    TagRecord newRecord();
+    RecordTag newRecord();
 
-    TagList newList();
+    ListTag newList();
 
-    TagLiteral newLiteral(String value);
+    StringTag newLiteral(String value);
 
-    TagPrimitive newPrimitive(boolean value);
+    NumericTag newPrimitive(boolean value);
 
-    TagPrimitive newPrimitive(byte value);
+    NumericTag newPrimitive(byte value);
 
-    TagPrimitive newPrimitive(short value);
+    NumericTag newPrimitive(short value);
 
-    TagPrimitive newPrimitive(int value);
+    NumericTag newPrimitive(int value);
 
-    TagPrimitive newPrimitive(long value);
+    NumericTag newPrimitive(long value);
 
-    TagPrimitive newPrimitive(float value);
+    NumericTag newPrimitive(float value);
 
-    TagPrimitive newPrimitive(double value);
+    NumericTag newPrimitive(double value);
 
 
 }

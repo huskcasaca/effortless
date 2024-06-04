@@ -34,4 +34,8 @@ public interface BlockState extends StateHolder {
         return getBlock().asItem();
     }
 
+    default BlockEntity getEntity(BlockPosition blockPosition) {
+        return getBlock().getEntity(blockPosition, this);
+    }
+
 }

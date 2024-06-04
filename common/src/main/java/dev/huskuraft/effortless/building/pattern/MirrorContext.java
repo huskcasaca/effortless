@@ -1,13 +1,14 @@
 package dev.huskuraft.effortless.building.pattern;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
-import dev.huskuraft.effortless.building.operation.block.EntityState;
+import dev.huskuraft.effortless.building.operation.block.Extras;
 
 public record MirrorContext(
        Vector3d center,
@@ -50,9 +51,13 @@ public record MirrorContext(
         return blockState.mirror(axis);
     }
 
-    public EntityState mirror(EntityState entityState) {
+    public BlockEntity mirror(BlockEntity blockEntity) {
+        return blockEntity;
+    }
+
+    public Extras mirror(Extras extras) {
         // TODO: 23/5/24
-        return entityState;
+        return extras;
     }
 
     @Override

@@ -18,6 +18,11 @@ import dev.huskuraft.effortless.api.math.Vector2i;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
+import dev.huskuraft.effortless.api.tag.ListTag;
+import dev.huskuraft.effortless.api.tag.NumericTag;
+import dev.huskuraft.effortless.api.tag.RecordTag;
+import dev.huskuraft.effortless.api.tag.StringTag;
+import dev.huskuraft.effortless.api.tag.Tag;
 import dev.huskuraft.effortless.api.text.Style;
 import dev.huskuraft.effortless.api.text.Text;
 import io.netty.buffer.ByteBuf;
@@ -234,6 +239,45 @@ public final class NetByteBuf extends WrappedByteBuf {
 
     public void writeBlockState(BlockState blockState) {
         writeId(BlockState.REGISTRY, blockState);
+    }
+
+    public RecordTag readRecordTag() {
+        return (RecordTag) readTag();
+    }
+
+    public void writeRecordTag(RecordTag tag) {
+        writeTag(tag);
+    }
+
+    public Tag readTag() {
+        return switch (readByte()) {
+            case Tag.TAG_BYTE -> NumericTag.of(readByte());
+            case Tag.TAG_SHORT -> NumericTag.of(readShort());
+            case Tag.TAG_INT -> NumericTag.of(readInt());
+            case Tag.TAG_LONG -> NumericTag.of(readLong());
+            case Tag.TAG_FLOAT -> NumericTag.of(readFloat());
+            case Tag.TAG_DOUBLE -> NumericTag.of(readDouble());
+            case Tag.TAG_STRING -> StringTag.of(readString());
+            case Tag.TAG_LIST -> ListTag.of(readList(NetByteBuf::readTag));
+            case Tag.TAG_COMPOUND -> RecordTag.of(readMap(NetByteBuf::readString, NetByteBuf::readTag));
+            default -> throw new IllegalArgumentException("Unsupported tag type!");
+        };
+    }
+
+    public void writeTag(Tag tag) {
+        writeByte(tag.getId());
+        switch (tag.getId()) {
+            case Tag.TAG_BYTE -> writeByte(tag.asPrimitive().getAsByte());
+            case Tag.TAG_SHORT -> writeShort(tag.asPrimitive().getAsShort());
+            case Tag.TAG_INT -> writeInt(tag.asPrimitive().getAsInt());
+            case Tag.TAG_LONG -> writeLong(tag.asPrimitive().getAsLong());
+            case Tag.TAG_FLOAT -> writeFloat(tag.asPrimitive().getAsFloat());
+            case Tag.TAG_DOUBLE -> writeDouble(tag.asPrimitive().getAsDouble());
+            case Tag.TAG_STRING -> writeString(tag.asString().getString());
+            case Tag.TAG_LIST -> writeList(tag.asList().stream().toList(), NetByteBuf::writeTag);
+            case Tag.TAG_COMPOUND -> writeMap(tag.asRecord().getTags(), NetByteBuf::writeString, NetByteBuf::writeTag);
+            default -> throw new IllegalArgumentException("Unsupported tag!");
+        }
     }
 
 }

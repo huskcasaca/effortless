@@ -11,14 +11,12 @@ import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Typeface;
-import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.BufferSource;
 import dev.huskuraft.effortless.api.renderer.MatrixStack;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.Screen;
@@ -44,11 +42,6 @@ public class MinecraftRenderer extends Renderer {
         this.minecraftRendererProvider = new Screen(Component.empty()) {{
             init(Minecraft.getInstance(), 0, 0);
         }};
-    }
-
-    @Override
-    public Client client() {
-        return new MinecraftClient(minecraftClient);
     }
 
     @Override
@@ -116,7 +109,7 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState) {
+    public void renderBlockState(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState) {
         var minecraftBlockRenderer = minecraftClient.getBlockRenderer();
         var minecraftWorld = (Level) world.reference();
         var minecraftRenderLayer = (RenderType) renderLayer.reference();

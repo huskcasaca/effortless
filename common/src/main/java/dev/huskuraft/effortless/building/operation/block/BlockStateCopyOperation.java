@@ -20,9 +20,9 @@ public class BlockStateCopyOperation extends BlockOperation {
             Context context,
             Storage storage, // for preview
             BlockInteraction interaction,
-            EntityState entityState
+            Extras extras
     ) {
-        super(world, player, context, storage, interaction, world.getBlockState(interaction.getBlockPosition()), entityState);
+        super(world, player, context, storage, interaction, extras);
     }
 
     protected BlockOperationResultType saveBlock() {
@@ -63,23 +63,25 @@ public class BlockStateCopyOperation extends BlockOperation {
 
     @Override
     public BlockStateCopyOperationResult commit() {
-        var entityStateBeforeOp = EntityState.get(getPlayer());
+        var entityExtrasBeforeOp = Extras.get(getPlayer());
         var blockStateBeforeOp = getBlockStateInWorld();
-        EntityState.set(getPlayer(), getEntityState());
+        var entityTagBeforeOp = getEntityTagInWorld();
+        Extras.set(getPlayer(), getExtras());
         var result = saveBlock();
-        EntityState.set(getPlayer(), entityStateBeforeOp);
+        Extras.set(getPlayer(), entityExtrasBeforeOp);
         var blockStateAfterOp = getBlockStateInWorld();
+        var entityTagAfterOp = getEntityTagInWorld();
 
         if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             getPlayer().getClient().getParticleEngine().crack(getBlockPosition(), getInteraction().getDirection());
         }
 
-        return new BlockStateCopyOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp);
+        return new BlockStateCopyOperationResult(this, result, blockStateBeforeOp, blockStateAfterOp, entityTagBeforeOp, entityTagAfterOp);
     }
 
     @Override
     public Operation move(MoveContext moveContext) {
-        return new BlockStateCopyOperation(world, player, context, storage, moveContext.move(interaction), entityState);
+        return new BlockStateCopyOperation(world, player, context, storage, moveContext.move(interaction), extras);
     }
 
     @Override
@@ -87,7 +89,7 @@ public class BlockStateCopyOperation extends BlockOperation {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockStateCopyOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(entityState));
+        return new BlockStateCopyOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(extras));
     }
 
     @Override
@@ -95,7 +97,7 @@ public class BlockStateCopyOperation extends BlockOperation {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockStateCopyOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(entityState));
+        return new BlockStateCopyOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(extras));
     }
 
     @Override

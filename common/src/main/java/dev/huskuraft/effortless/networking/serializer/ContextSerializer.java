@@ -7,10 +7,9 @@ import dev.huskuraft.effortless.building.BuildState;
 import dev.huskuraft.effortless.building.BuildType;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.InventorySnapshot;
-import dev.huskuraft.effortless.building.clipboard.BlockSnapshot;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.BuilderConfig;
-import dev.huskuraft.effortless.building.operation.block.EntityState;
+import dev.huskuraft.effortless.building.operation.block.Extras;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.replace.ReplaceStrategy;
@@ -62,30 +61,14 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         public Clipboard read(NetByteBuf byteBuf) {
             return new Clipboard(
                     byteBuf.readBoolean(),
-                    byteBuf.readList(new BlockSnapshotSerializer())
+                    byteBuf.read(new SnapshotSerializer())
             );
         }
 
         @Override
         public void write(NetByteBuf byteBuf, Clipboard clipboard) {
             byteBuf.writeBoolean(clipboard.enabled());
-            byteBuf.writeList(clipboard.blockSnapshots(), new BlockSnapshotSerializer());
-        }
-    }
-
-    public static class BlockSnapshotSerializer implements NetByteBufSerializer<BlockSnapshot> {
-        @Override
-        public BlockSnapshot read(NetByteBuf byteBuf) {
-            return new BlockSnapshot(
-                    byteBuf.read(new BlockPositionSerializer()),
-                    byteBuf.readNullable(NetByteBuf::readBlockState)
-            );
-        }
-
-        @Override
-        public void write(NetByteBuf byteBuf, BlockSnapshot blockSnapshot) {
-            byteBuf.write(blockSnapshot.relativePosition(), new BlockPositionSerializer());
-            byteBuf.writeNullable(blockSnapshot.blockState(), NetByteBuf::writeBlockState);
+            byteBuf.write(clipboard.snapshot(), new SnapshotSerializer());
         }
     }
 
@@ -105,10 +88,10 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         }
     }
 
-    public static class EntityStateSerializer implements NetByteBufSerializer<EntityState> {
+    public static class EntityStateSerializer implements NetByteBufSerializer<Extras> {
         @Override
-        public EntityState read(NetByteBuf byteBuf) {
-            return new EntityState(
+        public Extras read(NetByteBuf byteBuf) {
+            return new Extras(
                     byteBuf.read(new Vector3dSerializer()),
                     byteBuf.readFloat(),
                     byteBuf.readFloat()
@@ -116,10 +99,10 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         }
 
         @Override
-        public void write(NetByteBuf byteBuf, EntityState entityState) {
-            byteBuf.write(entityState.position(), new Vector3dSerializer());
-            byteBuf.writeFloat(entityState.rotationX());
-            byteBuf.writeFloat(entityState.rotationY());
+        public void write(NetByteBuf byteBuf, Extras extras) {
+            byteBuf.write(extras.position(), new Vector3dSerializer());
+            byteBuf.writeFloat(extras.rotationX());
+            byteBuf.writeFloat(extras.rotationY());
         }
     }
 
@@ -129,19 +112,20 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         public InventorySnapshot read(NetByteBuf byteBuf) {
             return new InventorySnapshot(
                     byteBuf.readList(NetByteBuf::readItemStack),
-                    byteBuf.readList(NetByteBuf::readItemStack),
-                    byteBuf.readList(NetByteBuf::readItemStack),
                     byteBuf.readVarInt(),
-                    byteBuf.readVarInt()
-            );
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt(),
+                    byteBuf.readVarInt());
         }
 
         @Override
         public void write(NetByteBuf byteBuf, InventorySnapshot inventorySnapshot) {
             byteBuf.writeList(inventorySnapshot.items(), NetByteBuf::writeItemStack);
-            byteBuf.writeList(inventorySnapshot.armorItems(), NetByteBuf::writeItemStack);
-            byteBuf.writeList(inventorySnapshot.offhandItems(), NetByteBuf::writeItemStack);
             byteBuf.writeVarInt(inventorySnapshot.selected());
+            byteBuf.writeVarInt(inventorySnapshot.bagSize());
+            byteBuf.writeVarInt(inventorySnapshot.armorSize());
+            byteBuf.writeVarInt(inventorySnapshot.offhandSize());
             byteBuf.writeVarInt(inventorySnapshot.hotbarSize());
         }
     }
@@ -162,7 +146,7 @@ public class ContextSerializer implements NetByteBufSerializer<Context> {
         @Override
         public void write(NetByteBuf byteBuf, Context.Extras extras) {
             byteBuf.writeResourceLocation(extras.dimensionId());
-            byteBuf.write(extras.entityState(), new EntityStateSerializer());
+            byteBuf.write(extras.extras(), new EntityStateSerializer());
             byteBuf.writeEnum(extras.gameMode());
             byteBuf.writeLong(extras.seed());
             byteBuf.write(extras.inventorySnapshot(), new InventorySnapshotSerializer());

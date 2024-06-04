@@ -33,7 +33,7 @@ public abstract class TransformerRenderer {
     public abstract void render(Renderer renderer, float deltaTick);
 
     protected void renderRadialFloor(Renderer renderer, Vector3d center, Vector3d pos1, Vector3d pos2, int color) {
-        var cam = renderer.camera().position();
+        var cam = renderer.getCamera().position();
         pos1 = pos1.sub(center);
         pos2 = pos2.sub(center);
         renderer.pushPose();
@@ -44,7 +44,7 @@ public abstract class TransformerRenderer {
 
 
     protected void renderRadialPlane(Renderer renderer, Vector3d pos1, Vector3d pos2, int length, Axis axis, int color) {
-        var cam = renderer.camera().position();
+        var cam = renderer.getCamera().position();
         var min = switch (axis) {
             case X -> Vector3d.ZERO.withX(-length);
             case Y -> Vector3d.ZERO.withY(-length);
@@ -91,7 +91,7 @@ public abstract class TransformerRenderer {
     }
 
     protected void renderPlaneByAxis(Renderer renderer, Vector3d pos, Integer range, Axis axis, Color color) {
-        var cam = renderer.camera().position();
+        var cam = renderer.getCamera().position();
         var min = new Vector3d(-range, -range, -range);
         var max = new Vector3d(range, range, range);
 
@@ -133,7 +133,7 @@ public abstract class TransformerRenderer {
     }
 
     protected void renderBoundingBox(Renderer renderer, BoundingBox3d boundingBox3d, int color) {
-        var cam = renderer.camera().position();
+        var cam = renderer.getCamera().position();
         var center = boundingBox3d.getCenter();
         var box = boundingBox3d.move(center.mul(-1));
 
@@ -189,7 +189,7 @@ public abstract class TransformerRenderer {
     }
 
     protected void renderAACuboidLine(Renderer renderer, Vector3d start, Vector3d end, float width, int color, boolean disableNormals) {
-        var camera = renderer.camera().position();
+        var camera = renderer.getCamera().position();
         start = start.sub(camera);
         end = end.sub(camera);
         if (width == 0) {

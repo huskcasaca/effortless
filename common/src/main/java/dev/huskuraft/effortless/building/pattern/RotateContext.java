@@ -1,6 +1,7 @@
 package dev.huskuraft.effortless.building.pattern;
 
 import dev.huskuraft.effortless.api.core.Axis;
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
@@ -8,7 +9,7 @@ import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.core.Revolve;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3d;
-import dev.huskuraft.effortless.building.operation.block.EntityState;
+import dev.huskuraft.effortless.building.operation.block.Extras;
 
 public record RotateContext(
         Axis axis,
@@ -116,6 +117,10 @@ public record RotateContext(
         };
     }
 
+    public BlockEntity rotate(BlockEntity blockEntity) {
+        return blockEntity;
+    }
+
     public BlockState rotate(BlockState blockState) {
         if (blockState == null) {
             return null;
@@ -123,9 +128,9 @@ public record RotateContext(
         return rotateBlockState(blockState, angle, false);
     }
 
-    public EntityState rotate(EntityState entityState) {
+    public Extras rotate(Extras extras) {
         // TODO: 23/5/24
-        return entityState;
+        return extras;
     }
 
     @Override

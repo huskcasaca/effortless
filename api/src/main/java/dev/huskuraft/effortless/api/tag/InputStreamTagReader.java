@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface InputStreamTagReader {
-    TagRecord readCompressed(InputStream input) throws IOException;
+    RecordTag readCompressed(InputStream input) throws IOException;
 
-    default TagRecord readCompressed(File file) throws IOException {
+    default RecordTag readCompressed(File file) throws IOException {
         try (var inputStream = new FileInputStream(file)) {
             return readCompressed(inputStream);
         }

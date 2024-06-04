@@ -20,7 +20,7 @@ import dev.huskuraft.effortless.api.platform.ClientManager;
 import dev.huskuraft.effortless.api.platform.Platform;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.renderer.Shaders;
-import dev.huskuraft.effortless.building.clipboard.ClipboardAction;
+import dev.huskuraft.effortless.building.clipboard.SnapshotTransform;
 import dev.huskuraft.effortless.renderer.BlockShaders;
 import dev.huskuraft.effortless.renderer.opertaion.OperationsRenderer;
 import dev.huskuraft.effortless.renderer.outliner.OutlineRenderer;
@@ -185,71 +185,71 @@ public final class EffortlessClientManager implements ClientManager {
         }
 
         if (EffortlessKeys.ROTATE_X.getBinding().consumeClick()) {
-            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.ROTATE_X);
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.ROTATE_X);
         }
 
         if (EffortlessKeys.ROTATE_Y.getBinding().consumeClick()) {
-            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.ROTATE_Y);
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.ROTATE_Y);
         }
 
         if (EffortlessKeys.ROTATE_Z.getBinding().consumeClick()) {
-            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.ROTATE_Z);
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.ROTATE_Z);
         }
 
         if (EffortlessKeys.MOVE_BACKWARD.getBinding().consumeClick()) {
             switch (Direction.fromYRot(getPlayer().getYRot())) {
-                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Z);
-                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Z);
-                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_X);
-                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_X);
+                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.INCREASE_Z);
+                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.DECREASE_Z);
+                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.INCREASE_X);
+                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.DECREASE_X);
             }
         }
 
         if (EffortlessKeys.MOVE_FORWARD.getBinding().consumeClick()) {
             switch (Direction.fromYRot(getPlayer().getYRot())) {
-                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Z);
-                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Z);
-                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_X);
-                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_X);
+                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.DECREASE_Z);
+                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.INCREASE_Z);
+                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.DECREASE_X);
+                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.INCREASE_X);
             }
         }
 
         if (EffortlessKeys.MOVE_LEFT.getBinding().consumeClick()) {
             switch (Direction.fromYRot(getPlayer().getYRot())) {
-                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_X);
-                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_X);
-                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Z);
-                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Z);
+                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.DECREASE_X);
+                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.INCREASE_X);
+                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.INCREASE_Z);
+                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.DECREASE_Z);
             }
         }
 
         if (EffortlessKeys.MOVE_RIGHT.getBinding().consumeClick()) {
             switch (Direction.fromYRot(getPlayer().getYRot())) {
-                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_X);
-                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_X);
-                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Z);
-                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Z);
+                case NORTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.INCREASE_X);
+                case SOUTH -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.DECREASE_X);
+                case WEST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.DECREASE_Z);
+                case EAST -> getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.INCREASE_Z);
             }
         }
 
         if (EffortlessKeys.MOVE_UP.getBinding().consumeClick()) {
-            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.INCREASE_Y);
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.INCREASE_Y);
         }
 
         if (EffortlessKeys.MOVE_DOWN.getBinding().consumeClick()) {
-            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.DECREASE_Y);
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.DECREASE_Y);
         }
 
         if (EffortlessKeys.MIRROR_X.getBinding().consumeClick()) {
-            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.MIRROR_X);
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.MIRROR_X);
         }
 
         if (EffortlessKeys.MIRROR_Y.getBinding().consumeClick()) {
-            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.MIRROR_Y);
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.MIRROR_Y);
         }
 
         if (EffortlessKeys.MIRROR_Z.getBinding().consumeClick()) {
-            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), ClipboardAction.MIRROR_Z);
+            getEntrance().getStructureBuilder().updateClipboard(getPlayer(), SnapshotTransform.MIRROR_Z);
         }
 
         if (Keys.KEY_ESCAPE.getBinding().isKeyDown()) {

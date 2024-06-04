@@ -6,19 +6,18 @@ import java.util.Optional;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.gui.Typeface;
-import dev.huskuraft.effortless.api.platform.Client;
 import dev.huskuraft.effortless.api.renderer.BufferSource;
 import dev.huskuraft.effortless.api.renderer.MatrixStack;
 import dev.huskuraft.effortless.api.renderer.RenderLayer;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
-import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -42,11 +41,6 @@ public class MinecraftRenderer extends Renderer {
         this.minecraftMatrixStack = minecraftMatrixStack;
         this.minecraftBufferSource = minecraftClient.renderBuffers().bufferSource();
         this.minecraftRendererProvider = new GuiGraphics(Minecraft.getInstance(), this.minecraftMatrixStack, minecraftBufferSource);
-    }
-
-    @Override
-    public Client client() {
-        return new MinecraftClient(minecraftClient);
     }
 
     @Override
@@ -109,7 +103,7 @@ public class MinecraftRenderer extends Renderer {
     }
 
     @Override
-    public void renderBlockInWorld(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState) {
+    public void renderBlockState(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockState blockState) {
         var minecraftBlockRenderer = minecraftClient.getBlockRenderer();
         var minecraftWorld = (Level) world.reference();
         var minecraftRenderLayer = (RenderType) renderLayer.reference();
@@ -128,5 +122,17 @@ public class MinecraftRenderer extends Renderer {
                 minecraftBlockState.getSeed(minecraftBlockPosition),
                 OverlayTexture.NO_OVERLAY);
     }
+
+    @Override
+    public void renderBlockEntity(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockEntity blockEntity) {
+        var minecraftBlockEntityRenderDispatcher = minecraftClient.getBlockEntityRenderDispatcher();
+        var minecraftBlockEntity = (net.minecraft.world.level.block.entity.BlockEntity) blockEntity.reference();
+
+        minecraftBlockEntity.setLevel(world.reference());
+        minecraftBlockEntityRenderDispatcher.render(minecraftBlockEntity, 0f, minecraftMatrixStack, minecraftBufferSource);
+
+
+    }
+
 
 }
