@@ -297,7 +297,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         updateContext(player, context -> context.withNoInteraction().withStructure(structure).withEmptyClipboard());
         if (structure.getMode().isDisabled()) {
             getEntrance().getClientManager().getTooltipRenderer().hideAllEntries(false);
-            updateContext(player, context -> context.withPattern(context.pattern().withEnabled(false)));
+            updateContext(player, context -> context);
         }
         return true;
     }
