@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.ItemStack;
@@ -123,5 +124,17 @@ public class MinecraftRenderer extends Renderer {
                 minecraftBlockState.getSeed(minecraftBlockPosition),
                 OverlayTexture.NO_OVERLAY);
     }
+
+    @Override
+    public void renderBlockEntity(RenderLayer renderLayer, World world, BlockPosition blockPosition, BlockEntity blockEntity) {
+        var minecraftBlockEntityRenderDispatcher = minecraftClient.getBlockEntityRenderDispatcher();
+        var minecraftBlockEntity = (net.minecraft.world.level.block.entity.BlockEntity) blockEntity.reference();
+
+        minecraftBlockEntity.setLevel(world.reference());
+        minecraftBlockEntityRenderDispatcher.render(minecraftBlockEntity, 0f, minecraftMatrixStack, minecraftBufferSource);
+
+
+    }
+
 
 }
