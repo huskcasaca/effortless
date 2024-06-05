@@ -38,4 +38,7 @@ public interface BlockState extends StateHolder {
         return getBlock().getEntity(blockPosition, this);
     }
 
+    @Deprecated
+    int getRequiredItemCount(); // this is a temp solution for slab blocks drop count, will replace with loot table in the future.
+
 }

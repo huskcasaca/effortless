@@ -180,8 +180,15 @@ public class BlockStateUpdateOperation extends BlockOperation {
                 return BlockOperationResultType.FAIL_PLACE_ITEM_NOT_BLOCK;
             }
 
+            var estimation = getItemCountEstimation();
+            if (!getPlayer().getGameMode().isCreative()) {
+                if (storage.getCount(itemStack.getItem()) < estimation) {
+                    return BlockOperationResultType.FAIL_PLACE_ITEM_INSUFFICIENT;
+                }
+            }
+
             if (context.isPreviewType() || context.isBuildClientType()) {
-                itemStack.decrease(1);
+                storage.consume(itemStack.getItem(), estimation);
                 return BlockOperationResultType.CONSUME;
             }
 
@@ -200,7 +207,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
                         blockItem.getBlock().place(getWorld(), getPlayer(), getBlockPosition(), getBlockState(), itemStack);
                     }
                     if (placed && !getPlayer().getGameMode().isCreative()) {
-                        itemStack.decrease(1);
+                        storage.consume(blockItem, getItemCountEstimation());
                     }
                 }
                 player.setItemStack(getHand(), originalItemStack);
@@ -277,5 +284,10 @@ public class BlockStateUpdateOperation extends BlockOperation {
     @Override
     public Type getType() {
         return Type.UPDATE;
+    }
+
+    public int getItemCountEstimation() {
+        return getBlockState().getRequiredItemCount();
+//        return getBlockState().getBlock().getDrops(getWorld(), getPlayer(), getBlockPosition(), getBlockStateInWorld(), null, ItemStack.empty()).stream().filter(itemStack1 -> itemStack1.getItem().equals(getBlockState().getItem())).mapToInt(ItemStack::getCount).sum();
     }
 }

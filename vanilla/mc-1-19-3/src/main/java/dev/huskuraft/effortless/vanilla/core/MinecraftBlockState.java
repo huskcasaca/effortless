@@ -161,4 +161,12 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
     public boolean requiresCorrectToolForDrops() {
         return refs.requiresCorrectToolForDrops();
     }
+
+    @Override
+    public int getRequiredItemCount() {
+        if (refs.getBlock() instanceof SlabBlock && refs.getValue(SlabBlock.TYPE) == SlabType.DOUBLE) {
+            return 2;
+        }
+        return 1;
+    }
 }

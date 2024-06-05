@@ -29,6 +29,16 @@ public interface Storage {
         }
 
         @Override
+        public int consume(Item item, int count) {
+            return count;
+        }
+
+        @Override
+        public int getCount(Item item) {
+            return Integer.MAX_VALUE;
+        }
+
+        @Override
         public List<ItemStack> contents() {
             return List.of();
         }
@@ -48,6 +58,16 @@ public interface Storage {
         @Override
         public boolean consume(ItemStack stack) {
             return false;
+        }
+
+        @Override
+        public int consume(Item item, int count) {
+            return 0;
+        }
+
+        @Override
+        public int getCount(Item item) {
+            return 0;
         }
 
         @Override
@@ -98,6 +118,16 @@ public interface Storage {
             }
 
             @Override
+            public int consume(Item item, int count) {
+                return getStorage().consume(item, count);
+            }
+
+            @Override
+            public int getCount(Item item) {
+                return getStorage().getCount(item);
+            }
+
+            @Override
             public List<ItemStack> contents() {
                 return getStorage().contents();
             }
@@ -106,12 +136,12 @@ public interface Storage {
     }
 
 
-    static Storage merge(Storage... storage) {
+    static Storage merge(Storage... storages) {
         return new Storage() {
             @Override
             public Optional<ItemStack> searchTag(ItemStack stack) {
-                for (Storage storage1 : storage) {
-                    var found = storage1.searchTag(stack);
+                for (var storage : storages) {
+                    var found = storage.searchTag(stack);
                     if (found.isPresent()) {
                         return found;
                     }
@@ -121,8 +151,8 @@ public interface Storage {
 
             @Override
             public Optional<ItemStack> search(Item item) {
-                for (Storage storage1 : storage) {
-                    var found = storage1.search(item);
+                for (var storage : storages) {
+                    var found = storage.search(item);
                     if (found.isPresent()) {
                         return found;
                     }
@@ -132,8 +162,8 @@ public interface Storage {
 
             @Override
             public boolean consume(ItemStack stack) {
-                for (Storage storage1 : storage) {
-                    if (storage1.consume(stack)) {
+                for (var storage : storages) {
+                    if (storage.consume(stack)) {
                         return true;
                     }
                 }
@@ -141,8 +171,29 @@ public interface Storage {
             }
 
             @Override
+            public int consume(Item item, int count) {
+                var consumed = 0;
+                for (var storage : storages) {
+                    consumed += storage.consume(item, count - consumed);
+                    if (consumed >= count) {
+                        return consumed;
+                    }
+                }
+                return consumed;
+            }
+
+            @Override
+            public int getCount(Item item) {
+                var result = 0L;
+                for (var storage : storages) {
+                    result += storage.getCount(item);
+                }
+                return (int) Math.min(result, Integer.MAX_VALUE);
+            }
+
+            @Override
             public List<ItemStack> contents() {
-                return Arrays.stream(storage).map(Storage::contents).flatMap(List::stream).toList();
+                return Arrays.stream(storages).map(Storage::contents).flatMap(List::stream).toList();
             }
 
         };
@@ -205,6 +256,39 @@ public interface Storage {
             }
 
             @Override
+            public int consume(Item item, int count) {
+                if (infinite) {
+                    return count;
+                }
+                var consumed = 0;
+                for (var content : contents()) {
+                    if (content.getItem().equals(item)) {
+                        var available = Math.min(content.getCount(), count - consumed);
+                        content.decrease(available);
+                        consumed += available;
+                    }
+                    if (consumed >= count) {
+                        return consumed;
+                    }
+                }
+                return consumed;
+            }
+
+            @Override
+            public int getCount(Item item) {
+                if (infinite) {
+                    return Integer.MAX_VALUE;
+                }
+                var result = 0;
+                for (var content : contents()) {
+                    if (content.getItem().equals(item)) {
+                        result += content.getCount();
+                    }
+                }
+                return result;
+            }
+
+            @Override
             public List<ItemStack> contents() {
                 return itemStacks;
             }
@@ -217,6 +301,16 @@ public interface Storage {
     Optional<ItemStack> search(Item item);
 
     boolean consume(ItemStack stack);
+
+    int consume(Item item, int count);
+
+    int getCount(Item item);
+
+//    default boolean contains(Item item) {
+//        var result = search(item);
+//        return result.isPresent() && !result.get().isEmpty();
+//    }
+//
 
     List<ItemStack> contents();
 
