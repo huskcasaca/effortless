@@ -10,8 +10,8 @@ import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.api.networking.Side;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
-import dev.huskuraft.effortless.networking.packets.player.PlayerOperationTooltipPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSnapshotCapturePacket;
@@ -41,7 +41,7 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         registerPacket(PlayerSettingsPacket.class, new PlayerSettingsPacket.Serializer());
         registerPacket(PlayerBuildPacket.class, new PlayerBuildPacket.Serializer());
         registerPacket(PlayerPermissionCheckPacket.class, new PlayerPermissionCheckPacket.Serializer());
-        registerPacket(PlayerOperationTooltipPacket.class, new PlayerOperationTooltipPacket.Serializer());
+        registerPacket(PlayerBuildTooltipPacket.class, new PlayerBuildTooltipPacket.Serializer());
         registerPacket(PlayerSnapshotCapturePacket.class, new PlayerSnapshotCapturePacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
@@ -108,7 +108,7 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         }
 
         @Override
-        public void handle(PlayerOperationTooltipPacket packet, Player player) {
+        public void handle(PlayerBuildTooltipPacket packet, Player player) {
 
         }
 

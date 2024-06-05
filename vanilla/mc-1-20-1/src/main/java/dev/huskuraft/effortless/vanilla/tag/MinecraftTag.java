@@ -8,14 +8,13 @@ import net.minecraft.nbt.StringTag;
 
 public record MinecraftTag(net.minecraft.nbt.Tag refs) implements Tag {
 
-    public static Tag ofNullable(net.minecraft.nbt.Tag tag) {
-        if (tag == null) return null;
-        if (tag instanceof NumericTag numericTag) return new MinecraftNumericTag(numericTag);
-        if (tag instanceof StringTag stringTag) return new MinecraftStringTag(stringTag);
-        if (tag instanceof CompoundTag compoundTag) return new MinecraftRecordTag(compoundTag);
-        if (tag instanceof ListTag listTag) return new MinecraftListTag(listTag);
-
-        return new MinecraftTag(tag);
+    public static Tag ofNullable(net.minecraft.nbt.Tag refs) {
+        if (refs == null) return null;
+        if (refs instanceof NumericTag numericTag) return new MinecraftNumericTag(numericTag);
+        if (refs instanceof StringTag stringTag) return new MinecraftStringTag(stringTag);
+        if (refs instanceof CompoundTag compoundTag) return new MinecraftRecordTag(compoundTag);
+        if (refs instanceof ListTag listTag) return new MinecraftListTag(listTag);
+        return new MinecraftTag(refs);
     }
 
     @Override

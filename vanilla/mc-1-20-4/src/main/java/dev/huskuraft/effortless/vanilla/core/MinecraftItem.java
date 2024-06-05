@@ -19,12 +19,12 @@ import net.minecraft.world.item.context.UseOnContext;
 
 public record MinecraftItem(net.minecraft.world.item.Item refs) implements Item {
 
-    public static Item ofNullable(net.minecraft.world.item.Item reference) {
-        if (reference == null) return null;
-        if (reference instanceof BlockItem blockItem) return new MinecraftBlockItem(blockItem);
-        if (reference instanceof DiggerItem diggerItem) return new MinecraftDiggerItem(diggerItem);
-        if (reference instanceof BucketItem bucketItem) return new MinecraftBucketItem(bucketItem);
-        return new MinecraftItem(reference);
+    public static Item ofNullable(net.minecraft.world.item.Item refs) {
+        if (refs == null) return null;
+        if (refs instanceof BlockItem blockItem) return new MinecraftBlockItem(blockItem);
+        if (refs instanceof DiggerItem diggerItem) return new MinecraftDiggerItem(diggerItem);
+        if (refs instanceof BucketItem bucketItem) return new MinecraftBucketItem(bucketItem);
+        return new MinecraftItem(refs);
     }
 
     @Override

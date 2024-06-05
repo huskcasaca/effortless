@@ -15,6 +15,10 @@ public record PlayerBuildPacket(
         Context context
 ) implements Packet<AllPacketListener> {
 
+    public static PlayerBuildPacket by(Player player, Context context) {
+        return new PlayerBuildPacket(player.getId(), context);
+    }
+
     @Override
     public void handle(AllPacketListener packetListener, Player sender) {
         packetListener.handle(this, sender);

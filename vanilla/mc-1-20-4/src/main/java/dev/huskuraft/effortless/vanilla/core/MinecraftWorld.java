@@ -15,8 +15,9 @@ import net.minecraft.world.level.Level;
 
 public record MinecraftWorld(Level refs) implements World {
 
-    public static World ofNullable(Level reference) {
-        return reference == null ? null : new MinecraftWorld(reference);
+    public static World ofNullable(Level refs) {
+        if (refs == null) return null;
+        return new MinecraftWorld(refs);
     }
 
     @Override

@@ -10,8 +10,9 @@ import net.minecraft.network.chat.TextColor;
 
 public record MinecraftText(Component refs) implements Text {
 
-    public static Text ofNullable(Component reference) {
-        return reference == null ? null : new MinecraftText(reference);
+    public static Text ofNullable(Component refs) {
+        if (refs == null) return null;
+        return new MinecraftText(refs);
     }
 
     @Override

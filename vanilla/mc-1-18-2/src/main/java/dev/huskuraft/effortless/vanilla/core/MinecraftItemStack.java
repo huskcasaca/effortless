@@ -15,6 +15,11 @@ public record MinecraftItemStack(
         net.minecraft.world.item.ItemStack refs
 ) implements ItemStack {
 
+    public static ItemStack ofNullable(net.minecraft.world.item.ItemStack refs) {
+        if (refs == null) return null;
+        return new MinecraftItemStack(refs);
+    }
+
     @Override
     public Item getItem() {
         return MinecraftItem.ofNullable(refs.getItem());

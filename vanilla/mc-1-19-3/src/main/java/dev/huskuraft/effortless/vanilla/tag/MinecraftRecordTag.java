@@ -8,8 +8,9 @@ import net.minecraft.nbt.CompoundTag;
 
 public record MinecraftRecordTag(CompoundTag refs) implements RecordTag {
 
-    public static RecordTag ofNullable(CompoundTag compoundTag) {
-        return compoundTag == null ? null : new MinecraftRecordTag(compoundTag);
+    public static RecordTag ofNullable(CompoundTag refs) {
+        if (refs == null) return null;
+        return new MinecraftRecordTag(refs);
     }
 
     @Override
