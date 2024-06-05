@@ -2,6 +2,14 @@
 
 ----------
 
+### 3.0.0-alpha.4
+
+- Add renderer for block entity ([#144](https://github.com/huskcasaca/effortless/pull/144))
+- Add support for copying/pasting container contents ([#144](https://github.com/huskcasaca/effortless/pull/144))
+- Fix slab item consumption ([#145](https://github.com/huskcasaca/effortless/pull/145))
+
+----------
+
 ### 3.0.0-alpha.3
 
 - Add quick replace mode back ([#141](https://github.com/huskcasaca/effortless/pull/141))
