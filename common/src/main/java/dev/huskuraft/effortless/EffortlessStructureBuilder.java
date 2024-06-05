@@ -118,21 +118,27 @@ public final class EffortlessStructureBuilder extends StructureBuilder {
         }
 
         var server = player.getServer();
-        var result = new BatchBuildSession(getEntrance(), player, context).commit();
+
+        if (context.isBuildClientType()) {
+            Effortless.LOGGER.debug("Received BUILD_CLIENT request from %s".formatted(player.getProfile().getName()));
+            return;
+        }
 
         if (context.isBuildType()) {
-            Effortless.LOGGER.debug("Received build request from %s".formatted(player.getProfile().getName()));
+            Effortless.LOGGER.debug("Received BUILD request from %s".formatted(player.getProfile().getName()));
+            var result = new BatchBuildSession(getEntrance(), player, context).commit();
             getOperationResultStack(player).push(result);
+            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.build(result), player);
+            return;
         }
 
         for (var otherPlayer : server.getPlayerList().getPlayers()) {
-            if (otherPlayer.getPosition().distance(player.getPosition()) > 128) {
+            if (otherPlayer.getId().equals(player.getId()) || otherPlayer.getPosition().distance(player.getPosition()) > 128) {
                 continue;
             }
-            Effortless.LOGGER.debug("Received build request from %s".formatted(player.getProfile().getName()));
-
+            Effortless.LOGGER.debug("Received PREVIEW request from %s".formatted(player.getProfile().getName()));
             getEntrance().getChannel().sendPacket(PlayerBuildPacket.by(player, context), otherPlayer);
-            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.build(result), player);
+//            getEntrance().getChannel().sendPacket(PlayerBuildTooltipPacket.build(result), player);
         }
     }
 

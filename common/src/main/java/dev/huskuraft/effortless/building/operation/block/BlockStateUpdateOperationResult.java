@@ -108,10 +108,8 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
         if (blockState == null) {
             return List.of();
         }
-        if (getOperation().getWorld().isClient()) {
-            return List.of();
-        }
-        return blockState.getBlock().getDrops(getOperation().getWorld(), getOperation().getPlayer(), getOperation().getBlockPosition(), blockState, null, ItemStack.empty());
+        return List.of(blockState.getItem().getDefaultStack().withCount(blockState.getRequiredItemCount()));
+//        return blockState.getBlock().getDrops(getOperation().getWorld(), getOperation().getPlayer(), getOperation().getBlockPosition(), blockState, null, ItemStack.empty());
     }
 
 

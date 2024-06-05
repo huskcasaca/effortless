@@ -97,13 +97,13 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             setContext(player, getContext(getPlayer()).newInteraction());
 
             var finalizedContext = context.finalize(player, BuildStage.INTERACT);
-            var previewContext = finalizedContext.withBuildType(BuildType.BUILD_CLIENT);
-            var result = new BatchBuildSession(getEntrance(), player, previewContext).commit();
+            var clientContext = finalizedContext.withBuildType(BuildType.BUILD_CLIENT);
+            var result = new BatchBuildSession(getEntrance(), player, clientContext).commit();
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(getPlayer().getId(), finalizedContext));
             showContext(context.id(), 1024, player, context, result);
 
             playSoundInBatch(player, result);
-//            showBuildTooltip(context.id(), 1024, player, previewContext, result);
+            showTooltip(context.id(), 1024, player, result.getTooltip());
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, true);
 
             return BuildResult.COMPLETED;
@@ -461,12 +461,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     @Override
     public void onContextReceived(Player player, Context context) {
         if (context.isBuildType()) {
-            return; // handle on server
+            return; // handle on server, will never happen
         }
         var result = new BatchBuildSession(getEntrance(), player, context).commit();
 
         showContext(player.getId(), 1024, player, context, result);
-//        showBuildTooltip(context.id(), 1024, player, result);
+        showTooltip(context.id(), 1024, player, result.getTooltip());
 
         if (context.isBuildClientType()) {
             playSoundInBatch(player, result);
@@ -571,11 +571,11 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
         if (context.getVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
             showContext(player.getId(), 0, player, context, null);
-//            showBuildTooltip(player.getId(), 0, player, OperationTooltip.build(context));
+            showTooltip(player.getId(), 0, player, OperationTooltip.build(context));
         } else {
             var result = new BatchBuildSession(getEntrance(), player, context.withBuildType(BuildType.PREVIEW)).commit();
             showContext(player.getId(), 0, player, context, result);
-//            showBuildTooltip(player.getId(), 0, player, result.getTooltip());
+            showTooltip(player.getId(), 0, player, result.getTooltip());
         }
 
         showBuildMessage(player, context);
