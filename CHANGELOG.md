@@ -2,6 +2,13 @@
 
 ----------
 
+### 3.0.0-beta.1
+
+* Fix build tooltip not show correctly at client side ([#146](https://github.com/huskcasaca/effortless/pull/146))
+* Fix pattern disabled when update build mode ([#147](https://github.com/huskcasaca/effortless/pull/147))
+
+----------
+
 ### 3.0.0-alpha.4
 
 - Add renderer for block entity ([#144](https://github.com/huskcasaca/effortless/pull/144))
