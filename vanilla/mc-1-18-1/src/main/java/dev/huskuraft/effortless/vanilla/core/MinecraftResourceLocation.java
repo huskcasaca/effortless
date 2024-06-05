@@ -6,8 +6,9 @@ public record MinecraftResourceLocation(
         net.minecraft.resources.ResourceLocation refs
 ) implements ResourceLocation {
 
-    public static ResourceLocation ofNullable(net.minecraft.resources.ResourceLocation reference) {
-        return reference == null ? null : new MinecraftResourceLocation(reference);
+    public static ResourceLocation ofNullable(net.minecraft.resources.ResourceLocation refs) {
+        if (refs == null) return null;
+        return new MinecraftResourceLocation(refs);
     }
 
     @Override

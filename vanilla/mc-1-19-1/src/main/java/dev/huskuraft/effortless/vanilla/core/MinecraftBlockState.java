@@ -29,8 +29,9 @@ import net.minecraft.world.level.block.state.properties.SlabType;
 
 public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockState refs) implements BlockState {
 
-    public static BlockState ofNullable(net.minecraft.world.level.block.state.BlockState value) {
-        return value == null ? null : new MinecraftBlockState(value);
+    public static BlockState ofNullable(net.minecraft.world.level.block.state.BlockState refs) {
+        if (refs == null) return null;
+        return new MinecraftBlockState(refs);
     }
 
     public static net.minecraft.world.level.block.state.BlockState mirrorTopBottom(net.minecraft.world.level.block.state.BlockState value) {

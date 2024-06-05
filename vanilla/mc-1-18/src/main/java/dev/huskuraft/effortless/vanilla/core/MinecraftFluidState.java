@@ -10,8 +10,9 @@ import dev.huskuraft.effortless.api.core.PropertyValue;
 
 public record MinecraftFluidState(net.minecraft.world.level.material.FluidState refs) implements FluidState {
 
-    public static FluidState ofNullable(net.minecraft.world.level.material.FluidState value) {
-        return value == null ? null : new MinecraftFluidState(value);
+    public static FluidState ofNullable(net.minecraft.world.level.material.FluidState refs) {
+        if (refs == null) return null;
+        return new MinecraftFluidState(refs);
     }
 
     @Override

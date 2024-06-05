@@ -22,8 +22,9 @@ import net.minecraft.server.level.ServerPlayer;
 
 public record MinecraftPlayer(net.minecraft.world.entity.player.Player refs) implements Player {
 
-    public static Player ofNullable(net.minecraft.world.entity.player.Player reference) {
-        return reference == null ? null : new MinecraftPlayer(reference);
+    public static Player ofNullable(net.minecraft.world.entity.player.Player refs) {
+        if (refs == null) return null;
+        return new MinecraftPlayer(refs);
     }
 
     @Override
