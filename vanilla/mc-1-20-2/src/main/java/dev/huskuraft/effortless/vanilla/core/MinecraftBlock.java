@@ -1,6 +1,9 @@
 package dev.huskuraft.effortless.vanilla.core;
 
+import java.util.List;
 import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.core.Block;
 import dev.huskuraft.effortless.api.core.BlockEntity;
@@ -109,4 +112,10 @@ public record MinecraftBlock(
         }
         return null;
     }
+
+    @Override
+    public List<ItemStack> getDrops(World world, Player player, BlockPosition blockPosition, BlockState blockState, @Nullable BlockEntity blockEntity, ItemStack itemStack) {
+        return net.minecraft.world.level.block.Block.getDrops(blockState.reference(), world.reference(), MinecraftConvertor.toPlatformBlockPosition(blockPosition), blockEntity == null ? null : blockEntity.reference(), player.reference(), itemStack.reference()).stream().map(MinecraftItemStack::ofNullable).toList();
+    }
+
 }

@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.building.history;
 import java.util.Stack;
 
 import dev.huskuraft.effortless.building.operation.OperationResult;
-import dev.huskuraft.effortless.building.session.BuildSession;
 
 public class OperationResultStack {
 
@@ -13,9 +12,9 @@ public class OperationResultStack {
     public OperationResultStack() {
     }
 
-    public OperationResult pushSession(BuildSession buildSession) {
+    public OperationResult push(OperationResult result) {
         redoStack.clear();
-        return undoStack.push(buildSession.commit());
+        return undoStack.push(result);
     }
 
     public synchronized OperationResult undo() {

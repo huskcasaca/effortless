@@ -100,7 +100,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             var previewContext = finalizedContext.withBuildType(BuildType.BUILD_CLIENT);
             var result = new BatchBuildSession(getEntrance(), player, previewContext).commit();
             getEntrance().getChannel().sendPacket(new PlayerBuildPacket(getPlayer().getId(), finalizedContext));
-            showBuildContextResult(context.id(), 1024, player, context, result);
+            showContext(context.id(), 1024, player, context, result);
 
             playSoundInBatch(player, result);
 //            showBuildTooltip(context.id(), 1024, player, previewContext, result);
@@ -465,13 +465,31 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
         var result = new BatchBuildSession(getEntrance(), player, context).commit();
 
-        showBuildContextResult(player.getId(), 1024, player, context, result);
-        showBuildTooltip(context.id(), 1024, player, result);
+        showContext(player.getId(), 1024, player, context, result);
+//        showBuildTooltip(context.id(), 1024, player, result);
 
         if (context.isBuildClientType()) {
             playSoundInBatch(player, result);
         }
+    }
 
+    public void onTooltipReceived(Player player, OperationTooltip operationTooltip) {
+        switch (operationTooltip.type()) {
+            case BUILD -> {
+                showTooltip(operationTooltip.context().id(), 1024, player, operationTooltip);
+            }
+            default -> {
+                if (operationTooltip.context().buildMode() == BuildMode.DISABLED) { // nothing
+                    var entries = new ArrayList<>();
+                    entries.add(operationTooltip.itemSummary().values().stream().flatMap(List::stream).toList());
+                    entries.add(Text.translate("effortless.history." + operationTooltip.type().getName()));
+                    entries.add(operationTooltip.context().buildMode().getIcon());
+                    getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1024 + 1, entries, true);
+                } else {
+                    showTooltip(operationTooltip.context().id(), 1024, player, operationTooltip);
+                }
+            }
+        }
     }
 
     public void onSnapshotCaptured(Player player, Snapshot snapshot) {
@@ -482,30 +500,6 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         updateContext(player, context -> context.withClipboard(context.clipboard().withSnapshot(context.clipboard().snapshot().update(action))));
     }
 
-    public void onHistoryResultReceived(Player player, OperationTooltip operationTooltip) {
-        switch (operationTooltip.type()) {
-            case BUILD -> {
-//        showBuildContextResult(player.getId(), 1024, player, context, result);
-                showBuildTooltip(operationTooltip.context().id(), 1024, player, operationTooltip);
-
-            }
-            default -> {
-
-                if (operationTooltip.context().buildMode() == BuildMode.DISABLED) { // nothing
-                    var entries = new ArrayList<>();
-                    entries.add(operationTooltip.itemSummary().values().stream().flatMap(List::stream).toList());
-                    entries.add(Text.translate("effortless.history." + operationTooltip.type().getName()));
-                    entries.add(operationTooltip.context().buildMode().getIcon());
-                    getEntrance().getClientManager().getTooltipRenderer().showGroupEntry(UUID.randomUUID(), 1024 + 1, entries, true);
-                } else {
-                    showBuildTooltip(operationTooltip.context().id(), 1024, player, operationTooltip);
-                }
-
-
-            }
-        }
-
-    }
 
     @Override
     public OperationResultStack getOperationResultStack(Player player) {
@@ -576,12 +570,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         var context = context1.withBuildType(BuildType.PREVIEW);
 
         if (context.getVolume() > getEntrance().getConfigStorage().get().renderConfig().maxRenderVolume()) {
-            showBuildContextResult(player.getId(), 0, player, context, null);
-            showBuildTooltip(player.getId(), 0, player, OperationTooltip.build(context));
+            showContext(player.getId(), 0, player, context, null);
+//            showBuildTooltip(player.getId(), 0, player, OperationTooltip.build(context));
         } else {
             var result = new BatchBuildSession(getEntrance(), player, context.withBuildType(BuildType.PREVIEW)).commit();
-            showBuildContextResult(player.getId(), 0, player, context, result);
-            showBuildTooltip(player.getId(), 0, player, result.getTooltip());
+            showContext(player.getId(), 0, player, context, result);
+//            showBuildTooltip(player.getId(), 0, player, result.getTooltip());
         }
 
         showBuildMessage(player, context);
@@ -625,7 +619,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         return new UUID(uuid.getMostSignificantBits(), uuid.getLeastSignificantBits() + tag.hashCode());
     }
 
-    public void showBuildContextResult(UUID uuid, int priority, Player player, Context context, OperationResult result) {
+    public void showContext(UUID uuid, int priority, Player player, Context context, OperationResult result) {
         if (player.getId() != getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuild()) {
                 return;
@@ -671,11 +665,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
     }
 
-    public void showBuildTooltip(UUID id, int priority, Player player, OperationResult result) {
-        showBuildTooltip(id, priority, player, result.getTooltip());
-    }
-
-    public void showBuildTooltip(UUID id, int priority, Player player, OperationTooltip tooltip) {
+    public void showTooltip(UUID id, int priority, Player player, OperationTooltip tooltip) {
         var context = tooltip.context();
 
         if (player.getId() != getPlayer().getId()) {
