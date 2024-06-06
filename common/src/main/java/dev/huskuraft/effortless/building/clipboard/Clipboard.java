@@ -33,9 +33,9 @@ public record Clipboard(
     @Override
     public String getName() {
         if (enabled) {
-            return "clipboard_disabled";
-        } else {
             return "clipboard_enabled";
+        } else {
+            return "clipboard_disabled";
         }
     }
 
