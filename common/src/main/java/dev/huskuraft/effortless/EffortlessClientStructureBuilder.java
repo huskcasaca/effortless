@@ -544,12 +544,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
 
         if (player.isDeadOrDying()) {
-            resetContextInteractions(player);
+            resetInteractions(player);
             return;
         }
 
         if (!player.getWorld().getDimensionId().location().equals(lastClientPlayerLevel.get())) {
-            resetContextInteractions(player);
+            resetInteractions(player);
             lastClientPlayerLevel.set(player.getWorld().getDimensionId().location());
             return;
         }

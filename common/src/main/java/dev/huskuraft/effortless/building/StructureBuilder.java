@@ -35,11 +35,11 @@ public abstract class StructureBuilder {
 
     public abstract void resetAll();
 
-    public void resetContext(Player player) {
+    public final void resetContext(Player player) {
         setContext(player, getDefaultContext(player));
     }
 
-    public void resetContextInteractions(Player player) {
+    public final void resetInteractions(Player player) {
         setContext(player, getContext(player).newInteraction());
     }
 

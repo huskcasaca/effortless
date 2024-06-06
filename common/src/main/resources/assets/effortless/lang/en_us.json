@@ -506,5 +506,8 @@
   "effortless.action.go_back": "Go Back",
   "effortless.action.replace": "Replace",
   "effortless.build.summary.container_consumed": "Container Consumed",
-  "effortless.build.summary.container_dropped": "Container Dropped"
+  "effortless.build.summary.container_dropped": "Container Dropped",
+  "effortless.message.building.server.toggle_clipboard": "Clipboard is %s!",
+  "effortless.message.building.server.toggle_pattern": "Pattern is %s!",
+  "effortless.message.building.server.toggle_replace": "Replace switched to %s!"
 }

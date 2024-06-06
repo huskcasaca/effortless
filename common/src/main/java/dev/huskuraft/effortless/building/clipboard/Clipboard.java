@@ -22,6 +22,10 @@ public record Clipboard(
         return new Clipboard(enabled, snapshot);
     }
 
+    public Clipboard toggled() {
+        return new Clipboard(!enabled, snapshot);
+    }
+
     public boolean isEmpty() {
         return snapshot.isEmpty();
     }
