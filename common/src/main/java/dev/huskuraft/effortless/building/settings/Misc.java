@@ -5,7 +5,6 @@ import dev.huskuraft.effortless.building.Option;
 public enum Misc implements Option {
     SETTINGS("settings"),
     PATTERN("pattern"),
-    REPLACE("replace"),
     GO_BACK("go_back"),
     ;
 

@@ -309,14 +309,12 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         var result = false;
         if (isActive() && isVisible()) {
             if (radialSelectResponder != null && hoveredSlot != null) {
-                this.animationScaleTicks = 1.5f;
                 radialSelectResponder.accept(hoveredSlot, button == 0);
                 playRadialMenuSound();
                 result = true;
             }
 
             if (radialOptionSelectResponder != null && hoveredButton != null) {
-                this.animationScaleTicks = 1.5f;
                 radialOptionSelectResponder.accept(hoveredButton, button == 0);
                 playRadialMenuSound();
                 result = true;
@@ -358,7 +356,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @SafeVarargs
     public final void setLeftButtons(ButtonSet<B>... options) {
-        this.leftButtons = List.of(options);
+        setLeftButtons(List.of(options));
     }
 
     public final void setLeftButtons(List<? extends ButtonSet<B>> options) {
@@ -367,7 +365,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @SafeVarargs
     public final void setRightButtons(ButtonSet<B>... options) {
-        this.rightButtons = List.of(options);
+        setRightButtons(List.of(options));
     }
 
     public final void setRightButtons(List<? extends ButtonSet<B>> options) {
@@ -376,11 +374,15 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @SafeVarargs
     public final void setSelectedSlots(Slot<S>... slots) {
-        this.selectedSlot = Set.of(slots);
+        setSelectedSlots(Set.of(slots));
     }
 
     public final void setSelectedSlots(Collection<? extends Slot<S>> slots) {
         this.selectedSlot = slots;
+    }
+
+    public void resetScaleAnimation() {
+        this.animationScaleTicks = 1f;
     }
 
     private void renderRadialSlots(Renderer renderer, int mouseX, int mouseY, List<? extends Slot<S>> slots) {

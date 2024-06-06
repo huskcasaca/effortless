@@ -16,6 +16,7 @@ import dev.huskuraft.effortless.building.Option;
 import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.PassiveMode;
 import dev.huskuraft.effortless.building.history.UndoRedo;
+import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.pattern.Patterns;
 import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
@@ -32,8 +33,6 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     private static final Button<Option> UNDO_OPTION = button(UndoRedo.UNDO);
     private static final Button<Option> REDO_OPTION = button(UndoRedo.REDO);
     private static final Button<Option> SETTING_OPTION = button(Misc.SETTINGS);
-    private static final Button<Option> PATTERN_DISABLED_OPTION = button(Patterns.DISABLED, false);
-    private static final Button<Option> PATTERN_ENABLED_OPTION = button(Patterns.ENABLED, true);
     private static final Button<Option> PATTERN_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
@@ -49,9 +48,9 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                     descriptions.add(Text.text(" ").append(description.withStyle(ChatFormatting.DARK_GRAY)));
                 }
             }
-            return button(Patterns.ENABLED, name, descriptions, true);
+            return button(context.pattern(), name, descriptions, true);
         } else {
-            return PATTERN_DISABLED_OPTION;
+            return button(context.pattern(), false);
         }
     });
 
@@ -145,9 +144,11 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         super.onCreate();
 
         setRadialSelectResponder((slot, click) -> {
+            resetScaleAnimation();
             getEntrance().getStructureBuilder().setStructure(getPlayer(), slot.getContent());
         });
         setRadialOptionSelectResponder((entry, click) -> {
+            resetScaleAnimation();
             if (entry.getContent() instanceof Misc misc) {
                 switch (misc) {
                     case SETTINGS -> {
@@ -158,16 +159,13 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                         detach();
                         new EffortlessPatternScreen(getEntrance()).attach();
                     }
-                    case REPLACE -> {
-                        setReplaceLeftButtons();
-                    }
                     case GO_BACK -> {
                         setLeftButtons();
                     }
                 }
                 return;
             }
-            if (entry.getContent() instanceof Patterns patterns) {
+            if (entry.getContent() instanceof Pattern pattern) {
 //                if (click) {
 //                    var pattern = getEntrance().getStructureBuilder().getContext(getPlayer()).pattern();
 //                    getEntrance().getStructureBuilder().setPattern(getPlayer(), pattern.withEnabled(!pattern.enabled()));

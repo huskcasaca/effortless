@@ -18,6 +18,9 @@ public enum EffortlessKeys implements Key {
     TOGGLE_PATTERN("toggle_pattern", Category.DEFAULT, KeyCodes.KEY_UNKNOWN),
     TOGGLE_REPLACE("toggle_replace", Category.DEFAULT, KeyCodes.KEY_UNKNOWN),
 
+    OPEN_CLIPBOARD_EDITOR("open_clipboard", Category.DEFAULT, KeyCodes.KEY_UNKNOWN),
+    OPEN_PATTERN_EDITOR("open_pattern", Category.DEFAULT, KeyCodes.KEY_UNKNOWN),
+    OPEN_REPLACE_EDITOR("open_replace", Category.DEFAULT, KeyCodes.KEY_UNKNOWN),
 
     // clipboard
     MOVE_LEFT("move_left", Category.CLIPBOARD, KeyCodes.KEY_LEFT),
