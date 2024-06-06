@@ -104,7 +104,7 @@ public class TooltipHelper {
     }
 
     public static boolean isSummaryButtonDown() {
-        return Keys.KEY_LEFT_SHIFT.getBinding().isDown() || Keys.KEY_LEFT_SHIFT.getBinding().isDown();
+        return Keys.KEY_LEFT_SHIFT.isDown() || Keys.KEY_RIGHT_SHIFT.isDown();
     }
 
 }

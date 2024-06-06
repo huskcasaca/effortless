@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless;
 
-import dev.huskuraft.effortless.api.input.Key;
+import dev.huskuraft.effortless.api.input.KeyBindingOwner;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.KeyCodes;
 
-public enum EffortlessKeys implements Key {
+public enum EffortlessKeys implements KeyBindingOwner {
     // default
     SETTINGS("settings", Category.DEFAULT, KeyCodes.KEY_UNKNOWN),
 
@@ -54,7 +54,7 @@ public enum EffortlessKeys implements Key {
     }
 
     @Override
-    public KeyBinding getBinding() {
+    public KeyBinding getKeyBinding() {
         return keyBinding;
     }
 

@@ -14,16 +14,16 @@ public interface KeyBinding extends PlatformReference {
 
     String getCategory();
 
-    int getDefaultKey();
+    Key getDefaultKey();
+
+    Key getKey();
 
     boolean consumeClick();
 
     boolean isDown();
 
     default boolean isKeyDown() {
-        return ClientEntrance.getInstance().getClient().getWindow().isKeyDown(getBoundCode());
+        return getKey().isDown();
     }
-
-    int getBoundCode();
 
 }

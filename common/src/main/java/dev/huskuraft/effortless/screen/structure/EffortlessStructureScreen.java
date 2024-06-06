@@ -7,7 +7,7 @@ import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
-import dev.huskuraft.effortless.api.input.Key;
+import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.input.OptionKeys;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
@@ -37,8 +37,9 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         var entrance = EffortlessClient.getInstance();
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
         var descriptions = new ArrayList<Text>();
+        var name = context.pattern().getNameText();
         if (context.pattern().enabled()) {
-            var name = context.pattern().getNameText().append(" " + context.pattern().transformers().size() + " Transformers");
+            name = context.pattern().getNameText().append(" " + context.pattern().transformers().size() + " Transformers");
             if (!context.pattern().transformers().isEmpty()) {
                 descriptions.add(Text.empty());
             }
@@ -48,16 +49,11 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                     descriptions.add(Text.text(" ").append(description.withStyle(ChatFormatting.DARK_GRAY)));
                 }
             }
-            descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_switch", Text.translate(OptionKeys.KEY_ATTACK.getBinding().getName())).withStyle(ChatFormatting.DARK_GRAY));
-            descriptions.add(Text.translate("effortless.tooltip.click_for_more_options", Text.translate(OptionKeys.KEY_USE.getBinding().getName())).withStyle(ChatFormatting.DARK_GRAY));
-            return button(context.pattern(), name, descriptions, true);
-        } else {
-            var name = context.pattern().getNameText();
-            descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_switch", Text.translate(OptionKeys.KEY_ATTACK.getBinding().getName())).withStyle(ChatFormatting.DARK_GRAY));
-            descriptions.add(Text.translate("effortless.tooltip.click_for_more_options", Text.translate(OptionKeys.KEY_USE.getBinding().getName())).withStyle(ChatFormatting.DARK_GRAY));
-            return button(context.pattern(), name, descriptions, false);
-
         }
+        descriptions.add(Text.empty());
+        descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_switch", Text.translate(OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
+        descriptions.add(Text.translate("effortless.tooltip.click_for_more_options", Text.translate(OptionKeys.KEY_USE.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
+        return button(context.pattern(), name, descriptions, context.pattern().enabled());
     });
 
     private static final Button<Option> REPLACE_STRATEGY_DISABLED_OPTION = lazyButton(() -> {
@@ -113,11 +109,11 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     private static final Button<Option> GO_BACK_OPTION = button(Misc.GO_BACK, false);
 
 
-    private final Key assignedKey;
+    private final KeyBinding assignedKey;
 
     private AbstractWidget passiveModeTextWidget;
 
-    public EffortlessStructureScreen(Entrance entrance, Key assignedKey) {
+    public EffortlessStructureScreen(Entrance entrance, KeyBinding assignedKey) {
         super(entrance, Text.translate("effortless.building.radial.title"));
         this.assignedKey = assignedKey;
     }
@@ -141,7 +137,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     }
 
     @Override
-    public Key getAssignedKey() {
+    public KeyBinding getAssignedKeyBinds() {
         return assignedKey;
     }
 
@@ -172,11 +168,10 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                 return;
             }
             if (entry.getContent() instanceof Pattern pattern) {
-//                if (click) {
-//                    var pattern = getEntrance().getStructureBuilder().getContext(getPlayer()).pattern();
-//                    getEntrance().getStructureBuilder().setPattern(getPlayer(), pattern.withEnabled(!pattern.enabled()));
-//                    return;
-//                }
+                if (click) {
+                    getEntrance().getStructureBuilder().setPattern(getPlayer(), getEntrance().getStructureBuilder().getContext(getPlayer()).pattern().toggled());
+                    return;
+                }
                 if (getEntrance().getStructureBuilder().checkPermission(getPlayer())) {
                     detach();
                     new EffortlessPatternScreen(getEntrance()).attach();

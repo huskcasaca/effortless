@@ -134,50 +134,26 @@ public enum Keys implements Key {
     KEY_WORLD_2("key.keyboard.world.2", KeyCodes.KEY_WORLD_2),
     ;
 
-    private final KeyBinding keyBinding;
+    private final String nameKey;
+    private final KeyCodes key;
 
     Keys(String nameKey, KeyCodes key) {
-        this.keyBinding = new KeyBinding() {
-            @Override
-            public String getName() {
-                return nameKey;
-            }
-
-            @Override
-            public String getCategory() {
-                return null;
-            }
-
-            @Override
-            public int getDefaultKey() {
-                return key.value();
-            }
-
-            @Override
-            public boolean consumeClick() {
-                return false;
-            }
-
-            @Override
-            public boolean isDown() {
-                return isKeyDown();
-            }
-
-            @Override
-            public int getBoundCode() {
-                return key.value();
-            }
-
-            @Override
-            public KeyBinding refs() {
-                return this;
-            }
-        };
+        this.nameKey = nameKey;
+        this.key = key;
     }
 
     @Override
-    public KeyBinding getBinding() {
-        return keyBinding;
+    public String getName() {
+        return nameKey;
     }
 
+    @Override
+    public int getValue() {
+        return key.value();
+    }
+
+    @Override
+    public Object refs() {
+        return this;
+    }
 }

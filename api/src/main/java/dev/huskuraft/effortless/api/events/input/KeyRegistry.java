@@ -1,8 +1,8 @@
 package dev.huskuraft.effortless.api.events.input;
 
-import dev.huskuraft.effortless.api.input.Key;
+import dev.huskuraft.effortless.api.input.KeyBindingOwner;
 
 public interface KeyRegistry {
 
-    void register(Key key);
+    void register(KeyBindingOwner key);
 }

@@ -16,7 +16,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
-import dev.huskuraft.effortless.api.input.Key;
+import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
@@ -235,7 +235,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         return button(option, name, option.getCategoryText(), option.getTooltipText(), description, option.getIcon(), option, activated);
     }
 
-    protected abstract Key getAssignedKey();
+    protected abstract KeyBinding getAssignedKeyBinds();
     @Override
     public void init(int width, int height) {
         super.init(width, height);
@@ -251,7 +251,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @Override
     public void onAnimateTick(float partialTick) {
-        this.detached = !getAssignedKey().getBinding().isKeyDown();
+        this.detached = !getAssignedKeyBinds().isKeyDown();
         this.animationTicks = Math.min(Math.max(animationTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);
         this.animationScaleTicks = Math.min(Math.max(animationScaleTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);
         if (detached && animationTicks == 0) {
