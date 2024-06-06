@@ -340,7 +340,7 @@
   "effortless.symbol": "Effortless",
   "effortless.test.cancel": "Cancel",
   "effortless.test.save": "Save",
-  "effortless.tooltip.hold_for_summary": "Hold [%s] for Summary",
+  "effortless.tooltip.hold_for_summary": "Hold [%s] for summary",
   "effortless.tracing.failed": "Failed",
   "effortless.tracing.pass": "Disabled",
   "effortless.tracing.success_fulfilled": "Success",
@@ -467,13 +467,12 @@
   "key.effortless.control.desc": "Control",
   "key.effortless.cycle_replace.desc": "Cycle Replace",
   "key.effortless.left_control.desc": "Left Control",
-  "key.effortless.left_shift.desc": "Left Shift",
   "key.effortless.passive_build_modifier.desc": "Passive Build Modifier",
   "key.effortless.pattern_radial.desc": "Show Pattern Radial",
   "key.effortless.pattern_settings.desc": "Open Pattern Settings",
   "key.effortless.redo.desc": "Build History Redo",
   "key.effortless.settings.desc": "Basic Settings",
-  "key.effortless.shift.desc": "Shift",
+  "key.effortless.shift": "Shift",
   "key.effortless.toggle_alt_place.desc": "Toggle Alternative Placement",
   "key.effortless.toggle_replace_strategy.desc": "Toggle Replace Strategy",
   "key.effortless.toggle_replace_quick.desc": "Toggle Quick Replace",
@@ -509,5 +508,7 @@
   "effortless.build.summary.container_dropped": "Container Dropped",
   "effortless.message.building.server.toggle_clipboard": "Clipboard is %s!",
   "effortless.message.building.server.toggle_pattern": "Pattern is %s!",
-  "effortless.message.building.server.toggle_replace": "Replace switched to %s!"
+  "effortless.message.building.server.toggle_replace": "Replace switched to %s!",
+  "effortless.tooltip.click_to_toggle_switch": "Click [%s] to toggle switch",
+  "effortless.tooltip.click_for_more_options": "Click [%s] for more options"
 }

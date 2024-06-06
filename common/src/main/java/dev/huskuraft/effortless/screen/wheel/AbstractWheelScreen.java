@@ -17,8 +17,6 @@ import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
 import dev.huskuraft.effortless.api.input.Key;
-import dev.huskuraft.effortless.api.input.Keys;
-import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
@@ -547,10 +545,8 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 //                tooltip.add(Text.text("Click [Left Button] for Switch").withStyle(ChatFormatting.DARK_GRAY));
 //                tooltip.add(Text.text("Click [Right Button] for More Configs").withStyle(ChatFormatting.DARK_GRAY));
                 tooltip.add(Text.empty());
-                if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
-                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
-                } else {
-                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
+                tooltip.add(TooltipHelper.holdShiftForSummary());
+                if (TooltipHelper.isSummaryButtonDown()) {
                     tooltip.add(Text.empty());
 //                    tooltip.add(hoveredButton.getTooltip());
                     tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), hoveredButton.getSummary().withStyle(ChatFormatting.GRAY)));

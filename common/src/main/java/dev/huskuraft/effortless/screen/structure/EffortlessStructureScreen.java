@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.input.Key;
+import dev.huskuraft.effortless.api.input.OptionKeys;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
@@ -17,7 +18,6 @@ import dev.huskuraft.effortless.building.clipboard.Clipboard;
 import dev.huskuraft.effortless.building.config.PassiveMode;
 import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.pattern.Pattern;
-import dev.huskuraft.effortless.building.pattern.Patterns;
 import dev.huskuraft.effortless.building.replace.Replace;
 import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.replace.ReplaceStrategy;
@@ -36,9 +36,9 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     private static final Button<Option> PATTERN_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+        var descriptions = new ArrayList<Text>();
         if (context.pattern().enabled()) {
-            var name = Patterns.ENABLED.getNameText().append(" " + context.pattern().transformers().size() + " Transformers");
-            var descriptions = new ArrayList<Text>();
+            var name = context.pattern().getNameText().append(" " + context.pattern().transformers().size() + " Transformers");
             if (!context.pattern().transformers().isEmpty()) {
                 descriptions.add(Text.empty());
             }
@@ -48,9 +48,15 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                     descriptions.add(Text.text(" ").append(description.withStyle(ChatFormatting.DARK_GRAY)));
                 }
             }
+            descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_switch", Text.translate(OptionKeys.KEY_ATTACK.getBinding().getName())).withStyle(ChatFormatting.DARK_GRAY));
+            descriptions.add(Text.translate("effortless.tooltip.click_for_more_options", Text.translate(OptionKeys.KEY_USE.getBinding().getName())).withStyle(ChatFormatting.DARK_GRAY));
             return button(context.pattern(), name, descriptions, true);
         } else {
-            return button(context.pattern(), false);
+            var name = context.pattern().getNameText();
+            descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_switch", Text.translate(OptionKeys.KEY_ATTACK.getBinding().getName())).withStyle(ChatFormatting.DARK_GRAY));
+            descriptions.add(Text.translate("effortless.tooltip.click_for_more_options", Text.translate(OptionKeys.KEY_USE.getBinding().getName())).withStyle(ChatFormatting.DARK_GRAY));
+            return button(context.pattern(), name, descriptions, false);
+
         }
     });
 

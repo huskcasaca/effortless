@@ -12,15 +12,15 @@ public interface Option {
     String getCategory();
 
     default String getNameKey() {
-        return Lang.asKey("action.%s".formatted(getName()));
+        return Lang.asKey(Effortless.MOD_ID, "action.%s".formatted(getName()));
     }
 
     default String getCategoryKey() {
-        return Lang.asKey("option.%s".formatted(getCategory()));
+        return Lang.asKey(Effortless.MOD_ID, "option.%s".formatted(getCategory()));
     }
 
     default String getTooltipKey() {
-        return Lang.asKey("action.%s.tooltip".formatted(getName()));
+        return Lang.asKey(Effortless.MOD_ID, "action.%s.tooltip".formatted(getName()));
     }
 
     default Text getNameText() {
