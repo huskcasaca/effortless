@@ -387,7 +387,9 @@
   "effortless.transformer.radial.radius": "Radius",
   "effortless.transformer.radial.slices": "Slices",
   "effortless.transformer.radial.title": "Radial",
-  "effortless.transformer.randomizer": "Item Randomizer",
+  "effortless.transformer.randomizer": "Randomizer",
+  "effortless.transformer.randomizer.title": "Randomizer",
+  "effortless.transformer.randomizer.item": "Item Randomizer",
   "effortless.transformer.randomizer.category.item": "Item",
   "effortless.transformer.randomizer.edit.add": "Add Item",
   "effortless.transformer.randomizer.edit.cancel": "Cancel",
@@ -509,6 +511,14 @@
   "effortless.message.building.server.toggle_clipboard": "Clipboard is %s!",
   "effortless.message.building.server.toggle_pattern": "Pattern is %s!",
   "effortless.message.building.server.toggle_replace": "Replace switched to %s!",
-  "effortless.tooltip.click_to_toggle_switch": "Click [%s] to toggle switch",
-  "effortless.tooltip.click_for_more_options": "Click [%s] for more options"
+  "effortless.tooltip.click_to_toggle_on_off": "Click [%s] to toggle on/off",
+  "effortless.tooltip.click_to_edit_pattern": "Click [%s] to edit pattern",
+  "effortless.tooltip.click_to_edit_clipboard": "Click [%s] to edit clipboard",
+  "effortless.clipboard.edit.title": "Clipboard",
+  "effortless.clipboard.button.disable": "Disable Copy/Paste",
+  "effortless.clipboard.button.enable": "Enable Copy/Paste",
+  "effortless.button.share": "Share",
+  "effortless.button.history": "History",
+  "effortless.button.export": "Export",
+  "effortless.button.import": "Import"
 }

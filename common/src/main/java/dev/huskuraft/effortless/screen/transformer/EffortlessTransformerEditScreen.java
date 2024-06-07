@@ -34,7 +34,7 @@ public class EffortlessTransformerEditScreen extends AbstractPanelScreen {
 //    private EditBox nameEditBox;
 
     public EffortlessTransformerEditScreen(Entrance entrance, Consumer<Transformer> consumer, Transformer transformer) {
-        super(entrance, Text.translate("effortless.transformer.edit.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.transformer.edit.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_FULL);
         this.consumer = consumer;
         this.transformer = transformer;
     }

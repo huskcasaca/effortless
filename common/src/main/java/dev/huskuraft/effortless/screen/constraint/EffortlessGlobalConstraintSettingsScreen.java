@@ -24,7 +24,7 @@ public class EffortlessGlobalConstraintSettingsScreen extends AbstractPanelScree
     private AbstractWidget saveButton;
 
     public EffortlessGlobalConstraintSettingsScreen(Entrance entrance, ConstraintConfig config, Consumer<ConstraintConfig> consumer) {
-        super(entrance, Text.translate("effortless.global_constraint_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.global_constraint_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_3_4);
         this.defaultConfig = ConstraintConfig.DEFAULT;
         this.originalConfig = config;
         this.config = config;

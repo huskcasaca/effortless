@@ -34,7 +34,7 @@ public class EffortlessPlayerConstraintSettingsListScreen extends AbstractPanelS
     private Button cancelButton;
 
     public EffortlessPlayerConstraintSettingsListScreen(Entrance entrance, Map<UUID, ConstraintConfig> config, Consumer<Map<UUID, ConstraintConfig>> editConsumer) {
-        super(entrance, Text.translate("effortless.player_constraint_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.player_constraint_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_3_4);
         this.defaultConfig = new LinkedHashMap<>();
         this.originalConfig = new LinkedHashMap<>(config);
         this.config = new LinkedHashMap<>(config);

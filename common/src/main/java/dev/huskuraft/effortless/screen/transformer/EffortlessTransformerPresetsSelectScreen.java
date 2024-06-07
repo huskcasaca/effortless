@@ -30,7 +30,7 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractPanelScree
     private Transformers selectedType = Transformers.ARRAY;
 
     public EffortlessTransformerPresetsSelectScreen(Entrance entrance, Consumer<Transformer> consumer) {
-        super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_3_4);
         this.consumer = consumer;
         this.builtInTransformers = PatternConfig.getBuiltInPresets().getByType();
         this.transformers = getEntrance().getConfigStorage().get().patternConfig().getByType();
@@ -56,10 +56,10 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractPanelScree
             }
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-
+        this.tabButtons.clear();
         for (var type : Transformers.values()) {
-            tabButtons.add(
-                    addWidget(Button.builder(getEntrance(), type.getDisplayName(), button -> {
+            this.tabButtons.add(
+                    addWidget(Button.builder(getEntrance(), type.getTitleText(), button -> {
                         setSelectedType(type);
                     }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
             );
@@ -75,7 +75,7 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractPanelScree
     public void onReload() {
         useTemplateButton.setActive(entries.hasSelected());
         for (var tabButton : tabButtons) {
-            tabButton.setActive(!tabButton.getMessage().equals(selectedType.getDisplayName()));
+            tabButton.setActive(!tabButton.getMessage().equals(selectedType.getTitleText()));
         }
         this.entries.reset(Stream.concat(this.builtInTransformers.get(selectedType).stream(), this.transformers.get(selectedType).stream()).toList());
         if (entries.consumeDoubleClick() && entries.hasSelected()) {

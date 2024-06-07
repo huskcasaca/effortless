@@ -30,7 +30,7 @@ public class EffortlessItemRandomizerPresetsScreen extends AbstractPanelScreen {
     private Button saveButton;
 
     public EffortlessItemRandomizerPresetsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_3_4);
         this.consumer = transformers -> {
             getEntrance().getConfigStorage().update(config -> config.withPatternConfig(new PatternConfig(transformers)));
         };

@@ -24,6 +24,7 @@ import dev.huskuraft.effortless.building.replace.ReplaceStrategy;
 import dev.huskuraft.effortless.building.settings.Misc;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
 import dev.huskuraft.effortless.building.structure.builder.Structure;
+import dev.huskuraft.effortless.screen.clipboard.EffortlessClipboardScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternScreen;
 import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 import dev.huskuraft.effortless.screen.wheel.AbstractWheelScreen;
@@ -51,8 +52,8 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
             }
         }
         descriptions.add(Text.empty());
-        descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_switch", Text.translate(OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
-        descriptions.add(Text.translate("effortless.tooltip.click_for_more_options", Text.translate(OptionKeys.KEY_USE.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
+        descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_on_off", Text.translate(OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
+        descriptions.add(Text.translate("effortless.tooltip.click_to_edit_pattern", Text.translate(OptionKeys.KEY_USE.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
         return button(context.pattern(), name, descriptions, context.pattern().enabled());
     });
 
@@ -103,7 +104,11 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
     private static final Button<Option> CLIPBOARD_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-        return button(context.clipboard(), context.clipboard().enabled());
+        var descriptions = new ArrayList<Text>();
+        descriptions.add(Text.empty());
+        descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_on_off", Text.translate(OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
+        descriptions.add(Text.translate("effortless.tooltip.click_to_edit_clipboard", Text.translate(OptionKeys.KEY_USE.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
+        return button(context.clipboard(), context.clipboard().getNameText(), descriptions, context.clipboard().enabled());
     });
 
     private static final Button<Option> GO_BACK_OPTION = button(Misc.GO_BACK, false);
@@ -169,7 +174,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
             }
             if (entry.getContent() instanceof Pattern pattern) {
                 if (click) {
-                    getEntrance().getStructureBuilder().setPattern(getPlayer(), getEntrance().getStructureBuilder().getContext(getPlayer()).pattern().toggled());
+                    getEntrance().getStructureBuilder().setPattern(getPlayer(), pattern.toggled());
                     return;
                 }
                 if (getEntrance().getStructureBuilder().checkPermission(getPlayer())) {
@@ -179,7 +184,14 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                 return;
             }
             if (entry.getContent() instanceof Clipboard clipboard) {
-                getEntrance().getStructureBuilder().setClipboard(getPlayer(), clipboard.withEnabled(!clipboard.enabled()));
+                if (click) {
+                    getEntrance().getStructureBuilder().setClipboard(getPlayer(), clipboard.toggled());
+                    return;
+                }
+                if (getEntrance().getStructureBuilder().checkPermission(getPlayer())) {
+                    detach();
+                    new EffortlessClipboardScreen(getEntrance()).attach();
+                }
                 return;
 
             }

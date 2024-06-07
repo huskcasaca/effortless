@@ -22,7 +22,7 @@ public class EffortlessRenderSettingsScreen extends AbstractPanelScreen {
     private AbstractWidget saveButton;
 
     public EffortlessRenderSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.render_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.render_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_3_4);
         this.consumer = pattern -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
             getEntrance().getConfigStorage().update(config -> config.withRenderConfig(this.config));
