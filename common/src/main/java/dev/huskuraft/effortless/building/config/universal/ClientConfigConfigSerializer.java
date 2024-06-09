@@ -9,6 +9,7 @@ import com.electronwill.nightconfig.core.ConfigSpec;
 
 import dev.huskuraft.effortless.api.config.ConfigSerializer;
 import dev.huskuraft.effortless.building.config.ClientConfig;
+import dev.huskuraft.effortless.building.config.ClipboardConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
 
@@ -22,6 +23,9 @@ public class ClientConfigConfigSerializer implements ConfigSerializer<ClientConf
 
     private static final String KEY_PATTERN = "pattern";
     private static final String KEY_TRANSFORMER_PRESETS = "transformerPresets";
+    private static final String KEY_CLIPBOARD = "clipboard";
+    private static final String KEY_COLLECTIONS = "collections";
+
 
     @Override
     public ConfigSpec getSpec(Config config) {
@@ -32,6 +36,7 @@ public class ClientConfigConfigSerializer implements ConfigSerializer<ClientConf
         spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_VOLUME), getDefault().renderConfig().maxRenderVolume(), RenderConfig.MAX_RENDER_VOLUME_MIN, RenderConfig.MAX_RENDER_VOLUME_MAX);
 //        spec.defineInRange(List.of(KEY_RENDER, KEY_MAX_RENDER_DISTANCE), () -> getDefault().renderConfig().maxRenderDistance(), RenderConfig.MIN_MAX_RENDER_DISTANCE, RenderConfig.MAX_MAX_RENDER_DISTANCE);
         spec.defineList(List.of(KEY_PATTERN, KEY_TRANSFORMER_PRESETS), () -> getDefault().patternConfig().itemRandomizers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
+        spec.defineList(List.of(KEY_CLIPBOARD, KEY_COLLECTIONS), () -> getDefault().clipboardConfig().collections().stream().map(SnapshotConfigSerializer.INSTANCE::serialize).toList(), Config.class::isInstance);
 //        spec.define(KEY_PASSIVE_MODE, () -> getDefault().passiveMode(), Boolean.class::isInstance);
 
         return spec;
@@ -51,6 +56,10 @@ public class ClientConfigConfigSerializer implements ConfigSerializer<ClientConf
                 ),
                 new PatternConfig(
                         config.<List<Config>>get(List.of(KEY_PATTERN, KEY_TRANSFORMER_PRESETS)).stream().map(TransformerConfigSerializer.INSTANCE::deserialize).toList()
+                ),
+                new ClipboardConfig(
+                        config.<List<Config>>get(List.of(KEY_CLIPBOARD, KEY_COLLECTIONS)).stream().map(SnapshotConfigSerializer.INSTANCE::deserialize).toList(),
+                        List.of()
                 )
         );
     }
@@ -63,6 +72,7 @@ public class ClientConfigConfigSerializer implements ConfigSerializer<ClientConf
 //        config.set(List.of(KEY_RENDER, KEY_SHOW_OTHER_PLAYERS_BUILD_TOOLTIPS), settings.renderConfig().showOtherPlayersBuildTooltips());
         config.set(List.of(KEY_RENDER, KEY_MAX_RENDER_VOLUME), settings.renderConfig().maxRenderVolume());
         config.set(List.of(KEY_PATTERN, KEY_TRANSFORMER_PRESETS), settings.patternConfig().itemRandomizers().stream().map(TransformerConfigSerializer.INSTANCE::serialize).filter(Objects::nonNull).toList());
+        config.set(List.of(KEY_CLIPBOARD, KEY_COLLECTIONS), settings.clipboardConfig().collections().stream().map(SnapshotConfigSerializer.INSTANCE::serialize).filter(Objects::nonNull).toList());
         validate(config);
         return config;
     }

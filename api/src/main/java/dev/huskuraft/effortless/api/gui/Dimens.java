@@ -18,6 +18,7 @@ public class Dimens {
         public static final int SIZE_18 = 18;
         public static final int SIZE_26 = 26;
         public static final int SIZE_34 = 34;
+        public static final int SIZE_62 = 62;
 
     }
 

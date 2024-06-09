@@ -4,19 +4,24 @@ import dev.huskuraft.effortless.api.tag.Tag;
 import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.api.tag.TagSerializer;
 import dev.huskuraft.effortless.building.config.ClientConfig;
+import dev.huskuraft.effortless.building.config.ClipboardConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
+
+import java.util.List;
 
 public class ClientConfigTagSerializer implements TagSerializer<ClientConfig> {
 
     private static final String TAG_RENDER_CONFIG = "RenderConfig";
     private static final String TAG_PATTERN_CONFIG = "PatternConfig";
+    private static final String TAG_CLIPBOARD_CONFIG = "ClipboardConfig";
 
     @Override
     public ClientConfig decode(Tag tag) {
         return new ClientConfig(
                 tag.asRecord().getTag(TAG_RENDER_CONFIG, new RenderSettingsTagSerializer()),
-                tag.asRecord().getTag(TAG_PATTERN_CONFIG, new PatternConfigTagSerializer())
+                tag.asRecord().getTag(TAG_PATTERN_CONFIG, new PatternConfigTagSerializer()),
+                tag.asRecord().getTag(TAG_CLIPBOARD_CONFIG, new ClipboardConfigTagSerializer())
         );
     }
 
@@ -25,6 +30,7 @@ public class ClientConfigTagSerializer implements TagSerializer<ClientConfig> {
         var tag = RecordTag.newRecord();
         tag.asRecord().putTag(TAG_RENDER_CONFIG, config.renderConfig(), new RenderSettingsTagSerializer());
         tag.asRecord().putTag(TAG_PATTERN_CONFIG, config.patternConfig(), new PatternConfigTagSerializer());
+        tag.asRecord().putTag(TAG_CLIPBOARD_CONFIG, config.clipboardConfig(), new ClipboardConfigTagSerializer());
         return tag;
     }
 
@@ -66,6 +72,21 @@ public class ClientConfigTagSerializer implements TagSerializer<ClientConfig> {
             tag.asRecord().putList(TAG_MIRRORS, config.mirrorTransformers(), new TransformerTagSerializer.MirrorTransformerTagSerializer());
             tag.asRecord().putList(TAG_RADIALS, config.radialTransformers(), new TransformerTagSerializer.RadialTransformerTagSerializer());
             tag.asRecord().putList(TAG_ITEM_RANDOMIZERS, config.itemRandomizers(), new TransformerTagSerializer.ItemRandomizerTagSerializer());
+            return tag;
+        }
+    }
+
+
+    public static class ClipboardConfigTagSerializer implements TagSerializer<ClipboardConfig> {
+
+        @Override
+        public ClipboardConfig decode(Tag tag) {
+            return new ClipboardConfig(List.of(), List.of());
+        }
+
+        @Override
+        public Tag encode(ClipboardConfig config) {
+            var tag = RecordTag.newRecord();
             return tag;
         }
     }

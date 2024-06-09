@@ -6,6 +6,7 @@ import dev.huskuraft.effortless.api.networking.NetworkChannel;
 import dev.huskuraft.effortless.api.networking.NetworkRegistry;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.api.networking.Side;
+import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
@@ -127,6 +128,7 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
 
         @Override
         public void handle(PlayerSnapshotCapturePacket packet, Player player) {
+            getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig(), config.clipboardConfig().appendHistory(packet.snapshot())));
             getEntrance().getClient().execute(() -> getEntrance().getStructureBuilder().onSnapshotCaptured(player, packet.snapshot()));
         }
     }

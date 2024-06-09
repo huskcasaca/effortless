@@ -524,5 +524,6 @@
   "key.effortless.edit_clipboard.desc": "Edit Clipboard",
   "key.effortless.edit_pattern.desc": "Edit Pattern",
   "key.effortless.edit_replace.desc": "Edit Replace",
-  "effortless.clipboard.no_structure": "There is no content in your clipboard. Please copy from your world or import from other places."
+  "effortless.clipboard.no_structure": "There is no content in your clipboard. Please copy from your world or import from other places.",
+  "effortless.clipboard.history.title": "Clipboard History"
 }
