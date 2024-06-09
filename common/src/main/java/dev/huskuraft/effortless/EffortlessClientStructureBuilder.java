@@ -343,6 +343,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                 return EventResult.pass();
             }
 
+        if (type == InteractionType.UNKNOWN) {
+            return EventResult.pass();
+        }
+
         var buildResult = updateContext(player, context -> {
 
             var state = switch (type) {
