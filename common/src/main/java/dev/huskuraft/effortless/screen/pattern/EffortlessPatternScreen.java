@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
-import dev.huskuraft.effortless.api.gui.text.MultiLineTextWidget;
+import dev.huskuraft.effortless.api.gui.text.MessageTextWidget;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
@@ -26,7 +26,7 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
     private Pattern pattern;
     private TextWidget titleTextWidget;
     private TransformerList entries;
-    private MultiLineTextWidget textWidget;
+    private MessageTextWidget textWidget;
     private Button upButton;
     private Button downButton;
     private Button editButton;
@@ -69,7 +69,7 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
         this.entries.reset(pattern.transformers());
         this.entries.setAlwaysShowScrollbar(true);
 
-        this.textWidget = addWidget(new MultiLineTextWidget(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS_H * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1N - PANEL_BUTTON_ROW_HEIGHT_2, Text.translate("effortless.pattern.no_transformer"), MultiLineTextWidget.Gravity.CENTER));
+        this.textWidget = addWidget(new MessageTextWidget(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1N, getWidth() - AbstractPanelScreen.PADDINGS_H * 2, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1N - PANEL_BUTTON_ROW_HEIGHT_2, Text.translate("effortless.pattern.no_transformer"), MessageTextWidget.Gravity.CENTER));
 
         this.upButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.up"), button -> {
             if (entries.hasSelected()) {

@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.building.clipboard;
 
+import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.tag.RecordTag;
@@ -41,5 +42,19 @@ public record BlockData(
                 mirrorContext.mirror(blockState),
                 entityTag
         );
+    }
+
+    public BlockEntity blockEntity() {
+        if (blockState == null) {
+            return null;
+        }
+        var blockEntity = blockState.getEntity(blockPosition);
+        if (blockEntity == null) {
+            return null;
+        }
+        if (entityTag != null) {
+            blockEntity.setTag(entityTag);
+        }
+        return blockEntity;
     }
 }

@@ -511,14 +511,18 @@
   "effortless.message.building.server.toggle_clipboard": "Clipboard is %s!",
   "effortless.message.building.server.toggle_pattern": "Pattern is %s!",
   "effortless.message.building.server.toggle_replace": "Replace switched to %s!",
-  "effortless.tooltip.click_to_toggle_on_off": "Click [%s] to toggle on/off",
-  "effortless.tooltip.click_to_edit_pattern": "Click [%s] to edit pattern",
-  "effortless.tooltip.click_to_edit_clipboard": "Click [%s] to edit clipboard",
+  "effortless.tooltip.click_to_toggle_on_off": "Click [%s] to Toggle On/Off",
+  "effortless.tooltip.click_to_edit_pattern": "Click [%s] to Edit Pattern",
+  "effortless.tooltip.click_to_edit_clipboard": "Click [%s] to Edit Clipboard",
   "effortless.clipboard.edit.title": "Clipboard",
   "effortless.clipboard.button.disable": "Disable Copy/Paste",
   "effortless.clipboard.button.enable": "Enable Copy/Paste",
   "effortless.button.share": "Share",
   "effortless.button.history": "History",
   "effortless.button.export": "Export",
-  "effortless.button.import": "Import"
+  "effortless.button.import": "Import",
+  "key.effortless.edit_clipboard.desc": "Edit Clipboard",
+  "key.effortless.edit_pattern.desc": "Edit Pattern",
+  "key.effortless.edit_replace.desc": "Edit Replace",
+  "effortless.clipboard.no_structure": "There is no content in your clipboard. Please copy from your world or import from other places."
 }

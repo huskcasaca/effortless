@@ -120,7 +120,7 @@ public class BatchBuildSession implements BuildSession {
         if (!context.clipboard().enabled()) {
             return;
         }
-        var snapshot = new Snapshot(lastResult.getResults().stream().map(BlockStateCopyOperationResult.class::cast).map(BlockStateCopyOperationResult::getBlockData).toList());
+        var snapshot = new Snapshot(lastResult.getResults().stream().map(BlockStateCopyOperationResult.class::cast).map(BlockStateCopyOperationResult::getBlockData).filter(blockData -> context.clipboard().copyAir() || (blockData.blockState() != null && !blockData.blockState().isAir())).toList());
         getEntrance().getChannel().sendPacket(new PlayerSnapshotCapturePacket(player.getId(), snapshot), player);
     }
 

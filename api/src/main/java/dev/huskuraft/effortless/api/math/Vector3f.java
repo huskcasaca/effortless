@@ -15,6 +15,13 @@ public record Vector3f(float x, float y, float z) {
     public static final Vector3f UNIT_MINUS_Y = new Vector3f(0, -1, 0);
     public static final Vector3f UNIT_MINUS_Z = new Vector3f(0, 0, -1);
 
+    public static final Vector3f XN = new Vector3f(-1.0F, 0.0F, 0.0F);
+    public static final Vector3f XP = new Vector3f(1.0F, 0.0F, 0.0F);
+    public static final Vector3f YN = new Vector3f(0.0F, -1.0F, 0.0F);
+    public static final Vector3f YP = new Vector3f(0.0F, 1.0F, 0.0F);
+    public static final Vector3f ZN = new Vector3f(0.0F, 0.0F, -1.0F);
+    public static final Vector3f ZP = new Vector3f(0.0F, 0.0F, 1.0F);
+
     /**
      * Construct an instance.
      *
@@ -492,5 +499,9 @@ public record Vector3f(float x, float y, float z) {
                 .comparingDouble(Vector3f::y)
                 .thenComparingDouble(Vector3f::z)
                 .thenComparingDouble(Vector3f::x);
+    }
+
+    public Quaternionf rotationDegrees(float ang) {
+        return Quaternionf.rotate(this, ang, true);
     }
 }
