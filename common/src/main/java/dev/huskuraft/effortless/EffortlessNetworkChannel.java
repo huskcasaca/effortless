@@ -8,6 +8,7 @@ import dev.huskuraft.effortless.api.networking.NetworkChannel;
 import dev.huskuraft.effortless.api.networking.NetworkRegistry;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.api.networking.Side;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildTooltipPacket;
@@ -15,6 +16,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSnapshotCapturePacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerSnapshotSharePacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 
@@ -43,6 +45,7 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         registerPacket(PlayerPermissionCheckPacket.class, new PlayerPermissionCheckPacket.Serializer());
         registerPacket(PlayerBuildTooltipPacket.class, new PlayerBuildTooltipPacket.Serializer());
         registerPacket(PlayerSnapshotCapturePacket.class, new PlayerSnapshotCapturePacket.Serializer());
+        registerPacket(PlayerSnapshotSharePacket.class, new PlayerSnapshotSharePacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
     }
@@ -128,6 +131,26 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
 
         @Override
         public void handle(PlayerSnapshotCapturePacket packet, Player player) {
+
+        }
+
+        @Override
+        public void handle(PlayerSnapshotSharePacket packet, Player player) {
+            getEntrance().getServer().execute(() -> {
+                var fromPlayer = getEntrance().getServer().getPlayerList().getPlayer(packet.from());
+                var toPlayer = getEntrance().getServer().getPlayerList().getPlayer(packet.to());
+                if (fromPlayer == null) {
+                    return;
+                }
+                if (toPlayer == null) {
+                    fromPlayer.sendMessage(Effortless.getSystemMessage(Text.text("Cannot share this snapshot. Player is offline.")));
+                } else {
+                    fromPlayer.sendMessage(Effortless.getSystemMessage(Text.text("Snapshot shared to player %s.".formatted(toPlayer.getProfile().getName()))));
+                    toPlayer.sendMessage(Effortless.getSystemMessage(Text.text("Player %s shared you a snapshot. Go to clipboard to import it.".formatted(fromPlayer.getProfile().getName()))));
+                    getEntrance().getChannel().sendPacket(packet, toPlayer);
+                }
+            });
+
 
         }
     }

@@ -21,7 +21,7 @@ import dev.huskuraft.effortless.screen.render.EffortlessRenderSettingsScreen;
 public class EffortlessSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.settings.title"), PANEL_WIDTH, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_5);
+        super(entrance, Text.translate("effortless.settings.title"), PANEL_WIDTH_42, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_6);
     }
 
     private Button constraintButton;
@@ -56,15 +56,18 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
                     }
                 });
             }
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 4f, 0f, 1f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 5f   , 0f, 1f).build());
         this.buildertButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.builder_settings.title"), button -> {
             new EffortlessBuilderSettingsScreen(getEntrance()).attach();
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 4f, 0f, 1f).build());
+        this.renderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.render_settings.title"), button -> {
+            new EffortlessRenderSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 3f, 0f, 1f).build());
         this.patterntButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern_settings.title"), button -> {
             new EffortlessPatternSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
-        this.renderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.render_settings.title"), button -> {
-            new EffortlessRenderSettingsScreen(getEntrance()).attach();
+        this.patterntButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.clipboard_settings.title"), button -> {
+            new EffortlessPatternSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {

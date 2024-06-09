@@ -15,7 +15,7 @@ import dev.huskuraft.effortless.api.text.Text;
 public class EffortlessSessionStatusScreen extends AbstractPanelScreen {
 
     public EffortlessSessionStatusScreen(Entrance entrance) {
-        super(entrance, Text.empty(), PANEL_WIDTH_EXPANDED, 0);
+        super(entrance, Text.empty(), PANEL_WIDTH_50, 0);
     }
 
     @Override

@@ -18,7 +18,7 @@ import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 public class EffortlessConstraintSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessConstraintSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.constraint_settings.title"), PANEL_WIDTH, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3);
+        super(entrance, Text.translate("effortless.constraint_settings.title"), PANEL_WIDTH_42, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3);
     }
 
     private Button globalButton;

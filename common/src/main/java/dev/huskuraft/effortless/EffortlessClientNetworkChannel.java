@@ -6,6 +6,7 @@ import dev.huskuraft.effortless.api.networking.NetworkChannel;
 import dev.huskuraft.effortless.api.networking.NetworkRegistry;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.api.networking.Side;
+import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
@@ -14,6 +15,7 @@ import dev.huskuraft.effortless.networking.packets.player.PlayerCommandPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSettingsPacket;
 import dev.huskuraft.effortless.networking.packets.player.PlayerSnapshotCapturePacket;
+import dev.huskuraft.effortless.networking.packets.player.PlayerSnapshotSharePacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionConfigPacket;
 import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 
@@ -42,6 +44,7 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
         registerPacket(PlayerPermissionCheckPacket.class, new PlayerPermissionCheckPacket.Serializer());
         registerPacket(PlayerBuildTooltipPacket.class, new PlayerBuildTooltipPacket.Serializer());
         registerPacket(PlayerSnapshotCapturePacket.class, new PlayerSnapshotCapturePacket.Serializer());
+        registerPacket(PlayerSnapshotSharePacket.class, new PlayerSnapshotSharePacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
     }
@@ -130,6 +133,14 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
         public void handle(PlayerSnapshotCapturePacket packet, Player player) {
             getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig(), config.clipboardConfig().appendHistory(packet.snapshot())));
             getEntrance().getClient().execute(() -> getEntrance().getStructureBuilder().onSnapshotCaptured(player, packet.snapshot()));
+        }
+
+        @Override
+        public void handle(PlayerSnapshotSharePacket packet, Player player) {
+            getEntrance().getClient().execute(() -> {
+
+
+            });
         }
     }
 

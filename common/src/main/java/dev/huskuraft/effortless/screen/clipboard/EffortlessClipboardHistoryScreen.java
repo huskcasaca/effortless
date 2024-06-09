@@ -5,7 +5,9 @@ import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.EffortlessClient;
 import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
+import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
+import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -23,7 +25,7 @@ public class EffortlessClipboardHistoryScreen extends AbstractPanelScreen {
     private Button selectButton;
 
     public EffortlessClipboardHistoryScreen(Entrance entrance, Consumer<Snapshot> consumer) {
-        super(entrance, Text.translate("effortless.clipboard.history.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_FULL);
+        super(entrance, Text.translate("effortless.clipboard.history.title"), AbstractPanelScreen.PANEL_WIDTH_64, PANEL_HEIGHT_FULL);
         this.consumer = consumer;
         this.history = getEntrance().getConfigStorage().get().clipboardConfig().history();
     }

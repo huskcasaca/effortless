@@ -22,7 +22,7 @@ import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 public class EffortlessTestScreen extends AbstractPanelScreen {
 
     public EffortlessTestScreen(Entrance entrance) {
-        super(entrance, Text.text("Test"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_3_4);
+        super(entrance, Text.text("Test"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
     }
 
     @Override

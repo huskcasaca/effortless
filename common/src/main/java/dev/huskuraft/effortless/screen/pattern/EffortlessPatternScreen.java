@@ -51,8 +51,8 @@ public class EffortlessPatternScreen extends AbstractPanelScreen {
 
     @Override
     public void onCreate() {
-        setHeight(pattern.enabled() ? PANEL_HEIGHT_3_4 : PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_2);
-        setWidth(pattern.enabled() ? PANEL_WIDTH_EXPANDED : PANEL_WIDTH);
+        setHeight(pattern.enabled() ? PANEL_HEIGHT_FULL : PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_2);
+        setWidth(pattern.enabled() ? PANEL_WIDTH_50 : PANEL_WIDTH_42);
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(AbstractPanelScreen.TITLE_COLOR), TextWidget.Gravity.CENTER));
 

@@ -30,7 +30,7 @@ public class EffortlessItemPickerScreen extends AbstractPanelScreen {
     protected Button cancelButton;
 
     public EffortlessItemPickerScreen(Entrance entrance, Predicate<Item> filter, Consumer<Item> consumer) {
-        super(entrance, Text.translate("effortless.item.picker.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_3_4);
+        super(entrance, Text.translate("effortless.item.picker.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
         this.filter = filter;
         this.consumer = consumer;
     }

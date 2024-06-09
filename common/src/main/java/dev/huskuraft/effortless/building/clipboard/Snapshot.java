@@ -2,13 +2,16 @@ package dev.huskuraft.effortless.building.clipboard;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3f;
 import dev.huskuraft.effortless.api.math.Vector3i;
+import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
@@ -21,6 +24,10 @@ public record Snapshot(
 
     public boolean isEmpty() {
         return blockData.isEmpty();
+    }
+
+    public List<ItemStack> getItems() {
+        return ItemStackUtils.flattenStack(blockData().stream().map(BlockData::blockState).filter(Objects::nonNull).map(blockState -> blockState.getItem().getDefaultStack().withCount(blockState.getRequiredItemCount())).collect(Collectors.toList()));
     }
 
     public int volume() {

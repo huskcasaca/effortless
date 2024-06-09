@@ -12,7 +12,7 @@ import dev.huskuraft.effortless.renderer.opertaion.BlockRenderLayers;
 
 public final class StructureSnapshotWidget extends AbstractWidget {
 
-    private final Snapshot snapshot;
+    private Snapshot snapshot;
 
     public StructureSnapshotWidget(Entrance entrance, int x, int y, int width, int height, Snapshot snapshot) {
         super(entrance, x, y, width, height, Text.empty());
@@ -58,8 +58,19 @@ public final class StructureSnapshotWidget extends AbstractWidget {
 
     }
 
+    private int backgroundColor = 0xdc000000;
+
+
     @Override
     public void renderWidgetBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-        renderer.renderGradientRect(getLeft(), getTop(), getRight(), getBottom(), 0xdc000000, 0xdc000000);
+        renderer.renderGradientRect(getLeft(), getTop(), getRight(), getBottom(), backgroundColor, backgroundColor);
+    }
+
+    public void setBackgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public void setSnapshot(Snapshot snapshot) {
+        this.snapshot = snapshot;
     }
 }

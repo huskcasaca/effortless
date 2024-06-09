@@ -14,7 +14,7 @@ import dev.huskuraft.effortless.api.text.Text;
 public class EffortlessNotAnOperatorScreen extends AbstractPanelScreen {
 
     public EffortlessNotAnOperatorScreen(Entrance entrance) {
-        super(entrance, Text.empty(), PANEL_WIDTH_EXPANDED, 0);
+        super(entrance, Text.empty(), PANEL_WIDTH_50, 0);
     }
 
     @Override

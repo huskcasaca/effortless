@@ -30,7 +30,7 @@ public class EffortlessTransformerPresetsSelectScreen extends AbstractPanelScree
     private Transformers selectedType = Transformers.ARRAY;
 
     public EffortlessTransformerPresetsSelectScreen(Entrance entrance, Consumer<Transformer> consumer) {
-        super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_3_4);
+        super(entrance, Text.translate("effortless.transformer.template_select.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
         this.consumer = consumer;
         this.builtInTransformers = PatternConfig.getBuiltInPresets().getByType();
         this.transformers = getEntrance().getConfigStorage().get().patternConfig().getByType();

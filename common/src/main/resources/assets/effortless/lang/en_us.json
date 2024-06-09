@@ -525,5 +525,9 @@
   "key.effortless.edit_pattern.desc": "Edit Pattern",
   "key.effortless.edit_replace.desc": "Edit Replace",
   "effortless.clipboard.no_structure": "There is no content in your clipboard. Please copy from your world or import from other places.",
-  "effortless.clipboard.history.title": "Clipboard History"
+  "effortless.clipboard.history.title": "Clipboard History",
+  "effortless.message.clipboard.server.cannot_share_snapshot_player_is_offline": "Cannot share this snapshot. Player is offline.",
+  "effortless.message.clipboard.server.snapshot_shared_with_player": "Snapshot shared with %s.",
+  "effortless.message.clipboard.server.player_shared_snapshot": "%s shared you a snapshot. Go to clipboard to import it.",
+  "effortless.clipboard_settings.title": "Clipboard Settings"
 }
