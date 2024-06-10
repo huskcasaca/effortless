@@ -15,6 +15,7 @@ import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.screen.builer.EffortlessBuilderSettingsScreen;
 import dev.huskuraft.effortless.screen.constraint.EffortlessConstraintSettingsScreen;
+import dev.huskuraft.effortless.screen.pattern.EffortlessClipboardSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.render.EffortlessRenderSettingsScreen;
 
@@ -67,7 +68,7 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
             new EffortlessPatternSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
         this.patterntButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.clipboard_settings.title"), button -> {
-            new EffortlessPatternSettingsScreen(getEntrance()).attach();
+            new EffortlessClipboardSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
