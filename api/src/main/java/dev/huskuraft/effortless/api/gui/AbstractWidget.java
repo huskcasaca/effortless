@@ -84,7 +84,6 @@ public abstract class AbstractWidget implements Widget {
 
     @Override
     public void render(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-        onAnimateTick(deltaTick);
         onReload();
         setHovered(isMouseOver(mouseX, mouseY));
 
@@ -99,6 +98,7 @@ public abstract class AbstractWidget implements Widget {
         if (isVisible()) {
             renderWidgetOverlay(renderer, mouseX, mouseY, deltaTick);
         }
+        onAnimateTick(deltaTick);
     }
 
     public void renderWidgetBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
