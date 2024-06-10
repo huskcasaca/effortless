@@ -32,7 +32,7 @@ public class EffortlessPlayerConstraintSettingsScreen extends AbstractPanelScree
     private AbstractWidget saveButton;
 
     public EffortlessPlayerConstraintSettingsScreen(Entrance entrance, PlayerInfo playerInfo, ConstraintConfig config, BiConsumer<PlayerInfo, ConstraintConfig> consumer) {
-        super(entrance, Text.translate("effortless.constraint_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.constraint_settings.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
         this.playerInfo = playerInfo;
         this.defaultConfig = ConstraintConfig.NULL;
         this.originalConfig = config;

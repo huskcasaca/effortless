@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.config.ClientConfig;
+import dev.huskuraft.effortless.building.config.ClipboardConfig;
 import dev.huskuraft.effortless.building.config.PatternConfig;
 import dev.huskuraft.effortless.building.config.RenderConfig;
 import dev.huskuraft.effortless.screen.constraint.EffortlessConstraintSettingsScreen;
@@ -21,7 +22,7 @@ import dev.huskuraft.effortless.screen.settings.EffortlessSettingsScreen;
 public class EffortlessTestScreen extends AbstractPanelScreen {
 
     public EffortlessTestScreen(Entrance entrance) {
-        super(entrance, Text.text("Test"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.text("Test"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
     }
 
     @Override
@@ -49,7 +50,8 @@ public class EffortlessTestScreen extends AbstractPanelScreen {
                 getEntrance().getConfigStorage().set(
                         new ClientConfig(
                                 new RenderConfig(),
-                                new PatternConfig()
+                                new PatternConfig(),
+                                new ClipboardConfig()
                         )
                 );
             }));

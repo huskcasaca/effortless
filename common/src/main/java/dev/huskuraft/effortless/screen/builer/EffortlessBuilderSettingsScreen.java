@@ -19,7 +19,7 @@ public class EffortlessBuilderSettingsScreen extends AbstractPanelScreen {
 
 
     public EffortlessBuilderSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.builder_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.builder_settings.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
         this.consumer = pattern -> {
             getEntrance().getConfigStorage().update(config -> config.withBuilderConfig(this.config));
         };

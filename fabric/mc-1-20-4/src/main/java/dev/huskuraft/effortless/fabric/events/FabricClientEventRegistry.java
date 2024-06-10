@@ -31,7 +31,7 @@ public class FabricClientEventRegistry extends ClientEventRegistry {
             });
 
             getRegisterKeysEvent().invoker().onRegisterKeys(key1 -> {
-                KeyBindingHelper.registerKeyBinding(key1.getBinding().reference());
+                KeyBindingHelper.registerKeyBinding(key1.getKeyBinding().reference());
             });
         });
 

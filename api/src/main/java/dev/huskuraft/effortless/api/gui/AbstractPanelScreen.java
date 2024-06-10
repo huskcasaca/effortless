@@ -10,13 +10,14 @@ import dev.huskuraft.effortless.api.texture.TextureSprite;
 
 public abstract class AbstractPanelScreen extends AbstractScreen {
 
-    public static final int PANEL_WIDTH_EXPANDED = 64 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
-    public static final int PANEL_WIDTH = 42 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
+    public static final int PANEL_WIDTH_64 = 64 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
+    public static final int PANEL_WIDTH_50 = 50 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
+    public static final int PANEL_WIDTH_42 = 42 * 4 + 3 * Button.COMPAT_SPACING_V + 2 * Button.PADDINGS;
 
-    public static final int PANEL_HEIGHT_270 = 270;
-    public static final int PANEL_HEIGHT_180 = 180;
-    public static final int PANEL_HEIGHT_90 = 90;
-    public static final int PANEL_HEIGHT_45 = 45;
+    public static final int PANEL_HEIGHT_FULL = 238;
+    public static final int PANEL_HEIGHT_3_4 = 180;
+    public static final int PANEL_HEIGHT_2_4 = 90;
+    public static final int PANEL_HEIGHT_1_4 = 45;
 
     public static final int PANEL_BUTTON_ROW_HEIGHT_1 = Dimens.Buttons.HEIGHT + Button.COMPAT_SPACING_H + Button.PADDINGS;
     public static final int PANEL_BUTTON_ROW_HEIGHT_2 = Dimens.Buttons.HEIGHT * 2 + Button.COMPAT_SPACING_H * 2 + Button.PADDINGS;

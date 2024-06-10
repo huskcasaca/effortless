@@ -22,6 +22,10 @@ public record Clipboard(
         return new Clipboard(enabled, snapshot);
     }
 
+    public Clipboard toggled() {
+        return new Clipboard(!enabled, snapshot);
+    }
+
     public boolean isEmpty() {
         return snapshot.isEmpty();
     }
@@ -33,9 +37,9 @@ public record Clipboard(
     @Override
     public String getName() {
         if (enabled) {
-            return "clipboard_disabled";
-        } else {
             return "clipboard_enabled";
+        } else {
+            return "clipboard_disabled";
         }
     }
 

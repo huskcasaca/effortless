@@ -18,4 +18,8 @@ public enum Transformers {
         return Text.translate("effortless.transformer.%s".formatted(name));
     }
 
+    public Text getTitleText() {
+        return Text.translate("effortless.transformer.%s.title".formatted(name));
+    }
+
 }

@@ -16,9 +16,7 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractScreen;
 import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
-import dev.huskuraft.effortless.api.input.Key;
-import dev.huskuraft.effortless.api.input.Keys;
-import dev.huskuraft.effortless.api.lang.Lang;
+import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.RenderLayers;
@@ -237,7 +235,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         return button(option, name, option.getCategoryText(), option.getTooltipText(), description, option.getIcon(), option, activated);
     }
 
-    protected abstract Key getAssignedKey();
+    protected abstract KeyBinding getAssignedKeyBinds();
     @Override
     public void init(int width, int height) {
         super.init(width, height);
@@ -253,7 +251,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @Override
     public void onAnimateTick(float partialTick) {
-        this.detached = !getAssignedKey().getBinding().isKeyDown();
+        this.detached = !getAssignedKeyBinds().isKeyDown();
         this.animationTicks = Math.min(Math.max(animationTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);
         this.animationScaleTicks = Math.min(Math.max(animationScaleTicks + (detached ? -1 : 1) * partialTick, 0), MAX_ANIMATION_TICKS);
         if (detached && animationTicks == 0) {
@@ -309,14 +307,12 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         var result = false;
         if (isActive() && isVisible()) {
             if (radialSelectResponder != null && hoveredSlot != null) {
-                this.animationScaleTicks = 1.5f;
                 radialSelectResponder.accept(hoveredSlot, button == 0);
                 playRadialMenuSound();
                 result = true;
             }
 
             if (radialOptionSelectResponder != null && hoveredButton != null) {
-                this.animationScaleTicks = 1.5f;
                 radialOptionSelectResponder.accept(hoveredButton, button == 0);
                 playRadialMenuSound();
                 result = true;
@@ -358,7 +354,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @SafeVarargs
     public final void setLeftButtons(ButtonSet<B>... options) {
-        this.leftButtons = List.of(options);
+        setLeftButtons(List.of(options));
     }
 
     public final void setLeftButtons(List<? extends ButtonSet<B>> options) {
@@ -367,7 +363,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @SafeVarargs
     public final void setRightButtons(ButtonSet<B>... options) {
-        this.rightButtons = List.of(options);
+        setRightButtons(List.of(options));
     }
 
     public final void setRightButtons(List<? extends ButtonSet<B>> options) {
@@ -376,11 +372,15 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 
     @SafeVarargs
     public final void setSelectedSlots(Slot<S>... slots) {
-        this.selectedSlot = Set.of(slots);
+        setSelectedSlots(Set.of(slots));
     }
 
     public final void setSelectedSlots(Collection<? extends Slot<S>> slots) {
         this.selectedSlot = slots;
+    }
+
+    public void resetScaleAnimation() {
+        this.animationScaleTicks = 1f;
     }
 
     private void renderRadialSlots(Renderer renderer, int mouseX, int mouseY, List<? extends Slot<S>> slots) {
@@ -545,10 +545,8 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
 //                tooltip.add(Text.text("Click [Left Button] for Switch").withStyle(ChatFormatting.DARK_GRAY));
 //                tooltip.add(Text.text("Click [Right Button] for More Configs").withStyle(ChatFormatting.DARK_GRAY));
                 tooltip.add(Text.empty());
-                if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
-                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
-                } else {
-                    tooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
+                tooltip.add(TooltipHelper.holdShiftForSummary());
+                if (TooltipHelper.isSummaryButtonDown()) {
                     tooltip.add(Text.empty());
 //                    tooltip.add(hoveredButton.getTooltip());
                     tooltip.addAll(TooltipHelper.wrapLines(getTypeface(), hoveredButton.getSummary().withStyle(ChatFormatting.GRAY)));

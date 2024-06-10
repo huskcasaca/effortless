@@ -44,7 +44,7 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
     @SubscribeEvent
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
-            event.register(key.getBinding().reference());
+            event.register(key.getKeyBinding().reference());
         });
     }
 

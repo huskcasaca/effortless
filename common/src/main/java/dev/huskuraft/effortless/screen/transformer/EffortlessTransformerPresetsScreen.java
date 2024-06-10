@@ -41,7 +41,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
     private Transformers selectedType = Transformers.ARRAY;
 
     public EffortlessTransformerPresetsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
         this.consumer = transformers -> {
             getEntrance().getConfigStorage().update(config -> config.withPatternConfig(new PatternConfig(transformers)));
         };
@@ -102,11 +102,10 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
 
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0.5f, 0.5f).build());
 
-
         this.tabButtons.clear();
         for (var type : Transformers.values()) {
             tabButtons.add(
-                    addWidget(Button.builder(getEntrance(), type.getDisplayName(), button -> {
+                    addWidget(Button.builder(getEntrance(), type.getTitleText(), button -> {
                         setSelectedType(type);
                     }).setBoundsGrid(getLeft(), getTop(), getWidth(), PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_1, 0, 1f * type.ordinal() / Transformers.values().length, 1f / Transformers.values().length).build())
             );
@@ -121,7 +120,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
     @Override
     public void onReload() {
         for (var tabButton : tabButtons) {
-            tabButton.setActive(!tabButton.getMessage().equals(selectedType.getDisplayName()));
+            tabButton.setActive(!tabButton.getMessage().equals(selectedType.getTitleText()));
         }
         this.editButton.setActive(entries.getSelected() != null && !entries.getSelected().getItem().isBuiltIn());
         this.deleteButton.setActive(entries.getSelected() != null && !entries.getSelected().getItem().isBuiltIn());

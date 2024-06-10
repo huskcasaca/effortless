@@ -1,10 +1,13 @@
 package dev.huskuraft.effortless.api.gui.tooltip;
 
 import java.text.BreakIterator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import dev.huskuraft.effortless.api.gui.Typeface;
+import dev.huskuraft.effortless.api.input.Keys;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Style;
 import dev.huskuraft.effortless.api.text.Text;
@@ -92,6 +95,29 @@ public class TooltipHelper {
         }
 
         return lines;
+    }
+
+    public static Text holdShiftForSummary() {
+        if (isSummaryButtonDown()) {
+            return Text.translate("effortless.tooltip.hold_for_summary", Text.translate("key.effortless.shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY);
+        } else {
+            return Text.translate("effortless.tooltip.hold_for_summary", Text.translate("key.effortless.shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY);
+        }
+    }
+
+    public static boolean isSummaryButtonDown() {
+        return Keys.KEY_LEFT_SHIFT.isDown() || Keys.KEY_RIGHT_SHIFT.isDown();
+    }
+
+    public static List<Text> makeSummary(Typeface typeface, Text name, Text summary) {
+        var tooltips = new ArrayList<Text>();
+        tooltips.add(name);
+        tooltips.add(holdShiftForSummary());
+        if (isSummaryButtonDown()) {
+            tooltips.add(Text.empty());
+            tooltips.addAll(TooltipHelper.wrapLines(typeface, summary.withStyle(ChatFormatting.GRAY)));
+        }
+        return Collections.unmodifiableList(tooltips);
     }
 
 }

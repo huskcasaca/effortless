@@ -11,8 +11,6 @@ import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.gui.tooltip.Palette;
 import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
-import dev.huskuraft.effortless.api.input.Keys;
-import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
@@ -48,8 +46,8 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
 
     @Override
     public void onCreate() {
-        setWidth(PANEL_WIDTH_EXPANDED);
-        setHeight(randomizer.getSource() == ItemRandomizer.Source.CUSTOMIZE ? PANEL_HEIGHT_270 : PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_3);
+        setWidth(PANEL_WIDTH_50);
+        setHeight(randomizer.getSource() == ItemRandomizer.Source.CUSTOMIZE ? PANEL_HEIGHT_FULL : PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_3);
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(AbstractPanelScreen.TITLE_COLOR), TextWidget.Gravity.CENTER));
 
@@ -133,10 +131,8 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
         sourceTooltip.add(Text.translate("effortless.transformer.randomizer.edit.source.tooltip.title"));
         sourceTooltip.add(this.randomizer.getSource().getDisplayName().withStyle(ChatFormatting.GOLD));
         sourceTooltip.add(Text.empty());
-        if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
-            sourceTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
-        } else {
-            sourceTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
+        sourceTooltip.add(TooltipHelper.holdShiftForSummary());
+        if (TooltipHelper.isSummaryButtonDown()) {
             sourceTooltip.add(Text.empty());
             sourceTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.randomizer.edit.source.tooltip.message").withStyle(ChatFormatting.GRAY)));
             for (var source : ItemRandomizer.Source.values()) {
@@ -150,10 +146,8 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
         orderTooltip.add(Text.translate("effortless.transformer.randomizer.edit.order.tooltip.title"));
         orderTooltip.add(this.randomizer.getOrder().getDisplayName().withStyle(ChatFormatting.GOLD));
         orderTooltip.add(Text.empty());
-        if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
-            orderTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
-        } else {
-            orderTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
+        orderTooltip.add(TooltipHelper.holdShiftForSummary());
+        if (TooltipHelper.isSummaryButtonDown()) {
             orderTooltip.add(Text.empty());
             orderTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.randomizer.edit.order.tooltip.message").withStyle(ChatFormatting.GRAY)));
             for (var order : Randomizer.Order.values()) {
@@ -167,10 +161,8 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
         targetTooltip.add(Text.translate("effortless.transformer.randomizer.edit.target.tooltip.title"));
         targetTooltip.add(this.randomizer.getTarget().getDisplayName().withStyle(ChatFormatting.GOLD));
         targetTooltip.add(Text.empty());
-        if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
-            targetTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
-        } else {
-            targetTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
+        targetTooltip.add(TooltipHelper.holdShiftForSummary());
+        if (TooltipHelper.isSummaryButtonDown()) {
             targetTooltip.add(Text.empty());
             targetTooltip.addAll(TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.transformer.randomizer.edit.target.tooltip.message").withStyle(ChatFormatting.GRAY)));
             for (var target : Randomizer.Target.values()) {

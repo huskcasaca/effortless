@@ -20,7 +20,7 @@ public class EffortlessPatternSettingsScreen extends AbstractPanelScreen {
     private PatternConfig config;
 
     public EffortlessPatternSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.pattern_settings.title"), PANEL_WIDTH_EXPANDED, PANEL_HEIGHT_270);
+        super(entrance, Text.translate("effortless.pattern_settings.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
         this.consumer = pattern -> {
             getEntrance().getConfigStorage().update(config -> config.withPatternConfig(this.config));
         };

@@ -334,12 +334,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         lastClientPlayerLevel.set(null);
         contexts.clear();
         undoRedoStacks.clear();
-        getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig()));
+        getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig(), config.clipboardConfig()));
     }
 
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
         if (getEntrance().getConfigStorage().get().builderConfig().passiveMode())
-            if (!EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
+            if (!EffortlessKeys.PASSIVE_BUILD_MODIFIER.getKeyBinding().isDown() && !getContext(player).isBuilding()) {
                 return EventResult.pass();
             }
 
@@ -544,12 +544,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         }
 
         if (player.isDeadOrDying()) {
-            resetContextInteractions(player);
+            resetInteractions(player);
             return;
         }
 
         if (!player.getWorld().getDimensionId().location().equals(lastClientPlayerLevel.get())) {
-            resetContextInteractions(player);
+            resetInteractions(player);
             lastClientPlayerLevel.set(player.getWorld().getDimensionId().location());
             return;
         }
@@ -559,7 +559,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
             return;
         }
 
-        if (getEntrance().getConfigStorage().get().builderConfig().passiveMode() && !EffortlessKeys.PASSIVE_BUILD_MODIFIER.getBinding().isDown() && !getContext(player).isBuilding()) {
+        if (getEntrance().getConfigStorage().get().builderConfig().passiveMode() && !EffortlessKeys.PASSIVE_BUILD_MODIFIER.getKeyBinding().isDown() && !getContext(player).isBuilding()) {
             getEntrance().getClientManager().getTooltipRenderer().hideEntry(generateId(player.getId(), Context.class), 0, false);
             return;
         }
@@ -600,7 +600,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         setContext(player, getContext(player).finalize(player, BuildStage.TICK));
 
 
-//        if (Keys.KEY_LEFT_CONTROL.getBinding().isKeyDown()) {
+//        if (Keys.KEY_LEFT_CONTROL.getKeyBinding().isKeyDown()) {
 //            setContext(player, getContext(player).withBuildFeature(PlaneLength.EQUAL));
 //        } else {
 //            setContext(player, getContext(player).withBuildFeature(PlaneLength.VARIABLE));

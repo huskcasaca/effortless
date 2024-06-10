@@ -39,7 +39,7 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
         getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
         });
         getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
-            ClientRegistry.registerKeyBinding(key.getBinding().reference());
+            ClientRegistry.registerKeyBinding(key.getKeyBinding().reference());
         });
     }
 

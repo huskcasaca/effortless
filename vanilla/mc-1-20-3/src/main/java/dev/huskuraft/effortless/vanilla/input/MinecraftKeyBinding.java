@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.vanilla.input;
 
+import dev.huskuraft.effortless.api.input.Key;
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import net.minecraft.client.KeyMapping;
 
@@ -18,8 +19,13 @@ public record MinecraftKeyBinding(
     }
 
     @Override
-    public int getDefaultKey() {
-        return refs.getDefaultKey().getValue();
+    public Key getDefaultKey() {
+        return new MinecraftKey(refs.getDefaultKey());
+    }
+
+    @Override
+    public Key getKey() {
+        return new MinecraftKey(refs.key);
     }
 
     @Override
@@ -30,11 +36,6 @@ public record MinecraftKeyBinding(
     @Override
     public boolean isDown() {
         return refs.isDown();
-    }
-
-    @Override
-    public int getBoundCode() {
-        return refs.key.getValue();
     }
 
 }

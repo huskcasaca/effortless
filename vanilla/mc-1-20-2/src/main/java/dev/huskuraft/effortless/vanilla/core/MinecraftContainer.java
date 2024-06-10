@@ -7,7 +7,11 @@ public record MinecraftContainer(net.minecraft.world.Container refs) implements 
 
     @Override
     public ItemStack getItem(int index) {
-        return new MinecraftItemStack(refs.getItem(index));
+        try {
+            return new MinecraftItemStack(refs.getItem(index));
+        } catch (NullPointerException e) {
+            return new MinecraftItemStack(net.minecraft.world.item.ItemStack.EMPTY);
+        }
     }
 
     @Override

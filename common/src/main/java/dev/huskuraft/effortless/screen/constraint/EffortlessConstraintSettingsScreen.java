@@ -8,8 +8,6 @@ import dev.huskuraft.effortless.api.gui.AbstractPanelScreen;
 import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
 import dev.huskuraft.effortless.api.gui.tooltip.TooltipHelper;
-import dev.huskuraft.effortless.api.input.Keys;
-import dev.huskuraft.effortless.api.lang.Lang;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
@@ -20,7 +18,7 @@ import dev.huskuraft.effortless.screen.settings.EffortlessSessionStatusScreen;
 public class EffortlessConstraintSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessConstraintSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.constraint_settings.title"), PANEL_WIDTH, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3);
+        super(entrance, Text.translate("effortless.constraint_settings.title"), PANEL_WIDTH_42, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3);
     }
 
     private Button globalButton;
@@ -89,12 +87,9 @@ public class EffortlessConstraintSettingsScreen extends AbstractPanelScreen {
     @Override
     public void onReload() {
         var globalTooltip = new ArrayList<Text>();
-        if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
-            globalTooltip.add(Text.translate("effortless.global_constraint_settings.title").withStyle(ChatFormatting.WHITE));
-            globalTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
-        } else {
-            globalTooltip.add(Text.translate("effortless.global_constraint_settings.title").withStyle(ChatFormatting.WHITE));
-            globalTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
+        globalTooltip.add(Text.translate("effortless.global_constraint_settings.title").withStyle(ChatFormatting.WHITE));
+        globalTooltip.add(TooltipHelper.holdShiftForSummary());
+        if (TooltipHelper.isSummaryButtonDown()) {
             globalTooltip.add(Text.empty());
             globalTooltip.addAll(
                     TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.global_constraint_settings.tooltip", Text.text("[%s]".formatted(EffortlessConfigStorage.CONFIG_NAME)).withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GRAY))
@@ -104,12 +99,9 @@ public class EffortlessConstraintSettingsScreen extends AbstractPanelScreen {
 
 
         var playerTooltip = new ArrayList<Text>();
-        if (!Keys.KEY_LEFT_SHIFT.getBinding().isDown() && !Keys.KEY_LEFT_SHIFT.getBinding().isDown()) {
-            playerTooltip.add(Text.translate("effortless.player_constraint_settings.title").withStyle(ChatFormatting.WHITE));
-            playerTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.DARK_GRAY)).withStyle(ChatFormatting.DARK_GRAY));
-        } else {
-            playerTooltip.add(Text.translate("effortless.player_constraint_settings.title").withStyle(ChatFormatting.WHITE));
-            playerTooltip.add(Lang.translate("tooltip.hold_for_summary", Lang.translateKeyDesc("shift").withStyle(ChatFormatting.GRAY)).withStyle(ChatFormatting.DARK_GRAY));
+        playerTooltip.add(Text.translate("effortless.player_constraint_settings.title").withStyle(ChatFormatting.WHITE));
+        playerTooltip.add(TooltipHelper.holdShiftForSummary());
+        if (TooltipHelper.isSummaryButtonDown()) {
             playerTooltip.add(Text.empty());
             playerTooltip.addAll(
                     TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.player_constraint_settings.tooltip", Text.text("[%s]".formatted(EffortlessConfigStorage.CONFIG_NAME)).withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GRAY))

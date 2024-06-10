@@ -4,11 +4,12 @@ import java.util.List;
 
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.building.BuildStage;
+import dev.huskuraft.effortless.building.Option;
 
 public record Pattern(
         boolean enabled,
         List<Transformer> transformers
-) {
+) implements Option {
 
     public static final Pattern DISABLED = new Pattern(false, List.of());
     public static final Pattern EMPTY = new Pattern(true, List.of());
@@ -25,6 +26,10 @@ public record Pattern(
         return new Pattern(enabled, transformers);
     }
 
+    public Pattern toggled() {
+        return new Pattern(!enabled, transformers);
+    }
+
     public Pattern finalize(Player player, BuildStage stage) {
         return withTransformers(
                 transformers().stream().map(transformer -> transformer.finalize(player, stage)).toList()
@@ -39,4 +44,21 @@ public record Pattern(
         return multiplier;
     }
 
+    @Override
+    public String getName() {
+        if (enabled) {
+            return Patterns.ENABLED.getName();
+        } else {
+            return Patterns.DISABLED.getName();
+        }
+    }
+
+    @Override
+    public String getCategory() {
+        if (enabled) {
+            return Patterns.ENABLED.getCategory();
+        } else {
+            return Patterns.DISABLED.getCategory();
+        }
+    }
 }
