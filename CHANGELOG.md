@@ -2,6 +2,13 @@
 
 ----------
 
+### 3.0.0-beta.2
+
+* New Clipboard UI ([#150](https://github.com/huskcasaca/effortless/pull/150))
+* Fix crashes upon picking a block in radial menu ([#151](https://github.com/huskcasaca/effortless/pull/151))
+
+----------
+
 ### 3.0.0-beta.1
 
 * Fix build tooltip not show correctly at client side ([#146](https://github.com/huskcasaca/effortless/pull/146))
