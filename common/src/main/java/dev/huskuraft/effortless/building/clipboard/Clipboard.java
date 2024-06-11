@@ -8,7 +8,7 @@ public record Clipboard(
         boolean enabled,
         Snapshot snapshot
 ) implements Option  {
-    public static Clipboard DISABLED = new Clipboard(false, new Snapshot(List.of()));
+    public static Clipboard DISABLED = new Clipboard(false, new Snapshot("", 0, List.of()));
 
     public static Clipboard of(boolean enabled, Snapshot snapshot) {
         return new Clipboard(enabled, snapshot);

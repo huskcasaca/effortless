@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.gui.AbstractButton;
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.platform.Entrance;
@@ -30,16 +31,42 @@ public class Button extends AbstractButton {
     private OnPress onPress;
 
     public Button(Entrance entrance, int x, int y, int width, int height, Text message) {
-        this(entrance, x, y, width, height, message, null);
+        super(entrance, x, y, width, height, message, null);
+    }
+
+    public Button(Entrance entrance, int x, int y, int width, int height, ResourceLocation icon) {
+        super(entrance, x, y, width, height, Text.empty(), icon);
+    }
+
+    public Button(Entrance entrance, int x, int y, int width, int height, Text message, ResourceLocation icon) {
+        super(entrance, x, y, width, height, message, icon);
     }
 
     public Button(Entrance entrance, int x, int y, int width, int height, Text message, OnPress onPress) {
-        super(entrance, x, y, width, height, message);
+        super(entrance, x, y, width, height, message, null);
+        this.onPress = onPress;
+    }
+
+    public Button(Entrance entrance, int x, int y, int width, int height, ResourceLocation icon, OnPress onPress) {
+        super(entrance, x, y, width, height, Text.empty(), icon);
+        this.onPress = onPress;
+    }
+
+    public Button(Entrance entrance, int x, int y, int width, int height, Text message, ResourceLocation icon, OnPress onPress) {
+        super(entrance, x, y, width, height, message, icon);
         this.onPress = onPress;
     }
 
     public static Builder builder(Entrance entrance, Text text, OnPress onPress) {
-        return new Builder(entrance, text, onPress);
+        return new Builder(entrance, onPress).setText(text);
+    }
+
+    public static Builder builder(Entrance entrance, ResourceLocation icon, OnPress onPress) {
+        return new Builder(entrance, onPress).setIcon(icon);
+    }
+
+    public static Builder builder(Entrance entrance, Text text,ResourceLocation icon, OnPress onPress) {
+        return new Builder(entrance, onPress).setText(text).setIcon(icon);
     }
 
     protected void onPress() {
@@ -58,7 +85,8 @@ public class Button extends AbstractButton {
 
     public static class Builder {
 
-        private final Text message;
+        private Text text = Text.empty();
+        private ResourceLocation icon;
         private final OnPress onPress;
         private final Entrance entrance;
         @Nullable
@@ -68,10 +96,19 @@ public class Button extends AbstractButton {
         private int width = 150;
         private int height = 20;
 
-        public Builder(Entrance entrance, Text text, OnPress onPress) {
+        public Builder(Entrance entrance, OnPress onPress) {
             this.entrance = entrance;
-            this.message = text;
             this.onPress = onPress;
+        }
+
+        public Builder setText(Text text) {
+            this.text = text;
+            return this;
+        }
+
+        public Builder setIcon(ResourceLocation icon) {
+            this.icon = icon;
+            return this;
         }
 
         public Builder setPos(int i, int j) {
@@ -97,7 +134,7 @@ public class Button extends AbstractButton {
 
         public Builder setBoundsGrid(int width, int height, float row, float col, float size) {
             return setBounds(
-                    (int) (width / 2 - Button.BUTTON_WIDTH_1 * 2 - HORIZONTAL_PADDING * 3 / 2 + col * 4 * (Button.BUTTON_WIDTH_1 + HORIZONTAL_PADDING)),
+                    (int) (width / 2f - Button.BUTTON_WIDTH_1 * 2 - HORIZONTAL_PADDING * 3 / 2f + col * 4 * (Button.BUTTON_WIDTH_1 + HORIZONTAL_PADDING)),
                     (int) (height - Button.DEFAULT_HEIGHT - Dimens.Buttons.VERTICAL_PADDING - row * (DEFAULT_HEIGHT + VERTICAL_PADDING)),
                     (int) (Button.BUTTON_WIDTH_1 * size * 4 + HORIZONTAL_PADDING * (size * 4 - 1)),
                     DEFAULT_HEIGHT);
@@ -126,7 +163,7 @@ public class Button extends AbstractButton {
         }
 
         public Button build() {
-            var button = new Button(entrance, this.x, this.y, this.width, this.height, this.message, this.onPress);
+            var button = new Button(entrance, this.x, this.y, this.width, this.height, this.text, this.icon, this.onPress);
             button.setTooltip(this.tooltip);
             return button;
         }

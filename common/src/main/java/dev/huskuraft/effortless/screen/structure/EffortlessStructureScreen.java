@@ -52,8 +52,8 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
             }
         }
         descriptions.add(Text.empty());
-        descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_on_off", Text.translate(OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
-        descriptions.add(Text.translate("effortless.tooltip.click_to_edit_pattern", Text.translate(OptionKeys.KEY_USE.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
+        descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_on_off", OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
+        descriptions.add(Text.translate("effortless.tooltip.click_to_edit_pattern", OptionKeys.KEY_USE.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
         return button(context.pattern(), name, descriptions, context.pattern().enabled());
     });
 
@@ -106,8 +106,8 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
         var descriptions = new ArrayList<Text>();
         descriptions.add(Text.empty());
-        descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_on_off", Text.translate(OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
-        descriptions.add(Text.translate("effortless.tooltip.click_to_edit_clipboard", Text.translate(OptionKeys.KEY_USE.getKeyBinding().getKey().getName())).withStyle(ChatFormatting.DARK_GRAY));
+        descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_on_off", OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
+        descriptions.add(Text.translate("effortless.tooltip.click_to_edit_clipboard", OptionKeys.KEY_USE.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
         return button(context.clipboard(), context.clipboard().getNameText(), descriptions, context.clipboard().enabled());
     });
 
