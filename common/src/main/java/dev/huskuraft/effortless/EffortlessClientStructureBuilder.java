@@ -696,7 +696,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     case BLOCKS_DESTROYED -> ChatFormatting.RED;
                     case BLOCKS_INTERACTED -> ChatFormatting.YELLOW;
                     case BLOCKS_COPIED -> ChatFormatting.GREEN;
-                    case BLOCKS_NOT_PLACEABLE -> ChatFormatting.GRAY;
+                    case BLOCKS_NOT_REPLACEABLE -> ChatFormatting.GRAY;
                     case BLOCKS_NOT_BREAKABLE -> ChatFormatting.GRAY;
                     case BLOCKS_NOT_INTERACTABLE -> ChatFormatting.GRAY;
                     case BLOCKS_NOT_COPYABLE -> ChatFormatting.GRAY;
