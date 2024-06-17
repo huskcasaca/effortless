@@ -50,7 +50,7 @@ public class EffortlessStructureSnapshotsHistoryScreen extends AbstractPanelScre
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(AbstractPanelScreen.TITLE_COLOR), TextWidget.Gravity.CENTER));
 
-        this.entries = addWidget(new StructureSnapshotList(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - AbstractPanelScreen.PADDINGS_H * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_2));
+        this.entries = addWidget(new StructureSnapshotList(getEntrance(), getLeft() + AbstractPanelScreen.PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - AbstractPanelScreen.PADDINGS_H * 2 - 8 /* scrollbar */, getHeight() - PANEL_TITLE_HEIGHT_1 - PANEL_BUTTON_ROW_HEIGHT_1));
         this.entries.setAlwaysShowScrollbar(true);
         this.entries.reset(history);
 
@@ -82,11 +82,11 @@ public class EffortlessStructureSnapshotsHistoryScreen extends AbstractPanelScre
 //        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0 / 5f, 1 / 5f).build());
 
 
-        this.addToLibraryButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save_to_library"), button -> {
-            if (this.entries.hasSelected()) {
-                getEntrance().getConfigStorage().update(clientConfig -> clientConfig.withClipboardConfig(clientConfig.clipboardConfig().appendCollection(this.entries.getSelected().getItem())));
-            }
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0 / 5f, 5 / 5f).build());
+//        this.addToLibraryButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.save_to_library"), button -> {
+//            if (this.entries.hasSelected()) {
+//                getEntrance().getConfigStorage().update(clientConfig -> clientConfig.withClipboardConfig(clientConfig.clipboardConfig().appendCollection(this.entries.getSelected().getItem())));
+//            }
+//        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0 / 5f, 5 / 5f).build());
 
         this.cancelButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
             detach();
@@ -121,7 +121,7 @@ public class EffortlessStructureSnapshotsHistoryScreen extends AbstractPanelScre
 //
 //        this.favButton.setActive(this.entries.hasSelected());
 
-        addToLibraryButton.setActive(this.entries.hasSelected() && !getEntrance().getConfigStorage().get().clipboardConfig().collections().contains(this.entries.getSelected().getItem()));
+//        addToLibraryButton.setActive(this.entries.hasSelected() && !getEntrance().getConfigStorage().get().clipboardConfig().collections().contains(this.entries.getSelected().getItem()));
 
     }
 

@@ -97,40 +97,40 @@ public class EffortlessClipboardScreen extends AbstractPanelScreen {
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
 
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 4 / 5f, 1 / 5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 3 / 4f, 1 / 4f).build());
 
         this.shareButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.share"), button -> {
             new EffortlessOnlinePlayersScreen(getEntrance(), playerInfo -> {
                 getEntrance().getChannel().sendPacket(new PlayerSnapshotSharePacket(getPlayer().getId(), playerInfo.getId(), clipboard.snapshot()));
                 detach();
             }).attach();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 2 / 5f, 1 / 5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 1 / 4f, 1 / 4f).build());
 
         this.clearButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.clear"), button -> {
             this.clipboard = this.clipboard.withSnapshot(Snapshot.EMPTY);
 
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 3 / 5f, 1 / 5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 2 / 4f, 1 / 4f).build());
 
         this.historyButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.history"), button -> {
             new EffortlessStructureSnapshotsHistoryScreen(getEntrance(), snapshot -> {
                 this.clipboard = this.clipboard.withSnapshot(snapshot);
             }).attach();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0 / 5f, 1 / 5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0 / 4f, 1 / 4f).build());
 
-        this.libraryButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.library"), button -> {
-            new EffortlessStructureSnapshotsLibraryScreen(getEntrance(), snapshot -> {
-                this.clipboard = this.clipboard.withSnapshot(snapshot);
-            }).attach();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 1 / 5f, 1 / 5f).build());
+//        this.libraryButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.library"), button -> {
+//            new EffortlessStructureSnapshotsLibraryScreen(getEntrance(), snapshot -> {
+//                this.clipboard = this.clipboard.withSnapshot(snapshot);
+//            }).attach();
+//        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 1 / 4f, 1 / 4f).build());
 
         this.doneButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
             detachAll();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 2 / 5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 0f, 2 / 4f).build());
 
         this.enableButton = addWidget(Button.builder(getEntrance(), clipboard.enabled() ? Text.translate("effortless.clipboard.button.disable") : Text.translate("effortless.clipboard.button.enable"), button -> {
             this.clipboard = clipboard.withEnabled(!clipboard.enabled());
             recreate();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 2 / 5f, 3 / 5f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 0f, 2 / 4f, 2 / 4f).build());
 
 
     }
@@ -143,7 +143,7 @@ public class EffortlessClipboardScreen extends AbstractPanelScreen {
 
         this.historyButton.setTooltip(TooltipHelper.makeSummary(getTypeface(), Text.translate("effortless.button.history"), Text.translate("effortless.clipboard.history.tooltip")));
 
-        this.libraryButton.setTooltip(TooltipHelper.makeSummary(getTypeface(), Text.translate("effortless.button.library"), Text.translate("effortless.clipboard.library.tooltip")));
+//        this.libraryButton.setTooltip(TooltipHelper.makeSummary(getTypeface(), Text.translate("effortless.button.library"), Text.translate("effortless.clipboard.library.tooltip")));
 
         this.shareButton.setTooltip(TooltipHelper.makeSummary(getTypeface(), Text.translate("effortless.button.share"), Text.translate("effortless.clipboard.share.tooltip")));
         this.shareButton.setActive(!clipboard.isEmpty());
