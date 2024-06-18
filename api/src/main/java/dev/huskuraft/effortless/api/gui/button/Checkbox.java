@@ -1,6 +1,5 @@
-package dev.huskuraft.effortless.api.gui.checkbox;
+package dev.huskuraft.effortless.api.gui.button;
 
-import dev.huskuraft.effortless.api.gui.button.Button;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;

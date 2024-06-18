@@ -28,6 +28,7 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
     private Button constraintButton;
     private Button buildertButton;
     private Button patterntButton;
+    private Button clipboardButton;
     private Button renderButton;
 
     @Override
@@ -67,7 +68,7 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
         this.patterntButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern_settings.title"), button -> {
             new EffortlessPatternSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
-        this.patterntButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.clipboard_settings.title"), button -> {
+        this.clipboardButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.clipboard_settings.title"), button -> {
             new EffortlessClipboardSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
 

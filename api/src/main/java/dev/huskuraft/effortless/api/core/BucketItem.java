@@ -1,5 +1,7 @@
 package dev.huskuraft.effortless.api.core;
 
+import java.util.Objects;
+
 import dev.huskuraft.effortless.api.core.fluid.Fluid;
 import dev.huskuraft.effortless.api.core.fluid.Fluids;
 
@@ -38,7 +40,7 @@ public interface BucketItem extends Item {
     void useExtraContent(World world, Player player, BlockPosition blockPosition, ItemStack itemStack);
 
     default boolean isEmpty() {
-        return getContent().refs().equals(Fluids.EMPTY.fluid().refs());
+        return getContent() == null || Objects.equals(getContent().reference(), Fluids.EMPTY.fluid().reference());
     }
 
     @Override

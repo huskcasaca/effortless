@@ -1,15 +1,11 @@
 package dev.huskuraft.effortless.building.clipboard;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.ItemStack;
-import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.Vector3d;
-import dev.huskuraft.effortless.api.math.Vector3f;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.pattern.MirrorContext;
@@ -17,10 +13,10 @@ import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
 
 public record Snapshot(
-        List<BlockData> blockData
+        String name, long createdTimestamp, List<BlockData> blockData
 ) {
 
-    public static Snapshot EMPTY = new Snapshot(List.of());
+    public static Snapshot EMPTY = new Snapshot("", 0, List.of());
 
     public boolean isEmpty() {
         return blockData.isEmpty();
@@ -65,28 +61,8 @@ public record Snapshot(
 
     }
 
-    public Vector3d getVisualCenter() {
-        if (blockData().isEmpty()) {
-            return Vector3d.ZERO;
-        }
-        var center = getCenter();
-        var maxYBlockPosition = blockData().stream().max(Comparator.comparingDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()) * 0.57735026919f + blockData.blockPosition().getCenter().sub(center).y())).map(BlockData::blockPosition).map(BlockPosition::getCenter).get();
-        var minYBlockPosition = blockData().stream().min(Comparator.comparingDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()) * 0.57735026919f + blockData.blockPosition().getCenter().sub(center).y())).map(BlockData::blockPosition).map(BlockPosition::getCenter).get();
-        var maxXBlockPosition = blockData().stream().max(Comparator.comparingDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()))).map(BlockData::blockPosition).map(BlockPosition::getCenter).get();
-        var minXBlockPosition = blockData().stream().min(Comparator.comparingDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()))).map(BlockData::blockPosition).map(BlockPosition::getCenter).get();
-        var xyPos = BoundingBox3d.of(maxXBlockPosition, minXBlockPosition);
-        var yPos = BoundingBox3d.of(maxYBlockPosition, minYBlockPosition);
-
-        return new Vector3d(
-                xyPos.getCenter().x(),
-                yPos.getCenter().y(),
-                xyPos.getCenter().z()
-        );
-
-    }
-
     public Snapshot withBlockData(List<BlockData> blockData) {
-        return new Snapshot(blockData);
+        return new Snapshot(name, createdTimestamp, blockData);
     }
 
     public Snapshot update(SnapshotTransform action) {

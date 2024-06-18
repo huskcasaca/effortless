@@ -4,7 +4,6 @@ import java.util.stream.Collectors;
 
 import dev.huskuraft.effortless.api.gui.Dimens;
 import dev.huskuraft.effortless.api.gui.container.EditableEntryList;
-import dev.huskuraft.effortless.api.gui.icon.RadialTextIcon;
 import dev.huskuraft.effortless.api.gui.slot.SlotContainer;
 import dev.huskuraft.effortless.api.gui.slot.SlotData;
 import dev.huskuraft.effortless.api.gui.text.TextWidget;
