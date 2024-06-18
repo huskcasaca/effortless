@@ -28,14 +28,14 @@ public final class StructureSnapshotWidget extends AbstractWidget {
         renderer.pushPose();
         renderer.translate(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 100);
         var center = snapshot.getCenter();
-        var maxY = snapshot.blockData().stream().mapToDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()) * 0.57735026919f + blockData.blockPosition().getCenter().sub(center).y()).max().orElse(0) + 1.5;
-        var minY = snapshot.blockData().stream().mapToDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()) * 0.57735026919f + blockData.blockPosition().getCenter().sub(center).y()).min().orElse(0) - 1.5;
+        var maxY = snapshot.blockData().stream().mapToDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()) * Math.sin(Math.PI / 4) * 0.8  + blockData.blockPosition().getCenter().sub(center).y()).max().orElse(0) + 1.5;
+        var minY = snapshot.blockData().stream().mapToDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()) * Math.sin(Math.PI / 4) * 0.8  + blockData.blockPosition().getCenter().sub(center).y()).min().orElse(0) - 1.5;
 
-        var maxX = snapshot.blockData().stream().mapToDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z())).max().orElse(0) + 1.5;
-        var minX = snapshot.blockData().stream().mapToDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z())).min().orElse(0) - 1.5;
-        renderer.scale(-Math.min(getWidth() / (maxX - minX), getHeight() / (maxY - minY) * 1.2));
+        var maxX = snapshot.blockData().stream().mapToDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()) * 0.8).max().orElse(0) + 1.5;
+        var minX = snapshot.blockData().stream().mapToDouble(blockData -> (blockData.blockPosition().getCenter().sub(center).x() - blockData.blockPosition().getCenter().sub(center).z()) * 0.8).min().orElse(0) - 1.5;
+        renderer.scale(-Math.min(getWidth() / (maxX - minX), getHeight() / Math.max((maxY - minY), 8) * 1.1));
 
-        renderer.rotate(Vector3f.XP.rotationDegrees(-45));
+        renderer.rotate(Vector3f.XP.rotationDegrees(-30));
         renderer.rotate(Vector3f.YP.rotationDegrees(45));
         renderer.pushPose();
         renderer.translate(-snapshot.getCenter().x(), -snapshot.getCenter().y(), -snapshot.getCenter().z());

@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.api.gui;
 
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
@@ -9,8 +10,11 @@ import dev.huskuraft.effortless.api.texture.TextureFactory;
 
 public abstract class AbstractButton extends AbstractWidget {
 
-    protected AbstractButton(Entrance entrance, int x, int y, int width, int height, Text message) {
+    private final ResourceLocation icon;
+
+    protected AbstractButton(Entrance entrance, int x, int y, int width, int height, Text message, ResourceLocation icon) {
         super(entrance, x, y, width, height, message);
+        this.icon = icon;
         this.focusable = true;
     }
 
@@ -48,17 +52,22 @@ public abstract class AbstractButton extends AbstractWidget {
     public void renderWidget(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
         super.renderWidget(renderer, mouseX, mouseY, deltaTick);
         renderButtonBackground(renderer, mouseX, mouseY, deltaTick);
+        if (icon == null) {
+            renderScrollingString(renderer, getTypeface(), 2, (isActive() ? 16777215 : 10526880) | (int) MathUtils.ceil(this.getAlpha() * 255.0F) << 24);
+        } else {
+            renderIconScrollingString(renderer, getTypeface(), 2, (isActive() ? 16777215 : 10526880) | (int) MathUtils.ceil(this.getAlpha() * 255.0F) << 24);
+            if (!isActive()) {
+                renderer.setRsShaderColor(0.72f, 0.72f ,0.72f , 0.75f);
+                renderIcon(renderer);
+                renderer.setRsShaderColor(1f, 1f, 1f, 1f);
+            } else {
+                renderIcon(renderer);
+            }
+        }
     }
 
     public void renderButtonBackground(Renderer renderer, int mouseX, int mouseY, float deltaTick) {
-//        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, this.getAlpha());
         renderer.renderSprite(TextureFactory.getInstance().getButtonTextureSprite(isActive(), isHoveredOrFocused()), getX(), getY(), getWidth(), getHeight());
-//        renderer.setRsShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        renderString(renderer, getTypeface(), (isActive() ? 16777215 : 10526880) | (int) MathUtils.ceil(this.getAlpha() * 255.0F) << 24);
-    }
-
-    public void renderString(Renderer renderer, Typeface typeface, int color) {
-        this.renderScrollingString(renderer, typeface, 2, color);
     }
 
     protected void renderScrollingString(Renderer renderer, Typeface typeface, int padding, int color) {
@@ -68,6 +77,18 @@ public abstract class AbstractButton extends AbstractWidget {
         renderer.renderScrollingText(typeface, message, left, this.getY() + (getHeight() - getTypeface().measureHeight(message)) / 2 + 1, right, this.getY() + this.getHeight(), color);
     }
 
+    protected void renderIcon(Renderer renderer) {
+        var left = -(Math.min(getTypeface().measureWidth(getMessage()), getWidth() - 18) + 18) / 2f + getWidth() / 2f + getX() + 1;
+        var top = getTop() + 2;
+        renderer.renderTexture(icon, (int) left, (int) top, 16, 16, 0f, 0f, 16, 16, 16, 16);
+    }
+
+    protected void renderIconScrollingString(Renderer renderer, Typeface typeface, int padding, int color) {
+        var left = this.getX() + padding + 18;
+        var right = this.getX() + this.getWidth() - padding;
+        var message = isActive() ? this.getMessage() : this.getMessage().withStyle(ChatFormatting.RESET);
+        renderer.renderScrollingText(typeface, message, left, this.getY() + (getHeight() - getTypeface().measureHeight(message)) / 2 + 1, right, this.getY() + this.getHeight(), color);
+    }
 
     public boolean onMouseClicked(double mouseX, double mouseY, int button) {
         if (super.onMouseClicked(mouseX, mouseY, button) && isActive() && isVisible() && isMouseKeyValid(button)) {

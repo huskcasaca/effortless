@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.api.gui.icon;
+package dev.huskuraft.effortless.screen.pattern;
 
 import dev.huskuraft.effortless.api.gui.AbstractWidget;
 import dev.huskuraft.effortless.api.gui.Dimens;

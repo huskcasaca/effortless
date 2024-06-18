@@ -38,4 +38,8 @@ public record ClipboardConfig(
         return new ClipboardConfig(collections, Stream.of(List.of(snapshot), history).flatMap(List::stream).toList());
     }
 
+    public ClipboardConfig appendCollection(Snapshot snapshot) {
+        return new ClipboardConfig(Stream.of(List.of(snapshot), collections).flatMap(List::stream).toList(), history);
+    }
+
 }
