@@ -118,7 +118,7 @@ public class MinecraftContentFactory implements ContentFactory {
             case FLOWING_LAVA -> net.minecraft.world.level.material.Fluids.FLOWING_LAVA;
             case LAVA -> net.minecraft.world.level.material.Fluids.LAVA;
         };
-        return new MinecraftFluid(fluid);
+        return MinecraftFluid.ofNullable(fluid);
     }
 
     @Override
