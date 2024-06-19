@@ -1,7 +1,5 @@
 package dev.huskuraft.effortless.vanilla.core;
 
-import java.util.function.Supplier;
-
 import dev.huskuraft.effortless.api.core.Block;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
@@ -18,7 +16,7 @@ public record MinecraftBucketItem(net.minecraft.world.item.BucketItem refs) impl
 
     @Override
     public Fluid getContent() {
-        return getBucketFluid(refs);
+        return MinecraftFluid.ofNullable(refs.content);
     }
 
     @Override
@@ -69,38 +67,6 @@ public record MinecraftBucketItem(net.minecraft.world.item.BucketItem refs) impl
     @Override
     public Text getName(ItemStack itemStack) {
         return new MinecraftItem(refs).getName(itemStack);
-    }
-
-
-    public static Fluid getBucketFluid(net.minecraft.world.item.BucketItem bucketItem) {
-        for (var declaredField : net.minecraft.world.item.BucketItem.class.getDeclaredFields()) {
-            // Fluid content (fabric & forge)
-            if (declaredField.getType().equals(net.minecraft.world.level.material.Fluid.class)) {
-                try {
-                    declaredField.trySetAccessible();
-                    var fluid = (net.minecraft.world.level.material.Fluid) declaredField.get(bucketItem);
-                    if (fluid != null) {
-                        return MinecraftFluid.ofNullable(fluid);
-                    }
-                } catch (IllegalAccessException | SecurityException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            // Supplier<Fluid> fluidSupplier (forge only)
-            if (declaredField.getType().equals(Supplier.class)) {
-                try {
-                    declaredField.trySetAccessible();
-                    var fluidSupplier = (Supplier<?>) declaredField.get(bucketItem);
-                    var fluid = (net.minecraft.world.level.material.Fluid) fluidSupplier.get();
-                    if (fluid != null) {
-                        return MinecraftFluid.ofNullable(fluid);
-                    }
-                } catch (IllegalAccessException | SecurityException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        return null;
     }
 
 }
