@@ -59,7 +59,7 @@ def devPorts = [
     '1-20-1',
 ]
 
-['fabric', 'forge', 'vanilla', 'multiplatform'].forEach { platform ->
+['fabric', 'forge', 'multiplatform'].forEach { platform ->
     include "$platform"
     def ports
     switch (System.getenv("EFFORTLESS_PORT_TYPE")) {

@@ -32,10 +32,8 @@ subprojects {
         modCompileOnly "org.quiltmc:quilt-loader:${quilt_loader_version}"
 
         implementation project(':common')
-        implementation project(":vanilla:$project.name")
 
         shadow project(':common')
-        shadow project(":vanilla:$project.name")
 
         implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
@@ -69,12 +67,8 @@ subprojects {
         inputFile = shadowJar.archiveFile
     }
 
-    processResources {
-        from project(":vanilla:${project.name}").file("src/main/resources")
-    }
-
     loom {
-        accessWidenerPath = project(":vanilla:$project.name").file("src/main/resources/effortless.accesswidener")
+        accessWidenerPath = file("src/main/resources/effortless.accesswidener")
         mixin {
             add(sourceSets.main, 'effortless.fabric.refmap.json')
         }

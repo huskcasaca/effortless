@@ -32,7 +32,6 @@ subprojects {
         minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
         implementation project(':common')
-        compileOnly project(":vanilla:$project.name")
 
         shadow project(':common')
 
@@ -126,17 +125,6 @@ subprojects {
             ])
         }
         finalizedBy 'reobfJar'
-    }
-
-    sourceSets {
-        main {
-            java {
-                srcDir project(":vanilla:$project.name").file("src/main")
-            }
-            resources {
-                srcDir project(":vanilla:$project.name").file("src/main/resources")
-            }
-        }
     }
 
     reobf {
