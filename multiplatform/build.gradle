@@ -3,8 +3,28 @@ plugins {
 
 subprojects {
     apply plugin: 'java-library'
+    apply plugin: 'dev.huskuraft.fuse'
 
-    apply from: '../../gradle/fuse/fuse.gradle'
+    fuseJar {
+
+        mergeServiceFiles()
+
+        if (findProject(":fabric:mc-${minecraft_version.replace(".", "-")}") != null) {
+            includeJar {
+                source project(":fabric:mc-${minecraft_version.replace(".", "-")}")
+                task 'remapJar'
+            }
+        }
+
+        if (findProject(":forge:mc-${minecraft_version.replace(".", "-")}") != null) {
+            includeJar {
+                source project(":forge:mc-${minecraft_version.replace(".", "-")}")
+                task 'shadowJar'
+            }
+        }
+
+    }
+
     apply from: '../../gradle/publishing/modrinth.gradle'
 
     version = mod_version
