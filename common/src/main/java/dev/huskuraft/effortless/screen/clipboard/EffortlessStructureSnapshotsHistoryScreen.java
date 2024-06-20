@@ -30,7 +30,7 @@ public class EffortlessStructureSnapshotsHistoryScreen extends AbstractPanelScre
     private Button addToLibraryButton;
 
     public EffortlessStructureSnapshotsHistoryScreen(Entrance entrance, Consumer<Snapshot> consumer) {
-        super(entrance, Text.translate("effortless.structure_snapshots_history.title"), AbstractPanelScreen.PANEL_WIDTH_64, PANEL_HEIGHT_FULL);
+        super(entrance, Text.translate("effortless.structure_snapshots_history.title"), AbstractPanelScreen.PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
         this.consumer = consumer;
         this.history = getEntrance().getConfigStorage().get().clipboardConfig().history();
     }
