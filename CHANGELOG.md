@@ -4,18 +4,18 @@
 
 ### 3.0.0
 
-- Add passive mode ([#118](https://github.com/huskcasaca/effortless/pull/118))
-- Fix tooltip item count ([#120](https://github.com/huskcasaca/effortless/pull/120))
-- Add limitation for block stack size ([#121](https://github.com/huskcasaca/effortless/pull/121))
-- Fix block tracing issues ([#123](https://github.com/huskcasaca/effortless/pull/123))
-- Add use correct tool only ([#128](https://github.com/huskcasaca/effortless/pull/128))
-- Add some replace modes ([#134](https://github.com/huskcasaca/effortless/pull/134))
-- Add clipboard for copy and paste ([#135](https://github.com/huskcasaca/effortless/pull/135))
-- Add shortcut keys to mirror/rotate/move clipboard ([#138](https://github.com/huskcasaca/effortless/pull/138))
-- Fix mod not found on server ([#139](https://github.com/huskcasaca/effortless/pull/139))
-- Add renderer for block entity ([#144](https://github.com/huskcasaca/effortless/pull/144))
-- Add support for copying/pasting container contents ([#144](https://github.com/huskcasaca/effortless/pull/144))
-- Fix slab item consumption ([#145](https://github.com/huskcasaca/effortless/pull/145))
+* Add passive mode ([#118](https://github.com/huskcasaca/effortless/pull/118))
+* Fix tooltip item count ([#120](https://github.com/huskcasaca/effortless/pull/120))
+* Add limitation for block stack size ([#121](https://github.com/huskcasaca/effortless/pull/121))
+* Fix block tracing issues ([#123](https://github.com/huskcasaca/effortless/pull/123))
+* Add use correct tool only ([#128](https://github.com/huskcasaca/effortless/pull/128))
+* Add some replace modes ([#134](https://github.com/huskcasaca/effortless/pull/134))
+* Add clipboard for copy and paste ([#135](https://github.com/huskcasaca/effortless/pull/135))
+* Add shortcut keys to mirror/rotate/move clipboard ([#138](https://github.com/huskcasaca/effortless/pull/138))
+* Fix mod not found on server ([#139](https://github.com/huskcasaca/effortless/pull/139))
+* Add renderer for block entity ([#144](https://github.com/huskcasaca/effortless/pull/144))
+* Add support for copying/pasting container contents ([#144](https://github.com/huskcasaca/effortless/pull/144))
+* Fix slab item consumption ([#145](https://github.com/huskcasaca/effortless/pull/145))
 * Fix pattern disabled when update build mode ([#147](https://github.com/huskcasaca/effortless/pull/147))
 * Fix crashes upon picking a block in radial menu ([#151](https://github.com/huskcasaca/effortless/pull/151))
 * Fix forge bucket cannot place non vanilla fluid ([#153](https://github.com/huskcasaca/effortless/pull/153))
@@ -40,69 +40,69 @@
 
 ### 3.0.0-alpha.4
 
-- Add renderer for block entity ([#144](https://github.com/huskcasaca/effortless/pull/144))
-- Add support for copying/pasting container contents ([#144](https://github.com/huskcasaca/effortless/pull/144))
-- Fix slab item consumption ([#145](https://github.com/huskcasaca/effortless/pull/145))
+* Add renderer for block entity ([#144](https://github.com/huskcasaca/effortless/pull/144))
+* Add support for copying/pasting container contents ([#144](https://github.com/huskcasaca/effortless/pull/144))
+* Fix slab item consumption ([#145](https://github.com/huskcasaca/effortless/pull/145))
 
 ----------
 
 ### 3.0.0-alpha.3
 
-- Add quick replace mode back ([#141](https://github.com/huskcasaca/effortless/pull/141))
+* Add quick replace mode back ([#141](https://github.com/huskcasaca/effortless/pull/141))
 
 ----------
 
 ### 3.0.0-alpha.2
 
-- Add shortcut keys to mirror/rotate/move clipboard ([#138](https://github.com/huskcasaca/effortless/pull/138))
-- Fix mod not found on server ([#139](https://github.com/huskcasaca/effortless/pull/139))
+* Add shortcut keys to mirror/rotate/move clipboard ([#138](https://github.com/huskcasaca/effortless/pull/138))
+* Fix mod not found on server ([#139](https://github.com/huskcasaca/effortless/pull/139))
 
 ----------
 
 ### 3.0.0-alpha.1
 
-- Add passive mode ([#118](https://github.com/huskcasaca/effortless/pull/118))
-- Reorder session packets ([#119](https://github.com/huskcasaca/effortless/pull/119))
-- Fix tooltip item count ([#120](https://github.com/huskcasaca/effortless/pull/120))
-- Add limitation for block stack size ([#121](https://github.com/huskcasaca/effortless/pull/121))
-- Fix block tracing issues ([#123](https://github.com/huskcasaca/effortless/pull/123))
-- Revamp Patterns UI ([#125](https://github.com/huskcasaca/effortless/pull/125))
-- Revamp Build Mode ([#126](https://github.com/huskcasaca/effortless/pull/126))
-- Revamp Settings UI ([#127](https://github.com/huskcasaca/effortless/pull/127))
-- Add use correct tool only ([#128](https://github.com/huskcasaca/effortless/pull/128))
-- Revamp Sound ([#129](https://github.com/huskcasaca/effortless/pull/129))
-- Add player state when build ([#130](https://github.com/huskcasaca/effortless/pull/130))
-- Revamp Undo/Redo ([#131](https://github.com/huskcasaca/effortless/pull/131))
-- Revamp Transformers ([#132](https://github.com/huskcasaca/effortless/pull/132))
-- Add some replace modes ([#134](https://github.com/huskcasaca/effortless/pull/134))
-- Add clipboard for copy and paste ([#135](https://github.com/huskcasaca/effortless/pull/135))
+* Add passive mode ([#118](https://github.com/huskcasaca/effortless/pull/118))
+* Reorder session packets ([#119](https://github.com/huskcasaca/effortless/pull/119))
+* Fix tooltip item count ([#120](https://github.com/huskcasaca/effortless/pull/120))
+* Add limitation for block stack size ([#121](https://github.com/huskcasaca/effortless/pull/121))
+* Fix block tracing issues ([#123](https://github.com/huskcasaca/effortless/pull/123))
+* Revamp Patterns UI ([#125](https://github.com/huskcasaca/effortless/pull/125))
+* Revamp Build Mode ([#126](https://github.com/huskcasaca/effortless/pull/126))
+* Revamp Settings UI ([#127](https://github.com/huskcasaca/effortless/pull/127))
+* Add use correct tool only ([#128](https://github.com/huskcasaca/effortless/pull/128))
+* Revamp Sound ([#129](https://github.com/huskcasaca/effortless/pull/129))
+* Add player state when build ([#130](https://github.com/huskcasaca/effortless/pull/130))
+* Revamp Undo/Redo ([#131](https://github.com/huskcasaca/effortless/pull/131))
+* Revamp Transformers ([#132](https://github.com/huskcasaca/effortless/pull/132))
+* Add some replace modes ([#134](https://github.com/huskcasaca/effortless/pull/134))
+* Add clipboard for copy and paste ([#135](https://github.com/huskcasaca/effortless/pull/135))
 
 ----------
 
 ### 2.4.1
 
-- Fix statistics award issue ([#117](https://github.com/huskcasaca/effortless/pull/117))
+* Fix statistics award issue ([#117](https://github.com/huskcasaca/effortless/pull/117))
 
 ----------
 
 ### 2.4.0
 
-- Add side length uniform feature ([#109](https://github.com/huskcasaca/effortless/pull/109))
-- Add block interaction feature ([#111](https://github.com/huskcasaca/effortless/pull/111))
-- Fix crash in RadialTransformer ([#112](https://github.com/huskcasaca/effortless/pull/112))
-- Add more client config options ([#113](https://github.com/huskcasaca/effortless/pull/113))
-- Add more build tooltip ([#114](https://github.com/huskcasaca/effortless/pull/114))
-- Rename to Effortless Structure ([#115](https://github.com/huskcasaca/effortless/pull/115))
-- Add Spanish and French translations ([#116](https://github.com/huskcasaca/effortless/pull/116))
+* Add side length uniform feature ([#109](https://github.com/huskcasaca/effortless/pull/109))
+* Add block interaction feature ([#111](https://github.com/huskcasaca/effortless/pull/111))
+* Fix crash in RadialTransformer ([#112](https://github.com/huskcasaca/effortless/pull/112))
+* Add more client config options ([#113](https://github.com/huskcasaca/effortless/pull/113))
+* Add more build tooltip ([#114](https://github.com/huskcasaca/effortless/pull/114))
+* Rename to Effortless Structure ([#115](https://github.com/huskcasaca/effortless/pull/115))
+* Add Spanish and French translations ([#116](https://github.com/huskcasaca/effortless/pull/116))
 
 ----------
 
 ### 2.3.3
 
-- Fix crash on lantern ([#102](https://github.com/huskcasaca/effortless/pull/102))
-- Fix modrinth push not in project order ([#103](https://github.com/huskcasaca/effortless/pull/103))
-- Fix forge crash ([#106](https://github.com/huskcasaca/effortless/pull/106))
-- Fix fabric config ([#107](https://github.com/huskcasaca/effortless/pull/107))
+* Fix crash on lantern ([#102](https://github.com/huskcasaca/effortless/pull/102))
+* Fix modrinth push not in project order ([#103](https://github.com/huskcasaca/effortless/pull/103))
+* Fix forge crash ([#106](https://github.com/huskcasaca/effortless/pull/106))
+* Fix fabric config ([#107](https://github.com/huskcasaca/effortless/pull/107))
 
 ----------
 
