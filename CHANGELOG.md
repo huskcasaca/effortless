@@ -2,6 +2,28 @@
 
 ----------
 
+### 3.0.0
+
+- Add passive mode ([#118](https://github.com/huskcasaca/effortless/pull/118))
+- Fix tooltip item count ([#120](https://github.com/huskcasaca/effortless/pull/120))
+- Add limitation for block stack size ([#121](https://github.com/huskcasaca/effortless/pull/121))
+- Fix block tracing issues ([#123](https://github.com/huskcasaca/effortless/pull/123))
+- Add use correct tool only ([#128](https://github.com/huskcasaca/effortless/pull/128))
+- Add some replace modes ([#134](https://github.com/huskcasaca/effortless/pull/134))
+- Add clipboard for copy and paste ([#135](https://github.com/huskcasaca/effortless/pull/135))
+- Add shortcut keys to mirror/rotate/move clipboard ([#138](https://github.com/huskcasaca/effortless/pull/138))
+- Fix mod not found on server ([#139](https://github.com/huskcasaca/effortless/pull/139))
+- Add renderer for block entity ([#144](https://github.com/huskcasaca/effortless/pull/144))
+- Add support for copying/pasting container contents ([#144](https://github.com/huskcasaca/effortless/pull/144))
+- Fix slab item consumption ([#145](https://github.com/huskcasaca/effortless/pull/145))
+* Fix pattern disabled when update build mode ([#147](https://github.com/huskcasaca/effortless/pull/147))
+* Fix crashes upon picking a block in radial menu ([#151](https://github.com/huskcasaca/effortless/pull/151))
+* Fix forge bucket cannot place non vanilla fluid ([#153](https://github.com/huskcasaca/effortless/pull/153))
+* Add clipboard collections ([#154](https://github.com/huskcasaca/effortless/pull/154))
+* Add not replaceable items tooltip ([#155](https://github.com/huskcasaca/effortless/pull/155))
+
+----------
+
 ### 3.0.0-beta.2
 
 * New Clipboard UI ([#150](https://github.com/huskcasaca/effortless/pull/150))
