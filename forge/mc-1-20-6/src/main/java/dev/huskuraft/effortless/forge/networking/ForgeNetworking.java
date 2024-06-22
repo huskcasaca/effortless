@@ -11,10 +11,9 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.EventNetworkChannel;
-import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.PacketDistributor;
 
 @AutoService(Networking.class)
 public class ForgeNetworking implements Networking {
@@ -33,53 +32,33 @@ public class ForgeNetworking implements Networking {
 
     @Override
     public void registerClientReceiver(NetByteBufReceiver receiver) {
-        ClientNetworking.registerReceiver(receiver);
+        CHANNEL.addListener(event -> {
+            if (event.getPayload() != null && event.getSource().isClientSide()) {
+                receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
+                event.getSource().setPacketHandled(true);
+            }
+        });
+
     }
 
     @Override
     public void registerServerReceiver(NetByteBufReceiver receiver) {
-        ServerNetworking.registerReceiver(receiver);
+        CHANNEL.addListener(event -> {
+            if (event.getPayload() != null && event.getSource().isServerSide()) {
+                receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(event.getSource().getSender()));
+                event.getSource().setPacketHandled(true);
+            }
+        });
     }
 
     @Override
     public void sendToClient(NetByteBuf byteBuf, Player player) {
-        ServerNetworking.send(byteBuf, player);
+        CHANNEL.send(new FriendlyByteBuf(byteBuf), PacketDistributor.PLAYER.with(player.reference()));
     }
 
     @Override
     public void sendToServer(NetByteBuf byteBuf, Player player) {
-        ClientNetworking.send(byteBuf, player);
-    }
-
-    static class ClientNetworking {
-        public static void registerReceiver(NetByteBufReceiver receiver) {
-            CHANNEL.addListener(event1 -> {
-                if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
-                    receiver.receiveBuffer(new NetByteBuf(event1.getPayload()), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
-                }
-            });
-
-        }
-
-        public static void send(NetByteBuf byteBuf, Player player) {
-            var minecraftPacket = NetworkDirection.PLAY_TO_SERVER.buildPacket(new FriendlyByteBuf(byteBuf), CHANNEL.getName()).getThis();
-            Minecraft.getInstance().getConnection().send(minecraftPacket);
-        }
-    }
-
-    static class ServerNetworking {
-        public static void registerReceiver(NetByteBufReceiver receiver) {
-            CHANNEL.addListener(event1 -> {
-                if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
-                    receiver.receiveBuffer(new NetByteBuf(event1.getPayload()), MinecraftPlayer.ofNullable(event1.getSource().getSender()));
-                }
-            });
-        }
-
-        public static void send(NetByteBuf byteBuf, Player player) {
-            var minecraftPacket = NetworkDirection.PLAY_TO_CLIENT.buildPacket(new FriendlyByteBuf(byteBuf), CHANNEL.getName()).getThis();
-            ((ServerPlayer) player.reference()).connection.send(minecraftPacket);
-        }
+        CHANNEL.send(new FriendlyByteBuf(byteBuf), PacketDistributor.SERVER.noArg());
     }
 
 }

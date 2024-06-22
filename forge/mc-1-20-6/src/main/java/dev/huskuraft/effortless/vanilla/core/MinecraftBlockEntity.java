@@ -33,11 +33,11 @@ public record MinecraftBlockEntity(net.minecraft.world.level.block.entity.BlockE
 
     @Override
     public RecordTag getTag() {
-        return MinecraftRecordTag.ofNullable(refs.saveWithoutMetadata());
+        return MinecraftRecordTag.ofNullable(refs.saveWithoutMetadata(net.minecraft.core.RegistryAccess.EMPTY));
     }
 
     @Override
     public void setTag(RecordTag recordTag) {
-        refs.load(recordTag.reference());
+        refs.loadWithComponents(recordTag.reference(), net.minecraft.core.RegistryAccess.EMPTY);
     }
 }

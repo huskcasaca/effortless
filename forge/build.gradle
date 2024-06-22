@@ -5,7 +5,7 @@ plugins {
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'net.minecraftforge.gradle'
-    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'io.github.goooler.shadow'
 
     ext {
         minecraft_version_range = "[${project.minecraft_version},)"
@@ -24,8 +24,8 @@ subprojects {
 
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     dependencies {
@@ -37,6 +37,8 @@ subprojects {
 
         annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
         compileOnly 'com.google.auto.service:auto-service:1.1.1'
+
+        implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 
     }
 
@@ -127,11 +129,6 @@ subprojects {
         finalizedBy 'reobfJar'
     }
 
-    reobf {
-        shadowJar {
-        }
-    }
-
     shadowJar {
         dependsOn 'reobfJar'
         configurations = [project.configurations.shadow]
@@ -147,7 +144,6 @@ subprojects {
         minimize()
         archiveClassifier.set('')
 
-        finalizedBy reobfShadowJar
     }
 
 }

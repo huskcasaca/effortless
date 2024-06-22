@@ -12,7 +12,7 @@ import net.minecraft.client.gui.GuiGraphics;
 @Mixin(Gui.class)
 public abstract class GuiMixin {
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;renderSavingIndicator(Lnet/minecraft/client/gui/GuiGraphics;)V", shift = At.Shift.AFTER))
+    @Inject(method = "render", at = @At(value = "HEAD"))
     private void onRenderGui(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
         ClientRenderEvents.GUI.invoker().onRenderGui(guiGraphics, f);
     }

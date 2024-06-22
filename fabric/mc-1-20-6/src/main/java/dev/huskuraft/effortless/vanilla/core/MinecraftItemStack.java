@@ -48,7 +48,7 @@ public record MinecraftItemStack(
             case ADVANCED -> TooltipFlag.ADVANCED;
             case ADVANCED_CREATIVE -> TooltipFlag.ADVANCED.asCreative();
         };
-        return refs.getTooltipLines(player.reference(), minecraftFlag).stream().map(text -> new MinecraftText(text)).collect(Collectors.toList());
+        return refs.getTooltipLines(net.minecraft.world.item.Item.TooltipContext.EMPTY, player.reference(), minecraftFlag).stream().map(text -> new MinecraftText(text)).collect(Collectors.toList());
     }
 
     @Override
@@ -58,17 +58,17 @@ public record MinecraftItemStack(
 
     @Override
     public RecordTag getTag() {
-        return MinecraftRecordTag.ofNullable(refs.getTag());
+        return MinecraftRecordTag.ofNullable((net.minecraft.nbt.CompoundTag) refs.save(net.minecraft.core.RegistryAccess.EMPTY));
     }
 
     @Override
     public void setTag(RecordTag recordTag) {
-        refs.setTag(recordTag.reference());
+//        refs.setTag(recordTag.reference());
     }
 
     @Override
     public boolean damageBy(Player player, int damage) {
-        return refs.hurt(damage, player.<net.minecraft.world.entity.player.Player>reference().getRandom(), null);
+        refs.setDamageValue(getDamageValue() + damage); return true;
     }
 
 }

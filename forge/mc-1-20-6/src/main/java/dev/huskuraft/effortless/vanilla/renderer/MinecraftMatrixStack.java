@@ -54,7 +54,7 @@ public record MinecraftMatrixStack(
 
     @Override
     public void multiply(Matrix4f matrix) {
-        refs.mulPoseMatrix(MinecraftConvertor.toPlatformMatrix4f(matrix));
+        refs.mulPose(MinecraftConvertor.toPlatformMatrix4f(matrix));
     }
 
     @Override

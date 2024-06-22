@@ -9,8 +9,11 @@ import dev.huskuraft.effortless.api.networking.NetByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 @AutoService(Networking.class)
 public class FabricNetworking implements Networking {
@@ -37,11 +40,14 @@ public class FabricNetworking implements Networking {
     static class ClientNetworking {
 
         private static void registerReceiver(NetByteBufReceiver receiver, ResourceLocation channelId) {
-            ClientPlayNetworking.registerGlobalReceiver(channelId.reference(), (client, handler, buf, responseSender) -> receiver.receiveBuffer(new NetByteBuf(buf), MinecraftPlayer.ofNullable(client.player)));
+            PayloadTypeRegistry.playS2C().register(getType(channelId), getCodec(channelId));
+            ClientPlayNetworking.registerGlobalReceiver(getType(channelId), (payload, context) -> {
+                receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
+            });
         }
 
         private static void send(NetByteBuf byteBuf, ResourceLocation channelId) {
-            ClientPlayNetworking.send(channelId.reference(), new FriendlyByteBuf(byteBuf));
+            ClientPlayNetworking.send(new Payload(getType(channelId), byteBuf));
         }
 
     }
@@ -49,13 +55,36 @@ public class FabricNetworking implements Networking {
     static class ServerNetworking {
 
         private static void registerReceiver(NetByteBufReceiver receiver, ResourceLocation channelId) {
-            ServerPlayNetworking.registerGlobalReceiver(channelId.reference(), (server, player, handler, buf, responseSender) -> receiver.receiveBuffer(new NetByteBuf(buf), MinecraftPlayer.ofNullable(player)));
+            PayloadTypeRegistry.playC2S().register(getType(channelId), getCodec(channelId));
+            ServerPlayNetworking.registerGlobalReceiver(getType(channelId), (payload, context) -> {
+                receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
+            });
         }
 
         private static void send(NetByteBuf byteBuf, Player player, ResourceLocation channelId) {
-            ServerPlayNetworking.send(player.reference(), channelId.reference(), new FriendlyByteBuf(byteBuf));
+            ServerPlayNetworking.send(player.reference(), new Payload(getType(channelId), byteBuf));
         }
+    }
 
+    static Payload.Type<Payload> getType(ResourceLocation channelId) {
+        return new CustomPacketPayload.Type<>(channelId.reference());
+    }
+
+    static StreamCodec<RegistryFriendlyByteBuf, Payload> getCodec(ResourceLocation channelId) {
+        return new StreamCodec<>() {
+            @Override
+            public Payload decode(RegistryFriendlyByteBuf byteBuf) {
+                return new Payload(getType(channelId), new NetByteBuf(byteBuf.readBytes(byteBuf.readableBytes())));
+            }
+
+            @Override
+            public void encode(RegistryFriendlyByteBuf byteBuf, Payload payload) {
+                byteBuf.writeBytes(payload.byteBuf().readBytes(payload.byteBuf().readableBytes()));
+            }
+        };
+    }
+
+    record Payload(Type<Payload> type, NetByteBuf byteBuf) implements CustomPacketPayload {
     }
 
 }

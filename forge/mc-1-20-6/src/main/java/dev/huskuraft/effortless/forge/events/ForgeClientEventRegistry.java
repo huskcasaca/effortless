@@ -2,6 +2,8 @@ package dev.huskuraft.effortless.forge.events;
 
 import com.google.auto.service.AutoService;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+
 import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.events.ClientEventRegistry;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
@@ -12,10 +14,10 @@ import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftShader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.RegisterShadersEvent;
-import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -58,10 +60,10 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        getClientTickEvent().invoker().onClientTick(new MinecraftClient(Minecraft.getInstance()), switch (event.phase) {
-            case START -> ClientTick.Phase.START;
-            case END -> ClientTick.Phase.END;
-        });
+        getClientTickEvent().invoker().onClientTick(new MinecraftClient(Minecraft.getInstance()), ClientTick.Phase.START); //  switch (event.phase) {
+//            case START -> ClientTick.Phase.START;
+//            case END -> ClientTick.Phase.END;
+//        });
     }
 
     @SubscribeEvent
@@ -69,13 +71,13 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             return;
         }
-        var renderer = new MinecraftRenderer(event.getPoseStack());
+        var renderer = new MinecraftRenderer(new PoseStack());
         var partialTick = event.getPartialTick();
         getRenderWorldEvent().invoker().onRenderWorld(renderer, partialTick);
     }
 
     @SubscribeEvent
-    public void onRenderGui(RenderGuiEvent event) {
+    public void onRenderGui(CustomizeGuiOverlayEvent event) {
         getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(event.getGuiGraphics().pose()), event.getPartialTick());
     }
 

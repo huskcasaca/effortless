@@ -5,7 +5,7 @@ plugins {
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'fabric-loom'
-    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'io.github.goooler.shadow'
 
     version = "${mod_version}"
     group = "${mod_group_id}.fabric"
@@ -16,8 +16,8 @@ subprojects {
 
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     dependencies {

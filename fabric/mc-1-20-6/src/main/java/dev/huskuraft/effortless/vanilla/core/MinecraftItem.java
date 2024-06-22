@@ -50,17 +50,17 @@ public record MinecraftItem(net.minecraft.world.item.Item refs) implements Item 
 
     @Override
     public int getMaxStackSize() {
-        return refs.getMaxStackSize();
+        return refs.getDefaultMaxStackSize();
     }
 
     @Override
     public boolean isCorrectToolForDrops(BlockState blockState) {
-        return refs.isCorrectToolForDrops(blockState.reference());
+        return refs.isCorrectToolForDrops(refs.getDefaultInstance(), blockState.reference()); // FIXME: 21/6/24
     }
 
     @Override
     public int getMaxDamage() {
-        return refs.getMaxDamage();
+        return refs.getDefaultInstance().get(net.minecraft.core.component.DataComponents.TOOL).damagePerBlock(); // FIXME: 21/6/24
     }
 
     @Override

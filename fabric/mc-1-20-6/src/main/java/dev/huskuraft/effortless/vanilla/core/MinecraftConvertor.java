@@ -165,6 +165,7 @@ public final class MinecraftConvertor {
     public static InteractionResult toPlatformInteractionResult(net.minecraft.world.InteractionResult interactionResult) {
         return switch (interactionResult) {
             case SUCCESS -> InteractionResult.SUCCESS;
+            case SUCCESS_NO_ITEM_USED -> InteractionResult.SUCCESS_NO_ITEM_USED;
             case CONSUME -> InteractionResult.CONSUME;
             case CONSUME_PARTIAL -> InteractionResult.CONSUME_PARTIAL;
             case PASS -> InteractionResult.PASS;
