@@ -191,7 +191,7 @@ public final class MinecraftRenderStateFactory implements RenderStateFactory {
         var shader = switch (shaders) {
             case POSITION_COLOR_LIGHTMAP -> GameRenderer.getPositionColorLightmapShader();
             case POSITION -> GameRenderer.getPositionShader();
-            case POSITION_COLOR_TEX -> GameRenderer.getPositionColorTexShader();
+            case POSITION_COLOR_TEX -> null;
             case POSITION_TEX -> GameRenderer.getPositionTexShader();
             case POSITION_COLOR_TEX_LIGHTMAP -> GameRenderer.getPositionColorTexLightmapShader();
             case POSITION_COLOR -> GameRenderer.getPositionColorShader();
@@ -260,7 +260,7 @@ public final class MinecraftRenderStateFactory implements RenderStateFactory {
             case POSITION_COLOR_NORMAL -> DefaultVertexFormat.POSITION_COLOR_NORMAL;
             case POSITION_COLOR_LIGHTMAP -> DefaultVertexFormat.POSITION_COLOR_LIGHTMAP;
             case POSITION_TEX -> DefaultVertexFormat.POSITION_TEX;
-            case POSITION_COLOR_TEX -> DefaultVertexFormat.POSITION_COLOR_TEX;
+            case POSITION_COLOR_TEX -> null;
             case POSITION_TEX_COLOR -> DefaultVertexFormat.POSITION_TEX_COLOR;
             case POSITION_COLOR_TEX_LIGHTMAP -> DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP;
             case POSITION_TEX_LIGHTMAP_COLOR -> DefaultVertexFormat.POSITION_TEX_LIGHTMAP_COLOR;

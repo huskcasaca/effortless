@@ -13,8 +13,8 @@ import net.minecraft.client.gui.GuiGraphics;
 public abstract class GuiMixin {
 
     @Inject(method = "render", at = @At(value = "HEAD"))
-    private void onRenderGui(GuiGraphics guiGraphics, float f, CallbackInfo ci) {
-        ClientRenderEvents.GUI.invoker().onRenderGui(guiGraphics, f);
+    private void onRenderGui(GuiGraphics guiGraphics, net.minecraft.client.DeltaTracker deltaTracker, CallbackInfo ci) {
+        ClientRenderEvents.GUI.invoker().onRenderGui(guiGraphics, deltaTracker.getGameTimeDeltaPartialTick(false));
     }
 
 }

@@ -26,7 +26,7 @@ abstract class PlayerListMixin {
     }
 
     @Inject(method = "respawn", at = @At("TAIL"))
-    private void onPlayerRespawned(ServerPlayer oldPlayer, boolean alive, CallbackInfoReturnable<ServerPlayer> cir) {
-        ServerPlayerEvents.RESPAWN.invoker().onRespawn(oldPlayer, cir.getReturnValue(), alive);
+    private void onPlayerRespawned(ServerPlayer serverPlayer, boolean bl, net.minecraft.world.entity.Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
+        ServerPlayerEvents.RESPAWN.invoker().onRespawn(serverPlayer, cir.getReturnValue(), bl);
     }
 }

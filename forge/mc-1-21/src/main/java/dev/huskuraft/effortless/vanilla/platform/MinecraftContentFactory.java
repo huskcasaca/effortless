@@ -40,7 +40,7 @@ public class MinecraftContentFactory implements ContentFactory {
 
     @Override
     public ResourceLocation newResourceLocation(String namespace, String path) {
-        return new MinecraftResourceLocation(new net.minecraft.resources.ResourceLocation(namespace, path));
+        return new MinecraftResourceLocation(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(namespace, path));
     }
 
     @Override

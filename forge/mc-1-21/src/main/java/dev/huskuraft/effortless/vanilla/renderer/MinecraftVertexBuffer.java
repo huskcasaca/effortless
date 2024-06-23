@@ -10,53 +10,53 @@ public record MinecraftVertexBuffer(
 
     @Override
     public MinecraftVertexBuffer vertex(double x, double y, double z) {
-        refs.vertex(x, y, z);
+        refs.addVertex((float) x, (float) y, (float) z);
         return this;
     }
 
     @Override
     public MinecraftVertexBuffer color(int red, int green, int blue, int alpha) {
-        refs.color(red, green, blue, alpha);
+        refs.setColor(red, green, blue, alpha);
         return this;
     }
 
     @Override
     public MinecraftVertexBuffer uv(float u, float v) {
-        refs.uv(u, v);
+        refs.setUv(u, v);
         return this;
     }
 
     @Override
     public MinecraftVertexBuffer overlayCoords(int u, int v) {
-        refs.overlayCoords(u, v);
+        refs.setUv1(u, v);
         return this;
     }
 
     @Override
     public MinecraftVertexBuffer uv2(int u, int v) {
-        refs.uv2(u, v);
+        refs.setUv2(u, v);
         return this;
     }
 
     @Override
     public MinecraftVertexBuffer normal(float x, float y, float z) {
-        refs.normal(x, y, z);
+        refs.setNormal(x, y, z);
         return this;
     }
 
     @Override
     public void endVertex() {
-        refs.endVertex();
+        // no-op
     }
 
     @Override
     public void defaultColor(int defaultR, int defaultG, int defaultB, int defaultA) {
-        refs.color(defaultR, defaultG, defaultB, defaultA);
+        refs.setColor(defaultR, defaultG, defaultB, defaultA);
     }
 
     @Override
     public void unsetDefaultColor() {
-        refs.unsetDefaultColor();
+//        refs.unsetDefaultColor();
     }
 
 }

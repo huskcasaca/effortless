@@ -36,7 +36,7 @@ public final class MinecraftTextureFactory implements TextureFactory {
 
     @Override
     public TextureSprite getDemoBackgroundTextureSprite() {
-        return createTextureSprite(new ResourceLocation("textures/gui/demo_background.png"), null, 248, 166, 0, 0, 256, 256, new SpriteScaling.NineSlice(248, 166, 6));
+        return createTextureSprite(ResourceLocation.withDefaultNamespace("textures/gui/demo_background.png"), null, 248, 166, 0, 0, 256, 256, new SpriteScaling.NineSlice(248, 166, 6));
     }
 
     public TextureSprite createTextureSprite(ResourceLocation texture, ResourceLocation name, int width, int height, int x, int y, int textureWidth, int textureHeight, SpriteScaling scaling) {

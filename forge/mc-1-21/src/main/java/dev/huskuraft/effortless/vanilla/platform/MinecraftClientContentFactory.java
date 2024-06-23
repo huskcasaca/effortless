@@ -17,9 +17,9 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.input.MinecraftKeyBinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.searchtree.PlainTextSearchTree;
-import net.minecraft.client.searchtree.SearchRegistry;
-import net.minecraft.network.chat.Component;
+//import net.minecraft.client.searchtree.PlainTextSearchTree;
+//import net.minecraft.client.searchtree.SearchRegistry;
+//import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTabs;
 
 @AutoService(ClientContentFactory.class)
@@ -30,18 +30,18 @@ public class MinecraftClientContentFactory extends MinecraftContentFactory imple
         var minecraftPlayer = Minecraft.getInstance().player;
         CreativeModeTabs.tryRebuildTabContents(minecraftPlayer.connection.enabledFeatures(), true, minecraftPlayer.clientLevel.registryAccess());
 
-        var minecraftSearchTree = Minecraft.getInstance().getSearchTree(
-                switch (searchBy) {
-                    case NAME -> SearchRegistry.CREATIVE_NAMES;
-                    case TAG -> SearchRegistry.CREATIVE_TAGS;
-                }
-        );
+        var minecraftSearchTrees = Minecraft.getInstance().getConnection().searchTrees();
+        var minecraftSearchTree = switch (searchBy) {
+            case NAME -> minecraftSearchTrees.creativeNameSearch();
+            case TAG -> minecraftSearchTrees.creativeTagSearch();
+        };
+
         return query -> minecraftSearchTree.search(query).stream().map(itemStack -> new MinecraftItemStack(itemStack)).collect(Collectors.toList());
     }
 
     @Override
     public <T> SearchTree<T> search(List<T> list, Function<T, Stream<Text>> keyExtractor) {
-        return query -> PlainTextSearchTree.create(list, item -> keyExtractor.apply(item).map(text -> ((Component) text.reference()).getString())).search(query);
+        return null;
     }
 
     @Override

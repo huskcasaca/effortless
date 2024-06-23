@@ -48,7 +48,7 @@ public class FabricClientEventRegistry extends ClientEventRegistry {
         });
 
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
-            getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(context.matrixStack()), context.tickDelta());
+            getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(context.matrixStack()), context.tickCounter().getGameTimeDeltaPartialTick(false));
         });
 
         ClientRenderEvents.GUI.register((guiGraphics, f) -> {
