@@ -24,8 +24,13 @@ subprojects {
 
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+
+        if (minecraft_version == '1.20.6') {
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
+        }
     }
 
     dependencies {
@@ -129,6 +134,13 @@ subprojects {
         finalizedBy 'reobfJar'
     }
 
+    if (minecraft_version != '1.20.6') {
+        reobf {
+            shadowJar {
+            }
+        }
+    }
+
     shadowJar {
         dependsOn 'reobfJar'
         configurations = [project.configurations.shadow]
@@ -144,6 +156,9 @@ subprojects {
         minimize()
         archiveClassifier.set('')
 
+        if (minecraft_version != '1.20.6') {
+            finalizedBy reobfShadowJar
+        }
     }
 
 }
