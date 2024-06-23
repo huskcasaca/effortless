@@ -708,8 +708,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     case CONTAINER_CONSUMED -> ChatFormatting.WHITE;
                     case CONTAINER_DROPPED -> ChatFormatting.WHITE;
                 };
-                items = items.stream().map(stack -> ItemStackUtils.putColorTag(stack, color.getColor())).toList();
-                entries.add(items);
+                entries.add(new Tuple2<>(items, color.getColor()));
                 entries.add(Text.translate("effortless.build.summary." + summary.name().toLowerCase(Locale.ROOT)).withStyle(color));
                 allProducts.addAll(items);
             }

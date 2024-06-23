@@ -68,7 +68,7 @@ public class BlockInteractOperation extends BlockOperation {
 //        if (!(itemStackBeforeInteract.getItem() instanceof BucketItem) && blockState.isAir()) {
 //            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
 //        }
-            if (itemStackToUse.isDamageableItem() && itemStackToUse.getRemainingDamage() <= context.getReservedToolDurability()) {
+            if (itemStackToUse.isDamageableItem() && itemStackToUse.getDurabilityLeft() <= context.getReservedToolDurability()) {
                 return BlockOperationResultType.FAIL_INTERACT_TOOL_INSUFFICIENT;
             }
             player.setItemStack(getHand(), itemStackToUse);

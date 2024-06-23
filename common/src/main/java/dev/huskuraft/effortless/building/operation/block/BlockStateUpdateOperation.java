@@ -139,10 +139,10 @@ public class BlockStateUpdateOperation extends BlockOperation {
 
             var durabilityReserved = getContext().getReservedToolDurability();
             var requireCorrectTool = !player.getGameMode().isCreative() && context.useProperTool();
-            var miningTool = getStorage().contents().stream().filter(stack -> stack.getItem().isCorrectToolForDrops(getBlockStateInWorld())).filter(tool -> !tool.isDamageableItem() || tool.getRemainingDamage() > durabilityReserved).findFirst();
+            var miningTool = getStorage().contents().stream().filter(stack -> stack.getItem().isCorrectToolForDrops(getBlockStateInWorld())).filter(tool -> !tool.isDamageableItem() || tool.getDurabilityLeft() > durabilityReserved).findFirst();
 
             if (miningTool.isEmpty()) {
-                miningTool = getStorage().contents().stream().filter(tool -> tool.getItem() instanceof DiggerItem).filter(tool -> !tool.isDamageableItem() || tool.getRemainingDamage() > durabilityReserved).findFirst();
+                miningTool = getStorage().contents().stream().filter(tool -> tool.getItem() instanceof DiggerItem).filter(tool -> !tool.isDamageableItem() || tool.getDurabilityLeft() > durabilityReserved).findFirst();
             }
 
             if (requireCorrectTool && miningTool.isEmpty()) {
@@ -151,7 +151,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
 
             if (context.isPreviewType() || context.isBuildClientType()) {
                 if (requireCorrectTool) {
-                    miningTool.get().damageBy(player, 1);
+                    miningTool.get().damage(1);
                 }
             }
             if (context.isBuildType()) {

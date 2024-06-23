@@ -4,13 +4,9 @@ import java.util.List;
 
 import dev.huskuraft.effortless.api.platform.ContentFactory;
 import dev.huskuraft.effortless.api.platform.PlatformReference;
-import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.api.text.Text;
 
 public interface ItemStack extends PlatformReference {
-
-    String DAMAGE_TAG = "Damage";
-    String UNBREAKABLE_TAG = "Unbreakable";
 
     static ItemStack empty() {
         return ContentFactory.getInstance().newItemStack();
@@ -31,17 +27,6 @@ public interface ItemStack extends PlatformReference {
     Text getHoverName();
 
     ItemStack copy();
-
-    RecordTag getTag();
-
-    default RecordTag getOrCreateTag() {
-        if (getTag() == null) {
-            setTag(RecordTag.newRecord());
-        }
-        return getTag();
-    };
-
-    void setTag(RecordTag recordTag);
 
     default int getMaxStackSize() {
         return getItem().getMaxStackSize();
@@ -75,42 +60,34 @@ public interface ItemStack extends PlatformReference {
         return getMaxStackSize() > 1 && (!isDamageableItem() || !isDamaged());
     }
 
+    int getDamageValue();
 
-    default void setDamageValue(int damage) {
-        this.getOrCreateTag().putInt(DAMAGE_TAG, Math.max(0, damage));
-    }
+    void setDamageValue(int damage);
 
-    default int getDamageValue() {
-        return getOrCreateTag().getIntOrElse(DAMAGE_TAG, 0);
-    }
+    int getMaxDamage();
 
-    default int getMaxDamage() {
-        return getItem().getMaxDamage();
-    }
-
-    default int getRemainingDamage() {
+    default int getDurabilityLeft() {
         return getMaxDamage() - getDamageValue();
     }
 
-    default boolean isDamageableItem() {
-        if (!isEmpty() && getItem().getMaxDamage() > 0) {
-            return !getOrCreateTag().getBooleanOrElse(UNBREAKABLE_TAG, false);
-        } else {
-            return false;
-        }
-    }
+    boolean isDamageableItem();
 
     default boolean isCorrectToolForDrops(BlockState blockState) {
         return getItem().isCorrectToolForDrops(blockState);
     }
 
-    boolean damageBy(Player player, int damage);
+    default boolean damage(int damage) {
+        if (isDamageableItem()) {
+            setDamageValue(Math.min(getDamageValue() + damage, getMaxDamage()));
+            return true;
+        }
+        return false;
+    }
 
     default void mineBlock(World world, Player player, BlockPosition blockPosition, BlockState blockState) {
         if (getItem().mineBlock(world, player, blockPosition, blockState, this)) {
             player.awardStat(StatTypes.ITEM_USED.get(getItem()));
         }
-
     }
 
     default Text getName() {
