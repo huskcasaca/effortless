@@ -27,7 +27,7 @@ public record MinecraftVertexBuffer(
     }
 
     @Override
-    public MinecraftVertexBuffer overlayCoords(int u, int v) {
+    public MinecraftVertexBuffer uv1(int u, int v) {
         refs.overlayCoords(u, v);
         return this;
     }
@@ -47,16 +47,6 @@ public record MinecraftVertexBuffer(
     @Override
     public void endVertex() {
         refs.endVertex();
-    }
-
-    @Override
-    public void defaultColor(int defaultR, int defaultG, int defaultB, int defaultA) {
-        refs.color(defaultR, defaultG, defaultB, defaultA);
-    }
-
-    @Override
-    public void unsetDefaultColor() {
-        refs.unsetDefaultColor();
     }
 
 }
