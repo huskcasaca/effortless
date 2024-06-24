@@ -6,9 +6,7 @@ import java.util.stream.Collectors;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.vanilla.tag.MinecraftRecordTag;
 import net.minecraft.world.item.TooltipFlag;
 
 public record MinecraftItemStack(
@@ -57,18 +55,22 @@ public record MinecraftItemStack(
     }
 
     @Override
-    public RecordTag getTag() {
-        return MinecraftRecordTag.ofNullable(refs.getTag());
+    public int getDamageValue() {
+        return refs.getDamageValue();
     }
 
     @Override
-    public void setTag(RecordTag recordTag) {
-        refs.setTag(recordTag.reference());
+    public void setDamageValue(int damage) {
+        refs.setDamageValue(damage);
     }
 
     @Override
-    public boolean damageBy(Player player, int damage) {
-        return refs.hurt(damage, player.<net.minecraft.world.entity.player.Player>reference().getRandom(), null);
+    public int getMaxDamage() {
+        return refs.getMaxDamage();
     }
 
+    @Override
+    public boolean isDamageableItem() {
+        return refs.isDamageableItem();
+    }
 }

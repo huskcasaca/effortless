@@ -42,6 +42,7 @@ def fullPorts = [
     '1-20-2',
     '1-20-3',
     '1-20-4',
+    '1-20-6',
 ]
 
 def activePorts = [
@@ -52,11 +53,12 @@ def activePorts = [
     '1-20-1',
     '1-20-2',
     '1-20-4',
+    '1-20-6',
 ]
 
 def devPorts = [
-    '1-17-1',
     '1-20-1',
+    '1-20-6',
 ]
 
 ['fabric', 'forge', 'multiplatform'].forEach { platform ->
@@ -68,7 +70,7 @@ def devPorts = [
         case 'dev': ports = devPorts; break
         default: ports = fullPorts
     }
-    ports.each { port ->
+    devPorts.each { port ->
         include ":${platform}:mc-${port}"
     }
 }

@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.renderer.tooltip;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -66,6 +67,9 @@ public class TooltipRenderer {
                 } else if (list.get(0) instanceof Tuple2<?, ?> pair) {
                     if (pair.value1() instanceof Text && pair.value2() instanceof Text) {
                         return new ComponentPairEntry((Collection<Tuple2<Text, Text>>) list);
+                    }
+                    if (pair.value1() instanceof ItemStack && pair.value2() instanceof Integer color) {
+                        return new ItemsEntry((Collection<ItemStack>) list, color);
                     }
                 } else if (list.get(0) instanceof ItemStack) {
                     return new ItemsEntry((Collection<ItemStack>) list);
@@ -340,9 +344,16 @@ public class TooltipRenderer {
         private static final int ITEM_SPACING_X = 18;
         private static final int ITEM_SPACING_Y = 18;
         private final Collection<ItemStack> itemStacks;
+        private final Integer color;
+
+        public ItemsEntry(Collection<ItemStack> itemStacks, Integer color) {
+            this.itemStacks = itemStacks;
+            this.color = color;
+        }
 
         public ItemsEntry(Collection<ItemStack> itemStacks) {
             this.itemStacks = itemStacks;
+            this.color = null;
         }
 
 
@@ -358,7 +369,6 @@ public class TooltipRenderer {
                 var y = j * ITEM_SPACING_Y - ITEM_SPACING_Y * (int) MathUtils.ceil(1f * itemStacks.size() / MAX_COLUMN);
 
                 var text = Text.text(String.valueOf(itemStack.getCount()));
-                var color = ItemStackUtils.getColorTag(itemStack);
 
                 renderer.pushPose();
                 renderer.translate(-1, -1, 0);
