@@ -3,7 +3,6 @@ package dev.huskuraft.effortless.fabric.networking;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
@@ -20,61 +19,38 @@ public class FabricNetworking implements Networking {
 
     @Override
     public void registerClientReceiver(NetByteBufReceiver receiver) {
-        ClientNetworking.registerReceiver(receiver, Networking.getChannelId());
+        PayloadTypeRegistry.playS2C().register(getType(), getCodec());
+        ClientPlayNetworking.registerGlobalReceiver(getType(), (payload, context) -> {
+            receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
+        });
     }
 
     @Override
     public void registerServerReceiver(NetByteBufReceiver receiver) {
-        ServerNetworking.registerReceiver(receiver, Networking.getChannelId());
+        PayloadTypeRegistry.playC2S().register(getType(), getCodec());
+        ServerPlayNetworking.registerGlobalReceiver(getType(), (payload, context) -> {
+            receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
+        });
     }
 
     @Override
     public void sendToClient(NetByteBuf byteBuf, Player player) {
-        ServerNetworking.send(byteBuf, player, Networking.getChannelId());
+        ServerPlayNetworking.send(player.reference(), new Payload(byteBuf));
     }
 
     public void sendToServer(NetByteBuf byteBuf, Player player) {
-        ClientNetworking.send(byteBuf, Networking.getChannelId());
+        ClientPlayNetworking.send(new Payload(byteBuf));
     }
 
-    static class ClientNetworking {
-
-        private static void registerReceiver(NetByteBufReceiver receiver, ResourceLocation channelId) {
-            PayloadTypeRegistry.playS2C().register(getType(channelId), getCodec(channelId));
-            ClientPlayNetworking.registerGlobalReceiver(getType(channelId), (payload, context) -> {
-                receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
-            });
-        }
-
-        private static void send(NetByteBuf byteBuf, ResourceLocation channelId) {
-            ClientPlayNetworking.send(new Payload(getType(channelId), byteBuf));
-        }
-
+    static Payload.Type<Payload> getType() {
+        return new CustomPacketPayload.Type<>(Networking.getChannelId().reference());
     }
 
-    static class ServerNetworking {
-
-        private static void registerReceiver(NetByteBufReceiver receiver, ResourceLocation channelId) {
-            PayloadTypeRegistry.playC2S().register(getType(channelId), getCodec(channelId));
-            ServerPlayNetworking.registerGlobalReceiver(getType(channelId), (payload, context) -> {
-                receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
-            });
-        }
-
-        private static void send(NetByteBuf byteBuf, Player player, ResourceLocation channelId) {
-            ServerPlayNetworking.send(player.reference(), new Payload(getType(channelId), byteBuf));
-        }
-    }
-
-    static Payload.Type<Payload> getType(ResourceLocation channelId) {
-        return new CustomPacketPayload.Type<>(channelId.reference());
-    }
-
-    static StreamCodec<RegistryFriendlyByteBuf, Payload> getCodec(ResourceLocation channelId) {
+    static StreamCodec<RegistryFriendlyByteBuf, Payload> getCodec() {
         return new StreamCodec<>() {
             @Override
             public Payload decode(RegistryFriendlyByteBuf byteBuf) {
-                return new Payload(getType(channelId), new NetByteBuf(byteBuf.readBytes(byteBuf.readableBytes())));
+                return new Payload(new NetByteBuf(byteBuf.readBytes(byteBuf.readableBytes())));
             }
 
             @Override
@@ -84,7 +60,11 @@ public class FabricNetworking implements Networking {
         };
     }
 
-    record Payload(Type<Payload> type, NetByteBuf byteBuf) implements CustomPacketPayload {
+    record Payload(NetByteBuf byteBuf) implements CustomPacketPayload {
+        @Override
+        public Type<Payload> type() {
+            return getType();
+        }
     }
 
 }

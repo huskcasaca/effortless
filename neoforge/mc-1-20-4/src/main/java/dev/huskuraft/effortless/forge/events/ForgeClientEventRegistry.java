@@ -12,26 +12,26 @@ import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftShader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TickEvent;
-import net.neoforged.neoforge.eventbus.api.SubscribeEvent;
-import net.neoforged.neoforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @AutoService(ClientEventRegistry.class)
 public class ForgeClientEventRegistry extends ClientEventRegistry {
 
     public ForgeClientEventRegistry() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterKeyMappings);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onReloadShader);
+//        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+//        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterKeyMappings);
+//        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onReloadShader);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent

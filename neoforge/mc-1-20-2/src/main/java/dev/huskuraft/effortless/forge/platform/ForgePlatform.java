@@ -10,7 +10,7 @@ import dev.huskuraft.effortless.api.platform.Environment;
 import dev.huskuraft.effortless.api.platform.LoaderType;
 import dev.huskuraft.effortless.api.platform.Mod;
 import dev.huskuraft.effortless.api.platform.Platform;
-import net.neoforged.neoforge.fml.loading.FMLLoader;
+import net.neoforged.fml.loading.FMLLoader;
 
 @AutoService(Platform.class)
 public class ForgePlatform implements Platform {
@@ -22,7 +22,7 @@ public class ForgePlatform implements Platform {
 
     @Override
     public String getLoaderVersion() {
-        return FMLLoader.versionInfo().forgeVersion();
+        return FMLLoader.versionInfo().neoForgeVersion();
     }
 
     @Override

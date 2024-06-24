@@ -1,7 +1,7 @@
 package dev.huskuraft.effortless.forge.platform;
 
 import dev.huskuraft.effortless.api.platform.Mod;
-import net.neoforged.neoforge.fml.loading.moddiscovery.ModInfo;
+import net.neoforged.fml.loading.moddiscovery.ModInfo;
 
 record ForgeMod(ModInfo modInfo) implements Mod {
 
