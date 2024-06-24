@@ -16,17 +16,13 @@ public interface VertexBuffer extends PlatformReference {
 
     VertexBuffer uv(float u, float v);
 
-    VertexBuffer overlayCoords(int u, int v);
+    VertexBuffer uv1(int u, int v);
 
     VertexBuffer uv2(int u, int v);
 
     VertexBuffer normal(float x, float y, float z);
 
     void endVertex();
-
-    void defaultColor(int defaultR, int defaultG, int defaultB, int defaultA);
-
-    void unsetDefaultColor();
 
     default VertexBuffer color(float red, float green, float blue, float alpha) {
         return this.color((int) (red * 255.0F), (int) (green * 255.0F), (int) (blue * 255.0F), (int) (alpha * 255.0F));
@@ -36,12 +32,12 @@ public interface VertexBuffer extends PlatformReference {
         return this.color(RenderUtils.ARGB32.red(color), RenderUtils.ARGB32.green(color), RenderUtils.ARGB32.blue(color), RenderUtils.ARGB32.alpha(color));
     }
 
-    default VertexBuffer uv2(int lightmapUV) {
-        return this.uv2(lightmapUV & '\uffff', lightmapUV >> 16 & '\uffff');
+    default VertexBuffer uv1(int overlayUV) {
+        return this.uv1(overlayUV & '\uffff', overlayUV >> 16 & '\uffff');
     }
 
-    default VertexBuffer overlayCoords(int overlayUV) {
-        return this.overlayCoords(overlayUV & '\uffff', overlayUV >> 16 & '\uffff');
+    default VertexBuffer uv2(int lightmapUV) {
+        return this.uv2(lightmapUV & '\uffff', lightmapUV >> 16 & '\uffff');
     }
 
     default VertexBuffer vertex(Matrix4f matrix, float x, float y, float z) {

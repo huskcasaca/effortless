@@ -177,8 +177,8 @@ public abstract class Renderer {
     public final void renderLine(RenderLayer renderLayer, Vector3d v1, Vector3d v2, int uv2, int color) {
         var buffer = this.vertexBuffer(renderLayer);
         var pose = lastMatrixPose();
-        buffer.vertex(pose, v1).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
-        buffer.vertex(pose, v2).uv(1, 1).uv2(uv2).color(color).overlayCoords(OverlayTexture.NO_OVERLAY).endVertex();
+        buffer.vertex(pose, v1).uv(1, 1).uv2(uv2).color(color).uv1(OverlayTexture.NO_OVERLAY).endVertex();
+        buffer.vertex(pose, v2).uv(1, 1).uv2(uv2).color(color).uv1(OverlayTexture.NO_OVERLAY).endVertex();
     }
 
     public final void renderBorder(int x, int y, int width, int height, int color) {
@@ -267,10 +267,10 @@ public abstract class Renderer {
                                    float minV, float maxU, float maxV, int uv2, int color, Direction normal) {
         var buffer = this.vertexBuffer(renderLayer);
         var pose = lastMatrixPose();
-        buffer.vertex(pose, v1).color(color).uv(minU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
-        buffer.vertex(pose, v2).color(color).uv(maxU, minV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
-        buffer.vertex(pose, v3).color(color).uv(maxU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
-        buffer.vertex(pose, v4).color(color).uv(minU, maxV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(pose, v1).color(color).uv(minU, minV).uv1(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(pose, v2).color(color).uv(maxU, minV).uv1(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(pose, v3).color(color).uv(maxU, maxV).uv1(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
+        buffer.vertex(pose, v4).color(color).uv(minU, maxV).uv1(OverlayTexture.NO_OVERLAY).uv2(uv2).normal(lastMatrixNormal(), normal).endVertex();
     }
 
     protected abstract int renderTextInternal(Typeface typeface, Text text, int x, int y, int color, int backgroundColor, boolean shadow, boolean seeThrough, int lightMap);
