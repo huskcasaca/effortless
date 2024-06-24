@@ -11,6 +11,10 @@ pluginManagement {
             url = uri('https://maven.minecraftforge.net/')
         }
         maven {
+            name = 'NeoForge'
+            url = 'https://maven.neoforged.net/releases'
+        }
+        maven {
             name = 'Sponge Snapshots'
             url = uri('https://repo.spongepowered.org/repository/maven-public/')
         }
@@ -27,7 +31,7 @@ includeBuild 'fuse-gradle-plugin'
 include ':api'
 include ':common'
 
-def fullPorts = [
+def fabricFull = [
     '1-17-1',
     '1-18',
     '1-18-1',
@@ -46,7 +50,33 @@ def fullPorts = [
     '1-21',
 ]
 
-def activePorts = [
+def forgeFull = [
+    '1-17-1',
+    '1-18',
+    '1-18-1',
+    '1-18-2',
+    '1-19',
+    '1-19-1',
+    '1-19-2',
+    '1-19-3',
+    '1-19-4',
+    '1-20',
+    '1-20-1',
+    '1-20-2',
+    '1-20-3',
+    '1-20-4',
+    '1-20-6',
+    '1-21',
+]
+
+def neoforgeFull = [
+    '1-20-2',
+    '1-20-4',
+    '1-20-6',
+    '1-21',
+]
+
+def fabric = [
     '1-17-1',
     '1-18-2',
     '1-19-2',
@@ -58,22 +88,60 @@ def activePorts = [
     '1-21',
 ]
 
-def devPorts = [
+def forge = [
+    '1-17-1',
+    '1-18-2',
+    '1-19-2',
+    '1-19-4',
     '1-20-1',
+    '1-20-2',
+    '1-20-4',
     '1-20-6',
     '1-21',
 ]
 
-['fabric', 'forge', 'multiplatform'].forEach { platform ->
-    include "$platform"
-    def ports
-    switch (System.getenv("EFFORTLESS_PORT_TYPE")) {
-        case 'full': ports = fullPorts; break
-        case 'active': ports = activePorts; break
-        case 'dev': ports = devPorts; break
-        default: ports = fullPorts
+def neoforge = [
+    '1-20-2',
+    '1-20-4',
+    '1-20-6',
+    '1-21',
+]
+
+def type = System.getenv("EFFORTLESS_PORT_TYPE")
+
+switch (type) {
+    case 'full': {
+        fabricFull.forEach { port ->
+            include 'fabric'
+            include ":fabric:mc-${port}"
+        }
+
+        forgeFull.forEach { port ->
+            include ':forge'
+            include ":forge:mc-${port}"
+        }
+
+        neoforgeFull.forEach { port ->
+            include ':neoforge'
+            include ":neoforge:mc-${port}"
+        }
+        break
     }
-    devPorts.each { port ->
-        include ":${platform}:mc-${port}"
+    default: {
+        fabric.forEach { port ->
+            include 'fabric'
+            include ":fabric:mc-${port}"
+        }
+
+        forge.forEach { port ->
+            include ':forge'
+            include ":forge:mc-${port}"
+        }
+
+        neoforge.forEach { port ->
+            include ':neoforge'
+            include ":neoforge:mc-${port}"
+        }
+        break
     }
 }
