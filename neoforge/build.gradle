@@ -36,8 +36,10 @@ subprojects {
     dependencies {
         implementation "net.neoforged:neoforge:${neo_version}"
 
+        implementation project(':api')
         implementation project(':common')
 
+        shadow project(':api')
         shadow project(':common')
 
         annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
@@ -106,6 +108,16 @@ subprojects {
         }
 
     }
+
+    tasks.register('generateJava', Copy) {
+        from project(':api').file('src/main/java')
+        from project(':common').file('src/main/java')
+        into "${layout.buildDirectory.asFile.get()}/generated/java"
+    }
+    sourceSets.main.java {
+        srcDir "${layout.buildDirectory.asFile.get()}/generated/java"
+    }
+    compileJava.dependsOn generateJava
 
     jar {
         manifest {
