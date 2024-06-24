@@ -125,6 +125,11 @@ switch (type) {
             include ':neoforge'
             include ":neoforge:mc-${port}"
         }
+
+        (fabricFull + forgeFull + neoforgeFull).forEach { port ->
+            include ':multiplatform'
+            include ":multiplatform:mc-${port}"
+        }
         break
     }
     default: {
@@ -141,6 +146,11 @@ switch (type) {
         neoforge.forEach { port ->
             include ':neoforge'
             include ":neoforge:mc-${port}"
+        }
+
+        (fabric + forge + neoforge).forEach { port ->
+            include ':multiplatform'
+            include ":multiplatform:mc-${port}"
         }
         break
     }

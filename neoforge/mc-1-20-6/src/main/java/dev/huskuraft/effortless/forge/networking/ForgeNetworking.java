@@ -11,9 +11,9 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.EventNetworkChannel;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.ChannelBuilder;
+import net.neoforged.neoforge.network.EventNetworkChannel;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @AutoService(Networking.class)
 public class ForgeNetworking implements Networking {

@@ -10,7 +10,7 @@ import dev.huskuraft.effortless.api.platform.Environment;
 import dev.huskuraft.effortless.api.platform.LoaderType;
 import dev.huskuraft.effortless.api.platform.Mod;
 import dev.huskuraft.effortless.api.platform.Platform;
-import net.minecraftforge.fml.loading.FMLLoader;
+import net.neoforged.neoforge.fml.loading.FMLLoader;
 
 @AutoService(Platform.class)
 public class ForgePlatform implements Platform {

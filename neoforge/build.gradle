@@ -48,6 +48,9 @@ subprojects {
     }
 
     minecraft {
+        accessTransformers {
+            file('src/main/resources/META-INF/accesstransformer.cfg')
+        }
         runs {
             configureEach {
                 workingDirectory project.file('run')
@@ -116,17 +119,15 @@ subprojects {
                     'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
         }
-        finalizedBy 'reobfJar'
     }
 
     shadowJar {
-        dependsOn 'reobfJar'
         configurations = [project.configurations.shadow]
         mergeServiceFiles()
         dependencies {
             exclude dependency('com.google.code.findbugs:jsr305')
         }
-        relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.forge'
+        relocate 'dev.huskuraft.effortless.vanilla', 'dev.huskuraft.effortless.neoforge'
         relocate 'com.electronwill.nightconfig', 'dev.huskuraft.effortless.api.nightconfig'
 
         exclude 'effortless.accesswidener'

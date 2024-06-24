@@ -8,19 +8,23 @@ modrinth {
     versionNumber = mod_version
     versionName = "${mod_name} ${mod_version}"
     versionType = mod_version.contains('-alpha') ? 'alpha' : mod_version.contains('-beta') ? 'beta' : 'release'
-    changelog = extractChangelog(rootProject.file('CHANGELOG.md'), mod_version)
     uploadFile = file("build/libs/${mod_id}-${loader_name}-${minecraft_version}-${mod_version}.jar")
+    changelog = extractChangelog(rootProject.file('CHANGELOG.md'), mod_version)
     gameVersions = [minecraft_version]
-    if (loader_name == 'multiplatform') {
-        loaders = ['forge', 'fabric']
+    def loaders = []
+    if (project.ext.find('fuse_forge') == true) {
+        loaders.add('forge')
     }
-    if (loader_name == 'forge') {
-        loaders = ['forge']
+    if (project.ext.find('fuse_fabric') == true) {
+        loaders.add('fabric')
     }
-    if (loader_name == 'fabric') {
-        loaders = ['fabric']
-        required.project('fabric-api')
+    if (project.ext.find('fuse_quilt') == true) {
+        loaders.add('quilt')
     }
+    if (project.ext.find('fuse_neoforge') == true) {
+        loaders.add('neoforge')
+    }
+    println("${mod_name} ${mod_version} ${minecraft_version} \t${loaders}")
 }
 
 static def extractChangelog(File changelogFile, String modVersion) {
@@ -28,7 +32,6 @@ static def extractChangelog(File changelogFile, String modVersion) {
     def split = text.split('----------\n\n')
     for (final def log in split) {
         if (log.startsWith("### $modVersion")) {
-            println(log)
             return log.replaceFirst("### $modVersion", '').trim()
         }
     }

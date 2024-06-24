@@ -1,5 +1,5 @@
 curseforge {
-    String token = System.getenv("CURSEFORGE_TOKEN")
+    def token = System.getenv("CURSEFORGE_TOKEN")
     apiKey = token == null || token.isEmpty() ? "unset" : token
     project {
         id = curseforge_id
