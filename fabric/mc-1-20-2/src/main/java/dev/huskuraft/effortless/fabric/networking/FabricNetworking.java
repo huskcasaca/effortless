@@ -41,7 +41,7 @@ public class FabricNetworking implements Networking {
             ClientPlayNetworking.registerGlobalReceiver(channelId.reference(), (client, handler, buf, responseSender) -> receiver.receiveBuffer(new NetByteBuf(buf), MinecraftPlayer.ofNullable(client.player)));
         }
 
-        private static void send(NetByteBuf byteBuf, ResourceLocation channelId) {
+        private static void send(ByteBuf byteBuf, ResourceLocation channelId) {
             ClientPlayNetworking.send(channelId.reference(), new FriendlyByteBuf(byteBuf));
         }
 
@@ -53,7 +53,7 @@ public class FabricNetworking implements Networking {
             ServerPlayNetworking.registerGlobalReceiver(channelId.reference(), (server, player, handler, buf, responseSender) -> receiver.receiveBuffer(new NetByteBuf(buf), MinecraftPlayer.ofNullable(player)));
         }
 
-        private static void send(NetByteBuf byteBuf, Player player, ResourceLocation channelId) {
+        private static void send(ByteBuf byteBuf, Player player, ResourceLocation channelId) {
             ServerPlayNetworking.send(player.reference(), channelId.reference(), new FriendlyByteBuf(byteBuf));
         }
 

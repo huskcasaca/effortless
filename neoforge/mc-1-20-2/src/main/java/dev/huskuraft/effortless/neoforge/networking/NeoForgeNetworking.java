@@ -42,7 +42,7 @@ public class NeoForgeNetworking implements Networking {
 
     @Override
     public void registerServerReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
-        register(channelId);
+        if (CHANNEL == null) register(channelId);
         CHANNEL.addListener(event -> {
             if (event.getPayload() != null && event.getSource().getDirection().getReceptionSide().isServer()) {
                 receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(event.getSource().getSender()));

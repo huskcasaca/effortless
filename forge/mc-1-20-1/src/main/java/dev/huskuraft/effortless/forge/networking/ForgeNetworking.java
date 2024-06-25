@@ -62,7 +62,7 @@ public class ForgeNetworking implements Networking {
 
         }
 
-        public static void send(NetByteBuf byteBuf, Player player) {
+        public static void send(ByteBuf byteBuf, Player player) {
             var minecraftPacket = NetworkDirection.PLAY_TO_SERVER.buildPacket(Pair.of(new FriendlyByteBuf(byteBuf), 0), Networking.getChannelId().reference()).getThis();
             Minecraft.getInstance().getConnection().send(minecraftPacket);
         }
@@ -77,7 +77,7 @@ public class ForgeNetworking implements Networking {
             });
         }
 
-        public static void send(NetByteBuf byteBuf, Player player) {
+        public static void send(ByteBuf byteBuf, Player player) {
             var minecraftPacket = NetworkDirection.PLAY_TO_CLIENT.buildPacket(Pair.of(new FriendlyByteBuf(byteBuf), 0), Networking.getChannelId().reference()).getThis();
             ((ServerPlayer) player.reference()).connection.send(minecraftPacket);
         }
