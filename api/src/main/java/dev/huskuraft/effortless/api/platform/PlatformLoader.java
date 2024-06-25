@@ -94,8 +94,11 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
                 return LoaderType.QUILT;
             }
             if (loader.getClass().getPackageName().equals("cpw.mods.modlauncher")) {
-
-                return LoaderType.FORGE;
+                if (loader.getDefinedPackage("net.neoforged.neoforge.server") != null) {
+                    return LoaderType.NEO_FORGE;
+                } else {
+                    return LoaderType.FORGE;
+                }
             }
             throw new IllegalStateException("Unknown loader: " + loader.getClass().getPackageName());
         }
