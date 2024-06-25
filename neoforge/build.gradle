@@ -38,10 +38,8 @@ subprojects {
     dependencies {
         implementation "net.neoforged:neoforge:${neo_version}"
 
-        implementation project(':api')
         implementation project(':common')
 
-        shadow project(':api')
         shadow project(':common')
 
         annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
@@ -105,21 +103,21 @@ subprojects {
         ]
         inputs.properties replaceProperties
 
-        filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
             expand replaceProperties + [project: project]
         }
 
     }
 
-    tasks.register('generateJava', Copy) {
-        from project(':api').file('src/main/java')
-        from project(':common').file('src/main/java')
-        into "${layout.buildDirectory.asFile.get()}/generated/java"
-    }
-    sourceSets.main.java {
-        srcDir "${layout.buildDirectory.asFile.get()}/generated/java"
-    }
-    compileJava.dependsOn generateJava
+//    tasks.register('generateJava', Copy) {
+//        from project(':api').file('src/main/java')
+//        from project(':common').file('src/main/java')
+//        into "${layout.buildDirectory.asFile.get()}/generated/java"
+//    }
+//    sourceSets.main.java {
+//        srcDir "${layout.buildDirectory.asFile.get()}/generated/java"
+//    }
+//    compileJava.dependsOn generateJava
 
     jar {
         manifest {
@@ -133,6 +131,7 @@ subprojects {
                     'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
         }
+        finalizedBy 'shadowJar'
     }
 
     shadowJar {
@@ -146,6 +145,7 @@ subprojects {
 
         minimize()
         archiveClassifier.set('')
+
     }
 
 }

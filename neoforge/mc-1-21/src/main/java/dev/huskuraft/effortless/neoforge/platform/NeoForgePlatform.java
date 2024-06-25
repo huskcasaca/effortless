@@ -17,7 +17,7 @@ public class NeoForgePlatform implements Platform {
 
     @Override
     public LoaderType getLoaderType() {
-        return LoaderType.FORGE;
+        return LoaderType.NEO_FORGE;
     }
 
     @Override

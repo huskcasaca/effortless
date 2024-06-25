@@ -94,6 +94,7 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
                 return LoaderType.QUILT;
             }
             if (loader.getClass().getPackageName().equals("cpw.mods.modlauncher")) {
+
                 return LoaderType.FORGE;
             }
             throw new IllegalStateException("Unknown loader: " + loader.getClass().getPackageName());
@@ -112,6 +113,9 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
             if (className.contains(".forge.")) {
                 return LoaderType.FORGE;
             }
+            if (className.contains(".neoforge.")) {
+                return LoaderType.NEO_FORGE;
+            }
             return LoaderType.VANILLA;
         }
 
@@ -123,34 +127,35 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
             return clazz.cast(childClass.getDeclaredConstructor().newInstance());
         }
 
-        public boolean isCompatible() {
-            return switch (getLoaderTypeByName()) {
-                case FABRIC ->
-                        getLoaderTypeByThread() == LoaderType.FABRIC || getLoaderTypeByThread() == LoaderType.QUILT;
-                case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT;
-                case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
-                case VANILLA -> true;
-            };
-        }
-
         public boolean isPresent() {
             return switch (getLoaderTypeByName()) {
                 case FABRIC -> getLoaderTypeByThread() == LoaderType.FABRIC;
                 case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT;
                 case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
+                case NEO_FORGE -> getLoaderTypeByThread() == LoaderType.NEO_FORGE;
+                case VANILLA -> true;
+            };
+        }
+
+        public boolean isCompatible() {
+            return switch (getLoaderTypeByName()) {
+                case FABRIC -> getLoaderTypeByThread() == LoaderType.FABRIC || getLoaderTypeByThread() == LoaderType.QUILT;
+                case QUILT -> getLoaderTypeByThread() == LoaderType.QUILT;
+                case FORGE -> getLoaderTypeByThread() == LoaderType.FORGE;
+                case NEO_FORGE -> getLoaderTypeByThread() == LoaderType.NEO_FORGE;
                 case VANILLA -> true;
             };
         }
 
         public S get() {
             if (!isPresent() && !isCompatible()) {
-                throw new ServiceConfigurationError("Service " + clazz.getName() + " is not available in loader " + getLoaderTypeByThread());
+                throw new ServiceConfigurationError("Cannot find " + clazz.getName() + " using loader " + getLoaderTypeByThread());
             }
             try {
                 return create();
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new ServiceConfigurationError(e.getMessage());
+                throw new ServiceConfigurationError("Cannot find " + clazz.getName() + " using loader " + getLoaderTypeByThread());
             }
         }
 
