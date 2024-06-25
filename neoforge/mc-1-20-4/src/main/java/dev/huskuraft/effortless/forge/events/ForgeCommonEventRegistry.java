@@ -26,8 +26,6 @@ public class ForgeCommonEventRegistry extends CommonEventRegistry {
         ForgeInitializer.EVENT_BUS.addListener(this::onCommonSetup);
         ForgeInitializer.EVENT_BUS.addListener(this::onRegisterNetwork);
 
-        ForgeInitializer.EVENT_BUS.addListener(EventPriority.HIGH, ForgeNetworking::register);
-
         NeoForge.EVENT_BUS.register(this);
     }
 

@@ -2,15 +2,18 @@ package dev.huskuraft.effortless.forge.networking;
 
 import com.google.auto.service.AutoService;
 
+import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
+import dev.huskuraft.effortless.forge.platform.ForgeInitializer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
@@ -21,14 +24,18 @@ public class ForgeNetworking implements Networking {
 
     public static IPayloadRegistrar REGISTRAR;
 
-    @SubscribeEvent
+    public ForgeNetworking() {
+        ForgeInitializer.EVENT_BUS.register(this);
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
     public static void register(RegisterPayloadHandlerEvent event) {
-        REGISTRAR = event.registrar(Networking.getChannelId().getNamespace()).optional();
+        REGISTRAR = event.registrar(Effortless.MOD_ID).optional();
     }
 
     @Override
-    public void registerClientReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
-        REGISTRAR.play(Networking.getChannelId().reference(), Wrapper::new, (payload, context) -> {
+    public void registerClientReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
+        REGISTRAR.play(channelId.reference(), byteBuf -> new Wrapper(channelId, byteBuf), (payload, context) -> {
             if (context.flow().isClientbound()) {
                 return;
             }
@@ -37,8 +44,8 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerServerReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
-        REGISTRAR.play(Networking.getChannelId().reference(), Wrapper::new, (payload, context) -> {
+    public void registerServerReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
+        REGISTRAR.play(channelId.reference(), byteBuf -> new Wrapper(channelId, byteBuf), (payload, context) -> {
             if (context.flow().isServerbound()) {
                 return;
             }
@@ -47,24 +54,24 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void sendToClient(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
-        PacketDistributor.PLAYER.with(player.reference()).send(new Wrapper(byteBuf));
+    public void sendToClient(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
+        PacketDistributor.PLAYER.with(player.reference()).send(new Wrapper(channelId, byteBuf));
     }
 
     @Override
-    public void sendToServer(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
-        PacketDistributor.SERVER.noArg().send(new Wrapper(byteBuf));
+    public void sendToServer(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
+        PacketDistributor.SERVER.noArg().send(new Wrapper(channelId, byteBuf));
     }
 
-    record Wrapper(ByteBuf byteBuf) implements CustomPacketPayload {
+    record Wrapper(ResourceLocation channelId, ByteBuf byteBuf) implements CustomPacketPayload {
         @Override
         public void write(FriendlyByteBuf friendlyByteBuf) {
             friendlyByteBuf.writeBytes(byteBuf().readBytes(byteBuf().readableBytes()));
         }
 
         @Override
-        public ResourceLocation id() {
-            return Networking.getChannelId().reference();
+        public net.minecraft.resources.ResourceLocation id() {
+            return channelId.reference();
         }
     }
 
