@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.forge.events;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.InteractionType;
-import dev.huskuraft.effortless.api.events.ClientEventRegistry;
+import dev.huskuraft.effortless.api.events.impl.ClientEventRegistry;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;

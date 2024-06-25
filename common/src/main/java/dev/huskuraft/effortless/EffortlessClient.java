@@ -2,14 +2,15 @@ package dev.huskuraft.effortless;
 
 import com.google.auto.service.AutoService;
 
-import dev.huskuraft.effortless.api.events.ClientEventRegistry;
-import dev.huskuraft.effortless.api.events.EventRegister;
+import dev.huskuraft.effortless.api.events.impl.ClientEventRegistry;
+import dev.huskuraft.effortless.api.events.EventHolder;
 import dev.huskuraft.effortless.api.platform.ClientEntrance;
+import dev.huskuraft.effortless.api.platform.PlatformLoader;
 
 @AutoService(ClientEntrance.class)
 public class EffortlessClient implements ClientEntrance {
 
-    private final ClientEventRegistry eventRegistry = (ClientEventRegistry) EventRegister.getClient();
+    private final ClientEventRegistry eventRegistry = PlatformLoader.getSingleton(ClientEventRegistry.class);
     private final EffortlessClientNetworkChannel channel = new EffortlessClientNetworkChannel(this);
     private final EffortlessClientStructureBuilder structureBuilder = new EffortlessClientStructureBuilder(this);
     private final EffortlessClientManager clientManager = new EffortlessClientManager(this);
