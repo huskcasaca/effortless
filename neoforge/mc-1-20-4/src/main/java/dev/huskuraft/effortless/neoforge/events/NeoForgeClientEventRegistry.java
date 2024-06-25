@@ -71,9 +71,7 @@ public class NeoForgeClientEventRegistry extends ClientEventRegistry {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             return;
         }
-        var renderer = new MinecraftRenderer(event.getPoseStack());
-        var partialTick = event.getPartialTick();
-        getRenderWorldEvent().invoker().onRenderWorld(renderer, partialTick);
+        getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(event.getPoseStack()), event.getPartialTick());
     }
 
     @SubscribeEvent

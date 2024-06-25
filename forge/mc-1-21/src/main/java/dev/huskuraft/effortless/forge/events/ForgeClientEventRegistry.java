@@ -71,9 +71,7 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             return;
         }
-        var renderer = new MinecraftRenderer(new PoseStack());
-        var partialTick = event.getPartialTick();
-        getRenderWorldEvent().invoker().onRenderWorld(renderer, partialTick);
+        getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(new PoseStack()), event.getPartialTick());
     }
 
     @SubscribeEvent
