@@ -31,6 +31,11 @@ includeBuild 'fuse-gradle-plugin'
 include ':api'
 include ':common'
 
+include ':fabric'
+include ':forge'
+include ':neoforge'
+include ':multiplatform'
+
 def fabricFull = [
     '1-17-1',
     '1-18',
@@ -107,51 +112,19 @@ def neoforge = [
     '1-21',
 ]
 
-def type = System.getenv("EFFORTLESS_PORT_TYPE")
-
-switch (type) {
+switch (System.getenv("EFFORTLESS_PORT_TYPE")) {
     case 'full': {
-        fabricFull.forEach { port ->
-            include 'fabric'
-            include ":fabric:mc-${port}"
-        }
-
-        forgeFull.forEach { port ->
-            include ':forge'
-            include ":forge:mc-${port}"
-        }
-
-        neoforgeFull.forEach { port ->
-            include ':neoforge'
-            include ":neoforge:mc-${port}"
-        }
-
-        (fabricFull + forgeFull + neoforgeFull).forEach { port ->
-            include ':multiplatform'
-            include ":multiplatform:mc-${port}"
-        }
+        fabricFull.forEach { port -> include ":fabric:mc-${port}" }
+        forgeFull.forEach { port -> include ":forge:mc-${port}" }
+        neoforgeFull.forEach { port -> include ":neoforge:mc-${port}" }
+        (fabricFull + forgeFull + neoforgeFull).forEach { port -> include ":multiplatform:mc-${port}" }
         break
     }
     default: {
-        fabric.forEach { port ->
-            include 'fabric'
-            include ":fabric:mc-${port}"
-        }
-
-        forge.forEach { port ->
-            include ':forge'
-            include ":forge:mc-${port}"
-        }
-
-        neoforge.forEach { port ->
-            include ':neoforge'
-            include ":neoforge:mc-${port}"
-        }
-
-        (fabric + forge + neoforge).forEach { port ->
-            include ':multiplatform'
-            include ":multiplatform:mc-${port}"
-        }
+        fabric.forEach { port -> include ":fabric:mc-${port}" }
+        forge.forEach { port -> include ":forge:mc-${port}" }
+        neoforge.forEach { port -> include ":neoforge:mc-${port}" }
+        (fabric + forge + neoforge).forEach { port -> include ":multiplatform:mc-${port}" }
         break
     }
 }
