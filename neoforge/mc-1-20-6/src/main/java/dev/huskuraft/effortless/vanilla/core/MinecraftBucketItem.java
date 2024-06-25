@@ -16,7 +16,7 @@ public record MinecraftBucketItem(net.minecraft.world.item.BucketItem refs) impl
 
     @Override
     public Fluid getContent() {
-        return MinecraftFluid.ofNullable(refs.getFluid());
+        return MinecraftFluid.ofNullable(refs.content);
     }
 
     @Override
