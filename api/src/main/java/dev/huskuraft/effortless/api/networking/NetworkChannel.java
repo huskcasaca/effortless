@@ -23,14 +23,16 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     private final Side side;
     private final Map<UUID, Consumer<? extends ResponsiblePacket<?>>> responseMap = Collections.synchronizedMap(new HashMap<>());
     private PacketSet<P> packetSet = new PacketSet<>();
+    private Networking networking;
 
     protected NetworkChannel(ResourceLocation channelId, Side side) {
         this.channelId = channelId;
         this.side = side;
+        this.networking = PlatformLoader.getSingleton();
     }
 
     public Networking getPlatformChannel() {
-        return PlatformLoader.getSingleton();
+        return networking;
     }
 
     @Override
@@ -41,8 +43,8 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     @Override
     public void sendBuffer(NetByteBuf byteBuf, Player player) {
         switch (side) {
-            case CLIENT -> getPlatformChannel().sendToServer(byteBuf, player);
-            case SERVER -> getPlatformChannel().sendToClient(byteBuf, player);
+            case CLIENT -> getPlatformChannel().sendToServer(getChannelId(), byteBuf, player);
+            case SERVER -> getPlatformChannel().sendToClient(getChannelId(), byteBuf, player);
         }
     }
 

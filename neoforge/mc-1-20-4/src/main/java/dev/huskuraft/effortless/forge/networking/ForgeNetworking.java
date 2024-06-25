@@ -27,7 +27,7 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerClientReceiver(NetByteBufReceiver receiver) {
+    public void registerClientReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
         REGISTRAR.play(Networking.getChannelId().reference(), Wrapper::new, (payload, context) -> {
             if (context.flow().isClientbound()) {
                 return;
@@ -37,7 +37,7 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerServerReceiver(NetByteBufReceiver receiver) {
+    public void registerServerReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
         REGISTRAR.play(Networking.getChannelId().reference(), Wrapper::new, (payload, context) -> {
             if (context.flow().isServerbound()) {
                 return;
@@ -47,12 +47,12 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void sendToClient(NetByteBuf byteBuf, Player player) {
+    public void sendToClient(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         PacketDistributor.PLAYER.with(player.reference()).send(new Wrapper(byteBuf));
     }
 
     @Override
-    public void sendToServer(NetByteBuf byteBuf, Player player) {
+    public void sendToServer(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         PacketDistributor.SERVER.noArg().send(new Wrapper(byteBuf));
     }
 

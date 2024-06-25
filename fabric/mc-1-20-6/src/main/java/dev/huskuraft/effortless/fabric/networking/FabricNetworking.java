@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.fabric.networking;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
@@ -18,7 +19,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 public class FabricNetworking implements Networking {
 
     @Override
-    public void registerClientReceiver(NetByteBufReceiver receiver) {
+    public void registerClientReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
         PayloadTypeRegistry.playS2C().register(getType(), getCodec());
         ClientPlayNetworking.registerGlobalReceiver(getType(), (payload, context) -> {
             receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
@@ -26,7 +27,7 @@ public class FabricNetworking implements Networking {
     }
 
     @Override
-    public void registerServerReceiver(NetByteBufReceiver receiver) {
+    public void registerServerReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
         PayloadTypeRegistry.playC2S().register(getType(), getCodec());
         ServerPlayNetworking.registerGlobalReceiver(getType(), (payload, context) -> {
             receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
@@ -34,11 +35,11 @@ public class FabricNetworking implements Networking {
     }
 
     @Override
-    public void sendToClient(NetByteBuf byteBuf, Player player) {
+    public void sendToClient(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         ServerPlayNetworking.send(player.reference(), new Payload(byteBuf));
     }
 
-    public void sendToServer(NetByteBuf byteBuf, Player player) {
+    public void sendToServer(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         ClientPlayNetworking.send(new Payload(byteBuf));
     }
 

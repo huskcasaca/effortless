@@ -1,5 +1,6 @@
 package dev.huskuraft.effortless.forge.networking;
 
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.auto.service.AutoService;
@@ -30,22 +31,22 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerClientReceiver(NetByteBufReceiver receiver) {
+    public void registerClientReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
         ClientNetworking.registerReceiver(receiver);
     }
 
     @Override
-    public void registerServerReceiver(NetByteBufReceiver receiver) {
+    public void registerServerReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
         ServerNetworking.registerReceiver(receiver);
     }
 
     @Override
-    public void sendToClient(NetByteBuf byteBuf, Player player) {
+    public void sendToClient(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         ServerNetworking.send(byteBuf, player);
     }
 
     @Override
-    public void sendToServer(NetByteBuf byteBuf, Player player) {
+    public void sendToServer(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         ClientNetworking.send(byteBuf, player);
     }
 

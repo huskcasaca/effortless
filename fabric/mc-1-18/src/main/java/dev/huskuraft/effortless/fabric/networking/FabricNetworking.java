@@ -16,21 +16,21 @@ import net.minecraft.network.FriendlyByteBuf;
 public class FabricNetworking implements Networking {
 
     @Override
-    public void registerClientReceiver(NetByteBufReceiver receiver) {
+    public void registerClientReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
         ClientNetworking.registerReceiver(receiver, Networking.getChannelId());
     }
 
     @Override
-    public void registerServerReceiver(NetByteBufReceiver receiver) {
+    public void registerServerReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
         ServerNetworking.registerReceiver(receiver, Networking.getChannelId());
     }
 
     @Override
-    public void sendToClient(NetByteBuf byteBuf, Player player) {
+    public void sendToClient(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         ServerNetworking.send(byteBuf, player, Networking.getChannelId());
     }
 
-    public void sendToServer(NetByteBuf byteBuf, Player player) {
+    public void sendToServer(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         ClientNetworking.send(byteBuf, Networking.getChannelId());
     }
 

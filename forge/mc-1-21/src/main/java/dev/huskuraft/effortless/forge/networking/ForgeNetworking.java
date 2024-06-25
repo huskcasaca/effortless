@@ -31,7 +31,7 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerClientReceiver(NetByteBufReceiver receiver) {
+    public void registerClientReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
         CHANNEL.addListener(event -> {
             if (event.getPayload() != null && event.getSource().isClientSide()) {
                 receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
@@ -42,7 +42,7 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerServerReceiver(NetByteBufReceiver receiver) {
+    public void registerServerReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
         CHANNEL.addListener(event -> {
             if (event.getPayload() != null && event.getSource().isServerSide()) {
                 receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(event.getSource().getSender()));
@@ -52,12 +52,12 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void sendToClient(NetByteBuf byteBuf, Player player) {
+    public void sendToClient(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         CHANNEL.send(new FriendlyByteBuf(byteBuf), PacketDistributor.PLAYER.with(player.reference()));
     }
 
     @Override
-    public void sendToServer(NetByteBuf byteBuf, Player player) {
+    public void sendToServer(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         CHANNEL.send(new FriendlyByteBuf(byteBuf), PacketDistributor.SERVER.noArg());
     }
 

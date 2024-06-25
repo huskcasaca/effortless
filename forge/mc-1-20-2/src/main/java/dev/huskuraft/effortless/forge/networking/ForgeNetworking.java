@@ -29,22 +29,22 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerClientReceiver(NetByteBufReceiver receiver) {
+    public void registerClientReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
         ClientNetworking.registerReceiver(receiver);
     }
 
     @Override
-    public void registerServerReceiver(NetByteBufReceiver receiver) {
+    public void registerServerReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
         ServerNetworking.registerReceiver(receiver);
     }
 
     @Override
-    public void sendToClient(NetByteBuf byteBuf, Player player) {
+    public void sendToClient(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         ServerNetworking.send(byteBuf, player);
     }
 
     @Override
-    public void sendToServer(NetByteBuf byteBuf, Player player) {
+    public void sendToServer(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         ClientNetworking.send(byteBuf, player);
     }
 

@@ -6,7 +6,6 @@ import dev.huskuraft.effortless.api.networking.NetworkChannel;
 import dev.huskuraft.effortless.api.networking.NetworkRegistry;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.api.networking.Side;
-import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
@@ -50,7 +49,7 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
     }
 
     private void onRegisterNetwork(NetworkRegistry registry) {
-        getPlatformChannel().registerClientReceiver(this);
+        getPlatformChannel().registerClientReceiver(getChannelId(), this);
 
     }
 

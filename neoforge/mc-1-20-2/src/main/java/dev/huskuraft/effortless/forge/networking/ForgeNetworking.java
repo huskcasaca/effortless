@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.forge.networking;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.NetByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
@@ -29,7 +30,7 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerClientReceiver(NetByteBufReceiver receiver) {
+    public void registerClientReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
         CHANNEL.addListener(event -> {
             if (event.getPayload() != null && event.getSource().getDirection().getReceptionSide().isClient()) {
                 receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
@@ -38,7 +39,7 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerServerReceiver(NetByteBufReceiver receiver) {
+    public void registerServerReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
         CHANNEL.addListener(event -> {
             if (event.getPayload() != null && event.getSource().getDirection().getReceptionSide().isServer()) {
                 receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(event.getSource().getSender()));
@@ -47,13 +48,13 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void sendToClient(NetByteBuf byteBuf, Player player) {
+    public void sendToClient(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         var minecraftPacket = PlayNetworkDirection.PLAY_TO_CLIENT.buildPacket(new INetworkDirection.PacketData(new FriendlyByteBuf(byteBuf), 0), Networking.getChannelId().reference());
         ((ServerPlayer) player.reference()).connection.send(minecraftPacket);
     }
 
     @Override
-    public void sendToServer(NetByteBuf byteBuf, Player player) {
+    public void sendToServer(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
         var minecraftPacket = PlayNetworkDirection.PLAY_TO_SERVER.buildPacket(new INetworkDirection.PacketData(new FriendlyByteBuf(byteBuf), 0), Networking.getChannelId().reference());
         Minecraft.getInstance().getConnection().send(minecraftPacket);
     }

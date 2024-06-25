@@ -51,7 +51,7 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
     }
 
     private void onRegisterNetwork(NetworkRegistry registry) {
-        getPlatformChannel().registerServerReceiver(this);
+        getPlatformChannel().registerServerReceiver(getChannelId(), this);
 
     }
 
