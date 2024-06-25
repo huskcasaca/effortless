@@ -16,6 +16,8 @@ import javax.annotation.Nullable;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.platform.PlatformLoader;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 public abstract class NetworkChannel<P extends PacketListener> implements PacketChannel {
 
@@ -41,7 +43,7 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     }
 
     @Override
-    public void sendBuffer(NetByteBuf byteBuf, Player player) {
+    public void sendBuffer(ByteBuf byteBuf, Player player) {
         switch (side) {
             case CLIENT -> getPlatformChannel().sendToServer(getChannelId(), byteBuf, player);
             case SERVER -> getPlatformChannel().sendToClient(getChannelId(), byteBuf, player);
@@ -57,7 +59,7 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     public abstract void receivePacket(Packet packet, Player player);
 
     @Override
-    public void receiveBuffer(NetByteBuf byteBuf, Player player) {
+    public void receiveBuffer(ByteBuf byteBuf, Player player) {
         var packet = (Packet<P>) null;
         try {
             packet = createPacket(byteBuf);
@@ -79,11 +81,11 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     }
 
     @SuppressWarnings("unchecked")
-    public Packet<P> createPacket(NetByteBuf byteBuf) {
+    public Packet<P> createPacket(ByteBuf byteBuf) {
         return (Packet<P>) packetSet.createPacket(byteBuf);
     }
 
-    public NetByteBuf createBuffer(Packet<P> packet) {
+    public ByteBuf createBuffer(Packet<P> packet) {
         return packetSet.createBuffer(packet);
     }
 
@@ -130,23 +132,23 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
             return classToId.getOrDefault(clazz, null);
         }
 
-        public NetByteBuf createBuffer(Packet<T> packet) {
+        public ByteBuf createBuffer(Packet<T> packet) {
             var id = getId(packet.getClass());
             if (id == null) {
                 throw new IllegalArgumentException("Packet " + packet.getClass() + " is not registered");
             }
-            var buffer = NetByteBuf.newBuffer();
+            var buffer = Unpooled.buffer();
             var serializer = (NetByteBufSerializer<Packet<T>>) idToDeserializer.get(getId(packet.getClass()));
             buffer.writeInt(id);
-            serializer.write(buffer, packet);
+            serializer.write(new NetByteBuf(buffer), packet);
             return buffer;
         }
 
         @Nullable
-        public Packet<?> createPacket(NetByteBuf byteBuf) {
+        public Packet<?> createPacket(ByteBuf byteBuf) {
             var id = byteBuf.readInt();
             var serializer = idToDeserializer.get(id);
-            if (serializer != null) return serializer.read(byteBuf);
+            if (serializer != null) return serializer.read(new NetByteBuf(byteBuf));
             return null;
         }
     }

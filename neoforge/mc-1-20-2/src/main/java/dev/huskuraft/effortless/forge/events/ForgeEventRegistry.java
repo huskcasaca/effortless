@@ -22,12 +22,15 @@ public class ForgeEventRegistry extends EventRegistry {
 
     public ForgeEventRegistry() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterNetwork);
 
         NeoForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent event) {
+    }
+
+    public void onRegisterNetwork(FMLCommonSetupEvent event) {
         getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
         });
     }

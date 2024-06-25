@@ -1,13 +1,13 @@
 package dev.huskuraft.effortless.forge.events;
 
 import com.google.auto.service.AutoService;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.events.impl.ClientEventRegistry;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
+import dev.huskuraft.effortless.forge.platform.ForgeInitializer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
@@ -16,41 +16,42 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.CustomizeGuiOverlayEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterShadersEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @AutoService(ClientEventRegistry.class)
 public class ForgeClientEventRegistry extends ClientEventRegistry {
 
     public ForgeClientEventRegistry() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterKeyMappings);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onReloadShader);
+        ForgeInitializer.EVENT_BUS.addListener(this::onClientSetup);
+        ForgeInitializer.EVENT_BUS.addListener(this::onRegisterNetwork);
+        ForgeInitializer.EVENT_BUS.addListener(this::onRegisterKeyMappings);
+        ForgeInitializer.EVENT_BUS.addListener(this::onReloadShader);
 
         NeoForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
         getClientStartEvent().invoker().onClientStart(new MinecraftClient(Minecraft.getInstance()));
+    }
+
+    public void onRegisterNetwork(RegisterPayloadHandlersEvent event) {
         getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
         });
     }
 
-    @SubscribeEvent
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
             event.register(key.getKeyBinding().reference());
         });
     }
 
-    @SubscribeEvent
     public void onReloadShader(RegisterShadersEvent event) {
         getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> {
             var minecraftShader = new ShaderInstance(event.getResourceProvider(), resource.getPath(), format.reference());
@@ -59,7 +60,7 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
     }
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public void onClientTick(ClientTickEvent event) {
         getClientTickEvent().invoker().onClientTick(new MinecraftClient(Minecraft.getInstance()), ClientTick.Phase.START); //  switch (event.phase) {
 //            case START -> ClientTick.Phase.START;
 //            case END -> ClientTick.Phase.END;
@@ -73,12 +74,12 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
         }
         var renderer = new MinecraftRenderer(new PoseStack());
         var partialTick = event.getPartialTick();
-        getRenderWorldEvent().invoker().onRenderWorld(renderer, partialTick);
+        getRenderWorldEvent().invoker().onRenderWorld(renderer, partialTick.getGameTimeDeltaPartialTick(false));
     }
 
     @SubscribeEvent
     public void onRenderGui(CustomizeGuiOverlayEvent event) {
-        getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(event.getGuiGraphics().pose()), event.getPartialTick());
+        getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(event.getGuiGraphics().pose()), event.getPartialTick().getGameTimeDeltaPartialTick(false));
     }
 
     @SubscribeEvent

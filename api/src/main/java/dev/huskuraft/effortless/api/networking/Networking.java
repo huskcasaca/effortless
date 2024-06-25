@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.api.networking;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.platform.Entrance;
+import io.netty.buffer.ByteBuf;
 
 public interface Networking {
 
@@ -21,12 +22,12 @@ public interface Networking {
         return Entrance.getInstance().getChannel().getCompatibilityVersionStr();
     }
 
-    void sendToClient(ResourceLocation channelId, NetByteBuf byteBuf, Player player);
+    void sendToClient(ResourceLocation channelId, ByteBuf byteBuf, Player player);
 
-    void sendToServer(ResourceLocation channelId, NetByteBuf byteBuf, Player player);
+    void sendToServer(ResourceLocation channelId, ByteBuf byteBuf, Player player);
 
-    void registerClientReceiver(ResourceLocation channelId, NetByteBufReceiver receiver);
+    void registerClientReceiver(ResourceLocation channelId, ByteBufReceiver receiver);
 
-    void registerServerReceiver(ResourceLocation channelId, NetByteBufReceiver receiver);
+    void registerServerReceiver(ResourceLocation channelId, ByteBufReceiver receiver);
 
 }

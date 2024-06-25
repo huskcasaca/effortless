@@ -2,63 +2,91 @@ package dev.huskuraft.effortless.forge.networking;
 
 import com.google.auto.service.AutoService;
 
+import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.Player;
+import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
-import dev.huskuraft.effortless.api.networking.NetByteBufReceiver;
+import dev.huskuraft.effortless.api.networking.ByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
-import dev.huskuraft.effortless.api.platform.Entrance;
+import dev.huskuraft.effortless.forge.platform.ForgeInitializer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.ChannelBuilder;
-import net.neoforged.neoforge.network.EventNetworkChannel;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @AutoService(Networking.class)
 public class ForgeNetworking implements Networking {
 
-    public static final EventNetworkChannel CHANNEL;
+    private PayloadRegistrar REGISTRAR;
 
-    static {
-        var channel = Entrance.getInstance().getChannel();
+    public ForgeNetworking() {
+        ForgeInitializer.EVENT_BUS.register(this);
+    }
 
-        CHANNEL = ChannelBuilder.named((ResourceLocation) channel.getChannelId().reference())
-                .acceptedVersions((status, version) -> true)
-                .optional()
-                .networkProtocolVersion(channel.getCompatibilityVersion())
-                .eventNetworkChannel();
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void register(RegisterPayloadHandlersEvent event) {
+        REGISTRAR = event.registrar(Effortless.MOD_ID);
     }
 
     @Override
-    public void registerClientReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
-        CHANNEL.addListener(event -> {
-            if (event.getPayload() != null && event.getSource().isClientSide()) {
-                receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
-                event.getSource().setPacketHandled(true);
+    public void registerClientReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
+        REGISTRAR.playToServer(getType(channelId.reference()), getCodec(channelId.reference()), (payload, context) -> {
+            if (context.flow().isClientbound()) {
+                return;
             }
-        });
-
-    }
-
-    @Override
-    public void registerServerReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
-        CHANNEL.addListener(event -> {
-            if (event.getPayload() != null && event.getSource().isServerSide()) {
-                receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(event.getSource().getSender()));
-                event.getSource().setPacketHandled(true);
-            }
+            receiver.receiveBuffer(new NetByteBuf(payload.byteBuf()), MinecraftPlayer.ofNullable(context.player()));
         });
     }
 
     @Override
-    public void sendToClient(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
-        CHANNEL.send(new FriendlyByteBuf(byteBuf), PacketDistributor.PLAYER.with(player.reference()));
+    public void registerServerReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
+        REGISTRAR.playToClient(getType(channelId.reference()), getCodec(channelId.reference()), (payload, context) -> {
+            if (context.flow().isServerbound()) {
+                return;
+            }
+            receiver.receiveBuffer(new NetByteBuf(payload.byteBuf()), MinecraftPlayer.ofNullable(context.player()));
+        });
     }
 
     @Override
-    public void sendToServer(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
-        CHANNEL.send(new FriendlyByteBuf(byteBuf), PacketDistributor.SERVER.noArg());
+    public void sendToClient(ResourceLocation channelId, ByteBuf byteBuf, Player player) {
+        PacketDistributor.sendToPlayer(player.reference(), new Payload(channelId, byteBuf));
+    }
+
+    @Override
+    public void sendToServer(ResourceLocation channelId, ByteBuf byteBuf, Player player) {
+        PacketDistributor.sendToServer(new Payload(channelId, byteBuf));
+    }
+
+    private static Payload.Type<Payload> getType(ResourceLocation channelId) {
+        return new Payload.Type<>(channelId.reference());
+    }
+
+    private static StreamCodec<RegistryFriendlyByteBuf, Payload> getCodec(ResourceLocation channelId) {
+        return new StreamCodec<>() {
+            @Override
+            public Payload decode(RegistryFriendlyByteBuf byteBuf) {
+                return new Payload(channelId, new NetByteBuf(byteBuf.readBytes(byteBuf.readableBytes())));
+            }
+
+            @Override
+            public void encode(RegistryFriendlyByteBuf byteBuf, Payload payload) {
+                byteBuf.writeBytes(payload.byteBuf().readBytes(payload.byteBuf().readableBytes()));
+            }
+        };
+    }
+
+    private record Payload(ResourceLocation channelId, ByteBuf byteBuf) implements CustomPacketPayload {
+        @Override
+        public Type<Payload> type() {
+            return getType(channelId);
+        }
     }
 
 }

@@ -6,7 +6,7 @@ import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
-import dev.huskuraft.effortless.api.networking.NetByteBufReceiver;
+import dev.huskuraft.effortless.api.networking.ByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
 import dev.huskuraft.effortless.forge.platform.ForgeInitializer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
@@ -22,7 +22,7 @@ import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 @AutoService(Networking.class)
 public class ForgeNetworking implements Networking {
 
-    public static IPayloadRegistrar REGISTRAR;
+    private IPayloadRegistrar REGISTRAR;
 
     public ForgeNetworking() {
         ForgeInitializer.EVENT_BUS.register(this);
@@ -30,12 +30,12 @@ public class ForgeNetworking implements Networking {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void register(RegisterPayloadHandlerEvent event) {
-        REGISTRAR = event.registrar(Effortless.MOD_ID).optional();
+        REGISTRAR = event.registrar(Effortless.MOD_ID);
     }
 
     @Override
-    public void registerClientReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
-        REGISTRAR.play(channelId.reference(), byteBuf -> new Wrapper(channelId, byteBuf), (payload, context) -> {
+    public void registerClientReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
+        REGISTRAR.play(channelId.reference(), byteBuf -> new Payload(channelId, byteBuf), (payload, context) -> {
             if (context.flow().isClientbound()) {
                 return;
             }
@@ -44,8 +44,8 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerServerReceiver(ResourceLocation channelId, NetByteBufReceiver receiver) {
-        REGISTRAR.play(channelId.reference(), byteBuf -> new Wrapper(channelId, byteBuf), (payload, context) -> {
+    public void registerServerReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
+        REGISTRAR.play(channelId.reference(), byteBuf -> new Payload(channelId, byteBuf), (payload, context) -> {
             if (context.flow().isServerbound()) {
                 return;
             }
@@ -54,16 +54,16 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void sendToClient(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
-        PacketDistributor.PLAYER.with(player.reference()).send(new Wrapper(channelId, byteBuf));
+    public void sendToClient(ResourceLocation channelId, ByteBuf byteBuf, Player player) {
+        PacketDistributor.PLAYER.with(player.reference()).send(new Payload(channelId, byteBuf));
     }
 
     @Override
-    public void sendToServer(ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
-        PacketDistributor.SERVER.noArg().send(new Wrapper(channelId, byteBuf));
+    public void sendToServer(ResourceLocation channelId, ByteBuf byteBuf, Player player) {
+        PacketDistributor.SERVER.noArg().send(new Payload(channelId, byteBuf));
     }
 
-    record Wrapper(ResourceLocation channelId, ByteBuf byteBuf) implements CustomPacketPayload {
+    record Payload(ResourceLocation channelId, ByteBuf byteBuf) implements CustomPacketPayload {
         @Override
         public void write(FriendlyByteBuf friendlyByteBuf) {
             friendlyByteBuf.writeBytes(byteBuf().readBytes(byteBuf().readableBytes()));

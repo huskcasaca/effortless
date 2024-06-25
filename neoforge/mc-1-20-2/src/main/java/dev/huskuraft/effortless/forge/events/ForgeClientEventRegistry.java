@@ -28,27 +28,28 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
 
     public ForgeClientEventRegistry() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterNetwork);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterKeyMappings);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onReloadShader);
 
         NeoForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
         getClientStartEvent().invoker().onClientStart(new MinecraftClient(Minecraft.getInstance()));
+    }
+
+    public void onRegisterNetwork(FMLClientSetupEvent event) {
         getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
         });
     }
 
-    @SubscribeEvent
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
             event.register(key.getKeyBinding().reference());
         });
     }
 
-    @SubscribeEvent
     public void onReloadShader(RegisterShadersEvent event) {
         getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> {
             var minecraftShader = new ShaderInstance(event.getResourceProvider(), resource.getPath(), format.reference());

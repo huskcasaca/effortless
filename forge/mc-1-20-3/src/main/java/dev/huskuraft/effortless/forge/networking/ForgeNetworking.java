@@ -4,9 +4,10 @@ import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.networking.NetByteBuf;
-import dev.huskuraft.effortless.api.networking.NetByteBufReceiver;
+import dev.huskuraft.effortless.api.networking.ByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.Networking;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -29,27 +30,27 @@ public class ForgeNetworking implements Networking {
     }
 
     @Override
-    public void registerClientReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
+    public void registerClientReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, ByteBufReceiver receiver) {
         ClientNetworking.registerReceiver(receiver);
     }
 
     @Override
-    public void registerServerReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBufReceiver receiver) {
+    public void registerServerReceiver(dev.huskuraft.effortless.api.core.ResourceLocation channelId, ByteBufReceiver receiver) {
         ServerNetworking.registerReceiver(receiver);
     }
 
     @Override
-    public void sendToClient(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
+    public void sendToClient(dev.huskuraft.effortless.api.core.ResourceLocation channelId, ByteBuf byteBuf, Player player) {
         ServerNetworking.send(byteBuf, player);
     }
 
     @Override
-    public void sendToServer(dev.huskuraft.effortless.api.core.ResourceLocation channelId, NetByteBuf byteBuf, Player player) {
+    public void sendToServer(dev.huskuraft.effortless.api.core.ResourceLocation channelId, ByteBuf byteBuf, Player player) {
         ClientNetworking.send(byteBuf, player);
     }
 
     static class ClientNetworking {
-        public static void registerReceiver(NetByteBufReceiver receiver) {
+        public static void registerReceiver(ByteBufReceiver receiver) {
             CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
                     receiver.receiveBuffer(new NetByteBuf(event1.getPayload()), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
@@ -65,7 +66,7 @@ public class ForgeNetworking implements Networking {
     }
 
     static class ServerNetworking {
-        public static void registerReceiver(NetByteBufReceiver receiver) {
+        public static void registerReceiver(ByteBufReceiver receiver) {
             CHANNEL.addListener(event1 -> {
                 if (event1.getPayload() != null && event1.getSource().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
                     receiver.receiveBuffer(new NetByteBuf(event1.getPayload()), MinecraftPlayer.ofNullable(event1.getSource().getSender()));
