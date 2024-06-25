@@ -29,7 +29,7 @@ public class ForgeNetworking implements Networking {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void register(RegisterPayloadHandlerEvent event) {
+    public void register(RegisterPayloadHandlerEvent event) {
         REGISTRAR = event.registrar(Effortless.MOD_ID).optional();
     }
 
