@@ -22,7 +22,7 @@ public class ForgeNetworking implements Networking {
     public static IPayloadRegistrar REGISTRAR;
 
     @SubscribeEvent
-    public void register(RegisterPayloadHandlerEvent event) {
+    public static void register(RegisterPayloadHandlerEvent event) {
         REGISTRAR = event.registrar(Networking.getChannelId().getNamespace()).optional();
     }
 

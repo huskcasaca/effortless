@@ -6,6 +6,7 @@ import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.events.ClientEventRegistry;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
+import dev.huskuraft.effortless.forge.platform.ForgeInitializer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
@@ -22,33 +23,35 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 
 @AutoService(ClientEventRegistry.class)
 public class ForgeClientEventRegistry extends ClientEventRegistry {
 
     public ForgeClientEventRegistry() {
-//        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
-//        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onRegisterKeyMappings);
-//        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onReloadShader);
+        ForgeInitializer.EVENT_BUS.addListener(this::onClientSetup);
+        ForgeInitializer.EVENT_BUS.addListener(this::onRegisterNetwork);
+        ForgeInitializer.EVENT_BUS.addListener(this::onRegisterKeyMappings);
+        ForgeInitializer.EVENT_BUS.addListener(this::onReloadShader);
 
         NeoForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
         getClientStartEvent().invoker().onClientStart(new MinecraftClient(Minecraft.getInstance()));
+    }
+
+    public void onRegisterNetwork(RegisterPayloadHandlerEvent event) {
         getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
         });
     }
 
-    @SubscribeEvent
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
             event.register(key.getKeyBinding().reference());
         });
     }
 
-    @SubscribeEvent
     public void onReloadShader(RegisterShadersEvent event) {
         getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> {
             var minecraftShader = new ShaderInstance(event.getResourceProvider(), resource.getPath(), format.reference());

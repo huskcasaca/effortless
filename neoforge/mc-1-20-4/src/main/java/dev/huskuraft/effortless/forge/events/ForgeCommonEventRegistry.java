@@ -3,9 +3,12 @@ package dev.huskuraft.effortless.forge.events;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.events.CommonEventRegistry;
+import dev.huskuraft.effortless.forge.networking.ForgeNetworking;
+import dev.huskuraft.effortless.forge.platform.ForgeInitializer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -14,19 +17,24 @@ import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 
 @AutoService(CommonEventRegistry.class)
 public class ForgeCommonEventRegistry extends CommonEventRegistry {
 
-
     public ForgeCommonEventRegistry() {
-//        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
+        ForgeInitializer.EVENT_BUS.addListener(this::onCommonSetup);
+        ForgeInitializer.EVENT_BUS.addListener(this::onRegisterNetwork);
+
+        ForgeInitializer.EVENT_BUS.addListener(EventPriority.HIGH, ForgeNetworking::register);
 
         NeoForge.EVENT_BUS.register(this);
     }
 
-    @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent event) {
+    }
+
+    public void onRegisterNetwork(RegisterPayloadHandlerEvent event) {
         getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
         });
     }
