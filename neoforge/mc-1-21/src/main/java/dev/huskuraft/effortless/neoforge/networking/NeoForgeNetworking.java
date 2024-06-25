@@ -36,7 +36,7 @@ public class NeoForgeNetworking implements Networking {
 
     @Override
     public void registerClientReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
-        REGISTRAR.playToServer(getType(channelId.reference()), getCodec(channelId.reference()), (payload, context) -> {
+        REGISTRAR.playToServer(getType(channelId), getCodec(channelId), (payload, context) -> {
             if (context.flow().isClientbound()) {
                 return;
             }
@@ -46,7 +46,7 @@ public class NeoForgeNetworking implements Networking {
 
     @Override
     public void registerServerReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
-        REGISTRAR.playToClient(getType(channelId.reference()), getCodec(channelId.reference()), (payload, context) -> {
+        REGISTRAR.playToClient(getType(channelId), getCodec(channelId), (payload, context) -> {
             if (context.flow().isServerbound()) {
                 return;
             }

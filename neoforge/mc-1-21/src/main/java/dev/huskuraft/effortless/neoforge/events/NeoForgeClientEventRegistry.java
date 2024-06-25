@@ -60,7 +60,7 @@ public class NeoForgeClientEventRegistry extends ClientEventRegistry {
     }
 
     @SubscribeEvent
-    public void onClientTick(ClientTickEvent event) {
+    public void onClientTick(ClientTickEvent.Pre event) {
         getClientTickEvent().invoker().onClientTick(new MinecraftClient(Minecraft.getInstance()), ClientTick.Phase.START); //  switch (event.phase) {
 //            case START -> ClientTick.Phase.START;
 //            case END -> ClientTick.Phase.END;
@@ -76,7 +76,7 @@ public class NeoForgeClientEventRegistry extends ClientEventRegistry {
     }
 
     @SubscribeEvent
-    public void onRenderGui(CustomizeGuiOverlayEvent event) {
+    public void onRenderGui(CustomizeGuiOverlayEvent.Chat event) {
         getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(event.getGuiGraphics().pose()), event.getPartialTick().getGameTimeDeltaPartialTick(false));
     }
 

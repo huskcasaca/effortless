@@ -152,13 +152,13 @@ public final class PlatformLoader<S> implements Iterable<PlatformLoader.Loader<S
 
         public S get() {
             if (!isPresent() && !isCompatible()) {
-                throw new ServiceConfigurationError("Cannot find " + clazz.getName() + " using loader " + getLoaderTypeByThread());
+                throw new ServiceConfigurationError("Cannot find " + getLoaderTypeByName() + " class " + clazz.getName() + " using loader " + getLoaderTypeByThread());
             }
             try {
                 return create();
             } catch (Exception e) {
                 e.printStackTrace();
-                throw new ServiceConfigurationError("Cannot find " + clazz.getName() + " using loader " + getLoaderTypeByThread());
+                throw new ServiceConfigurationError("Cannot load " + getLoaderTypeByName() + " class " + clazz.getName() + " using loader " + getLoaderTypeByThread());
             }
         }
 
