@@ -672,6 +672,10 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
     public void showTooltip(UUID id, int priority, Player player, OperationTooltip tooltip) {
         var context = tooltip.context();
 
+        if (player == null) {
+            player = getPlayer();
+        }
+
         if (player.getId() != getPlayer().getId()) {
             if (!getEntrance().getConfigStorage().get().renderConfig().showOtherPlayersBuildTooltips()) {
                 return;

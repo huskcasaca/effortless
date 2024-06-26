@@ -17,6 +17,7 @@ import dev.huskuraft.effortless.api.text.Text;
 public class Effortless implements Entrance {
 
     public static final String MOD_ID = "effortless";
+    public static final String DEFAULT_CHANNEL = "default";
     public static final int PROTOCOL_VERSION = 12;
     public static final Logger LOGGER = LoggerFactory.getLogger(Effortless.class.getName());
 

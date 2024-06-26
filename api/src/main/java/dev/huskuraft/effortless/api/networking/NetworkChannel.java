@@ -15,20 +15,23 @@ import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.platform.PlatformLoader;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 public abstract class NetworkChannel<P extends PacketListener> implements PacketChannel {
 
-    private final ResourceLocation channelId;
+    private final Entrance entrance;
+    private final String name;
     private final Side side;
     private final Map<UUID, Consumer<? extends ResponsiblePacket<?>>> responseMap = Collections.synchronizedMap(new HashMap<>());
     private PacketSet<P> packetSet = new PacketSet<>();
     private Networking networking;
 
-    protected NetworkChannel(ResourceLocation channelId, Side side) {
-        this.channelId = channelId;
+    protected NetworkChannel(Entrance entrance, String name, Side side) {
+        this.entrance = entrance;
+        this.name = name;
         this.side = side;
         this.networking = PlatformLoader.getSingleton();
     }
@@ -45,8 +48,8 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     @Override
     public void sendBuffer(ByteBuf byteBuf, Player player) {
         switch (side) {
-            case CLIENT -> getPlatformChannel().sendToServer(getChannelId(), byteBuf, player);
-            case SERVER -> getPlatformChannel().sendToClient(getChannelId(), byteBuf, player);
+            case CLIENT -> getPlatformChannel().sendToServer(getSideChannelId(side), byteBuf, player);
+            case SERVER -> getPlatformChannel().sendToClient(getSideChannelId(side), byteBuf, player);
         }
     }
 
@@ -65,7 +68,7 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
             packet = createPacket(byteBuf);
             Objects.requireNonNull(packet);
         } catch (Exception e) {
-            throw new RuntimeException("Could not create packet in channel '" + channelId + "'", e);
+            throw new RuntimeException("Could not create packet in channel '" + getSideChannelId(side) + "'", e);
         }
         try {
             var packet1 = packet;
@@ -107,8 +110,15 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
         return Integer.toString(getCompatibilityVersion());
     }
 
+    public final ResourceLocation getSideChannelId(Side side) {
+        return switch (side) {
+            case CLIENT -> ResourceLocation.of(entrance.getId(), name + "_c2s");
+            case SERVER -> ResourceLocation.of(entrance.getId(), name + "_s2c");
+        };
+    }
+
     public final ResourceLocation getChannelId() {
-        return channelId;
+        return ResourceLocation.of("effortless", "default_channel");
     }
 
     private class PacketSet<T extends PacketListener> {
