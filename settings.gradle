@@ -36,52 +36,7 @@ include ':forge'
 include ':neoforge'
 include ':multiplatform'
 
-def fabricFull = [
-    '1-17-1',
-    '1-18',
-    '1-18-1',
-    '1-18-2',
-    '1-19',
-    '1-19-1',
-    '1-19-2',
-    '1-19-3',
-    '1-19-4',
-    '1-20',
-    '1-20-1',
-    '1-20-2',
-    '1-20-3',
-    '1-20-4',
-    '1-20-6',
-    '1-21',
-]
-
-def forgeFull = [
-    '1-17-1',
-    '1-18',
-    '1-18-1',
-    '1-18-2',
-    '1-19',
-    '1-19-1',
-    '1-19-2',
-    '1-19-3',
-    '1-19-4',
-    '1-20',
-    '1-20-1',
-    '1-20-2',
-    '1-20-3',
-    '1-20-4',
-    '1-20-6',
-    '1-21',
-]
-
-def neoforgeFull = [
-    '1-20-2',
-    '1-20-4',
-    '1-20-6',
-    '1-21',
-]
-
-def fabric = [
+[
     '1-17-1',
     '1-18-2',
     '1-19-2',
@@ -91,9 +46,9 @@ def fabric = [
     '1-20-4',
     '1-20-6',
     '1-21',
-]
+].forEach { port -> include ":fabric:mc-${port}" }
 
-def forge = [
+[
     '1-17-1',
     '1-18-2',
     '1-19-2',
@@ -103,28 +58,23 @@ def forge = [
     '1-20-4',
     '1-20-6',
     '1-21',
-]
+].forEach { port -> include ":forge:mc-${port}" }
 
-def neoforge = [
+[
     '1-20-2',
     '1-20-4',
     '1-20-6',
     '1-21',
-]
+].forEach { port -> include ":neoforge:mc-${port}" }
 
-switch (System.getenv("EFFORTLESS_PORT_TYPE")) {
-    case 'full': {
-        fabricFull.forEach { port -> include ":fabric:mc-${port}" }
-        forgeFull.forEach { port -> include ":forge:mc-${port}" }
-        neoforgeFull.forEach { port -> include ":neoforge:mc-${port}" }
-        (fabricFull + forgeFull + neoforgeFull).forEach { port -> include ":multiplatform:mc-${port}" }
-        break
-    }
-    default: {
-        fabric.forEach { port -> include ":fabric:mc-${port}" }
-        forge.forEach { port -> include ":forge:mc-${port}" }
-        neoforge.forEach { port -> include ":neoforge:mc-${port}" }
-        (fabric + forge + neoforge).forEach { port -> include ":multiplatform:mc-${port}" }
-        break
-    }
-}
+[
+    '1-17-1',
+    '1-18-2',
+    '1-19-2',
+    '1-19-4',
+    '1-20-1',
+    '1-20-2',
+    '1-20-4',
+    '1-20-6',
+    '1-21',
+].forEach { port -> include ":multiplatform:mc-${port}" }
