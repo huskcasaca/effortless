@@ -18,45 +18,21 @@ public class FabricNetworking implements Networking {
 
     @Override
     public void registerClientReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
-        ClientNetworking.registerReceiver(receiver, Networking.getChannelId());
+        ClientPlayNetworking.registerGlobalReceiver(channelId.reference(), (client, handler, buf, responseSender) -> receiver.receiveBuffer(new NetByteBuf(buf), MinecraftPlayer.ofNullable(null)));
     }
 
     @Override
     public void registerServerReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
-        ServerNetworking.registerReceiver(receiver, Networking.getChannelId());
+        ServerPlayNetworking.registerGlobalReceiver(channelId.reference(), (server, player, handler, buf, responseSender) -> receiver.receiveBuffer(new NetByteBuf(buf), MinecraftPlayer.ofNullable(player)));
     }
 
     @Override
     public void sendToClient(ResourceLocation channelId, ByteBuf byteBuf, Player player) {
-        ServerNetworking.send(byteBuf, player, Networking.getChannelId());
+        ServerPlayNetworking.send(player.reference(), channelId.reference(), new FriendlyByteBuf(byteBuf));
     }
 
     public void sendToServer(ResourceLocation channelId, ByteBuf byteBuf, Player player) {
-        ClientNetworking.send(byteBuf, Networking.getChannelId());
-    }
-
-    static class ClientNetworking {
-
-        private static void registerReceiver(ByteBufReceiver receiver, ResourceLocation channelId) {
-            ClientPlayNetworking.registerGlobalReceiver(channelId.reference(), (client, handler, buf, responseSender) -> receiver.receiveBuffer(new NetByteBuf(buf), MinecraftPlayer.ofNullable(client.player)));
-        }
-
-        private static void send(ByteBuf byteBuf, ResourceLocation channelId) {
-            ClientPlayNetworking.send(channelId.reference(), new FriendlyByteBuf(byteBuf));
-        }
-
-    }
-
-    static class ServerNetworking {
-
-        private static void registerReceiver(ByteBufReceiver receiver, ResourceLocation channelId) {
-            ServerPlayNetworking.registerGlobalReceiver(channelId.reference(), (server, player, handler, buf, responseSender) -> receiver.receiveBuffer(new NetByteBuf(buf), MinecraftPlayer.ofNullable(player)));
-        }
-
-        private static void send(ByteBuf byteBuf, Player player, ResourceLocation channelId) {
-            ServerPlayNetworking.send(player.reference(), channelId.reference(), new FriendlyByteBuf(byteBuf));
-        }
-
+        ClientPlayNetworking.send(channelId.reference(), new FriendlyByteBuf(byteBuf));
     }
 
 }

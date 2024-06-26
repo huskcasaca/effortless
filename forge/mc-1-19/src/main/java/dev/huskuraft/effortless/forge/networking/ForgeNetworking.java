@@ -20,10 +20,8 @@ import net.minecraftforge.network.event.EventNetworkChannel;
 @AutoService(Networking.class)
 public class ForgeNetworking implements Networking {
 
-    private EventNetworkChannel CHANNEL;
-
-    private void register(ResourceLocation channelId) {
-        CHANNEL = NetworkRegistry.ChannelBuilder.named(channelId.reference())
+    private EventNetworkChannel register(ResourceLocation channelId) {
+        return NetworkRegistry.ChannelBuilder.named(channelId.reference())
                 .networkProtocolVersion(NetworkRegistry.ACCEPTVANILLA::toString)
                 .clientAcceptedVersions(NetworkRegistry.ACCEPTVANILLA::equals)
                 .serverAcceptedVersions(NetworkRegistry.ACCEPTVANILLA::equals)
@@ -32,8 +30,7 @@ public class ForgeNetworking implements Networking {
 
     @Override
     public void registerClientReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
-        if (CHANNEL == null) register(channelId);
-        CHANNEL.addListener(event -> {
+        register(channelId).addListener(event -> {
             if (event.getPayload() != null && event.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
                 receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(event.getSource().get().getSender()));
             }
@@ -42,8 +39,7 @@ public class ForgeNetworking implements Networking {
 
     @Override
     public void registerServerReceiver(ResourceLocation channelId, ByteBufReceiver receiver) {
-        if (CHANNEL == null) register(channelId);
-        CHANNEL.addListener(event -> {
+        register(channelId).addListener(event -> {
             if (event.getPayload() != null && event.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
                 receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(event.getSource().get().getSender()));
             }
