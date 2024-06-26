@@ -47,11 +47,6 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
     }
 
-    private void onRegisterNetwork(NetworkRegistry registry) {
-        getPlatformChannel().registerClientReceiver(getSideChannelId(Side.SERVER), this);
-
-    }
-
     private EffortlessClient getEntrance() {
         return entrance;
     }

@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.forge.events;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.events.impl.EventRegistry;
+import dev.huskuraft.effortless.forge.networking.ForgeNetworking;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
@@ -28,8 +29,7 @@ public class ForgeEventRegistry extends EventRegistry {
 
     @SubscribeEvent
     public void onCommonSetup(FMLCommonSetupEvent event) {
-        getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
-        });
+        getRegisterNetworkEvent().invoker().onRegisterNetwork(ForgeNetworking::register);
     }
 
     @SubscribeEvent

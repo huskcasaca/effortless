@@ -1,7 +1,9 @@
 package dev.huskuraft.effortless.api.networking;
 
+import dev.huskuraft.effortless.api.core.ResourceLocation;
+
 public interface NetworkRegistry {
 
-    void register(PacketChannel receiver);
+    ByteBufSender register(ResourceLocation channelId, Side side, ByteBufReceiver receiver);
 
 }

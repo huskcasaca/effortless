@@ -27,17 +27,11 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     private final Side side;
     private final Map<UUID, Consumer<? extends ResponsiblePacket<?>>> responseMap = Collections.synchronizedMap(new HashMap<>());
     private PacketSet<P> packetSet = new PacketSet<>();
-    private Networking networking;
 
     protected NetworkChannel(Entrance entrance, String name, Side side) {
         this.entrance = entrance;
         this.name = name;
         this.side = side;
-        this.networking = PlatformLoader.getSingleton();
-    }
-
-    public Networking getPlatformChannel() {
-        return networking;
     }
 
     @Override
@@ -47,10 +41,13 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
 
     @Override
     public void sendBuffer(ByteBuf byteBuf, Player player) {
-        switch (side) {
-            case CLIENT -> getPlatformChannel().sendToServer(getSideChannelId(side), byteBuf, player);
-            case SERVER -> getPlatformChannel().sendToClient(getSideChannelId(side), byteBuf, player);
-        }
+        sender.sendBuffer(byteBuf, player);
+    }
+
+    private ByteBufSender sender;
+
+    public void onRegisterNetwork(NetworkRegistry registry) {
+        this.sender = registry.register(getChannelId(), side, this);
     }
 
     public <T extends ResponsiblePacket<?>> void sendPacket(T packet, Consumer<T> callback) {
@@ -68,7 +65,8 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
             packet = createPacket(byteBuf);
             Objects.requireNonNull(packet);
         } catch (Exception e) {
-            throw new RuntimeException("Could not create packet in channel '" + getSideChannelId(side) + "'", e);
+            e.printStackTrace();
+            throw new RuntimeException("Could not create packet in channel '" + getChannelId() + "'", e);
         }
         try {
             var packet1 = packet;
@@ -106,19 +104,8 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
 
     public abstract int getCompatibilityVersion();
 
-    public String getCompatibilityVersionStr() {
-        return Integer.toString(getCompatibilityVersion());
-    }
-
-    public final ResourceLocation getSideChannelId(Side side) {
-        return switch (side) {
-            case CLIENT -> ResourceLocation.of(entrance.getId(), name + "_c2s");
-            case SERVER -> ResourceLocation.of(entrance.getId(), name + "_s2c");
-        };
-    }
-
     public final ResourceLocation getChannelId() {
-        return ResourceLocation.of("effortless", "default_channel");
+        return ResourceLocation.of(entrance.getId(), name);
     }
 
     private class PacketSet<T extends PacketListener> {
