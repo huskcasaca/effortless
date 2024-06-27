@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.renderer.tooltip;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +21,6 @@ import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.renderer.Renderer;
 import dev.huskuraft.effortless.api.text.Text;
-import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 
 public class TooltipRenderer {
 
@@ -38,38 +36,15 @@ public class TooltipRenderer {
         return (EffortlessClient) entrance;
     }
 
-//    public void showMessages(Object id, int priority, List<Text> texts) {
-//        showEntry(id, priority, new ComponentsEntry(texts));
-//    }
-//
-//    public void showMessagePairs(Object id, int priority, List<Tuple2<Text, Text>> texts) {
-//        showEntry(id, priority, new ComponentPairEntry(texts));
-//    }
-//
-//    public void showTitledItems(Object id, int priority, Text title, List<ItemStack> groups) {
-//        showEntry(id, priority, new TitledItemsEntry(title, groups));
-//    }
-//
-//    public void showItems(Object id, int priority, Collection<ItemStack> items) {
-//        showEntry(id, priority, new ItemsEntry(items));
-//    }
-//
-//    @SuppressWarnings("unchecked")
-//    public void showEmptyEntry(Object id, int priority) {
-//        showEntry(id, priority, new EmptyEntry());
-//    }
-
+    @SuppressWarnings("unchecked")
     public void showGroupEntry(Object id, int priority, List<Object> entry, boolean immediate) {
         var entries = entry.stream().map(object -> {
             if (object instanceof List<?> list && !list.isEmpty()) {
                 if (list.get(0) instanceof Text text) {
                     return new ComponentsEntry(Collections.singletonList(text));
-                } else if (list.get(0) instanceof Tuple2<?, ?> pair) {
-                    if (pair.value1() instanceof Text && pair.value2() instanceof Text) {
+                } else if (list.get(0) instanceof Tuple2<?, ?> tuple2) {
+                    if (tuple2.value1() instanceof Text && tuple2.value2() instanceof Text) {
                         return new ComponentPairEntry((Collection<Tuple2<Text, Text>>) list);
-                    }
-                    if (pair.value1() instanceof ItemStack && pair.value2() instanceof Integer color) {
-                        return new ItemsEntry((Collection<ItemStack>) list, color);
                     }
                 } else if (list.get(0) instanceof ItemStack) {
                     return new ItemsEntry((Collection<ItemStack>) list);
@@ -78,6 +53,10 @@ public class TooltipRenderer {
                 return new ComponentsEntry(Collections.singletonList(text));
             } else if (object instanceof ResourceLocation icon) {
                 return new IconEntry(icon);
+            } else if (object instanceof Tuple2<?,?> tuple2 && tuple2.value1() instanceof List<?> list && tuple2.value2() instanceof Integer color) {
+                if (!list.isEmpty() && list.get(0) instanceof ItemStack) {
+                    return new ItemsEntry((Collection<ItemStack>) list, color);
+                }
             }
             return null;
         }).filter(Objects::nonNull).toList();
