@@ -15,22 +15,23 @@ import javax.annotation.Nullable;
 
 import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
+import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.platform.PlatformLoader;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 public abstract class NetworkChannel<P extends PacketListener> implements PacketChannel {
 
-    private final ResourceLocation channelId;
+    private final Entrance entrance;
+    private final String name;
     private final Side side;
     private final Map<UUID, Consumer<? extends ResponsiblePacket<?>>> responseMap = Collections.synchronizedMap(new HashMap<>());
     private PacketSet<P> packetSet = new PacketSet<>();
 
-    protected NetworkChannel(ResourceLocation channelId, Side side) {
-        this.channelId = channelId;
+    protected NetworkChannel(Entrance entrance, String name, Side side) {
+        this.entrance = entrance;
+        this.name = name;
         this.side = side;
-    }
-
-    public Networking getPlatformChannel() {
-        return PlatformLoader.getSingleton();
     }
 
     @Override
@@ -39,11 +40,14 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     }
 
     @Override
-    public void sendBuffer(NetByteBuf byteBuf, Player player) {
-        switch (side) {
-            case CLIENT -> getPlatformChannel().sendToServer(byteBuf, player);
-            case SERVER -> getPlatformChannel().sendToClient(byteBuf, player);
-        }
+    public void sendBuffer(ByteBuf byteBuf, Player player) {
+        sender.sendBuffer(byteBuf, player);
+    }
+
+    private ByteBufSender sender;
+
+    public void onRegisterNetwork(NetworkRegistry registry) {
+        this.sender = registry.register(getChannelId(), side, this);
     }
 
     public <T extends ResponsiblePacket<?>> void sendPacket(T packet, Consumer<T> callback) {
@@ -55,13 +59,14 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     public abstract void receivePacket(Packet packet, Player player);
 
     @Override
-    public void receiveBuffer(NetByteBuf byteBuf, Player player) {
+    public void receiveBuffer(ByteBuf byteBuf, Player player) {
         var packet = (Packet<P>) null;
         try {
             packet = createPacket(byteBuf);
             Objects.requireNonNull(packet);
         } catch (Exception e) {
-            throw new RuntimeException("Could not create packet in channel '" + channelId + "'", e);
+            e.printStackTrace();
+            throw new RuntimeException("Could not create packet in channel '" + getChannelId() + "'", e);
         }
         try {
             var packet1 = packet;
@@ -77,11 +82,11 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
     }
 
     @SuppressWarnings("unchecked")
-    public Packet<P> createPacket(NetByteBuf byteBuf) {
+    public Packet<P> createPacket(ByteBuf byteBuf) {
         return (Packet<P>) packetSet.createPacket(byteBuf);
     }
 
-    public NetByteBuf createBuffer(Packet<P> packet) {
+    public ByteBuf createBuffer(Packet<P> packet) {
         return packetSet.createBuffer(packet);
     }
 
@@ -99,12 +104,8 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
 
     public abstract int getCompatibilityVersion();
 
-    public String getCompatibilityVersionStr() {
-        return Integer.toString(getCompatibilityVersion());
-    }
-
     public final ResourceLocation getChannelId() {
-        return channelId;
+        return ResourceLocation.of(entrance.getId(), name);
     }
 
     private class PacketSet<T extends PacketListener> {
@@ -128,23 +129,23 @@ public abstract class NetworkChannel<P extends PacketListener> implements Packet
             return classToId.getOrDefault(clazz, null);
         }
 
-        public NetByteBuf createBuffer(Packet<T> packet) {
+        public ByteBuf createBuffer(Packet<T> packet) {
             var id = getId(packet.getClass());
             if (id == null) {
                 throw new IllegalArgumentException("Packet " + packet.getClass() + " is not registered");
             }
-            var buffer = NetByteBuf.newBuffer();
+            var buffer = Unpooled.buffer();
             var serializer = (NetByteBufSerializer<Packet<T>>) idToDeserializer.get(getId(packet.getClass()));
             buffer.writeInt(id);
-            serializer.write(buffer, packet);
+            serializer.write(new NetByteBuf(buffer), packet);
             return buffer;
         }
 
         @Nullable
-        public Packet<?> createPacket(NetByteBuf byteBuf) {
+        public Packet<?> createPacket(ByteBuf byteBuf) {
             var id = byteBuf.readInt();
             var serializer = idToDeserializer.get(id);
-            if (serializer != null) return serializer.read(byteBuf);
+            if (serializer != null) return serializer.read(new NetByteBuf(byteBuf));
             return null;
         }
     }

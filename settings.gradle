@@ -11,6 +11,10 @@ pluginManagement {
             url = uri('https://maven.minecraftforge.net/')
         }
         maven {
+            name = 'NeoForge'
+            url = 'https://maven.neoforged.net/releases'
+        }
+        maven {
             name = 'Sponge Snapshots'
             url = uri('https://repo.spongepowered.org/repository/maven-public/')
         }
@@ -27,26 +31,12 @@ includeBuild 'fuse-gradle-plugin'
 include ':api'
 include ':common'
 
-def fullPorts = [
-    '1-17-1',
-    '1-18',
-    '1-18-1',
-    '1-18-2',
-    '1-19',
-    '1-19-1',
-    '1-19-2',
-    '1-19-3',
-    '1-19-4',
-    '1-20',
-    '1-20-1',
-    '1-20-2',
-    '1-20-3',
-    '1-20-4',
-    '1-20-6',
-    '1-21',
-]
+include ':fabric'
+include ':forge'
+include ':neoforge'
+include ':multiplatform'
 
-def activePorts = [
+[
     '1-17-1',
     '1-18-2',
     '1-19-2',
@@ -56,24 +46,35 @@ def activePorts = [
     '1-20-4',
     '1-20-6',
     '1-21',
-]
+].forEach { port -> include ":fabric:mc-${port}" }
 
-def devPorts = [
+[
+    '1-17-1',
+    '1-18-2',
+    '1-19-2',
+    '1-19-4',
     '1-20-1',
+    '1-20-2',
+    '1-20-4',
     '1-20-6',
     '1-21',
-]
+].forEach { port -> include ":forge:mc-${port}" }
 
-['fabric', 'forge', 'multiplatform'].forEach { platform ->
-    include "$platform"
-    def ports
-    switch (System.getenv("EFFORTLESS_PORT_TYPE")) {
-        case 'full': ports = fullPorts; break
-        case 'active': ports = activePorts; break
-        case 'dev': ports = devPorts; break
-        default: ports = fullPorts
-    }
-    devPorts.each { port ->
-        include ":${platform}:mc-${port}"
-    }
-}
+[
+    '1-20-2',
+    '1-20-4',
+    '1-20-6',
+    '1-21',
+].forEach { port -> include ":neoforge:mc-${port}" }
+
+[
+    '1-17-1',
+    '1-18-2',
+    '1-19-2',
+    '1-19-4',
+    '1-20-1',
+    '1-20-2',
+    '1-20-4',
+    '1-20-6',
+    '1-21',
+].forEach { port -> include ":multiplatform:mc-${port}" }

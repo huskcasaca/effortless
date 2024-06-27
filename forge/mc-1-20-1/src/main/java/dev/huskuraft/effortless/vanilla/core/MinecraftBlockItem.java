@@ -41,21 +41,6 @@ public record MinecraftBlockItem(net.minecraft.world.item.BlockItem refs) implem
     }
 
     @Override
-    public boolean setBlockInWorld(World world, Player player, BlockInteraction blockInteraction, BlockState blockState) {
-        return refs.placeBlock(new BlockPlaceContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), player.getItemStack(blockInteraction.getHand()).reference(), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)), blockState.reference());
-    }
-
-    @Override
-    public boolean updateBlockEntityTag(World world, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
-        return refs.updateCustomBlockEntityTag(MinecraftConvertor.toPlatformBlockPosition(blockPosition), world.reference(), null, itemStack.reference(), blockState.reference());
-    }
-
-    @Override
-    public BlockState updateBlockStateFromTag(World world, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
-        return MinecraftBlockState.ofNullable(refs.updateBlockStateFromTag(MinecraftConvertor.toPlatformBlockPosition(blockPosition), world.reference(), itemStack.reference(), blockState.reference()));
-    }
-
-    @Override
     public boolean isCorrectToolForDrops(BlockState blockState) {
         return new MinecraftItem(refs).isCorrectToolForDrops(blockState);
     }

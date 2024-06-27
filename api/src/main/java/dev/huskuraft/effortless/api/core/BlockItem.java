@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.api.core;
 
-
 public interface BlockItem extends Item {
 
     Block getBlock();
@@ -13,9 +12,10 @@ public interface BlockItem extends Item {
         return world.setBlockAndUpdate(blockInteraction.getBlockPosition(), blockState);
     }
 
-    boolean setBlockInWorld(World world, Player player, BlockInteraction blockInteraction, BlockState blockState);
+    // FIXME: 25/6/24
+    default boolean updateBlockEntityTag(World world, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack) {
+        return true;
+    }
 
-    boolean updateBlockEntityTag(World world, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack);
 
-    BlockState updateBlockStateFromTag(World world, BlockPosition blockPosition, BlockState blockState, ItemStack itemStack);
 }

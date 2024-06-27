@@ -1,12 +1,14 @@
 package dev.huskuraft.effortless;
 
+import dev.huskuraft.effortless.api.platform.PlatformLoader;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.auto.service.AutoService;
 
-import dev.huskuraft.effortless.api.events.CommonEventRegistry;
-import dev.huskuraft.effortless.api.events.EventRegister;
+import dev.huskuraft.effortless.api.events.impl.EventRegistry;
+import dev.huskuraft.effortless.api.events.EventHolder;
 import dev.huskuraft.effortless.api.platform.Entrance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
@@ -15,10 +17,11 @@ import dev.huskuraft.effortless.api.text.Text;
 public class Effortless implements Entrance {
 
     public static final String MOD_ID = "effortless";
+    public static final String DEFAULT_CHANNEL = "default";
     public static final int PROTOCOL_VERSION = 12;
     public static final Logger LOGGER = LoggerFactory.getLogger(Effortless.class.getName());
 
-    private final CommonEventRegistry commonEventRegistry = (CommonEventRegistry) EventRegister.getCommon();
+    private final EventRegistry eventRegistry = PlatformLoader.getSingleton(EventRegistry.class);
     private final EffortlessNetworkChannel networkChannel = new EffortlessNetworkChannel(this);
     private final EffortlessStructureBuilder structureBuilder = new EffortlessStructureBuilder(this);
     private final EffortlessConfigStorage sessionConfigStorage = new EffortlessConfigStorage(this);
@@ -37,8 +40,8 @@ public class Effortless implements Entrance {
         return msg;
     }
 
-    public CommonEventRegistry getEventRegistry() {
-        return commonEventRegistry;
+    public EventRegistry getEventRegistry() {
+        return eventRegistry;
     }
 
     public EffortlessNetworkChannel getChannel() {

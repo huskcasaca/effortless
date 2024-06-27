@@ -6,7 +6,6 @@ import dev.huskuraft.effortless.api.networking.NetworkChannel;
 import dev.huskuraft.effortless.api.networking.NetworkRegistry;
 import dev.huskuraft.effortless.api.networking.Packet;
 import dev.huskuraft.effortless.api.networking.Side;
-import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.networking.packets.AllPacketListener;
 import dev.huskuraft.effortless.networking.packets.player.PlayerBuildPacket;
@@ -21,17 +20,16 @@ import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 
 public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPacketListener> {
 
-    private static final ResourceLocation DEFAULT_CHANNEL = ResourceLocation.of(Effortless.MOD_ID, "default_channel");
     private static final int COMPATIBILITY_VERSION = Effortless.PROTOCOL_VERSION;
     private final EffortlessClient entrance;
     private final AllPacketListener listener;
 
     public EffortlessClientNetworkChannel(EffortlessClient entrance) {
-        this(entrance, DEFAULT_CHANNEL);
+        this(entrance, Effortless.DEFAULT_CHANNEL);
     }
 
-    public EffortlessClientNetworkChannel(EffortlessClient entrance, ResourceLocation channelId) {
-        super(channelId, Side.CLIENT);
+    public EffortlessClientNetworkChannel(EffortlessClient entrance, String name) {
+        super(entrance, name, Side.CLIENT);
         this.entrance = entrance;
         this.listener = new ClientPacketListener();
 
@@ -47,11 +45,6 @@ public final class EffortlessClientNetworkChannel extends NetworkChannel<AllPack
         registerPacket(PlayerSnapshotSharePacket.class, new PlayerSnapshotSharePacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
-    }
-
-    private void onRegisterNetwork(NetworkRegistry registry) {
-        getPlatformChannel().registerClientReceiver(this);
-
     }
 
     private EffortlessClient getEntrance() {

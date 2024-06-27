@@ -1,6 +1,6 @@
 package dev.huskuraft.effortless.api.platform;
 
-import dev.huskuraft.effortless.api.events.ClientEventRegistry;
+import dev.huskuraft.effortless.api.events.impl.ClientEventRegistry;
 
 public interface ClientEntrance extends Entrance {
 

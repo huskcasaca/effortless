@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.fabric.events;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.InteractionType;
-import dev.huskuraft.effortless.api.events.ClientEventRegistry;
+import dev.huskuraft.effortless.api.events.impl.ClientEventRegistry;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
 import dev.huskuraft.effortless.fabric.events.common.ClientRenderEvents;
@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.fabric.events.common.ClientShadersEvents;
 import dev.huskuraft.effortless.fabric.events.common.InteractionInputEvents;
 import dev.huskuraft.effortless.fabric.events.common.KeyboardInputEvents;
 import dev.huskuraft.effortless.fabric.events.common.PlatformLifecycleEvents;
+import dev.huskuraft.effortless.fabric.networking.FabricNetworking;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
@@ -27,8 +28,7 @@ public class FabricClientEventRegistry extends ClientEventRegistry {
     public FabricClientEventRegistry() {
         PlatformLifecycleEvents.CLIENT_START.register(() -> {
             getClientStartEvent().invoker().onClientStart(new MinecraftClient(Minecraft.getInstance()));
-            getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
-            });
+            getRegisterNetworkEvent().invoker().onRegisterNetwork(FabricNetworking::register);
 
             getRegisterKeysEvent().invoker().onRegisterKeys(key1 -> {
                 KeyBindingHelper.registerKeyBinding(key1.getKeyBinding().reference());

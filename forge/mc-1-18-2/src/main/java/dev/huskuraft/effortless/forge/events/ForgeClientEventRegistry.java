@@ -3,9 +3,10 @@ package dev.huskuraft.effortless.forge.events;
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.InteractionType;
-import dev.huskuraft.effortless.api.events.ClientEventRegistry;
+import dev.huskuraft.effortless.api.events.impl.ClientEventRegistry;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
+import dev.huskuraft.effortless.forge.networking.ForgeNetworking;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
@@ -36,8 +37,7 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
     @SubscribeEvent
     public void onClientSetup(FMLClientSetupEvent event) {
         getClientStartEvent().invoker().onClientStart(new MinecraftClient(Minecraft.getInstance()));
-        getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
-        });
+        getRegisterNetworkEvent().invoker().onRegisterNetwork(ForgeNetworking::register);
         getRegisterKeysEvent().invoker().onRegisterKeys(key -> {
             ClientRegistry.registerKeyBinding(key.getKeyBinding().reference());
         });
@@ -64,9 +64,7 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             return;
         }
-        var renderer = new MinecraftRenderer(event.getPoseStack());
-        var partialTick = event.getPartialTick();
-        getRenderWorldEvent().invoker().onRenderWorld(renderer, partialTick);
+        getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(event.getPoseStack()), event.getPartialTick());
     }
 
     @SubscribeEvent

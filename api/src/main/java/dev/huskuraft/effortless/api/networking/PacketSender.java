@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import dev.huskuraft.effortless.api.core.Player;
 
-public interface PacketSender extends NetByteBufSender {
+public interface PacketSender extends ByteBufSender {
 
     void sendPacket(Packet packet, Player player);
 

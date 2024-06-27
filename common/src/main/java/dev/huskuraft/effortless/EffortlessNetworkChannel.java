@@ -22,17 +22,16 @@ import dev.huskuraft.effortless.networking.packets.session.SessionPacket;
 
 public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketListener> {
 
-    private static final ResourceLocation DEFAULT_CHANNEL = ResourceLocation.of(Effortless.MOD_ID, "default_channel");
     private static final int COMPATIBILITY_VERSION = Effortless.PROTOCOL_VERSION;
     private final Effortless entrance;
     private final AllPacketListener listener;
 
     public EffortlessNetworkChannel(Effortless entrance) {
-        this(entrance, DEFAULT_CHANNEL);
+        this(entrance, Effortless.DEFAULT_CHANNEL);
     }
 
-    public EffortlessNetworkChannel(Effortless entrance, ResourceLocation channelId) {
-        super(channelId, Side.SERVER);
+    public EffortlessNetworkChannel(Effortless entrance, String name) {
+        super(entrance, name, Side.SERVER);
         this.entrance = entrance;
         this.listener = new ServerPacketListener();
 
@@ -48,11 +47,6 @@ public final class EffortlessNetworkChannel extends NetworkChannel<AllPacketList
         registerPacket(PlayerSnapshotSharePacket.class, new PlayerSnapshotSharePacket.Serializer());
 
         getEntrance().getEventRegistry().getRegisterNetworkEvent().register(this::onRegisterNetwork);
-    }
-
-    private void onRegisterNetwork(NetworkRegistry registry) {
-        getPlatformChannel().registerServerReceiver(this);
-
     }
 
     public Effortless getEntrance() {
