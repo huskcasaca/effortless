@@ -5,7 +5,6 @@ import com.google.auto.service.AutoService;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.ByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.ByteBufSender;
-import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.Networking;
 import dev.huskuraft.effortless.api.networking.Side;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
@@ -31,7 +30,7 @@ public class FabricNetworking implements Networking {
         var codec = new StreamCodec<RegistryFriendlyByteBuf, Payload>() {
             @Override
             public Payload decode(RegistryFriendlyByteBuf byteBuf) {
-                return new Payload(channelId, new NetByteBuf(byteBuf.readBytes(byteBuf.readableBytes())));
+                return new Payload(channelId, byteBuf.readBytes(byteBuf.readableBytes()));
             }
             @Override
             public void encode(RegistryFriendlyByteBuf byteBuf, Payload payload) {

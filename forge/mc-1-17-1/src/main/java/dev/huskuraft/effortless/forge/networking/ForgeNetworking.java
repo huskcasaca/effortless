@@ -20,7 +20,6 @@ import com.google.auto.service.AutoService;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.ByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.ByteBufSender;
-import dev.huskuraft.effortless.api.networking.NetByteBuf;
 import dev.huskuraft.effortless.api.networking.Networking;
 import dev.huskuraft.effortless.api.networking.Side;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
@@ -46,13 +45,13 @@ public class ForgeNetworking implements Networking {
         switch (side) {
             case CLIENT -> register(channelId, event -> {
                 if (event.getPayload() != null && event.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_CLIENT)) {
-                    receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(event.getSource().get().getSender()));
+                    receiver.receiveBuffer(event.getPayload(), MinecraftPlayer.ofNullable(event.getSource().get().getSender()));
                     event.getSource().get().setPacketHandled(true);
                 }
             });
             case SERVER -> register(channelId, event -> {
                 if (event.getPayload() != null && event.getSource().get().getDirection().equals(NetworkDirection.PLAY_TO_SERVER)) {
-                    receiver.receiveBuffer(new NetByteBuf(event.getPayload()), MinecraftPlayer.ofNullable(event.getSource().get().getSender()));
+                    receiver.receiveBuffer(event.getPayload(), MinecraftPlayer.ofNullable(event.getSource().get().getSender()));
                     event.getSource().get().setPacketHandled(true);
                 }
             });

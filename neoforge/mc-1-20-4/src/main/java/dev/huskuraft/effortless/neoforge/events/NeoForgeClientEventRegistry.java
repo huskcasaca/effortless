@@ -6,6 +6,7 @@ import dev.huskuraft.effortless.api.core.InteractionType;
 import dev.huskuraft.effortless.api.events.impl.ClientEventRegistry;
 import dev.huskuraft.effortless.api.events.lifecycle.ClientTick;
 import dev.huskuraft.effortless.api.input.InputKey;
+import dev.huskuraft.effortless.neoforge.networking.NeoForgeNetworking;
 import dev.huskuraft.effortless.neoforge.platform.NeoForgeInitializer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftConvertor;
 import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
@@ -41,8 +42,7 @@ public class NeoForgeClientEventRegistry extends ClientEventRegistry {
     }
 
     public void onRegisterNetwork(RegisterPayloadHandlerEvent event) {
-        getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
-        });
+        getRegisterNetworkEvent().invoker().onRegisterNetwork(NeoForgeNetworking::register);
     }
 
     public void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {

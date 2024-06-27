@@ -5,6 +5,7 @@ import com.google.auto.service.AutoService;
 import dev.huskuraft.effortless.api.events.impl.EventRegistry;
 import dev.huskuraft.effortless.fabric.events.common.PlatformLifecycleEvents;
 import dev.huskuraft.effortless.fabric.events.common.ServerPlayerEvents;
+import dev.huskuraft.effortless.fabric.networking.FabricNetworking;
 import dev.huskuraft.effortless.vanilla.core.MinecraftPlayer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftServer;
 import dev.huskuraft.effortless.vanilla.core.MinecraftWorld;
@@ -16,8 +17,7 @@ public class FabricEventRegistry extends EventRegistry {
 
     public FabricEventRegistry() {
         PlatformLifecycleEvents.COMMON_START.register(() -> {
-            getRegisterNetworkEvent().invoker().onRegisterNetwork(receiver -> {
-            });
+            getRegisterNetworkEvent().invoker().onRegisterNetwork(FabricNetworking::register);
         });
 
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
