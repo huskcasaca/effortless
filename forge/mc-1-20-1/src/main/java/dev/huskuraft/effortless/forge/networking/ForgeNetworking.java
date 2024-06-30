@@ -29,9 +29,9 @@ public class ForgeNetworking implements Networking {
     private static void register(ResourceLocation channelId, Consumer<NetworkEvent> eventConsumer) {
         MAP.computeIfAbsent(channelId, id -> {
             return NetworkRegistry.ChannelBuilder.named(channelId.reference())
-                    .networkProtocolVersion(NetworkRegistry.ACCEPTVANILLA::toString)
-                    .clientAcceptedVersions(NetworkRegistry.ACCEPTVANILLA::equals)
-                    .serverAcceptedVersions(NetworkRegistry.ACCEPTVANILLA::equals)
+                    .networkProtocolVersion(() -> "0")
+                    .clientAcceptedVersions(s -> true)
+                    .serverAcceptedVersions(s -> true)
                     .eventNetworkChannel();
         }).addListener(eventConsumer);
     }

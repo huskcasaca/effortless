@@ -28,9 +28,7 @@ public class ForgeNetworking implements Networking {
     private static void register(ResourceLocation channelId, Consumer<CustomPayloadEvent> eventConsumer) {
         MAP.computeIfAbsent(channelId, id -> {
             return ChannelBuilder.named((net.minecraft.resources.ResourceLocation) id.reference())
-                    .acceptedVersions(Channel.VersionTest.ACCEPT_VANILLA)
-                    .clientAcceptedVersions(Channel.VersionTest.ACCEPT_VANILLA)
-                    .serverAcceptedVersions(Channel.VersionTest.ACCEPT_VANILLA)
+                    .acceptedVersions((status, i) -> true)
                     .eventNetworkChannel();
         }).addListener(eventConsumer);
     }
@@ -39,13 +37,13 @@ public class ForgeNetworking implements Networking {
         switch (side) {
             case CLIENT -> register(channelId, event -> {
                 if (event.getPayload() != null && event.getSource().isClientSide()) {
-                    receiver.receiveBuffer(event.getPayload(), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
+                    receiver.receiveBuffer(event.getPayload(), MinecraftPlayer.ofNullable(event.getSource().getSender()));
                     event.getSource().setPacketHandled(true);
                 }
             });
             case SERVER -> register(channelId, event -> {
                 if (event.getPayload() != null && event.getSource().isServerSide()) {
-                    receiver.receiveBuffer(event.getPayload(), MinecraftPlayer.ofNullable(Minecraft.getInstance().player));
+                    receiver.receiveBuffer(event.getPayload(), MinecraftPlayer.ofNullable(event.getSource().getSender()));
                     event.getSource().setPacketHandled(true);
                 }
             });
