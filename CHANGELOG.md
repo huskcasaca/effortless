@@ -2,6 +2,14 @@
 
 ----------
 
+### 3.1.0
+
+* Port to 1.20.6 ([#157](https://github.com/huskcasaca/effortless/pull/157))
+* Port to 1.21 ([#158](https://github.com/huskcasaca/effortless/pull/158))
+* Port to NeoForge and Minecraft 1.21 ([#159](https://github.com/huskcasaca/effortless/pull/159))
+
+----------
+
 ### 3.0.0
 
 * Add passive mode ([#118](https://github.com/huskcasaca/effortless/pull/118))
