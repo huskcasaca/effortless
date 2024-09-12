@@ -19,7 +19,7 @@ public class ModSerializer implements NetByteBufSerializer<Mod> {
     public void write(NetByteBuf byteBuf, Mod mod) {
         byteBuf.writeNullable(mod.getId(), NetByteBuf::writeString);
         byteBuf.writeNullable(mod.getVersionStr(), NetByteBuf::writeString);
-        byteBuf.writeNullable(mod.getDescription(), NetByteBuf::writeString);
+        byteBuf.writeNullable(null, NetByteBuf::writeString);
         byteBuf.writeNullable(mod.getName(), NetByteBuf::writeString);
     }
 }
