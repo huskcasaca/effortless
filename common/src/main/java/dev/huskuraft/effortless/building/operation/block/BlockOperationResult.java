@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import javax.annotation.Nullable;
 
+import dev.huskuraft.effortless.Effortless;
 import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.tag.RecordTag;
@@ -103,7 +104,11 @@ public abstract class BlockOperationResult extends OperationResult {
             return null;
         }
         if (entityTag != null) {
-            blockEntity.setTag(entityTag);
+            try {
+                blockEntity.setTag(entityTag);
+            } catch (Exception e) {
+                Effortless.LOGGER.warn("Fail to set block entity tag for: {}", blockEntity.refs());
+            }
         }
         return blockEntity;
     }
