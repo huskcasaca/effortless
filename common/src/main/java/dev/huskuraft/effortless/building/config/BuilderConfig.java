@@ -10,7 +10,7 @@ public record BuilderConfig(
     public static final Range1i RESERVED_TOOL_DURABILITY_RANGE = new Range1i(0, 32);
 
     public static BuilderConfig DEFAULT = new BuilderConfig(
-            1,
+            0,
             Boolean.FALSE
     );
 
