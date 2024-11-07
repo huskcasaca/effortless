@@ -28,7 +28,7 @@ subprojects {
         targetCompatibility = JavaVersion.VERSION_17
         toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-        if (['1.20.6', '1.21'].contains(minecraft_version)) {
+        if (['1.20.6', '1.21',"1.21.1"].contains(minecraft_version)) {
             sourceCompatibility = JavaVersion.VERSION_21
             targetCompatibility = JavaVersion.VERSION_21
             toolchain.languageVersion = JavaLanguageVersion.of(21)
