@@ -34,3 +34,4 @@ replay_*.log
 
 # Minecraft
 run/
+log.txt
