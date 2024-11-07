@@ -2,4 +2,5 @@ plugins {
     id 'io.github.goooler.shadow' version '8.1.7' apply false
     id 'com.modrinth.minotaur' version "2.+" apply false // modrinth publishing
     id 'dev.huskuraft.fuse' apply false
+
 }
