@@ -1,7 +1,7 @@
 ![Logo](assets/logo.png)
 
 # Effortless Structure
-test
+
 [Effortless Structure]() is a multiplatform mod for placing and breaking blocks in Minecraft. It offers a set of modes
 allowing players to create structures and designs with ease. Additionally, it includes an randomizer that randomly
 selects items
