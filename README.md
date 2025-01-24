@@ -97,79 +97,28 @@ from a pre-defined list for random placement.
 - [ViaFabric](https://github.com/ViaVersion/ViaFabric) and [ViaForge](https://github.com/ViaVersion/ViaForge) are also
   supported and tested.
 
-### Server + Client
-
-| Minecraft                | Fabric | Forge |
-|--------------------------|--------|-------|
-| 1.20.6 (Server + Client) | ❌      | ❌     |
-| 1.20.5 (Server + Client) | ❌      | ❌     |
-| 1.20.4 (Server + Client) | ✅      | ✅     |
-| 1.20.3 (Server + Client) | ✅      | ✅     |
-| 1.20.2 (Server + Client) | ✅      | ✅     |
-| 1.20.1 (Server + Client) | ✅      | ✅     |
-| 1.20 (Server + Client)   | ✅      | ✅     |
-| 1.19.4 (Server + Client) | ✅      | ✅     |
-| 1.19.3 (Server + Client) | ✅      | ✅     |
-| 1.19.2 (Server + Client) | ✅      | ✅     |
-| 1.19.1 (Server + Client) | ✅      | ✅     |
-| 1.19 (Server + Client)   | ✅      | ✅     |
-| 1.18.2 (Server + Client) | ✅      | ✅     |
-| 1.18.1 (Server + Client) | ✅      | ✅     |
-| 1.18 (Server + Client)   | ✅      | ✅     |
-| 1.17.1 (Server + Client) | ✅      | ✅     |
-| 1.17 (Server + Client)   | ❌      | ❌     |
-
-### Server Only
-
-| Minecraft            | Fabric | Forge | Sponge | CLI |
-|----------------------|--------|-------|--------|-----|
-| 1.20.6 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.20.5 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.20.4 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.20.3 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.20.2 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.20.1 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.20 (Server Only)   | ❌      | ❌     | ❌      | ❌   |
-| 1.19.4 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.19.3 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.19.2 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.19.1 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.19 (Server Only)   | ❌      | ❌     | ❌      | ❌   |
-| 1.18.2 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.18.1 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.18 (Server Only)   | ❌      | ❌     | ❌      | ❌   |
-| 1.17.1 (Server Only) | ❌      | ❌     | ❌      | ❌   |
-| 1.17 (Server Only)   | ❌      | ❌     | ❌      | ❌   |
-
-### Client Only (Commands)
-
-| Minecraft            | Fabric | Forge | CLI |
-|----------------------|--------|-------|-----|
-| 1.20.6 (Client Only) | ❌      | ❌     | ❌   |
-| 1.20.5 (Client Only) | ❌      | ❌     | ❌   |
-| 1.20.4 (Client Only) | ❌      | ❌     | ❌   |
-| 1.20.3 (Client Only) | ❌      | ❌     | ❌   |
-| 1.20.2 (Client Only) | ❌      | ❌     | ❌   |
-| 1.20.1 (Client Only) | ❌      | ❌     | ❌   |
-| 1.20 (Client Only)   | ❌      | ❌     | ❌   |
-| 1.19.4 (Client Only) | ❌      | ❌     | ❌   |
-| 1.19.3 (Client Only) | ❌      | ❌     | ❌   |
-| 1.19.2 (Client Only) | ❌      | ❌     | ❌   |
-| 1.19.1 (Client Only) | ❌      | ❌     | ❌   |
-| 1.19 (Client Only)   | ❌      | ❌     | ❌   |
-| 1.18.2 (Client Only) | ❌      | ❌     | ❌   |
-| 1.18.1 (Client Only) | ❌      | ❌     | ❌   |
-| 1.18 (Client Only)   | ❌      | ❌     | ❌   |
-| 1.17.1 (Client Only) | ❌      | ❌     | ❌   |
-| 1.17 (Client Only)   | ❌      | ❌     | ❌   |
+| Minecraft | Fabric | Quilt | Forge | NeoForge |
+|-----------|--------|-------|-------|----------|
+| `1.21.0`  | ✅      | ✅     | ✅     | ✅        |
+| `1.20.6`  | ✅      | ✅     | ✅     | ✅        |
+| `1.20.5`  | ❌      | ❌     | ❌     | ❌        |
+| `1.20.4`  | ✅      | ✅     | ✅     | ❌        |
+| `1.20.3`  | ✅      | ✅     | ✅     | ❌        |
+| `1.20.2`  | ✅      | ✅     | ✅     | ❌        |
+| `1.20.1`  | ✅      | ✅     | ✅     | ❌        |
+| `1.20  `  | ✅      | ✅     | ✅     | ❌        |
+| `1.19.4`  | ✅      | ✅     | ✅     | ❌        |
+| `1.19.3`  | ✅      | ✅     | ✅     | ❌        |
+| `1.19.2`  | ✅      | ✅     | ✅     | ❌        |
+| `1.19.1`  | ✅      | ✅     | ✅     | ❌        |
+| `1.19  `  | ✅      | ✅     | ✅     | ❌        |
+| `1.18.2`  | ✅      | ✅     | ✅     | ❌        |
+| `1.18.1`  | ✅      | ✅     | ✅     | ❌        |
+| `1.18  `  | ✅      | ✅     | ✅     | ❌        |
+| `1.17.1`  | ✅      | ✅     | ✅     | ❌        |
+| `1.17  `  | ❌      | ❌     | ❌     | ❌        |
 
 ## Dependencies
-
-## Forge
-
-| Dependency   | Download                          |
-|--------------|-----------------------------------|
-| Forge Loader | https://files.minecraftforge.net/ |
 
 ## Fabric
 
@@ -177,6 +126,25 @@ from a pre-defined list for random placement.
 |---------------|---------------------------------------------------------------|
 | Fabric Loader | https://fabricmc.net/use/installer/                           |
 | Fabric API    | https://www.curseforge.com/minecraft/mc-mods/fabric-api/files |
+
+## Quilt
+
+| Dependency         | Download                              |
+|--------------------|---------------------------------------|
+| Quilt Loader       | https://quiltmc.org/install/          |
+| Quilted Fabric API | https://modrinth.com/mod/qsl/versions |
+
+## Forge
+
+| Dependency   | Download                                                   |
+|--------------|------------------------------------------------------------|
+| Forge Loader | https://files.minecraftforge.net/net/minecraftforge/forge/ |
+
+## NeoForge
+
+| Dependency      | Download                                   |
+|-----------------|--------------------------------------------|
+| NeoForge Loader | https://neoforged.net/categories/releases/ |
 
 ## Credits
 

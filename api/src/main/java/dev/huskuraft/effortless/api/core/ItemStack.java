@@ -72,10 +72,6 @@ public interface ItemStack extends PlatformReference {
 
     boolean isDamageableItem();
 
-    default boolean isCorrectToolForDrops(BlockState blockState) {
-        return getItem().isCorrectToolForDrops(blockState);
-    }
-
     default boolean damage(int damage) {
         if (isDamageableItem()) {
             setDamageValue(Math.min(getDamageValue() + damage, getMaxDamage()));

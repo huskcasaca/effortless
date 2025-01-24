@@ -49,7 +49,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
         if (getPlayer().getGameMode().isCreative()) {
             return true;
         }
-        var properTool = !blockState.requiresCorrectToolForDrops() || itemInHand.isCorrectToolForDrops(blockState);
+        var properTool = !blockState.requiresCorrectToolForDrops() || itemInHand.getItem().isCorrectToolForDropsNoThrows(blockState);
         itemInHand.mineBlock(getWorld(), getPlayer(), getBlockPosition(), blockState);
         if (removed && properTool) {
             blockState.getBlock().destroyEnd(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
@@ -139,7 +139,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
 
             var durabilityReserved = getContext().getReservedToolDurability();
             var requireCorrectTool = !player.getGameMode().isCreative() && context.useProperTool();
-            var miningTool = getStorage().contents().stream().filter(stack -> stack.getItem().isCorrectToolForDrops(getBlockStateInWorld())).filter(tool -> !tool.isDamageableItem() || tool.getDurabilityLeft() > durabilityReserved).findFirst();
+            var miningTool = getStorage().contents().stream().filter(stack -> stack.getItem().isCorrectToolForDropsNoThrows(getBlockStateInWorld())).filter(tool -> !tool.isDamageableItem() || tool.getDurabilityLeft() > durabilityReserved).findFirst();
 
             if (miningTool.isEmpty()) {
                 miningTool = getStorage().contents().stream().filter(tool -> tool.getItem() instanceof DiggerItem).filter(tool -> !tool.isDamageableItem() || tool.getDurabilityLeft() > durabilityReserved).findFirst();
