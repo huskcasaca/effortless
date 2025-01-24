@@ -41,4 +41,12 @@ public interface Item extends PlatformReference {
         return getName(getDefaultStack());
     }
 
+    default boolean isCorrectToolForDropsNoThrows(BlockState blockState) {
+        try {
+            return isCorrectToolForDrops(blockState);
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
 }
