@@ -47,12 +47,12 @@ public record RotateContext(
                 newBlockState = newBlockState.mirror(Axis.X);
             }
         } else if (angle < -0.251 * MathUtils.PI) {
-            newBlockState = blockState.rotate(Revolve.CLOCKWISE_90);
+            newBlockState = blockState.rotate(Revolve.COUNTERCLOCKWISE_90);
             if (alternate) {
                 newBlockState = newBlockState.mirror(Axis.Z);
             }
         } else if (angle > 0.249 * MathUtils.PI) {
-            newBlockState = blockState.rotate(Revolve.COUNTERCLOCKWISE_90);
+            newBlockState = blockState.rotate(Revolve.CLOCKWISE_90);
             if (alternate) {
                 newBlockState = newBlockState.mirror(Axis.Z);
             }

@@ -105,15 +105,15 @@ public record Circle(
         var y2 = pos2.y();
         var z2 = pos2.z();
 
+        var centerX = isCenter ? x1 : x1 + (x2 - x1) / 2f;
+        var centerY = isCenter ? y1 : y1 + (y2 - y1) / 2f;
+        var centerZ = isCenter ? z1 : z1 + (z2 - z1) / 2f;
+
         if (isCenter) {
             x1 = (x1 - x2) * 2 + x1;
             y1 = (y1 - y2) * 2 + y1;
             z1 = (z1 - z2) * 2 + z1;
         }
-
-        var centerX = x1 + (x2 - x1) / 2f;
-        var centerY = y1 + (y2 - y1) / 2f;
-        var centerZ = z1 + (z2 - z1) / 2f;
 
         var radiusX = MathUtils.abs(x2 - centerX);
         var radiusY = MathUtils.abs(y2 - centerY);
