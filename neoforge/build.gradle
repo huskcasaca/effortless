@@ -95,6 +95,9 @@ subprojects {
                 mod_version            : mod_version,
                 mod_authors            : mod_authors,
                 mod_description        : mod_description,
+                mod_display_url        : mod_display_url,
+                mod_sources_url        : mod_sources_url,
+                mod_issues_url         : mod_issues_url,
         ]
         inputs.properties replaceProperties
 
