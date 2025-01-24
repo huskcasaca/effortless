@@ -80,6 +80,11 @@ subprojects {
         }
     }
 
+    sourceSets.main.java {
+        srcDir "${project(":api").projectDir}/src/main/java"
+        srcDir "${project(":common").projectDir}/src/main/java"
+    }
+
     processResources {
 
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
