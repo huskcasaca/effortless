@@ -1,4 +1,22 @@
 ## Changelog
+----------
+
+### 3.2.0
+
+* Fix block entity tag setting issue ([#169](https://github.com/huskcasaca/effortless/pull/169))
+* Fix crashes from long mod descriptions ([#170](https://github.com/huskcasaca/effortless/pull/170))
+* Fix rotation angles for axial patterns and center circle calculations ([#171](https://github.com/huskcasaca/effortless/pull/171), thanks @almarzn)
+* Fix server not launching with Minecraft 1.21 ([#190](https://github.com/huskcasaca/effortless/pull/190))
+* Fix crashes from improper use of tools ([#191](https://github.com/huskcasaca/effortless/pull/191))
+* Fix compatibility issue with NeoForge ([#192](https://github.com/huskcasaca/effortless/pull/192))
+
+----------
+
+### 3.1.0
+
+* Port to 1.20.6 ([#157](https://github.com/huskcasaca/effortless/pull/157))
+* Port to 1.21 ([#158](https://github.com/huskcasaca/effortless/pull/158))
+* Port to NeoForge and Minecraft 1.21 ([#159](https://github.com/huskcasaca/effortless/pull/159))
 
 ----------
 
