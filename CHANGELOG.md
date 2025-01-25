@@ -9,6 +9,7 @@
 * Fix server not launching with Minecraft 1.21 ([#190](https://github.com/huskcasaca/effortless/pull/190))
 * Fix crashes from improper use of tools ([#191](https://github.com/huskcasaca/effortless/pull/191))
 * Fix compatibility issue with NeoForge ([#192](https://github.com/huskcasaca/effortless/pull/192))
+* Port to 1.21.1 ([#193](https://github.com/huskcasaca/effortless/pull/193))
 
 ----------
 
