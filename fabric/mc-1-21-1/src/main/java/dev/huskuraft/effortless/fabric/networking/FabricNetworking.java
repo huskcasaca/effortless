@@ -1,7 +1,10 @@
 package dev.huskuraft.effortless.fabric.networking;
 
+import java.util.function.BiConsumer;
+
 import com.google.auto.service.AutoService;
 
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.networking.ByteBufReceiver;
 import dev.huskuraft.effortless.api.networking.ByteBufSender;
@@ -20,42 +23,81 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 public class FabricNetworking implements Networking {
 
     public static ByteBufSender register(ResourceLocation channelId, Side side, ByteBufReceiver receiver) {
-        record Payload(ResourceLocation channelId, ByteBuf byteBuf) implements CustomPacketPayload {
-            @Override
-            public Type<Payload> type() {
-                return new Type<>(channelId.reference());
-            }
-        }
+        var fabricSide = switch (side) {
+            case CLIENT -> new Client();
+            case SERVER -> new Server();
+        };
         var type = new Payload.Type<Payload>(channelId.reference());
         var codec = new StreamCodec<RegistryFriendlyByteBuf, Payload>() {
             @Override
             public Payload decode(RegistryFriendlyByteBuf byteBuf) {
-                return new Payload(channelId, byteBuf.readBytes(byteBuf.readableBytes()));
+                return new Payload(type, byteBuf.readBytes(byteBuf.readableBytes()));
             }
+
             @Override
             public void encode(RegistryFriendlyByteBuf byteBuf, Payload payload) {
-                byteBuf.writeBytes(payload.byteBuf().readBytes(payload.byteBuf().readableBytes()));
+                byteBuf.writeBytes(payload.byteBuf());
             }
         };
-        switch (side) {
-            case CLIENT -> {
-                PayloadTypeRegistry.playS2C().register(type, codec);
-                ClientPlayNetworking.registerGlobalReceiver(type, (payload, context) -> {
-                    receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
-                });
-            }
-            case SERVER -> {
-                PayloadTypeRegistry.playC2S().register(type, codec);
-                ServerPlayNetworking.registerGlobalReceiver(type, (payload, context) -> {
-                    receiver.receiveBuffer(payload.byteBuf(), MinecraftPlayer.ofNullable(context.player()));
-                });
-            }
-        }
-        return switch (side) {
-            case CLIENT -> (byteBuf, player) -> ClientPlayNetworking.send(new Payload(channelId, byteBuf));
-            case SERVER -> (byteBuf, player) -> ServerPlayNetworking.send(player.reference(), new Payload(channelId, byteBuf));
+        fabricSide.registerPayload(type, codec);
+        fabricSide.registerReceiver(type, (payload, player) -> {
+            receiver.receiveBuffer(payload.byteBuf(), player);
+        });
+        return (byteBuf, player) -> {
+            fabricSide.send(new Payload(type, byteBuf), player);
         };
+    }
 
+    public record Payload(CustomPacketPayload.Type<Payload> type, ByteBuf byteBuf) implements CustomPacketPayload {
+    }
+
+    void registerPayload(Payload.Type<Payload> type, StreamCodec<RegistryFriendlyByteBuf, Payload> codec) {
+    }
+
+    void registerReceiver(Payload.Type<Payload> type, BiConsumer<Payload, Player> receiver) {
+    }
+
+    void send(Payload payload, Player player) {
+    }
+
+    static class Server extends FabricNetworking {
+
+        @Override
+        public void registerPayload(Payload.Type<Payload> type, StreamCodec<RegistryFriendlyByteBuf, Payload> codec) {
+            PayloadTypeRegistry.playC2S().register(type, codec);
+        }
+
+        @Override
+        public void registerReceiver(Payload.Type<Payload> type, BiConsumer<Payload, Player> receiver) {
+            ServerPlayNetworking.registerGlobalReceiver(type, (payload, context) -> {
+                receiver.accept(payload, MinecraftPlayer.ofNullable(context.player()));
+            });
+        }
+
+        @Override
+        public void send(Payload payload, Player player) {
+            ServerPlayNetworking.send(player.reference(), payload);
+        }
+    }
+
+    static class Client extends FabricNetworking {
+
+        @Override
+        public void registerPayload(Payload.Type<Payload> type, StreamCodec<RegistryFriendlyByteBuf, Payload> codec) {
+            PayloadTypeRegistry.playS2C().register(type, codec);
+        }
+
+        @Override
+        public void registerReceiver(Payload.Type<Payload> type, BiConsumer<Payload, Player> receiver) {
+            ClientPlayNetworking.registerGlobalReceiver(type, (payload, context) -> {
+                receiver.accept(payload, MinecraftPlayer.ofNullable(context.player()));
+            });
+        }
+
+        @Override
+        public void send(Payload payload, Player player) {
+            ClientPlayNetworking.send(payload);
+        }
     }
 
 }
