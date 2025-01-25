@@ -45,7 +45,6 @@ include ':multiplatform'
     '1-20-2',
     '1-20-4',
     '1-20-6',
-    '1-21',
     '1-21-1',
     '1-21-3',
 ].forEach { port -> include ":fabric:mc-${port}" }
@@ -59,14 +58,12 @@ include ':multiplatform'
     '1-20-2',
     '1-20-4',
     '1-20-6',
-    '1-21',
     '1-21-1',
     '1-21-3',
 ].forEach { port -> include ":forge:mc-${port}" }
 
 [
     '1-20-6',
-    '1-21',
     '1-21-1',
     '1-21-3',
 ].forEach { port -> include ":neoforge:mc-${port}" }
@@ -80,7 +77,6 @@ include ':multiplatform'
     '1-20-2',
     '1-20-4',
     '1-20-6',
-    '1-21',
     '1-21-1',
     '1-21-3',
 ].forEach { port -> include ":multiplatform:mc-${port}" }

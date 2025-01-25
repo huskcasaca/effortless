@@ -8,7 +8,7 @@ subprojects {
     apply plugin: 'io.github.goooler.shadow'
 
     ext {
-        minecraft_version_range = "[${project.minecraft_version},)"
+        minecraft_version_range = "[${"${project.minecraft_supported_versions}".split(",")[0]},)"
         neo_version_range = "[0,)"
         loader_version_range = "[0,)"
         mapping_channel = "official"
