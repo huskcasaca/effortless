@@ -71,3 +71,5 @@ accessible method net/minecraft/client/player/AbstractClientPlayer getPlayerInfo
 accessible method net/minecraft/client/gui/GuiGraphics <init> (Lnet/minecraft/client/Minecraft;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;)V
 
 accessible field net/minecraft/client/gui/components/AbstractButton SPRITES Lnet/minecraft/client/gui/components/WidgetSprites;
+
+accessible method net/minecraft/world/item/BlockItem getPlacementState (Lnet/minecraft/world/item/context/BlockPlaceContext;)Lnet/minecraft/world/level/block/state/BlockState;

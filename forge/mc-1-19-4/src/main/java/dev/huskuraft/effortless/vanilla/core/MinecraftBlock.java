@@ -10,6 +10,7 @@ import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.BlockState;
+import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.core.FluidState;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.ItemStack;
@@ -20,6 +21,7 @@ import dev.huskuraft.effortless.api.core.fluid.Fluid;
 import dev.huskuraft.effortless.api.core.fluid.LiquidPlaceable;
 import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSound;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
@@ -35,11 +37,14 @@ public record MinecraftBlock(
 
     @Override
     public BlockState getBlockState(Player player, BlockInteraction interaction) {
-        return MinecraftBlockState.ofNullable(refs.getStateForPlacement(new BlockPlaceContext(
+        BlockItem blockItem = (BlockItem) refs.asItem();
+        Direction opposite = interaction.direction().getOpposite();
+        BlockPosition placementPosition = interaction.getBlockPosition().offset(opposite.getStepX(), opposite.getStepY(), opposite.getStepZ());
+        return MinecraftBlockState.ofNullable(blockItem.getPlacementState(new BlockPlaceContext(
                 player.reference(),
                 MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
                 player.getItemStack(interaction.getHand()).reference(),
-                MinecraftConvertor.toPlatformBlockInteraction(interaction)
+                MinecraftConvertor.toPlatformBlockInteraction(interaction.withBlockPosition(placementPosition))
         )));
     }
 

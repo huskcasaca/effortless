@@ -63,3 +63,5 @@ accessible class net/minecraft/client/renderer/RenderStateShard$MultiTextureStat
 accessible field net/minecraft/client/KeyMapping key Lcom/mojang/blaze3d/platform/InputConstants$Key;
 
 accessible method net/minecraft/client/player/AbstractClientPlayer getPlayerInfo ()Lnet/minecraft/client/multiplayer/PlayerInfo;
+
+accessible method net/minecraft/world/item/BlockItem getPlacementState (Lnet/minecraft/world/item/context/BlockPlaceContext;)Lnet/minecraft/world/level/block/state/BlockState;
