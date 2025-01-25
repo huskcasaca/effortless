@@ -47,8 +47,13 @@ subprojects {
     }
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+
+        if (['1.17.1', '1.18.2', "1.19.2", "1.19.4", "1.20.1", "1.20.2", "1.20.4"].contains(minecraft_version)) {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }
     }
 
     assemble {

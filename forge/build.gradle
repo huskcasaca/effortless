@@ -24,12 +24,12 @@ subprojects {
 
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
 
-        if (['1.20.6', '1.21',"1.21.1"].contains(minecraft_version)) {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
+        if (['1.17.1', '1.18.2', "1.19.2", "1.19.4", "1.20.1", "1.20.2", "1.20.4"].contains(minecraft_version)) {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
         }
     }
 
@@ -98,20 +98,20 @@ subprojects {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         var replaceProperties = [
-                minecraft_version      : minecraft_version,
-                minecraft_version_range: minecraft_version_range,
-                forge_version          : forge_version,
-                forge_version_range    : forge_version_range,
-                loader_version_range   : loader_version_range,
-                mod_id                 : mod_id,
-                mod_name               : mod_name,
-                mod_license            : mod_license,
-                mod_version            : mod_version,
-                mod_authors            : mod_authors,
-                mod_description        : mod_description,
-                mod_display_url        : mod_display_url,
-                mod_sources_url        : mod_sources_url,
-                mod_issues_url         : mod_issues_url,
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            forge_version          : forge_version,
+            forge_version_range    : forge_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
+            mod_display_url        : mod_display_url,
+            mod_sources_url        : mod_sources_url,
+            mod_issues_url         : mod_issues_url,
         ]
         inputs.properties replaceProperties
 
@@ -125,13 +125,13 @@ subprojects {
     jar {
         manifest {
             attributes([
-                    'Specification-Title'     : mod_id,
-                    'Specification-Vendor'    : mod_authors,
-                    'Specification-Version'   : '1',
-                    'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : project.jar.archiveVersion,
-                    'Implementation-Vendor'   : mod_authors,
-                    'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                'Specification-Title'     : mod_id,
+                'Specification-Vendor'    : mod_authors,
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.jar.archiveVersion,
+                'Implementation-Vendor'   : mod_authors,
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
         }
         finalizedBy 'reobfJar'

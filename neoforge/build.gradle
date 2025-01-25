@@ -66,11 +66,6 @@ subprojects {
             gameTestServer {
                 systemProperty 'forge.enabledGameTestNamespaces', mod_id
             }
-
-            data {
-//                workingDirectory project.file('run-data')
-                programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-            }
         }
     }
 
