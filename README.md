@@ -99,6 +99,7 @@ from a pre-defined list for random placement.
 
 | Minecraft | Fabric | Quilt | Forge | NeoForge |
 |-----------|--------|-------|-------|----------|
+| `1.21.1`  | ✅      | ✅     | ✅     | ✅        |
 | `1.21.0`  | ✅      | ✅     | ✅     | ✅        |
 | `1.20.6`  | ✅      | ✅     | ✅     | ✅        |
 | `1.20.5`  | ❌      | ❌     | ❌     | ❌        |
