@@ -22,12 +22,14 @@ subprojects {
         archivesName = "${mod_id}-${loader_name}-${minecraft_version}"
     }
 
+    def isJava17Ports = ['1.17.1', '1.18.2', "1.19.2", "1.19.4", "1.20.1", "1.20.2", "1.20.4"].contains(minecraft_version)
+
     java {
         withSourcesJar()
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
 
-        if (['1.17.1', '1.18.2', "1.19.2", "1.19.4", "1.20.1", "1.20.2", "1.20.4"].contains(minecraft_version)) {
+        if (isJava17Ports) {
             sourceCompatibility = JavaVersion.VERSION_17
             targetCompatibility = JavaVersion.VERSION_17
         }
@@ -84,12 +86,6 @@ subprojects {
             gameTestServer {
                 property 'forge.enabledGameTestNamespaces', mod_id
             }
-
-            data {
-                workingDirectory project.file('run-data')
-
-                args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            }
         }
     }
 
@@ -137,7 +133,7 @@ subprojects {
         finalizedBy 'reobfJar'
     }
 
-    if (!['1.20.6', '1.21'].contains(minecraft_version)) {
+    if (isJava17Ports) {
         reobf {
             shadowJar {
             }
@@ -159,7 +155,7 @@ subprojects {
         minimize()
         archiveClassifier.set('')
 
-        if (!['1.20.6', '1.21'].contains(minecraft_version)) {
+        if (isJava17Ports) {
             finalizedBy reobfShadowJar
         }
     }
