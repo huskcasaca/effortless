@@ -94,7 +94,12 @@ public class MinecraftRenderer extends Renderer {
 
     @Override
     public void renderItem(ItemStack stack, int x, int y) {
+////        RenderSystem.getModelViewStack().pushPose();
+////        RenderSystem.getModelViewStack().mulPoseMatrix(minecraftMatrixStack.last().pose());
+////        RenderSystem.applyModelViewMatrix();
         minecraftRendererProvider.renderItem(stack.reference(), x, y);
+////        RenderSystem.getModelViewStack().popPose();
+////        RenderSystem.applyModelViewMatrix();
     }
 
     @Override

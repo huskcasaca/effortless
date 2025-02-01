@@ -40,9 +40,7 @@ public class MinecraftRenderer extends Renderer {
         this.minecraftClient = Minecraft.getInstance();
         this.minecraftMatrixStack = minecraftMatrixStack;
         this.minecraftBufferSource = minecraftClient.renderBuffers().bufferSource();
-        this.minecraftRendererProvider = new Screen(Component.empty()) {{
-            init(Minecraft.getInstance(), 0, 0);
-        }};
+        this.minecraftRendererProvider = new Screen(Component.empty()) {{ init(Minecraft.getInstance(), 0, 0); }};
     }
 
     @Override
@@ -89,14 +87,19 @@ public class MinecraftRenderer extends Renderer {
                 shadow,
                 minecraftMatrixStack.last().pose(),
                 minecraftBufferSource,
-                seeThrough ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL,
+                seeThrough,
                 backgroundColor,
                 lightMap);
     }
 
     @Override
     public void renderItem(ItemStack stack, int x, int y) {
-        minecraftClient.getItemRenderer().renderGuiItem(minecraftMatrixStack, stack.reference(), x, y);
+        RenderSystem.getModelViewStack().pushPose();
+        RenderSystem.getModelViewStack().mulPoseMatrix(minecraftMatrixStack.last().pose());
+        RenderSystem.applyModelViewMatrix();
+        minecraftClient.getItemRenderer().renderGuiItem(stack.reference(), x, y);
+        RenderSystem.getModelViewStack().popPose();
+        RenderSystem.applyModelViewMatrix();
     }
 
     @Override
