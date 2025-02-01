@@ -20,7 +20,6 @@ import dev.huskuraft.effortless.api.core.fluid.Fluid;
 import dev.huskuraft.effortless.api.core.fluid.LiquidPlaceable;
 import dev.huskuraft.effortless.api.sound.Sound;
 import dev.huskuraft.effortless.vanilla.sound.MinecraftSound;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 
@@ -35,12 +34,7 @@ public record MinecraftBlock(
 
     @Override
     public BlockState getBlockState(Player player, BlockInteraction interaction) {
-        return MinecraftBlockState.ofNullable(refs.getStateForPlacement(new BlockPlaceContext(
-                player.reference(),
-                MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
-                player.getItemStack(interaction.getHand()).reference(),
-                MinecraftConvertor.toPlatformBlockInteraction(interaction)
-        )));
+        return MinecraftBlockState.ofNullable(refs.getStateForPlacement(MinecraftConvertor.toPlatformBlockPlaceContext(player, interaction)));
     }
 
     @Override

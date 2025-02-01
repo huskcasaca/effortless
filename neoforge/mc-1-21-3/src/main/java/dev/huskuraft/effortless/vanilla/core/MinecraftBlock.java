@@ -35,12 +35,7 @@ public record MinecraftBlock(
 
     @Override
     public BlockState getBlockState(Player player, BlockInteraction interaction) {
-        return MinecraftBlockState.ofNullable(refs.getStateForPlacement(new BlockPlaceContext(
-                player.reference(),
-                MinecraftConvertor.toPlatformInteractionHand(interaction.getHand()),
-                player.getItemStack(interaction.getHand()).reference(),
-                MinecraftConvertor.toPlatformBlockInteraction(interaction)
-        )));
+        return MinecraftBlockState.ofNullable(refs.getStateForPlacement(MinecraftConvertor.toPlatformBlockPlaceContext(player, interaction)));
     }
 
     @Override

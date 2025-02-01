@@ -11,6 +11,7 @@ import dev.huskuraft.effortless.api.core.EntityInteraction;
 import dev.huskuraft.effortless.api.core.Interaction;
 import dev.huskuraft.effortless.api.core.InteractionHand;
 import dev.huskuraft.effortless.api.core.InteractionResult;
+import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.math.Matrix3f;
 import dev.huskuraft.effortless.api.math.Matrix4f;
 import dev.huskuraft.effortless.api.math.Quaternionf;
@@ -18,6 +19,7 @@ import dev.huskuraft.effortless.api.math.Vector3d;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -160,7 +162,7 @@ public final class MinecraftConvertor {
     }
 
 
-    public static InteractionResult toPlatformInteractionResult(net.minecraft.world.InteractionResult interactionResult) {
+    public static InteractionResult fromPlatformInteractionResult(net.minecraft.world.InteractionResult interactionResult) {
         return switch (interactionResult) {
             case SUCCESS -> InteractionResult.SUCCESS;
 //            case SUCCESS_NO_ITEM_USED -> InteractionResult.SUCCESS_NO_ITEM_USED;
@@ -169,6 +171,15 @@ public final class MinecraftConvertor {
             case PASS -> InteractionResult.PASS;
             case FAIL -> InteractionResult.FAIL;
         };
+    }
+
+    public static BlockPlaceContext toPlatformBlockPlaceContext(Player player, BlockInteraction blockInteraction) {
+        return new BlockPlaceContext(
+                player.reference(),
+                toPlatformInteractionHand(blockInteraction.getHand()),
+                player.getItemStack(blockInteraction.getHand()).reference(),
+                toPlatformBlockInteraction(blockInteraction)
+        );
     }
 
 }
