@@ -16,41 +16,45 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 @AutoService(Networking.class)
 public class FabricNetworking implements Networking {
 
+    public static final Map<ResourceLocation, Payload.Type<Payload>> MAP = new HashMap<>();
+
     public static ByteBufSender register(ResourceLocation channelId, Side side, ByteBufReceiver receiver) {
+        var payloadType = MAP.computeIfAbsent(channelId, resourceLocation -> {
+            var type = new Payload.Type<Payload>(channelId.reference());
+            var codec = new StreamCodec<RegistryFriendlyByteBuf, Payload>() {
+                @Override
+                public Payload decode(RegistryFriendlyByteBuf byteBuf) {
+                    return new Payload(type, byteBuf.readBytes(byteBuf.readableBytes()));
+                }
+                @Override
+                public void encode(RegistryFriendlyByteBuf byteBuf, Payload payload) {
+                    byteBuf.writeBytes(payload.byteBuf());
+                }
+            };
+            PayloadTypeRegistry.playC2S().register(type, codec);
+            PayloadTypeRegistry.playS2C().register(type, codec);
+            return type;
+        });
         var fabricSide = switch (side) {
             case CLIENT -> new Client();
             case SERVER -> new Server();
         };
-        var type = new Payload.Type<Payload>(channelId.reference());
-        var codec = new StreamCodec<RegistryFriendlyByteBuf, Payload>() {
-            @Override
-            public Payload decode(RegistryFriendlyByteBuf byteBuf) {
-                return new Payload(type, byteBuf.readBytes(byteBuf.readableBytes()));
-            }
-
-            @Override
-            public void encode(RegistryFriendlyByteBuf byteBuf, Payload payload) {
-                byteBuf.writeBytes(payload.byteBuf());
-            }
-        };
-        fabricSide.registerPayload(type, codec);
-        fabricSide.registerReceiver(type, (payload, player) -> {
+        fabricSide.registerReceiver(payloadType, (payload, player) -> {
             receiver.receiveBuffer(payload.byteBuf(), player);
         });
         return (byteBuf, player) -> {
-            fabricSide.send(new Payload(type, byteBuf), player);
+            fabricSide.send(new Payload(payloadType, byteBuf), player);
         };
     }
 
     public record Payload(Type<Payload> type, ByteBuf byteBuf) implements CustomPacketPayload {
-    }
-
-    void registerPayload(Payload.Type<Payload> type, StreamCodec<RegistryFriendlyByteBuf, Payload> codec) {
     }
 
     void registerReceiver(Payload.Type<Payload> type, BiConsumer<Payload, Player> receiver) {
@@ -60,11 +64,6 @@ public class FabricNetworking implements Networking {
     }
 
     static class Server extends FabricNetworking {
-
-        @Override
-        public void registerPayload(Payload.Type<Payload> type, StreamCodec<RegistryFriendlyByteBuf, Payload> codec) {
-            PayloadTypeRegistry.playC2S().register(type, codec);
-        }
 
         @Override
         public void registerReceiver(Payload.Type<Payload> type, BiConsumer<Payload, Player> receiver) {
@@ -80,11 +79,6 @@ public class FabricNetworking implements Networking {
     }
 
     static class Client extends FabricNetworking {
-
-        @Override
-        public void registerPayload(Payload.Type<Payload> type, StreamCodec<RegistryFriendlyByteBuf, Payload> codec) {
-            PayloadTypeRegistry.playS2C().register(type, codec);
-        }
 
         @Override
         public void registerReceiver(Payload.Type<Payload> type, BiConsumer<Payload, Player> receiver) {
