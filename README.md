@@ -99,42 +99,37 @@ from a pre-defined list for random placement.
 
 ### Minecraft 1.21
 
-| Target   | Fabric  |  Quilt  |  Forge  | NeoForge |
-|----------|:-------:|:-------:|:-------:|:--------:|
-| `1.21.3` | &check; | &check; | &check; | &check;  |
-| `1.21.2` |         |         |         |          |
-| `1.21.1` | &check; | &check; | &check; | &check;  |
-| `1.21`   | &check; | &check; | &check; | &check;  |
+| Target              | Fabric  |  Quilt  |  Forge  | NeoForge |
+|---------------------|:-------:|:-------:|:-------:|:--------:|
+| `1.21.3`            | &check; | &check; | &check; | &check;  |
+| `1.21.2`            |         |         |         |          |
+| `1.21.1`<br/>`1.21` | &check; | &check; | &check; | &check;  |
 
 ### Minecraft 1.20
 
-| Target   | Fabric  |  Quilt  |  Forge  |
-|----------|:-------:|:-------:|:-------:|
-| `1.20.6` | &check; | &check; | &check; |
-| `1.20.5` | &check; | &check; |         |
-| `1.20.4` | &check; | &check; | &check; |
-| `1.20.3` | &check; | &check; | &check; |
-| `1.20.2` | &check; | &check; | &check; |
-| `1.20.1` | &check; | &check; | &check; |
-| `1.20  ` | &check; | &check; | &check; |
+| Target                | Fabric  |  Quilt  |  Forge  |
+|-----------------------|:-------:|:-------:|:-------:|
+| `1.20.6`<br/>`1.20.5` | &check; | &check; | &check; |
+| `1.20.4`<br/>`1.20.3` | &check; | &check; | &check; |
+| `1.20.2`              | &check; | &check; | &check; |
+| `1.20.1`              | &check; | &check; | &check; |
+| `1.20  `              | &check; | &check; | &check; |
 
 ### Minecraft 1.19
 
-| Target   | Fabric  |  Quilt  |  Forge  |
-|----------|:-------:|:-------:|:-------:|
-| `1.19.4` | &check; | &check; | &check; |
-| `1.19.3` | &check; | &check; | &check; |
-| `1.19.2` | &check; | &check; | &check; |
-| `1.19.1` | &check; | &check; | &check; |
-| `1.19  ` |         |         |         |
+| Target                | Fabric  |  Quilt  |  Forge  |
+|-----------------------|:-------:|:-------:|:-------:|
+| `1.19.4`              | &check; | &check; | &check; |
+| `1.19.3`              | &check; | &check; | &check; |
+| `1.19.2`<br/>`1.19.1` | &check; | &check; | &check; |
+| `1.19  `              |         |         |         |
 
 ### Minecraft 1.18
 
-| Target   | Fabric  |  Quilt  |  Forge  |
-|----------|:-------:|:-------:|:-------:|
-| `1.18.2` | &check; | &check; | &check; |
-| `1.18.1` |         |         |         |
-| `1.18  ` |         |         |         |
+| Target                | Fabric  |  Quilt  |  Forge  |
+|-----------------------|:-------:|:-------:|:-------:|
+| `1.18.2`              | &check; | &check; | &check; |
+| `1.18.1`<br/>`1.18  ` |         |         |         |
 
 ### Minecraft 1.17
 
