@@ -75,7 +75,7 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
     }
 
     @SubscribeEvent
-    public void onRenderGui(CustomizeGuiOverlayEvent event) {
+    public void onRenderGui(CustomizeGuiOverlayEvent.Chat event) {
         getRenderGuiEvent().invoker().onRenderGui(new MinecraftRenderer(event.getGuiGraphics().pose()), event.getPartialTick());
     }
 

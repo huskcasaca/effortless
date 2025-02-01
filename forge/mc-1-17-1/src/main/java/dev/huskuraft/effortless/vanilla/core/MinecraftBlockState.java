@@ -154,7 +154,7 @@ public record MinecraftBlockState(net.minecraft.world.level.block.state.BlockSta
 
     @Override
     public InteractionResult use(Player player, BlockInteraction blockInteraction) {
-        return MinecraftConvertor.toPlatformInteractionResult(refs.use(player.getWorld().reference(), player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)));
+        return MinecraftConvertor.fromPlatformInteractionResult(refs.use(player.getWorld().reference(), player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction)));
     }
 
     @Override

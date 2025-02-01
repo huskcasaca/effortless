@@ -2,6 +2,7 @@ package dev.huskuraft.effortless.building.pattern;
 
 import dev.huskuraft.effortless.api.core.BlockEntity;
 import dev.huskuraft.effortless.api.core.BlockInteraction;
+import dev.huskuraft.effortless.api.core.BlockItem;
 import dev.huskuraft.effortless.api.core.BlockState;
 import dev.huskuraft.effortless.api.core.Item;
 import dev.huskuraft.effortless.api.core.Player;
@@ -22,7 +23,10 @@ public class RefactorContext {
         if (item == null) {
             return null;
         }
-        return item.getBlock().getBlockState(player, blockInteraction);
+        if (item instanceof BlockItem blockItem) {
+            return blockItem.getPlacementState(player,  blockInteraction);
+        }
+        return null;
     }
 
     public BlockEntity refactor(BlockEntity blockEntity, BlockInteraction blockInteraction) {

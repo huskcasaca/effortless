@@ -45,7 +45,7 @@ public record MinecraftItem(net.minecraft.world.item.Item refs) implements Item 
 
     @Override
     public InteractionResult useOnBlock(Player player, BlockInteraction blockInteraction) {
-        return MinecraftConvertor.toPlatformInteractionResult(refs.useOn(new UseOnContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction))));
+        return MinecraftConvertor.fromPlatformInteractionResult(refs.useOn(new UseOnContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction))));
     }
 
     @Override

@@ -17,5 +17,7 @@ public interface BlockItem extends Item {
         return true;
     }
 
+    BlockState getPlacementState(Player player, BlockInteraction interaction);
+
 
 }

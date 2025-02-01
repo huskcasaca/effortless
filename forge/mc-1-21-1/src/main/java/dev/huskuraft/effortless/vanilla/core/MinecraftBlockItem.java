@@ -11,9 +11,27 @@ import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.ResourceLocation;
 import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.api.text.Text;
-import net.minecraft.world.item.context.BlockPlaceContext;
 
 public record MinecraftBlockItem(net.minecraft.world.item.BlockItem refs) implements BlockItem {
+
+    public static net.minecraft.world.level.block.state.BlockState getPlacementState(
+            net.minecraft.world.item.BlockItem refs,
+            net.minecraft.world.item.context.BlockPlaceContext blockPlaceContext
+    ) {
+        try {
+            var getPlacementStateMethod = refs.getClass().getDeclaredMethod("getPlacementState", net.minecraft.world.item.context.BlockPlaceContext.class);
+            getPlacementStateMethod.setAccessible(true);
+            return (net.minecraft.world.level.block.state.BlockState) getPlacementStateMethod.invoke(refs, blockPlaceContext);
+        } catch (Exception ignored) {
+        }
+        try {
+            var getPlacementStateMethod = refs.getClass().getDeclaredMethod("m_5965_", net.minecraft.world.item.context.BlockPlaceContext.class);
+            getPlacementStateMethod.setAccessible(true);
+            return (net.minecraft.world.level.block.state.BlockState) getPlacementStateMethod.invoke(refs, blockPlaceContext);
+        } catch (Exception ignored) {
+        }
+        throw new RuntimeException("Failed to invoke getPlacementState");
+    }
 
     @Override
     public ItemStack getDefaultStack() {
@@ -23,6 +41,11 @@ public record MinecraftBlockItem(net.minecraft.world.item.BlockItem refs) implem
     @Override
     public Block getBlock() {
         return new MinecraftItem(refs).getBlock();
+    }
+
+    @Override
+    public BlockState getPlacementState(Player player, BlockInteraction interaction) {
+        return MinecraftBlockState.ofNullable(refs.getPlacementState(MinecraftConvertor.toPlatformBlockPlaceContext(player, interaction)));
     }
 
     @Override
@@ -37,7 +60,7 @@ public record MinecraftBlockItem(net.minecraft.world.item.BlockItem refs) implem
 
     @Override
     public InteractionResult placeOnBlock(Player player, BlockInteraction blockInteraction) {
-        return MinecraftConvertor.toPlatformInteractionResult(refs.place(new BlockPlaceContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), player.getItemStack(blockInteraction.getHand()).reference(), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction))));
+        return MinecraftConvertor.fromPlatformInteractionResult(refs.place(new net.minecraft.world.item.context.BlockPlaceContext(player.reference(), MinecraftConvertor.toPlatformInteractionHand(blockInteraction.getHand()), player.getItemStack(blockInteraction.getHand()).reference(), MinecraftConvertor.toPlatformBlockInteraction(blockInteraction))));
     }
 
     @Override
