@@ -35,10 +35,10 @@ public record Single() implements BlockStructure {
         var isReplaceBlock = relative || player.getWorld().getBlockState(startBlockPosition).canBeReplaced(player, interaction);
 
         if ((isHoldingNonBlockItem && buildState == BuildState.INTERACT_BLOCK || !isTracingTarget) && !isReplaceBlock) {
-            startBlockPosition = startBlockPosition.relative(interaction.getDirection());
+            return interaction.withBlockPosition(startBlockPosition.relative(interaction.getDirection()));
         }
 
-        return interaction.withBlockPosition(startBlockPosition);
+        return interaction;
     }
 
     public static Stream<BlockPosition> collectSingleBlocks(Context context) {

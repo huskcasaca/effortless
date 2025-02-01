@@ -13,6 +13,7 @@ public class BlockInteractionSerializer implements NetByteBufSerializer<BlockInt
                 byteBuf.read(new Vector3dSerializer()),
                 byteBuf.readEnum(Direction.class),
                 byteBuf.read(new BlockPositionSerializer()),
+                byteBuf.readBoolean(),
                 byteBuf.readBoolean()
         );
     }
@@ -23,6 +24,7 @@ public class BlockInteractionSerializer implements NetByteBufSerializer<BlockInt
         byteBuf.writeEnum(blockInteraction.getDirection());
         byteBuf.write(blockInteraction.getBlockPosition(), new BlockPositionSerializer());
         byteBuf.writeBoolean(blockInteraction.isInside());
+        byteBuf.writeBoolean(blockInteraction.isMiss());
     }
 
 }

@@ -52,4 +52,8 @@ public record BlockInteraction(
     public boolean isInside() {
         return this.inside;
     }
+
+    public boolean isMiss() {
+        return this.miss;
+    }
 }

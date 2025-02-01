@@ -81,7 +81,7 @@ public record Context(
     }
 
     private static BlockInteraction withPosition(BlockInteraction blockInteraction, BlockPosition blockPosition) {
-        return new BlockInteraction(blockInteraction.getPosition().add(blockPosition.sub(blockInteraction.getBlockPosition()).toVector3d()), blockInteraction.getDirection(), blockPosition, blockInteraction.isInside());
+        return new BlockInteraction(blockInteraction.getPosition().add(blockPosition.sub(blockInteraction.getBlockPosition()).toVector3d()), blockInteraction.getDirection(), blockPosition, blockInteraction.isInside(), blockInteraction.isMiss());
     }
 
     public BuildMode buildMode() {
