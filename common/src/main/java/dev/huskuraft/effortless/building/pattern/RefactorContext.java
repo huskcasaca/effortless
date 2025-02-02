@@ -24,7 +24,7 @@ public class RefactorContext {
             return null;
         }
         if (item instanceof BlockItem blockItem) {
-            return blockItem.getPlacementState(player,  blockInteraction);
+            return blockItem.getPlacementState(player, blockInteraction);
         }
         return null;
     }

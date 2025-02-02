@@ -242,8 +242,8 @@ public class BlockStateUpdateOperation extends BlockOperation {
         Extras.set(getPlayer(), getExtras());
         var result = updateBlock();
         Extras.set(getPlayer(), entityExtrasBeforeOp);
-        var blockStateAfterOp = getBlockStateInWorld();
         var entityTagAfterOp = getEntityTagInWorld();
+        var blockStateAfterOp = getBlockStateInWorld();
 
         if (getContext().isBuildClientType() && getBlockPosition().toVector3d().distance(getPlayer().getEyePosition()) <= 32) {
             if (result.success()) {
