@@ -33,7 +33,6 @@ public abstract class RenderLayers {
     protected static final RenderState.ShaderState CUTOUT_SHADER_STATE = RenderState.ShaderState.create("cutout", Shaders.CUTOUT);
     protected static final RenderState.ShaderState TRANSLUCENT_SHADER_STATE = RenderState.ShaderState.create("translucent", Shaders.TRANSLUCENT);
     protected static final RenderState.ShaderState TRANSLUCENT_MOVING_BLOCK_SHADER_STATE = RenderState.ShaderState.create("translucent_moving_block", Shaders.TRANSLUCENT_MOVING_BLOCK);
-    protected static final RenderState.ShaderState TRANSLUCENT_NO_CRUMBLING_SHADER_STATE = RenderState.ShaderState.create("translucent_no_crumbling", Shaders.TRANSLUCENT_NO_CRUMBLING);
     protected static final RenderState.ShaderState ARMOR_CUTOUT_NO_CULL_SHADER_STATE = RenderState.ShaderState.create("armor_cutout_no_cull", Shaders.ARMOR_CUTOUT_NO_CULL);
     protected static final RenderState.ShaderState ENTITY_SOLID_SHADER_STATE = RenderState.ShaderState.create("entity_solid", Shaders.ENTITY_SOLID);
     protected static final RenderState.ShaderState ENTITY_CUTOUT_SHADER_STATE = RenderState.ShaderState.create("entity_cutout", Shaders.ENTITY_CUTOUT);
@@ -55,12 +54,9 @@ public abstract class RenderLayers {
     protected static final RenderState.ShaderState WATER_MASK_SHADER_STATE = RenderState.ShaderState.create("water_mask", Shaders.WATER_MASK);
     protected static final RenderState.ShaderState OUTLINE_SHADER_STATE = RenderState.ShaderState.create("outline", Shaders.OUTLINE);
     protected static final RenderState.ShaderState ARMOR_GLINT_SHADER_STATE = RenderState.ShaderState.create("armor_glint", Shaders.ARMOR_GLINT);
-    protected static final RenderState.ShaderState ARMOR_ENTITY_GLINT_SHADER_STATE = RenderState.ShaderState.create("armor_entity_glint", Shaders.ARMOR_ENTITY_GLINT);
     protected static final RenderState.ShaderState GLINT_TRANSLUCENT_SHADER_STATE = RenderState.ShaderState.create("glint_translucent", Shaders.GLINT_TRANSLUCENT);
     protected static final RenderState.ShaderState GLINT_SHADER_STATE = RenderState.ShaderState.create("glint", Shaders.GLINT);
-    protected static final RenderState.ShaderState GLINT_DIRECT_SHADER_STATE = RenderState.ShaderState.create("glint_direct", Shaders.GLINT_DIRECT);
     protected static final RenderState.ShaderState ENTITY_GLINT_SHADER_STATE = RenderState.ShaderState.create("entity_glint", Shaders.ENTITY_GLINT);
-    protected static final RenderState.ShaderState ENTITY_GLINT_DIRECT_SHADER_STATE = RenderState.ShaderState.create("entity_glint_direct", Shaders.ENTITY_GLINT_DIRECT);
     protected static final RenderState.ShaderState CRUMBLING_SHADER_STATE = RenderState.ShaderState.create("crumbling", Shaders.CRUMBLING);
     protected static final RenderState.ShaderState TEXT_SHADER_STATE = RenderState.ShaderState.create("text", Shaders.TEXT);
     protected static final RenderState.ShaderState TEXT_BACKGROUND_SHADER_STATE = RenderState.ShaderState.create("text_background", Shaders.TEXT_BACKGROUND);

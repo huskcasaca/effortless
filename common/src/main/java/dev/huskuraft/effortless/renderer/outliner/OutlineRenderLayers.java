@@ -101,6 +101,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
             true,
             RenderState.builder()
                     .setShaderState(RenderLayers.ENTITY_TRANSLUCENT_CULL_SHADER_STATE)
+                    .setCullState(RenderLayers.CULL)
                     .setTextureState(RenderLayers.BLOCK_SHEET_TEXTURE)
                     .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
                     .setLightmapState(RenderLayers.LIGHTMAP)
@@ -109,6 +110,7 @@ public abstract class OutlineRenderLayers extends RenderLayers {
     protected static final RenderLayer FLUID = RenderLayer.createComposite("fluid",
             VertexFormats.NEW_ENTITY, VertexFormats.Modes.QUADS, 256, false, true, RenderState.builder()
                     .setShaderState(RenderLayers.ENTITY_TRANSLUCENT_CULL_SHADER_STATE)
+                    .setCullState(RenderLayers.CULL)
                     .setTextureState(RenderLayers.BLOCK_SHEET_MIPPED_TEXTURE)
                     .setTransparencyState(RenderLayers.TRANSLUCENT_TRANSPARENCY)
                     .setLightmapState(RenderLayers.LIGHTMAP)

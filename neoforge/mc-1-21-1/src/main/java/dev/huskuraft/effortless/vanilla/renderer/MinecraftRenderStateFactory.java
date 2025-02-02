@@ -191,7 +191,7 @@ public final class MinecraftRenderStateFactory implements RenderStateFactory {
         var shader = switch (shaders) {
             case POSITION_COLOR_LIGHTMAP -> GameRenderer.getPositionColorLightmapShader();
             case POSITION -> GameRenderer.getPositionShader();
-            case POSITION_COLOR_TEX -> null;
+            case POSITION_COLOR_TEX -> GameRenderer.getPositionTexShader();
             case POSITION_TEX -> GameRenderer.getPositionTexShader();
             case POSITION_COLOR_TEX_LIGHTMAP -> GameRenderer.getPositionColorTexLightmapShader();
             case POSITION_COLOR -> GameRenderer.getPositionColorShader();
