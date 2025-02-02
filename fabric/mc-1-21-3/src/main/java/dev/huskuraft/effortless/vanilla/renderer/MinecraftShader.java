@@ -16,7 +16,7 @@ public record MinecraftShader(
     }
 
     public VertexFormat getVertexFormat() {
-        return refs::vertexFormat;
+        return () -> refs.vertexFormat();
     }
 
     public Uniform getUniform(String param) {

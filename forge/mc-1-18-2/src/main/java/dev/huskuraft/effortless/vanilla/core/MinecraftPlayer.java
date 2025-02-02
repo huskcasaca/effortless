@@ -78,13 +78,7 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player refs) imp
     }
 
     @Override
-    public void sendMessage(Text message) {
-        refs.sendMessage(message.reference(), UUID.randomUUID());
-//        getRef().displayClientMessage(message, true);
-    }
-
-    @Override
-    public void sendClientMessage(Text message, boolean actionBar) {
+    public void sendMessage(Text message, boolean actionBar) {
         refs.displayClientMessage(message.reference(), actionBar);
     }
 
