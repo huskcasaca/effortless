@@ -17,9 +17,6 @@ import dev.huskuraft.effortless.vanilla.core.MinecraftItemStack;
 import dev.huskuraft.effortless.vanilla.input.MinecraftKeyBinding;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-//import net.minecraft.client.searchtree.PlainTextSearchTree;
-//import net.minecraft.client.searchtree.SearchRegistry;
-//import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTabs;
 
 @AutoService(ClientContentFactory.class)

@@ -4,13 +4,13 @@ import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.platform.TagFactory;
 import dev.huskuraft.effortless.api.tag.ListTag;
-import dev.huskuraft.effortless.api.tag.StringTag;
 import dev.huskuraft.effortless.api.tag.NumericTag;
 import dev.huskuraft.effortless.api.tag.RecordTag;
+import dev.huskuraft.effortless.api.tag.StringTag;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftListTag;
-import dev.huskuraft.effortless.vanilla.tag.MinecraftStringTag;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftNumericTag;
 import dev.huskuraft.effortless.vanilla.tag.MinecraftRecordTag;
+import dev.huskuraft.effortless.vanilla.tag.MinecraftStringTag;
 import net.minecraft.nbt.ByteTag;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;

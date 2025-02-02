@@ -14,7 +14,8 @@ import dev.huskuraft.effortless.vanilla.platform.MinecraftClient;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftRenderer;
 import dev.huskuraft.effortless.vanilla.renderer.MinecraftShader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.ShaderDefines;
+import net.minecraft.client.renderer.ShaderProgram;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -54,8 +55,8 @@ public class NeoForgeClientEventRegistry extends ClientEventRegistry {
 
     public void onReloadShader(RegisterShadersEvent event) {
         getRegisterShaderEvent().invoker().onRegisterShader((resource, format, consumer) -> {
-            var minecraftShader = new ShaderInstance(event.getResourceProvider(), resource.getPath(), format.reference());
-            event.registerShader(minecraftShader, shaderInstance -> consumer.accept(new MinecraftShader(shaderInstance)));
+            var minecraftShader = new ShaderProgram(resource.reference(), format.reference(), ShaderDefines.EMPTY);
+            event.registerShader(minecraftShader);
         });
     }
 

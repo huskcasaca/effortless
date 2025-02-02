@@ -13,7 +13,7 @@ import dev.huskuraft.effortless.api.renderer.VertexFormat;
 import dev.huskuraft.effortless.api.renderer.VertexFormats;
 import dev.huskuraft.effortless.api.renderer.programs.CompositeRenderState;
 import dev.huskuraft.effortless.api.renderer.programs.RenderState;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 
@@ -82,13 +82,13 @@ public final class MinecraftRenderStateFactory implements RenderStateFactory {
 
     @Override
     public RenderState.TextureState createTextureState(String name, RenderState.TextureState.Texture texture) {
-        var state = texture == null ? RenderType.NO_TEXTURE : new RenderType.TextureStateShard(texture.location().reference(), texture.blur(), texture.mipmap());
+        var state = texture == null ? RenderType.NO_TEXTURE : new RenderType.TextureStateShard(texture.location().reference(), texture.blur() ? net.minecraft.util.TriState.TRUE : net.minecraft.util.TriState.FALSE, texture.mipmap());
         return () -> state;
     }
 
     @Override
     public RenderState.ShaderState createShaderState(String name, Shader shader) {
-        var state = shader == null ? new RenderType.ShaderStateShard() : new RenderType.ShaderStateShard(shader::reference);
+        var state = shader == null ? new RenderType.ShaderStateShard() : new RenderType.ShaderStateShard(shader.reference());
         return () -> state;
     }
 
@@ -189,61 +189,61 @@ public final class MinecraftRenderStateFactory implements RenderStateFactory {
     @Override
     public Shader getShader(Shaders shaders) {
         var shader = switch (shaders) {
-            case POSITION_COLOR_LIGHTMAP -> GameRenderer.getPositionColorLightmapShader();
-            case POSITION -> GameRenderer.getPositionShader();
-            case POSITION_COLOR_TEX -> null;
-            case POSITION_TEX -> GameRenderer.getPositionTexShader();
-            case POSITION_COLOR_TEX_LIGHTMAP -> GameRenderer.getPositionColorTexLightmapShader();
-            case POSITION_COLOR -> GameRenderer.getPositionColorShader();
-            case SOLID -> GameRenderer.getRendertypeSolidShader();
-            case CUTOUT_MIPPED -> GameRenderer.getRendertypeCutoutMippedShader();
-            case CUTOUT -> GameRenderer.getRendertypeCutoutShader();
-            case TRANSLUCENT -> GameRenderer.getRendertypeTranslucentShader();
-            case TRANSLUCENT_MOVING_BLOCK -> GameRenderer.getRendertypeTranslucentMovingBlockShader();
+            case POSITION_COLOR_LIGHTMAP -> CoreShaders.POSITION_COLOR_LIGHTMAP;
+            case POSITION -> CoreShaders.POSITION;
+            case POSITION_COLOR_TEX -> CoreShaders.POSITION_TEX;
+            case POSITION_TEX -> CoreShaders.POSITION_TEX;
+            case POSITION_COLOR_TEX_LIGHTMAP -> CoreShaders.POSITION_COLOR_TEX_LIGHTMAP;
+            case POSITION_COLOR -> CoreShaders.POSITION_COLOR;
+            case SOLID -> CoreShaders.RENDERTYPE_SOLID;
+            case CUTOUT_MIPPED -> CoreShaders.RENDERTYPE_CUTOUT_MIPPED;
+            case CUTOUT -> CoreShaders.RENDERTYPE_CUTOUT;
+            case TRANSLUCENT -> CoreShaders.RENDERTYPE_TRANSLUCENT;
+            case TRANSLUCENT_MOVING_BLOCK -> CoreShaders.RENDERTYPE_TRANSLUCENT_MOVING_BLOCK;
             case TRANSLUCENT_NO_CRUMBLING -> null;
-            case ARMOR_CUTOUT_NO_CULL -> GameRenderer.getRendertypeArmorCutoutNoCullShader();
-            case ENTITY_SOLID -> GameRenderer.getRendertypeEntitySolidShader();
-            case ENTITY_CUTOUT -> GameRenderer.getRendertypeEntityCutoutShader();
-            case ENTITY_CUTOUT_NO_CULL -> GameRenderer.getRendertypeEntityCutoutNoCullShader();
-            case ENTITY_CUTOUT_NO_CULL_Z_OFFSET -> GameRenderer.getRendertypeEntityCutoutNoCullZOffsetShader();
-            case ITEM_ENTITY_TRANSLUCENT_CULL -> GameRenderer.getRendertypeItemEntityTranslucentCullShader();
-            case ENTITY_TRANSLUCENT_CULL -> GameRenderer.getRendertypeEntityTranslucentCullShader();
-            case ENTITY_TRANSLUCENT -> GameRenderer.getRendertypeEntityTranslucentShader();
-            case ENTITY_TRANSLUCENT_EMISSIVE -> GameRenderer.getRendertypeEntityTranslucentEmissiveShader();
-            case ENTITY_SMOOTH_CUTOUT -> GameRenderer.getRendertypeEntitySmoothCutoutShader();
-            case BEACON_BEAM -> GameRenderer.getRendertypeBeaconBeamShader();
-            case ENTITY_DECAL -> GameRenderer.getRendertypeEntityDecalShader();
-            case ENTITY_NO_OUTLINE -> GameRenderer.getRendertypeEntityNoOutlineShader();
-            case ENTITY_SHADOW -> GameRenderer.getRendertypeEntityShadowShader();
-            case ENTITY_ALPHA -> GameRenderer.getRendertypeEntityAlphaShader();
-            case EYES -> GameRenderer.getRendertypeEyesShader();
-            case ENERGY_SWIRL -> GameRenderer.getRendertypeEnergySwirlShader();
-            case LEASH -> GameRenderer.getRendertypeLeashShader();
-            case WATER_MASK -> GameRenderer.getRendertypeWaterMaskShader();
-            case OUTLINE -> GameRenderer.getRendertypeOutlineShader();
-            case ARMOR_GLINT -> GameRenderer.getRendertypeArmorGlintShader();
-            case ARMOR_ENTITY_GLINT -> GameRenderer.getRendertypeArmorEntityGlintShader();
-            case GLINT_TRANSLUCENT -> GameRenderer.getRendertypeGlintTranslucentShader();
-            case GLINT -> GameRenderer.getRendertypeGlintShader();
-            case GLINT_DIRECT -> GameRenderer.getRendertypeGlintDirectShader();
-            case ENTITY_GLINT -> GameRenderer.getRendertypeEntityGlintShader();
-            case ENTITY_GLINT_DIRECT -> GameRenderer.getRendertypeEntityGlintDirectShader();
-            case CRUMBLING -> GameRenderer.getRendertypeCrumblingShader();
-            case TEXT -> GameRenderer.getRendertypeTextShader();
-            case TEXT_BACKGROUND -> GameRenderer.getRendertypeTextBackgroundShader();
-            case TEXT_INTENSITY -> GameRenderer.getRendertypeTextIntensityShader();
-            case TEXT_SEE_THROUGH -> GameRenderer.getRendertypeTextSeeThroughShader();
-            case TEXT_BACKGROUND_SEE_THROUGH -> GameRenderer.getRendertypeTextBackgroundSeeThroughShader();
-            case TEXT_INTENSITY_SEE_THROUGH -> GameRenderer.getRendertypeTextIntensitySeeThroughShader();
-            case LIGHTNING -> GameRenderer.getRendertypeLightningShader();
-            case TRIPWIRE -> GameRenderer.getRendertypeTripwireShader();
-            case END_PORTAL -> GameRenderer.getRendertypeEndPortalShader();
-            case END_GATEWAY -> GameRenderer.getRendertypeEndGatewayShader();
-            case LINES -> GameRenderer.getRendertypeLinesShader();
-            case GUI -> GameRenderer.getRendertypeGuiShader();
-            case GUI_OVERLAY -> GameRenderer.getRendertypeGuiOverlayShader();
-            case GUI_TEXT_HIGHLIGHT -> GameRenderer.getRendertypeGuiTextHighlightShader();
-            case GUI_GHOST_RECIPE_OVERLAY -> GameRenderer.getRendertypeGuiGhostRecipeOverlayShader();
+            case ARMOR_CUTOUT_NO_CULL -> CoreShaders.RENDERTYPE_ARMOR_CUTOUT_NO_CULL;
+            case ENTITY_SOLID -> CoreShaders.RENDERTYPE_ENTITY_SOLID;
+            case ENTITY_CUTOUT -> CoreShaders.RENDERTYPE_ENTITY_CUTOUT;
+            case ENTITY_CUTOUT_NO_CULL -> CoreShaders.RENDERTYPE_ENTITY_CUTOUT_NO_CULL;
+            case ENTITY_CUTOUT_NO_CULL_Z_OFFSET -> CoreShaders.RENDERTYPE_ENTITY_CUTOUT_NO_CULL_Z_OFFSET;
+            case ITEM_ENTITY_TRANSLUCENT_CULL -> CoreShaders.RENDERTYPE_ITEM_ENTITY_TRANSLUCENT_CULL;
+            case ENTITY_TRANSLUCENT_CULL -> CoreShaders.RENDERTYPE_ENTITY_TRANSLUCENT;
+            case ENTITY_TRANSLUCENT -> CoreShaders.RENDERTYPE_ENTITY_TRANSLUCENT;
+            case ENTITY_TRANSLUCENT_EMISSIVE -> CoreShaders.RENDERTYPE_ENTITY_TRANSLUCENT_EMISSIVE;
+            case ENTITY_SMOOTH_CUTOUT -> CoreShaders.RENDERTYPE_ENTITY_SMOOTH_CUTOUT;
+            case BEACON_BEAM -> CoreShaders.RENDERTYPE_BEACON_BEAM;
+            case ENTITY_DECAL -> CoreShaders.RENDERTYPE_ENTITY_DECAL;
+            case ENTITY_NO_OUTLINE -> CoreShaders.RENDERTYPE_ENTITY_NO_OUTLINE;
+            case ENTITY_SHADOW -> CoreShaders.RENDERTYPE_ENTITY_SHADOW;
+            case ENTITY_ALPHA -> CoreShaders.RENDERTYPE_ENTITY_ALPHA;
+            case EYES -> CoreShaders.RENDERTYPE_EYES;
+            case ENERGY_SWIRL -> CoreShaders.RENDERTYPE_ENERGY_SWIRL;
+            case LEASH -> CoreShaders.RENDERTYPE_LEASH;
+            case WATER_MASK -> CoreShaders.RENDERTYPE_WATER_MASK;
+            case OUTLINE -> CoreShaders.RENDERTYPE_OUTLINE;
+            case ARMOR_GLINT -> CoreShaders.RENDERTYPE_ARMOR_ENTITY_GLINT;
+            case ARMOR_ENTITY_GLINT -> null;
+            case GLINT_TRANSLUCENT -> CoreShaders.RENDERTYPE_GLINT_TRANSLUCENT;
+            case GLINT -> CoreShaders.RENDERTYPE_GLINT;
+            case GLINT_DIRECT -> null;
+            case ENTITY_GLINT -> CoreShaders.RENDERTYPE_ENTITY_GLINT;
+            case ENTITY_GLINT_DIRECT -> null;
+            case CRUMBLING -> CoreShaders.RENDERTYPE_CRUMBLING;
+            case TEXT -> CoreShaders.RENDERTYPE_TEXT;
+            case TEXT_BACKGROUND -> CoreShaders.RENDERTYPE_TEXT_BACKGROUND;
+            case TEXT_INTENSITY -> CoreShaders.RENDERTYPE_TEXT_INTENSITY;
+            case TEXT_SEE_THROUGH -> CoreShaders.RENDERTYPE_TEXT_SEE_THROUGH;
+            case TEXT_BACKGROUND_SEE_THROUGH -> CoreShaders.RENDERTYPE_TEXT_BACKGROUND_SEE_THROUGH;
+            case TEXT_INTENSITY_SEE_THROUGH -> CoreShaders.RENDERTYPE_TEXT_INTENSITY_SEE_THROUGH;
+            case LIGHTNING -> CoreShaders.RENDERTYPE_LIGHTNING;
+            case TRIPWIRE -> CoreShaders.RENDERTYPE_TRIPWIRE;
+            case END_PORTAL -> CoreShaders.RENDERTYPE_END_PORTAL;
+            case END_GATEWAY -> CoreShaders.RENDERTYPE_END_GATEWAY;
+            case LINES -> CoreShaders.RENDERTYPE_LINES;
+            case GUI -> CoreShaders.RENDERTYPE_GUI;
+            case GUI_OVERLAY -> CoreShaders.RENDERTYPE_GUI_OVERLAY;
+            case GUI_TEXT_HIGHLIGHT -> CoreShaders.RENDERTYPE_GUI_TEXT_HIGHLIGHT;
+            case GUI_GHOST_RECIPE_OVERLAY -> CoreShaders.RENDERTYPE_GUI_GHOST_RECIPE_OVERLAY;
         };
         return new MinecraftShader(shader);
     }

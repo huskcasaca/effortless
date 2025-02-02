@@ -79,7 +79,7 @@ public record MinecraftPlayer(net.minecraft.world.entity.player.Player refs) imp
 
     @Override
     public void sendMessage(Text message) {
-        refs.sendSystemMessage(message.reference());
+        sendClientMessage(message, false); // TODO: move to defaults
 //        getRef().displayClientMessage(message, true);
     }
 

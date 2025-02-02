@@ -1,10 +1,10 @@
 package dev.huskuraft.effortless.vanilla.platform;
 
-import java.util.Arrays;
-
 import dev.huskuraft.effortless.api.input.KeyBinding;
 import dev.huskuraft.effortless.api.platform.Options;
 import dev.huskuraft.effortless.vanilla.input.MinecraftKeyBinding;
+
+import java.util.Arrays;
 
 public record MinecraftOptions(net.minecraft.client.Options refs) implements Options {
 

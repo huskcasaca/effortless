@@ -4,8 +4,8 @@
     "srcrgb": "srcalpha",
     "dstrgb": "1-srcalpha"
   },
-  "vertex": "rendertype_tinted_solid",
-  "fragment": "rendertype_tinted_solid",
+  "vertex": "minecraft:core/rendertype_tinted_solid",
+  "fragment": "minecraft:core/rendertype_tinted_solid",
   "attributes": [
     "Position",
     "Color",
