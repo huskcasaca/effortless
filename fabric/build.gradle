@@ -11,7 +11,8 @@ subprojects {
     group = "${mod_group_id}.fabric"
 
     ext {
-        minecraft_version_range = '>=' + "${project.minecraft_supported_versions}".split(",")[0]
+        minecraft_version_earliest = "${project.minecraft_version_list}".split(",")[0]
+        minecraft_version_range = ">=${project.minecraft_version_earliest}-"
     }
 
     base {

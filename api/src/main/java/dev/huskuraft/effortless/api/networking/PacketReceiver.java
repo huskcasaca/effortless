@@ -6,8 +6,4 @@ public interface PacketReceiver extends ByteBufReceiver {
 
     void receivePacket(Packet packet, Player player);
 
-    default void receivePacket(Packet packet) {
-        receivePacket(packet, null);
-    }
-
 }

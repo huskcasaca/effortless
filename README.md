@@ -21,8 +21,8 @@ from a pre-defined list for random placement.
 
 ## Downloads
 
-- [Curseforge](https://www.curseforge.com/minecraft/mc-mods/effortless)
 - [Modrinth](https://modrinth.com/mod/effortless)
+- [Curseforge](https://www.curseforge.com/minecraft/mc-mods/effortless)
 
 ## Features
 
@@ -94,46 +94,25 @@ from a pre-defined list for random placement.
 
 - You need to install this mod on both the client side and server side.
 - You can use this mod on servers with different platforms from your client.
-- [ViaFabric](https://github.com/ViaVersion/ViaFabric) and [ViaForge](https://github.com/ViaVersion/ViaForge) are also
+- You can use [ViaFabric](https://github.com/ViaVersion/ViaFabric) and [ViaForge](https://github.com/ViaVersion/ViaForge) are also
   supported and tested.
+- You can use the same mod jar file on multiple targets.
 
-### Minecraft 1.21
-
-| Target                | Fabric  |  Quilt  |  Forge  | NeoForge |
-|-----------------------|:-------:|:-------:|:-------:|:--------:|
-| `1.21.3`<br/>`1.21.2` | &check; | &check; |         | &check;  |
-| `1.21.1`<br/>`1.21`   | &check; | &check; | &check; | &check;  |
-
-### Minecraft 1.20
-
-| Target                | Fabric  |  Quilt  |  Forge  |
-|-----------------------|:-------:|:-------:|:-------:|
-| `1.20.6`<br/>`1.20.5` | &check; | &check; | &check; |
-| `1.20.4`<br/>`1.20.3` | &check; | &check; | &check; |
-| `1.20.2`              | &check; | &check; | &check; |
-| `1.20.1`<br/>`1.20`   | &check; | &check; | &check; |
-
-### Minecraft 1.19
-
-| Target                           | Fabric  |  Quilt  |  Forge  |
-|----------------------------------|:-------:|:-------:|:-------:|
-| `1.19.4`                         | &check; | &check; | &check; |
-| `1.19.3`                         | &check; | &check; | &check; |
-| `1.19.2`<br/>`1.19.1`<br/>`1.19` | &check; | &check; | &check; |
-
-### Minecraft 1.18
-
-| Target              | Fabric  |  Quilt  |  Forge  |
-|---------------------|:-------:|:-------:|:-------:|
-| `1.18.2`            | &check; | &check; | &check; |
-| `1.18.1`<br/>`1.18` |         |         |         |
-
-### Minecraft 1.17
-
-| Target   | Fabric  |  Quilt  |  Forge  |
-|----------|:-------:|:-------:|:-------:|
-| `1.17.1` | &check; | &check; | &check; |
-| `1.17  ` |         |         |         |
+| Filename                      | Targets                  | Fabric  |  Quilt  |  Forge  | NeoForge |
+|-------------------------------|--------------------------|:-------:|:-------:|:-------:|:--------:|
+| `effortless-1.21.3-3.2.0.jar` | `1.21.3` `1.21.2`        | &check; | &check; |         | &check;  |
+| `effortless-1.21.1-3.2.0.jar` | `1.21.1` `1.21`          | &check; | &check; | &check; | &check;  |
+| `effortless-1.20.6-3.2.0.jar` | `1.20.6` `1.20.5`        | &check; | &check; | &check; | &check;  |
+| `effortless-1.20.4-3.2.0.jar` | `1.20.4` `1.20.3`        | &check; | &check; | &check; |          |
+| `effortless-1.20.2-3.2.0.jar` | `1.20.2`                 | &check; | &check; | &check; |          |
+| `effortless-1.20.1-3.2.0.jar` | `1.20.1` `1.20`          | &check; | &check; | &check; |          |
+| `effortless-1.19.4-3.2.0.jar` | `1.19.4`                 | &check; | &check; | &check; |          |
+| `effortless-1.19.3-3.2.0.jar` | `1.19.3`                 | &check; | &check; | &check; |          |
+| `effortless-1.19.2-3.2.0.jar` | `1.19.2` `1.19.1` `1.19` | &check; | &check; | &check; |          |
+| `effortless-1.18.2-3.2.0.jar` | `1.18.2`                 | &check; | &check; | &check; |          |
+| `effortless-1.18.1-3.2.0.jar` | `1.18.1` `1.18`          | &check; | &check; | &check; |          |
+| `effortless-1.17.1-3.2.0.jar` | `1.17.1`                 | &check; | &check; | &check; |          |
+|                               | `1.17  `                 |         |         |         |          |
 
 ## Dependencies
 

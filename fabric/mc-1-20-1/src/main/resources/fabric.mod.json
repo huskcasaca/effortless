@@ -26,6 +26,8 @@
   ],
   "accessWidener": "effortless.accesswidener",
   "depends": {
-    "minecraft": "${minecraft_version_range}"
+    "minecraft": "${minecraft_version_range}",
+    "fabricloader": "*",
+    "fabric-api": "*"
   }
 }

@@ -1,6 +1,5 @@
 package dev.huskuraft.effortless.forge.events;
 
-
 import com.google.auto.service.AutoService;
 
 import dev.huskuraft.effortless.api.core.InteractionType;
@@ -62,12 +61,10 @@ public class ForgeClientEventRegistry extends ClientEventRegistry {
 
     @SubscribeEvent
     public void onRenderLevelStage(RenderWorldLastEvent event) {
-//        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
-//            return;
-//        }
-        var renderer = new MinecraftRenderer(event.getMatrixStack());
-        var partialTick = event.getPartialTicks();
-        getRenderWorldEvent().invoker().onRenderWorld(renderer, partialTick);
+        ////
+        ////
+        ////
+        getRenderWorldEvent().invoker().onRenderWorld(new MinecraftRenderer(event.getMatrixStack()), event.getPartialTicks());
     }
 
     @SubscribeEvent

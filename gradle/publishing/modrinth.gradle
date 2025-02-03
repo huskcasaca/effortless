@@ -10,7 +10,7 @@ modrinth {
     versionType = mod_version.contains('-alpha') ? 'alpha' : mod_version.contains('-beta') ? 'beta' : 'release'
     uploadFile = file("build/libs/${mod_id}-${loader_name}-${minecraft_version}-${mod_version}.jar")
     changelog = extractChangelog(rootProject.file('CHANGELOG.md'), mod_version)
-    gameVersions = "${minecraft_supported_versions}".split(",").toList()
+    gameVersions = "${minecraft_version_list}".split(",").toList()
     def targets = []
     if (project.ext.find('fuse_forge') == true) {
         targets.add('forge')
