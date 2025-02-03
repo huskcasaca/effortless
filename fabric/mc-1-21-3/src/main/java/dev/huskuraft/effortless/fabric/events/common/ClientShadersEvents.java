@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.renderer.ShaderProgram;
 import net.minecraft.server.packs.resources.ResourceProvider;
 
 public class ClientShadersEvents {
@@ -22,7 +22,7 @@ public class ClientShadersEvents {
 
         @FunctionalInterface
         interface ShadersSink {
-            void register(ShaderInstance shader, Consumer<ShaderInstance> callback);
+            void register(ShaderProgram shader, Consumer<ShaderProgram> callback);
         }
     }
 

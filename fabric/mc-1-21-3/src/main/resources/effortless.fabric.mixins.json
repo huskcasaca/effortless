@@ -10,7 +10,7 @@
     "PlayerListMixin"
   ],
   "client": [
-    "GameRendererMixin",
+    "ShaderManagerMixin",
     "GuiMixin",
     "KeyboardMixin",
     "MinecraftMixin"

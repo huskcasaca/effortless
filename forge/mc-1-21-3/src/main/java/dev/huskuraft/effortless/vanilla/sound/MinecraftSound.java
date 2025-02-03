@@ -11,6 +11,6 @@ public record MinecraftSound(
 
     @Override
     public ResourceLocation getId() {
-        return new MinecraftResourceLocation(refs.getLocation());
+        return new MinecraftResourceLocation(refs.location());
     }
 }

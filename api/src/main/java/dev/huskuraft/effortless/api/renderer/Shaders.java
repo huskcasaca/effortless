@@ -17,6 +17,7 @@ public enum Shaders implements Shader {
     CUTOUT,
     TRANSLUCENT,
     TRANSLUCENT_MOVING_BLOCK,
+    @Deprecated(since = "1.21.3")
     TRANSLUCENT_NO_CRUMBLING,
     ARMOR_CUTOUT_NO_CULL,
     ENTITY_SOLID,
@@ -24,6 +25,7 @@ public enum Shaders implements Shader {
     ENTITY_CUTOUT_NO_CULL,
     ENTITY_CUTOUT_NO_CULL_Z_OFFSET,
     ITEM_ENTITY_TRANSLUCENT_CULL,
+    @Deprecated(since = "1.21.3")
     ENTITY_TRANSLUCENT_CULL,
     ENTITY_TRANSLUCENT,
     ENTITY_TRANSLUCENT_EMISSIVE,
@@ -39,11 +41,14 @@ public enum Shaders implements Shader {
     WATER_MASK,
     OUTLINE,
     ARMOR_GLINT,
+    @Deprecated(since = "1.21.3")
     ARMOR_ENTITY_GLINT,
     GLINT_TRANSLUCENT,
     GLINT,
+    @Deprecated(since = "1.21.3")
     GLINT_DIRECT,
     ENTITY_GLINT,
+    @Deprecated(since = "1.21.3")
     ENTITY_GLINT_DIRECT,
     CRUMBLING,
     TEXT,

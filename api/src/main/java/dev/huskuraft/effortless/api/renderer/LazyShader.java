@@ -34,7 +34,7 @@ class LazyShader implements Shader {
     @Override
     public void register(RegisterShader.ShadersSink sink) {
         try {
-            sink.register(location, vertexFormat, shader -> this.reference = shader);
+            sink.register(getResource(), getVertexFormat(), shader -> this.reference = shader);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

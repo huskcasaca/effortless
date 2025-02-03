@@ -47,7 +47,6 @@ import dev.huskuraft.effortless.building.clipboard.Snapshot;
 import dev.huskuraft.effortless.building.clipboard.SnapshotTransform;
 import dev.huskuraft.effortless.building.config.ClientConfig;
 import dev.huskuraft.effortless.building.history.OperationResultStack;
-import dev.huskuraft.effortless.building.operation.ItemStackUtils;
 import dev.huskuraft.effortless.building.operation.ItemSummary;
 import dev.huskuraft.effortless.building.operation.OperationResult;
 import dev.huskuraft.effortless.building.operation.OperationTooltip;
@@ -749,7 +748,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 
     public void clearBuildMessage(Player player) {
         if (this.isBuildMessageVisible) {
-            player.sendClientMessage(Text.empty(), true);
+            player.sendMessage(Text.empty(), true);
             this.isBuildMessageVisible = false;
         }
 
@@ -788,7 +787,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
 //            }
         }
 
-        player.sendClientMessage(message, true);
+        player.sendMessage(message, true);
         this.isBuildMessageVisible = true;
 
 

@@ -22,7 +22,7 @@ subprojects {
         archivesName = "${mod_id}-${loader_name}-${minecraft_version}"
     }
 
-    def isJava17Ports = ['1.17.1', '1.18.2', "1.19.2", "1.19.4", "1.20.1", "1.20.2", "1.20.4"].contains(minecraft_version)
+    def isJava17Ports = "${project.minecraft_version}".replace(".", "").toInteger() < 1205
 
     java {
         withSourcesJar()

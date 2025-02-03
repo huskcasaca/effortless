@@ -115,12 +115,12 @@ public record MinecraftClient(
 
     @Override
     public void sendChat(String chat) {
-        refs.player.chatSigned(chat, null);
+//        refs.player.chatSigned(chat, null); // m_240287_
     }
 
     @Override
     public void sendCommand(String command) {
-        refs.player.commandSigned(command, null);
+//        refs.player.commandSigned(command, null); // m_234148_
     }
 
     @Override

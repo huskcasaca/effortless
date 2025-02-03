@@ -165,14 +165,14 @@ public final class MinecraftConvertor {
 
 
     public static InteractionResult fromPlatformInteractionResult(net.minecraft.world.InteractionResult interactionResult) {
-        return switch (interactionResult) {
-            case SUCCESS -> InteractionResult.SUCCESS;
-            case SUCCESS_NO_ITEM_USED -> InteractionResult.SUCCESS_NO_ITEM_USED;
-            case CONSUME -> InteractionResult.CONSUME;
-            case CONSUME_PARTIAL -> InteractionResult.CONSUME_PARTIAL;
-            case PASS -> InteractionResult.PASS;
-            case FAIL -> InteractionResult.FAIL;
-        };
+        if (interactionResult instanceof net.minecraft.world.InteractionResult.Success) return InteractionResult.SUCCESS;
+        if (interactionResult.consumesAction()) return InteractionResult.CONSUME;
+        if (interactionResult instanceof net.minecraft.world.InteractionResult.Pass) return InteractionResult.PASS;
+        if (interactionResult instanceof net.minecraft.world.InteractionResult.Fail) return InteractionResult.FAIL;
+        if (interactionResult instanceof net.minecraft.world.InteractionResult.TryEmptyHandInteraction) return InteractionResult.PASS;
+        return InteractionResult.PASS;
+        ////
+        ////
     }
 
     public static BlockPlaceContext toPlatformBlockPlaceContext(Player player, BlockInteraction blockInteraction) {

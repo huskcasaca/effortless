@@ -40,16 +40,18 @@ public interface Player extends Entity {
 
     void drop(ItemStack itemStack, boolean dropAround, boolean includeThrowerName);
 
-    void sendMessage(Text messages);
+    void sendMessage(Text message, boolean actionBar);
 
-    default void sendMessage(String message) {
-        sendMessage(Text.text(message));
+    default void sendMessage(String message, boolean actionBar) {
+        sendMessage(Text.text(message), actionBar);
     }
 
-    void sendClientMessage(Text message, boolean actionBar);
+    default void sendMessage(Text message) {
+        sendMessage(message, false);
+    }
 
-    default void sendClientMessage(String message, boolean actionBar) {
-        sendClientMessage(Text.text(message), actionBar);
+    default void sendMessage(String message) {
+        sendMessage(Text.text(message), false);
     }
 
     void swing(InteractionHand hand);
