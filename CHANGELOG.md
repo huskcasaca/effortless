@@ -1,6 +1,16 @@
 ## Changelog
 ----------
 
+### 3.3.0
+
+* Fix Fabric networking not working on 1.21+ ([#196](https://github.com/huskcasaca/effortless/pull/196))
+* Fix Forge 1.21+ not launch ([#197](https://github.com/huskcasaca/effortless/pull/197))
+* Fix wall torch placement ([#198](https://github.com/huskcasaca/effortless/pull/198))
+* Port to 1.21.3 ([#199](https://github.com/huskcasaca/effortless/pull/200))
+* Fix randomzier item creation issue ([#201](https://github.com/huskcasaca/effortless/pull/201))
+
+----------
+
 ### 3.2.0
 
 * Fix block entity tag setting issue ([#169](https://github.com/huskcasaca/effortless/pull/169))
