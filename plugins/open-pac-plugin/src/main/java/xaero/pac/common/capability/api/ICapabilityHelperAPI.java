@@ -1,6 +1,5 @@
 package xaero.pac.common.capability.api;
 
-import xaero.pac.client.world.capability.api.ClientWorldCapabilityTypes;
 import xaero.pac.common.capability.ICapability;
 
 import javax.annotation.Nonnull;
@@ -14,7 +13,6 @@ public interface ICapabilityHelperAPI {
 	/**
 	 * Gets the capability value of a specified type for a specified object.
 	 * <p>
-	 * Client world capability types can be found in {@link ClientWorldCapabilityTypes}
 	 *
 	 * @param object  the object that the capability is attached to, not null
 	 * @param capability  the capability type, not null

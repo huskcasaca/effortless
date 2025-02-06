@@ -1,7 +1,6 @@
 package xaero.pac.client.player.config.api;
 
 import xaero.pac.common.server.player.config.api.IPlayerConfigOptionSpecAPI;
-import xaero.pac.common.server.player.config.api.PlayerConfigOptions;
 import xaero.pac.common.server.player.config.api.PlayerConfigType;
 
 import javax.annotation.Nonnull;
@@ -18,7 +17,6 @@ public interface IPlayerConfigClientStorageAPI {
 	/**
 	 * Gets the config option value storage for a specified config option in this config.
 	 * <p>
-	 * All player config option types are statically accessible in {@link PlayerConfigOptions}.
 	 *
 	 * @param option  the player config option, not null
 	 * @return the value storage for the config option, not null

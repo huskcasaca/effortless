@@ -10,19 +10,19 @@ import javax.annotation.Nonnull;
 public enum PlayerConfigType {
 
 	/** Server claims config */
-	SERVER(Component.translatable("gui.xaero_pac_config_type_server")),
+	SERVER(null),
 
 	/** Expired claims config */
-	EXPIRED(Component.translatable("gui.xaero_pac_config_type_expired")),
+	EXPIRED(null),
 
 	/** Wilderness config */
-	WILDERNESS(Component.translatable("gui.xaero_pac_config_type_wilderness")),
+	WILDERNESS(null),
 
 	/** The default player config */
-	DEFAULT_PLAYER(Component.translatable("gui.xaero_pac_config_type_default_player")),
+	DEFAULT_PLAYER(null),
 
 	/** A player config */
-	PLAYER(Component.translatable("gui.xaero_pac_config_type_player"));
+	PLAYER(null);
 
 	private final Component name;
 

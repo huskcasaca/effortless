@@ -1,7 +1,5 @@
 package xaero.pac.common.server.player.config.api;
 
-import xaero.pac.common.server.player.config.PlayerConfig;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;

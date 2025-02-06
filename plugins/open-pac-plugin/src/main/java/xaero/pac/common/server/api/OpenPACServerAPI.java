@@ -2,7 +2,6 @@ package xaero.pac.common.server.api;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import xaero.pac.common.server.IOpenPACMinecraftServer;
 import xaero.pac.common.server.IServerDataAPI;
 import xaero.pac.common.server.claims.api.IServerClaimsManagerAPI;
 import xaero.pac.common.server.claims.protection.api.IChunkProtectionAPI;
@@ -24,8 +23,6 @@ import javax.annotation.Nonnull;
  */
 public class OpenPACServerAPI {
 
-	private final IServerDataAPI serverData;
-
 	/**
 	 * Constructor for internal usage.
 	 *
@@ -33,8 +30,7 @@ public class OpenPACServerAPI {
 	 */
 	@SuppressWarnings("unchecked")
 	public OpenPACServerAPI(IServerDataAPI serverData) {
-		super();
-		this.serverData = serverData;
+        throw new RuntimeException("stub!");
 	}
 
 	/**
@@ -44,7 +40,7 @@ public class OpenPACServerAPI {
 	 */
 	@Nonnull
 	public IPartyManagerAPI getPartyManager(){
-		return serverData.getPartyManager();
+        throw new RuntimeException("stub!");
 	}
 
 	/**
@@ -54,7 +50,7 @@ public class OpenPACServerAPI {
 	 */
 	@Nonnull
 	public IServerClaimsManagerAPI getServerClaimsManager(){
-		return serverData.getServerClaimsManager();
+        throw new RuntimeException("stub!");
 	}
 
 	/**
@@ -64,7 +60,7 @@ public class OpenPACServerAPI {
 	 */
 	@Nonnull
 	public IPlayerConfigManagerAPI getPlayerConfigs() {
-		return serverData.getPlayerConfigs();
+        throw new RuntimeException("stub!");
 	}
 
 	/**
@@ -74,7 +70,7 @@ public class OpenPACServerAPI {
 	 * @return the adaptive text localizer API, not null
 	 */
 	public IAdaptiveLocalizerAPI getAdaptiveTextLocalizer(){
-		return serverData.getAdaptiveLocalizer();
+        throw new RuntimeException("stub!");
 	}
 
 	/**
@@ -83,7 +79,7 @@ public class OpenPACServerAPI {
 	 * @return the chunk protection API
 	 */
 	public IChunkProtectionAPI getChunkProtection(){
-		return serverData.getChunkProtection();
+        throw new RuntimeException("stub!");
 	}
 
 	/**
@@ -94,7 +90,7 @@ public class OpenPACServerAPI {
 	 */
 	@Nonnull
 	public static OpenPACServerAPI get(@Nonnull MinecraftServer server) {
-		return ((IOpenPACMinecraftServer)server).getXaero_OPAC_ServerData().getAPI();
+        throw new RuntimeException("stub!");
 	}
 
 }
