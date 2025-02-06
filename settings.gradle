@@ -112,3 +112,5 @@ include ':multiplatform'
 //  '1-21-2',
     '1-21-3',
 ].forEach { port -> include ":multiplatform:mc-${port}" }
+
+include ':plugins:open-pac-plugin'
