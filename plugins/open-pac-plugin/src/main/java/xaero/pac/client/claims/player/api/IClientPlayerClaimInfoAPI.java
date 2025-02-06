@@ -1,57 +1,58 @@
 package xaero.pac.client.claims.player.api;
 
-import net.minecraft.resources.ResourceLocation;
-import xaero.pac.common.claims.player.api.IPlayerClaimInfoAPI;
-import xaero.pac.common.claims.player.api.IPlayerDimensionClaimsAPI;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.resources.ResourceLocation;
+import xaero.pac.common.claims.player.api.IPlayerClaimInfoAPI;
+import xaero.pac.common.claims.player.api.IPlayerDimensionClaimsAPI;
 
 /**
  * API for claim info of a player on the client side
  */
 public interface IClientPlayerClaimInfoAPI extends IPlayerClaimInfoAPI {
 
-	@Override
-	public int getClaimCount();
+    @Override
+    int getClaimCount();
 
-	@Override
-	public int getForceloadCount();
+    @Override
+    int getForceloadCount();
 
-	@Nonnull
-	@Override
-	public UUID getPlayerId();
+    @Nonnull
+    @Override
+    UUID getPlayerId();
 
-	@Nonnull
-	@Override
-	public String getPlayerUsername();
+    @Nonnull
+    @Override
+    String getPlayerUsername();
 
-	@Override
-	public String getClaimsName();
+    @Override
+    String getClaimsName();
 
-	@Override
-	public int getClaimsColor();
+    @Override
+    int getClaimsColor();
 
-	@Nullable
-	@Override
-	String getClaimsName(int subConfigIndex);
+    @Nullable
+    @Override
+    String getClaimsName(int subConfigIndex);
 
-	@Nullable
-	@Override
-	Integer getClaimsColor(int subConfigIndex);
+    @Nullable
+    @Override
+    Integer getClaimsColor(int subConfigIndex);
 
-	/**
-	 * Gets a stream of all dimension claim info entries for the player.
-	 *
-	 * @return the stream of all dimension claim info entries, not null
-	 */
-	@Nonnull
-	public Stream<Entry<ResourceLocation, IPlayerDimensionClaimsAPI>> getStream();
+    /**
+     * Gets a stream of all dimension claim info entries for the player.
+     *
+     * @return the stream of all dimension claim info entries, not null
+     */
+    @Nonnull
+    Stream<Entry<ResourceLocation, IPlayerDimensionClaimsAPI>> getStream();
 
-	@Nullable
-	public IPlayerDimensionClaimsAPI getDimension(@Nonnull ResourceLocation id);
+    @Nullable
+    IPlayerDimensionClaimsAPI getDimension(@Nonnull ResourceLocation id);
 
 }

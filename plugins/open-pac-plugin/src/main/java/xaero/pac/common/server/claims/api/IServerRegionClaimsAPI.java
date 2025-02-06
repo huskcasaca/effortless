@@ -1,23 +1,23 @@
 package xaero.pac.common.server.claims.api;
 
+import javax.annotation.Nullable;
+
 import xaero.pac.common.claims.api.IRegionClaimsAPI;
 import xaero.pac.common.claims.player.api.IPlayerChunkClaimAPI;
-
-import javax.annotation.Nullable;
 
 /**
  * API for region claims on the server side
  */
 public interface IServerRegionClaimsAPI extends IRegionClaimsAPI {
 
-	@Nullable
-	@Override
-	public IPlayerChunkClaimAPI get(int x, int z);
+    @Nullable
+    @Override
+    IPlayerChunkClaimAPI get(int x, int z);
 
-	@Override
-	public int getX();
+    @Override
+    int getX();
 
-	@Override
-	public int getZ();
+    @Override
+    int getZ();
 
 }

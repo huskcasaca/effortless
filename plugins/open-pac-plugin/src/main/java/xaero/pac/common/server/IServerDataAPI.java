@@ -9,16 +9,16 @@ import xaero.pac.common.server.player.localization.api.IAdaptiveLocalizerAPI;
 
 public interface IServerDataAPI {
 
-	public IPartyManagerAPI getPartyManager();
+    IPartyManagerAPI getPartyManager();
 
-	public IServerClaimsManagerAPI getServerClaimsManager();
+    IServerClaimsManagerAPI getServerClaimsManager();
 
-	public IPlayerConfigManagerAPI getPlayerConfigs();
+    IPlayerConfigManagerAPI getPlayerConfigs();
 
-	public OpenPACServerAPI getAPI();
+    OpenPACServerAPI getAPI();
 
-	public IAdaptiveLocalizerAPI getAdaptiveLocalizer();
+    IAdaptiveLocalizerAPI getAdaptiveLocalizer();
 
-	public IChunkProtectionAPI getChunkProtection();
+    IChunkProtectionAPI getChunkProtection();
 
 }

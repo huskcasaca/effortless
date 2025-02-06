@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
  */
 public interface IClaimsManagerClaimResultTrackerAPI extends IClaimsManagerClaimResultTrackerRegisterAPI {
 
-	@Override
-	void register(@Nonnull IClaimsManagerClaimResultListenerAPI listener);
+    @Override
+    void register(@Nonnull IClaimsManagerClaimResultListenerAPI listener);
 
 }

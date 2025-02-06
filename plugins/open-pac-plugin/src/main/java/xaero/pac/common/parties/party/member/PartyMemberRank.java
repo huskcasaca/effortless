@@ -4,17 +4,18 @@ import net.minecraft.ChatFormatting;
 
 public enum PartyMemberRank {
 
-	MEMBER(ChatFormatting.GRAY),
-	MODERATOR(ChatFormatting.AQUA),
-	ADMIN(ChatFormatting.YELLOW);
+    MEMBER(ChatFormatting.GRAY),
+    MODERATOR(ChatFormatting.AQUA),
+    ADMIN(ChatFormatting.YELLOW);
 
-	private final ChatFormatting color;
-	private PartyMemberRank(ChatFormatting color) {
-		this.color = color;
-	}
+    private final ChatFormatting color;
 
-	public ChatFormatting getColor() {
-		return color;
-	}
+    PartyMemberRank(ChatFormatting color) {
+        this.color = color;
+    }
+
+    public ChatFormatting getColor() {
+        return color;
+    }
 
 }
