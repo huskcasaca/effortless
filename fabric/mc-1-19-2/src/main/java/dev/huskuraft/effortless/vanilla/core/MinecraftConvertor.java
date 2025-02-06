@@ -6,6 +6,7 @@ import com.mojang.math.Quaternion;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.BlockPosition;
+import dev.huskuraft.effortless.api.core.ChunkPosition;
 import dev.huskuraft.effortless.api.core.Direction;
 import dev.huskuraft.effortless.api.core.EntityInteraction;
 import dev.huskuraft.effortless.api.core.Interaction;
@@ -20,6 +21,7 @@ import dev.huskuraft.effortless.api.math.Vector3i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -65,6 +67,10 @@ public final class MinecraftConvertor {
 
     public static BlockPos toPlatformBlockPosition(BlockPosition blockPosition) {
         return new BlockPos(blockPosition.x(), blockPosition.y(), blockPosition.z());
+    }
+
+    public static ChunkPos toPlatformChunkPosition(ChunkPosition chunkPosition) {
+        return new ChunkPos(chunkPosition.x(), chunkPosition.z());
     }
 
     public static Vec3i toPlatformVector3i(Vector3i vector) {

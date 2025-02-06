@@ -34,8 +34,9 @@ subprojects {
         implementation "net.neoforged:neoforge:${neo_version}"
 
         implementation project(':common')
-
         shadow project(':common')
+
+        compileOnly project(':plugins:open-pac-plugin')
 
         annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
         compileOnly 'com.google.auto.service:auto-service:1.1.1'

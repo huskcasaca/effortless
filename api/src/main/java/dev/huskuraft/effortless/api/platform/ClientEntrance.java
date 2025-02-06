@@ -20,5 +20,9 @@ public interface ClientEntrance extends Entrance {
     default ServerManager getServerManager() {
         throw new UnsupportedOperationException();
     }
+
+    default <T extends ClientPlugin> T getPlugin(T... typeGetter) {
+        return PlatformLoader.getSingleton(typeGetter);
+    }
 }
 

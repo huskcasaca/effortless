@@ -44,8 +44,9 @@ subprojects {
         modCompileOnly "org.quiltmc:quilt-loader:${quilt_loader_version}"
 
         implementation project(':common')
-
         shadow project(':common')
+
+        compileOnly project(':plugins:open-pac-plugin')
 
         implementation 'com.google.code.findbugs:jsr305:3.0.2'
 

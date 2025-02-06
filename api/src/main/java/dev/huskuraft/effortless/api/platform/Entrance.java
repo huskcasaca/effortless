@@ -21,5 +21,9 @@ public interface Entrance {
         return getServerManager().getRunningServer();
     }
 
+    default <T extends Plugin> T getPlugin(T... typeGetter) {
+        return PlatformLoader.getSingleton(typeGetter);
+    }
+
 }
 

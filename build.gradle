@@ -7,4 +7,4 @@ plugins {
     id 'dev.huskuraft.fuse' apply false
 }
 
-//apply from: 'patch.gradle'
+apply from: 'patch.gradle'
