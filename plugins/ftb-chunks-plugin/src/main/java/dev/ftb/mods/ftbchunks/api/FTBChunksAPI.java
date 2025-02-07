@@ -2,7 +2,6 @@ package dev.ftb.mods.ftbchunks.api;
 
 import dev.ftb.mods.ftbchunks.api.client.FTBChunksClientAPI;
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
-import dev.ftb.mods.ftbteams.api.event.TeamManagerEvent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,7 +52,7 @@ public class FTBChunksAPI {
     public interface API {
         /**
          * Check if the server-side manager is loaded. This will always be the case on the server once the FTB Teams
-         * manager object has been created ({@link TeamManagerEvent#CREATED} Architectury event has been fired), which
+         * manager object has been created ({TeamManagerEvent#CREATED} Architectury event has been fired), which
          * happens when the server is starting up.
          *
          * @return true if the manager is available for use

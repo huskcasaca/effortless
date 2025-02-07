@@ -36,7 +36,7 @@ public interface ClaimResult {
 
 	/**
 	 * Create a custom claim failure result. This may be of use to mods which add extra checks to claiming/forcing/etc.
-	 * via the events in {@link dev.ftb.mods.ftbchunks.api.event.ClaimedChunkEvent}; such mods can return a custom claim
+	 * via the events in {ClaimedChunkEvent}; such mods can return a custom claim
 	 * result from the "before" event handler as appropriate.
 	 *
 	 * @param translationKey the translation key for message display
@@ -85,7 +85,7 @@ public interface ClaimResult {
 		}
 
 		public MutableComponent getMessage() {
-			return Component.translatable("ftbchunks.claim_result." + getResultId());
+            throw new RuntimeException("stub!");
 		}
 
 		@Override
@@ -96,7 +96,7 @@ public interface ClaimResult {
 
 	/**
 	 * This class can be used to represent custom reasons why a claim operation cannot be completed. Intended for use
-	 * by other mods when creating a return value for the claim events in {@link dev.ftb.mods.ftbchunks.api.event.ClaimedChunkEvent}.
+	 * by other mods when creating a return value for the claim events in {ClaimedChunkEvent}.
 	 * Use {@link ClaimResult#customProblem(String)} to create instances of this class.
 	 */
 	class CustomProblem implements ClaimResult {
@@ -113,7 +113,7 @@ public interface ClaimResult {
 
 		@Override
 		public MutableComponent getMessage() {
-			return Component.translatable(name);
+            throw new RuntimeException("stub!");
 		}
 	}
 }
