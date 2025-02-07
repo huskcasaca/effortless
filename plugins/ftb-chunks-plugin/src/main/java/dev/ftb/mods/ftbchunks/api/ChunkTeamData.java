@@ -3,7 +3,6 @@ package dev.ftb.mods.ftbchunks.api;
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import dev.ftb.mods.ftbteams.api.Team;
 import dev.ftb.mods.ftbteams.api.TeamManager;
-import dev.ftb.mods.ftbteams.api.property.PrivacyProperty;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -11,9 +10,9 @@ import java.util.Collection;
 import java.util.UUID;
 
 /**
- * Represents the FTB Chunks information regarding the {@link Team} (either player or party) which may own zero or
- * more chunks on the server. Instances of this can be retrieved via {@link ClaimedChunkManager#getOrCreateData(Team)}
- * or {@link ClaimedChunkManager#getOrCreateData(ServerPlayer)}.
+ * Represents the FTB Chunks information regarding the {Team} (either player or party) which may own zero or
+ * more chunks on the server. Instances of this can be retrieved via {ClaimedChunkManager#getOrCreateData(Team)}
+ * or {ClaimedChunkManager#getOrCreateData(ServerPlayer)}.
  */
 public interface ChunkTeamData {
     /**
@@ -46,7 +45,7 @@ public interface ChunkTeamData {
     /**
      * Get a collection of all the chunks this team currently has force-loading enabled for. Note that the chunks
      * are not necessarily force-loaded right now, depending on player online status and server offline force-loading
-     * settings; use {@link ClaimedChunk#isActuallyForceLoaded()} to verify this.
+     * settings; use {ClaimedChunk#isActuallyForceLoaded()} to verify this.
      *
      * @return all the force-loaded chunks for this team
      */
@@ -153,15 +152,15 @@ public interface ChunkTeamData {
      * true if
      * <ul>
      *     <li>the player is a member of the team</li>
-     *     <li>the player is an ally of the team, and the property has a value of {@link dev.ftb.mods.ftbteams.api.property.PrivacyMode#ALLIES} or {@link dev.ftb.mods.ftbteams.api.property.PrivacyMode#PUBLIC}</li>
-     *     <li>the property has a value of {@link dev.ftb.mods.ftbteams.api.property.PrivacyMode#PUBLIC}</li>
+     *     <li>the player is an ally of the team, and the property has a value of {dev.ftb.mods.ftbteams.api.property.PrivacyMode#ALLIES} or {dev.ftb.mods.ftbteams.api.property.PrivacyMode#PUBLIC}</li>
+     *     <li>the property has a value of {dev.ftb.mods.ftbteams.api.property.PrivacyMode#PUBLIC}</li>
      * </ul>
      *
      * @param player the player being checked
-     * @param property the team property to check (see {@link FTBChunksProperties} for a list of team properties added by FTB Chunks)
+     * @param property the team property to check (see {FTBChunksProperties} for a list of team properties added by FTB Chunks)
      * @return true if the player has permission to use the property
      */
-    boolean canPlayerUse(ServerPlayer player, PrivacyProperty property);
+//    boolean canPlayerUse(ServerPlayer player, PrivacyProperty property);
 
     /**
      * Set the number of extra chunks this team may have claimed. This is 0 by default, but can be increased via
@@ -172,7 +171,7 @@ public interface ChunkTeamData {
     int getExtraClaimChunks();
 
     /**
-     * Set the number of extra chunks this team may have claimed. See {@link #getExtraClaimChunks()}.
+     * Set the number of extra chunks this team may have claimed. See {#getExtraClaimChunks()}.
      *
      * @param extraClaimChunks the number of extra chunks over the default which this team may claim
      */
@@ -180,7 +179,7 @@ public interface ChunkTeamData {
 
     /**
      * Convenience method to check if this team's claims should be hidden from players not on the team. Equivalent
-     * to checking the {@link FTBChunksProperties#CLAIM_VISIBILITY} team property being not public.
+     * to checking the {FTBChunksProperties#CLAIM_VISIBILITY} team property being not public.
      *
      * @return true if this team's chunk claims are not publicly visible
      */
@@ -209,7 +208,7 @@ public interface ChunkTeamData {
     int getExtraForceLoadChunks();
 
     /**
-     * Set the number of extra chunks this team may have force-loaded. See {@link #getExtraForceLoadChunks()}.
+     * Set the number of extra chunks this team may have force-loaded. See {#getExtraForceLoadChunks()}.
      *
      * @param extraForceLoadChunks the number of extra chunks over the default which this team may force-load
      */
@@ -224,7 +223,7 @@ public interface ChunkTeamData {
 
     /**
      * Are explosions able to damage terrain in chunks claimed by this team? This is a convenience method to check
-     * the value of the {@link FTBChunksProperties#ALLOW_EXPLOSIONS} team property.
+     * the value of the {FTBChunksProperties#ALLOW_EXPLOSIONS} team property.
      *
      * @return true if explosions can damage terrain, false if not
      */
@@ -232,7 +231,7 @@ public interface ChunkTeamData {
 
     /**
      * Are mobs able to grief terrain in chunks claimed by this team? This is a convenience method to check
-     * the value of the {@link FTBChunksProperties#ALLOW_MOB_GRIEFING} team property.
+     * the value of the {FTBChunksProperties#ALLOW_MOB_GRIEFING} team property.
      * <p>
      * Currently, this only extends to Endermen being allowed to pick up and place blocks.
      *
@@ -242,7 +241,7 @@ public interface ChunkTeamData {
 
     /**
      * Is player-vs-player damage allowed in chunks claimed by this team? This is a convenience method to check
-     * the value of the {@link FTBChunksProperties#ALLOW_PVP} team property.
+     * the value of the {FTBChunksProperties#ALLOW_PVP} team property.
      * <p>
      * If PvP is not allowed, then if either the attacker or the victim are in a claimed chunk, PvP damage will
      * be cancelled. Note this is not 100% foolproof, e.g. it won't prevent a player pouring a bucket of lava

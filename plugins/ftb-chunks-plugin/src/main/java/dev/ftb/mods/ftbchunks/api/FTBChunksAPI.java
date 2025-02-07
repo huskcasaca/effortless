@@ -47,7 +47,7 @@ public class FTBChunksAPI {
     }
 
     /**
-     * Top-level FTB Chunks API. Retrieve an instance of this via {@link FTBChunksAPI#api()}
+     * Top-level FTB Chunks API. Retrieve an instance of this via {FTBChunksAPI#api()}
      */
     public interface API {
         /**

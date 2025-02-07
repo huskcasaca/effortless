@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 
 /**
  * Top-level manager for all known claims and teams. You can get an instance of this via
- * {@link FTBChunksAPI.API#getManager()}.
+ * {FTBChunksAPI.API#getManager()}.
  */
 public interface ClaimedChunkManager {
     /**
@@ -86,7 +86,7 @@ public interface ClaimedChunkManager {
     boolean getBypassProtection(UUID player);
 
     /**
-     * Set the protection bypass flag for the given player. See {@link #getBypassProtection(UUID)} for more
+     * Set the protection bypass flag for the given player. See {#getBypassProtection(UUID)} for more
      * information.
      *
      * @param player the player to adjust
@@ -112,7 +112,7 @@ public interface ClaimedChunkManager {
     /**
      * Get an unmodifiable view of all currently force-loaded chunks, grouped by dimension. The key of the returned
      * map is a long encoding of the chunk position; you can obtain the chunk pos via {@code new ChunkPos(long pos)}.
-     * The value of the map items is the UUID of the owning {@link Team}.
+     * The value of the map items is the UUID of the owning {Team}.
      *
      * @return a map of dimension to map of all force-loaded chunks, mapping long-encoded chunk pos to team ID
      */
@@ -120,7 +120,7 @@ public interface ClaimedChunkManager {
 
     /**
      * Get an unmodifiable view of the force loaded chunks for the given dimension. The keys and values of the returned
-     * map as the same as for {@link #getForceLoadedChunks()}.
+     * map as the same as for {#getForceLoadedChunks()}.
      *
      * @param dimension the dimension to check
      * @return a map of all force-loaded chunks, mapping long-encoded chunk pos to team ID

@@ -1,11 +1,9 @@
 package dev.ftb.mods.ftbteams.api;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.ftb.mods.ftblibrary.icon.Color4I;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -14,7 +12,7 @@ import java.util.UUID;
 
 /**
  * Top-level interface for querying team data on the server. Retrieve an instance of this via
- * {@link FTBTeamsAPI.API#getManager()}.
+ * {FTBTeamsAPI.API#getManager()}.
  */
 public interface TeamManager {
     /**
@@ -64,7 +62,7 @@ public interface TeamManager {
     Optional<Team> getPlayerTeamForPlayerID(UUID uuid);
 
     /**
-     * Retrieve the given team by short (friendly) name. This is the name as returned by {@link Team#getShortName()}.
+     * Retrieve the given team by short (friendly) name. This is the name as returned by {Team#getShortName()}.
      *
      * @param teamName a team name
      * @return the team, or {@code Optional.empty()} if no team could be found
@@ -72,7 +70,7 @@ public interface TeamManager {
     Optional<Team> getTeamByName(String teamName);
 
     /**
-     * Retrieve the given team by its unique ID. This is the name as returned by {@link Team#getId()}.
+     * Retrieve the given team by its unique ID. This is the name as returned by {Team#getId()}.
      *
      * @param teamId unique team ID
      * @return the team, or {@code Optional.empty()} if no team could be found
@@ -101,7 +99,7 @@ public interface TeamManager {
      * this to store manager-specific data where necessary.
      * <p>
      * This data is serialized along with the rest of the manager so persists across server restarts, but if you change
-     * any data in the compound tag returned by this method, you should call {@link #markDirty()} to ensure your changes
+     * any data in the compound tag returned by this method, you should call {#markDirty()} to ensure your changes
      * actually get saved.
      *
      * @return extension data for the manager
@@ -110,7 +108,7 @@ public interface TeamManager {
 
     /**
      * Mark the manager as requiring serialization. The only time this should be necessary to call is if you change
-     * any data in the compound returned by {@link #getExtraData()}.
+     * any data in the compound returned by {#getExtraData()}.
      */
     void markDirty();
 
@@ -124,5 +122,5 @@ public interface TeamManager {
      * @throws CommandSyntaxException if there was any kind of failure creating the team,
      * most commonly that the player is already in a party
      */
-    Team createPartyTeam(ServerPlayer player, String name, @Nullable String description, @Nullable Color4I color) throws CommandSyntaxException;
+//    Team createPartyTeam(ServerPlayer player, String name, @Nullable String description, @Nullable Color4I color) throws CommandSyntaxException;
 }

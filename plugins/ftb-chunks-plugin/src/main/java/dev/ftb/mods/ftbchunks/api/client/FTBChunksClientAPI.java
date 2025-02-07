@@ -31,7 +31,7 @@ public interface FTBChunksClientAPI {
     void requestMinimapIconRefresh();
 
     /**
-     * Register a custom minimap info component {@link MinimapInfoComponent} to be rendered on the minimap.
+     * Register a custom minimap info component {MinimapInfoComponent} to be rendered on the minimap.
      *
      * This should be called during mod initialization as this list will be finalized once Minecraft has "started"
      * per the client lifecycle events

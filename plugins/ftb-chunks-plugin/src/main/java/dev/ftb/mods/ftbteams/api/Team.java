@@ -1,13 +1,8 @@
 package dev.ftb.mods.ftbteams.api;
 
-import dev.ftb.mods.ftblibrary.icon.Color4I;
-import dev.ftb.mods.ftbteams.api.property.TeamProperties;
-import dev.ftb.mods.ftbteams.api.property.TeamProperty;
-import dev.ftb.mods.ftbteams.api.property.TeamPropertyCollection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -22,7 +17,7 @@ public interface Team {
 
     /**
      * Get the unique effective ID for this team. For party and server teams, this is always the same as the result
-     * of {@link #getId()}. For player teams, this is the same as {@code getId()} if the player is not in a party,
+     * of {#getId()}. For player teams, this is the same as {@code getId()} if the player is not in a party,
      * but is the ID of the party team if the player is in a party.
      *
      * @return the team ID for this team
@@ -34,7 +29,7 @@ public interface Team {
      * <p>
      *     {@code team.getProperty(TeamProperties.DISPLAY_NAME)}
      * </p>
-     * followed by a '#', then by the first 8 characters of the team's full UUID, as returned by {@link #getId()}.
+     * followed by a '#', then by the first 8 characters of the team's full UUID, as returned by {#getId()}.
      * <p>
      * For example, {@code Herobrine#1A2B3C4D}, or {@code Notch_Party#5E6F8A9B}.
      * </p>
@@ -55,17 +50,17 @@ public interface Team {
      *
      * @return the team's property collection
      */
-    TeamPropertyCollection getProperties();
+//    TeamPropertyCollection getProperties();
 
     /**
-     * Get the value for the given team property. See {@link TeamProperties} for the
+     * Get the value for the given team property. See {TeamProperties} for the
      * built-in properties defined by FTB Teams. Other mods may register extra properties.
      *
      * @param property the property to retrieve
      * @return the retrieved value
      * @param <T> the property type
      */
-    <T> T getProperty(TeamProperty<T> property);
+//    <T> T getProperty(TeamProperty<T> property);
 
     /**
      * Set a new value for the given team property.
@@ -74,7 +69,7 @@ public interface Team {
      * @param value the new value
      * @param <T> the property type
      */
-    <T> void setProperty(TeamProperty<T> property, T value);
+//    <T> void setProperty(TeamProperty<T> property, T value);
 
     /**
      * Check if this team is a player team, i.e. a player's personal team.
@@ -109,7 +104,7 @@ public interface Team {
      *
      * @return the team's message history
      */
-    List<TeamMessage> getMessageHistory();
+//    List<TeamMessage> getMessageHistory();
 
     /**
      * Get the team rank for the given player ID. If the player is not currently in a party team, this will return
@@ -118,7 +113,7 @@ public interface Team {
      * @param playerId a valid player UUID
      * @return the player's rank in their current team
      */
-    TeamRank getRankForPlayer(UUID playerId);
+//    TeamRank getRankForPlayer(UUID playerId);
 
     /**
      * Get a nicely marked-up name of this team, for display purposes. The name is colored according to the team
@@ -151,7 +146,7 @@ public interface Team {
      * @param minRank the minimum rank to include (pass {@code TeamRank.NONE} to include everyone)
      * @return a map of member ID's to their rank
      */
-    Map<UUID,TeamRank> getPlayersByRank(TeamRank minRank);
+//    Map<UUID,TeamRank> getPlayersByRank(TeamRank minRank);
 
     /**
      * Get a set of the UUID's for all team members.
@@ -182,7 +177,7 @@ public interface Team {
      * this to store mod-specific data where necessary.
      * <p>
      * This data is serialized along with the rest of the team data so persists across server restarts, but if you change
-     * any data in the compound tag returned by this method, you should call {@link #markDirty()} to ensure your changes
+     * any data in the compound tag returned by this method, you should call {#markDirty()} to ensure your changes
      * actually get saved.
      *
      * @return extension data for the team
@@ -191,7 +186,7 @@ public interface Team {
 
     /**
      * Mark the team as requiring serialization. The only time this should be necessary to call is if you change
-     * any data in the compound returned by {@link #getExtraData()}.
+     * any data in the compound returned by {#getExtraData()}.
      */
     void markDirty();
 
@@ -227,5 +222,5 @@ public interface Team {
      * @param color the color for the new team; if null, then a random color is chosen
      * @return the newly-created party team
      */
-    Team createParty(String description, @Nullable Color4I color);
+//    Team createParty(String description, @Nullable Color4I color);
 }

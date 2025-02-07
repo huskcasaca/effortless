@@ -10,8 +10,8 @@ import java.util.Optional;
 
 /**
  * Allows access to the waypoints for a particular dimension. A waypoint manager is dimension-specific; an instance
- * of the manager for a dimension can be obtained via {@link FTBChunksClientAPI#getWaypointManager()} or
- * {@link FTBChunksClientAPI#getWaypointManager(ResourceKey)}.
+ * of the manager for a dimension can be obtained via {FTBChunksClientAPI#getWaypointManager()} or
+ * {FTBChunksClientAPI#getWaypointManager(ResourceKey)}.
  */
 public interface WaypointManager {
     /**

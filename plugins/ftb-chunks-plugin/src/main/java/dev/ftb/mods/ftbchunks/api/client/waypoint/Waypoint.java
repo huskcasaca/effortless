@@ -1,6 +1,5 @@
 package dev.ftb.mods.ftbchunks.api.client.waypoint;
 
-import dev.ftb.mods.ftbchunks.api.client.icon.WaypointIcon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
@@ -10,7 +9,7 @@ import net.minecraft.world.level.Level;
  * A waypoint; these can be displayed on the minimap, the large fullscreen map, or as in-world icons. Waypoints can be
  * added by players, or automatically added on player death.
  * <p>
- * See also {@link WaypointManager} for methods to add/delete/retrieve waypoints.
+ * See also {WaypointManager} for methods to add/delete/retrieve waypoints.
  */
 public interface Waypoint {
     /**
@@ -92,5 +91,5 @@ public interface Waypoint {
      *
      * @return the map icon
      */
-    WaypointIcon getMapIcon();
+//    WaypointIcon getMapIcon();
 }

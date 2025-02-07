@@ -4,7 +4,7 @@ import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import net.minecraft.commands.CommandSourceStack;
 
 /**
- * Represents a chunk which has been claimed. See {@link ClaimedChunkManager} for methods to retrieve instances of
+ * Represents a chunk which has been claimed. See {ClaimedChunkManager} for methods to retrieve instances of
  * this class.
  */
 public interface ClaimedChunk extends ClaimResult {
@@ -34,9 +34,9 @@ public interface ClaimedChunk extends ClaimResult {
      * <p>
      *     <strong>IMPORTANT</strong>: this does not guarantee that the chunk is actually currently being force-loaded
      *     by the server. That depends on the offline chunkloading settings, and whether the chunk owner is actually online.
-     *     See {@link #isActuallyForceLoaded()} for a method to check that.</p>
+     *     See {#isActuallyForceLoaded()} for a method to check that.</p>
      * <p>
-     *     To request a chunk be force-loaded, use {@link ChunkTeamData#forceLoad(CommandSourceStack, ChunkDimPos, boolean)}
+     *     To request a chunk be force-loaded, use {ChunkTeamData#forceLoad(CommandSourceStack, ChunkDimPos, boolean)}
      * </p>
      * @return the force-load time; 0 if the chunk is not currently force-loaded
      */
@@ -45,7 +45,7 @@ public interface ClaimedChunk extends ClaimResult {
     /**
      * Convenience method to check if the chunk has force-loading enabled; equivalent to: {@code if (getForceLoadedTime() > 0)}
      * <p>
-     * See the disclaimer in {@link #getForceLoadedTime()} for more information.
+     * See the disclaimer in {#getForceLoadedTime()} for more information.
      *
      * @return true if the chunk is force-loaded
      */
