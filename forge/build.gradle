@@ -42,8 +42,8 @@ subprojects {
         implementation project(':common')
         shadow project(':common')
 
-        compileOnly project(':plugins:open-pac-plugin')
-        compileOnly project(':plugins:ftb-chunks-plugin')
+        compileOnly project(':plugins:open-pac-api-v0')
+        compileOnly project(':plugins:ftb-chunks-api-v2')
 
         annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
         compileOnly 'com.google.auto.service:auto-service:1.1.1'
