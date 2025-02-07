@@ -32,9 +32,6 @@ public class BlockInteractOperation extends BlockOperation {
         if (getPlayer().getGameMode().isSpectator()) {
             return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
         }
-        if (!allowInteraction()) {
-            return BlockOperationResultType.FAIL_WORLD_BORDER;
-        }
         if (!isInBorderBound()) {
             return BlockOperationResultType.FAIL_WORLD_BORDER;
         }
@@ -43,6 +40,9 @@ public class BlockInteractOperation extends BlockOperation {
         }
         if (getBlockState() == null) {
             return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
+        }
+        if (!allowInteraction()) {
+            return BlockOperationResultType.FAIL_INTERACT_NO_PERMISSION;
         }
 
         if (!context.configs().constraintConfig().allowInteractBlocks()) {

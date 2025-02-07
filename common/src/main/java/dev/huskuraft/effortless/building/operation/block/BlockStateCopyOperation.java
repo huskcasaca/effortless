@@ -30,9 +30,6 @@ public class BlockStateCopyOperation extends BlockOperation {
         if (getPlayer().getGameMode().isSpectator()) {
             return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
         }
-        if (!allowInteraction()) {
-            return BlockOperationResultType.FAIL_WORLD_BORDER;
-        }
         if (!isInBorderBound()) {
             return BlockOperationResultType.FAIL_WORLD_BORDER;
         }
@@ -45,6 +42,9 @@ public class BlockStateCopyOperation extends BlockOperation {
         if (getBlockState().isAir() && !context.clipboard().copyAir()) {
             return BlockOperationResultType.FAIL_BLOCK_STATE_AIR;
         }
+//        if (!allowInteraction()) {
+//            return BlockOperationResultType.FAIL_COPY_NO_PERMISSION;
+//        }
 
         if (!context.configs().constraintConfig().allowCopyPasteStructures()) {
             return BlockOperationResultType.FAIL_COPY_NO_PERMISSION;

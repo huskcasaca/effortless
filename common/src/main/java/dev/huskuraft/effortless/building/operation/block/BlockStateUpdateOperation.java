@@ -9,6 +9,7 @@ import dev.huskuraft.effortless.api.core.ItemStack;
 import dev.huskuraft.effortless.api.core.StatTypes;
 import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.building.Context;
+import dev.huskuraft.effortless.building.Option;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.Operation;
 import dev.huskuraft.effortless.building.operation.empty.EmptyOperation;
@@ -17,6 +18,8 @@ import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
 import dev.huskuraft.effortless.building.session.Session;
+
+import java.util.Optional;
 
 public class BlockStateUpdateOperation extends BlockOperation {
 
@@ -63,20 +66,25 @@ public class BlockStateUpdateOperation extends BlockOperation {
         if (getPlayer().getGameMode().isSpectator()) {
             return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
         }
+        if (getBlockStateInWorld() == null || getBlockState() == null) {
+            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
+        }
+        if (getBlockStateInWorld().isAir() && getBlockState().isAir()) {
+            return BlockOperationResultType.FAIL_BLOCK_STATE_AIR;
+        }
         if (!allowInteraction()) {
-            return BlockOperationResultType.FAIL_WORLD_BORDER;
+            if (!getBlockStateInWorld().isAir()) {
+                return BlockOperationResultType.FAIL_BREAK_NO_PERMISSION;
+            }
+            if (!getBlockState().isAir()) {
+                return BlockOperationResultType.FAIL_PLACE_NO_PERMISSION;
+            }
         }
         if (!isInBorderBound()) {
             return BlockOperationResultType.FAIL_WORLD_BORDER;
         }
         if (!isInHeightBound()) {
             return BlockOperationResultType.FAIL_WORLD_HEIGHT;
-        }
-        if (getBlockStateInWorld() == null || getBlockState() == null) {
-            return BlockOperationResultType.FAIL_BLOCK_STATE_NULL;
-        }
-        if (getBlockStateInWorld().isAir() && getBlockState().isAir()) {
-            return BlockOperationResultType.FAIL_BLOCK_STATE_AIR;
         }
 
         if (!getBlockStateInWorld().isAir()) {
