@@ -6,8 +6,8 @@ public interface Plugin {
 
     void init();
 
-    default boolean isSupported(Platform platform) {
-        return platform.findMod(getId()).isPresent();
+    default boolean isSupported() {
+        return Platform.getInstance().findMod(getId()).isPresent();
     }
 
 }

@@ -2,9 +2,7 @@ package dev.huskuraft.effortless.building.operation.block;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
 import dev.huskuraft.effortless.api.core.Items;
-import dev.huskuraft.effortless.api.core.Player;
 import dev.huskuraft.effortless.api.core.StatTypes;
-import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.Operation;
@@ -13,26 +11,29 @@ import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
+import dev.huskuraft.effortless.building.session.Session;
 
 public class BlockInteractOperation extends BlockOperation {
 
     public BlockInteractOperation(
-            World world,
-            Player player,
+            Session session,
             Context context,
             Storage storage,
             BlockInteraction interaction,
             Extras extras
     ) {
-        super(world, player, context, storage, interaction, extras);
+        super(session, context, storage, interaction, extras);
     }
 
     protected BlockOperationResultType interactBlock() {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
             return BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM;
         }
-        if (player.getGameMode().isSpectator()) {
+        if (getPlayer().getGameMode().isSpectator()) {
             return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
+        }
+        if (!allowInteraction()) {
+            return BlockOperationResultType.FAIL_WORLD_BORDER;
         }
         if (!isInBorderBound()) {
             return BlockOperationResultType.FAIL_WORLD_BORDER;
@@ -56,7 +57,7 @@ public class BlockInteractOperation extends BlockOperation {
             }
         }
 
-        var itemStackToUse = storage.search(player.getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
+        var itemStackToUse = storage.search(getPlayer().getItemStack(getHand()).getItem()).orElse(Items.AIR.item().getDefaultStack());
 
         if (context.isPreviewType() || context.isBuildClientType()) {
             itemStackToUse.decrease(1);
@@ -64,22 +65,22 @@ public class BlockInteractOperation extends BlockOperation {
         }
 
         if (context.isBuildType()) {
-            var itemStackBeforeInteract = player.getItemStack(getHand());
+            var itemStackBeforeInteract = getPlayer().getItemStack(getHand());
 //        if (!(itemStackBeforeInteract.getItem() instanceof BucketItem) && blockState.isAir()) {
 //            return BlockOperationResult.Type.FAIL_BLOCK_STATE_AIR;
 //        }
             if (itemStackToUse.isDamageableItem() && itemStackToUse.getDurabilityLeft() <= context.getReservedToolDurability()) {
                 return BlockOperationResultType.FAIL_INTERACT_TOOL_INSUFFICIENT;
             }
-            player.setItemStack(getHand(), itemStackToUse);
-            var interacted = getBlockStateInWorld().use(player, interaction).consumesAction();
+            getPlayer().setItemStack(getHand(), itemStackToUse);
+            var interacted = getBlockStateInWorld().use(getPlayer(), interaction).consumesAction();
             if (!interacted) {
-                interacted = player.getItemStack(interaction.getHand()).getItem().useOnBlock(player, interaction).consumesAction();
-                if (interacted && !world.isClient()) {
-                    player.awardStat(StatTypes.ITEM_USED.get(itemStackToUse.getItem()));
+                interacted = getPlayer().getItemStack(interaction.getHand()).getItem().useOnBlock(getPlayer(), interaction).consumesAction();
+                if (interacted && !getWorld().isClient()) {
+                    getPlayer().awardStat(StatTypes.ITEM_USED.get(itemStackToUse.getItem()));
                 }
             }
-            player.setItemStack(getHand(), itemStackBeforeInteract);
+            getPlayer().setItemStack(getHand(), itemStackBeforeInteract);
             if (!interacted) {
                 return BlockOperationResultType.FAIL_UNKNOWN;
             }
@@ -108,7 +109,7 @@ public class BlockInteractOperation extends BlockOperation {
 
     @Override
     public Operation move(MoveContext moveContext) {
-        return new BlockInteractOperation(world, player, context, storage, moveContext.move(interaction), extras);
+        return new BlockInteractOperation(session, context, storage, moveContext.move(interaction), extras);
     }
 
     @Override
@@ -116,7 +117,7 @@ public class BlockInteractOperation extends BlockOperation {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockInteractOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(extras));
+        return new BlockInteractOperation(session, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(extras));
     }
 
     @Override
@@ -124,7 +125,7 @@ public class BlockInteractOperation extends BlockOperation {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockInteractOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(extras));
+        return new BlockInteractOperation(session, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(extras));
     }
 
     @Override

@@ -30,8 +30,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
         }
 
         return new BlockStateUpdateOperation(
-                operation.getWorld(),
-                operation.getPlayer(),
+                operation.getSession(),
                 operation.getContext(),
                 operation.getStorage(),
                 operation.getInteraction(),

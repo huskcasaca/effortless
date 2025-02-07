@@ -25,8 +25,7 @@ public class BlockInteractOperationResult extends BlockOperationResult {
     @Override
     public Operation getReverseOperation() {
         return new BlockStateUpdateOperation(
-                operation.getWorld(),
-                operation.getPlayer(),
+                operation.getSession(),
                 operation.getContext(),
                 operation.getStorage(),
                 operation.getInteraction(),

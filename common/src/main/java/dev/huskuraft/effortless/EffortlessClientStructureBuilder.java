@@ -31,6 +31,7 @@ import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
+import dev.huskuraft.effortless.api.plugin.openpac.OpenPacClientPlugin;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;
@@ -336,7 +337,13 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig(), config.clipboardConfig()));
     }
 
+    public OpenPacClientPlugin getOpenPacClientPlugin() {
+        return getEntrance().getPlugin();
+    }
+
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
+        getOpenPacClientPlugin().init();
+
         if (getEntrance().getConfigStorage().get().builderConfig().passiveMode())
             if (!EffortlessKeys.PASSIVE_BUILD_MODIFIER.getKeyBinding().isDown() && !getContext(player).isBuilding()) {
                 return EventResult.pass();

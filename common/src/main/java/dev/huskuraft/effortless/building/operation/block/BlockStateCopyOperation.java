@@ -1,8 +1,6 @@
 package dev.huskuraft.effortless.building.operation.block;
 
 import dev.huskuraft.effortless.api.core.BlockInteraction;
-import dev.huskuraft.effortless.api.core.Player;
-import dev.huskuraft.effortless.api.core.World;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.Operation;
@@ -11,26 +9,29 @@ import dev.huskuraft.effortless.building.pattern.MirrorContext;
 import dev.huskuraft.effortless.building.pattern.MoveContext;
 import dev.huskuraft.effortless.building.pattern.RefactorContext;
 import dev.huskuraft.effortless.building.pattern.RotateContext;
+import dev.huskuraft.effortless.building.session.Session;
 
 public class BlockStateCopyOperation extends BlockOperation {
 
     public BlockStateCopyOperation(
-            World world,
-            Player player,
+            Session session,
             Context context,
             Storage storage, // for preview
             BlockInteraction interaction,
             Extras extras
     ) {
-        super(world, player, context, storage, interaction, extras);
+        super(session, context, storage, interaction, extras);
     }
 
     protected BlockOperationResultType saveBlock() {
         if (!context.extras().dimensionId().equals(getWorld().getDimensionId().location())) {
             return BlockOperationResultType.FAIL_WORLD_INCORRECT_DIM;
         }
-        if (player.getGameMode().isSpectator()) {
+        if (getPlayer().getGameMode().isSpectator()) {
             return BlockOperationResultType.FAIL_PLAYER_GAME_MODE;
+        }
+        if (!allowInteraction()) {
+            return BlockOperationResultType.FAIL_WORLD_BORDER;
         }
         if (!isInBorderBound()) {
             return BlockOperationResultType.FAIL_WORLD_BORDER;
@@ -55,7 +56,7 @@ public class BlockStateCopyOperation extends BlockOperation {
             return BlockOperationResultType.FAIL_COPY_BLACKLISTED;
         }
 
-        if (world.isClient()) {
+        if (getWorld().isClient()) {
             return BlockOperationResultType.CONSUME;
         }
         return BlockOperationResultType.SUCCESS;
@@ -81,7 +82,7 @@ public class BlockStateCopyOperation extends BlockOperation {
 
     @Override
     public Operation move(MoveContext moveContext) {
-        return new BlockStateCopyOperation(world, player, context, storage, moveContext.move(interaction), extras);
+        return new BlockStateCopyOperation(session, context, storage, moveContext.move(interaction), extras);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class BlockStateCopyOperation extends BlockOperation {
         if (!mirrorContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockStateCopyOperation(world, player, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(extras));
+        return new BlockStateCopyOperation(session, context, storage, mirrorContext.mirror(interaction), mirrorContext.mirror(extras));
     }
 
     @Override
@@ -97,7 +98,7 @@ public class BlockStateCopyOperation extends BlockOperation {
         if (!rotateContext.isInBounds(getBlockPosition().getCenter())) {
             return new EmptyOperation(context);
         }
-        return new BlockStateCopyOperation(world, player, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(extras));
+        return new BlockStateCopyOperation(session, context, storage, rotateContext.rotate(interaction), rotateContext.rotate(extras));
     }
 
     @Override
