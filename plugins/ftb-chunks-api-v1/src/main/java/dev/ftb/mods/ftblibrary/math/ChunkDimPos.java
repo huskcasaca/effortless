@@ -5,36 +5,34 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 
-public class ChunkDimPos {
-    public final ResourceKey<Level> dimension;
-    public final int x;
-    public final int z;
-    private ChunkPos chunkPos;
-    private int hash;
+public record ChunkDimPos(ResourceKey<Level> dimension, ChunkPos chunkPos) implements Comparable<ChunkDimPos> {
 
-    public ChunkDimPos(ResourceKey<Level> dim, int _x, int _z) {
-        dimension = dim;
-        x = _x;
-        z = _z;
-    }
-
-    public ChunkDimPos(ResourceKey<Level> dim, ChunkPos pos) {
-        this(dim, pos.x, pos.z);
+    public ChunkDimPos(ResourceKey<Level> dim, int x, int z) {
+        this(dim, new ChunkPos(x, z));
     }
 
     public ChunkDimPos(Level world, BlockPos pos) {
         this(world.dimension(), pos.getX() >> 4, pos.getZ() >> 4);
     }
 
-    public ChunkPos getChunkPos() {
-        if (chunkPos == null) {
-            chunkPos = new ChunkPos(x, z);
-        }
+    public int x() {
+        throw new RuntimeException("stub!");
+    }
 
-        return chunkPos;
+    public int z() {
+        throw new RuntimeException("stub!");
+    }
+
+    public ResourceKey<Level> dimension() {
+        throw new RuntimeException("stub!");
+    }
+
+    @Override
+    public int compareTo(ChunkDimPos o) {
+        throw new RuntimeException("stub!");
     }
 
     public ChunkDimPos offset(int ox, int oz) {
-        return new ChunkDimPos(dimension, x + ox, z + oz);
+        throw new RuntimeException("stub!");
     }
 }

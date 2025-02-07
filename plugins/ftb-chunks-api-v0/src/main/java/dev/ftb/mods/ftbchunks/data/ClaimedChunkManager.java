@@ -10,8 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import dev.ftb.mods.ftbteams.data.Team;
@@ -19,6 +17,9 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ClaimedChunkManager {
 
@@ -80,7 +81,7 @@ public class ClaimedChunkManager {
         throw new RuntimeException("stub!");
     }
 
-    @NotNull
+    @Nonnull
     public Long2ObjectMap<UUID> getForceLoadedChunks(ResourceKey<Level> dimension) {
         throw new RuntimeException("stub!");
     }

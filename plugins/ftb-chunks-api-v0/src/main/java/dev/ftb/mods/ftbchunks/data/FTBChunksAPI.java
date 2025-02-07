@@ -27,5 +27,4 @@ public class FTBChunksAPI {
         throw new RuntimeException("stub!");
     }
 
-    static {}
 }

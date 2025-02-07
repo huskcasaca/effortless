@@ -3,7 +3,7 @@ package dev.huskuraft.effortless.vanilla.plugin.ftbchunks;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import dev.ftb.mods.ftbchunks.api.ClaimedChunkManager;
+import dev.ftb.mods.ftbchunks.data.ClaimedChunkManager;
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import dev.huskuraft.effortless.api.core.BlockPosition;
 import dev.huskuraft.effortless.api.core.World;

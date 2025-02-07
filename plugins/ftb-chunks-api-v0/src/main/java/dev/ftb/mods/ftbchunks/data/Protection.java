@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 @FunctionalInterface
 public interface Protection {

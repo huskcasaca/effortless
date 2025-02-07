@@ -19,23 +19,23 @@ subprojects {
         archivesName = "${mod_id}-${loader_name}-${minecraft_version}"
     }
 
-    def isJava17Ports = "${project.minecraft_version}".replace(".", "").toInteger() < 1205
+    def parts = "${project.minecraft_version}".split('\\.')
+    def versionCode = parts[0].toInteger() * 1000 + parts[1].toInteger() * 10 + (parts.size() > 2 ? parts[2].toInteger() : 0)
+    def useJava17Ports = versionCode < 1205
 
     java {
         withSourcesJar()
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
 
-        if (isJava17Ports) {
+        if (useJava17Ports) {
             sourceCompatibility = JavaVersion.VERSION_17
             targetCompatibility = JavaVersion.VERSION_17
         }
     }
 
     dependencies {
-
         minecraft "com.mojang:minecraft:${minecraft_version}"
-
         mappings loom.officialMojangMappings() // reserved for fabric loom
 
         modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
@@ -47,7 +47,12 @@ subprojects {
         shadow project(':common')
 
         compileOnly project(':plugins:open-pac-api-v0')
-        compileOnly project(':plugins:ftb-chunks-api-v2')
+
+        if (versionCode < 1200) {
+            compileOnly project(':plugins:ftb-chunks-api-v0')
+        } else {
+            compileOnly project(':plugins:ftb-chunks-api-v1')
+        }
 
         implementation 'com.google.code.findbugs:jsr305:3.0.2'
 

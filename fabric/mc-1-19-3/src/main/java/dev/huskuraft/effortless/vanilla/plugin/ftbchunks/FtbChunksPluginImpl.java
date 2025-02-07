@@ -2,9 +2,10 @@ package dev.huskuraft.effortless.vanilla.plugin.ftbchunks;
 
 import com.google.auto.service.AutoService;
 
-import dev.ftb.mods.ftbchunks.api.ClaimedChunk;
-import dev.ftb.mods.ftbchunks.api.ClaimedChunkManager;
-import dev.ftb.mods.ftbchunks.api.FTBChunksAPI;
+import dev.ftb.mods.ftbchunks.FTBChunks;
+import dev.ftb.mods.ftbchunks.data.ClaimedChunk;
+import dev.ftb.mods.ftbchunks.data.ClaimedChunkManager;
+import dev.ftb.mods.ftbchunks.data.FTBChunksAPI;
 import dev.huskuraft.effortless.api.plugin.ftbchunks.FtbChunkClaimsManager;
 import dev.huskuraft.effortless.api.plugin.ftbchunks.FtbChunksPlugin;
 
@@ -14,14 +15,14 @@ import java.util.Objects;
 public class FtbChunksPluginImpl implements FtbChunksPlugin {
 
     static  {
-        Objects.requireNonNull(FTBChunksAPI.api());
+        Objects.requireNonNull(FTBChunksAPI.class);
         Objects.requireNonNull(ClaimedChunkManager.class);
         Objects.requireNonNull(ClaimedChunk.class);
     }
 
     @Override
     public String getId() {
-        return FTBChunksAPI.MOD_ID;
+        return FTBChunks.MOD_ID;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class FtbChunksPluginImpl implements FtbChunksPlugin {
 
     @Override
     public FtbChunkClaimsManager getClaimManager() {
-        return FtbChunkClaimsManagerImpl.ofNullable(FTBChunksAPI.api().getManager());
+        return FtbChunkClaimsManagerImpl.ofNullable(FTBChunksAPI.getManager());
     }
 
 }

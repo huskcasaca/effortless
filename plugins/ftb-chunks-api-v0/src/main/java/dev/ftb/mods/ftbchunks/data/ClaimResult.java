@@ -1,6 +1,7 @@
 package dev.ftb.mods.ftbchunks.data;
 
 public interface ClaimResult {
+
 	String claimResultName();
 
 	boolean isSuccess();
@@ -10,4 +11,5 @@ public interface ClaimResult {
 	void setForceLoadedTime(long time);
 
 	String getTranslationKey();
+
 }

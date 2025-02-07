@@ -11,8 +11,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 
 public class FTBChunksAPI {
+
     public static final String MOD_ID = "ftbchunks";
-    public static final String MOD_NAME = "FTB Chunks";
 
     /**
      * Retrieve the public API instance.
