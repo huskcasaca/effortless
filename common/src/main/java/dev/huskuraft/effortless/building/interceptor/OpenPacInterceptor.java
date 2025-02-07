@@ -22,22 +22,13 @@ public final class OpenPacInterceptor implements BuildInterceptor {
     public OpenPacInterceptor(
             Entrance entrance
     ) {
-        if (entrance instanceof ClientEntrance clientEntrance) {
-            var plugin = getClientPlugin(clientEntrance);
-            this.chunkClaimsManager = plugin.isSupported() ? plugin.getClaimManager() : null;
+        if (entrance instanceof ClientEntrance) {
+            var plugin = entrance.findPlugin(OpenPacClientPlugin.class);
+            this.chunkClaimsManager = plugin.map(OpenPacClientPlugin::getClaimManager).orElse(null);
         } else {
-            var plugin = getPlugin(entrance);
-            this.chunkClaimsManager = plugin.isSupported() ? plugin.getServerClaimManager(entrance.getServer()) : null;
+            var plugin = entrance.findPlugin(OpenPacPlugin.class);
+            this.chunkClaimsManager = plugin.map(openPacPlugin -> openPacPlugin.getServerClaimManager(entrance.getServer())).orElse(null);
         }
-    }
-
-
-    public static OpenPacClientPlugin getClientPlugin(Entrance entrance) {
-        return entrance.getPlugin();
-    }
-
-    public static OpenPacPlugin getPlugin(Entrance entrance) {
-        return entrance.getPlugin();
     }
 
     public ChunkClaimsManager getChunkClaimsManager() {

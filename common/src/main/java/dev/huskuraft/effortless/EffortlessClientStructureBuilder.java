@@ -337,13 +337,7 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
         getEntrance().getConfigStorage().update(config -> new ClientConfig(config.renderConfig(), config.patternConfig(), config.clipboardConfig()));
     }
 
-    public OpenPacClientPlugin getOpenPacClientPlugin() {
-        return getEntrance().getPlugin();
-    }
-
     public EventResult onPlayerInteract(Player player, InteractionType type, InteractionHand hand) {
-        getOpenPacClientPlugin().init();
-
         if (getEntrance().getConfigStorage().get().builderConfig().passiveMode())
             if (!EffortlessKeys.PASSIVE_BUILD_MODIFIER.getKeyBinding().isDown() && !getContext(player).isBuilding()) {
                 return EventResult.pass();

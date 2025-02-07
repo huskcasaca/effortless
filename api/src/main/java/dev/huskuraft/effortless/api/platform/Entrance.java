@@ -3,6 +3,8 @@ package dev.huskuraft.effortless.api.platform;
 import dev.huskuraft.effortless.api.events.impl.EventRegistry;
 import dev.huskuraft.effortless.api.networking.NetworkChannel;
 
+import java.util.Optional;
+
 public interface Entrance {
 
     static Entrance getInstance() {
@@ -21,8 +23,12 @@ public interface Entrance {
         return getServerManager().getRunningServer();
     }
 
-    default <T extends Plugin> T getPlugin(T... typeGetter) {
-        return PlatformLoader.getSingleton(typeGetter);
+    default <T extends Plugin> Optional<T> findPlugin(Class<T> pluginClass) {
+        try {
+            return Optional.of(PlatformLoader.getSingleton(pluginClass));
+        } catch (NoClassDefFoundError e) {
+            return Optional.empty();
+        }
     }
 
 }
