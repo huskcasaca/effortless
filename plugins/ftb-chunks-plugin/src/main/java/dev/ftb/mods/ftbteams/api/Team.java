@@ -1,10 +1,13 @@
 package dev.ftb.mods.ftbteams.api;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-
-import java.util.*;
 
 public interface Team {
     /**
@@ -27,7 +30,7 @@ public interface Team {
     /**
      * Get the shortened team name, which is the team's display name, as returned by
      * <p>
-     *     {@code team.getProperty(TeamProperties.DISPLAY_NAME)}
+     * {@code team.getProperty(TeamProperties.DISPLAY_NAME)}
      * </p>
      * followed by a '#', then by the first 8 characters of the team's full UUID, as returned by {#getId()}.
      * <p>

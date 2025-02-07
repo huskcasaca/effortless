@@ -1,13 +1,12 @@
 package dev.ftb.mods.ftbchunks.api;
 
+import java.util.Collection;
+import java.util.UUID;
+
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import dev.ftb.mods.ftbteams.api.Team;
 import dev.ftb.mods.ftbteams.api.TeamManager;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.server.level.ServerPlayer;
-
-import java.util.Collection;
-import java.util.UUID;
 
 /**
  * Represents the FTB Chunks information regarding the {Team} (either player or party) which may own zero or
@@ -24,6 +23,7 @@ public interface ChunkTeamData {
 
     /**
      * Convenience method to get the FTB Teams manager instances.
+     *
      * @return the team manager
      */
     TeamManager getTeamManager();
@@ -54,10 +54,9 @@ public interface ChunkTeamData {
     /**
      * Try to claim the given chunk for this team.
      *
-     * @param source the command source (player or console) claiming the chunk
-     * @param pos the combined dimension and chunk pos
+     * @param source    the command source (player or console) claiming the chunk
+     * @param pos       the combined dimension and chunk pos
      * @param checkOnly true if just simulating the claim
-     *
      * @return the result of the attempt
      */
     ClaimResult claim(CommandSourceStack source, ChunkDimPos pos, boolean checkOnly);
@@ -65,11 +64,10 @@ public interface ChunkTeamData {
     /**
      * Try to release any claim on the given chunk for this team.
      *
-     * @param source the command source (player or console) unclaiming the chunk
-     * @param pos the combined dimension and chunk pos
-     * @param checkOnly true if just simulating the unclaim
+     * @param source        the command source (player or console) unclaiming the chunk
+     * @param pos           the combined dimension and chunk pos
+     * @param checkOnly     true if just simulating the unclaim
      * @param adminOverride if true, admins can unclaim regardless chunk ownership
-     *
      * @return the result of the attempt
      */
     ClaimResult unclaim(CommandSourceStack source, ChunkDimPos pos, boolean checkOnly, boolean adminOverride);
@@ -77,10 +75,9 @@ public interface ChunkTeamData {
     /**
      * Try to release any claim on the given chunk for this team.
      *
-     * @param source the command source (player or console) unclaiming the chunk
-     * @param pos the combined dimension and chunk pos
+     * @param source    the command source (player or console) unclaiming the chunk
+     * @param pos       the combined dimension and chunk pos
      * @param checkOnly true if just simulating the unclaim
-     *
      * @return the result of the attempt
      */
     default ClaimResult unclaim(CommandSourceStack source, ChunkDimPos pos, boolean checkOnly) {
@@ -90,11 +87,10 @@ public interface ChunkTeamData {
     /**
      * Try to force-load the given chunk for this team.
      *
-     * @param source the command source (player or console) force-loading the chunk
-     * @param pos the combined dimension and chunk pos
-     * @param checkOnly true if just simulating the force-load
+     * @param source        the command source (player or console) force-loading the chunk
+     * @param pos           the combined dimension and chunk pos
+     * @param checkOnly     true if just simulating the force-load
      * @param adminOverride if true, admins can force-load regardless chunk ownership
-     *
      * @return the result of the attempt
      */
     ClaimResult forceLoad(CommandSourceStack source, ChunkDimPos pos, boolean checkOnly, boolean adminOverride);
@@ -102,10 +98,9 @@ public interface ChunkTeamData {
     /**
      * Try to force-load the given chunk for this team.
      *
-     * @param source the command source (player or console) force-loading the chunk
-     * @param pos the combined dimension and chunk pos
+     * @param source    the command source (player or console) force-loading the chunk
+     * @param pos       the combined dimension and chunk pos
      * @param checkOnly true if just simulating the force-load
-     *
      * @return the result of the attempt
      */
     default ClaimResult forceLoad(CommandSourceStack source, ChunkDimPos pos, boolean checkOnly) {
@@ -115,11 +110,10 @@ public interface ChunkTeamData {
     /**
      * Try to cancel any force-load this team has for the given chunk.
      *
-     * @param source the command source (player or console) un-force-loading the chunk
-     * @param pos the combined dimension and chunk pos
-     * @param checkOnly true if just simulating the un-force-load
+     * @param source        the command source (player or console) un-force-loading the chunk
+     * @param pos           the combined dimension and chunk pos
+     * @param checkOnly     true if just simulating the un-force-load
      * @param adminOverride if true, admins can un-force regardless chunk ownership
-     *
      * @return the un-force-load result
      */
     ClaimResult unForceLoad(CommandSourceStack source, ChunkDimPos pos, boolean checkOnly, boolean adminOverride);
@@ -127,10 +121,9 @@ public interface ChunkTeamData {
     /**
      * Try to cancel any force-load this team has for the given chunk.
      *
-     * @param source the command source (player or console) un-force-loading the chunk
-     * @param pos the combined dimension and chunk pos
+     * @param source    the command source (player or console) un-force-loading the chunk
+     * @param pos       the combined dimension and chunk pos
      * @param checkOnly true if just simulating the un-force-load
-     *
      * @return the un-force-load result
      */
     default ClaimResult unForceLoad(CommandSourceStack source, ChunkDimPos pos, boolean checkOnly) {

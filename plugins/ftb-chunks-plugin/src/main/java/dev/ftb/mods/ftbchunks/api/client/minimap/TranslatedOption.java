@@ -1,8 +1,8 @@
 package dev.ftb.mods.ftbchunks.api.client.minimap;
 
 public record TranslatedOption(
-   String optionName,
-   String translationKey
+        String optionName,
+        String translationKey
 ) {
 
     public static TranslatedOption of(String optionName) {

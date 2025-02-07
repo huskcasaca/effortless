@@ -1,5 +1,10 @@
 package dev.ftb.mods.ftbchunks.api;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import dev.ftb.mods.ftbteams.api.Team;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -9,13 +14,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Predicate;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Top-level manager for all known claims and teams. You can get an instance of this via
@@ -28,7 +29,7 @@ public interface ClaimedChunkManager {
      * @param team the team
      * @return the FTB Chunks data for the team
      */
-    ChunkTeamData getOrCreateData(@NotNull Team team);
+    ChunkTeamData getOrCreateData(@Nonnull Team team);
 
     /**
      * Get the FTB Chunks team data for the given player, creating a new instance if necessary. This will get the
@@ -97,15 +98,14 @@ public interface ClaimedChunkManager {
     /**
      * Check if the intended interaction should be prevented from occurring.
      *
-     * @implNote null may be passed as the acting entity, but this method will always return false if the actor does
-     * not extend {@code ServerPlayer} (fake players are OK as long as this the case)
-     *
-     * @param actor the entity performing the interaction, should be a player
-     * @param hand the actor's hand
-     * @param pos the block position at which the action will be performed
-     * @param protection the type of protection being checked for
+     * @param actor        the entity performing the interaction, should be a player
+     * @param hand         the actor's hand
+     * @param pos          the block position at which the action will be performed
+     * @param protection   the type of protection being checked for
      * @param targetEntity the entity being acted upon, if any (e.g. a painting, armor stand etc.)
      * @return true to prevent the interaction, false to permit it
+     * @implNote null may be passed as the acting entity, but this method will always return false if the actor does
+     * not extend {@code ServerPlayer} (fake players are OK as long as this the case)
      */
     boolean shouldPreventInteraction(@Nullable Entity actor, InteractionHand hand, BlockPos pos, Protection protection, @Nullable Entity targetEntity);
 
@@ -125,7 +125,7 @@ public interface ClaimedChunkManager {
      * @param dimension the dimension to check
      * @return a map of all force-loaded chunks, mapping long-encoded chunk pos to team ID
      */
-    @NotNull Long2ObjectMap<UUID> getForceLoadedChunks(ResourceKey<Level> dimension);
+    @Nonnull Long2ObjectMap<UUID> getForceLoadedChunks(ResourceKey<Level> dimension);
 
     /**
      * Check if the given chunk (dimension and chunk pos) is currently force-loaded.

@@ -1,12 +1,13 @@
 package dev.ftb.mods.ftbchunks.api.client;
 
+import java.util.Optional;
+
 import com.google.common.collect.ImmutableList;
+
 import dev.ftb.mods.ftbchunks.api.client.minimap.MinimapInfoComponent;
 import dev.ftb.mods.ftbchunks.api.client.waypoint.WaypointManager;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
-
-import java.util.Optional;
 
 public interface FTBChunksClientAPI {
     /**
@@ -32,7 +33,7 @@ public interface FTBChunksClientAPI {
 
     /**
      * Register a custom minimap info component {MinimapInfoComponent} to be rendered on the minimap.
-     *
+     * <p>
      * This should be called during mod initialization as this list will be finalized once Minecraft has "started"
      * per the client lifecycle events
      *
@@ -49,8 +50,9 @@ public interface FTBChunksClientAPI {
 
     /**
      * Enable or disable a specific minimap component for rendering under the minimap
+     *
      * @param component the component to enable or disable to that shoul
-     * @param enabled  the state to set the component to
+     * @param enabled   the state to set the component to
      */
     void setMinimapComponentEnabled(MinimapInfoComponent component, boolean enabled);
 

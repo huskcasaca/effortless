@@ -1,12 +1,10 @@
 package dev.ftb.mods.ftbchunks.api.client.waypoint;
 
-import dev.ftb.mods.ftbchunks.api.client.FTBChunksClientAPI;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.player.Player;
-
 import java.util.Collection;
 import java.util.Optional;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * Allows access to the waypoints for a particular dimension. A waypoint manager is dimension-specific; an instance
@@ -20,7 +18,7 @@ public interface WaypointManager {
      * <p>
      * If a waypoint already exists at the given position, a new waypoint will not be added.
      *
-     * @param pos the position to add the waypoint at
+     * @param pos  the position to add the waypoint at
      * @param name the waypoint's displayed name
      * @return a newly-added waypoint
      */

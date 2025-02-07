@@ -1,14 +1,15 @@
 package dev.ftb.mods.ftbteams.api;
 
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Top-level interface for querying team data on the server. Retrieve an instance of this via

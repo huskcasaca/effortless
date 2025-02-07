@@ -1,5 +1,7 @@
 package dev.ftb.mods.ftbchunks.api;
 
+import javax.annotation.Nonnull;
+
 import dev.ftb.mods.ftbchunks.api.client.FTBChunksClientAPI;
 import dev.ftb.mods.ftblibrary.math.ChunkDimPos;
 import net.minecraft.resources.ResourceKey;
@@ -7,8 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-
-import javax.annotation.Nonnull;
 
 public class FTBChunksAPI {
     public static final String MOD_ID = "ftbchunks";
@@ -71,9 +71,9 @@ public class FTBChunksAPI {
          * Convenience method to claim the given chunk for the given player; if the player is in a party team, the
          * chunk will be claimed for the team.
          *
-         * @param player the player making the claim
+         * @param player    the player making the claim
          * @param dimension the dimension
-         * @param pos the chunk positionm
+         * @param pos       the chunk positionm
          * @param checkOnly true if only checking that the chunk may be claimed
          * @return the result of making (or simulating) the claim
          */

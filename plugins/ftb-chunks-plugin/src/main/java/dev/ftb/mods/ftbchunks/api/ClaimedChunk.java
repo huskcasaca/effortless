@@ -32,12 +32,13 @@ public interface ClaimedChunk extends ClaimResult {
     /**
      * Get the time (milliseconds since epoch) at which force-loading for this chunk was requested.
      * <p>
-     *     <strong>IMPORTANT</strong>: this does not guarantee that the chunk is actually currently being force-loaded
-     *     by the server. That depends on the offline chunkloading settings, and whether the chunk owner is actually online.
-     *     See {#isActuallyForceLoaded()} for a method to check that.</p>
+     * <strong>IMPORTANT</strong>: this does not guarantee that the chunk is actually currently being force-loaded
+     * by the server. That depends on the offline chunkloading settings, and whether the chunk owner is actually online.
+     * See {#isActuallyForceLoaded()} for a method to check that.</p>
      * <p>
-     *     To request a chunk be force-loaded, use {ChunkTeamData#forceLoad(CommandSourceStack, ChunkDimPos, boolean)}
+     * To request a chunk be force-loaded, use {ChunkTeamData#forceLoad(CommandSourceStack, ChunkDimPos, boolean)}
      * </p>
+     *
      * @return the force-load time; 0 if the chunk is not currently force-loaded
      */
     long getForceLoadedTime();

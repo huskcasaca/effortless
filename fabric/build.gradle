@@ -47,6 +47,7 @@ subprojects {
         shadow project(':common')
 
         compileOnly project(':plugins:open-pac-plugin')
+        compileOnly project(':plugins:ftb-chunks-plugin')
 
         implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
