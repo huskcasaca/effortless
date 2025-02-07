@@ -26,4 +26,6 @@ public class FTBChunksAPI {
     public static boolean isChunkForceLoaded(ResourceKey<Level> dimension, int x, int z) {
         throw new RuntimeException("stub!");
     }
+
+    static {}
 }
