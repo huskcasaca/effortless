@@ -114,3 +114,5 @@ include ':multiplatform'
 ].forEach { port -> include ":multiplatform:mc-${port}" }
 
 include ':plugins:open-pac-plugin'
+include ':plugins:ftb-chunks-plugin'
+
