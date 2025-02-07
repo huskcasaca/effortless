@@ -20,5 +20,6 @@ public interface ClientEntrance extends Entrance {
     default ServerManager getServerManager() {
         throw new UnsupportedOperationException();
     }
+
 }
 

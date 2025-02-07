@@ -31,6 +31,7 @@ import dev.huskuraft.effortless.api.math.BoundingBox3d;
 import dev.huskuraft.effortless.api.math.MathUtils;
 import dev.huskuraft.effortless.api.math.Vector3i;
 import dev.huskuraft.effortless.api.platform.Client;
+import dev.huskuraft.effortless.api.plugin.openpac.OpenPacClientPlugin;
 import dev.huskuraft.effortless.api.renderer.LightTexture;
 import dev.huskuraft.effortless.api.sound.SoundInstance;
 import dev.huskuraft.effortless.api.text.ChatFormatting;

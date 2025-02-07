@@ -1,33 +1,69 @@
 import java.nio.file.Files
+import java.nio.file.Paths
 
-task createPatch(type: Task) {
-    def from = '1-21-1'
-    def text = Files.readString(file("patch/port-${from}.patch").toPath())
-    def buffer = new StringBuffer()
-    buffer.append()
-    [
-        '1-17-1',
-        '1-18',
-        '1-18-1',
-        '1-18-2',
-        '1-19',
-        '1-19-1',
-        '1-19-2',
-        '1-19-3',
-        '1-19-4',
-        '1-20',
-        '1-20-1',
-        '1-20-2',
-        '1-20-3',
-        '1-20-4',
-        '1-20-6',
-        '1-21',
-        '1-21-1',
-        '1-21-3'
-    ].forEach { port ->
-        buffer.append(text.replace("mc-${from}", "mc-${port}"))
-        buffer.append('\n')
+def fabricTargets = [
+    '1-17-1',
+    '1-18-1',
+    '1-18-2',
+    '1-19-2',
+    '1-19-3',
+    '1-19-4',
+    '1-20-1',
+    '1-20-2',
+    '1-20-4',
+    '1-20-6',
+    '1-21-1',
+    '1-21-3'
+]
+
+def forgeTargets = [
+    '1-17-1',
+    '1-18-1',
+    '1-18-2',
+    '1-19-2',
+    '1-19-3',
+    '1-19-4',
+    '1-20-1',
+    '1-20-2',
+    '1-20-4',
+    '1-20-6',
+    '1-21-1',
+]
+
+def neoforgeTargets = [
+    '1-20-6',
+    '1-21-1',
+    '1-21-3'
+]
+
+tasks.register('createPatch', DefaultTask) {
+    doLast {
+        file('patch').listFiles().each { f ->
+            if (!f.isFile()) {
+                return
+            }
+            if (f.getName().contains("-all")) {
+                return
+            }
+            def text = Files.readString(f.toPath())
+            def from = f.getName().split("\\.")[0]
+            def platform = f.getName().split("\\.")[1]
+            def buffer = new StringBuffer()
+
+            fabricTargets.each { port ->
+                buffer.append(text.replace("mc-${from}", "mc-${port}").replace(platform + '/', 'fabric/'))
+                buffer.append('\n')
+            }
+            forgeTargets.each { port ->
+                buffer.append(text.replace("mc-${from}", "mc-${port}").replace(platform + '/', 'forge/'))
+                buffer.append('\n')
+            }
+            neoforgeTargets.each { port ->
+                buffer.append(text.replace("mc-${from}", "mc-${port}").replace(platform + '/', 'neoforge/'))
+                buffer.append('\n')
+            }
+
+            file("patch/${from}-all.patch").write(buffer.toString())
+        }
     }
-    Files.writeString(file('patch/port-all.patch').toPath(), buffer.toString())
-
 }

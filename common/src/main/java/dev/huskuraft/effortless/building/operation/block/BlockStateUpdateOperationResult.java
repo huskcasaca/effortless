@@ -30,8 +30,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
         }
 
         return new BlockStateUpdateOperation(
-                operation.getWorld(),
-                operation.getPlayer(),
+                operation.getSession(),
                 operation.getContext(),
                 operation.getStorage(),
                 operation.getInteraction(),
@@ -75,7 +74,7 @@ public class BlockStateUpdateOperationResult extends BlockOperationResult {
             case BLOCKS_INTERACTED -> null;
             case BLOCKS_COPIED -> null;
             case BLOCKS_NOT_REPLACEABLE -> switch (result) {
-                case FAIL_BREAK_REPLACE_RULE, FAIL_BREAK_REPLACE_FLAGS -> getBlockStateToPlace();
+                case FAIL_BREAK_REPLACE_RULE, FAIL_BREAK_REPLACE_FLAGS -> getBlockStateToBreak();
                 default -> null;
             };
             case BLOCKS_NOT_BREAKABLE -> switch (result) {

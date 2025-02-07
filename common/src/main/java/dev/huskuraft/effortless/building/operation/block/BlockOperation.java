@@ -11,11 +11,11 @@ import dev.huskuraft.effortless.api.tag.RecordTag;
 import dev.huskuraft.effortless.building.Context;
 import dev.huskuraft.effortless.building.Storage;
 import dev.huskuraft.effortless.building.operation.Operation;
+import dev.huskuraft.effortless.building.session.Session;
 
 public abstract class BlockOperation implements Operation {
 
-    protected final World world;
-    protected final Player player;
+    protected final Session session;
     protected final Context context;
     protected final Storage storage;
     protected final BlockInteraction interaction;
@@ -24,8 +24,7 @@ public abstract class BlockOperation implements Operation {
     protected final Extras extras;
 
     protected BlockOperation(
-            World world,
-            Player player,
+            Session session,
             Context context,
             Storage storage, // for preview
             BlockInteraction interaction,
@@ -33,8 +32,7 @@ public abstract class BlockOperation implements Operation {
             RecordTag entityTag,
             Extras extras
     ) {
-        this.world = world;
-        this.player = player;
+        this.session = session;
         this.context = context;
         this.storage = storage;
         this.interaction = interaction;
@@ -44,20 +42,18 @@ public abstract class BlockOperation implements Operation {
     }
 
     protected BlockOperation(
-            World world,
-            Player player,
+            Session session,
             Context context,
             Storage storage, // for preview
             BlockInteraction interaction,
             Extras extras
     ) {
-        this.world = world;
-        this.player = player;
+        this.session = session;
         this.context = context;
         this.storage = storage;
         this.interaction = interaction;
-        this.blockState = world.getBlockState(interaction.getBlockPosition());
-        var blockEntity = world.getBlockEntity(interaction.getBlockPosition());
+        this.blockState = session.getWorld().getBlockState(interaction.getBlockPosition());
+        var blockEntity = session.getWorld().getBlockEntity(interaction.getBlockPosition());
         if (blockEntity != null) {
             // TODO: 4/6/24 clear position & id tags in 1.17.1
             this.entityTag = blockEntity.getTag();
@@ -67,65 +63,73 @@ public abstract class BlockOperation implements Operation {
         this.extras = extras;
     }
 
-    public World getWorld() {
-        return world;
+    public final Session getSession() {
+        return session;
     }
 
-    public Player getPlayer() {
-        return player;
+    public final World getWorld() {
+        return session.getWorld();
     }
 
-    public Context getContext() {
+    public final Player getPlayer() {
+        return session.getPlayer();
+    }
+
+    public final Context getContext() {
         return context;
     }
 
-    public Storage getStorage() {
+    public final Storage getStorage() {
         return storage;
     }
 
-    public BlockState getBlockState() {
+    public final BlockState getBlockState() {
         return blockState;
     }
 
-    public RecordTag getEntityTag() {
+    public final RecordTag getEntityTag() {
         return entityTag;
     }
 
-    public Extras getExtras() {
+    public final Extras getExtras() {
         return getContext().extras().extras();
     }
 
-    public BlockInteraction getInteraction() {
+    public final BlockInteraction getInteraction() {
         return interaction;
     }
 
-    public BlockPosition getBlockPosition() {
+    public final BlockPosition getBlockPosition() {
         return getInteraction().getBlockPosition();
     }
 
-    public BlockPosition getRelativeBlockPosition() {
+    public final BlockPosition getRelativeBlockPosition() {
         return getBlockPosition().relative(getInteraction().getDirection());
     }
 
-    public InteractionHand getHand() {
+    public final InteractionHand getHand() {
         return InteractionHand.MAIN;
     }
 
-    public boolean isInBorderBound() {
+    public final boolean isInBorderBound() {
         return getWorld().getWorldBorder().isInBounds(getBlockPosition());
     }
 
-    public boolean isInHeightBound() {
+    public final boolean isInHeightBound() {
         return getBlockPosition().y() >= getWorld().getMinBuildHeight() && getBlockPosition().y() <= getWorld().getMaxBuildHeight();
+    }
+
+    public final boolean allowInteraction() {
+        return getSession().getInterceptors().stream().allMatch(interceptor -> interceptor.allowInteraction(getPlayer(), getWorld(), getBlockPosition()));
     }
 
     public abstract Type getType();
 
-    public BlockState getBlockStateInWorld() {
+    public final BlockState getBlockStateInWorld() {
         return getWorld().getBlockState(getBlockPosition());
     }
 
-    public BlockEntity getBlockEntityInWorld() {
+    public final BlockEntity getBlockEntityInWorld() {
         return getWorld().getBlockEntity(getBlockPosition());
     }
 
