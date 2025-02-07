@@ -147,26 +147,28 @@ public class BlockStateUpdateOperation extends BlockOperation {
             }
 
             var durabilityReserved = getContext().getReservedToolDurability();
-            var requireCorrectTool = !getPlayer().getGameMode().isCreative() && context.useProperTool();
-            var miningTool = getStorage().contents().stream().filter(stack -> stack.getItem().isCorrectToolForDropsNoThrows(getBlockStateInWorld())).filter(tool -> !tool.isDamageableItem() || tool.getDurabilityLeft() > durabilityReserved).findFirst();
+            var requireCorrectTool = !getPlayer().getGameMode().isCreative() && context.useProperTool() && !getBlockStateInWorld().isReplaceable();
+            var miningTool = (ItemStack) null;
 
-            if (miningTool.isEmpty()) {
-                miningTool = getStorage().contents().stream().filter(tool -> tool.getItem() instanceof DiggerItem).filter(tool -> !tool.isDamageableItem() || tool.getDurabilityLeft() > durabilityReserved).findFirst();
-            }
-
-            if (requireCorrectTool && miningTool.isEmpty()) {
-                return BlockOperationResultType.FAIL_BREAK_TOOL_INSUFFICIENT;
+            if (requireCorrectTool) {
+                miningTool = getStorage().contents().stream().filter(stack -> stack.getItem().isCorrectToolForDropsNoThrows(getBlockStateInWorld())).filter(tool -> !tool.isDamageableItem() || tool.getDurabilityLeft() > durabilityReserved).findFirst().orElse(null);
+                if (miningTool == null) {
+                    miningTool = getStorage().contents().stream().filter(tool -> tool.getItem() instanceof DiggerItem).filter(tool -> !tool.isDamageableItem() || tool.getDurabilityLeft() > durabilityReserved).findFirst().orElse(null);
+                }
+                if (miningTool == null) {
+                    return BlockOperationResultType.FAIL_BREAK_TOOL_INSUFFICIENT;
+                }
             }
 
             if (context.isPreviewType() || context.isBuildClientType()) {
                 if (requireCorrectTool) {
-                    miningTool.get().damage(1);
+                    miningTool.damage(1);
                 }
             }
             if (context.isBuildType()) {
                 var itemStackBeforeBreak = getPlayer().getItemStack(InteractionHand.MAIN);
                 if (requireCorrectTool) {
-                    getPlayer().setItemStack(InteractionHand.MAIN, miningTool.get());
+                    getPlayer().setItemStack(InteractionHand.MAIN, miningTool);
                 }
                 var destroyed = destroyBlockInternal();
                 if (requireCorrectTool) {
