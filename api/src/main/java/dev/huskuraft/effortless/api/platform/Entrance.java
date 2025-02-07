@@ -26,7 +26,7 @@ public interface Entrance {
     default <T extends Plugin> Optional<T> findPlugin(Class<T> pluginClass) {
         try {
             return Optional.of(PlatformLoader.getSingleton(pluginClass));
-        } catch (NoClassDefFoundError e) {
+        } catch (LinkageError e) {
             return Optional.empty();
         }
     }

@@ -7,6 +7,6 @@ import dev.huskuraft.effortless.api.platform.Server;
 
 public interface OpenPacPlugin extends Plugin {
 
-    ChunkClaimsManager getServerClaimManager(@Nonnull Server server);
+    OpenPacChunkClaimsManager getServerClaimManager(@Nonnull Server server);
 
 }

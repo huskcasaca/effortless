@@ -4,6 +4,6 @@ import dev.huskuraft.effortless.api.platform.ClientPlugin;
 
 public interface OpenPacClientPlugin extends ClientPlugin {
 
-    ChunkClaimsManager getClaimManager();
+    OpenPacChunkClaimsManager getClaimManager();
 
 }

@@ -46,13 +46,15 @@ subprojects {
         archivesName = "${mod_id}-${minecraft_version}"
     }
 
-    def isJava17Ports = "${project.minecraft_version}".replace(".", "").toInteger() < 1205
+    def parts = "${project.minecraft_version}".split('\\.')
+    def versionCode = parts[0].toInteger() * 1000 + parts[1].toInteger() * 10 + (parts.size() > 2 ? parts[2].toInteger() : 0)
+    def useJava17Ports = versionCode < 1205
 
     java {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
 
-        if (isJava17Ports) {
+        if (useJava17Ports) {
             sourceCompatibility = JavaVersion.VERSION_17
             targetCompatibility = JavaVersion.VERSION_17
         }
