@@ -256,10 +256,12 @@ public final class EffortlessClientStructureBuilder extends StructureBuilder {
                     context = context.withBuildState(BuildState.PASTE_STRUCTURE);
                 }
             } else {
-                if (player.getItemStack(InteractionHand.MAIN).isEmpty() || !player.getItemStack(InteractionHand.MAIN).isBlock()) {
-                    context = context.withBuildState(BuildState.INTERACT_BLOCK);
-                } else {
+                if (player.getItemStack(InteractionHand.MAIN).isBlock()) {
                     context = context.withBuildState(BuildState.PLACE_BLOCK);
+                } else if (player.getItemStack(InteractionHand.MAIN).isDamageableItem()) {
+                    context = context.withBuildState(BuildState.BREAK_BLOCK);
+                } else {
+                    context = context.withBuildState(BuildState.INTERACT_BLOCK);
                 }
             }
         }
