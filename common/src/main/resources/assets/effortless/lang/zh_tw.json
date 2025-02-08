@@ -337,7 +337,7 @@
   "effortless.symbol": "輕鬆建造",
   "effortless.test.cancel": "取消",
   "effortless.test.save": "保存",
-  "effortless.tooltip.hold_for_summary": "按住 [%s] 查看摘要",
+  "effortless.tooltip.hold_for_summary": "按住[%s]查看摘要",
   "effortless.tracing.failed": "失敗",
   "effortless.tracing.pass": "跳過",
   "effortless.tracing.success_fulfilled": "成功",
@@ -547,5 +547,8 @@
   "effortless.clipboard.clear.tooltip": "清除當前剪貼簿中的結構快照。",
   "effortless.clipboard.edit.tooltip": "編輯當前剪貼簿中的結構快照。",
   "effortless.clipboard.enable_clipboard.tooltip": "你可以開始使用[%s]複製結構，並使用[%s]貼上。",
-  "effortless.button.per_player_overrides": "特定玩家配置"
+  "effortless.button.per_player_overrides": "特定玩家配置",
+  "effortless.tooltip.click_to_switch_replace_strategy": "點擊 [%s] 切換替換策略",
+  "effortless.tooltip.click_to_toggle_quick_replace": "點擊 [%s] 切換快速替換開/關",
+  "effortless.option.quick_replace": "快速替換"
 }

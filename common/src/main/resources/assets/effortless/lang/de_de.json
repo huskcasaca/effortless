@@ -547,5 +547,8 @@
   "effortless.clipboard.clear.tooltip": "Den Struktur-Schnappschuss in Ihrer aktuellen Zwischenablage löschen.",
   "effortless.clipboard.edit.tooltip": "Den Struktur-Schnappschuss in Ihrer aktuellen Zwischenablage bearbeiten.",
   "effortless.clipboard.enable_clipboard.tooltip": "Sie können Strukturen kopieren, indem Sie [%s] verwenden, und einfügen, indem Sie [%s] verwenden.",
-  "effortless.button.per_player_overrides": "Spielerbezogene Überschreibungen"
+  "effortless.button.per_player_overrides": "Spielerbezogene Überschreibungen",
+  "effortless.tooltip.click_to_switch_replace_strategy": "Klicken Sie [%s], um die Ersetzungsstrategie zu wechseln",
+  "effortless.tooltip.click_to_toggle_quick_replace": "Klicken Sie [%s], um die Schnellersetzung ein-/auszuschalten",
+  "effortless.option.quick_replace": "Schnellersetzung"
 }

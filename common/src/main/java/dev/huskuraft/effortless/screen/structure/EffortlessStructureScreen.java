@@ -19,7 +19,6 @@ import dev.huskuraft.effortless.building.config.PassiveMode;
 import dev.huskuraft.effortless.building.history.UndoRedo;
 import dev.huskuraft.effortless.building.pattern.Pattern;
 import dev.huskuraft.effortless.building.replace.Replace;
-import dev.huskuraft.effortless.building.replace.ReplaceMode;
 import dev.huskuraft.effortless.building.replace.ReplaceStrategy;
 import dev.huskuraft.effortless.building.settings.Misc;
 import dev.huskuraft.effortless.building.structure.BuildFeature;
@@ -40,7 +39,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         var descriptions = new ArrayList<Text>();
         var name = context.pattern().getNameText();
         if (context.pattern().enabled()) {
-            name = context.pattern().getNameText().append(" " + context.pattern().transformers().size() + " Transformers");
+//            name = context.pattern().getNameText().append(" " + context.pattern().transformers().size() + " Transformers");
             if (!context.pattern().transformers().isEmpty()) {
                 descriptions.add(Text.empty());
             }
@@ -54,44 +53,53 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         descriptions.add(Text.empty());
         descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_on_off", OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
         descriptions.add(Text.translate("effortless.tooltip.click_to_edit_pattern", OptionKeys.KEY_USE.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
-        return button(context.pattern(), name, descriptions, context.pattern().enabled());
+        return button(context.pattern(), context.pattern().enabled(), name, descriptions);
     });
 
-    private static final Button<Option> REPLACE_STRATEGY_DISABLED_OPTION = lazyButton(() -> {
-        var entrance = EffortlessClient.getInstance();
-        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-        return button(ReplaceStrategy.DISABLED, context.replaceStrategy() == ReplaceStrategy.DISABLED);
-    });
-    private static final Button<Option> REPLACE_STRATEGY_BLOCKS_AND_AIR_OPTION = lazyButton(() -> {
-        var entrance = EffortlessClient.getInstance();
-        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-        return button(ReplaceStrategy.BLOCKS_AND_AIR, context.replaceStrategy() == ReplaceStrategy.BLOCKS_AND_AIR);
-    });
-    private static final Button<Option> REPLACE_STRATEGY_BLOCKS_ONLY_OPTION = lazyButton(() -> {
-        var entrance = EffortlessClient.getInstance();
-        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-        return button(ReplaceStrategy.BLOCKS_ONLY, context.replaceStrategy() == ReplaceStrategy.BLOCKS_ONLY);
-    });
-    private static final Button<Option> REPLACE_STRATEGY_OFFHAND_ONLY_OPTION = lazyButton(() -> {
-        var entrance = EffortlessClient.getInstance();
-        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-        return button(ReplaceStrategy.OFFHAND_ONLY, context.replaceStrategy() == ReplaceStrategy.OFFHAND_ONLY);
-    });
-    private static final Button<Option> REPLACE_MODEL_OPTION = lazyButton(() -> {
-        var entrance = EffortlessClient.getInstance();
-        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-        if (context.replace().isQuick()) {
-            return button(ReplaceMode.QUICK, true);
-        } else {
-            return button(ReplaceMode.NORMAL, false);
-        }
-    });
+//    private static final Button<Option> REPLACE_STRATEGY_DISABLED_OPTION = lazyButton(() -> {
+//        var entrance = EffortlessClient.getInstance();
+//        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+//        return button(ReplaceStrategy.DISABLED, context.replaceStrategy() == ReplaceStrategy.DISABLED);
+//    });
+//    private static final Button<Option> REPLACE_STRATEGY_BLOCKS_AND_AIR_OPTION = lazyButton(() -> {
+//        var entrance = EffortlessClient.getInstance();
+//        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+//        return button(ReplaceStrategy.BLOCKS_AND_AIR, context.replaceStrategy() == ReplaceStrategy.BLOCKS_AND_AIR);
+//    });
+//    private static final Button<Option> REPLACE_STRATEGY_BLOCKS_ONLY_OPTION = lazyButton(() -> {
+//        var entrance = EffortlessClient.getInstance();
+//        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+//        return button(ReplaceStrategy.BLOCKS_ONLY, context.replaceStrategy() == ReplaceStrategy.BLOCKS_ONLY);
+//    });
+//    private static final Button<Option> REPLACE_STRATEGY_OFFHAND_ONLY_OPTION = lazyButton(() -> {
+//        var entrance = EffortlessClient.getInstance();
+//        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+//        return button(ReplaceStrategy.OFFHAND_ONLY, context.replaceStrategy() == ReplaceStrategy.OFFHAND_ONLY);
+//    });
+//    private static final Button<Option> REPLACE_MODEL_OPTION = lazyButton(() -> {
+//        var entrance = EffortlessClient.getInstance();
+//        var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
+//        if (context.replace().isQuick()) {
+//            return button(ReplaceMode.QUICK, true);
+//        } else {
+//            return button(ReplaceMode.NORMAL, false);
+//        }
+//    });
 //    private static final Button<Option> REPLACE_CUSTOM_LIST_ONLY_OPTION = button(ReplaceStrategy.CUSTOM_LIST_ONLY, true);
 
     private static final Button<Option> REPLACE_OPTION = lazyButton(() -> {
         var entrance = EffortlessClient.getInstance();
         var context = entrance.getStructureBuilder().getContext(entrance.getClient().getPlayer());
-        return button(context.replace(), context.replace().replaceStrategy() != ReplaceStrategy.DISABLED || context.replace().isQuick());
+
+        var name = context.replace().getNameText();
+
+        var descriptions = new ArrayList<Text>();
+
+        descriptions.add(Text.empty());
+        descriptions.add(Text.translate("effortless.tooltip.click_to_switch_replace_strategy", OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
+        descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_quick_replace", OptionKeys.KEY_USE.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
+
+        return button(context.replace(), context.replace().replaceStrategy() != ReplaceStrategy.DISABLED || context.replace().isQuick(), name, descriptions);
     });
 
 
@@ -108,7 +116,7 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         descriptions.add(Text.empty());
         descriptions.add(Text.translate("effortless.tooltip.click_to_toggle_on_off", OptionKeys.KEY_ATTACK.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
         descriptions.add(Text.translate("effortless.tooltip.click_to_edit_clipboard", OptionKeys.KEY_USE.getKeyBinding().getKey().getNameText()).withStyle(ChatFormatting.DARK_GRAY));
-        return button(context.clipboard(), context.clipboard().getNameText(), descriptions, context.clipboard().enabled());
+        return button(context.clipboard(), context.clipboard().enabled(), context.clipboard().getNameText(), descriptions);
     });
 
     private static final Button<Option> GO_BACK_OPTION = button(Misc.GO_BACK, false);
@@ -241,12 +249,12 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         );
     }
 
-    private void setReplaceLeftButtons() {
-        setLeftButtons(
-                buttonSet(GO_BACK_OPTION, REPLACE_MODEL_OPTION),
-                buttonSet(REPLACE_STRATEGY_DISABLED_OPTION, REPLACE_STRATEGY_BLOCKS_AND_AIR_OPTION, REPLACE_STRATEGY_BLOCKS_ONLY_OPTION, REPLACE_STRATEGY_OFFHAND_ONLY_OPTION)
-        );
-    }
+//    private void setReplaceLeftButtons() {
+//        setLeftButtons(
+//                buttonSet(GO_BACK_OPTION, REPLACE_MODEL_OPTION),
+//                buttonSet(REPLACE_STRATEGY_DISABLED_OPTION, REPLACE_STRATEGY_BLOCKS_AND_AIR_OPTION, REPLACE_STRATEGY_BLOCKS_ONLY_OPTION, REPLACE_STRATEGY_OFFHAND_ONLY_OPTION)
+//        );
+//    }
 
     @Override
     public void onReload() {

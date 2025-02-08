@@ -546,5 +546,8 @@
   "effortless.clipboard.clear.tooltip": "Borre la captura de estructura en su portapapeles actual.",
   "effortless.clipboard.edit.tooltip": "Edite la captura de estructura en su portapapeles actual.",
   "effortless.clipboard.enable_clipboard.tooltip": "Puede empezar a copiar estructuras usando [%s] y pegarlas usando [%s].",
-  "effortless.button.per_player_overrides": "Sobrescrituras por Jugador"
+  "effortless.button.per_player_overrides": "Sobrescrituras por Jugador",
+  "effortless.tooltip.click_to_switch_replace_strategy": "Haz clic [%s] para cambiar la estrategia de reemplazo",
+  "effortless.tooltip.click_to_toggle_quick_replace": "Haz clic [%s] para activar/desactivar la sustitución rápida",
+  "effortless.option.quick_replace": "Sustitución rápida"
 }

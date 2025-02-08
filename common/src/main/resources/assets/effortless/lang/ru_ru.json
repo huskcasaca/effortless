@@ -546,5 +546,8 @@
   "effortless.clipboard.clear.tooltip": "Очистить снимок структуры в текущем буфере обмена.",
   "effortless.clipboard.edit.tooltip": "Редактировать снимок структуры в текущем буфере обмена.",
   "effortless.clipboard.enable_clipboard.tooltip": "Вы можете начать копировать структуры, используя [%s], и вставлять, используя [%s].",
-  "effortless.button.per_player_overrides": "Переопределения для каждого игрока"
+  "effortless.button.per_player_overrides": "Переопределения для каждого игрока",
+  "effortless.tooltip.click_to_switch_replace_strategy": "Нажмите [%s], чтобы сменить стратегию замены",
+  "effortless.tooltip.click_to_toggle_quick_replace": "Нажмите [%s], чтобы включить/выключить быструю замену",
+  "effortless.option.quick_replace": "Быстрая замена"
 }

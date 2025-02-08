@@ -547,5 +547,8 @@
   "effortless.clipboard.clear.tooltip": "Effacez la capture de structure de votre presse-papiers actuel.",
   "effortless.clipboard.edit.tooltip": "Modifiez la capture de structure de votre presse-papiers actuel.",
   "effortless.clipboard.enable_clipboard.tooltip": "Vous pouvez commencer à copier des structures en utilisant [%s] et à coller en utilisant [%s].",
-  "effortless.button.per_player_overrides": "Remplacements par Joueur"
+  "effortless.button.per_player_overrides": "Remplacements par Joueur",
+  "effortless.tooltip.click_to_switch_replace_strategy": "Cliquez [%s] pour changer la stratégie de remplacement",
+  "effortless.tooltip.click_to_toggle_quick_replace": "Cliquez [%s] pour activer/désactiver le remplacement rapide",
+  "effortless.option.quick_replace": "Remplacement rapide"
 }

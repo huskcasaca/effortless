@@ -21,6 +21,10 @@ public record Replace(
         return new Replace(replaceStrategy(), replaceList(), replaceMode == ReplaceMode.QUICK);
     }
 
+    public Replace withQuick(boolean isQuick) {
+        return new Replace(replaceStrategy(), replaceList(), isQuick);
+    }
+
     public Replace next() {
         return withReplaceStrategy(replaceStrategy().next());
     }
@@ -32,6 +36,6 @@ public record Replace(
 
     @Override
     public String getCategory() {
-        return replaceStrategy().getCategory();
+        return isQuick ? "quick_replace" : "replace";
     }
 }

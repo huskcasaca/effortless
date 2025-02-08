@@ -547,5 +547,8 @@
   "effortless.clipboard.clear.tooltip": "Clear the structure snapshot in your current clipboard.",
   "effortless.clipboard.edit.tooltip": "Edit the structure snapshot in your current clipboard.",
   "effortless.clipboard.enable_clipboard.tooltip": "You can start copying structures using [%s] and pasting using [%s].",
-  "effortless.button.per_player_overrides": "Per-Player Overrides"
+  "effortless.button.per_player_overrides": "Per-Player Overrides",
+  "effortless.tooltip.click_to_switch_replace_strategy": "Click [%s] to Switch Replace Strategy",
+  "effortless.tooltip.click_to_toggle_quick_replace": "Click [%s] to Toggle On/Off Quick Replace",
+  "effortless.option.quick_replace": "Quick Replace"
 }

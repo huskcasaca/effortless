@@ -231,7 +231,7 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         return button(option, option.getNameText(), option.getCategoryText(), option.getTooltipText(), List.of(), option.getIcon(), option, activated);
     }
 
-    public static <T extends Option> Button<T> button(T option, Text name, List<Text> description, boolean activated) {
+    public static <T extends Option> Button<T> button(T option, boolean activated, Text name, List<Text> description) {
         return button(option, name, option.getCategoryText(), option.getTooltipText(), description, option.getIcon(), option, activated);
     }
 
