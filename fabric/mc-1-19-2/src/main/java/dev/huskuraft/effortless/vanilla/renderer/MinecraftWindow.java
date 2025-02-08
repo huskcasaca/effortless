@@ -42,11 +42,19 @@ public record MinecraftWindow(
 
     @Override
     public boolean isKeyDown(int key) {
-        return InputConstants.isKeyDown(refs.getWindow(), key);
+        try {
+            return InputConstants.isKeyDown(refs.getWindow(), key);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public boolean isMouseButtonDown(int button) {
-        return GLFW.glfwGetMouseButton(refs.getWindow(), button) == 1;
+        try {
+            return GLFW.glfwGetMouseButton(refs.getWindow(), button) == 1;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
