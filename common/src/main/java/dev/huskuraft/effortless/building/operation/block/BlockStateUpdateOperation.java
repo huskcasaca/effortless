@@ -55,7 +55,7 @@ public class BlockStateUpdateOperation extends BlockOperation {
         if (removed && properTool) {
             blockState.getBlock().destroyEnd(getWorld(), getPlayer(), getBlockPosition(), blockState, blockEntity, itemInHandCopy);
         }
-        return removed;
+        return true;
     }
 
     protected BlockOperationResultType updateBlock() {
