@@ -23,9 +23,9 @@ public class EffortlessRenderSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessRenderSettingsScreen(Entrance entrance) {
         super(entrance, Text.translate("effortless.render_settings.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
-        this.consumer = pattern -> {
+        this.consumer = newConfig -> {
             getEntrance().getStructureBuilder().setPattern(getEntrance().getClient().getPlayer(), Pattern.DISABLED);
-            getEntrance().getConfigStorage().update(config -> config.withRenderConfig(this.config));
+            getEntrance().getConfigStorage().update(config -> config.withRenderConfig(newConfig));
         };
         this.config = getEntrance().getConfigStorage().get().renderConfig();
         this.originalConfig = config;

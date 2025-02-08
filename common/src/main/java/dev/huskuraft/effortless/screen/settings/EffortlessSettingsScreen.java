@@ -14,7 +14,7 @@ import dev.huskuraft.effortless.api.text.ChatFormatting;
 import dev.huskuraft.effortless.api.text.Text;
 import dev.huskuraft.effortless.networking.packets.player.PlayerPermissionCheckPacket;
 import dev.huskuraft.effortless.screen.builer.EffortlessBuilderSettingsScreen;
-import dev.huskuraft.effortless.screen.constraint.EffortlessConstraintSettingsScreen;
+import dev.huskuraft.effortless.screen.general.EffortlessGlobalGeneralSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessClipboardSettingsScreen;
 import dev.huskuraft.effortless.screen.pattern.EffortlessPatternSettingsScreen;
 import dev.huskuraft.effortless.screen.render.EffortlessRenderSettingsScreen;
@@ -40,7 +40,7 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
     public void onCreate() {
         addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(AbstractPanelScreen.TITLE_COLOR), TextWidget.Gravity.CENTER));
 
-        this.constraintButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.constraint_settings.title"), button -> {
+        this.constraintButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.general_settings.title"), button -> {
             if (!getEntrance().getSessionManager().isSessionValid()) {
                 getEntrance().getClient().execute(() -> {
                     new EffortlessSessionStatusScreen(getEntrance()).attach();
@@ -49,7 +49,9 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
                 getEntrance().getChannel().sendPacket(new PlayerPermissionCheckPacket(getEntrance().getClient().getPlayer().getId()), (packet) -> {
                     if (packet.granted()) {
                         getEntrance().getClient().execute(() -> {
-                            new EffortlessConstraintSettingsScreen(getEntrance()).attach();
+                            new EffortlessGlobalGeneralSettingsScreen(getEntrance(), getEntrance().getSessionManager().getServerSessionConfigOrEmpty().getGlobalConfig(), config -> {
+                                getEntrance().getSessionManager().updateGlobalConfig(config);
+                            }).attach();
                         });
                     } else {
                         getEntrance().getClient().execute(() -> {
@@ -82,12 +84,12 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
     public void onReload() {
 
         var constraintTooltip = new ArrayList<Text>();
-        constraintTooltip.add(Text.translate("effortless.constraint_settings.title").withStyle(ChatFormatting.WHITE));
+        constraintTooltip.add(Text.translate("effortless.general_settings.title").withStyle(ChatFormatting.WHITE));
         constraintTooltip.add(TooltipHelper.holdShiftForSummary());
         if (TooltipHelper.isSummaryButtonDown()) {
             constraintTooltip.add(Text.empty());
             constraintTooltip.addAll(
-                    TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.constraint_settings.tooltip", Text.text("[%s]".formatted(EffortlessConfigStorage.CONFIG_NAME)).withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GRAY))
+                    TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.general_settings.tooltip", Text.text("[%s]".formatted(EffortlessConfigStorage.CONFIG_NAME)).withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GRAY))
             );
         }
         this.constraintButton.setTooltip(constraintTooltip);
