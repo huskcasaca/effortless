@@ -48,6 +48,18 @@ public interface Inventory extends Container {
         setItem(index + getBagSize() + getArmorSize(), itemStack);
     }
 
+    default boolean addBagItem(ItemStack itemStack) {
+        var items = getBagItems();
+        for (int i = 0; i < getBagSize(); i++) {
+            var inBag = items.get(i);
+            if (inBag.isEmpty()) {
+                setBagItem(i, itemStack);
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     default int getContainerSize() {
         return getBagSize() + getArmorSize() + getOffhandSize();
