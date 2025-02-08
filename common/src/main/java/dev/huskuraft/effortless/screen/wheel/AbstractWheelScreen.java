@@ -379,8 +379,8 @@ public abstract class AbstractWheelScreen<S, B> extends AbstractScreen {
         this.selectedSlot = slots;
     }
 
-    public void resetScaleAnimation() {
-        this.animationScaleTicks = 1f;
+    public void setScaleAnimation(float partialTicks) {
+        this.animationScaleTicks = partialTicks;
     }
 
     private void renderRadialSlots(Renderer renderer, int mouseX, int mouseY, List<? extends Slot<S>> slots) {

@@ -151,11 +151,11 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
         super.onCreate();
 
         setRadialSelectResponder((slot, click) -> {
-            resetScaleAnimation();
+            setScaleAnimation(3f);
             getEntrance().getStructureBuilder().setStructure(getPlayer(), slot.getContent());
         });
         setRadialOptionSelectResponder((entry, click) -> {
-            resetScaleAnimation();
+            setScaleAnimation(3f);
             if (entry.getContent() instanceof Misc misc) {
                 switch (misc) {
                     case SETTINGS -> {
@@ -207,17 +207,15 @@ public class EffortlessStructureScreen extends AbstractWheelScreen<Structure, Op
                 return;
             }
             if (entry.getContent() instanceof Replace replace) {
-                setReplaceLeftButtons();
+                if (click) {
+                    getEntrance().getStructureBuilder().setReplace(getPlayer(), getEntrance().getStructureBuilder().getContext(getPlayer()).replace().withReplaceStrategy(getEntrance().getStructureBuilder().getContext(getPlayer()).replace().replaceStrategy().next()));
+                    return;
+                }
+                getEntrance().getStructureBuilder().setReplace(getPlayer(), getEntrance().getStructureBuilder().getContext(getPlayer()).replace().withQuick(!getEntrance().getStructureBuilder().getContext(getPlayer()).replace().isQuick()));
+
                 return;
             }
-            if (entry.getContent() instanceof ReplaceMode replaceMode) {
-                getEntrance().getStructureBuilder().setReplace(getPlayer(), getEntrance().getStructureBuilder().getContext(getPlayer()).replace().withReplaceMode(replaceMode.next()));
-                return;
-            }
-            if (entry.getContent() instanceof ReplaceStrategy replaceStrategy) {
-                getEntrance().getStructureBuilder().setReplace(getPlayer(), getEntrance().getStructureBuilder().getContext(getPlayer()).replace().withReplaceStrategy(replaceStrategy));
-                return;
-            }
+
             if (entry.getContent() instanceof PassiveMode passiveMode) {
                 getEntrance().getConfigStorage().update(config -> config.withPassiveMode(passiveMode != PassiveMode.ENABLED));
                 return;
