@@ -80,7 +80,14 @@ public class BlockInteractOperation extends BlockOperation {
                     getPlayer().awardStat(StatTypes.ITEM_USED.get(itemStackToUse.getItem()));
                 }
             }
-            getPlayer().setItemStack(getHand(), itemStackBeforeInteract);
+            if (itemStackBeforeInteract.isEmpty()) {
+                if (getPlayer().getItemStack(getHand()).equals(itemStackToUse)) {
+                    getPlayer().setItemStack(getHand(), itemStackBeforeInteract);
+                }
+            } else {
+                getPlayer().setItemStack(getHand(), itemStackBeforeInteract);
+            }
+
             if (!interacted) {
                 return BlockOperationResultType.FAIL_UNKNOWN;
             }

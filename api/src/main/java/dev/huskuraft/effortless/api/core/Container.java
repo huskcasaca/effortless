@@ -17,12 +17,12 @@ public interface Container extends PlatformReference {
         return IntStream.range(0, getContainerSize()).mapToObj(this::getItem).toList();
     }
 
-    default boolean addItem(int index, ItemStack itemStack) {
+    default boolean addItem(ItemStack itemStack) {
         var items = getItems();
-        for (int indexInContainer = 0; indexInContainer < items.size(); indexInContainer++) {
-            var itemStackInContainer = items.get(indexInContainer);
-            if (itemStackInContainer.isAir()) {
-                setItem(indexInContainer, itemStack);
+        for (int i = 0; i < items.size(); i++) {
+            var inContainer = items.get(i);
+            if (inContainer.isEmpty()) {
+                setItem(i, itemStack);
                 return true;
             }
         }
@@ -34,12 +34,12 @@ public interface Container extends PlatformReference {
         return true;
     }
 
-    default boolean addItem(ItemStack itemStack) {
-        return addItem(-1, itemStack);
-    }
-
     default boolean contains(ItemStack itemStack) {
         return getItems().contains(itemStack);
+    }
+
+    default int indexOf(ItemStack itemStack) {
+        return getItems().indexOf(itemStack);
     }
 
 }

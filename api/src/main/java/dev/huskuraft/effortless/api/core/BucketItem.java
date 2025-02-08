@@ -7,30 +7,26 @@ import dev.huskuraft.effortless.api.core.fluid.Fluids;
 
 public interface BucketItem extends Item {
 
-    static ItemStack createFilledResult(Player player, ItemStack emptyItemStack, ItemStack filledItemStack, boolean preventDuplicates) {
+    static ItemStack createFilledResult(Player player, ItemStack emptyItemStack, ItemStack filledItemStack) {
         var isCreative = player.getGameMode().isCreative();
-        if (!isCreative) {
-            emptyItemStack.decrease(1);
-        }
-        if (isCreative && preventDuplicates) {
+        if (isCreative) {
 //            if (!player.getInventory().contains(filledItemStack)) {
 //                player.getInventory().addItem(filledItemStack);
 //            }
             return emptyItemStack;
         }
 
+        emptyItemStack.decrease(1);
+
+        if (!player.getInventory().addBagItem(filledItemStack)) {
+            player.drop(filledItemStack, false, false);
+        }
+
         if (emptyItemStack.isEmpty()) {
             return filledItemStack;
         } else {
-            if (!player.getInventory().addItem(filledItemStack)) {
-                player.drop(filledItemStack, false, false);
-            }
             return emptyItemStack;
         }
-    }
-
-    static ItemStack createFilledResult(Player player, ItemStack emptyItemStack, ItemStack filledItemStack) {
-        return createFilledResult(player, emptyItemStack, filledItemStack, true);
     }
 
     Fluid getContent();
@@ -55,7 +51,11 @@ public interface BucketItem extends Item {
                     var collected = bucketCollectable.pickupBlock(player.getWorld(), player, blockInteraction.getBlockPosition(), blockState);
                     if (!collected.isEmpty()) {
                         var result = createFilledResult(player, itemStack, collected);
-                        return InteractionResult.SUCCESS;
+//                        player.setItemStack(blockInteraction.getHand(), result);
+                        if (result.isEmpty()) {
+                            return InteractionResult.SUCCESS;
+                        }
+                        return InteractionResult.CONSUME;
                     }
                 }
             } else {
