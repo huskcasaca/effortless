@@ -41,7 +41,7 @@ public class EffortlessTransformerPresetsScreen extends AbstractPanelScreen {
     private Transformers selectedType = Transformers.ARRAY;
 
     public EffortlessTransformerPresetsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
+        super(entrance, Text.translate("effortless.transformer_presets.title").withStyle(ChatFormatting.DARK_GRAY), PANEL_WIDTH_60, PANEL_HEIGHT_FULL);
         this.consumer = transformers -> {
             getEntrance().getConfigStorage().update(config -> config.withPatternConfig(new PatternConfig(transformers)));
         };

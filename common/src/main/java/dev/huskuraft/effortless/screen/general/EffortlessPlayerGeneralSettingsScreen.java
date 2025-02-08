@@ -32,7 +32,7 @@ public class EffortlessPlayerGeneralSettingsScreen extends AbstractPanelScreen {
     private AbstractWidget saveButton;
 
     public EffortlessPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, ConstraintConfig config, BiConsumer<PlayerInfo, ConstraintConfig> consumer) {
-        super(entrance, Text.translate("effortless.general_settings.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
+        super(entrance, Text.translate("effortless.general_settings.title"), PANEL_WIDTH_60, PANEL_HEIGHT_FULL);
         this.playerInfo = playerInfo;
         this.defaultConfig = ConstraintConfig.NULL;
         this.originalConfig = config;

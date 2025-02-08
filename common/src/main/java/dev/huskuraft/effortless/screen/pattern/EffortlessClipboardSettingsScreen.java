@@ -18,7 +18,7 @@ public class EffortlessClipboardSettingsScreen extends AbstractPanelScreen {
     private ClipboardConfig config;
 
     public EffortlessClipboardSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.clipboard_settings.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
+        super(entrance, Text.translate("effortless.clipboard_settings.title"), PANEL_WIDTH_60, PANEL_HEIGHT_FULL);
         this.consumer = newConfig -> {
             getEntrance().getConfigStorage().update(config -> config.withClipboardConfig(newConfig));
         };
