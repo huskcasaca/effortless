@@ -1,4 +1,4 @@
-package dev.huskuraft.effortless.screen.constraint;
+package dev.huskuraft.effortless.screen.general;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,7 +20,7 @@ import dev.huskuraft.effortless.screen.player.EffortlessOnlinePlayersScreen;
 import dev.huskuraft.effortless.screen.player.PlayerInfoList;
 import dev.huskuraft.effortless.session.config.ConstraintConfig;
 
-public class EffortlessPlayerConstraintSettingsListScreen extends AbstractPanelScreen {
+public class EffortlessPlayerGeneralSettingsListScreen extends AbstractPanelScreen {
 
     private final Consumer<Map<UUID, ConstraintConfig>> consumer;
     private Map<UUID, ConstraintConfig> defaultConfig;
@@ -33,8 +33,8 @@ public class EffortlessPlayerConstraintSettingsListScreen extends AbstractPanelS
     private Button saveButton;
     private Button cancelButton;
 
-    public EffortlessPlayerConstraintSettingsListScreen(Entrance entrance, Map<UUID, ConstraintConfig> config, Consumer<Map<UUID, ConstraintConfig>> editConsumer) {
-        super(entrance, Text.translate("effortless.player_constraint_settings.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
+    public EffortlessPlayerGeneralSettingsListScreen(Entrance entrance, Map<UUID, ConstraintConfig> config, Consumer<Map<UUID, ConstraintConfig>> editConsumer) {
+        super(entrance, Text.translate("effortless.player_general_settings.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
         this.defaultConfig = new LinkedHashMap<>();
         this.originalConfig = new LinkedHashMap<>(config);
         this.config = new LinkedHashMap<>(config);
@@ -53,7 +53,7 @@ public class EffortlessPlayerConstraintSettingsListScreen extends AbstractPanelS
 
         this.editButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.edit"), button -> {
             if (entries.hasSelected()) {
-                new EffortlessPlayerConstraintSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), ConstraintConfig.NULL), (playerInfo1, config) -> {
+                new EffortlessPlayerGeneralSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), ConstraintConfig.NULL), (playerInfo1, config) -> {
                     this.entries.insertSelected(playerInfo1);
                     this.config.put(playerInfo1.getId(), config);
                     onReload();
@@ -73,7 +73,7 @@ public class EffortlessPlayerConstraintSettingsListScreen extends AbstractPanelS
             new EffortlessOnlinePlayersScreen(
                     getEntrance(),
                     playerInfo -> {
-                        new EffortlessPlayerConstraintSettingsScreen(getEntrance(), playerInfo, config.getOrDefault(playerInfo.getId(), ConstraintConfig.NULL), (playerInfo1, config) -> {
+                        new EffortlessPlayerGeneralSettingsScreen(getEntrance(), playerInfo, config.getOrDefault(playerInfo.getId(), ConstraintConfig.NULL), (playerInfo1, config) -> {
                             this.entries.insertSelected(playerInfo1);
                             this.config.put(playerInfo1.getId(), config);
                             onReload();
@@ -103,7 +103,7 @@ public class EffortlessPlayerConstraintSettingsListScreen extends AbstractPanelS
         this.config = this.entries.items().stream().map(PlayerInfo::getId).collect(Collectors.toMap(Function.identity(), config::get, (e1, e2) -> e1, LinkedHashMap::new));
 
         if (entries.consumeDoubleClick() && entries.hasSelected()) {
-            new EffortlessPlayerConstraintSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), ConstraintConfig.NULL), (playerInfo1, config) -> {
+            new EffortlessPlayerGeneralSettingsScreen(getEntrance(), entries.getSelected().getItem(), config.getOrDefault(entries.getSelected().getItem().getId(), ConstraintConfig.NULL), (playerInfo1, config) -> {
                 this.entries.insertSelected(playerInfo1);
                 this.config.put(playerInfo1.getId(), config);
                 onReload();
