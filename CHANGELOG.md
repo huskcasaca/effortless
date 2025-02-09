@@ -1,6 +1,19 @@
 ## Changelog
 ----------
 
+### 3.4.0
+
+* Add support for OpenPAC ([#202](https://github.com/huskcasaca/effortless/pull/202))
+* Add support for FTB Chunks ([#204](https://github.com/huskcasaca/effortless/pull/204))
+* Optimize build behavior ([#203](https://github.com/huskcasaca/effortless/pull/203))
+* Fix bucket not dropping when liquid-filled ([#205](https://github.com/huskcasaca/effortless/pull/205))
+* Fix unable to replace water ([#206](https://github.com/huskcasaca/effortless/pull/206))
+* Reinstate tool durability preservation config option ([#174](https://github.com/huskcasaca/effortless/pull/174))
+* Fix invalid key from GlException ([#207](https://github.com/huskcasaca/effortless/pull/207))
+* Refactor settings page ([#208](https://github.com/huskcasaca/effortless/pull/208))
+
+----------
+
 ### 3.3.0
 
 * Fix Fabric networking not working on 1.21+ ([#196](https://github.com/huskcasaca/effortless/pull/196))
@@ -15,7 +28,8 @@
 
 * Fix block entity tag setting issue ([#169](https://github.com/huskcasaca/effortless/pull/169))
 * Fix crashes from long mod descriptions ([#170](https://github.com/huskcasaca/effortless/pull/170))
-* Fix rotation angles for axial patterns and center circle calculations ([#171](https://github.com/huskcasaca/effortless/pull/171), thanks @almarzn)
+* Fix rotation angles for axial patterns and center circle
+  calculations ([#171](https://github.com/huskcasaca/effortless/pull/171), thanks @almarzn)
 * Fix server not launching with Minecraft 1.21 ([#190](https://github.com/huskcasaca/effortless/pull/190))
 * Fix crashes from improper use of tools ([#191](https://github.com/huskcasaca/effortless/pull/191))
 * Fix compatibility issue with NeoForge ([#192](https://github.com/huskcasaca/effortless/pull/192))
@@ -162,7 +176,8 @@
 * Fix game crashes with quilt ([#85](https://github.com/huskcasaca/effortless/pull/85))
 * Fix keeps causing server crash direct cause unknown ([#86](https://github.com/huskcasaca/effortless/pull/86))
 * Fix game crash upon attempted opening of build wheel ([#87](https://github.com/huskcasaca/effortless/pull/87))
-* Fix Center Start point does not work in Circle and Cylinder building modes ([#88](https://github.com/huskcasaca/effortless/pull/88))
+* Fix Center Start point does not work in Circle and Cylinder building
+  modes ([#88](https://github.com/huskcasaca/effortless/pull/88))
 * Fix left ctrl unusable on launch ([#89](https://github.com/huskcasaca/effortless/pull/89))
 * Add patter presets ([#90](https://github.com/huskcasaca/effortless/pull/90))
 * Fix some bugs ([#93](https://github.com/huskcasaca/effortless/pull/93))
