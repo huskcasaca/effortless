@@ -32,7 +32,7 @@ public class EffortlessPlayerGeneralSettingsScreen extends AbstractPanelScreen {
     private AbstractWidget saveButton;
 
     public EffortlessPlayerGeneralSettingsScreen(Entrance entrance, PlayerInfo playerInfo, ConstraintConfig config, BiConsumer<PlayerInfo, ConstraintConfig> consumer) {
-        super(entrance, Text.translate("effortless.general_settings.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
+        super(entrance, Text.translate("effortless.general_settings.title"), PANEL_WIDTH_60, PANEL_HEIGHT_FULL);
         this.playerInfo = playerInfo;
         this.defaultConfig = ConstraintConfig.NULL;
         this.originalConfig = config;
@@ -44,7 +44,6 @@ public class EffortlessPlayerGeneralSettingsScreen extends AbstractPanelScreen {
     @Override
     public void onCreate() {
         var titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(AbstractPanelScreen.TITLE_COLOR), TextWidget.Gravity.CENTER));
-        var playerNameTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 * 2 - 10, Text.text(playerInfo.getName()).withStyle(ChatFormatting.DARK_GRAY), TextWidget.Gravity.CENTER));
 
         var playerEntries = addWidget(new PlayerInfoList(getEntrance(), getLeft() + PADDINGS_H, getTop() + PANEL_TITLE_HEIGHT_1, getWidth() - PADDINGS_H * 2, 36, true));
         playerEntries.setShowScrollBar(false);

@@ -46,7 +46,7 @@ public class EffortlessItemRandomizerEditScreen extends AbstractPanelScreen {
 
     @Override
     public void onCreate() {
-        setWidth(PANEL_WIDTH_50);
+        setWidth(PANEL_WIDTH_60);
         setHeight(randomizer.getSource() == ItemRandomizer.Source.CUSTOMIZE ? PANEL_HEIGHT_FULL : PANEL_TITLE_HEIGHT_1 + 38 + PANEL_BUTTON_ROW_HEIGHT_3);
 
         this.titleTextWidget = addWidget(new TextWidget(getEntrance(), getLeft() + getWidth() / 2, getTop() + PANEL_TITLE_HEIGHT_1 - 10, getScreenTitle().withColor(AbstractPanelScreen.TITLE_COLOR), TextWidget.Gravity.CENTER));

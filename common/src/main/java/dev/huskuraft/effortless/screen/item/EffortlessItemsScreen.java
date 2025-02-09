@@ -27,7 +27,7 @@ public class EffortlessItemsScreen extends AbstractPanelScreen {
     private List<Item> items;
 
     public EffortlessItemsScreen(Entrance entrance, Text title, List<Item> items, Consumer<List<Item>> consumer) {
-        super(entrance, title, PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
+        super(entrance, title, PANEL_WIDTH_60, PANEL_HEIGHT_FULL);
         this.consumer = consumer;
         this.originalItems = items.stream().distinct().toList();
         this.items = items.stream().distinct().toList();

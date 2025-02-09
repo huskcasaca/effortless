@@ -26,7 +26,7 @@ public class EffortlessOnlinePlayersScreen extends AbstractPanelScreen {
     private Button cancelButton;
 
     public EffortlessOnlinePlayersScreen(Entrance entrance, Consumer<PlayerInfo> consumer) {
-        super(entrance, Text.translate("effortless.online_players.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
+        super(entrance, Text.translate("effortless.online_players.title"), PANEL_WIDTH_60, PANEL_HEIGHT_FULL);
         this.players = getEntrance().getClient().getOnlinePlayers();
         this.consumer = consumer;
     }

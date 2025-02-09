@@ -22,14 +22,14 @@ import dev.huskuraft.effortless.screen.render.EffortlessRenderSettingsScreen;
 public class EffortlessSettingsScreen extends AbstractPanelScreen {
 
     public EffortlessSettingsScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.settings.title"), PANEL_WIDTH_42, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_6);
+        super(entrance, Text.translate("effortless.settings.title"), PANEL_WIDTH_42, PANEL_TITLE_HEIGHT_1 + PANEL_BUTTON_ROW_HEIGHT_3);
     }
 
     private Button constraintButton;
     private Button buildertButton;
-    private Button patterntButton;
-    private Button clipboardButton;
-    private Button renderButton;
+//    private Button patternButton;
+//    private Button clipboardButton;
+//    private Button renderButton;
 
     @Override
     protected EffortlessClient getEntrance() {
@@ -60,19 +60,19 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
                     }
                 });
             }
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 5f   , 0f, 1f).build());
+        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f   , 0f, 1f).build());
         this.buildertButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.builder_settings.title"), button -> {
             new EffortlessBuilderSettingsScreen(getEntrance()).attach();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 4f, 0f, 1f).build());
-        this.renderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.render_settings.title"), button -> {
-            new EffortlessRenderSettingsScreen(getEntrance()).attach();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 3f, 0f, 1f).build());
-        this.patterntButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern_settings.title"), button -> {
-            new EffortlessPatternSettingsScreen(getEntrance()).attach();
-        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
-        this.clipboardButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.clipboard_settings.title"), button -> {
-            new EffortlessClipboardSettingsScreen(getEntrance()).attach();
         }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
+//        this.renderButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.render_settings.title"), button -> {
+//            new EffortlessRenderSettingsScreen(getEntrance()).attach();
+//        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
+//        this.patterntButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.pattern_settings.title"), button -> {
+//            new EffortlessPatternSettingsScreen(getEntrance()).attach();
+//        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 2f, 0f, 1f).build());
+//        this.clipboardButton = addWidget(Button.builder(getEntrance(), Text.translate("effortless.clipboard_settings.title"), button -> {
+//            new EffortlessClipboardSettingsScreen(getEntrance()).attach();
+//        }).setBoundsGrid(getLeft(), getTop(), getWidth(), getHeight(), 1f, 0f, 1f).build());
 
         addWidget(Button.builder(getEntrance(), Text.translate("effortless.button.done"), button -> {
             detach();
@@ -105,26 +105,26 @@ public class EffortlessSettingsScreen extends AbstractPanelScreen {
         }
         this.buildertButton.setTooltip(builderTooltip);
 
-        var patternTooltip = new ArrayList<Text>();
-        patternTooltip.add(Text.translate("effortless.pattern_settings.title").withStyle(ChatFormatting.WHITE));
-        patternTooltip.add(TooltipHelper.holdShiftForSummary());
-        if (TooltipHelper.isSummaryButtonDown()) {
-            patternTooltip.add(Text.empty());
-            patternTooltip.addAll(
-                    TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.pattern_settings.tooltip", Text.text("[%s]".formatted(EffortlessClientConfigStorage.CONFIG_NAME)).withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GRAY))
-            );
-        }
-        this.patterntButton.setTooltip(patternTooltip);
-
-        var renderTooltip = new ArrayList<Text>();
-        renderTooltip.add(Text.translate("effortless.render_settings.title").withStyle(ChatFormatting.WHITE));
-        renderTooltip.add(TooltipHelper.holdShiftForSummary());
-        if (TooltipHelper.isSummaryButtonDown()) {
-            renderTooltip.add(Text.empty());
-            renderTooltip.addAll(
-                    TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.render_settings.tooltip", Text.text("[%s]".formatted(EffortlessClientConfigStorage.CONFIG_NAME)).withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GRAY))
-            );
-        }
-        this.renderButton.setTooltip(renderTooltip);
+//        var patternTooltip = new ArrayList<Text>();
+//        patternTooltip.add(Text.translate("effortless.pattern_settings.title").withStyle(ChatFormatting.WHITE));
+//        patternTooltip.add(TooltipHelper.holdShiftForSummary());
+//        if (TooltipHelper.isSummaryButtonDown()) {
+//            patternTooltip.add(Text.empty());
+//            patternTooltip.addAll(
+//                    TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.pattern_settings.tooltip", Text.text("[%s]".formatted(EffortlessClientConfigStorage.CONFIG_NAME)).withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GRAY))
+//            );
+//        }
+//        this.patterntButton.setTooltip(patternTooltip);
+//
+//        var renderTooltip = new ArrayList<Text>();
+//        renderTooltip.add(Text.translate("effortless.render_settings.title").withStyle(ChatFormatting.WHITE));
+//        renderTooltip.add(TooltipHelper.holdShiftForSummary());
+//        if (TooltipHelper.isSummaryButtonDown()) {
+//            renderTooltip.add(Text.empty());
+//            renderTooltip.addAll(
+//                    TooltipHelper.wrapLines(getTypeface(), Text.translate("effortless.render_settings.tooltip", Text.text("[%s]".formatted(EffortlessClientConfigStorage.CONFIG_NAME)).withStyle(ChatFormatting.GOLD)).withStyle(ChatFormatting.GRAY))
+//            );
+//        }
+//        this.renderButton.setTooltip(renderTooltip);
     }
 }

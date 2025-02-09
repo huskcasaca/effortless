@@ -36,7 +36,7 @@ public class EffortlessClipboardScreen extends AbstractPanelScreen {
 //    private EditBox nameEditBox;
 
     public EffortlessClipboardScreen(Entrance entrance) {
-        super(entrance, Text.translate("effortless.clipboard.edit.title"), PANEL_WIDTH_50, PANEL_HEIGHT_FULL);
+        super(entrance, Text.translate("effortless.clipboard.edit.title"), PANEL_WIDTH_60, PANEL_HEIGHT_FULL);
         this.consumer = clipboard -> {
             getEntrance().getStructureBuilder().setClipboard(getEntrance().getClient().getPlayer(), this.clipboard);
         };
