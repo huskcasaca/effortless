@@ -123,7 +123,7 @@
   "effortless.general_settings.max_box_volume_per_break": "最大方块破坏体积",
   "effortless.general_settings.max_box_volume_per_place": "最大方块放置体积",
   "effortless.general_settings.max_reach_distance": "最大触及距离",
-  "effortless.general_settings.max_structure_copy_paste_volume": "最大结构复制/粘贴量",
+  "effortless.general_settings.max_structure_copy_paste_volume": "最大复制/粘贴体积",
   "effortless.general_settings.tooltip": "这些设置为玩家在建造过程中添加了限制规则。只有服务器操作员或单人游戏所有者可以使用。\n\n这些设置保存在名为%s的配置目录中的文件中。",
   "effortless.general_settings.use_commands": "使用指令",
   "effortless.general_settings.use_proper_tools": "使用正确工具",
