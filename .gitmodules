@@ -1,4 +1,4 @@
 [submodule "fuse-gradle-plugin"]
-	path = fuse-gradle-plugin
+	path = minecraft-universal-gradle-plugin/fuse-gradle-plugin
 	url = git@github.com:huskcasaca/fuse.git
 	branch = master

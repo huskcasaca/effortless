@@ -1,10 +1,11 @@
 plugins {
-    id 'io.github.goooler.shadow' version '8.1.7' apply false
-    id 'com.modrinth.minotaur' version "2.+" apply false // modrinth publishing
-
-    id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT' apply false
-
-    id 'dev.huskuraft.fuse' apply false
+    id 'java-library'
+    id 'dev.huskuraft.universal' version '0.1.0'
 }
 
-apply from: 'patch.gradle'
+group = mod_group_id
+version = mod_version
+
+universal {
+    includePrimaryTargets()
+}
