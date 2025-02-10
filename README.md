@@ -19,11 +19,6 @@ from a pre-defined list for random placement.
     <a href="https://discord.gg/FwbBg8uUZ7">Discord</a>
 </div>
 
-## Downloads
-
-- [Modrinth](https://modrinth.com/mod/effortless)
-- [Curseforge](https://www.curseforge.com/minecraft/mc-mods/effortless)
-
 ## Features
 
 - Pure Vanilla Compatibility: This mod is designed to be fully compatible with a pure vanilla game without adding new
@@ -31,6 +26,40 @@ from a pre-defined list for random placement.
 - Item Randomizer: This mod includes an item randomizer that lets players place blocks and entities randomly from a
   pre-defined list.
 - Clipboard: This mod includes a clipboard that lets players copy and paste blocks and entities between worlds.
+
+## Platforms
+
+- You need to install this mod on both the client side and server side.
+- You can use this mod on servers with different platforms from your client.
+- You can use the same mod jar file on multiple targets.
+
+### Targets
+
+| Filename                      | Targets                  | Fabric  |  Quilt  |  Forge  | NeoForge |
+|-------------------------------|--------------------------|:-------:|:-------:|:-------:|:--------:|
+| `effortless-1.21.3-3.2.0.jar` | `1.21.3` `1.21.2`        | &check; | &check; |         | &check;  |
+| `effortless-1.21.1-3.2.0.jar` | `1.21.1` `1.21`          | &check; | &check; | &check; | &check;  |
+| `effortless-1.20.6-3.2.0.jar` | `1.20.6` `1.20.5`        | &check; | &check; | &check; | &check;  |
+| `effortless-1.20.4-3.2.0.jar` | `1.20.4` `1.20.3`        | &check; | &check; | &check; |          |
+| `effortless-1.20.2-3.2.0.jar` | `1.20.2`                 | &check; | &check; | &check; |          |
+| `effortless-1.20.1-3.2.0.jar` | `1.20.1` `1.20`          | &check; | &check; | &check; |          |
+| `effortless-1.19.4-3.2.0.jar` | `1.19.4`                 | &check; | &check; | &check; |          |
+| `effortless-1.19.3-3.2.0.jar` | `1.19.3`                 | &check; | &check; | &check; |          |
+| `effortless-1.19.2-3.2.0.jar` | `1.19.2` `1.19.1` `1.19` | &check; | &check; | &check; |          |
+| `effortless-1.18.2-3.2.0.jar` | `1.18.2`                 | &check; | &check; | &check; |          |
+| `effortless-1.18.1-3.2.0.jar` | `1.18.1` `1.18`          | &check; | &check; | &check; |          |
+| `effortless-1.17.1-3.2.0.jar` | `1.17.1`                 | &check; | &check; | &check; |          |
+|                               | `1.17  `                 |         |         |         |          |
+
+### Plugins
+
+- You can use this mod together with these plugins.
+
+| Name                                                                                                                                                                    | Supported | Note                                                   |
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:---------:|--------------------------------------------------------|
+| [Open Parties and Claims](https://modrinth.com/mod/open-parties-and-claims)                                                                                             |  &check;  | Allows you to claim chunks and add build permissions.  |
+| [FTB Chunks Fabric](https://www.curseforge.com/minecraft/mc-mods/ftb-chunks-fabric) / [FTB Chunks Forge](https://www.curseforge.com/minecraft/mc-mods/ftb-chunks-forge) |  &check;  | Allows you to claim chunks and add build permissions.  |
+| [ViaFabric](https://github.com/ViaVersion/ViaFabric) / [ViaForge](https://github.com/ViaVersion/ViaForge)                                                               |  &check;  | Allows you to connect to a different Minecraft version |
 
 ## How to Use
 
@@ -89,30 +118,6 @@ from a pre-defined list for random placement.
 - You can use clipboard to transfer structures between worlds by copying and pasting blocks.
 
 ### Transformers
-
-## Platforms
-
-- You need to install this mod on both the client side and server side.
-- You can use this mod on servers with different platforms from your client.
-- You can use [ViaFabric](https://github.com/ViaVersion/ViaFabric) and [ViaForge](https://github.com/ViaVersion/ViaForge) are also
-  supported and tested.
-- You can use the same mod jar file on multiple targets.
-
-| Filename                      | Targets                  | Fabric  |  Quilt  |  Forge  | NeoForge |
-|-------------------------------|--------------------------|:-------:|:-------:|:-------:|:--------:|
-| `effortless-1.21.3-3.2.0.jar` | `1.21.3` `1.21.2`        | &check; | &check; |         | &check;  |
-| `effortless-1.21.1-3.2.0.jar` | `1.21.1` `1.21`          | &check; | &check; | &check; | &check;  |
-| `effortless-1.20.6-3.2.0.jar` | `1.20.6` `1.20.5`        | &check; | &check; | &check; | &check;  |
-| `effortless-1.20.4-3.2.0.jar` | `1.20.4` `1.20.3`        | &check; | &check; | &check; |          |
-| `effortless-1.20.2-3.2.0.jar` | `1.20.2`                 | &check; | &check; | &check; |          |
-| `effortless-1.20.1-3.2.0.jar` | `1.20.1` `1.20`          | &check; | &check; | &check; |          |
-| `effortless-1.19.4-3.2.0.jar` | `1.19.4`                 | &check; | &check; | &check; |          |
-| `effortless-1.19.3-3.2.0.jar` | `1.19.3`                 | &check; | &check; | &check; |          |
-| `effortless-1.19.2-3.2.0.jar` | `1.19.2` `1.19.1` `1.19` | &check; | &check; | &check; |          |
-| `effortless-1.18.2-3.2.0.jar` | `1.18.2`                 | &check; | &check; | &check; |          |
-| `effortless-1.18.1-3.2.0.jar` | `1.18.1` `1.18`          | &check; | &check; | &check; |          |
-| `effortless-1.17.1-3.2.0.jar` | `1.17.1`                 | &check; | &check; | &check; |          |
-|                               | `1.17  `                 |         |         |         |          |
 
 ## Dependencies
 
