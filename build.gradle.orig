@@ -1,0 +1,44 @@
+plugins {
+    id 'dev.huskuraft.universal' version '0.2.0'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+dependencies {
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+
+    annotationProcessor 'com.google.auto.service:auto-service:1.1.1'
+    compileOnly 'com.google.auto.service:auto-service:1.1.1'
+
+    compileOnly 'io.netty:netty-all:4.1.109.Final'
+    compileOnly 'org.slf4j:slf4j-api:2.0.13'
+
+    implementation 'dev.huskuraft.universal:common-api:0.1.0'
+
+    [
+        '1.17.1': ['fabric-api', 'quilt-api', 'forge-api',],
+        '1.18.1': ['fabric-api', 'quilt-api', 'forge-api',],
+        '1.18.2': ['fabric-api', 'quilt-api', 'forge-api',],
+        '1.19.2': ['fabric-api', 'quilt-api', 'forge-api',],
+        '1.19.3': ['fabric-api', 'quilt-api', 'forge-api',],
+        '1.19.4': ['fabric-api', 'quilt-api', 'forge-api',],
+        '1.20.1': ['fabric-api', 'quilt-api', 'forge-api',],
+        '1.20.2': ['fabric-api', 'quilt-api', 'forge-api',],
+        '1.20.4': ['fabric-api', 'quilt-api', 'forge-api',],
+        '1.20.6': ['fabric-api', 'quilt-api', 'forge-api', 'neoforge-api'],
+        '1.21.1': ['fabric-api', 'quilt-api', 'forge-api', 'neoforge-api'],
+        '1.21.3': ['fabric-api', 'quilt-api', 'forge-api', 'neoforge-api'],
+    ].forEach { minecraft, loaders ->
+        loaders.forEach { loader ->
+            universalTarget "dev.huskuraft.universal:${loader}:${minecraft}"
+        }
+    }
+
+}
+
+universal {
+
+}

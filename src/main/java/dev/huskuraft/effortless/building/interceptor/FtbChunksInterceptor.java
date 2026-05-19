@@ -3,6 +3,7 @@ package dev.huskuraft.effortless.building.interceptor;
 import dev.huskuraft.universal.api.core.BlockPosition;
 import dev.huskuraft.universal.api.core.Player;
 import dev.huskuraft.universal.api.core.World;
+import dev.huskuraft.universal.api.platform.ClientEntrance;
 import dev.huskuraft.universal.api.platform.Entrance;
 import dev.huskuraft.universal.api.plugin.ftbchunks.FtbChunkClaimsManager;
 import dev.huskuraft.universal.api.plugin.ftbchunks.FtbChunksPlugin;
@@ -20,7 +21,14 @@ public final class FtbChunksInterceptor implements BuildInterceptor {
     public FtbChunksInterceptor(
             Entrance entrance
     ) {
-        this.ftbChunkClaimsManager = entrance.findPlugin(FtbChunksPlugin.class).map(FtbChunksPlugin::getClaimManager).orElse(null);
+        if (entrance instanceof ClientEntrance) {
+            // FTB Chunks' claim manager is server-only; FTBChunksAPI.getManager() is null on a
+            // dedicated client and throws inside the plugin impl. Server-side BatchBuildSession
+            // enforces claims at commit time.
+            this.ftbChunkClaimsManager = null;
+        } else {
+            this.ftbChunkClaimsManager = entrance.findPlugin(FtbChunksPlugin.class).map(FtbChunksPlugin::getClaimManager).orElse(null);
+        }
     }
 
     public FtbChunkClaimsManager getChunkClaimsManager() {
